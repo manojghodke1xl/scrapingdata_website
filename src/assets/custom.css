@@ -1,0 +1,28 @@
+.spinneroverlay {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #22222288;
+  position: fixed;
+  z-index: 9999;
+  inset: 0;
+}
+
+.alert-container {
+  z-index: 9999;
+  position: fixed;
+  padding: 4px;
+  width: 60%;
+  box-sizing: border-box;
+  top: 3em;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.alert {
+  position: relative;
+  margin-top: 1rem;
+  padding: 8px;
+  cursor: pointer;
+  z-index: 0;
+}
