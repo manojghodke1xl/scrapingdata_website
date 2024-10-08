@@ -43,7 +43,7 @@ export default function Signin() {
                 <h2 className="h2 text-center mb-4">Admin Login</h2>
                 <form onSubmit={loginAccount} autoComplete="off">
                   <div className="mb-3">
-                    <label className="form-label">Email address</label>
+                    <label className="form-label">Email Address</label>
                     <input
                       type="email"
                       value={email}

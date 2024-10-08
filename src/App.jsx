@@ -13,9 +13,9 @@ import Dashboard from "./pages/dashboard";
 import EnquiryList from "./pages/enquirylist";
 import MailingList from "./pages/mailinglist";
 import SiteList from "./pages/sitelist";
-import EditMember from "./pages/editmember";
 import AddSite from "./pages/addsite";
 import EnquirySingle from "./pages/enquirysingle";
+import MailingSingle from "./pages/mailingsingle";
 // import EventList from "./pages/eventlist";
 // import EventBooking from "./pages/eventbooking";
 // import CreateEvent from "./pages/createevent";
@@ -41,8 +41,10 @@ function App() {
               <Route path="/enquiry-list" element={<EnquiryList />} />
               <Route path="/enquiry/:id" element={<EnquirySingle />} />
               <Route path="/mailing-list" element={<MailingList />} />
+              <Route path="/mailing/:id" element={<MailingSingle />} />
               <Route path="/site-list" element={<SiteList />} />
               <Route path="/add-site" element={<AddSite />} />
+              <Route path="/edit-site/:id" element={<AddSite />} />
               {/* <Route path="/mailing-list" element={<EventList />} /> */}
               {/* <Route path="/event-booking/:eid" element={<EventBooking />} /> */}
               {/* <Route path="/edit-event/:eid" element={<EditEvent />} /> */}

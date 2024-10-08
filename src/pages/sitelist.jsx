@@ -100,7 +100,7 @@ export default function SiteList() {
                     <td>{lst.host}</td>
                     <td className="text-end">
                       <div className="col-6 col-sm-4 col-md-2 col-xl py-3">
-                        <button className="btn btn-primary ">Edit</button>
+                        <button onClick={() => navigate(`/edit-site/${lst._id}`)} className="btn btn-primary">Edit</button>
                       </div>
                     </td>
                   </tr>

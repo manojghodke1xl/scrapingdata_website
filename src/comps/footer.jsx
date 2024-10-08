@@ -8,11 +8,11 @@ export default function Footer() {
           <div className="col-12 col-lg-auto mt-3 mt-lg-0">
             <ul className="list-inline list-inline-dots mb-0">
               <li className="list-inline-item">
-                Copyright © 2024
+                Copyright © 2024{" "}
                 <Link to="." className="link-secondary">
-                  | Vista Stuff
-                </Link>
-                | All rights reserved.
+                  | Vista Group
+                </Link>{" "}
+                | All Rights Reserved.
               </li>
               {/* <li className="list-inline-item">
                 <a href="./changelog.html" className="link-secondary" rel="noopener">

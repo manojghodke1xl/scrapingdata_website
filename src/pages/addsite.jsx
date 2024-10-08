@@ -4,7 +4,7 @@ import { GlobalContext } from "../GlobalContext";
 
 export default function AddSite() {
   const navigate = useNavigate();
-  const { sid = "" } = useParams();
+  const { id = "" } = useParams();
 
   const { alert, setLoading } = useContext(GlobalContext);
 
@@ -14,10 +14,10 @@ export default function AddSite() {
   });
 
   useEffect(() => {
-    if (sid) {
+    if (id) {
       setLoading(true);
       (async () => {
-        const res = await fetch(`${import.meta.env.VITE_API_URL}/site${12}`, {
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/site/${id}`, {
           method: "GET",
           headers: {
             Authorization: localStorage.getItem("auth"),
@@ -25,12 +25,15 @@ export default function AddSite() {
         });
         const { data, error } = await res.json();
         if (res.ok) {
-          setEnquiries(data.enquiries);
+          const { name, host } = data.site;
+          setDetail({ name, host });
         } else {
           alert({ type: "warning", title: "Warning !", text: error });
         }
       })()
-        .catch((error) => alert({ type: "danger", title: "Error !", text: error.message }))
+        .catch((error) =>
+          alert({ type: "danger", title: "Error !", text: error.message })
+        )
         .finally(() => setLoading(false));
     }
   }, []);
@@ -39,14 +42,17 @@ export default function AddSite() {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/site`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: localStorage.getItem("auth"),
-        },
-        body: JSON.stringify(detail),
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/site${id ? `/${id}` : ""}`,
+        {
+          method: id ? "PUT" : "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: localStorage.getItem("auth"),
+          },
+          body: JSON.stringify(detail),
+        }
+      );
       const { message, error } = await res.json();
       if (res.ok) {
         alert({ type: "success", title: "Success !", text: message });
@@ -76,7 +82,9 @@ export default function AddSite() {
                   className="form-control"
                   placeholder="Site Name"
                   value={detail.name}
-                  onChange={(e) => setDetail((d) => ({ ...d, name: e.target.value }))}
+                  onChange={(e) =>
+                    setDetail((d) => ({ ...d, name: e.target.value }))
+                  }
                   required
                 />
               </div>
@@ -88,7 +96,9 @@ export default function AddSite() {
                   className="form-control"
                   placeholder="Site host"
                   value={detail.host}
-                  onChange={(e) => setDetail((d) => ({ ...d, host: e.target.value }))}
+                  onChange={(e) =>
+                    setDetail((d) => ({ ...d, host: e.target.value }))
+                  }
                   required
                 />
               </div>

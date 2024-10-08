@@ -1,8 +1,10 @@
 import { useContext, useEffect, useState } from "react";
 import { GlobalContext } from "../GlobalContext";
+import { useNavigate } from "react-router-dom";
 // import { convertToCSV } from "../utils/exporter";
 
 export default function MailingList() {
+  const navigate = useNavigate();
   const { alert, setLoading } = useContext(GlobalContext);
 
   const [lists, setLists] = useState([]);
@@ -59,7 +61,12 @@ export default function MailingList() {
 
                     <td className="text-end">
                       <div className="col-6 col-sm-4 col-md-2 col-xl py-3">
-                        <button className="btn btn-primary w-100">View</button>
+                        <button
+                          onClick={() => navigate(`/mailing/${lst._id}`)}
+                          className="btn btn-primary w-100"
+                        >
+                          View
+                        </button>
                       </div>
                     </td>
                   </tr>
