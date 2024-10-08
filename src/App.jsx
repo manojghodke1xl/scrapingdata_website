@@ -15,6 +15,7 @@ import MailingList from "./pages/mailinglist";
 import SiteList from "./pages/sitelist";
 import EditMember from "./pages/editmember";
 import AddSite from "./pages/addsite";
+import EnquirySingle from "./pages/enquirysingle";
 // import EventList from "./pages/eventlist";
 // import EventBooking from "./pages/eventbooking";
 // import CreateEvent from "./pages/createevent";
@@ -38,6 +39,7 @@ function App() {
             <Route element={<Auth />}>
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/enquiry-list" element={<EnquiryList />} />
+              <Route path="/enquiry/:id" element={<EnquirySingle />} />
               <Route path="/mailing-list" element={<MailingList />} />
               <Route path="/site-list" element={<SiteList />} />
               <Route path="/add-site" element={<AddSite />} />

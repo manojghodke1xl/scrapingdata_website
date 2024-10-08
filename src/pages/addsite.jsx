@@ -17,7 +17,7 @@ export default function AddSite() {
     if (sid) {
       setLoading(true);
       (async () => {
-        const res = await fetch(`${import.meta.env.VITE_API_URL}/site${}`, {
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/site${12}`, {
           method: "GET",
           headers: {
             Authorization: localStorage.getItem("auth"),
