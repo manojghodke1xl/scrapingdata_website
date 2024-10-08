@@ -20,7 +20,7 @@ export default function EditEvent() {
   useEffect(() => {
     setLoading(true);
     (async () => {
-      const res = await fetch(`${process.env.REACT_APP_API_URL}/event/edit/${eid}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/event/edit/${eid}`, {
         method: "GET",
         headers: {
           Authorization: localStorage.getItem("auth"),
@@ -49,7 +49,7 @@ export default function EditEvent() {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await fetch(`${process.env.REACT_APP_API_URL}/event/edit/${eid}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/event/edit/${eid}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -99,7 +99,8 @@ export default function EditEvent() {
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder="Event Description ..."
-                  required></textarea>
+                  required
+                ></textarea>
               </div>
               <div className="mb-3">
                 <label className="form-label required">Last Booking Date</label>
@@ -164,9 +165,7 @@ export default function EditEvent() {
                 />
               </div>
               {variants.map((vari, ix) => (
-                <div
-                  key={ix}
-                  className="card card-sm my-3">
+                <div key={ix} className="card card-sm my-3">
                   <div className="card-header justify-content-between">
                     <strong className="fs-4">Variant {ix + 1}</strong>
                     {ix > 0 && (
@@ -253,7 +252,8 @@ export default function EditEvent() {
                   className="btn btn-azure btn-icon"
                   onClick={() =>
                     setVariants(variants.concat({ name: "", price: 0, isLimited: false, minLimit: 0, maxLimit: 0 }))
-                  }>
+                  }
+                >
                   <svg
                     className="icon"
                     width={24}
@@ -263,21 +263,16 @@ export default function EditEvent() {
                     stroke="currentColor"
                     fill="none"
                     strokeLinecap="round"
-                    strokeLinejoin="round">
-                    <path
-                      stroke="none"
-                      d="M0 0h24v24H0z"
-                      fill="none"
-                    />
+                    strokeLinejoin="round"
+                  >
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                     <path d="M12 5l0 14" />
                     <path d="M5 12l14 0" />
                   </svg>
                 </button>
               </div>
               <div className="form-footer">
-                <button
-                  type="submit"
-                  className="btn btn-primary w-100">
+                <button type="submit" className="btn btn-primary w-100">
                   Update
                 </button>
               </div>

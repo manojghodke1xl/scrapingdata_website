@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 export default function Footer() {
   return (
@@ -8,9 +8,9 @@ export default function Footer() {
           <div className="col-12 col-lg-auto mt-3 mt-lg-0">
             <ul className="list-inline list-inline-dots mb-0">
               <li className="list-inline-item">
-                Copyright © 2023
+                Copyright © 2024
                 <Link to="." className="link-secondary">
-                  | SMJV Pariwar
+                  | Vista Stuff
                 </Link>
                 | All rights reserved.
               </li>

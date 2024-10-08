@@ -8,7 +8,7 @@ export default function Layout() {
   const { auth } = useContext(GlobalContext);
   return (
     <div className="wrapper">
-      <Header isAuth={Boolean(auth.id)} />
+      <Header isAuth={Boolean(auth.email)} />
       <div className="page-wrapper">
         <Outlet />
         <Footer />

@@ -12,7 +12,7 @@ export default function EventList() {
     if (did > 0) return;
     setLoading(true);
     (async () => {
-      const res = await fetch(`${process.env.REACT_APP_API_URL}/event`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/event`, {
         method: "GET",
         headers: {
           Authorization: localStorage.getItem("auth"),
@@ -32,7 +32,7 @@ export default function EventList() {
   const deleteEvent = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`${process.env.REACT_APP_API_URL}/event/edit/${did}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/event/edit/${did}`, {
         method: "DELETE",
         headers: {
           Authorization: localStorage.getItem("auth"),
@@ -58,15 +58,11 @@ export default function EventList() {
         <div className="container-xl">
           <div className="row row-cards">
             {events.map((e) => (
-              <div
-                key={e.id}
-                className="col-md-6 col-lg-3">
+              <div key={e.id} className="col-md-6 col-lg-3">
                 <div className="card">
                   <div className="ribbon bg-azure">{e.reservations.length}</div>
                   <div className="card-body">
-                    <h3 className="card-title text-bold text-capitalize text-decoration-underline">
-                      {e.name}
-                    </h3>
+                    <h3 className="card-title text-bold text-capitalize text-decoration-underline">{e.name}</h3>
                     <ul className="list-unstyled lh-lg">
                       <li>Event Date: {e.eventdate}</li>
                       <li>Last Booking Date: {e.lastdate}</li>
@@ -83,17 +79,14 @@ export default function EventList() {
                         onClick={() => setDid(e.id)}
                         className="btn btn-danger mx-1"
                         data-bs-toggle="modal"
-                        data-bs-target="#modal">
+                        data-bs-target="#modal"
+                      >
                         Delete
                       </button>
-                      <Link
-                        to={`/edit-event/${e.id}`}
-                        className="btn btn-primary">
+                      <Link to={`/edit-event/${e.id}`} className="btn btn-primary">
                         Edit
                       </Link>
-                      <Link
-                        to={`/event-booking/${e.id}`}
-                        className="btn btn-success">
+                      <Link to={`/event-booking/${e.id}`} className="btn btn-success">
                         Bookings
                       </Link>
                     </div>
@@ -104,21 +97,10 @@ export default function EventList() {
           </div>
         </div>
       </div>
-      <div
-        id="modal"
-        tabIndex="-1"
-        className="modal modal-blur fade hide"
-        aria-hidden="true">
-        <div
-          className="modal-dialog modal-dialog-centered"
-          role="document">
+      <div id="modal" tabIndex="-1" className="modal modal-blur fade hide" aria-hidden="true">
+        <div className="modal-dialog modal-dialog-centered" role="document">
           <div className="modal-content">
-            <button
-              type="button"
-              className="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            />
+            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
             <div className="modal-status bg-danger" />
             <div className="modal-body text-center py-4">
               <svg
@@ -131,12 +113,9 @@ export default function EventList() {
                 stroke="currentColor"
                 fill="none"
                 strokeLinecap="round"
-                strokeLinejoin="round">
-                <path
-                  stroke="none"
-                  d="M0 0h24v24H0z"
-                  fill="none"
-                />
+                strokeLinejoin="round"
+              >
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                 <path d="M12 9v2m0 4v.01" />
                 <path d="M5 19h14a2 2 0 0 0 1.84 -2.75l-7.1 -12.25a2 2 0 0 0 -3.5 0l-7.1 12.25a2 2 0 0 0 1.75 2.75" />
               </svg>
@@ -149,17 +128,12 @@ export default function EventList() {
               <div className="w-100">
                 <div className="row">
                   <div className="col">
-                    <span
-                      className="btn w-100"
-                      data-bs-dismiss="modal">
+                    <span className="btn w-100" data-bs-dismiss="modal">
                       Cancel
                     </span>
                   </div>
                   <div className="col">
-                    <span
-                      onClick={deleteEvent}
-                      className="btn btn-danger w-100"
-                      data-bs-dismiss="modal">
+                    <span onClick={deleteEvent} className="btn btn-danger w-100" data-bs-dismiss="modal">
                       Delete Event
                     </span>
                   </div>

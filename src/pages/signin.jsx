@@ -1,33 +1,33 @@
-import { useContext, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { GlobalContext } from '../GlobalContext';
+import { useContext, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { GlobalContext } from "../GlobalContext";
 
 export default function Signin() {
   const navigate = useNavigate();
   const { alert, dispatch, setLoading } = useContext(GlobalContext);
 
   const [show, setShow] = useState(false);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const loginAccount = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await fetch(`${process.env.REACT_APP_API_URL}/signin`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/signin`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
       const { data, error } = await res.json();
       if (res.ok) {
-        dispatch({ type: 'SIGNIN', payload: data });
-        navigate('/dashboard');
+        dispatch({ type: "SIGNIN", payload: data.token });
+        navigate("/dashboard");
       } else {
-        alert({ type: 'warning', title: 'Warning !', text: error });
+        alert({ type: "warning", title: "Warning !", text: error });
       }
     } catch (error) {
-      alert({ type: 'danger', title: 'Error !', text: error.message });
+      alert({ type: "danger", title: "Error !", text: error.message });
     } finally {
       setLoading(false);
     }
@@ -58,7 +58,7 @@ export default function Signin() {
                     <label className="form-label">Password</label>
                     <div className="input-group input-group-flat">
                       <input
-                        type={show ? 'text' : 'password'}
+                        type={show ? "text" : "password"}
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         className="form-control"
@@ -73,7 +73,8 @@ export default function Signin() {
                           className="link-secondary ms-1"
                           data-bs-toggle="tooltip"
                           aria-label="Show password"
-                          data-bs-original-title="Show password">
+                          data-bs-original-title="Show password"
+                        >
                           <svg
                             className="icon"
                             width={24}
@@ -83,7 +84,8 @@ export default function Signin() {
                             stroke="currentColor"
                             fill="none"
                             strokeLinecap="round"
-                            strokeLinejoin="round">
+                            strokeLinejoin="round"
+                          >
                             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                             <circle cx={12} cy={12} r={2} />
                             <path d="M22 12c-2.667 4.667 -6 7 -10 7s-7.333 -2.333 -10 -7c2.667 -4.667 6 -7 10 -7s7.333 2.333 10 7" />
