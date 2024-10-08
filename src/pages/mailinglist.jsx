@@ -41,7 +41,7 @@ export default function MailingList() {
           <div className="card-header">
             <h3 className="card-title">All Mailing Lists</h3>
           </div>
-          
+
           <div className="table-responsive">
             <table className="table card-table table-vcenter text-nowrap datatable">
               <thead>
@@ -67,7 +67,7 @@ export default function MailingList() {
               </tbody>
             </table>
           </div>
-          <div className="card-footer d-flex align-items-center">
+          {/* <div className="card-footer d-flex align-items-center">
             <p className="m-0 text-secondary">
               Showing <span>1</span> to <span>8</span> of <span>16</span>{" "}
               entries
@@ -80,7 +80,6 @@ export default function MailingList() {
                   tabIndex={-1}
                   aria-disabled="true"
                 >
-                  {/* Download SVG icon from http://tabler-icons.io/i/chevron-left */}
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width={24}
@@ -127,7 +126,6 @@ export default function MailingList() {
               <li className="page-item">
                 <a className="page-link" href="#">
                   next{" "}
-                  {/* Download SVG icon from http://tabler-icons.io/i/chevron-right */}
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width={24}
@@ -146,7 +144,7 @@ export default function MailingList() {
                 </a>
               </li>
             </ul>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

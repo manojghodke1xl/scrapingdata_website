@@ -20,7 +20,8 @@ export default function Header({ isAuth = false }) {
         </button>
         <h1 className="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
           <Link to="/">
-            <img src="/logo.jpg" alt="Logo" className="navbar-brand-image" width={110} height={32} />
+            Vista
+            {/* <img src="/logo.jpg" alt="Logo" className="navbar-brand-image" width={110} height={32} /> */}
           </Link>
         </h1>
         {isAuth && (
@@ -124,7 +125,10 @@ export default function Header({ isAuth = false }) {
               </div>
             </div>
             <div className="btn-list">
-              <button className="btn" onClick={() => dispatch({ type: "SIGNOUT" })}>
+              <button
+                className="btn"
+                onClick={() => dispatch({ type: "SIGNOUT" })}
+              >
                 Log Out
               </button>
             </div>

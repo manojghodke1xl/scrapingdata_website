@@ -105,12 +105,12 @@ export default function Signin() {
           </div>
         </div>
         <div className="col-lg d-none d-lg-block">
-          <img
+          {/* <img
             src="./static/illustrations/undraw_secure_login_pdn4.svg"
             className="d-block mx-auto"
             alt="illustration"
             height={300}
-          />
+          /> */}
         </div>
       </div>
     </div>

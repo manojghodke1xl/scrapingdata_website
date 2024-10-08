@@ -49,6 +49,11 @@ export default function EnquiryList() {
               <thead>
                 <tr>
                   <th>Customer Name</th>
+                  <th>Customer Email</th>
+                  <th>Customer Mobile</th>
+                  <th>Enquiry Service</th>
+                  <th>Enquiry Subject</th>
+                  <th>Enquiry Message</th>
                   <th>Site Name</th>
                   <th>Actions</th>
                 </tr>
@@ -57,11 +62,22 @@ export default function EnquiryList() {
                 {enquiries.map((enq) => (
                   <tr>
                     <td>{enq.name}</td>
+                    <td>{enq.email}</td>
+                    <td>
+                      {enq.ccode} {enq.mobile}
+                    </td>
+                    <td>{enq.service}</td>
+                    <td>{enq.subject}</td>
                     <td>{enq.site.name}</td>
 
                     <td className="text-end">
                       <div className="col-6 col-sm-4 col-md-2 col-xl py-3">
-                        <button onClick={() => navigate(`/enquiry/${enq._id}`)} className="btn btn-primary w-100">View</button>
+                        <button
+                          onClick={() => navigate(`/enquiry/${enq._id}`)}
+                          className="btn btn-primary w-100"
+                        >
+                          View
+                        </button>
                       </div>
                     </td>
                   </tr>
@@ -69,7 +85,7 @@ export default function EnquiryList() {
               </tbody>
             </table>
           </div>
-          <div className="card-footer d-flex align-items-center">
+          {/* <div className="card-footer d-flex align-items-center">
             <p className="m-0 text-secondary">
               Showing <span>1</span> to <span>8</span> of <span>16</span>{" "}
               entries
@@ -82,7 +98,6 @@ export default function EnquiryList() {
                   tabIndex={-1}
                   aria-disabled="true"
                 >
-                  {/* Download SVG icon from http://tabler-icons.io/i/chevron-left */}
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width={24}
@@ -129,7 +144,6 @@ export default function EnquiryList() {
               <li className="page-item">
                 <a className="page-link" href="#">
                   next{" "}
-                  {/* Download SVG icon from http://tabler-icons.io/i/chevron-right */}
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width={24}
@@ -148,7 +162,7 @@ export default function EnquiryList() {
                 </a>
               </li>
             </ul>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
