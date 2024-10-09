@@ -11,6 +11,7 @@ export default function AddSite() {
   const [detail, setDetail] = useState({
     name: "",
     host: "",
+    status: "",
   });
 
   useEffect(() => {
@@ -102,6 +103,23 @@ export default function AddSite() {
                   required
                 />
               </div>
+              <label className="row">
+                <span className="col">Site Status</span>
+                <span className="col-auto">
+                  <label className="form-check form-check-single form-switch">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      defaultChecked=""
+                      name="status"
+                      value={detail.status}
+                      onChange={(e) =>
+                        setDetail((d) => ({ ...d, status: e.target.value }))
+                      }
+                    />
+                  </label>
+                </span>
+              </label>
               <div className="form-footer">
                 <button type="submit" className="btn btn-primary w-100">
                   Add Site

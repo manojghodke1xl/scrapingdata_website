@@ -16,6 +16,8 @@ import SiteList from "./pages/sitelist";
 import AddSite from "./pages/addsite";
 import EnquirySingle from "./pages/enquirysingle";
 import MailingSingle from "./pages/mailingsingle";
+import AdminList from "./pages/adminlist";
+import AddAdmin from "./pages/addadmin";
 
 function App() {
   const [alerts, alert] = useAlert();
@@ -39,6 +41,9 @@ function App() {
               <Route path="/mailing-list" element={<MailingList />} />
               <Route path="/mailing/:id" element={<MailingSingle />} />
               <Route path="/site-list" element={<SiteList />} />
+              <Route path="/admin-list" element={<AdminList />} />
+              <Route path="/add-admin" element={<AddAdmin />} />
+              <Route path="/add-admin/:id" element={<AddAdmin />} />
               <Route path="/add-site" element={<AddSite />} />
               <Route path="/edit-site/:id" element={<AddSite />} />
             </Route>

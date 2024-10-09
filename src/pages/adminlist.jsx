@@ -3,20 +3,20 @@ import { GlobalContext } from "../GlobalContext";
 import { useNavigate } from "react-router-dom";
 import Table from "../comps/table";
 
-export default function EnquiryList() {
-  const { alert, setLoading } = useContext(GlobalContext);
+export default function AdminList() {
   const navigate = useNavigate();
+  const { alert, setLoading } = useContext(GlobalContext);
 
-  const [enquiries, setEnquiries] = useState([]);
-  const [page, setPage] = useState(1);
+  const [lists, setLists] = useState([]);
+  const [page, setPage] = useState(0);
   const [limit, setLimit] = useState(8);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [sitesMap, setSitesMap] = useState({});
 
   useEffect(() => {
     setLoading(true);
     (async () => {
       const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/enquiries?p=${page}&n=${limit}`,
+        `${import.meta.env.VITE_API_URL}/admins?p=${page}&n=${limit}`,
         {
           method: "GET",
           headers: {
@@ -24,9 +24,10 @@ export default function EnquiryList() {
           },
         }
       );
+
       const { data, error } = await res.json();
       if (res.ok) {
-        setEnquiries(data.enquiries);
+        setLists(data.admins);
       } else {
         alert({ type: "warning", title: "Warning !", text: error });
       }
@@ -38,29 +39,19 @@ export default function EnquiryList() {
   }, [alert, limit, page, setLoading]);
 
   const headers = [
-    { label: "Customer Name" },
-    { label: "Customer Email" },
-    { label: "Customer Mobile" },
-    { label: "Enquiry Service" },
-    { label: "Enquiry Subject" },
-    { label: "Enquiry Message" },
-    { label: "Site Name" },
+    { label: "Admin Name" },
+    { label: "Admin Email" },
     { label: "Actions" },
   ];
 
-  const rows = enquiries.map((enq) => [
-    enq.name,
-    enq.email,
-    `${enq.ccode} ${enq.mobile}`,
-    enq.service,
-    enq.subject,
-    enq.message, // Assuming 'message' is available in the response
-    enq.site.name,
+  const rows = lists.map((admin) => [
+    admin.name,
+    admin.email,
     <button
-      onClick={() => navigate(`/enquiry/${enq._id}`)}
+      onClick={() => navigate(`/add-admin/${admin._id}`)}
       className="btn btn-primary w-100"
     >
-      View
+      Edit
     </button>,
   ]);
 
@@ -68,7 +59,7 @@ export default function EnquiryList() {
 
   const handleLimitChange = (newLimit) => {
     setLimit(newLimit);
-    setPage(1); // Reset to the first page on limit change
+    setPage(1);
   };
 
   return (
@@ -76,15 +67,14 @@ export default function EnquiryList() {
       <div className="container-xl">
         <div className="card">
           <div className="card-header">
-            <h3 className="card-title">All Enquiries</h3>
+            <h3 className="card-title">All Admins List</h3>
             <div className="card-options">
-              <input
-                type="text"
-                className="form-control form-control-sm"
-                placeholder="Search enquiries..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)} // Handle search input
-              />
+              <button
+                onClick={() => navigate("/add-admin")}
+                className="btn btn-primary"
+              >
+                Add Admin
+              </button>
             </div>
           </div>
 
@@ -93,7 +83,7 @@ export default function EnquiryList() {
               headers={headers}
               rows={rows}
               currentPage={page}
-              totalPages={Math.ceil(enquiries.length / limit)}
+              totalPages={Math.ceil(lists.length / limit)}
               onPageChange={handlePageChange}
               entriesPerPage={limit}
               onEntriesChange={handleLimitChange}

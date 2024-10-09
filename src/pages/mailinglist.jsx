@@ -1,14 +1,15 @@
 import { useContext, useEffect, useState } from "react";
 import { GlobalContext } from "../GlobalContext";
 import { useNavigate } from "react-router-dom";
+import Table from "../comps/table"; 
 
 export default function MailingList() {
   const navigate = useNavigate();
   const { alert, setLoading } = useContext(GlobalContext);
 
   const [lists, setLists] = useState([]);
-  const [page, setPage] = useState(0);
-  const [limit, setLimit] = useState(1000);
+  const [page, setPage] = useState(1); 
+  const [limit, setLimit] = useState(8); 
 
   useEffect(() => {
     setLoading(true);
@@ -35,6 +36,27 @@ export default function MailingList() {
       .finally(() => setLoading(false));
   }, [alert, limit, page, setLoading]);
 
+  const headers = [
+    { label: "Customer Email" },
+    { label: "Site Name" },
+    { label: "Actions" },
+  ];
+
+  const rows = lists.map((lst) => [
+    lst.email,
+    lst.site.name,
+    <button
+      onClick={() => navigate(`/mailing/${lst._id}`)}
+      className="btn btn-primary w-100"
+    >
+      View
+    </button>,
+  ]);
+
+  const handlePageChange = (newPage) => setPage(newPage);
+
+  const handleLimitChange = (newLimit) => setLimit(newLimit);
+
   return (
     <div className="page-body">
       <div className="container-xl">
@@ -44,34 +66,15 @@ export default function MailingList() {
           </div>
 
           <div className="table-responsive">
-            <table className="table card-table table-vcenter text-nowrap datatable">
-              <thead>
-                <tr>
-                  <th>Customer Email</th>
-                  <th>Site Name</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {lists.map((lst) => (
-                  <tr>
-                    <td>{lst.email}</td>
-                    <td>{lst.site.name}</td>
-
-                    <td className="text-end">
-                      <div className="col-6 col-sm-4 col-md-2 col-xl py-3">
-                        <button
-                          onClick={() => navigate(`/mailing/${lst._id}`)}
-                          className="btn btn-primary w-100"
-                        >
-                          View
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            <Table
+              headers={headers}        
+              rows={rows}               
+              currentPage={page}         
+              totalPages={Math.ceil(lists.length / limit)} 
+              onPageChange={handlePageChange} 
+              entriesPerPage={limit}     
+              onEntriesChange={handleLimitChange} 
+            />
           </div>
         </div>
       </div>

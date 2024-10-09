@@ -1,14 +1,14 @@
 import { useContext, useEffect, useState } from "react";
 import { GlobalContext } from "../GlobalContext";
 import { useNavigate } from "react-router-dom";
-
+import Table from "../comps/table"; 
 export default function SiteList() {
   const navigate = useNavigate();
   const { alert, setLoading } = useContext(GlobalContext);
 
   const [sites, setSites] = useState([]);
-  const [page, setPage] = useState(0);
-  const [limit, setLimit] = useState(1000);
+  const [page, setPage] = useState(0); 
+  const [limit, setLimit] = useState(8); 
 
   useEffect(() => {
     setLoading(true);
@@ -35,12 +35,32 @@ export default function SiteList() {
       .finally(() => setLoading(false));
   }, [alert, limit, page, setLoading]);
 
+  const headers = [
+    { label: "Site Key" },
+    { label: "Website Name" },
+    { label: "Web Address" },
+    { label: "Actions" },
+  ];
+
+  const rows = sites.map((site) => [
+    site._id,
+    site.name,
+    site.host,
+    <button
+      onClick={() => navigate(`/edit-site/${site._id}`)}
+      className="btn btn-primary w-100"
+    >
+      Edit
+    </button>,
+  ]);
+
+  const totalPages = Math.ceil(sites.length / limit); 
   return (
     <div className="page-body">
       <div className="container-xl">
         <div className="card">
           <div className="card-header">
-            <h3 className="card-title">All Webistes</h3>
+            <h3 className="card-title">All Websites</h3>
             <div className="card-options">
               <div className="page-header d-print-none">
                 <div className="container-xl">
@@ -48,9 +68,7 @@ export default function SiteList() {
                     <div className="col-auto ms-auto d-print-none">
                       <div className="btn-list">
                         <button
-                          onClick={() => {
-                            navigate("/add-site");
-                          }}
+                          onClick={() => navigate("/add-site")}
                           className="btn btn-primary d-none d-sm-inline-block"
                           data-bs-toggle="modal"
                           data-bs-target="#modal-report"
@@ -81,37 +99,18 @@ export default function SiteList() {
             </div>
           </div>
 
-          <div className="table-responsive">
-            <table className="table card-table table-vcenter text-nowrap datatable">
-              <thead>
-                <tr>
-                  <th>Site Key</th>
-                  <th>Website Name</th>
-                  <th>Web Adress</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {sites.map((lst) => (
-                  <tr>
-                    <td>{lst._id}</td>
-                    <td>{lst.name}</td>
-                    <td>{lst.host}</td>
-                    <td className="text-end">
-                      <div className="col-6 col-sm-4 col-md-2 col-xl py-3">
-                        <button
-                          onClick={() => navigate(`/edit-site/${lst._id}`)}
-                          className="btn btn-primary"
-                        >
-                          Edit
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <Table
+            headers={headers}
+            rows={rows}
+            currentPage={page}
+            totalPages={totalPages}
+            onPageChange={setPage}
+            entriesPerPage={limit}
+            onEntriesChange={(newLimit) => {
+              setLimit(newLimit);
+              setPage(1); 
+            }}
+          />
         </div>
       </div>
     </div>
