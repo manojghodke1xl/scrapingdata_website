@@ -3,7 +3,7 @@ import { createContext } from "react";
 export const GlobalContext = createContext();
 
 const defaultState = {
-  email: "",
+  id: "",
   exp: 0,
   iat: 0,
 };

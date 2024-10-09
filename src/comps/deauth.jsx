@@ -5,6 +5,6 @@ import { Navigate, Outlet } from "react-router-dom";
 export default function DeAuth() {
   const { auth } = useContext(GlobalContext);
 
-  if (!auth.email) return <Outlet />;
+  if (!auth.id) return <Outlet />;
   else return <Navigate to="/dashboard" replace />;
 }

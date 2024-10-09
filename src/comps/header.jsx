@@ -19,10 +19,7 @@ export default function Header({ isAuth = false }) {
           <span className="navbar-toggler-icon" />
         </button>
         <h1 className="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
-          <Link to="/">
-            Vista Group
-            {/* <img src="/logo.jpg" alt="Logo" className="navbar-brand-image" width={110} height={32} /> */}
-          </Link>
+          <Link to="/">Vista Group</Link>
         </h1>
         {isAuth && (
           <>

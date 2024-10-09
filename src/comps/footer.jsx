@@ -14,11 +14,6 @@ export default function Footer() {
                 </Link>{" "}
                 | All Rights Reserved.
               </li>
-              {/* <li className="list-inline-item">
-                <a href="./changelog.html" className="link-secondary" rel="noopener">
-                  v1.0.0-beta17
-                </a>
-              </li> */}
             </ul>
           </div>
         </div>

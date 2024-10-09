@@ -6,6 +6,6 @@ export default function Auth() {
   const { pathname } = useLocation();
   const { auth } = useContext(GlobalContext);
 
-  if (auth.email) return <Outlet />;
+  if (auth.id) return <Outlet />;
   else return <Navigate to="/signin" state={pathname} replace />;
 }
