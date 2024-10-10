@@ -45,8 +45,14 @@ export default function AddAdmin() {
         });
         const { data, error } = await res.json();
         if (res.ok) {
-          const { name, email, sites } = data.admin;
-          setDetail({ name, email, sites }); // Populate existing admin data
+          const { name, email, isSuperAdmin, sites } = data.admin;
+          setDetail((d) => ({
+            ...d,
+            name,
+            email,
+            isSuperAdmin,
+            sites: sites.map((s) => s._id),
+          })); // Populate existing admin data
         } else {
           alert({ type: "warning", title: "Warning !", text: error });
         }
@@ -86,6 +92,8 @@ export default function AddAdmin() {
       setLoading(false);
     }
   };
+
+  console.log(detail.sites);
 
   return (
     <div className="page-body">
@@ -133,7 +141,7 @@ export default function AddAdmin() {
                   onChange={(e) =>
                     setDetail((d) => ({ ...d, password: e.target.value }))
                   }
-                  required
+                  required={!id}
                 />
               </div>
               <div className="mb-3">
@@ -145,7 +153,9 @@ export default function AddAdmin() {
                   onChange={(e) =>
                     setDetail((d) => ({
                       ...d,
-                      sites: [...e.target.selectedOptions].map(option => option.value),
+                      sites: Array.from(e.target.options)
+                        .filter((op) => op.selected)
+                        .map((op) => op.value),
                     }))
                   }
                 >
@@ -155,7 +165,9 @@ export default function AddAdmin() {
                     </option>
                   ))}
                 </select>
-                <small className="form-text text-muted">Hold Ctrl (Windows) or Command (Mac) to select multiple sites.</small>
+                <small className="form-text text-muted">
+                  Hold Ctrl (Windows) or Command (Mac) to select multiple sites.
+                </small>
               </div>
               <div className="form-footer">
                 <button type="submit" className="btn btn-primary w-100">
