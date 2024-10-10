@@ -18,6 +18,8 @@ import EnquirySingle from "./pages/enquirysingle";
 import MailingSingle from "./pages/mailingsingle";
 import AdminList from "./pages/adminlist";
 import AddAdmin from "./pages/addadmin";
+import GuideList from "./pages/guidelist";
+import AddGuide from "./pages/addguide";
 
 function App() {
   const [alerts, alert] = useAlert();
@@ -46,6 +48,9 @@ function App() {
               <Route path="/add-admin/:id" element={<AddAdmin />} />
               <Route path="/add-site" element={<AddSite />} />
               <Route path="/edit-site/:id" element={<AddSite />} />
+              <Route path="/guide-list" element={<GuideList />} />
+              <Route path="/add-guide" element={<AddGuide />} />
+              <Route path="/add-guide/:id" element={<AddGuide />} />
             </Route>
 
             <Route path="*" element={<Missing />} />

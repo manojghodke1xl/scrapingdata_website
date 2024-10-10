@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { GlobalContext } from "../GlobalContext";
 import { useNavigate } from "react-router-dom";
 import Table from "../comps/table";
+import ConfirmationModal from "../comps/confirmation"; // Import the ConfirmationModal
 
 export default function EnquiryList() {
   const { alert, setLoading } = useContext(GlobalContext);
@@ -11,6 +12,8 @@ export default function EnquiryList() {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(8);
   const [searchTerm, setSearchTerm] = useState("");
+  const [enquiryToDelete, setEnquiryToDelete] = useState(null); // State for the enquiry to delete
+  const [modalOpen, setModalOpen] = useState(false); // State for modal visibility
 
   useEffect(() => {
     setLoading(true);
@@ -37,6 +40,35 @@ export default function EnquiryList() {
       .finally(() => setLoading(false));
   }, [alert, limit, page, setLoading]);
 
+  const deleteEnquiry = async () => {
+    if (!enquiryToDelete) return;
+
+    setLoading(true);
+    try {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/enquiry/${enquiryToDelete}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: localStorage.getItem("auth"),
+        },
+      });
+      const { error } = await res.json();
+
+      if (res.ok) {
+        // Remove the deleted enquiry from state
+        setEnquiries((prevEnquiries) => prevEnquiries.filter(enq => enq._id !== enquiryToDelete));
+        alert({ type: "success", title: "Deleted!", text: "Enquiry has been deleted." });
+      } else {
+        alert({ type: "danger", title: "Error!", text: error });
+      }
+    } catch (error) {
+      alert({ type: "danger", title: "Error!", text: error.message });
+    } finally {
+      setLoading(false);
+      setModalOpen(false); // Close the modal after deletion
+      setEnquiryToDelete(null); // Reset the enquiry ID
+    }
+  };
+
   const headers = [
     { label: "Customer Name" },
     { label: "Customer Email" },
@@ -51,24 +83,37 @@ export default function EnquiryList() {
   const rows = enquiries.map((enq) => [
     enq.name,
     enq.email,
-    `${enq.ccode} ${enq.mobile}`,
+    enq.mobile,
     enq.service,
     enq.subject,
     enq.message, // Assuming 'message' is available in the response
     enq.site.name,
-    <button
-      onClick={() => navigate(`/enquiry/${enq._id}`)}
-      className="btn btn-primary w-100"
-    >
-      View
-    </button>,
+    <div>
+      <button
+        onClick={() => navigate(`/enquiry/${enq._id}`)}
+        className="btn btn-primary me-2"
+      >
+        View
+      </button>
+      <button
+        onClick={() => {
+          setEnquiryToDelete(enq._id);
+          setModalOpen(true);
+        }}
+        className="btn btn-danger"
+      >
+        Delete
+      </button>
+    </div>,
   ]);
+
+  const totalCount = enquiries.length;
 
   const handlePageChange = (newPage) => setPage(newPage);
 
   const handleLimitChange = (newLimit) => {
     setLimit(newLimit);
-    setPage(1); // Reset to the first page on limit change
+    setPage(1);
   };
 
   return (
@@ -83,7 +128,7 @@ export default function EnquiryList() {
                 className="form-control form-control-sm"
                 placeholder="Search enquiries..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)} // Handle search input
+                onChange={(e) => setSearchTerm(e.target.value)} 
               />
             </div>
           </div>
@@ -101,6 +146,14 @@ export default function EnquiryList() {
           </div>
         </div>
       </div>
+
+      {/* Confirmation Modal */}
+      <ConfirmationModal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        onConfirm={deleteEnquiry}
+        message="Are you sure you want to delete this enquiry? If you proceed, you will lose this record."
+      />
     </div>
   );
 }

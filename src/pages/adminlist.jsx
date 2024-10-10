@@ -10,7 +10,7 @@ export default function AdminList() {
   const [lists, setLists] = useState([]);
   const [page, setPage] = useState(0);
   const [limit, setLimit] = useState(8);
-  const [sitesMap, setSitesMap] = useState({});
+  const [totalCount, setTotalCount] = useState(0); // To track the total number of admins
 
   useEffect(() => {
     setLoading(true);
@@ -28,12 +28,13 @@ export default function AdminList() {
       const { data, error } = await res.json();
       if (res.ok) {
         setLists(data.admins);
+        setTotalCount(data.count); // Use 'count' from API response
       } else {
-        alert({ type: "warning", title: "Warning !", text: error });
+        alert({ type: "warning", title: "Warning!", text: error });
       }
     })()
       .catch((error) =>
-        alert({ type: "danger", title: "Error !", text: error.message })
+        alert({ type: "danger", title: "Error!", text: error.message })
       )
       .finally(() => setLoading(false));
   }, [alert, limit, page, setLoading]);
@@ -59,7 +60,7 @@ export default function AdminList() {
 
   const handleLimitChange = (newLimit) => {
     setLimit(newLimit);
-    setPage(1);
+    setPage(0); // Reset to the first page on limit change
   };
 
   return (
@@ -83,7 +84,7 @@ export default function AdminList() {
               headers={headers}
               rows={rows}
               currentPage={page}
-              totalPages={Math.ceil(lists.length / limit)}
+              totalPages={Math.ceil(totalCount / limit)} // Calculate total pages based on count
               onPageChange={handlePageChange}
               entriesPerPage={limit}
               onEntriesChange={handleLimitChange}

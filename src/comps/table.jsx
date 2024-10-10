@@ -22,6 +22,7 @@ const TableRow = ({ rowData }) => (
 );
 
 const Pagination = ({ currentPage, totalPages, onPageChange }) => (
+  
   <ul className="pagination m-0 ms-auto">
     <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
       <a
@@ -91,7 +92,7 @@ const Table = ({
               </div>
             </div>
             <div className="table-responsive">
-              <table className="table card-table table-vcenter text-nowrap datatable">
+              <table className="table card-table table-vcenter text-nowrap datatable ">
                 <TableHeader headers={headers} />
                 <tbody>
                   {rows.map((row, index) => (
