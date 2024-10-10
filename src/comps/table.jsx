@@ -22,7 +22,6 @@ const TableRow = ({ rowData }) => (
 );
 
 const Pagination = ({ currentPage, totalPages, onPageChange }) => (
-  
   <ul className="pagination m-0 ms-auto">
     <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
       <a
@@ -30,7 +29,12 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => (
         href="#"
         tabIndex={-1}
         aria-disabled={currentPage === 1}
-        onClick={() => onPageChange(currentPage - 1)}
+        onClick={(e) => {
+          e.preventDefault();
+          if (currentPage > 1) {
+            onPageChange(currentPage - 1);
+          }
+        }}
       >
         prev
       </a>
@@ -39,7 +43,12 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => (
       <a
         className="page-link"
         href="#"
-        onClick={() => onPageChange(currentPage + 1)}
+        onClick={(e) => {
+          e.preventDefault();
+          if (currentPage < totalPages) {
+            onPageChange(currentPage + 1);
+          }
+        }}
       >
         next
       </a>
@@ -56,6 +65,7 @@ const Table = ({
   onSearch,
   entriesPerPage,
   onEntriesChange,
+  totalCount,
   actions,
 }) => {
   return (
@@ -103,8 +113,8 @@ const Table = ({
             </div>
             <div className="card-footer d-flex align-items-center">
               <p className="m-0 text-secondary">
-                Showing <span>{currentPage}</span> to{" "}
-                <span>{entriesPerPage}</span> of <span>{rows.length}</span>{" "}
+                Showing <span>{currentPage + 1}</span> to{" "}
+                <span>{entriesPerPage}</span> of <span>{totalCount}</span>{" "}
                 entries
               </p>
               <Pagination

@@ -12,6 +12,7 @@ export default function AdminList() {
   const [limit, setLimit] = useState(8);
   const [totalCount, setTotalCount] = useState(0); // To track the total number of admins
 
+
   useEffect(() => {
     setLoading(true);
     (async () => {
@@ -88,6 +89,7 @@ export default function AdminList() {
               onPageChange={handlePageChange}
               entriesPerPage={limit}
               onEntriesChange={handleLimitChange}
+              totalCount={totalCount}
             />
           </div>
         </div>

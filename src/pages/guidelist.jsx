@@ -13,6 +13,7 @@ export default function GuideList() {
   const [limit, setLimit] = useState(8);
   const [guideToDelete, setGuideToDelete] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
+  const [totalCount, setTotalCount] = useState(0); // To track the total number of guides
 
   useEffect(() => {
     setLoading(true);
@@ -28,8 +29,10 @@ export default function GuideList() {
       );
 
       const { data, error } = await res.json();
+      console.log(data);
       if (res.ok) {
         setLists(data.guides);
+        setTotalCount(data.count);
       } else {
         alert({ type: "warning", title: "Warning !", text: error });
       }
@@ -102,9 +105,7 @@ export default function GuideList() {
     </div>,
   ]);
 
-  console.log('rows is', row)
-
- handlePageChange = (newPage) => setPage(newPage);
+  const handlePageChange = (newPage) => setPage(newPage);
 
   const handleLimitChange = (newLimit) => {
     setLimit(newLimit);
@@ -136,7 +137,7 @@ export default function GuideList() {
               onPageChange={handlePageChange}
               entriesPerPage={limit}
               onEntriesChange={handleLimitChange}
-              
+              totalCount={totalCount}
             />
           </div>
         </div>

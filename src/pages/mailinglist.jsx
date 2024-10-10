@@ -9,10 +9,11 @@ export default function MailingList() {
   const { alert, setLoading } = useContext(GlobalContext);
 
   const [lists, setLists] = useState([]);
-  const [page, setPage] = useState(1); 
+  const [page, setPage] = useState(0); 
   const [limit, setLimit] = useState(8);
   const [mailingToDelete, setMailingToDelete] = useState(null); // State for the mailing to delete
   const [modalOpen, setModalOpen] = useState(false); // State for modal visibility
+  const [totalCount, setTotalCount] = useState(0); // To track the total number of guides
 
   useEffect(() => {
     setLoading(true);
@@ -29,6 +30,7 @@ export default function MailingList() {
       const { data, error } = await res.json();
       if (res.ok) {
         setLists(data.lists);
+        setTotalCount(data.count);
       } else {
         alert({ type: "warning", title: "Warning !", text: error });
       }
@@ -126,6 +128,7 @@ export default function MailingList() {
               onPageChange={handlePageChange} 
               entriesPerPage={limit}     
               onEntriesChange={handleLimitChange} 
+              totalCount={totalCount}
             />
           </div>
         </div>

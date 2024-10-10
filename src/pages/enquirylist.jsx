@@ -2,18 +2,19 @@ import { useContext, useEffect, useState } from "react";
 import { GlobalContext } from "../GlobalContext";
 import { useNavigate } from "react-router-dom";
 import Table from "../comps/table";
-import ConfirmationModal from "../comps/confirmation"; // Import the ConfirmationModal
+import ConfirmationModal from "../comps/confirmation"; 
 
 export default function EnquiryList() {
   const { alert, setLoading } = useContext(GlobalContext);
   const navigate = useNavigate();
 
   const [enquiries, setEnquiries] = useState([]);
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(0);
   const [limit, setLimit] = useState(8);
   const [searchTerm, setSearchTerm] = useState("");
-  const [enquiryToDelete, setEnquiryToDelete] = useState(null); // State for the enquiry to delete
-  const [modalOpen, setModalOpen] = useState(false); // State for modal visibility
+  const [enquiryToDelete, setEnquiryToDelete] = useState(null); 
+  const [modalOpen, setModalOpen] = useState(false); 
+  const [totalCount, setTotalCount] = useState(0); 
 
   useEffect(() => {
     setLoading(true);
@@ -30,6 +31,7 @@ export default function EnquiryList() {
       const { data, error } = await res.json();
       if (res.ok) {
         setEnquiries(data.enquiries);
+        setTotalCount(data.count);
       } else {
         alert({ type: "warning", title: "Warning !", text: error });
       }
@@ -107,7 +109,6 @@ export default function EnquiryList() {
     </div>,
   ]);
 
-  const totalCount = enquiries.length;
 
   const handlePageChange = (newPage) => setPage(newPage);
 
@@ -142,6 +143,7 @@ export default function EnquiryList() {
               onPageChange={handlePageChange}
               entriesPerPage={limit}
               onEntriesChange={handleLimitChange}
+              totalCount={totalCount}
             />
           </div>
         </div>

@@ -1,14 +1,15 @@
 import { useContext, useEffect, useState } from "react";
 import { GlobalContext } from "../GlobalContext";
 import { useNavigate } from "react-router-dom";
-import Table from "../comps/table"; 
+import Table from "../comps/table";
 export default function SiteList() {
   const navigate = useNavigate();
   const { alert, setLoading } = useContext(GlobalContext);
 
   const [sites, setSites] = useState([]);
-  const [page, setPage] = useState(0); 
-  const [limit, setLimit] = useState(8); 
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(8);
+  const [totalCount, setTotalCount] = useState(0); // To track the total number of sites
 
   useEffect(() => {
     setLoading(true);
@@ -25,6 +26,7 @@ export default function SiteList() {
       const { data, error } = await res.json();
       if (res.ok) {
         setSites(data.sites);
+        setTotalCount(data.count);
       } else {
         alert({ type: "warning", title: "Warning !", text: error });
       }
@@ -54,7 +56,6 @@ export default function SiteList() {
     </button>,
   ]);
 
-  const totalPages = Math.ceil(sites.length / limit); 
   return (
     <div className="page-body">
       <div className="container-xl">
@@ -102,14 +103,15 @@ export default function SiteList() {
           <Table
             headers={headers}
             rows={rows}
-            currentPage={page}
-            totalPages={totalPages}
+            currentPage={page-1}
+            totalPages={Math.ceil(sites.length / limit)}
             onPageChange={setPage}
             entriesPerPage={limit}
             onEntriesChange={(newLimit) => {
               setLimit(newLimit);
-              setPage(1); 
+              setPage(1);
             }}
+            totalCount={totalCount}
           />
         </div>
       </div>
