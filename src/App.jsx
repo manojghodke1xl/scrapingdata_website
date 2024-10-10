@@ -20,6 +20,8 @@ import AdminList from "./pages/adminlist";
 import AddAdmin from "./pages/addadmin";
 import GuideList from "./pages/guidelist";
 import AddGuide from "./pages/addguide";
+import CaseStudyList from "./pages/casestudylist";
+import AddCaseStudy from "./pages/addcasestudy";
 
 function App() {
   const [alerts, alert] = useAlert();
@@ -51,6 +53,10 @@ function App() {
               <Route path="/guide-list" element={<GuideList />} />
               <Route path="/add-guide" element={<AddGuide />} />
               <Route path="/add-guide/:id" element={<AddGuide />} />
+
+              <Route path="/casestudy-list" element={<CaseStudyList />} />
+              <Route path="/add-casestudy" element={<AddCaseStudy />} />
+              <Route path="/add-casestudy/:id" element={<AddCaseStudy />} />
             </Route>
 
             <Route path="*" element={<Missing />} />
