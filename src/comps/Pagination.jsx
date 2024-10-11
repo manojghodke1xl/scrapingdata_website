@@ -5,10 +5,6 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => (
         className="page-link"
         href="#"
         tabIndex={1}
-        style={{
-          backgroundColor: currentPage === 1 ? "red" : "",
-          color: currentPage === 1 ? "white" : "",
-        }}
         onClick={(e) => {
           e.preventDefault();
           if (currentPage > 1) {
@@ -22,11 +18,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => (
     <li className={`page-item ${currentPage === totalPages ? "disabled" : ""}`}>
       <a
         className="page-link"
-        href="#"
-        style={{
-          backgroundColor: currentPage === totalPages ? "green" : "",
-          color: currentPage === totalPages ? "white" : "",
-        }}
+        href="#"  
         onClick={(e) => {
           e.preventDefault();
           if (currentPage < totalPages) {

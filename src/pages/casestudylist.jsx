@@ -29,7 +29,6 @@ export default function CaseStudyList() {
       );
 
       const { data, error } = await res.json();
-      console.log(data);
       if (res.ok) {
         setLists(data.casestudies);
         setTotalCount(data.count);
@@ -84,11 +83,10 @@ export default function CaseStudyList() {
     }
   };
 
-  const headers = [{ label: "Title" }, { label: "Desc" }, { label: "Actions" }];
+  const headers = [{ label: "Title" }, { label: "Actions" }];
 
   const rows = lists.map((casestudy) => [
     casestudy.title,
-    casestudy.desc,
     <div className="d-flex justify-content-between" key={casestudy._is}>
       <button
         onClick={() => navigate(`/add-casestudy/${casestudy._id}`)}
@@ -105,12 +103,6 @@ export default function CaseStudyList() {
     </div>,
   ]);
 
-  const handlePageChange = (newPage) => setPage(newPage);
-
-  const handleLimitChange = (newLimit) => {
-    setLimit(newLimit);
-    setPage(1);
-  };
 
   return (
     <div className="page-body">
@@ -134,9 +126,11 @@ export default function CaseStudyList() {
               rows={rows}
               currentPage={page}
               totalPages={Math.ceil(lists.length / limit)}
-              onPageChange={handlePageChange}
+              onPageChange={setPage}
               entriesPerPage={limit}
-              onEntriesChange={handleLimitChange}
+              onEntriesChange={(newLimit) => {
+                setLimit(newLimit);
+              }}
               totalCount={totalCount}
             />
           </div>

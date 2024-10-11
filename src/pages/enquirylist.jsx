@@ -118,12 +118,6 @@ export default function EnquiryList() {
     </div>,
   ]);
 
-  const handlePageChange = (newPage) => setPage(newPage);
-
-  const handleLimitChange = (newLimit) => {
-    setLimit(newLimit);
-    setPage(1);
-  };
 
   return (
     <div className="page-body">
@@ -147,10 +141,12 @@ export default function EnquiryList() {
               headers={headers}
               rows={rows}
               currentPage={page}
-              totalPages={Math.ceil(enquiries.length / limit)}
-              onPageChange={handlePageChange}
+              totalPages={Math.ceil(totalCount / limit)}
+              onPageChange={setPage}
               entriesPerPage={limit}
-              onEntriesChange={handleLimitChange}
+              onEntriesChange={(newLimit) => {
+                setLimit(newLimit);
+              }}
               totalCount={totalCount}
             />
           </div>

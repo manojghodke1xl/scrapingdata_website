@@ -57,6 +57,10 @@ export default function SiteList() {
     </button>,
   ]);
 
+  const handlePageChange = (newPage) => setPage(newPage);
+
+  const handleLimitChange = (newLimit) => setLimit(newLimit);
+
   return (
     <div className="page-body">
       <div className="container-xl">

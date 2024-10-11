@@ -11,13 +11,14 @@ export default function AddAdmin() {
     email: "",
     name: "",
     password: "",
-    sites: [], // New field for selected sites
+    sites: [],
+    isBlocked: false,
+    isSuperAdmin: false,
   });
-  const [availableSites, setAvailableSites] = useState([]); // State to hold available sites
+  const [availableSites, setAvailableSites] = useState([]);
 
   useEffect(() => {
-    // Fetch available sites for selection
-    (async () => {
+    const fetchAvailableSites = async () => {
       const res = await fetch(`${import.meta.env.VITE_API_URL}/sites`, {
         method: "GET",
         headers: {
@@ -26,47 +27,71 @@ export default function AddAdmin() {
       });
       const { data, error } = await res.json();
       if (res.ok) {
-        setAvailableSites(data.sites); // Assuming the API returns a list of sites
+        setAvailableSites(data.sites);
       } else {
         alert({ type: "warning", title: "Warning !", text: error });
       }
-    })();
-  }, [alert, setLoading]);
+    };
+
+    fetchAvailableSites();
+  }, [alert]);
 
   useEffect(() => {
     if (id) {
       setLoading(true);
-      (async () => {
-        const res = await fetch(`${import.meta.env.VITE_API_URL}/admin/${id}`, {
-          method: "GET",
-          headers: {
-            Authorization: localStorage.getItem("auth"),
-          },
-        });
-        const { data, error } = await res.json();
-        if (res.ok) {
-          const { name, email, isSuperAdmin, sites } = data.admin;
-          setDetail((d) => ({
-            ...d,
-            name,
-            email,
-            isSuperAdmin,
-            sites: sites.map((s) => s._id),
-          })); // Populate existing admin data
-        } else {
-          alert({ type: "warning", title: "Warning !", text: error });
+      const fetchAdminDetails = async () => {
+        try {
+          console.log("fetch Api call");
+          const res = await fetch(
+            `${import.meta.env.VITE_API_URL}/admin/${id}`,
+            {
+              method: "GET",
+              headers: {
+                Authorization: localStorage.getItem("auth"),
+              },
+            }
+          );
+          const { data, error } = await res.json();
+          if (res.ok) {
+            const { name, email, isSuperAdmin, sites, isBlocked } = data.admin;
+            setDetail((prev) => ({
+              ...prev,
+              name,
+              email,
+              isBlocked,
+              isSuperAdmin,
+              sites: isSuperAdmin
+                ? availableSites.map((s) => s._id)
+                : sites.map((s) => s._id),
+            }));
+          } else {
+            alert({ type: "warning", title: "Warning !", text: error });
+          }
+        } catch (error) {
+          alert({ type: "danger", title: "Error !", text: error.message });
+        } finally {
+          setLoading(false);
         }
-      })()
-        .catch((error) =>
-          alert({ type: "danger", title: "Error !", text: error.message })
-        )
-        .finally(() => setLoading(false));
+      };
+      fetchAdminDetails();
     }
-  }, [id, alert, setLoading]);
+  }, [id, availableSites, alert, setLoading]);
 
   const handleDetails = async (e) => {
     e.preventDefault();
     setLoading(true);
+
+    const requestData = {
+      email: detail.email,
+      name: detail.name,
+      isBlocked: detail.isSuperAdmin ? false : detail.isBlocked,
+      isSuperAdmin: detail.isSuperAdmin,
+      ...(id ? {} : { password: detail.password }), // Set password only if not editing
+      ...(detail.isSuperAdmin || !id
+        ? { sites: availableSites.map((site) => site._id) }
+        : { sites: detail.sites }),
+    };
+
     try {
       const res = await fetch(
         `${import.meta.env.VITE_API_URL}/admin${id ? `/${id}` : ""}`,
@@ -76,7 +101,7 @@ export default function AddAdmin() {
             "Content-Type": "application/json",
             Authorization: localStorage.getItem("auth"),
           },
-          body: JSON.stringify(detail),
+          body: JSON.stringify(requestData),
         }
       );
       const { message, error } = await res.json();
@@ -93,14 +118,23 @@ export default function AddAdmin() {
     }
   };
 
-  console.log(detail.sites);
+  const handleSiteSelection = (siteId) => {
+    setDetail((prev) => ({
+      ...prev,
+      sites: prev.sites.includes(siteId)
+        ? prev.sites.filter((id) => id !== siteId)
+        : [...prev.sites, siteId],
+    }));
+  };
 
   return (
     <div className="page-body">
       <div className="container container-tight py-4">
         <div className="card card-md">
           <div className="card-body">
-            <h2 className="h2 text-center mb-4">Add Admin</h2>
+            <h2 className="h2 text-center mb-4">
+              {id ? "Edit Admin" : "Add Admin"}
+            </h2>
             <form onSubmit={handleDetails}>
               <div className="mb-3">
                 <label className="form-label required">Admin Name</label>
@@ -111,7 +145,7 @@ export default function AddAdmin() {
                   placeholder="Admin Name"
                   value={detail.name}
                   onChange={(e) =>
-                    setDetail((d) => ({ ...d, name: e.target.value }))
+                    setDetail((prev) => ({ ...prev, name: e.target.value }))
                   }
                   required
                 />
@@ -119,19 +153,22 @@ export default function AddAdmin() {
               <div className="mb-3">
                 <label className="form-label required">Admin Email</label>
                 <input
-                  type="email" // Changed to email type for validation
+                  type="email"
                   name="email"
                   className="form-control"
                   placeholder="Admin Email"
                   value={detail.email}
                   onChange={(e) =>
-                    setDetail((d) => ({ ...d, email: e.target.value }))
+                    setDetail((prev) => ({ ...prev, email: e.target.value }))
                   }
                   required
                 />
               </div>
               <div className="mb-3">
-                <label className="form-label required">Admin Password</label>
+                <label className="form-label">
+                  Admin Password{" "}
+                  {id ? "(Leave blank to keep current password)" : ""}
+                </label>
                 <input
                   type="password"
                   name="password"
@@ -139,39 +176,63 @@ export default function AddAdmin() {
                   placeholder="Admin Password"
                   value={detail.password}
                   onChange={(e) =>
-                    setDetail((d) => ({ ...d, password: e.target.value }))
+                    setDetail((prev) => ({ ...prev, password: e.target.value }))
                   }
                   required={!id}
                 />
               </div>
+
               <div className="mb-3">
-                <label className="form-label required">Select Sites</label>
-                <select
-                  multiple
-                  className="form-control"
-                  value={detail.sites}
-                  onChange={(e) =>
-                    setDetail((d) => ({
-                      ...d,
-                      sites: Array.from(e.target.options)
-                        .filter((op) => op.selected)
-                        .map((op) => op.value),
-                    }))
-                  }
+                <div className="form-label required">Select Sites</div>
+                <div
+                  style={{
+                    maxHeight: "200px",
+                    overflowY: "auto",
+                    border: "1px solid #ced4da",
+                    padding: "10px",
+                  }}
                 >
                   {availableSites.map((site) => (
-                    <option key={site._id} value={site._id}>
-                      {site.name}
-                    </option>
+                    <label key={site._id} className="form-check">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        checked={detail.sites.includes(site._id)}
+                        onChange={() => handleSiteSelection(site._id)}
+                        disabled={detail.isSuperAdmin}
+                      />
+                      <span className="form-check-label">{site.name}</span>
+                    </label>
                   ))}
-                </select>
-                <small className="form-text text-muted">
-                  Hold Ctrl (Windows) or Command (Mac) to select multiple sites.
-                </small>
+                </div>
               </div>
+
+              {!detail.isSuperAdmin && (
+                <div className="mb-3">
+                  <label className="row">
+                    <span className="col">Is admin blocked?</span>
+                    <span className="col-auto">
+                      <label className="form-check form-check-single form-switch">
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          checked={detail.isBlocked}
+                          onChange={() =>
+                            setDetail((prev) => ({
+                              ...prev,
+                              isBlocked: !prev.isBlocked,
+                            }))
+                          }
+                        />
+                      </label>
+                    </span>
+                  </label>
+                </div>
+              )}
+
               <div className="form-footer">
                 <button type="submit" className="btn btn-primary w-100">
-                  Add Admin
+                  {id ? "Update Admin" : "Add Admin"}
                 </button>
               </div>
             </form>

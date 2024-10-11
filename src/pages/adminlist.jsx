@@ -42,12 +42,14 @@ export default function AdminList() {
   const headers = [
     { label: "Admin Name" },
     { label: "Admin Email" },
+    { label: "Status" }, // New header for status
     { label: "Actions" },
   ];
 
   const rows = lists.map((admin) => [
     admin.name,
     admin.email,
+    admin.isBlocked ? "Blocked" : "Active", // Display "Blocked" or "Active" based on admin status
     <button
       key={admin._id}
       onClick={() => navigate(`/add-admin/${admin._id}`)}

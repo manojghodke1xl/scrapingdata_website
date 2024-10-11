@@ -124,17 +124,18 @@ export default function MailingList() {
               headers={headers}
               rows={rows}
               currentPage={page}
-              totalPages={Math.ceil(lists.length / limit)}
-              onPageChange={handlePageChange}
+              totalPages={Math.ceil(totalCount / limit)}
+              onPageChange={setPage}
               entriesPerPage={limit}
-              onEntriesChange={handleLimitChange}
+              onEntriesChange={(newLimit) => {
+                setLimit(newLimit);
+              }}
               totalCount={totalCount}
             />
           </div>
         </div>
       </div>
 
-      {/* Confirmation Modal */}
       <ConfirmationModal
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}

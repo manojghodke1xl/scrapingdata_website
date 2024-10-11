@@ -33,18 +33,7 @@ const Table = ({
   totalCount,
   actions,
 }) => {
-  console.log({
-    headers,
-    rows,
-    currentPage,
-    totalPages,
-    onPageChange,
-    onSearch,
-    entriesPerPage,
-    onEntriesChange,
-    totalCount,
-    actions,
-  });
+
   return (
     <div className="page-body">
       <div className="container-xl">
