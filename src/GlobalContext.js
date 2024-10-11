@@ -4,13 +4,16 @@ export const GlobalContext = createContext();
 
 const defaultState = {
   id: "",
+  isSuperAdmin: false,
   exp: 0,
   iat: 0,
 };
 
 const storage = localStorage.getItem("auth");
 
-export const authState = storage ? JSON.parse(window.atob(storage.slice(7).split(".")[1])) : defaultState;
+export const authState = storage
+  ? JSON.parse(window.atob(storage.slice(7).split(".")[1]))
+  : defaultState;
 
 export const authReducer = (state, action) => {
   const { type, payload } = action;

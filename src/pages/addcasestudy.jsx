@@ -68,6 +68,17 @@ export default function AddCaseStudy() {
     e.preventDefault();
     setLoading(true);
     try {
+      // Ensure image and pdf are provided when adding a new case study
+      if (!id && (!detail.image || !detail.pdf)) {
+        alert({
+          type: "warning",
+          title: "Warning !",
+          text: "Image and PDF are required for new case studies.",
+        });
+        setLoading(false);
+        return;
+      }
+
       const res = await fetch(
         `${import.meta.env.VITE_API_URL}/casestudy${id ? `/${id}` : ""}`,
         {
@@ -131,7 +142,6 @@ export default function AddCaseStudy() {
         throw new Error("File upload failed");
       }
       const fileId = data._id;
-      console.log(fileId);
 
       if (isImage) {
         setDetail((prevDetail) => ({ ...prevDetail, image: fileId }));
@@ -149,10 +159,18 @@ export default function AddCaseStudy() {
       <div className="container container-tight py-4">
         <div className="card card-md">
           <div className="card-body">
-            <h2 className="h2 text-center mb-4">Add CaseStudy</h2>
+            <h2 className="h2 text-center mb-4">
+              {id ? "Edit Casestudy" : "Add Casestudy"}
+            </h2>
             <form onSubmit={handleDetails}>
               <div className="mb-3">
-                <label className="form-label required">Title</label>
+                <label className="form-label ">
+                  {id ? (
+                    "Title"
+                  ) : (
+                    <label className="form-label required">Title</label>
+                  )}
+                </label>
                 <input
                   type="text"
                   name="title"
@@ -166,7 +184,15 @@ export default function AddCaseStudy() {
                 />
               </div>
               <div className="mb-3">
-                <label className="form-label">Short Description</label>
+                <label className="form-label">
+                  {id ? (
+                    "Short Description"
+                  ) : (
+                    <label className="form-label required">
+                      Short Description
+                    </label>
+                  )}
+                </label>
                 <textarea
                   className="form-control"
                   name="example-textarea-input"
@@ -179,7 +205,15 @@ export default function AddCaseStudy() {
                 />
               </div>
               <div className="mb-3">
-                <label className="form-label">Long Description</label>
+                <label className="form-label">
+                  {id ? (
+                    "Long Description"
+                  ) : (
+                    <label className="form-label required">
+                      Long Description
+                    </label>
+                  )}
+                </label>
                 <textarea
                   className="form-control"
                   name="example-textarea-input"
@@ -192,53 +226,74 @@ export default function AddCaseStudy() {
                 />
               </div>
               <div className="mb-3">
-                <label className="form-label required">Upload Image</label>
+                <label className="form-label ">
+                  {id ? (
+                    "Upload Image"
+                  ) : (
+                    <label className="form-label required">Upload Image</label>
+                  )}
+                </label>
                 <input
                   type="file"
                   name="image"
                   className="form-control"
                   onChange={(e) => uploadFile(e, true)}
                   accept="image/*"
+                  required={!id} // Required only when adding a new case study
                 />
               </div>
               <div className="mb-3">
-                <label className="form-label required">Upload PDF</label>
+                <label className="form-label ">
+                  {id ? (
+                    "Upload Pdf"
+                  ) : (
+                    <label className="form-label required">Upload Pdf</label>
+                  )}
+                </label>
                 <input
                   type="file"
                   name="pdf"
                   className="form-control"
                   onChange={(e) => uploadFile(e, false)}
                   accept="application/pdf"
+                  required={!id} // Required only when adding a new case study
                 />
               </div>
               <div className="mb-3">
-                <label className="form-label required">Select Sites</label>
-                <select
-                  multiple
-                  className="form-control"
-                  value={detail.sites}
-                  onChange={(e) =>
-                    setDetail((d) => ({
-                      ...d,
-                      sites: [...e.target.selectedOptions].map(
-                        (option) => option.value
-                      ),
-                    }))
-                  }
+                <div className="form-label ">
+                  {id ? (
+                    "Select Sites"
+                  ) : (
+                    <label className="form-label required">Select Sites</label>
+                  )}
+                </div>
+                <div
+                  style={{
+                    maxHeight: "200px",
+                    overflowY: "auto",
+                    border: "1px solid #ced4da",
+                    padding: "10px",
+                  }}
                 >
                   {availableSites.map((site) => (
-                    <option key={site._id} value={site._id}>
-                      {site.name}
-                    </option>
+                    <label key={site._id} className="form-check">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        checked={
+                          detail.isSuperAdmin || detail.sites.includes(site._id)
+                        }
+                        onChange={() => handleSiteSelection(site._id)}
+                        disabled={detail.isSuperAdmin}
+                      />
+                      <span className="form-check-label">{site.name}</span>
+                    </label>
                   ))}
-                </select>
-                <small className="form-text text-muted">
-                  Hold Ctrl (Windows) or Command (Mac) to select multiple sites.
-                </small>
+                </div>
               </div>
               <div className="form-footer">
                 <button type="submit" className="btn btn-primary w-100">
-                  Add CaseStudy
+                  {id ? "Update Casestudy" : "Add Casestudy"}
                 </button>
               </div>
             </form>

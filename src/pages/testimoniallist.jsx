@@ -11,7 +11,7 @@ export default function TestimonialList() {
   const [testimonials, setTestimonials] = useState([]);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(8);
-  const [casestudyToDelete, setCaseStudyToDelete] = useState(null);
+  const [testimonialToDelete, setTestimonialToDelete] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [totalCount, setTotalCount] = useState(0); 
 
@@ -43,17 +43,17 @@ export default function TestimonialList() {
   }, [alert, limit, page, setLoading]);
 
   const openDeleteModal = (id) => {
-    setCaseStudyToDelete(id);
+    setTestimonialToDelete(id);
     setModalOpen(true);
   };
 
   const deleteTestimonial = async () => {
-    if (!casestudyToDelete) return;
+    if (!testimonialToDelete) return;
 
     setLoading(true);
     try {
       const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/testimonial/${casestudyToDelete}`,
+        `${import.meta.env.VITE_API_URL}/testimonial/${testimonialToDelete}`,
         {
           method: "DELETE",
           headers: {
@@ -64,7 +64,7 @@ export default function TestimonialList() {
       const { error } = await res.json();
       if (res.ok) {
         setTestimonials((prevLists) =>
-          prevLists.filter((list) => list._id !== casestudyToDelete)
+          prevLists.filter((list) => list._id !== testimonialToDelete)
         );
         alert({
           type: "success",
@@ -79,7 +79,7 @@ export default function TestimonialList() {
     } finally {
       setLoading(false);
       setModalOpen(false); 
-      setCaseStudyToDelete(null); 
+      setTestimonialToDelete(null); 
     }
   };
 
@@ -108,7 +108,7 @@ export default function TestimonialList() {
       <div className="container-xl">
         <div className="card">
           <div className="card-header">
-            <h3 className="card-title">All Case Study List</h3>
+            <h3 className="card-title">All Testimonials List</h3>
             <div className="card-options">
               <button
                 onClick={() => navigate("/add-testimonial")}
@@ -140,7 +140,7 @@ export default function TestimonialList() {
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
         onConfirm={deleteTestimonial}
-        message="Are you sure you want to delete this casestudy?"
+        message="Are you sure you want to delete this Testimonial?"
       />
     </div>
   );

@@ -66,9 +66,6 @@ export default function MailingList() {
     </div>,
   ]);
 
-  const handlePageChange = (newPage) => setPage(newPage);
-
-  const handleLimitChange = (newLimit) => setLimit(newLimit);
 
   const openDeleteModal = (id) => {
     setMailingToDelete(id);
@@ -81,7 +78,7 @@ export default function MailingList() {
     setLoading(true);
     try {
       const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/lists/${mailingToDelete}`, // Ensure your API endpoint is correct
+        `${import.meta.env.VITE_API_URL}/list/${mailingToDelete}`, // Ensure your API endpoint is correct
         {
           method: "DELETE",
           headers: {

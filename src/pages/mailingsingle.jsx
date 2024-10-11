@@ -30,8 +30,6 @@ const mailingsingle = () => {
       .finally(() => setLoading(false));
   }, [alert, setLoading]);
 
-  console.log(enquiry);
-
   return (
     <div className="page-body">
       <div className="container-xl">

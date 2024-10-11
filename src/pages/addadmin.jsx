@@ -1,11 +1,11 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useLayoutEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { GlobalContext } from "../GlobalContext";
 
 export default function AddAdmin() {
   const navigate = useNavigate();
   const { id = "" } = useParams();
-  const { alert, setLoading } = useContext(GlobalContext);
+  const { auth, alert, setLoading } = useContext(GlobalContext);
 
   const [detail, setDetail] = useState({
     email: "",
@@ -16,6 +16,10 @@ export default function AddAdmin() {
     isSuperAdmin: false,
   });
   const [availableSites, setAvailableSites] = useState([]);
+
+  useLayoutEffect(() => {
+    if (!auth.isSuperAdmin) navigate("/dashboard");
+  }, [auth]);
 
   useEffect(() => {
     const fetchAvailableSites = async () => {
@@ -41,7 +45,6 @@ export default function AddAdmin() {
       setLoading(true);
       const fetchAdminDetails = async () => {
         try {
-          console.log("fetch Api call");
           const res = await fetch(
             `${import.meta.env.VITE_API_URL}/admin/${id}`,
             {
@@ -53,16 +56,14 @@ export default function AddAdmin() {
           );
           const { data, error } = await res.json();
           if (res.ok) {
-            const { name, email, isSuperAdmin, sites, isBlocked } = data.admin;
+            const { name, email, isSuperAdmin, isBlocked, sites } = data.admin;
             setDetail((prev) => ({
               ...prev,
               name,
               email,
               isBlocked,
               isSuperAdmin,
-              sites: isSuperAdmin
-                ? availableSites.map((s) => s._id)
-                : sites.map((s) => s._id),
+              sites,
             }));
           } else {
             alert({ type: "warning", title: "Warning !", text: error });
@@ -75,23 +76,13 @@ export default function AddAdmin() {
       };
       fetchAdminDetails();
     }
-  }, [id, availableSites, alert, setLoading]);
+  }, [id, alert, setLoading]);
 
   const handleDetails = async (e) => {
     e.preventDefault();
     setLoading(true);
-
-    const requestData = {
-      email: detail.email,
-      name: detail.name,
-      isBlocked: detail.isSuperAdmin ? false : detail.isBlocked,
-      isSuperAdmin: detail.isSuperAdmin,
-      ...(id ? {} : { password: detail.password }), // Set password only if not editing
-      ...(detail.isSuperAdmin || !id
-        ? { sites: availableSites.map((site) => site._id) }
-        : { sites: detail.sites }),
-    };
-
+    const { password, ...rest } = detail;
+    if (password) rest.password = password;
     try {
       const res = await fetch(
         `${import.meta.env.VITE_API_URL}/admin${id ? `/${id}` : ""}`,
@@ -101,7 +92,7 @@ export default function AddAdmin() {
             "Content-Type": "application/json",
             Authorization: localStorage.getItem("auth"),
           },
-          body: JSON.stringify(requestData),
+          body: JSON.stringify(rest),
         }
       );
       const { message, error } = await res.json();
@@ -119,12 +110,15 @@ export default function AddAdmin() {
   };
 
   const handleSiteSelection = (siteId) => {
-    setDetail((prev) => ({
-      ...prev,
-      sites: prev.sites.includes(siteId)
-        ? prev.sites.filter((id) => id !== siteId)
-        : [...prev.sites, siteId],
-    }));
+    setDetail((prev) => {
+      const isSelected = prev.sites.includes(siteId);
+      return {
+        ...prev,
+        sites: isSelected
+          ? prev.sites.filter((id) => id !== siteId)
+          : [...prev.sites, siteId],
+      };
+    });
   };
 
   return (
@@ -165,9 +159,8 @@ export default function AddAdmin() {
                 />
               </div>
               <div className="mb-3">
-                <label className="form-label">
-                  Admin Password{" "}
-                  {id ? "(Leave blank to keep current password)" : ""}
+                <label className={!id ? "form-label required" : "form-label"}>
+                  Admin Password
                 </label>
                 <input
                   type="password"
@@ -176,14 +169,20 @@ export default function AddAdmin() {
                   placeholder="Admin Password"
                   value={detail.password}
                   onChange={(e) =>
-                    setDetail((prev) => ({ ...prev, password: e.target.value }))
+                    setDetail((prev) => ({
+                      ...prev,
+                      password: e.target.value,
+                    }))
                   }
                   required={!id}
                 />
               </div>
-
               <div className="mb-3">
-                <div className="form-label required">Select Sites</div>
+                {detail.isSuperAdmin ? (
+                  <label className="form-label">All Sites</label>
+                ) : (
+                  <label className="form-label required">Select Sites</label>
+                )}
                 <div
                   style={{
                     maxHeight: "200px",
@@ -197,7 +196,9 @@ export default function AddAdmin() {
                       <input
                         className="form-check-input"
                         type="checkbox"
-                        checked={detail.sites.includes(site._id)}
+                        checked={
+                          detail.isSuperAdmin || detail.sites.includes(site._id)
+                        }
                         onChange={() => handleSiteSelection(site._id)}
                         disabled={detail.isSuperAdmin}
                       />
@@ -206,30 +207,26 @@ export default function AddAdmin() {
                   ))}
                 </div>
               </div>
-
-              {!detail.isSuperAdmin && (
-                <div className="mb-3">
-                  <label className="row">
-                    <span className="col">Is admin blocked?</span>
-                    <span className="col-auto">
-                      <label className="form-check form-check-single form-switch">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          checked={detail.isBlocked}
-                          onChange={() =>
-                            setDetail((prev) => ({
-                              ...prev,
-                              isBlocked: !prev.isBlocked,
-                            }))
-                          }
-                        />
-                      </label>
-                    </span>
-                  </label>
-                </div>
-              )}
-
+              <div className="mb-3">
+                <label className="row">
+                  <span className="col">Is admin blocked?</span>
+                  <span className="col-auto">
+                    <label className="form-check form-check-single form-switch">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        checked={detail.isBlocked}
+                        onChange={() =>
+                          setDetail((prev) => ({
+                            ...prev,
+                            isBlocked: !prev.isBlocked,
+                          }))
+                        }
+                      />
+                    </label>
+                  </span>
+                </label>
+              </div>
               <div className="form-footer">
                 <button type="submit" className="btn btn-primary w-100">
                   {id ? "Update Admin" : "Add Admin"}

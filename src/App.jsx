@@ -24,6 +24,8 @@ import CaseStudyList from "./pages/casestudylist";
 import AddCaseStudy from "./pages/addcasestudy";
 import TestimonialList from "./pages/testimoniallist";
 import AddTestimonial from "./pages/addtestimonial";
+import SmtpList from "./pages/smtplist";
+import AddSmtp from "./pages/addsmtp";
 
 function App() {
   const [alerts, alert] = useAlert();
@@ -63,6 +65,10 @@ function App() {
               <Route path="/testimonial-list" element={<TestimonialList />} />
               <Route path="/add-testimonial" element={<AddTestimonial />} />
               <Route path="/add-testimonial/:id" element={<AddTestimonial />} />
+
+              <Route path="/smtp-list" element={<SmtpList />} />
+              <Route path="/add-smtp" element={<AddSmtp />} />
+              <Route path="/add-smtp/:id" element={<AddSmtp />} />
             </Route>
 
             <Route path="*" element={<Missing />} />

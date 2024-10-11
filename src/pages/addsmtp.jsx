@@ -2,53 +2,35 @@ import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { GlobalContext } from "../GlobalContext";
 
-export default function AddSite() {
+export default function AddSmtp() {
   const navigate = useNavigate();
   const { id = "" } = useParams();
-
   const { alert, setLoading } = useContext(GlobalContext);
 
-  const [smtpOptions, setSmtpOptions] = useState([]);
   const [detail, setDetail] = useState({
     name: "",
     host: "",
-    status: false,
-    smtp: "",
+    port: "",
+    secure: "",
+    user: "",
+    password: "",
   });
-
-  useEffect(() => {
-    const fetchSmtpOptions = async () => {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/smtps`, {
-        method: "GET",
-        headers: {
-          Authorization: localStorage.getItem("auth"),
-        },
-      });
-      const { data, error } = await res.json();
-      if (res.ok) {
-        setSmtpOptions(data.smtps);
-      } else {
-        alert({ type: "warning", title: "Warning !", text: error });
-      }
-    };
-
-    fetchSmtpOptions();
-  }, [alert]);
 
   useEffect(() => {
     if (id) {
       setLoading(true);
       (async () => {
-        const res = await fetch(`${import.meta.env.VITE_API_URL}/site/${id}`, {
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/smtp/${id}`, {
           method: "GET",
           headers: {
             Authorization: localStorage.getItem("auth"),
           },
         });
         const { data, error } = await res.json();
+
         if (res.ok) {
-          const { name, host, smtp } = data.site;
-          setDetail((detail) => ({ ...detail, name, host, smtp }));
+          const { name, host, port, secure, user, password } = data.smtp; // Get isGlobal from response
+          setDetail({ name, host, port, secure, user, password });
         } else {
           alert({ type: "warning", title: "Warning !", text: error });
         }
@@ -58,14 +40,14 @@ export default function AddSite() {
         )
         .finally(() => setLoading(false));
     }
-  }, []);
+  }, [id, alert, setLoading]);
 
   const handleDetails = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
       const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/site${id ? `/${id}` : ""}`,
+        `${import.meta.env.VITE_API_URL}/smtp${id ? `/${id}` : ""}`,
         {
           method: id ? "PUT" : "POST",
           headers: {
@@ -78,7 +60,7 @@ export default function AddSite() {
       const { message, error } = await res.json();
       if (res.ok) {
         alert({ type: "success", title: "Success !", text: message });
-        navigate("/site-list");
+        navigate("/smtp-list");
       } else {
         alert({ type: "warning", title: "Warning !", text: error });
       }
@@ -95,22 +77,20 @@ export default function AddSite() {
         <div className="card card-md">
           <div className="card-body">
             <h2 className="h2 text-center mb-4">
-              {id ? "Edit site" : "Add site"}
+              {id ? (
+                "Edit Testimonial"
+              ) : (
+                <label className="form-label required">Add Testimonial</label>
+              )}
             </h2>
             <form onSubmit={handleDetails}>
               <div className="mb-3">
-                <label className="form-label ">
-                  {id ? (
-                    "Site Name"
-                  ) : (
-                    <label className="form-label required">Site Name</label>
-                  )}
-                </label>
+                <label className="form-label required">Name</label>
                 <input
                   type="text"
-                  name="name"
+                  name="title"
                   className="form-control"
-                  placeholder="Site Name"
+                  placeholder="Title"
                   value={detail.name}
                   onChange={(e) =>
                     setDetail((d) => ({ ...d, name: e.target.value }))
@@ -119,18 +99,12 @@ export default function AddSite() {
                 />
               </div>
               <div className="mb-3">
-                <label className="form-label ">
-                  {id ? (
-                    "Site host"
-                  ) : (
-                    <label className="form-label required">Site host</label>
-                  )}
-                </label>
+                <label className="form-label required">Host</label>
                 <input
                   type="text"
-                  name="host"
+                  name="title"
                   className="form-control"
-                  placeholder="Site host"
+                  placeholder="Title"
                   value={detail.host}
                   onChange={(e) =>
                     setDetail((d) => ({ ...d, host: e.target.value }))
@@ -139,46 +113,69 @@ export default function AddSite() {
                 />
               </div>
               <div className="mb-3">
-                <label className="form-label required">SMTP</label>
-                <select
-                  name="smtp"
+                <label className="form-label required">Port</label>
+                <input
+                  type="text"
+                  name="name"
                   className="form-control"
-                  value={detail.smtp}
+                  placeholder="Name"
+                  value={detail.port} 
                   onChange={(e) =>
-                    setDetail((d) => ({ ...d, smtp: e.target.value }))
+                    setDetail((d) => ({ ...d, port: e.target.value }))
+                  }
+                  required
+                />
+              </div>
+              <div className="mb-3 ">
+                <label className="form-label required">Security Protocol</label>
+                <select
+                  name="secure"
+                  className="form-control"
+                  value={detail.secure}
+                  onChange={(e) =>
+                    setDetail((d) => ({ ...d, secure: e.target.value }))
                   }
                   required
                 >
-                  {smtpOptions.map((smtp, index) => (
-                    <option key={index} value={smtp._id}>
-                      {smtp.name}
-                    </option>
-                  ))}
+                  <option value="None">None</option>
+                  <option value="SSL">SSL</option>
+                  <option value="TLS">TLS</option>
+                  <option value="STARTTLS">STARTTLS</option>
                 </select>
               </div>
+
               <div className="mb-3">
-                <label className="row">
-                  <span className="col">Site Status</span>
-                  <span className="col-auto">
-                    <label className="form-check form-check-single form-switch">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        defaultChecked=""
-                        name="status"
-                        checked={detail.status}
-                        onChange={(e) =>
-                          setDetail((d) => ({ ...d, status: e.target.checked }))
-                        }
-                      />
-                    </label>
-                  </span>
-                </label>
+                <label className="form-label required">User</label>
+                <input
+                  type="text"
+                  name="user"
+                  className="form-control"
+                  placeholder="User"
+                  value={detail.user}
+                  onChange={(e) =>
+                    setDetail((d) => ({ ...d, user: e.target.value }))
+                  }
+                  required
+                />
+              </div>
+              <div className="mb-3">
+                <label className="form-label required">Password</label>
+                <input
+                  type="password"
+                  name="password"
+                  className="form-control"
+                  placeholder="Passsword"
+                  value={detail.password} 
+                  onChange={(e) =>
+                    setDetail((d) => ({ ...d, password: e.target.value }))
+                  }
+                  required
+                />
               </div>
 
               <div className="form-footer">
                 <button type="submit" className="btn btn-primary w-100">
-                  {id ? "Update Site" : "Add Site"}
+                  {id ? "Edit Smtp" : "Add Smtp"}
                 </button>
               </div>
             </form>

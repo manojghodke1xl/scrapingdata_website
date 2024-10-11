@@ -1,16 +1,20 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useLayoutEffect, useState } from "react";
 import { GlobalContext } from "../GlobalContext";
 import { useNavigate } from "react-router-dom";
 import Table from "../comps/table";
 
 export default function AdminList() {
   const navigate = useNavigate();
-  const { alert, setLoading } = useContext(GlobalContext);
+  const { auth, alert, setLoading } = useContext(GlobalContext);
 
   const [lists, setLists] = useState([]);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(8);
   const [totalCount, setTotalCount] = useState(0); // To track the total number of admins
+
+  useLayoutEffect(() => {
+    if (!auth.isSuperAdmin) navigate("/dashboard");
+  }, [auth]);
 
   useEffect(() => {
     setLoading(true);
@@ -42,7 +46,7 @@ export default function AdminList() {
   const headers = [
     { label: "Admin Name" },
     { label: "Admin Email" },
-    { label: "Status" }, // New header for status
+    { label: "Status" },
     { label: "Actions" },
   ];
 

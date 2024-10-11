@@ -11,7 +11,7 @@ export default function AddTestimonial() {
     name: "",
     desg: "",
     text: "",
-    isGlobal: false,
+    isGlobal: false, 
     sites: [],
   });
   const [availableSites, setAvailableSites] = useState([]);
@@ -49,8 +49,8 @@ export default function AddTestimonial() {
         const { data, error } = await res.json();
 
         if (res.ok) {
-          const { name, desg, text, sites} = data.testimonial;
-          setDetail({ name, desg, text, sites});
+          const { name, desg, text, isGlobal, sites } = data.testimonial; // Get isGlobal from response
+          setDetail({ name, desg, text, isGlobal, sites });
         } else {
           alert({ type: "warning", title: "Warning !", text: error });
         }
@@ -91,13 +91,12 @@ export default function AddTestimonial() {
     }
   };
 
-  
   return (
     <div className="page-body">
       <div className="container container-tight py-4">
         <div className="card card-md">
           <div className="card-body">
-            <h2 className="h2 text-center mb-4">Add Testimonial</h2>
+            <h2 className="h2 text-center mb-4">{id ? "Edit Testimonial" : <label className="form-label required">Add Testimonial</label>}</h2>
             <form onSubmit={handleDetails}>
               <div className="mb-3">
                 <label className="form-label required">Name</label>
@@ -106,7 +105,7 @@ export default function AddTestimonial() {
                   name="title"
                   className="form-control"
                   placeholder="Title"
-                  value={detail.title}
+                  value={detail.name} // Changed from detail.title to detail.name
                   onChange={(e) =>
                     setDetail((d) => ({ ...d, name: e.target.value }))
                   }
@@ -114,54 +113,77 @@ export default function AddTestimonial() {
                 />
               </div>
               <div className="mb-3">
-                <label className="form-label">Short Description</label>
+                <label className="form-label">{id ? "Short Description" : <label className="form-label required">short Description</label>}</label>
                 <textarea
                   className="form-control"
                   name="example-textarea-input"
                   rows={6}
                   placeholder="Description.."
-                  value={detail.sdesc}
+                  value={detail.desg} 
                   onChange={(e) =>
                     setDetail((d) => ({ ...d, desg: e.target.value }))
                   }
                 />
               </div>
               <div className="mb-3">
-                <label className="form-label">Text</label>
+                <label className="form-label">{id ? "Edit Testimonial" : <label className="form-label required">Add Testimonial</label>}</label>
                 <textarea
                   className="form-control"
                   name="example-textarea-input"
                   rows={6}
                   placeholder="Description.."
-                  value={detail.ldesc}
+                  value={detail.text} 
                   onChange={(e) =>
                     setDetail((d) => ({ ...d, text: e.target.value }))
                   }
                 />
               </div>
               <div className="mb-3">
-                <label className="form-label required">Select Sites</label>
-                <select
-                  multiple
-                  className="form-control"
-                  value={detail.sites}
-                  onChange={(e) =>
-                    setDetail((d) => ({
-                      ...d,
-                      sites: [...e.target.selectedOptions].map(
-                        (option) => option.value
-                      ),
-                    }))
-                  }
+                <label className="form-label ">
+                  {id ? (
+                    "Select Sites"
+                  ) : (
+                    <label className="form-label ">{id ? "Selected Sites" : <label className="form-label required">Select Sites</label>}</label>
+                  )}
+                </label>
+                <div
+                  style={{
+                    maxHeight: "150px",
+                    overflowY: "auto",
+                    border: "1px solid #ccc",
+                    padding: "10px",
+                    borderRadius: "4px",
+                  }}
                 >
                   {availableSites.map((site) => (
-                    <option key={site._id} value={site._id}>
-                      {site.name}
-                    </option>
+                    <label key={site._id} className="form-check">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        value={site._id}
+                        checked={detail.sites.includes(site._id)}
+                        onChange={() => {
+                          setDetail((prevDetail) => {
+                            const isSelected = prevDetail.sites.includes(
+                              site._id
+                            );
+                            return {
+                              ...prevDetail,
+                              sites: isSelected
+                                ? prevDetail.sites.filter(
+                                    (id) => id !== site._id
+                                  )
+                                : [...prevDetail.sites, site._id],
+                            };
+                          });
+                        }}
+                      />
+                      <span className="form-check-label">{site.name}</span>
+                    </label>
                   ))}
-                </select>
+                </div>
                 <small className="form-text text-muted">
-                  Hold Ctrl (Windows) or Command (Mac) to select multiple sites.
+                  Select multiple sites by checking the boxes.
                 </small>
               </div>
               <div className="form-footer">

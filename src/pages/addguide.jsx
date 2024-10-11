@@ -127,7 +127,6 @@ export default function AddGuide() {
         throw new Error("File upload failed");
       }
       const fileId = data._id;
-      console.log(fileId);
 
       if (isImage) {
         setDetail((prevDetail) => ({ ...prevDetail, image: fileId }));
@@ -145,10 +144,18 @@ export default function AddGuide() {
       <div className="container container-tight py-4">
         <div className="card card-md">
           <div className="card-body">
-            <h2 className="h2 text-center mb-4">Add Guide</h2>
+            <h2 className="h2 text-center mb-4">
+              {id ? "Edit Guide" : "Add Guide"}
+            </h2>
             <form onSubmit={handleDetails}>
               <div className="mb-3">
-                <label className="form-label required">Title</label>
+                <label className="form-label ">
+                  {id ? (
+                    "Title"
+                  ) : (
+                    <label className="form-label required">Title</label>
+                  )}
+                </label>
                 <input
                   type="text"
                   name="title"
@@ -174,18 +181,15 @@ export default function AddGuide() {
                   }
                 />
               </div>
+
               <div className="mb-3">
-                <label className="form-label required">Upload Image</label>
-                <input
-                  type="file"
-                  name="image"
-                  className="form-control"
-                  onChange={(e) => uploadFile(e, true)}
-                  accept="image/*"
-                />
-              </div>
-              <div className="mb-3">
-                <label className="form-label required">Upload PDF</label>
+                <label className="form-label ">
+                  {id ? (
+                    "Upload Image"
+                  ) : (
+                    <label className="form-label required">Upload Image</label>
+                  )}
+                </label>
                 <input
                   type="file"
                   name="pdf"
@@ -194,34 +198,76 @@ export default function AddGuide() {
                   accept="application/pdf"
                 />
               </div>
+
               <div className="mb-3">
-                <label className="form-label required">Select Sites</label>
-                <select
-                  multiple
+                <label className="form-label ">
+                  {id ? (
+                    "Upload Pdf"
+                  ) : (
+                    <label className="form-label required">Upload Pdf</label>
+                  )}
+                </label>
+                <input
+                  type="file"
+                  name="pdf"
                   className="form-control"
-                  value={detail.sites}
-                  onChange={(e) =>
-                    setDetail((d) => ({
-                      ...d,
-                      sites: [...e.target.selectedOptions].map(
-                        (option) => option.value
-                      ),
-                    }))
-                  }
+                  onChange={(e) => uploadFile(e, false)}
+                  accept="application/pdf"
+                  required={!id}
+                />
+              </div>
+
+              <div className="mb-3">
+                <label className="form-label ">
+                  {id ? (
+                    "Select Sites"
+                  ) : (
+                    <label className="form-label required">Select Sites</label>
+                  )}
+                </label>
+                <div
+                  style={{
+                    maxHeight: "150px",
+                    overflowY: "auto",
+                    border: "1px solid #ccc",
+                    padding: "10px",
+                    borderRadius: "4px",
+                  }}
                 >
                   {availableSites.map((site) => (
-                    <option key={site._id} value={site._id}>
-                      {site.name}
-                    </option>
+                    <label key={site._id} className="form-check">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        value={site._id}
+                        checked={detail.sites.includes(site._id)}
+                        onChange={() => {
+                          setDetail((prevDetail) => {
+                            const isSelected = prevDetail.sites.includes(
+                              site._id
+                            );
+                            return {
+                              ...prevDetail,
+                              sites: isSelected
+                                ? prevDetail.sites.filter(
+                                    (id) => id !== site._id
+                                  )
+                                : [...prevDetail.sites, site._id],
+                            };
+                          });
+                        }}
+                      />
+                      <span className="form-check-label">{site.name}</span>
+                    </label>
                   ))}
-                </select>
+                </div>
                 <small className="form-text text-muted">
-                  Hold Ctrl (Windows) or Command (Mac) to select multiple sites.
+                  Select multiple sites by checking the boxes.
                 </small>
               </div>
               <div className="form-footer">
                 <button type="submit" className="btn btn-primary w-100">
-                  Add Guide
+                  {id ? "Update Guide" : "Add Guide"}
                 </button>
               </div>
             </form>

@@ -38,16 +38,20 @@ export default function SiteList() {
   }, [alert, limit, page, setLoading]);
 
   const headers = [
-    { label: "Site Key" },
     { label: "Website Name" },
     { label: "Web Address" },
+    { label: "Status" },
     { label: "Actions" },
   ];
 
   const rows = sites.map((site) => [
-    site._id,
     site.name,
     site.host,
+    site.isActive === true ? (
+      <span className="badge bg-success">Active</span>  
+    ) : (
+      <span className="badge bg-danger">Inactive</span>
+    ),
     <button
       key={site._id}
       onClick={() => navigate(`/edit-site/${site._id}`)}
@@ -56,10 +60,6 @@ export default function SiteList() {
       Edit
     </button>,
   ]);
-
-  const handlePageChange = (newPage) => setPage(newPage);
-
-  const handleLimitChange = (newLimit) => setLimit(newLimit);
 
   return (
     <div className="page-body">
