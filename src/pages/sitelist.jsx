@@ -15,7 +15,7 @@ export default function SiteList() {
     setLoading(true);
     (async () => {
       const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/sites?p=${page}&n=${limit}`,
+        `${import.meta.env.VITE_API_URL}/sites?p=${page - 1}&n=${limit}`,
         {
           method: "GET",
           headers: {
@@ -49,6 +49,7 @@ export default function SiteList() {
     site.name,
     site.host,
     <button
+      key={site._id}
       onClick={() => navigate(`/edit-site/${site._id}`)}
       className="btn btn-primary w-100"
     >
@@ -103,13 +104,12 @@ export default function SiteList() {
           <Table
             headers={headers}
             rows={rows}
-            currentPage={page-1}
-            totalPages={Math.ceil(sites.length / limit)}
+            currentPage={page}
+            totalPages={Math.ceil(totalCount / limit)}
             onPageChange={setPage}
             entriesPerPage={limit}
             onEntriesChange={(newLimit) => {
               setLimit(newLimit);
-              setPage(1);
             }}
             totalCount={totalCount}
           />

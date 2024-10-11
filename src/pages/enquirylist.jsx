@@ -2,25 +2,25 @@ import { useContext, useEffect, useState } from "react";
 import { GlobalContext } from "../GlobalContext";
 import { useNavigate } from "react-router-dom";
 import Table from "../comps/table";
-import ConfirmationModal from "../comps/confirmation"; 
+import ConfirmationModal from "../comps/confirmation";
 
 export default function EnquiryList() {
   const { alert, setLoading } = useContext(GlobalContext);
   const navigate = useNavigate();
 
   const [enquiries, setEnquiries] = useState([]);
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(8);
   const [searchTerm, setSearchTerm] = useState("");
-  const [enquiryToDelete, setEnquiryToDelete] = useState(null); 
-  const [modalOpen, setModalOpen] = useState(false); 
-  const [totalCount, setTotalCount] = useState(0); 
+  const [enquiryToDelete, setEnquiryToDelete] = useState(null);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [totalCount, setTotalCount] = useState(0);
 
   useEffect(() => {
     setLoading(true);
     (async () => {
       const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/enquiries?p=${page}&n=${limit}`,
+        `${import.meta.env.VITE_API_URL}/enquiries?p=${page - 1}&n=${limit}`,
         {
           method: "GET",
           headers: {
@@ -47,18 +47,27 @@ export default function EnquiryList() {
 
     setLoading(true);
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/enquiry/${enquiryToDelete}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: localStorage.getItem("auth"),
-        },
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/enquiry/${enquiryToDelete}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: localStorage.getItem("auth"),
+          },
+        }
+      );
       const { error } = await res.json();
 
       if (res.ok) {
         // Remove the deleted enquiry from state
-        setEnquiries((prevEnquiries) => prevEnquiries.filter(enq => enq._id !== enquiryToDelete));
-        alert({ type: "success", title: "Deleted!", text: "Enquiry has been deleted." });
+        setEnquiries((prevEnquiries) =>
+          prevEnquiries.filter((enq) => enq._id !== enquiryToDelete)
+        );
+        alert({
+          type: "success",
+          title: "Deleted!",
+          text: "Enquiry has been deleted.",
+        });
       } else {
         alert({ type: "danger", title: "Error!", text: error });
       }
@@ -90,7 +99,7 @@ export default function EnquiryList() {
     enq.subject,
     enq.message, // Assuming 'message' is available in the response
     enq.site.name,
-    <div>
+    <div key={enq._id}>
       <button
         onClick={() => navigate(`/enquiry/${enq._id}`)}
         className="btn btn-primary me-2"
@@ -108,7 +117,6 @@ export default function EnquiryList() {
       </button>
     </div>,
   ]);
-
 
   const handlePageChange = (newPage) => setPage(newPage);
 
@@ -129,7 +137,7 @@ export default function EnquiryList() {
                 className="form-control form-control-sm"
                 placeholder="Search enquiries..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)} 
+                onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
           </div>

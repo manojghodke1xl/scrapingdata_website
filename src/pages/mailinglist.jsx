@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { GlobalContext } from "../GlobalContext";
 import { useNavigate } from "react-router-dom";
-import Table from "../comps/table"; 
+import Table from "../comps/table";
 import ConfirmationModal from "../comps/confirmation"; // Import the ConfirmationModal
 
 export default function MailingList() {
@@ -9,7 +9,7 @@ export default function MailingList() {
   const { alert, setLoading } = useContext(GlobalContext);
 
   const [lists, setLists] = useState([]);
-  const [page, setPage] = useState(0); 
+  const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(8);
   const [mailingToDelete, setMailingToDelete] = useState(null); // State for the mailing to delete
   const [modalOpen, setModalOpen] = useState(false); // State for modal visibility
@@ -19,7 +19,7 @@ export default function MailingList() {
     setLoading(true);
     (async () => {
       const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/lists?p=${page}&n=${limit}`,
+        `${import.meta.env.VITE_API_URL}/lists?p=${page - 1}&n=${limit}`,
         {
           method: "GET",
           headers: {
@@ -50,15 +50,15 @@ export default function MailingList() {
   const rows = lists.map((lst) => [
     lst.email,
     lst.site.name,
-    <div className="d-flex">
+    <div className="d-flex" key={lst._id}>
       <button
         onClick={() => navigate(`/mailing/${lst._id}`)}
         className="btn btn-primary w-50 me-1" // Adjusted for spacing
       >
         View
       </button>
-      <button 
-        onClick={() => openDeleteModal(lst._id)} 
+      <button
+        onClick={() => openDeleteModal(lst._id)}
         className="btn btn-danger w-50"
       >
         Delete
@@ -121,13 +121,13 @@ export default function MailingList() {
 
           <div className="table-responsive">
             <Table
-              headers={headers}        
-              rows={rows}               
-              currentPage={page}         
-              totalPages={Math.ceil(lists.length / limit)} 
-              onPageChange={handlePageChange} 
-              entriesPerPage={limit}     
-              onEntriesChange={handleLimitChange} 
+              headers={headers}
+              rows={rows}
+              currentPage={page}
+              totalPages={Math.ceil(lists.length / limit)}
+              onPageChange={handlePageChange}
+              entriesPerPage={limit}
+              onEntriesChange={handleLimitChange}
               totalCount={totalCount}
             />
           </div>

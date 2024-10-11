@@ -8,16 +8,15 @@ export default function AdminList() {
   const { alert, setLoading } = useContext(GlobalContext);
 
   const [lists, setLists] = useState([]);
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(8);
   const [totalCount, setTotalCount] = useState(0); // To track the total number of admins
-
 
   useEffect(() => {
     setLoading(true);
     (async () => {
       const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/admins?p=${page}&n=${limit}`,
+        `${import.meta.env.VITE_API_URL}/admins?p=${page - 1}&n=${limit}`,
         {
           method: "GET",
           headers: {
@@ -50,6 +49,7 @@ export default function AdminList() {
     admin.name,
     admin.email,
     <button
+      key={admin._id}
       onClick={() => navigate(`/add-admin/${admin._id}`)}
       className="btn btn-primary w-100"
     >

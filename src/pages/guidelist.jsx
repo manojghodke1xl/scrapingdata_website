@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { GlobalContext } from "../GlobalContext";
 import { useNavigate } from "react-router-dom";
 import Table from "../comps/table";
@@ -9,7 +9,7 @@ export default function GuideList() {
   const { alert, setLoading } = useContext(GlobalContext);
 
   const [lists, setLists] = useState([]);
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(8);
   const [guideToDelete, setGuideToDelete] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
@@ -19,7 +19,7 @@ export default function GuideList() {
     setLoading(true);
     (async () => {
       const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/guides?p=${page}&n=${limit}`,
+        `${import.meta.env.VITE_API_URL}/guides?p=${page - 1}&n=${limit}`,
         {
           method: "GET",
           headers: {
@@ -89,7 +89,7 @@ export default function GuideList() {
   const rows = lists.map((guide) => [
     guide.title,
     guide.desc,
-    <div className="d-flex justify-content-between">
+    <div className="d-flex justify-content-between" key={guide._id}>
       <button
         onClick={() => navigate(`/add-guide/${guide._id}`)}
         className="btn btn-primary me-2"

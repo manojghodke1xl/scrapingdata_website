@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { GlobalContext } from "../GlobalContext";
 import { useNavigate } from "react-router-dom";
 import Table from "../comps/table";
@@ -9,7 +9,7 @@ export default function CaseStudyList() {
   const { alert, setLoading } = useContext(GlobalContext);
 
   const [lists, setLists] = useState([]);
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(8);
   const [casestudyToDelete, setCaseStudyToDelete] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
@@ -19,7 +19,7 @@ export default function CaseStudyList() {
     setLoading(true);
     (async () => {
       const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/casestudies?p=${page}&n=${limit}`,
+        `${import.meta.env.VITE_API_URL}/casestudies?p=${page - 1}&n=${limit}`,
         {
           method: "GET",
           headers: {
@@ -89,7 +89,7 @@ export default function CaseStudyList() {
   const rows = lists.map((casestudy) => [
     casestudy.title,
     casestudy.desc,
-    <div className="d-flex justify-content-between">
+    <div className="d-flex justify-content-between" key={casestudy._is}>
       <button
         onClick={() => navigate(`/add-casestudy/${casestudy._id}`)}
         className="btn btn-primary me-2"
@@ -130,9 +130,7 @@ export default function CaseStudyList() {
 
           <div className="table-responsive">
             <Table
-              // headers={[]}
               headers={headers}
-              // rows={[]}
               rows={rows}
               currentPage={page}
               totalPages={Math.ceil(lists.length / limit)}
