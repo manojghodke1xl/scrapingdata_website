@@ -2,45 +2,40 @@ import { useContext, useEffect, useState } from "react";
 import { GlobalContext } from "../GlobalContext";
 import { useNavigate } from "react-router-dom";
 import Table from "../comps/table";
-import ConfirmationModal from "../comps/confirmation"; // Adjust the import path
+import ConfirmationModal from "../comps/confirmation";
+import useSetTimeout from "../Hooks/useDebounce";
 
 export default function CaseStudyList() {
   const navigate = useNavigate();
   const { alert, setLoading } = useContext(GlobalContext);
 
-  const [lists, setLists] = useState([]);
+  const [caseStudies, setCaseStudies] = useState([]);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(8);
   const [casestudyToDelete, setCaseStudyToDelete] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
-  const [totalCount, setTotalCount] = useState(0); // To track the total number of casestudys
+  const [totalCount, setTotalCount] = useState(0);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchKey, setSearchKey] = useState("");
+
+  const searchAbleKeys = ["title"];
+
+  const [err, data] = useSetTimeout(
+    "casestudies",
+    page - 1,
+    limit,
+    searchTerm,
+    searchKey
+  );
 
   useEffect(() => {
-    setLoading(true);
-    (async () => {
-      const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/casestudies?p=${page - 1}&n=${limit}`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: localStorage.getItem("auth"),
-          },
-        }
-      );
-
-      const { data, error } = await res.json();
-      if (res.ok) {
-        setLists(data.casestudies);
-        setTotalCount(data.count);
-      } else {
-        alert({ type: "warning", title: "Warning !", text: error });
-      }
-    })()
-      .catch((error) =>
-        alert({ type: "danger", title: "Error !", text: error.message })
-      )
-      .finally(() => setLoading(false));
-  }, [alert, limit, page, setLoading]);
+    if (data) {
+      setCaseStudies(data.casestudies);
+      setTotalCount(data.count);
+    } else if (err) {
+      alert({ type: "warning", title: "Warning!", text: err.message });
+    }
+  }, [data, err, alert]);
 
   const openDeleteModal = (id) => {
     setCaseStudyToDelete(id);
@@ -63,7 +58,7 @@ export default function CaseStudyList() {
       );
       const { error } = await res.json();
       if (res.ok) {
-        setLists((prevLists) =>
+        setCaseStudies((prevLists) =>
           prevLists.filter((list) => list._id !== casestudyToDelete)
         );
         alert({
@@ -78,16 +73,16 @@ export default function CaseStudyList() {
       alert({ type: "danger", title: "Error!", text: error.message });
     } finally {
       setLoading(false);
-      setModalOpen(false); // Close the modal after deletion
-      setCaseStudyToDelete(null); // Reset the casestudy ID
+      setModalOpen(false);
+      setCaseStudyToDelete(null);
     }
   };
 
   const headers = [{ label: "Title" }, { label: "Actions" }];
 
-  const rows = lists.map((casestudy) => [
+  const rows = caseStudies.map((casestudy) => [
     casestudy.title,
-    <div>
+    <div key={casestudy._id}>
       <button
         onClick={() => navigate(`/add-casestudy/${casestudy._id}`)}
         className="btn btn-primary me-1"
@@ -102,7 +97,6 @@ export default function CaseStudyList() {
       </button>
     </div>,
   ]);
-
 
   return (
     <div className="page-body">
@@ -122,12 +116,15 @@ export default function CaseStudyList() {
 
           <div className="table-responsive  ">
             <Table
-              headers={ headers}
+              headers={headers}
               rows={rows}
               currentPage={page}
-              totalPages={Math.ceil(lists.length / limit)}
+              totalPages={Math.ceil(caseStudies.length / limit)}
               onPageChange={setPage}
               entriesPerPage={limit}
+              setSearchTerm={setSearchTerm}
+              setSearchKey={setSearchKey}
+              searchAbleKeys={searchAbleKeys}
               onEntriesChange={(newLimit) => {
                 setLimit(newLimit);
               }}

@@ -2,40 +2,36 @@ import { useContext, useEffect, useState } from "react";
 import { GlobalContext } from "../GlobalContext";
 import { useNavigate } from "react-router-dom";
 import Table from "../comps/table";
+import useSetTimeout from "../Hooks/useDebounce";
 export default function SiteList() {
   const navigate = useNavigate();
-  const { alert, setLoading } = useContext(GlobalContext);
+  const { alert } = useContext(GlobalContext);
 
   const [sites, setSites] = useState([]);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(8);
-  const [totalCount, setTotalCount] = useState(0); // To track the total number of sites
+  const [totalCount, setTotalCount] = useState(0);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchKey, setSearchKey] = useState("");
+
+  const searchAbleKeys = ["name", "host"];
+
+  const [err, data] = useSetTimeout(
+    "sites",
+    page - 1,
+    limit,
+    searchTerm,
+    searchKey
+  );
 
   useEffect(() => {
-    setLoading(true);
-    (async () => {
-      const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/sites?p=${page - 1}&n=${limit}`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: localStorage.getItem("auth"),
-          },
-        }
-      );
-      const { data, error } = await res.json();
-      if (res.ok) {
-        setSites(data.sites);
-        setTotalCount(data.count);
-      } else {
-        alert({ type: "warning", title: "Warning !", text: error });
-      }
-    })()
-      .catch((error) =>
-        alert({ type: "danger", title: "Error !", text: error.message })
-      )
-      .finally(() => setLoading(false));
-  }, [alert, limit, page, setLoading]);
+    if (data) {
+      setSites(data.sites);
+      setTotalCount(data.count);
+    } else if (err) {
+      alert({ type: "warning", title: "Warning!", text: err.message });
+    }
+  }, [data, err, alert]);
 
   const headers = [
     { label: "Website Name" },
@@ -48,7 +44,7 @@ export default function SiteList() {
     site.name,
     site.host,
     site.isActive === true ? (
-      <span className="badge bg-success">Active</span>  
+      <span className="badge bg-success">Active</span>
     ) : (
       <span className="badge bg-danger">Inactive</span>
     ),
@@ -112,6 +108,9 @@ export default function SiteList() {
             totalPages={Math.ceil(totalCount / limit)}
             onPageChange={setPage}
             entriesPerPage={limit}
+            setSearchTerm={setSearchTerm}
+            setSearchKey={setSearchKey}
+            searchAbleKeys={searchAbleKeys}
             onEntriesChange={(newLimit) => {
               setLimit(newLimit);
             }}

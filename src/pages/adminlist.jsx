@@ -2,46 +2,41 @@ import { useContext, useEffect, useLayoutEffect, useState } from "react";
 import { GlobalContext } from "../GlobalContext";
 import { useNavigate } from "react-router-dom";
 import Table from "../comps/table";
+import useSetTimeout from "../Hooks/useDebounce";
 
 export default function AdminList() {
   const navigate = useNavigate();
-  const { auth, alert, setLoading } = useContext(GlobalContext);
+  const { auth, alert } = useContext(GlobalContext);
 
-  const [lists, setLists] = useState([]);
+  const [admins, setAdmins] = useState([]);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(8);
-  const [totalCount, setTotalCount] = useState(0); // To track the total number of admins
+  const [totalCount, setTotalCount] = useState(0);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchKey, setSearchKey] = useState("");
+
+  const searchAbleKeys = ["name", "email"];
+
+  const [err, data] = useSetTimeout(
+    "admins",
+    page - 1,
+    limit,
+    searchTerm,
+    searchKey
+  );
+
+  useEffect(() => {
+    if (data) {
+      setAdmins(data.admins);
+      setTotalCount(data.count);
+    } else if (err) {
+      alert({ type: "warning", title: "Warning!", text: err.message });
+    }
+  }, [data, err, alert]);
 
   useLayoutEffect(() => {
     if (!auth.isSuperAdmin) navigate("/dashboard");
-  }, [auth]);
-
-  useEffect(() => {
-    setLoading(true);
-    (async () => {
-      const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/admins?p=${page - 1}&n=${limit}`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: localStorage.getItem("auth"),
-          },
-        }
-      );
-
-      const { data, error } = await res.json();
-      if (res.ok) {
-        setLists(data.admins);
-        setTotalCount(data.count); // Use 'count' from API response
-      } else {
-        alert({ type: "warning", title: "Warning!", text: error });
-      }
-    })()
-      .catch((error) =>
-        alert({ type: "danger", title: "Error!", text: error.message })
-      )
-      .finally(() => setLoading(false));
-  }, [alert, limit, page, setLoading]);
+  }, [auth, navigate]);
 
   const headers = [
     { label: "Admin Name" },
@@ -50,14 +45,14 @@ export default function AdminList() {
     { label: "Actions" },
   ];
 
-  const rows = lists.map((admin) => [
+  const rows = admins.map((admin) => [
     admin.name,
     admin.email,
     admin.isBlocked === true ? (
-      <span className="badge bg-danger">Blocked</span>  
+      <span className="badge bg-danger">Blocked</span>
     ) : (
       <span className="badge bg-success">Active</span>
-    ), 
+    ),
     <button
       key={admin._id}
       onClick={() => navigate(`/add-admin/${admin._id}`)}
@@ -98,6 +93,9 @@ export default function AdminList() {
               totalPages={Math.ceil(totalCount / limit)} // Calculate total pages based on count
               onPageChange={handlePageChange}
               entriesPerPage={limit}
+              setSearchTerm={setSearchTerm}
+              setSearchKey={setSearchKey}
+              searchAbleKeys={searchAbleKeys}
               onEntriesChange={handleLimitChange}
               totalCount={totalCount}
             />

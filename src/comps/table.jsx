@@ -27,8 +27,10 @@ const Table = ({
   currentPage,
   totalPages,
   onPageChange,
-  onSearch,
   entriesPerPage,
+  setSearchTerm,
+  setSearchKey,
+  searchAbleKeys,
   onEntriesChange,
   totalCount,
   actions,
@@ -53,14 +55,27 @@ const Table = ({
                   </div>
                   entries
                 </div>
-                <div className="ms-auto text-secondary">
+                <div className="ms-auto text-secondary align-items-end ">
+                  <select
+                    className="form-select"
+                    onChange={(e) => setSearchKey(e.target.value)}
+                  >
+                    <option value={""}>Select</option>
+                    {searchAbleKeys.map((key, i) => (
+                      <option key={i} value={key}>
+                        {key}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="ms-2 text-secondary">
                   Search:
                   <div className="ms-2 d-inline-block">
                     <input
                       type="text"
                       className="form-control form-control-sm"
                       aria-label="Search"
-                      onChange={(e) => onSearch(e.target.value)}
+                      onChange={(e) => setSearchTerm(e.target.value)}
                     />
                   </div>
                 </div>

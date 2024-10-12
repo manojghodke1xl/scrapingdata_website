@@ -2,45 +2,40 @@ import { useContext, useEffect, useState } from "react";
 import { GlobalContext } from "../GlobalContext";
 import { useNavigate } from "react-router-dom";
 import Table from "../comps/table";
-import ConfirmationModal from "../comps/confirmation"; // Adjust the import path
+import ConfirmationModal from "../comps/confirmation";
+import useSetTimeout from "../Hooks/useDebounce";
 
 export default function GuideList() {
   const navigate = useNavigate();
   const { alert, setLoading } = useContext(GlobalContext);
 
-  const [lists, setLists] = useState([]);
+  const [guides, setGuides] = useState([]);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(8);
   const [guideToDelete, setGuideToDelete] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
-  const [totalCount, setTotalCount] = useState(0); // To track the total number of guides
+  const [totalCount, setTotalCount] = useState(0);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchKey, setSearchKey] = useState("");
+
+  const searchAbleKeys = ["title"];
+
+  const [err, data] = useSetTimeout(
+    "guides",
+    page - 1,
+    limit,
+    searchTerm,
+    searchKey
+  );
 
   useEffect(() => {
-    setLoading(true);
-    (async () => {
-      const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/guides?p=${page - 1}&n=${limit}`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: localStorage.getItem("auth"),
-          },
-        }
-      );
-
-      const { data, error } = await res.json();
-      if (res.ok) {
-        setLists(data.guides);
-        setTotalCount(data.count);
-      } else {
-        alert({ type: "warning", title: "Warning !", text: error });
-      }
-    })()
-      .catch((error) =>
-        alert({ type: "danger", title: "Error !", text: error.message })
-      )
-      .finally(() => setLoading(false));
-  }, [alert, limit, page, setLoading]);
+    if (data) {
+      setGuides(data.guides);
+      setTotalCount(data.count);
+    } else if (err) {
+      alert({ type: "warning", title: "Warning!", text: err.message });
+    }
+  }, [data, err, alert]);
 
   const openDeleteModal = (id) => {
     setGuideToDelete(id);
@@ -63,7 +58,7 @@ export default function GuideList() {
       );
       const { error } = await res.json();
       if (res.ok) {
-        setLists((prevLists) =>
+        setGuides((prevLists) =>
           prevLists.filter((list) => list._id !== guideToDelete)
         );
         alert({
@@ -79,15 +74,15 @@ export default function GuideList() {
     } finally {
       setLoading(false);
       setModalOpen(false);
-      setGuideToDelete(null); 
+      setGuideToDelete(null);
     }
   };
 
   const headers = [{ label: "Title" }, { label: "Actions" }];
 
-  const rows = lists.map((guide) => [
+  const rows = guides.map((guide) => [
     guide.title,
-    <div>
+    <div key={guide._id}>
       <button
         onClick={() => navigate(`/add-guide/${guide._id}`)}
         className="btn btn-primary  me-1"
@@ -131,9 +126,12 @@ export default function GuideList() {
               headers={headers}
               rows={rows}
               currentPage={page}
-              totalPages={Math.ceil(lists.length / limit)}
+              totalPages={Math.ceil(guides.length / limit)}
               onPageChange={handlePageChange}
               entriesPerPage={limit}
+              setSearchTerm={setSearchTerm}
+              setSearchKey={setSearchKey}
+              searchAbleKeys={searchAbleKeys}
               onEntriesChange={handleLimitChange}
               totalCount={totalCount}
             />

@@ -2,7 +2,8 @@ import { useContext, useEffect, useState } from "react";
 import { GlobalContext } from "../GlobalContext";
 import { useNavigate } from "react-router-dom";
 import Table from "../comps/table";
-import ConfirmationModal from "../comps/confirmation"; 
+import ConfirmationModal from "../comps/confirmation";
+import useSetTimeout from "../Hooks/useDebounce";
 
 export default function TestimonialList() {
   const navigate = useNavigate();
@@ -13,34 +14,28 @@ export default function TestimonialList() {
   const [limit, setLimit] = useState(8);
   const [testimonialToDelete, setTestimonialToDelete] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
-  const [totalCount, setTotalCount] = useState(0); 
+  const [totalCount, setTotalCount] = useState(0);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchKey, setSearchKey] = useState("");
+
+  const searchAbleKeys = ["name"];
+
+  const [err, data] = useSetTimeout(
+    "testimonials",
+    page - 1,
+    limit,
+    searchTerm,
+    searchKey
+  );
 
   useEffect(() => {
-    setLoading(true);
-    (async () => {
-      const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/testimonials?p=${page - 1}&n=${limit}`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: localStorage.getItem("auth"),
-          },
-        }
-      );
-
-      const { data, error } = await res.json();
-      if (res.ok) {
-        setTestimonials(data.testimonials);
-        setTotalCount(data.count);
-      } else {
-        alert({ type: "warning", title: "Warning !", text: error });
-      }
-    })()
-      .catch((error) =>
-        alert({ type: "danger", title: "Error !", text: error.message })
-      )
-      .finally(() => setLoading(false));
-  }, [alert, limit, page, setLoading]);
+    if (data) {
+      setTestimonials(data.testimonials);
+      setTotalCount(data.count);
+    } else if (err) {
+      alert({ type: "warning", title: "Warning!", text: err.message });
+    }
+  }, [data, err, alert]);
 
   const openDeleteModal = (id) => {
     setTestimonialToDelete(id);
@@ -78,8 +73,8 @@ export default function TestimonialList() {
       alert({ type: "danger", title: "Error!", text: error.message });
     } finally {
       setLoading(false);
-      setModalOpen(false); 
-      setTestimonialToDelete(null); 
+      setModalOpen(false);
+      setTestimonialToDelete(null);
     }
   };
 
@@ -87,7 +82,7 @@ export default function TestimonialList() {
 
   const rows = testimonials.map((testimonial) => [
     testimonial.name,
-    <div>
+    <div key={testimonial._id}>
       <button
         onClick={() => navigate(`/add-testimonial/${testimonial._id}`)}
         className="btn btn-primary me-1"
@@ -127,6 +122,9 @@ export default function TestimonialList() {
               totalPages={Math.ceil(totalCount / limit)}
               onPageChange={setPage}
               entriesPerPage={limit}
+              setSearchTerm={setSearchTerm}
+              setSearchKey={setSearchKey}
+              searchAbleKeys={searchAbleKeys}
               onEntriesChange={(newLimit) => {
                 setLimit(newLimit);
               }}

@@ -3,6 +3,7 @@ import { GlobalContext } from "../GlobalContext";
 import { useNavigate } from "react-router-dom";
 import Table from "../comps/table";
 import ConfirmationModal from "../comps/confirmation";
+import useSetTimeout from "../Hooks/useDebounce";
 
 export default function EnquiryList() {
   const { alert, setLoading } = useContext(GlobalContext);
@@ -11,36 +12,30 @@ export default function EnquiryList() {
   const [enquiries, setEnquiries] = useState([]);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(8);
-  const [searchTerm, setSearchTerm] = useState("");
   const [enquiryToDelete, setEnquiryToDelete] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [totalCount, setTotalCount] = useState(0);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchKey, setSearchKey] = useState("");
+
+  const searchAbleKeys = ["name", "email", "mobile", "service", "subject",'site'];
+
+  const [err, data] = useSetTimeout(
+    "enquiries",
+    page - 1,
+    limit,
+    searchTerm,
+    searchKey
+  );
 
   useEffect(() => {
-    setLoading(true);
-    (async () => {
-      const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/enquiries?p=${page - 1}&n=${limit}`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: localStorage.getItem("auth"),
-          },
-        }
-      );
-      const { data, error } = await res.json();
-      if (res.ok) {
-        setEnquiries(data.enquiries);
-        setTotalCount(data.count);
-      } else {
-        alert({ type: "warning", title: "Warning !", text: error });
-      }
-    })()
-      .catch((error) =>
-        alert({ type: "danger", title: "Error !", text: error.message })
-      )
-      .finally(() => setLoading(false));
-  }, [alert, limit, page, setLoading]);
+    if (data) {
+      setEnquiries(data.enquiries);
+      setTotalCount(data.count);
+    } else if (err) {
+      alert({ type: "warning", title: "Warning!", text: err.message });
+    }
+  }, [data, err, alert]);
 
   const deleteEnquiry = async () => {
     if (!enquiryToDelete) return;
@@ -96,7 +91,7 @@ export default function EnquiryList() {
     enq.mobile,
     enq.service,
     enq.subject,
-    enq.message, // Assuming 'message' is available in the response
+    enq.message,
     enq.site.name,
     <div key={enq._id}>
       <button
@@ -117,24 +112,13 @@ export default function EnquiryList() {
     </div>,
   ]);
 
-
   return (
     <div className="page-body">
       <div className="container-xl">
         <div className="card">
           <div className="card-header">
             <h3 className="card-title">All Enquiries</h3>
-            <div className="card-options">
-              <input
-                type="text"
-                className="form-control form-control-sm"
-                placeholder="Search enquiries..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
           </div>
-
           <div className="table-responsive">
             <Table
               headers={headers}
@@ -143,6 +127,9 @@ export default function EnquiryList() {
               totalPages={Math.ceil(totalCount / limit)}
               onPageChange={setPage}
               entriesPerPage={limit}
+              setSearchTerm={setSearchTerm}
+              setSearchKey={setSearchKey}
+              searchAbleKeys={searchAbleKeys}
               onEntriesChange={(newLimit) => {
                 setLimit(newLimit);
               }}

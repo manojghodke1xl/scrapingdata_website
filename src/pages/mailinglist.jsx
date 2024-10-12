@@ -2,7 +2,8 @@ import { useContext, useEffect, useState } from "react";
 import { GlobalContext } from "../GlobalContext";
 import { useNavigate } from "react-router-dom";
 import Table from "../comps/table";
-import ConfirmationModal from "../comps/confirmation"; // Import the ConfirmationModal
+import ConfirmationModal from "../comps/confirmation";
+import useSetTimeout from "../Hooks/useDebounce";
 
 export default function MailingList() {
   const navigate = useNavigate();
@@ -11,35 +12,30 @@ export default function MailingList() {
   const [lists, setLists] = useState([]);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(8);
-  const [mailingToDelete, setMailingToDelete] = useState(null); // State for the mailing to delete
-  const [modalOpen, setModalOpen] = useState(false); // State for modal visibility
-  const [totalCount, setTotalCount] = useState(0); // To track the total number of guides
+  const [mailingToDelete, setMailingToDelete] = useState(null);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [totalCount, setTotalCount] = useState(0);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchKey, setSearchKey] = useState("");
+
+  const searchAbleKeys = ["email"];
+
+  const [err, data] = useSetTimeout(
+    "lists",
+    page - 1,
+    limit,
+    searchTerm,
+    searchKey
+  );
 
   useEffect(() => {
-    setLoading(true);
-    (async () => {
-      const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/lists?p=${page - 1}&n=${limit}`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: localStorage.getItem("auth"),
-          },
-        }
-      );
-      const { data, error } = await res.json();
-      if (res.ok) {
-        setLists(data.lists);
-        setTotalCount(data.count);
-      } else {
-        alert({ type: "warning", title: "Warning !", text: error });
-      }
-    })()
-      .catch((error) =>
-        alert({ type: "danger", title: "Error !", text: error.message })
-      )
-      .finally(() => setLoading(false));
-  }, [alert, limit, page, setLoading]);
+    if (data) {
+      setLists(data.lists);
+      setTotalCount(data.count);
+    } else if (err) {
+      alert({ type: "warning", title: "Warning!", text: err.message });
+    }
+  }, [data, err, alert]);
 
   const headers = [
     { label: "Customer Email" },
@@ -50,7 +46,7 @@ export default function MailingList() {
   const rows = lists.map((lst) => [
     lst.email,
     lst.site.name,
-    <div>
+    <div key={lst._id}>
       <button
         onClick={() => navigate(`/mailing/${lst._id}`)}
         className="btn btn-primary me-1" // Adjusted for spacing
@@ -59,13 +55,12 @@ export default function MailingList() {
       </button>
       <button
         onClick={() => openDeleteModal(lst._id)}
-        className="btn btn-danger " 
+        className="btn btn-danger "
       >
         Delete
       </button>
-      </div>
+    </div>,
   ]);
-
 
   const openDeleteModal = (id) => {
     setMailingToDelete(id);
@@ -124,6 +119,9 @@ export default function MailingList() {
               totalPages={Math.ceil(totalCount / limit)}
               onPageChange={setPage}
               entriesPerPage={limit}
+              setSearchTerm={setSearchTerm}
+              setSearchKey={setSearchKey}
+              searchAbleKeys={searchAbleKeys}
               onEntriesChange={(newLimit) => {
                 setLimit(newLimit);
               }}

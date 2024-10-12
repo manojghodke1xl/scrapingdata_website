@@ -2,42 +2,37 @@ import { useContext, useEffect, useState } from "react";
 import { GlobalContext } from "../GlobalContext";
 import { useNavigate } from "react-router-dom";
 import Table from "../comps/table";
+import useSetTimeout from "../Hooks/useDebounce";
 
 export default function TestimonialList() {
   const navigate = useNavigate();
-  const { alert, setLoading } = useContext(GlobalContext);
+  const { alert } = useContext(GlobalContext);
 
   const [smtps, setSmtps] = useState([]);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(8);
   const [totalCount, setTotalCount] = useState(0);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchKey, setSearchKey] = useState("");
+
+  const searchAbleKeys = ["name", "host"];
+
+  const [err, data] = useSetTimeout(
+    "smtps",
+    page - 1,
+    limit,
+    searchTerm,
+    searchKey
+  );
 
   useEffect(() => {
-    setLoading(true);
-    (async () => {
-      const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/smtps?p=${page - 1}&n=${limit}`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: localStorage.getItem("auth"),
-          },
-        }
-      );
-
-      const { data, error } = await res.json();
-      if (res.ok) {
-        setSmtps(data.smtps);
-        setTotalCount(data.count);
-      } else {
-        alert({ type: "warning", title: "Warning !", text: error });
-      }
-    })()
-      .catch((error) =>
-        alert({ type: "danger", title: "Error !", text: error.message })
-      )
-      .finally(() => setLoading(false));
-  }, [alert, limit, page, setLoading]);
+    if (data) {
+      setSmtps(data.smtps);
+      setTotalCount(data.count);
+    } else if (err) {
+      alert({ type: "warning", title: "Warning!", text: err.message });
+    }
+  }, [data, err, alert]);
 
   const headers = [{ label: "Name" }, { label: "Host" }, { label: "Actions" }];
 
@@ -46,6 +41,7 @@ export default function TestimonialList() {
     smtp.host,
 
     <button
+      key={smtp._id}
       onClick={() => navigate(`/add-smtp/${smtp._id}`)}
       className="btn btn-primary "
     >
@@ -77,6 +73,9 @@ export default function TestimonialList() {
               totalPages={Math.ceil(totalCount / limit)}
               onPageChange={setPage}
               entriesPerPage={limit}
+              setSearchTerm={setSearchTerm}
+              setSearchKey={setSearchKey}
+              searchAbleKeys={searchAbleKeys}
               onEntriesChange={(newLimit) => {
                 setLimit(newLimit);
               }}
