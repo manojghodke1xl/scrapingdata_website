@@ -202,6 +202,7 @@ export default function AddSite() {
                       <li key={index} className="list-group-item">
                         {email}
                         <button
+                          type="button"
                           className="btn btn-danger btn-sm float-end"
                           onClick={() => removeEmail(index)}
                         >
