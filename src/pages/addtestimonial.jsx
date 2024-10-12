@@ -11,7 +11,8 @@ export default function AddTestimonial() {
     name: "",
     desg: "",
     text: "",
-    isGlobal: false, 
+    isActive: false,
+    isGlobal: false,
     sites: [],
   });
   const [availableSites, setAvailableSites] = useState([]);
@@ -49,8 +50,17 @@ export default function AddTestimonial() {
         const { data, error } = await res.json();
 
         if (res.ok) {
-          const { name, desg, text, isGlobal, sites } = data.testimonial; // Get isGlobal from response
-          setDetail({ name, desg, text, isGlobal, sites });
+          const { name, desg, text, isGlobal, sites, isActive } =
+            data.testimonial; // Get isGlobal from response
+          setDetail((prev) => ({
+            ...prev,
+            name,
+            desg,
+            text,
+            isGlobal,
+            sites,
+            isActive,
+          }));
         } else {
           alert({ type: "warning", title: "Warning !", text: error });
         }
@@ -96,10 +106,14 @@ export default function AddTestimonial() {
       <div className="container container-tight py-4">
         <div className="card card-md">
           <div className="card-body">
-            <h2 className="h2 text-center mb-4">{id ? "Edit Testimonial" : <label className="form-label required">Add Testimonial</label>}</h2>
+            <h2 className="h2 text-center mb-4">
+              {!id ? "Add Testimonial" : "Edit Testimonial"}
+            </h2>
             <form onSubmit={handleDetails}>
               <div className="mb-3">
-                <label className="form-label required">Name</label>
+                <label className={!id ? "form-label required" : "form-label"}>
+                  Name
+                </label>
                 <input
                   type="text"
                   name="title"
@@ -109,43 +123,43 @@ export default function AddTestimonial() {
                   onChange={(e) =>
                     setDetail((d) => ({ ...d, name: e.target.value }))
                   }
-                  required
+                  required={!id}
                 />
               </div>
               <div className="mb-3">
-                <label className="form-label">{id ? "Short Description" : <label className="form-label required">short Description</label>}</label>
+                <label className={!id ? "form-label required" : "form-label"}>
+                  short Description
+                </label>
                 <textarea
                   className="form-control"
                   name="example-textarea-input"
                   rows={6}
                   placeholder="Description.."
-                  value={detail.desg} 
+                  value={detail.desg}
                   onChange={(e) =>
                     setDetail((d) => ({ ...d, desg: e.target.value }))
                   }
+                  required={!id}
                 />
               </div>
               <div className="mb-3">
-                <label className="form-label">{id ? "Edit Testimonial" : <label className="form-label required">Add Testimonial</label>}</label>
+                <label className={!id ? "form-label required" : "form-label"}>
+                  Add Testimonial
+                </label>
                 <textarea
                   className="form-control"
                   name="example-textarea-input"
                   rows={6}
                   placeholder="Description.."
-                  value={detail.text} 
+                  value={detail.text}
                   onChange={(e) =>
                     setDetail((d) => ({ ...d, text: e.target.value }))
                   }
+                  require={!id}
                 />
               </div>
               <div className="mb-3">
-                <label className="form-label ">
-                  {id ? (
-                    "Select Sites"
-                  ) : (
-                    <label className="form-label ">{id ? "Selected Sites" : <label className="form-label required">Select Sites</label>}</label>
-                  )}
-                </label>
+                <label className="form-label">Select Sites</label>
                 <div
                   style={{
                     maxHeight: "150px",
@@ -182,13 +196,30 @@ export default function AddTestimonial() {
                     </label>
                   ))}
                 </div>
-                <small className="form-text text-muted">
-                  Select multiple sites by checking the boxes.
-                </small>
+              </div>
+              <div className="mb-3">
+                <label className="row">
+                  <span className="col">Is Testimonial Active?</span>
+                  <span className="col-auto">
+                    <label className="form-check form-check-single form-switch">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        checked={detail.isActive}
+                        onChange={() =>
+                          setDetail((prev) => ({
+                            ...prev,
+                            isActive: !prev.isActive,
+                          }))
+                        }
+                      />
+                    </label>
+                  </span>
+                </label>
               </div>
               <div className="form-footer">
                 <button type="submit" className="btn btn-primary w-100">
-                  Add Testimonial
+                  {!id ? "Add Testimonial" : "Update Testimonial"}
                 </button>
               </div>
             </form>

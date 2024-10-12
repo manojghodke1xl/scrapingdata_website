@@ -78,10 +78,19 @@ export default function TestimonialList() {
     }
   };
 
-  const headers = [{ label: "Name" }, { label: "Actions" }];
+  const headers = [
+    { label: "Name" },
+    { label: "Status" },
+    { label: "Actions" },
+  ];
 
   const rows = testimonials.map((testimonial) => [
     testimonial.name,
+    testimonial.isActive === true ? (
+      <span className="badge bg-success">Active</span>
+    ) : (
+      <span className="badge bg-danger">Inactive</span>
+    ),
     <div key={testimonial._id}>
       <button
         onClick={() => navigate(`/add-testimonial/${testimonial._id}`)}

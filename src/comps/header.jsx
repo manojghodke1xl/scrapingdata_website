@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { GlobalContext } from "../GlobalContext";
 
-export default function Header({ isAuth = false }) {
+export default function Header() {
   const { auth, dispatch } = useContext(GlobalContext);
   return (
     <header className="navbar navbar-expand-md navbar-light d-print-none">
@@ -24,8 +24,9 @@ export default function Header({ isAuth = false }) {
         {!!auth.id && (
           <>
             <div className="collapse navbar-collapse" id="navbar-menu">
-                <ul className="navbar-nav ">
-                  <li className="nav-item ">
+              <div className="d-flex flex-column flex-md-row flex-fill align-items-stretch align-items-md-center">
+                <ul className="navbar-nav">
+                  <li className="nav-item">
                     <Link className="nav-link" to="/dashboard">
                       <span className="nav-link-icon d-md-none d-lg-inline-block">
                         <svg
@@ -237,6 +238,7 @@ export default function Header({ isAuth = false }) {
                     </Link>
                   </li>
                 </ul>
+              </div>
             </div>
             <div className="btn-list">
               <button

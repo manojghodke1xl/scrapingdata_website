@@ -29,8 +29,8 @@ export default function AddSmtp() {
         const { data, error } = await res.json();
 
         if (res.ok) {
-          const { name, host, port, secure, user, password } = data.smtp; // Get isGlobal from response
-          setDetail({ name, host, port, secure, user, password });
+          const { name, host, port, secure, user } = data.smtp; // Get isGlobal from response
+          setDetail({ name, host, port, secure, user });
         } else {
           alert({ type: "warning", title: "Warning !", text: error });
         }
@@ -77,15 +77,13 @@ export default function AddSmtp() {
         <div className="card card-md">
           <div className="card-body">
             <h2 className="h2 text-center mb-4">
-              {id ? (
-                "Edit Testimonial"
-              ) : (
-                <label className="form-label required">Add Testimonial</label>
-              )}
+              {!id ? "Add SMTP" : "Edit SMTP"}
             </h2>
             <form onSubmit={handleDetails}>
               <div className="mb-3">
-                <label className="form-label required">Name</label>
+                <label className={!id ? "form-label required" : "form-label"}>
+                  Name
+                </label>
                 <input
                   type="text"
                   name="title"
@@ -95,11 +93,13 @@ export default function AddSmtp() {
                   onChange={(e) =>
                     setDetail((d) => ({ ...d, name: e.target.value }))
                   }
-                  required
+                  required={!id}
                 />
               </div>
               <div className="mb-3">
-                <label className="form-label required">Host</label>
+                <label className={!id ? "form-label required" : "form-label"}>
+                  Host
+                </label>
                 <input
                   type="text"
                   name="title"
@@ -109,25 +109,29 @@ export default function AddSmtp() {
                   onChange={(e) =>
                     setDetail((d) => ({ ...d, host: e.target.value }))
                   }
-                  required
+                  required={!id}
                 />
               </div>
               <div className="mb-3">
-                <label className="form-label required">Port</label>
+                <label className={!id ? "form-label required" : "form-label"}>
+                  Port
+                </label>
                 <input
                   type="text"
                   name="name"
                   className="form-control"
                   placeholder="Name"
-                  value={detail.port} 
+                  value={detail.port}
                   onChange={(e) =>
                     setDetail((d) => ({ ...d, port: e.target.value }))
                   }
-                  required
+                  required={!id}
                 />
               </div>
               <div className="mb-3 ">
-                <label className="form-label required">Security Protocol</label>
+                <label className={!id ? "form-label required" : "form-label"}>
+                  Security Protocol
+                </label>
                 <select
                   name="secure"
                   className="form-control"
@@ -135,7 +139,7 @@ export default function AddSmtp() {
                   onChange={(e) =>
                     setDetail((d) => ({ ...d, secure: e.target.value }))
                   }
-                  required
+                  required={!id}
                 >
                   <option value="None">None</option>
                   <option value="SSL">SSL</option>
@@ -145,7 +149,9 @@ export default function AddSmtp() {
               </div>
 
               <div className="mb-3">
-                <label className="form-label required">User</label>
+                <label className={!id ? "form-label required" : "form-label"}>
+                  User
+                </label>
                 <input
                   type="text"
                   name="user"
@@ -155,21 +161,23 @@ export default function AddSmtp() {
                   onChange={(e) =>
                     setDetail((d) => ({ ...d, user: e.target.value }))
                   }
-                  required
+                  required={!id}
                 />
               </div>
               <div className="mb-3">
-                <label className="form-label required">Password</label>
+                <label className={!id ? "form-label required" : "form-label"}>
+                  Password
+                </label>
                 <input
                   type="password"
                   name="password"
                   className="form-control"
                   placeholder="Passsword"
-                  value={detail.password} 
+                  value={detail.password}
                   onChange={(e) =>
                     setDetail((d) => ({ ...d, password: e.target.value }))
                   }
-                  required
+                  required={!id}
                 />
               </div>
 

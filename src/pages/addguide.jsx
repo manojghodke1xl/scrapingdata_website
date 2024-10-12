@@ -10,7 +10,7 @@ export default function AddGuide() {
   const [detail, setDetail] = useState({
     title: "",
     desc: "",
-    isGlobal: false,
+    isActive: false,
     sites: [],
     image: "",
     pdf: "",
@@ -47,8 +47,8 @@ export default function AddGuide() {
         const { data, error } = await res.json();
 
         if (res.ok) {
-          const { title, desc, sites, image, pdf } = data.guide;
-          setDetail({ title, desc, sites, image, pdf });
+          const { title, desc, sites, image, pdf, isActive } = data.guide;
+          setDetail((prev) => ({ ...prev, title, desc, sites, image, pdf, isActive }));
         } else {
           alert({ type: "warning", title: "Warning !", text: error });
         }
@@ -149,12 +149,8 @@ export default function AddGuide() {
             </h2>
             <form onSubmit={handleDetails}>
               <div className="mb-3">
-                <label className="form-label ">
-                  {id ? (
-                    "Title"
-                  ) : (
-                    <label className="form-label required">Title</label>
-                  )}
+                <label className={!id ? "form-label required" : "form-label"}>
+                  Title
                 </label>
                 <input
                   type="text"
@@ -165,11 +161,13 @@ export default function AddGuide() {
                   onChange={(e) =>
                     setDetail((d) => ({ ...d, title: e.target.value }))
                   }
-                  required
+                  required={!id}
                 />
               </div>
               <div className="mb-3">
-                <label className="form-label">Description</label>
+                <label className={!id ? "form-label required" : "form-label"}>
+                  Description
+                </label>
                 <textarea
                   className="form-control"
                   name="example-textarea-input"
@@ -179,33 +177,27 @@ export default function AddGuide() {
                   onChange={(e) =>
                     setDetail((d) => ({ ...d, desc: e.target.value }))
                   }
+                  required={!id}
                 />
               </div>
 
               <div className="mb-3">
-                <label className="form-label ">
-                  {id ? (
-                    "Upload Image"
-                  ) : (
-                    <label className="form-label required">Upload Image</label>
-                  )}
+                <label className={!id ? "form-label required" : "form-label"}>
+                  Upload Image
                 </label>
                 <input
                   type="file"
-                  name="pdf"
+                  name="image"
                   className="form-control"
-                  onChange={(e) => uploadFile(e, false)}
-                  accept="application/pdf"
+                  onChange={(e) => uploadFile(e, true)}
+                  accept="image/*"
+                  required={!id}
                 />
               </div>
 
               <div className="mb-3">
-                <label className="form-label ">
-                  {id ? (
-                    "Upload Pdf"
-                  ) : (
-                    <label className="form-label required">Upload Pdf</label>
-                  )}
+                <label className={!id ? "form-label required" : "form-label"}>
+                  Upload PDF
                 </label>
                 <input
                   type="file"
@@ -218,13 +210,7 @@ export default function AddGuide() {
               </div>
 
               <div className="mb-3">
-                <label className="form-label ">
-                  {id ? (
-                    "Select Sites"
-                  ) : (
-                    <label className="form-label required">Select Sites</label>
-                  )}
-                </label>
+                <label className="form-label">Select Sites</label>
                 <div
                   style={{
                     maxHeight: "150px",
@@ -261,10 +247,30 @@ export default function AddGuide() {
                     </label>
                   ))}
                 </div>
-                <small className="form-text text-muted">
-                  Select multiple sites by checking the boxes.
-                </small>
               </div>
+              <div className="mb-3">
+                <label className="row">
+                  <span className="col">Site Status</span>
+                  <span className="col-auto">
+                    <label className="form-check form-check-singl  e form-switch">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        defaultChecked=""
+                        name="status"
+                        checked={detail.isActive}
+                        onChange={() =>
+                          setDetail((prev) => ({
+                            ...prev,
+                            isActive: !prev.isActive,
+                          }))
+                        }
+                      />
+                    </label>
+                  </span>
+                </label>
+              </div>
+
               <div className="form-footer">
                 <button type="submit" className="btn btn-primary w-100">
                   {id ? "Update Guide" : "Add Guide"}

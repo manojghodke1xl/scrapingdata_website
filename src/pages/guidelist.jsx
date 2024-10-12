@@ -78,10 +78,19 @@ export default function GuideList() {
     }
   };
 
-  const headers = [{ label: "Title" }, { label: "Actions" }];
+  const headers = [
+    { label: "Title" },
+    { label: "status" },
+    { label: "Actions" },
+  ];
 
   const rows = guides.map((guide) => [
     guide.title,
+    guide.isActive === true ? (
+      <span className="badge bg-success">Active</span>
+    ) : (
+      <span className="badge bg-danger">Inactive</span>
+    ),
     <div key={guide._id}>
       <button
         onClick={() => navigate(`/add-guide/${guide._id}`)}
@@ -102,7 +111,6 @@ export default function GuideList() {
 
   const handleLimitChange = (newLimit) => {
     setLimit(newLimit);
-    setPage(1);
   };
 
   return (
