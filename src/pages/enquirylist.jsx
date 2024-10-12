@@ -11,7 +11,6 @@ export default function EnquiryList() {
   const [enquiries, setEnquiries] = useState([]);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(8);
-  const [searchTerm, setSearchTerm] = useState("");
   const [enquiryToDelete, setEnquiryToDelete] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [totalCount, setTotalCount] = useState(0);
@@ -124,15 +123,7 @@ export default function EnquiryList() {
         <div className="card">
           <div className="card-header">
             <h3 className="card-title">All Enquiries</h3>
-            <div className="card-options">
-              <input
-                type="text"
-                className="form-control form-control-sm"
-                placeholder="Search enquiries..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
+            
           </div>
 
           <div className="table-responsive">
