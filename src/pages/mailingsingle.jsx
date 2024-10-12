@@ -1,8 +1,8 @@
-import React, { useContext, useState, useEffect } from "react";
+import { useContext, useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { GlobalContext } from "../GlobalContext";
 
-const mailingsingle = () => {
+const Mailingsingle = () => {
   const { id } = useParams();
   const { alert, setLoading } = useContext(GlobalContext);
 
@@ -11,12 +11,15 @@ const mailingsingle = () => {
   useEffect(() => {
     setLoading(true);
     (async () => {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/list/${id}`, {
-        method: "GET",
-        headers: {
-          Authorization: localStorage.getItem("auth"),
-        },
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/list/${id}?p=1`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: localStorage.getItem("auth"),
+          },
+        }
+      );
       const { data, error } = await res.json();
       if (res.ok) {
         setEnquiry(data.list);
@@ -28,7 +31,7 @@ const mailingsingle = () => {
         alert({ type: "danger", title: "Error !", text: error.message })
       )
       .finally(() => setLoading(false));
-  }, [alert, setLoading]);
+  }, [alert, id, setLoading]);
 
   return (
     <div className="page-body">
@@ -104,7 +107,7 @@ const mailingsingle = () => {
                       <input
                         type="datetime-local"
                         className="form-control"
-                        defaultValue={(enquiry?.createdAt).slice(0, 16)}
+                        defaultValue={enquiry?.createdAt?.slice(0, 16)}
                       />
                     </div>
                   </div>
@@ -118,4 +121,4 @@ const mailingsingle = () => {
   );
 };
 
-export default mailingsingle;
+export default Mailingsingle;

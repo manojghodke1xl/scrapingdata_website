@@ -48,7 +48,15 @@ export default function AddGuide() {
 
         if (res.ok) {
           const { title, desc, sites, image, pdf, isActive } = data.guide;
-          setDetail((prev) => ({ ...prev, title, desc, sites, image, pdf, isActive }));
+          setDetail((prev) => ({
+            ...prev,
+            title,
+            desc,
+            sites,
+            image,
+            pdf,
+            isActive,
+          }));
         } else {
           alert({ type: "warning", title: "Warning !", text: error });
         }
@@ -182,30 +190,24 @@ export default function AddGuide() {
               </div>
 
               <div className="mb-3">
-                <label className={!id ? "form-label required" : "form-label"}>
-                  Upload Image
-                </label>
+                <label className="form-label">Upload Image</label>
                 <input
                   type="file"
                   name="image"
                   className="form-control"
                   onChange={(e) => uploadFile(e, true)}
                   accept="image/*"
-                  required={!id}
                 />
               </div>
 
               <div className="mb-3">
-                <label className={!id ? "form-label required" : "form-label"}>
-                  Upload PDF
-                </label>
+                <label className="form-label">Upload PDF</label>
                 <input
                   type="file"
                   name="pdf"
                   className="form-control"
                   onChange={(e) => uploadFile(e, false)}
                   accept="application/pdf"
-                  required={!id}
                 />
               </div>
 
