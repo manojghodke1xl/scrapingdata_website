@@ -64,34 +64,35 @@ export default function SiteList() {
       <div className="container-xl">
         <div className="card">
           <div className="card-header">
-            <h3 className="card-title">All Websites</h3>
+            <h3 className="card-title">All Web sites</h3>
             <div className="card-options">
-                        <button
-                          onClick={() => navigate("/add-site")}
-                          className="btn btn-primary "
-                        >
-                          Add Site
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-
-          <Table
-            headers={headers}
-            rows={rows}
-            currentPage={page}
-            totalPages={Math.ceil(totalCount / limit)}
-            onPageChange={setPage}
-            entriesPerPage={limit}
-            setSearchTerm={setSearchTerm}
-            setSearchKey={setSearchKey}
-            searchAbleKeys={searchAbleKeys}
-            onEntriesChange={(newLimit) => {
-              setLimit(newLimit);
-            }}
-            totalCount={totalCount}
-          />
+              <button
+                onClick={() => navigate("/add-site")}
+                className="btn btn-primary "
+              >
+                Add Site
+              </button>
+            </div>
+          </div>
+          <div className="table-responsive">
+            <Table
+              headers={headers}
+              rows={rows}
+              currentPage={page}
+              totalPages={Math.ceil(totalCount / limit)}
+              onPageChange={setPage}
+              entriesPerPage={limit}
+              setSearchTerm={setSearchTerm}
+              setSearchKey={setSearchKey}
+              searchAbleKeys={searchAbleKeys}
+              onEntriesChange={(newLimit) => {
+                setLimit(newLimit);
+              }}
+              totalCount={totalCount}
+            />
+          </div>
         </div>
       </div>
+    </div>
   );
 }
