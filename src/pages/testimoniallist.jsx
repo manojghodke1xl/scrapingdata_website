@@ -87,10 +87,10 @@ export default function TestimonialList() {
 
   const rows = testimonials.map((testimonial) => [
     testimonial.name,
-    <div className="d-flex justify-content-between" key={testimonial._id}>
+    <div>
       <button
         onClick={() => navigate(`/add-testimonial/${testimonial._id}`)}
-        className="btn btn-primary me-2"
+        className="btn btn-primary me-1"
       >
         Edit
       </button>

@@ -24,9 +24,8 @@ export default function Header({ isAuth = false }) {
         {!!auth.id && (
           <>
             <div className="collapse navbar-collapse" id="navbar-menu">
-              <div className="d-flex flex-column flex-md-row flex-fill align-items-stretch align-items-md-center">
-                <ul className="navbar-nav">
-                  <li className="nav-item">
+                <ul className="navbar-nav ">
+                  <li className="nav-item ">
                     <Link className="nav-link" to="/dashboard">
                       <span className="nav-link-icon d-md-none d-lg-inline-block">
                         <svg
@@ -238,7 +237,6 @@ export default function Header({ isAuth = false }) {
                     </Link>
                   </li>
                 </ul>
-              </div>
             </div>
             <div className="btn-list">
               <button

@@ -59,7 +59,6 @@ export default function EnquiryList() {
       const { error } = await res.json();
 
       if (res.ok) {
-        // Remove the deleted enquiry from state
         setEnquiries((prevEnquiries) =>
           prevEnquiries.filter((enq) => enq._id !== enquiryToDelete)
         );
@@ -75,8 +74,8 @@ export default function EnquiryList() {
       alert({ type: "danger", title: "Error!", text: error.message });
     } finally {
       setLoading(false);
-      setModalOpen(false); // Close the modal after deletion
-      setEnquiryToDelete(null); // Reset the enquiry ID
+      setModalOpen(false);
+      setEnquiryToDelete(null);
     }
   };
 
@@ -102,7 +101,7 @@ export default function EnquiryList() {
     <div key={enq._id}>
       <button
         onClick={() => navigate(`/enquiry/${enq._id}`)}
-        className="btn btn-primary me-2"
+        className="btn btn-primary me-1"
       >
         View
       </button>

@@ -33,7 +33,6 @@ const Table = ({
   totalCount,
   actions,
 }) => {
-
   return (
     <div className="page-body">
       <div className="container-xl">
@@ -67,8 +66,8 @@ const Table = ({
                 </div>
               </div>
             </div>
-            <div className="table-responsive">
-              <table className="table card-table table-vcenter text-nowrap datatable ">
+            <div className="table-responsive ">
+              <table className="table card-table table-vcenter text-nowrap  datatable">
                 <TableHeader headers={headers} />
                 <tbody>
                   {rows.map((row, index) => (

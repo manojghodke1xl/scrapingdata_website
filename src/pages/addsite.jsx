@@ -160,7 +160,7 @@ export default function AddSite() {
                 <label className="row">
                   <span className="col">Site Status</span>
                   <span className="col-auto">
-                    <label className="form-check form-check-single form-switch">
+                    <label className="form-check form-check-singl  e form-switch">
                       <input
                         className="form-check-input"
                         type="checkbox"

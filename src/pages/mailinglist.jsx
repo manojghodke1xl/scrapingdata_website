@@ -50,20 +50,20 @@ export default function MailingList() {
   const rows = lists.map((lst) => [
     lst.email,
     lst.site.name,
-    <div className="d-flex" key={lst._id}>
+    <div>
       <button
         onClick={() => navigate(`/mailing/${lst._id}`)}
-        className="btn btn-primary w-50 me-1" // Adjusted for spacing
+        className="btn btn-primary me-1" // Adjusted for spacing
       >
         View
       </button>
       <button
         onClick={() => openDeleteModal(lst._id)}
-        className="btn btn-danger w-50"
+        className="btn btn-danger " 
       >
         Delete
       </button>
-    </div>,
+      </div>
   ]);
 
 

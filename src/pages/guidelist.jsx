@@ -78,8 +78,8 @@ export default function GuideList() {
       alert({ type: "danger", title: "Error!", text: error.message });
     } finally {
       setLoading(false);
-      setModalOpen(false); // Close the modal after deletion
-      setGuideToDelete(null); // Reset the guide ID
+      setModalOpen(false);
+      setGuideToDelete(null); 
     }
   };
 
@@ -87,10 +87,10 @@ export default function GuideList() {
 
   const rows = lists.map((guide) => [
     guide.title,
-    <div className="d-flex justify-content-between" key={guide._id}>
+    <div>
       <button
         onClick={() => navigate(`/add-guide/${guide._id}`)}
-        className="btn btn-primary me-2"
+        className="btn btn-primary  me-1"
       >
         Edit
       </button>

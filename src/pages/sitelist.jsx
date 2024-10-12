@@ -55,7 +55,7 @@ export default function SiteList() {
     <button
       key={site._id}
       onClick={() => navigate(`/edit-site/${site._id}`)}
-      className="btn btn-primary w-100"
+      className="btn btn-primary"
     >
       Edit
     </button>,

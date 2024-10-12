@@ -87,10 +87,10 @@ export default function CaseStudyList() {
 
   const rows = lists.map((casestudy) => [
     casestudy.title,
-    <div className="d-flex justify-content-between" key={casestudy._is}>
+    <div>
       <button
         onClick={() => navigate(`/add-casestudy/${casestudy._id}`)}
-        className="btn btn-primary me-2"
+        className="btn btn-primary me-1"
       >
         Edit
       </button>
@@ -120,9 +120,9 @@ export default function CaseStudyList() {
             </div>
           </div>
 
-          <div className="table-responsive">
+          <div className="table-responsive  ">
             <Table
-              headers={headers}
+              headers={ headers}
               rows={rows}
               currentPage={page}
               totalPages={Math.ceil(lists.length / limit)}

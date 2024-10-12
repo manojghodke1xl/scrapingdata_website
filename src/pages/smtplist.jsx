@@ -44,14 +44,13 @@ export default function TestimonialList() {
   const rows = smtps.map((smtp) => [
     smtp.name,
     smtp.host,
-    <div className="d-flex justify-content-between" key={smtp._id}>
-      <button
-        onClick={() => navigate(`/add-smtp/${smtp._id}`)}
-        className="btn btn-primary me-2"
-      >
-        Edit
-      </button>
-    </div>,
+
+    <button
+      onClick={() => navigate(`/add-smtp/${smtp._id}`)}
+      className="btn btn-primary "
+    >
+      Edit
+    </button>,
   ]);
 
   return (

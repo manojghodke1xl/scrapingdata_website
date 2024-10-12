@@ -207,26 +207,29 @@ export default function AddAdmin() {
                   ))}
                 </div>
               </div>
-              <div className="mb-3">
-                <label className="row">
-                  <span className="col">Is admin blocked?</span>
-                  <span className="col-auto">
-                    <label className="form-check form-check-single form-switch">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        checked={detail.isBlocked}
-                        onChange={() =>
-                          setDetail((prev) => ({
-                            ...prev,
-                            isBlocked: !prev.isBlocked,
-                          }))
-                        }
-                      />
-                    </label>
-                  </span>
-                </label>
-              </div>
+              {!detail.isSuperAdmin && (
+                <div className="mb-3">
+                  <label className="row">
+                    <span className="col">Is admin blocked?</span>
+                    <span className="col-auto">
+                      <label className="form-check form-check-single form-switch">
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          checked={detail.isBlocked}
+                          onChange={() =>
+                            setDetail((prev) => ({
+                              ...prev,
+                              isBlocked: !prev.isBlocked,
+                            }))
+                          }
+                        />
+                      </label>
+                    </span>
+                  </label>
+                </div>
+              )}
+
               <div className="form-footer">
                 <button type="submit" className="btn btn-primary w-100">
                   {id ? "Update Admin" : "Add Admin"}

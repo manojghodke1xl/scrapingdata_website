@@ -53,11 +53,15 @@ export default function AdminList() {
   const rows = lists.map((admin) => [
     admin.name,
     admin.email,
-    admin.isBlocked ? "Blocked" : "Active", // Display "Blocked" or "Active" based on admin status
+    admin.isBlocked === true ? (
+      <span className="badge bg-danger">Blocked</span>  
+    ) : (
+      <span className="badge bg-success">Active</span>
+    ), 
     <button
       key={admin._id}
       onClick={() => navigate(`/add-admin/${admin._id}`)}
-      className="btn btn-primary w-100"
+      className="btn btn-primary "
     >
       Edit
     </button>,
@@ -79,7 +83,7 @@ export default function AdminList() {
             <div className="card-options">
               <button
                 onClick={() => navigate("/add-admin")}
-                className="btn btn-primary"
+                className="btn btn-primary "
               >
                 Add Admin
               </button>
