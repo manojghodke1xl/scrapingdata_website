@@ -12,8 +12,9 @@ export default function AddSite() {
   const [detail, setDetail] = useState({
     name: "",
     host: "",
-    status: false,
+    isActive: false,
     smtp: "",
+    forwardEmails: [],
   });
 
   useEffect(() => {
@@ -47,8 +48,8 @@ export default function AddSite() {
         });
         const { data, error } = await res.json();
         if (res.ok) {
-          const { name, host, smtp } = data.site;
-          setDetail((detail) => ({ ...detail, name, host, smtp }));
+          const { name, host, smtp, isActive } = data.site;
+          setDetail((prev) => ({ ...prev, name, host, smtp, isActive }));
         } else {
           alert({ type: "warning", title: "Warning !", text: error });
         }
@@ -103,7 +104,11 @@ export default function AddSite() {
                   {id ? (
                     "Site Name"
                   ) : (
-                    <label className="form-label required">Site Name</label>
+                    <label
+                      className={!id ? "form-label required" : "form-label"}
+                    >
+                      Site Name
+                    </label>
                   )}
                 </label>
                 <input
@@ -115,7 +120,7 @@ export default function AddSite() {
                   onChange={(e) =>
                     setDetail((d) => ({ ...d, name: e.target.value }))
                   }
-                  required
+                  required={!id}
                 />
               </div>
               <div className="mb-3">
@@ -123,7 +128,11 @@ export default function AddSite() {
                   {id ? (
                     "Site host"
                   ) : (
-                    <label className="form-label required">Site host</label>
+                    <label
+                      className={!id ? "form-label required" : "form-label"}
+                    >
+                      Site host
+                    </label>
                   )}
                 </label>
                 <input
@@ -135,19 +144,46 @@ export default function AddSite() {
                   onChange={(e) =>
                     setDetail((d) => ({ ...d, host: e.target.value }))
                   }
-                  required
+                  required={!id}
                 />
               </div>
               <div className="mb-3">
-                <label className="form-label required">SMTP</label>
+                <label className="form-label ">
+                  {id ? (
+                    "Site host"
+                  ) : (
+                    <label
+                      className={!id ? "form-label required" : "form-label"}
+                    >
+                      Forward Emails
+                    </label>
+                  )}
+                </label>
+                <input
+                  type="text"
+                  name="eamil"
+                  className="form-control"
+                  placeholder="Email"
+                  value={detail.forwardEmails}
+                  onChange={(e) =>
+                    setDetail((d) => ({ ...d, forwardEmails: e.target.value }))
+                  }
+                  required={!id}
+                />
+              </div>
+              <div className="mb-3">
+                <label className={!id ? "form-label required" : "form-label"}>
+                  SMTP
+                </label>
                 <select
                   name="smtp"
                   className="form-control"
+                  placeholder="SMTP"
                   value={detail.smtp}
                   onChange={(e) =>
                     setDetail((d) => ({ ...d, smtp: e.target.value }))
                   }
-                  required
+                  required={!id}
                 >
                   {smtpOptions.map((smtp, index) => (
                     <option key={index} value={smtp._id}>
@@ -166,9 +202,12 @@ export default function AddSite() {
                         type="checkbox"
                         defaultChecked=""
                         name="status"
-                        checked={detail.status}
-                        onChange={(e) =>
-                          setDetail((d) => ({ ...d, status: e.target.checked }))
+                        checked={detail.isActive}
+                        onChange={() =>
+                          setDetail((prev) => ({
+                            ...prev,
+                            isActive: !prev.isActive,
+                          }))
                         }
                       />
                     </label>

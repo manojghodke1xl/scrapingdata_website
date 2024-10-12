@@ -38,6 +38,7 @@ export default function SiteList() {
   }, [alert, limit, page, setLoading]);
 
   const headers = [
+    { label: "Keys" },
     { label: "Website Name" },
     { label: "Web Address" },
     { label: "Status" },
@@ -45,6 +46,7 @@ export default function SiteList() {
   ];
 
   const rows = sites.map((site) => [
+    site._id,
     site.name,
     site.host,
     site.isActive === true ? (
@@ -68,42 +70,15 @@ export default function SiteList() {
           <div className="card-header">
             <h3 className="card-title">All Websites</h3>
             <div className="card-options">
-              <div className="page-header d-print-none">
-                <div className="container-xl">
-                  <div className="row g-2 align-items-center">
-                    <div className="col-auto ms-auto d-print-none">
-                      <div className="btn-list">
                         <button
                           onClick={() => navigate("/add-site")}
-                          className="btn btn-primary d-none d-sm-inline-block"
-                          data-bs-toggle="modal"
-                          data-bs-target="#modal-report"
+                          className="btn btn-primary "
                         >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width={24}
-                            height={24}
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth={2}
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            className="icon"
-                          >
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                            <path d="M12 5l0 14" />
-                            <path d="M5 12l14 0" />
-                          </svg>
                           Add Site
                         </button>
                       </div>
                     </div>
                   </div>
-                </div>
-              </div>
-            </div>
-          </div>
 
           <Table
             headers={headers}
@@ -119,6 +94,5 @@ export default function SiteList() {
           />
         </div>
       </div>
-    </div>
   );
 }

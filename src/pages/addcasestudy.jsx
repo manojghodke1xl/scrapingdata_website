@@ -11,6 +11,7 @@ export default function AddCaseStudy() {
     title: "",
     sdesc: "",
     ldesc: "",
+    isActive: false,
     isGlobal: false,
     sites: [],
     image: "",
@@ -51,8 +52,18 @@ export default function AddCaseStudy() {
         const { data, error } = await res.json();
 
         if (res.ok) {
-          const { title, sdesc, ldesc, sites, image, pdf } = data.casestudy;
-          setDetail({ title, sdesc, ldesc, sites, image, pdf });
+          const { title, sdesc, ldesc, isActive, sites, image, pdf } =
+            data.casestudy;
+          setDetail((prev) => ({
+            ...prev,
+            title,
+            sdesc,
+            ldesc,
+            isActive,
+            sites,
+            image,
+            pdf,
+          }));
         } else {
           alert({ type: "warning", title: "Warning !", text: error });
         }
@@ -68,7 +79,6 @@ export default function AddCaseStudy() {
     e.preventDefault();
     setLoading(true);
     try {
-      // Ensure image and pdf are provided when adding a new case study
       if (!id && (!detail.image || !detail.pdf)) {
         alert({
           type: "warning",
@@ -164,12 +174,8 @@ export default function AddCaseStudy() {
             </h2>
             <form onSubmit={handleDetails}>
               <div className="mb-3">
-                <label className="form-label ">
-                  {id ? (
-                    "Title"
-                  ) : (
-                    <label className="form-label required">Title</label>
-                  )}
+                <label className={!id ? "form-label required" : "form-label "}>
+                  Title
                 </label>
                 <input
                   type="text"
@@ -180,18 +186,12 @@ export default function AddCaseStudy() {
                   onChange={(e) =>
                     setDetail((d) => ({ ...d, title: e.target.value }))
                   }
-                  required
+                  required={!id}
                 />
               </div>
               <div className="mb-3">
-                <label className="form-label">
-                  {id ? (
-                    "Short Description"
-                  ) : (
-                    <label className="form-label required">
-                      Short Description
-                    </label>
-                  )}
+                <label className={!id ? "form-label required" : "form-label "}>
+                  Short Description
                 </label>
                 <textarea
                   className="form-control"
@@ -202,17 +202,12 @@ export default function AddCaseStudy() {
                   onChange={(e) =>
                     setDetail((d) => ({ ...d, sdesc: e.target.value }))
                   }
+                  required={!id}
                 />
               </div>
               <div className="mb-3">
-                <label className="form-label">
-                  {id ? (
-                    "Long Description"
-                  ) : (
-                    <label className="form-label required">
-                      Long Description
-                    </label>
-                  )}
+                <label className={!id ? "form-label required" : "form-label "}>
+                  Long Description
                 </label>
                 <textarea
                   className="form-control"
@@ -223,15 +218,12 @@ export default function AddCaseStudy() {
                   onChange={(e) =>
                     setDetail((d) => ({ ...d, ldesc: e.target.value }))
                   }
+                  required={!id}
                 />
               </div>
               <div className="mb-3">
-                <label className="form-label ">
-                  {id ? (
-                    "Upload Image"
-                  ) : (
-                    <label className="form-label required">Upload Image</label>
-                  )}
+                <label className={!id ? "form-label required" : "form-label "}>
+                  Upload Image
                 </label>
                 <input
                   type="file"
@@ -239,16 +231,12 @@ export default function AddCaseStudy() {
                   className="form-control"
                   onChange={(e) => uploadFile(e, true)}
                   accept="image/*"
-                  required={!id} // Required only when adding a new case study
+                  required={!id}
                 />
               </div>
               <div className="mb-3">
-                <label className="form-label ">
-                  {id ? (
-                    "Upload Pdf"
-                  ) : (
-                    <label className="form-label required">Upload Pdf</label>
-                  )}
+                <label className={!id ? "form-label required" : "form-label "}>
+                  Upload PDF
                 </label>
                 <input
                   type="file"
@@ -256,23 +244,18 @@ export default function AddCaseStudy() {
                   className="form-control"
                   onChange={(e) => uploadFile(e, false)}
                   accept="application/pdf"
-                  required={!id} // Required only when adding a new case study
+                  required={!id}
                 />
               </div>
               <div className="mb-3">
-                <div className="form-label ">
-                  {id ? (
-                    "Select Sites"
-                  ) : (
-                    <label className="form-label required">Select Sites</label>
-                  )}
-                </div>
+                <label className="form-label">Select Sites</label>
                 <div
                   style={{
-                    maxHeight: "200px",
+                    maxHeight: "150px",
                     overflowY: "auto",
-                    border: "1px solid #ced4da",
+                    border: "1px solid #ccc",
                     padding: "10px",
+                    borderRadius: "4px",
                   }}
                 >
                   {availableSites.map((site) => (
@@ -280,16 +263,48 @@ export default function AddCaseStudy() {
                       <input
                         className="form-check-input"
                         type="checkbox"
-                        checked={
-                          detail.isSuperAdmin || detail.sites.includes(site._id)
-                        }
-                        onChange={() => handleSiteSelection(site._id)}
-                        disabled={detail.isSuperAdmin}
+                        value={site._id}
+                        checked={detail.sites.includes(site._id)}
+                        onChange={() => {
+                          setDetail((prevDetail) => {
+                            const isSelected = prevDetail.sites.includes(
+                              site._id
+                            );
+                            return {
+                              ...prevDetail,
+                              sites: isSelected
+                                ? prevDetail.sites.filter(
+                                    (id) => id !== site._id
+                                  )
+                                : [...prevDetail.sites, site._id],
+                            };
+                          });
+                        }}
                       />
                       <span className="form-check-label">{site.name}</span>
                     </label>
                   ))}
                 </div>
+              </div>
+              <div className="mb-3">
+                <label className="row">
+                  <span className="col">Is Casestudy Active?</span>
+                  <span className="col-auto">
+                    <label className="form-check form-check-single form-switch">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        checked={detail.isActive}
+                        onChange={() =>
+                          setDetail((prev) => ({
+                            ...prev,
+                            isActive: !prev.isActive,
+                          }))
+                        }
+                      />
+                    </label>
+                  </span>
+                </label>
               </div>
               <div className="form-footer">
                 <button type="submit" className="btn btn-primary w-100">

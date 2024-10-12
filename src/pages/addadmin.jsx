@@ -131,7 +131,9 @@ export default function AddAdmin() {
             </h2>
             <form onSubmit={handleDetails}>
               <div className="mb-3">
-                <label className="form-label required">Admin Name</label>
+                <label className={!id ? "form-label required" : "form-label "}>
+                  Admin Name
+                </label>
                 <input
                   type="text"
                   name="name"
@@ -141,11 +143,13 @@ export default function AddAdmin() {
                   onChange={(e) =>
                     setDetail((prev) => ({ ...prev, name: e.target.value }))
                   }
-                  required
+                  required={!id}
                 />
               </div>
               <div className="mb-3">
-                <label className="form-label required">Admin Email</label>
+                <label className={!id ? "form-label required" : "form-label "}>
+                  Admin Email
+                </label>
                 <input
                   type="email"
                   name="email"
@@ -155,7 +159,7 @@ export default function AddAdmin() {
                   onChange={(e) =>
                     setDetail((prev) => ({ ...prev, email: e.target.value }))
                   }
-                  required
+                  required={!id}
                 />
               </div>
               <div className="mb-3">
@@ -181,7 +185,11 @@ export default function AddAdmin() {
                 {detail.isSuperAdmin ? (
                   <label className="form-label">All Sites</label>
                 ) : (
-                  <label className="form-label required">Select Sites</label>
+                  <label
+                    className="form-label"
+                  >
+                    Select Sites
+                  </label>
                 )}
                 <div
                   style={{

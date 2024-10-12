@@ -97,6 +97,7 @@ export default function AdminList() {
               currentPage={page}
               totalPages={Math.ceil(totalCount / limit)} // Calculate total pages based on count
               onPageChange={handlePageChange}
+              
               entriesPerPage={limit}
               onEntriesChange={handleLimitChange}
               totalCount={totalCount}

@@ -61,7 +61,7 @@ const mailingsingle = () => {
                       className="form-control"
                       name="example-textarea-input"
                       rows={6}
-                      placeholder="Not present ..."
+                      placeholder="Content ..."
                       defaultValue={enquiry?.header}
                     />
                   </div>
@@ -76,7 +76,7 @@ const mailingsingle = () => {
                       className="form-control"
                       name="example-textarea-input"
                       rows={6}
-                      placeholder="Not present ..."
+                      placeholder="Content ..."
                       defaultValue={enquiry?.uastring}
                     />
                   </div>

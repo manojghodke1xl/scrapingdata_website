@@ -83,10 +83,15 @@ export default function CaseStudyList() {
     }
   };
 
-  const headers = [{ label: "Title" }, { label: "Actions" }];
+  const headers = [{ label: "Title" }, { label: "Status" }, { label: "Actions" }];
 
   const rows = lists.map((casestudy) => [
     casestudy.title,
+    casestudy.isActive === true ? (
+      <span className="badge bg-success">Active</span>  
+    ) : (
+      <span className="badge bg-danger">Inactive</span>
+    ),
     <div>
       <button
         onClick={() => navigate(`/add-casestudy/${casestudy._id}`)}
