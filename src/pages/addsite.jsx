@@ -7,16 +7,19 @@ export default function AddSite() {
   const { id = "" } = useParams();
 
   const { alert, setLoading } = useContext(GlobalContext);
+  const [email, setEmail] = useState("");
 
   const [smtpOptions, setSmtpOptions] = useState([]);
   const [detail, setDetail] = useState({
     name: "",
     host: "",
     isActive: false,
+    forward: false,
     smtp: "",
-    forwardEmails: [],
+    forwardEmails: [], // To store emails
   });
 
+  // Fetch SMTP options
   useEffect(() => {
     const fetchSmtpOptions = async () => {
       const res = await fetch(`${import.meta.env.VITE_API_URL}/smtps`, {
@@ -36,6 +39,7 @@ export default function AddSite() {
     fetchSmtpOptions();
   }, [alert]);
 
+  // Fetch site details if updating
   useEffect(() => {
     if (id) {
       setLoading(true);
@@ -48,8 +52,17 @@ export default function AddSite() {
         });
         const { data, error } = await res.json();
         if (res.ok) {
-          const { name, host, smtp, isActive } = data.site;
-          setDetail((prev) => ({ ...prev, name, host, smtp, isActive }));
+          const { name, host, smtp, isActive, forward, forwardEmails } =
+            data.site;
+          setDetail((prev) => ({
+            ...prev,
+            name,
+            host,
+            smtp,
+            isActive,
+            forward,
+            forwardEmails: forwardEmails || [], // Populate forwardEmails from response
+          }));
         } else {
           alert({ type: "warning", title: "Warning !", text: error });
         }
@@ -59,7 +72,7 @@ export default function AddSite() {
         )
         .finally(() => setLoading(false));
     }
-  }, []);
+  }, [id, setLoading, alert]);
 
   const handleDetails = async (e) => {
     e.preventDefault();
@@ -90,6 +103,21 @@ export default function AddSite() {
     }
   };
 
+  const addEmail = (e) => {
+    e.preventDefault();
+    if (email) {
+      setDetail((d) => ({ ...d, forwardEmails: [...d.forwardEmails, email] }));
+      setEmail("");
+    }
+  };
+
+  const removeEmail = (index) => {
+    setDetail((d) => ({
+      ...d,
+      forwardEmails: d.forwardEmails.filter((_, i) => i !== index),
+    }));
+  };
+
   return (
     <div className="page-body">
       <div className="container container-tight py-4">
@@ -100,16 +128,8 @@ export default function AddSite() {
             </h2>
             <form onSubmit={handleDetails}>
               <div className="mb-3">
-                <label className="form-label ">
-                  {id ? (
-                    "Site Name"
-                  ) : (
-                    <label
-                      className={!id ? "form-label required" : "form-label"}
-                    >
-                      Site Name
-                    </label>
-                  )}
+                <label className={!id ? "form-label required" : "form-label"}>
+                  Site Name
                 </label>
                 <input
                   type="text"
@@ -124,16 +144,8 @@ export default function AddSite() {
                 />
               </div>
               <div className="mb-3">
-                <label className="form-label ">
-                  {id ? (
-                    "Site host"
-                  ) : (
-                    <label
-                      className={!id ? "form-label required" : "form-label"}
-                    >
-                      Site host
-                    </label>
-                  )}
+                <label className={!id ? "form-label required" : "form-label"}>
+                  Site host
                 </label>
                 <input
                   type="text"
@@ -148,29 +160,60 @@ export default function AddSite() {
                 />
               </div>
               <div className="mb-3">
-                <label className="form-label ">
-                  {id ? (
-                    "Site host"
-                  ) : (
-                    <label
-                      className={!id ? "form-label required" : "form-label"}
-                    >
-                      Forward Emails
+                <label className="row">
+                  <span className="col">Forward</span>
+                  <span className="col-auto">
+                    <label className="form-check form-check-single form-switch">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        name="forward"
+                        checked={detail.forward}
+                        onChange={() =>
+                          setDetail((prev) => ({
+                            ...prev,
+                            forward: !prev.forward,
+                          }))
+                        }
+                      />
                     </label>
-                  )}
+                  </span>
                 </label>
-                <input
-                  type="text"
-                  name="eamil"
-                  className="form-control"
-                  placeholder="Email"
-                  value={detail.forwardEmails}
-                  onChange={(e) =>
-                    setDetail((d) => ({ ...d, forwardEmails: e.target.value }))
-                  }
-                  required={!id}
-                />
               </div>
+              {detail.forward === true ? (
+                <div className="mb-3">
+                  <label className={!id ? "form-label required" : "form-label"}>
+                    Forward Emails
+                  </label>
+                  <input
+                    type="text"
+                    name="email"
+                    className="form-control"
+                    placeholder="Enter email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+
+                  <button className="btn btn-primary mt-2" onClick={addEmail}>
+                    Add Email
+                  </button>
+                  <ul className="list-group mt-3">
+                    {detail.forwardEmails.map((email, index) => (
+                      <li key={index} className="list-group-item">
+                        {email}
+                        <button
+                          className="btn btn-danger btn-sm float-end"
+                          onClick={() => removeEmail(index)}
+                        >
+                          Remove
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ) : (
+                ""
+              )}
               <div className="mb-3">
                 <label className={!id ? "form-label required" : "form-label"}>
                   SMTP
@@ -196,11 +239,10 @@ export default function AddSite() {
                 <label className="row">
                   <span className="col">Site Status</span>
                   <span className="col-auto">
-                    <label className="form-check form-check-singl  e form-switch">
+                    <label className="form-check form-check-single form-switch">
                       <input
                         className="form-check-input"
                         type="checkbox"
-                        defaultChecked=""
                         name="status"
                         checked={detail.isActive}
                         onChange={() =>
@@ -214,7 +256,6 @@ export default function AddSite() {
                   </span>
                 </label>
               </div>
-
               <div className="form-footer">
                 <button type="submit" className="btn btn-primary w-100">
                   {id ? "Update Site" : "Add Site"}
