@@ -7,6 +7,8 @@ export default function AddSmtp() {
   const { id = "" } = useParams();
   const { alert, setLoading } = useContext(GlobalContext);
 
+  const [errors, setErrors] = useState({});
+
   const [detail, setDetail] = useState({
     name: "",
     host: "",
@@ -42,8 +44,21 @@ export default function AddSmtp() {
     }
   }, [id, alert, setLoading]);
 
+  const validate = () => {
+    const newErrors = {};
+    if (!detail.name) newErrors.name = "Name is required";
+    if (!detail.host) newErrors.host = "Host is required";
+    if (!detail.secure.includes("none")) newErrors.secure = "Security Protocol is required";
+    if (!detail.port) newErrors.port = "Port is required";
+    if (!detail.user) newErrors.user = "User is required";
+    if (!detail.password) newErrors.password = "Password is required";
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleDetails = async (e) => {
     e.preventDefault();
+    if (!validate()) return;
     setLoading(true);
     try {
       const res = await fetch(
@@ -93,8 +108,10 @@ export default function AddSmtp() {
                   onChange={(e) =>
                     setDetail((d) => ({ ...d, name: e.target.value }))
                   }
-                  required={!id}
                 />
+                {errors.name && (
+                  <div className="alert alert-danger mt-2">{errors.name}</div>
+                )}
               </div>
               <div className="mb-3">
                 <label className={!id ? "form-label required" : "form-label"}>
@@ -109,8 +126,10 @@ export default function AddSmtp() {
                   onChange={(e) =>
                     setDetail((d) => ({ ...d, host: e.target.value }))
                   }
-                  required={!id}
                 />
+                {errors.host && (
+                  <div className="alert alert-danger mt-2">{errors.host}</div>
+                )}
               </div>
               <div className="mb-3">
                 <label className={!id ? "form-label required" : "form-label"}>
@@ -125,8 +144,10 @@ export default function AddSmtp() {
                   onChange={(e) =>
                     setDetail((d) => ({ ...d, port: e.target.value }))
                   }
-                  required={!id}
                 />
+                {errors.port && (
+                  <div className="alert alert-danger mt-2">{errors.port}</div>
+                )}
               </div>
               <div className="mb-3 ">
                 <label className={!id ? "form-label required" : "form-label"}>
@@ -139,13 +160,15 @@ export default function AddSmtp() {
                   onChange={(e) =>
                     setDetail((d) => ({ ...d, secure: e.target.value }))
                   }
-                  required={!id}
                 >
-                  <option value="None">None</option>
+                  <option value="select">Select</option>
                   <option value="SSL">SSL</option>
                   <option value="TLS">TLS</option>
                   <option value="STARTTLS">STARTTLS</option>
                 </select>
+                {errors.secure && (
+                    <div className="alert alert-danger mt-2">{errors.secure}</div>
+                  )}
               </div>
 
               <div className="mb-3">
@@ -161,8 +184,10 @@ export default function AddSmtp() {
                   onChange={(e) =>
                     setDetail((d) => ({ ...d, user: e.target.value }))
                   }
-                  required={!id}
                 />
+                {errors.user && (
+                  <div className="alert alert-danger mt-2">{errors.user}</div>
+                )}
               </div>
               <div className="mb-3">
                 <label className={!id ? "form-label required" : "form-label"}>
@@ -177,8 +202,10 @@ export default function AddSmtp() {
                   onChange={(e) =>
                     setDetail((d) => ({ ...d, password: e.target.value }))
                   }
-                  required={!id}
                 />
+                {errors.password && (
+                  <div className="alert alert-danger mt-2">{errors.password}</div>
+                )}
               </div>
 
               <div className="form-footer">

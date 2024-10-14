@@ -10,12 +10,12 @@ export default function AddGuide() {
   const [detail, setDetail] = useState({
     title: "",
     desc: "",
-    isActive: false,
+    isActive: true,
+    isGlobal: false,
     sites: [],
-    image: "",
-    pdf: "",
   });
   const [availableSites, setAvailableSites] = useState([]);
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     (async () => {
@@ -47,8 +47,18 @@ export default function AddGuide() {
         const { data, error } = await res.json();
 
         if (res.ok) {
-          const { title, desc, sites, image, pdf, isActive } = data.guide;
-          setDetail((prev) => ({ ...prev, title, desc, sites, image, pdf, isActive }));
+          const { title, desc, sites, image, pdf, isActive, isGlobal } =
+            data.guide;
+          setDetail((prev) => ({
+            ...prev,
+            title,
+            desc,
+            sites,
+            image,
+            pdf,
+            isActive,
+            isGlobal,
+          }));
         } else {
           alert({ type: "warning", title: "Warning !", text: error });
         }
@@ -60,8 +70,21 @@ export default function AddGuide() {
     }
   }, [id, alert, setLoading]);
 
+  const validate = () => {
+    const newErrors = {};
+    if (!detail.title.trim()) {
+      newErrors.title = "Title is required";
+    }
+    if (detail.sites.length === 0) {
+      newErrors.sites = "At least one site must be selected";
+    }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0; // Return true if no errors
+  };
+
   const handleDetails = async (e) => {
     e.preventDefault();
+    if (!validate()) return;
     setLoading(true);
     try {
       const res = await fetch(
@@ -161,13 +184,13 @@ export default function AddGuide() {
                   onChange={(e) =>
                     setDetail((d) => ({ ...d, title: e.target.value }))
                   }
-                  required={!id}
                 />
+                {errors.title && (
+                  <div className="alert alert-danger mt-2">{errors.title}</div>
+                )}
               </div>
               <div className="mb-3">
-                <label className={!id ? "form-label required" : "form-label"}>
-                  Description
-                </label>
+                <label className="form-label">Description</label>
                 <textarea
                   className="form-control"
                   name="example-textarea-input"
@@ -177,40 +200,35 @@ export default function AddGuide() {
                   onChange={(e) =>
                     setDetail((d) => ({ ...d, desc: e.target.value }))
                   }
-                  required={!id}
                 />
               </div>
 
               <div className="mb-3">
-                <label className={!id ? "form-label required" : "form-label"}>
-                  Upload Image
-                </label>
+                <label className="form-label">Upload Image</label>
                 <input
                   type="file"
                   name="image"
                   className="form-control"
                   onChange={(e) => uploadFile(e, true)}
                   accept="image/*"
-                  required={!id}
                 />
               </div>
 
               <div className="mb-3">
-                <label className={!id ? "form-label required" : "form-label"}>
-                  Upload PDF
-                </label>
+                <label className="form-label">Upload PDF</label>
                 <input
                   type="file"
                   name="pdf"
                   className="form-control"
                   onChange={(e) => uploadFile(e, false)}
                   accept="application/pdf"
-                  required={!id}
                 />
               </div>
 
               <div className="mb-3">
-                <label className="form-label">Select Sites</label>
+                <label className={!id ? "form-label required" : "form-label"}>
+                  Select Sites
+                </label>
                 <div
                   style={{
                     maxHeight: "150px",
@@ -247,16 +265,18 @@ export default function AddGuide() {
                     </label>
                   ))}
                 </div>
+                {errors.sites && (
+                  <div className="alert alert-danger mt-2">{errors.sites}</div>
+                )}
               </div>
               <div className="mb-3">
                 <label className="row">
-                  <span className="col">Site Status</span>
+                  <span className="col">Guide Status</span>
                   <span className="col-auto">
                     <label className="form-check form-check-singl  e form-switch">
                       <input
                         className="form-check-input"
                         type="checkbox"
-                        defaultChecked=""
                         name="status"
                         checked={detail.isActive}
                         onChange={() =>

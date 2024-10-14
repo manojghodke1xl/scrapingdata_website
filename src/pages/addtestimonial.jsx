@@ -6,12 +6,13 @@ export default function AddTestimonial() {
   const navigate = useNavigate();
   const { id = "" } = useParams();
   const { alert, setLoading } = useContext(GlobalContext);
+  const [errors, setErrors] = useState({});
 
   const [detail, setDetail] = useState({
     name: "",
     desg: "",
     text: "",
-    isActive: false,
+    isActive: true,
     isGlobal: false,
     sites: [],
   });
@@ -50,10 +51,11 @@ export default function AddTestimonial() {
         const { data, error } = await res.json();
 
         if (res.ok) {
-          const { name, desg, text, isGlobal, sites, isActive } =
+          const { name, desg, text, isGlobal, sites, isActive, image } =
             data.testimonial; // Get isGlobal from response
           setDetail((prev) => ({
             ...prev,
+            image,
             name,
             desg,
             text,
@@ -72,8 +74,19 @@ export default function AddTestimonial() {
     }
   }, [id, alert, setLoading]);
 
+  const validate = () => {
+    const newErrors = {};
+    if (!detail.name) newErrors.name = "Name is required";
+    if (!detail.text) newErrors.text = "Text is required";
+    if (!detail.sites.length)
+      newErrors.sites = "At least one site must be selected";
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleDetails = async (e) => {
     e.preventDefault();
+    if (!validate()) return;
     setLoading(true);
     try {
       const res = await fetch(
@@ -101,6 +114,54 @@ export default function AddTestimonial() {
     }
   };
 
+  const uploadFile = async (e, isImage) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const { name, size, type } = file;
+
+    try {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/upload`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: localStorage.getItem("auth"),
+        },
+        body: JSON.stringify({ name, size, mime: type }),
+      });
+
+      if (!res.ok) {
+        const { error } = await res.json();
+        throw new Error(error || "Failed to get upload URL");
+      }
+
+      const { data } = await res.json();
+      const fd = new FormData();
+      for (const [key, val] of Object.entries(data.fields)) {
+        fd.append(key, val);
+      }
+
+      fd.append("file", file);
+
+      const uploadRes = await fetch(data.url, {
+        method: "POST",
+        body: fd,
+      });
+
+      if (!uploadRes.ok) {
+        throw new Error("File upload failed");
+      }
+      const fileId = data._id;
+
+      if (isImage) {
+        setDetail((prevDetail) => ({ ...prevDetail, image: fileId }));
+      }
+    } catch (error) {
+      console.error("Upload error:", error);
+      alert({ type: "danger", title: "Error !", text: error.message });
+    }
+  };
+
   return (
     <div className="page-body">
       <div className="container container-tight py-4">
@@ -123,8 +184,10 @@ export default function AddTestimonial() {
                   onChange={(e) =>
                     setDetail((d) => ({ ...d, name: e.target.value }))
                   }
-                  required={!id}
                 />
+                {errors.name && (
+                  <div className="alert alert-danger mt-2">{errors.name}</div>
+                )}
               </div>
               <div className="mb-3">
                 <label className={!id ? "form-label required" : "form-label"}>
@@ -139,27 +202,40 @@ export default function AddTestimonial() {
                   onChange={(e) =>
                     setDetail((d) => ({ ...d, desg: e.target.value }))
                   }
-                  required={!id}
                 />
               </div>
               <div className="mb-3">
                 <label className={!id ? "form-label required" : "form-label"}>
-                  Add Testimonial
+                  Text
                 </label>
-                <textarea
+                <input
+                  type="text"
+                  name="text"
                   className="form-control"
-                  name="example-textarea-input"
-                  rows={6}
-                  placeholder="Description.."
-                  value={detail.text}
+                  placeholder="text"
+                  value={detail.name} // Changed from detail.title to detail.name
                   onChange={(e) =>
                     setDetail((d) => ({ ...d, text: e.target.value }))
                   }
-                  require={!id}
+                />
+                {errors.text && (
+                  <div className="alert alert-danger mt-2">{errors.text}</div>
+                )}
+              </div>
+              <div className="mb-3">
+                <label className="form-label">Upload Image</label>
+                <input
+                  type="file"
+                  name="image"
+                  className="form-control"
+                  onChange={(e) => uploadFile(e, true)}
+                  accept="image/*"
                 />
               </div>
               <div className="mb-3">
-                <label className="form-label">Select Sites</label>
+                <label className={!id ? "form-label required" : "form-label"}>
+                  Select Sites
+                </label>
                 <div
                   style={{
                     maxHeight: "150px",
@@ -196,6 +272,9 @@ export default function AddTestimonial() {
                     </label>
                   ))}
                 </div>
+                {errors.sites && (
+                  <div className="alert alert-danger mt-2">{errors.sites}</div>
+                )}
               </div>
               <div className="mb-3">
                 <label className="row">
