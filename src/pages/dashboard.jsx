@@ -5,7 +5,7 @@ export default function Dashboard() {
         <div className="card">
           <div className="card-body">
             <h2 className="h2 text-center">
-              Welcome to Vista Group's Enquiry Management System
+              Welcome to Vista Group&apos;s Enquiry Management System
             </h2>
           </div>
         </div>

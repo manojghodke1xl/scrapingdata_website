@@ -5,7 +5,7 @@ import Table from "../comps/table";
 import useSetTimeout from "../Hooks/useDebounce";
 export default function SiteList() {
   const navigate = useNavigate();
-  const { alert } = useContext(GlobalContext);
+  const { alert, auth } = useContext(GlobalContext);
 
   const [sites, setSites] = useState([]);
   const [page, setPage] = useState(1);
@@ -66,12 +66,14 @@ export default function SiteList() {
           <div className="card-header">
             <h3 className="card-title">All Web sites</h3>
             <div className="card-options">
-              <button
-                onClick={() => navigate("/add-site")}
-                className="btn btn-primary "
-              >
-                Add Site
-              </button>
+              {auth.isSuperAdmin && (
+                <button
+                  onClick={() => navigate("/add-site")}
+                  className="btn btn-primary "
+                >
+                  Add Site
+                </button>
+              )}
             </div>
           </div>
           <div className="table-responsive">

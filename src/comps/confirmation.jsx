@@ -1,5 +1,3 @@
-import React from "react";
-
 const ConfirmationModal = ({ isOpen, onClose, onConfirm, message }) => {
   if (!isOpen) return null;
 
@@ -9,7 +7,6 @@ const ConfirmationModal = ({ isOpen, onClose, onConfirm, message }) => {
         <div className="modal-content">
           <div className="modal-header justify-content-center">
             <h5 className="modal-title text-danger ">Confirmation</h5>
-            
           </div>
           <div className="modal-body">
             <p>{message}</p>
@@ -19,7 +16,7 @@ const ConfirmationModal = ({ isOpen, onClose, onConfirm, message }) => {
               Cancel
             </button>
             <button type="button" className="btn btn-danger" onClick={onConfirm}>
-              Yes, I'm sure
+              Yes, I&apos;m sure
             </button>
           </div>
         </div>

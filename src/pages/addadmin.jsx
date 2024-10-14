@@ -19,7 +19,7 @@ export default function AddAdmin() {
 
   useLayoutEffect(() => {
     if (!auth.isSuperAdmin) navigate("/dashboard");
-  }, [auth]);
+  }, [auth, navigate]);
 
   useEffect(() => {
     const fetchAvailableSites = async () => {

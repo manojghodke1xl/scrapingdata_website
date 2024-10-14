@@ -2,7 +2,8 @@ import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { GlobalContext } from "../GlobalContext";
 
-export default function Signin() {
+export default function SignIn() {
+
   const navigate = useNavigate();
   const { alert, dispatch, setLoading } = useContext(GlobalContext);
 

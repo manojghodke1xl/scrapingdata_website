@@ -26,6 +26,8 @@ import TestimonialList from "./pages/testimoniallist";
 import AddTestimonial from "./pages/addtestimonial";
 import SmtpList from "./pages/smtplist";
 import AddSmtp from "./pages/addsmtp";
+import PopupList from "./pages/popuplist";
+import AddPopup from "./pages/addpopup";
 
 function App() {
   const [alerts, alert] = useAlert();
@@ -69,6 +71,10 @@ function App() {
               <Route path="/smtp-list" element={<SmtpList />} />
               <Route path="/add-smtp" element={<AddSmtp />} />
               <Route path="/add-smtp/:id" element={<AddSmtp />} />
+
+              <Route path="/popup-list" element={<PopupList />} />
+              <Route path="/add-popup" element={<AddPopup />} />
+              <Route path="/add-popup/:id" element={<AddPopup />} />
             </Route>
 
             <Route path="*" element={<Missing />} />

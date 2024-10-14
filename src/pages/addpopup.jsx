@@ -1,0 +1,668 @@
+import { useContext, useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { GlobalContext } from "../GlobalContext";
+
+export default function AddPopup() {
+  const navigate = useNavigate();
+  const { id = "" } = useParams();
+  const { alert, setLoading } = useContext(GlobalContext);
+
+  const [popupDetails, setPopupDetails] = useState({
+    name: "",
+    position: "",
+    onPageLoad: false,
+    onPageUnload: false,
+    afterPageLoad: 1,
+    atPageScroll: 0,
+    offOnceSubmited: false,
+    againWhenCanceled: 1,
+    showOnDeviceType: "",
+    publishDate: new Date(),
+    archiveDate: new Date(),
+    contentType: "",
+    title: "",
+    desc: "",
+    // image: "",
+    allGlobalGuides: false,
+    allSiteGuides: false,
+    moreGuides: [],
+    allGlobalCaseStudy: false,
+    allSiteCaseStudy: false,
+    moreCaseStudy: [],
+    isActive: true,
+    site: "",
+  });
+
+  const [contentDetials, setContentDetials] = useState([]);
+  const [availableSites, setAvailableSites] = useState([]);
+
+  const positions = ["center-popup", "center-popup", "topbar-notifications"];
+  const deviceTypes = ["all", "desktop", "mobile"];
+  const contentTypes = ["basic", "guide", "casestudy"];
+
+  useEffect(() => {
+    (async () => {
+      if (popupDetails.contentType === "guide") {
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/allguides`, {
+          method: "GET",
+          headers: {
+            Authorization: localStorage.getItem("auth"),
+          },
+        });
+        const { data, error } = await res.json();
+        if (res.ok) {
+          setContentDetials(data.guides);
+        } else {
+          alert({ type: "warning", title: "Warning !", text: error });
+        }
+      } else if (popupDetails.contentType === "casestudy") {
+        const res = await fetch(
+          `${import.meta.env.VITE_API_URL}/allcasestudies`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: localStorage.getItem("auth"),
+            },
+          }
+        );
+        const { data, error } = await res.json();
+        if (res.ok) {
+          setContentDetials(data.casestudies);
+        } else {
+          alert({ type: "warning", title: "Warning !", text: error });
+        }
+      }
+    })();
+  }, [alert, popupDetails.contentType]);
+
+  useEffect(() => {
+    if (id) {
+      setLoading(true);
+      (async () => {
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/popup/${id}`, {
+          method: "GET",
+          headers: {
+            Authorization: localStorage.getItem("auth"),
+          },
+        });
+        const { data, error } = await res.json();
+
+        if (res.ok) {
+          setPopupDetails((prev) => ({
+            ...prev,
+            ...data.popup,
+          }));
+        } else {
+          alert({ type: "warning", title: "Warning !", text: error });
+        }
+      })()
+        .catch((error) =>
+          alert({ type: "danger", title: "Error !", text: error.message })
+        )
+        .finally(() => setLoading(false));
+    }
+  }, [id, alert, setLoading]);
+
+  useEffect(() => {
+    const fetchAvailableSites = async () => {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/sites`, {
+        method: "GET",
+        headers: {
+          Authorization: localStorage.getItem("auth"),
+        },
+      });
+      const { data, error } = await res.json();
+      if (res.ok) {
+        setAvailableSites(data.sites);
+      } else {
+        alert({ type: "warning", title: "Warning !", text: error });
+      }
+    };
+
+    fetchAvailableSites();
+  }, [alert]);
+
+  const handleSiteSelection = (id) => {
+    setPopupDetails((prev) => {
+      if (popupDetails.contentType === "guide") {
+        const isSelected = prev.moreGuides.includes(id);
+        return {
+          ...prev,
+          moreGuides: isSelected
+            ? prev.moreGuides.filter((id) => id !== id)
+            : [...prev.moreGuides, id],
+        };
+      } else if (popupDetails.contentType === "casestudy") {
+        const isSelected = prev.moreGuides.includes(id);
+        return {
+          ...prev,
+          moreGuides: isSelected
+            ? prev.moreGuides.filter((id) => id !== id)
+            : [...prev.moreGuides, id],
+        };
+      }
+    });
+  };
+
+  const handleDetails = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/popup${id ? `/${id}` : ""}`,
+        {
+          method: id ? "PUT" : "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: localStorage.getItem("auth"),
+          },
+          body: JSON.stringify(popupDetails),
+        }
+      );
+      const { message, error } = await res.json();
+      if (res.ok) {
+        alert({ type: "success", title: "Success !", text: message });
+        navigate("/popup-list");
+      } else {
+        alert({ type: "warning", title: "Warning !", text: error });
+      }
+    } catch (error) {
+      alert({ type: "danger", title: "Error !", text: error.message });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const uploadFile = async (e, isImage) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const { name, size, type } = file;
+
+    try {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/upload`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: localStorage.getItem("auth"),
+        },
+        body: JSON.stringify({ name, size, mime: type }),
+      });
+
+      if (!res.ok) {
+        const { error } = await res.json();
+        throw new Error(error || "Failed to get upload URL");
+      }
+
+      const { data } = await res.json();
+      const fd = new FormData();
+      for (const [key, val] of Object.entries(data.fields)) {
+        fd.append(key, val);
+      }
+
+      fd.append("file", file);
+
+      const uploadRes = await fetch(data.url, {
+        method: "POST",
+        body: fd,
+      });
+
+      if (!uploadRes.ok) {
+        throw new Error("File upload failed");
+      }
+      const fileId = data._id;
+
+      if (isImage) {
+        setPopupDetails((prevDetail) => ({ ...prevDetail, image: fileId }));
+      }
+    } catch (error) {
+      console.error("Upload error:", error);
+      alert({ type: "danger", title: "Error !", text: error.message });
+    }
+  };
+
+  return (
+    <div className="page-body">
+      <div className="container container py-4">
+        <div className="card card-md">
+          <div className="card-body">
+            <h2 className="h2 text-center mb-4">
+              {id ? "Edit Popup" : "Add Popup"}
+            </h2>
+            <form onSubmit={handleDetails}>
+              <div className="row">
+                <div className="col-md-3 mb-3">
+                  <label className={!id ? "form-label required" : "form-label"}>
+                    Name
+                  </label>
+                  <input
+                    type="text"
+                    name="name"
+                    className="form-control"
+                    placeholder="Name"
+                    value={popupDetails.name}
+                    onChange={(e) =>
+                      setPopupDetails((d) => ({ ...d, name: e.target.value }))
+                    }
+                    required={!id}
+                  />
+                </div>
+                <div className="col-md-3">
+                  <label className={!id ? "form-label required" : "form-label"}>
+                    Position
+                  </label>
+                  <select
+                    className="form-select"
+                    value={popupDetails.position}
+                    onChange={(e) =>
+                      setPopupDetails((d) => ({
+                        ...d,
+                        position: e.target.value,
+                      }))
+                    }
+                  >
+                    <option value={""}>Select</option>
+                    {positions.map((position, i) => (
+                      <option key={i} value={position}>
+                        {position}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="col-md-3">
+                  <label className={!id ? "form-label required" : "form-label"}>
+                    After Page Load
+                  </label>
+                  <input
+                    type="number"
+                    name="afterPageLoad"
+                    className="form-control"
+                    placeholder="After Page Load"
+                    value={popupDetails.afterPageLoad}
+                    onChange={(e) =>
+                      setPopupDetails((d) => ({
+                        ...d,
+                        afterPageLoad: e.target.value,
+                      }))
+                    }
+                    required={!id}
+                  />
+                </div>
+                <div className="col-md-3">
+                  <label className={!id ? "form-label required" : "form-label"}>
+                    At Page Scroll
+                  </label>
+                  <input
+                    type="number"
+                    name="atPageScroll"
+                    className="form-control"
+                    placeholder="At Page Scroll"
+                    value={popupDetails.atPageScroll}
+                    onChange={(e) =>
+                      setPopupDetails((d) => ({
+                        ...d,
+                        atPageScroll: e.target.value,
+                      }))
+                    }
+                    required={!id}
+                  />
+                </div>
+              </div>
+              <div className="row">
+                <div className="col-md-3 mb-3">
+                  <label className={!id ? "form-label required" : "form-label"}>
+                    Again When Canceled
+                  </label>
+                  <input
+                    type="number"
+                    name="againWhenCanceled"
+                    className="form-control"
+                    placeholder="Again When Canceled"
+                    value={popupDetails.againWhenCanceled}
+                    onChange={(e) =>
+                      setPopupDetails((d) => ({
+                        ...d,
+                        againWhenCanceled: e.target.value,
+                      }))
+                    }
+                    required={!id}
+                  />
+                </div>
+                <div className="col-md-3">
+                  <label className={!id ? "form-label required" : "form-label"}>
+                    Device Type
+                  </label>
+                  <select
+                    className="form-select"
+                    value={popupDetails.showOnDeviceType}
+                    onChange={(e) =>
+                      setPopupDetails((d) => ({
+                        ...d,
+                        showOnDeviceType: e.target.value,
+                      }))
+                    }
+                  >
+                    <option value={""}>Select</option>
+                    {deviceTypes.map((device, i) => (
+                      <option key={i} value={device}>
+                        {device}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="col-md-3">
+                  <label className={!id ? "form-label required" : "form-label"}>
+                    Publish Date
+                  </label>
+                  <input
+                    type="date"
+                    name="publishDate"
+                    className="form-control"
+                    placeholder="Title"
+                    value={popupDetails.publishDate}
+                    onChange={(e) =>
+                      setPopupDetails((d) => ({
+                        ...d,
+                        publishDate: e.target.value,
+                      }))
+                    }
+                    required={!id}
+                  />
+                </div>
+                <div className="col-md-3">
+                  <label className={!id ? "form-label required" : "form-label"}>
+                    Archive Date
+                  </label>
+                  <input
+                    type="date"
+                    name="archiveDate"
+                    className="form-control"
+                    placeholder="Title"
+                    value={popupDetails.archiveDate}
+                    onChange={(e) =>
+                      setPopupDetails((d) => ({
+                        ...d,
+                        archiveDate: e.target.value,
+                      }))
+                    }
+                    required={!id}
+                  />
+                </div>
+              </div>
+              <div className="row">
+                <div className="col-md-3 mb-3">
+                  <label className={!id ? "form-label required" : "form-label"}>
+                    Content Type
+                  </label>
+                  <select
+                    className="form-select"
+                    value={popupDetails.contentType}
+                    onChange={(e) =>
+                      setPopupDetails((d) => ({
+                        ...d,
+                        contentType: e.target.value,
+                      }))
+                    }
+                  >
+                    <option value={""}>Select</option>
+                    {contentTypes.map((contentType, i) => (
+                      <option key={i} value={contentType}>
+                        {contentType}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                {popupDetails.contentType === "basic" ? (
+                  <>
+                    <div className="col-md-3 mb-3">
+                      <label
+                        className={!id ? "form-label required" : "form-label"}
+                      >
+                        Title
+                      </label>
+                      <input
+                        type="text"
+                        name="title"
+                        className="form-control"
+                        placeholder="Title"
+                        value={popupDetails.title}
+                        onChange={(e) =>
+                          setPopupDetails((d) => ({
+                            ...d,
+                            title: e.target.value,
+                          }))
+                        }
+                        required={!id}
+                      />
+                    </div>
+                    <div className="col-md-3">
+                      <label className="form-label">Upload Image</label>
+                      <input
+                        type="file"
+                        name="image"
+                        className="form-control"
+                        onChange={(e) => uploadFile(e, true)}
+                        accept="image/*"
+                      />
+                    </div>
+                  </>
+                ) : (
+                  <> </>
+                )}
+                <div className="col-md-3 mb-3">
+                  <label className={!id ? "form-label required" : "form-label"}>
+                    Settings
+                  </label>
+                  <div
+                    style={{
+                      maxHeight: "100px",
+                      overflowY: "auto",
+                      padding: "10px",
+                    }}
+                  >
+                    <label className="form-check">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        checked={popupDetails.onPageLoad}
+                        onChange={() =>
+                          setPopupDetails((prev) => ({
+                            ...prev,
+                            onPageLoad: !prev.onPageLoad,
+                          }))
+                        }
+                      />
+                      <span className="form-check-label">On Page Load</span>
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        checked={popupDetails.onPageUnload}
+                        onChange={() =>
+                          setPopupDetails((prev) => ({
+                            ...prev,
+                            onPageUnload: !prev.onPageUnload,
+                          }))
+                        }
+                      />
+                      <span className="form-check-label">On Page Unload</span>
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        checked={popupDetails.offOnceSubmited}
+                        onChange={() =>
+                          setPopupDetails((prev) => ({
+                            ...prev,
+                            offOnceSubmited: !prev.offOnceSubmited,
+                          }))
+                        }
+                      />
+                      <span className="form-check-label">
+                        Off Once Submited
+                      </span>
+
+                      {popupDetails.contentType === "guide" && (
+                        <>
+                          <input
+                            className="form-check-input"
+                            type="checkbox"
+                            checked={popupDetails.allGlobalGuides}
+                            onChange={() =>
+                              setPopupDetails((prev) => ({
+                                ...prev,
+                                allGlobalGuides: !prev.allGlobalGuides,
+                              }))
+                            }
+                          />
+                          <span className="form-check-label">
+                            All Global Guides
+                          </span>
+                          <input
+                            className="form-check-input"
+                            type="checkbox"
+                            checked={popupDetails.allSiteGuides}
+                            onChange={() =>
+                              setPopupDetails((prev) => ({
+                                ...prev,
+                                allSiteGuides: !prev.allSiteGuides,
+                              }))
+                            }
+                          />
+                          <span className="form-check-label">
+                            All Site Guides
+                          </span>
+                        </>
+                      )}
+
+                      {popupDetails.contentType === "casestudy" && (
+                        <>
+                          <input
+                            className="form-check-input"
+                            type="checkbox"
+                            checked={popupDetails.allGlobalCaseStudies}
+                            onChange={() =>
+                              setPopupDetails((prev) => ({
+                                ...prev,
+                                allGlobalCaseStudies:
+                                  !prev.allGlobalCaseStudies,
+                              }))
+                            }
+                          />
+                          <span className="form-check-label">
+                            All Global CaseStudies
+                          </span>
+                          <input
+                            className="form-check-input"
+                            type="checkbox"
+                            checked={popupDetails.allSiteCaseStudies}
+                            onChange={() =>
+                              setPopupDetails((prev) => ({
+                                ...prev,
+                                allSiteCaseStudies: !prev.allSiteCaseStudies,
+                              }))
+                            }
+                          />
+                          <span className="form-check-label">
+                            All Site CaseStudies
+                          </span>
+                        </>
+                      )}
+                    </label>
+                  </div>
+                </div>
+
+                {(popupDetails.contentType === "guide" ||
+                  popupDetails.contentType === "casestudy") && (
+                  <div className="col-md-3">
+                    <label
+                      className={!id ? "form-label required" : "form-label"}
+                    >
+                      {popupDetails.contentType === "guide"
+                        ? "Additional Guides"
+                        : "Additional Case Study"}
+                    </label>
+                    <div
+                      style={{
+                        maxHeight: "100px",
+                        overflowY: "auto",
+                        padding: "10px",
+                      }}
+                    >
+                      {contentDetials.map((data) => (
+                        <label key={data._id} className="form-check">
+                          <input
+                            className="form-check-input"
+                            type="checkbox"
+                            checked={
+                              popupDetails.contentType === "guide"
+                                ? popupDetails.moreGuides.includes(data._id)
+                                : popupDetails.moreCaseStudy.includes(data._id)
+                            }
+                            onChange={() => handleSiteSelection(data._id)}
+                          />
+                          <span className="form-check-label">{data.title}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                <div className="col-md-3">
+                  <label className={!id ? "form-label required" : "form-label"}>
+                    Select site
+                  </label>
+                  <select
+                    className="form-select"
+                    value={popupDetails.site}
+                    onChange={(e) =>
+                      setPopupDetails((d) => ({
+                        ...d,
+                        site: e.target.value,
+                      }))
+                    }
+                  >
+                    <option value={""}>Select</option>
+                    {availableSites.map((site, i) => (
+                      <option key={i} value={site._id}>
+                        {site.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {popupDetails.contentType === "basic" && (
+                  <div className=" col-md-6 mb-3">
+                    <label
+                      className={!id ? "form-label required" : "form-label"}
+                    >
+                      Description
+                    </label>
+                    <textarea
+                      className="form-control"
+                      name="example-textarea-input"
+                      rows={4}
+                      placeholder="Description.."
+                      value={popupDetails.desc}
+                      onChange={(e) =>
+                        setPopupDetails((d) => ({ ...d, desc: e.target.value }))
+                      }
+                      required={!id}
+                    />
+                  </div>
+                )}
+              </div>
+
+              <div className="form-footer ">
+                <button
+                  type="submit"
+                  className="btn btn-primary d-block mx-auto"
+                >
+                  {id ? "Update Guide" : "Add Guide"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

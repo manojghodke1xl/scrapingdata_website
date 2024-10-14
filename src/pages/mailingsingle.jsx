@@ -2,7 +2,7 @@ import { useContext, useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { GlobalContext } from "../GlobalContext";
 
-const Mailingsingle = () => {
+const MailingSingle = () => {
   const { id } = useParams();
   const { alert, setLoading } = useContext(GlobalContext);
 
@@ -121,4 +121,4 @@ const Mailingsingle = () => {
   );
 };
 
-export default Mailingsingle;
+export default MailingSingle;

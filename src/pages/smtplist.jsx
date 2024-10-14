@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Table from "../comps/table";
 import useSetTimeout from "../Hooks/useDebounce";
 
-export default function TestimonialList() {
+export default function SmtpList() {
   const navigate = useNavigate();
   const { alert } = useContext(GlobalContext);
 
@@ -20,7 +20,7 @@ export default function TestimonialList() {
   const [err, data] = useSetTimeout(
     "smtps",
     page - 1,
-    limit,
+    limit, 
     searchTerm,
     searchKey
   );
