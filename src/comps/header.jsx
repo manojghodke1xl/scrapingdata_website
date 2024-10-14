@@ -69,7 +69,7 @@ export default function Header() {
                           <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
                         </svg>
                       </span>
-                      <span className="nav-link-title">All Enquiries</span>
+                      <span className="nav-link-title">Enquiries</span>
                     </Link>
                   </li>
                   <li className="nav-item">
@@ -92,7 +92,7 @@ export default function Header() {
                           <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
                         </svg>
                       </span>
-                      <span className="nav-link-title">All Maling Lists</span>
+                      <span className="nav-link-title">Maling Lists</span>
                     </Link>
                   </li>
                   <li className="nav-item">
@@ -115,7 +115,7 @@ export default function Header() {
                           <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
                         </svg>
                       </span>
-                      <span className="nav-link-title">All Websites</span>
+                      <span className="nav-link-title">Websites</span>
                     </Link>
                   </li>
                   {auth.isSuperAdmin && (
@@ -139,7 +139,7 @@ export default function Header() {
                             <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
                           </svg>
                         </span>
-                        <span className="nav-link-title">All Admins</span>
+                        <span className="nav-link-title">Admins</span>
                       </Link>
                     </li>
                   )}
@@ -163,7 +163,7 @@ export default function Header() {
                           <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
                         </svg>
                       </span>
-                      <span className="nav-link-title">All Guides</span>
+                      <span className="nav-link-title">Guides</span>
                     </Link>
                   </li>
 
@@ -187,7 +187,7 @@ export default function Header() {
                           <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
                         </svg>
                       </span>
-                      <span className="nav-link-title">All Case Study</span>
+                      <span className="nav-link-title">Case Study</span>
                     </Link>
                   </li>
 
@@ -211,7 +211,7 @@ export default function Header() {
                           <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
                         </svg>
                       </span>
-                      <span className="nav-link-title">All Testimonials</span>
+                      <span className="nav-link-title">Testimonials</span>
                     </Link>
                   </li>
                   <li className="nav-item">
@@ -234,7 +234,7 @@ export default function Header() {
                           <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
                         </svg>
                       </span>
-                      <span className="nav-link-title">All SMTPs</span>
+                      <span className="nav-link-title">SMTPs</span>
                     </Link>
                   </li>
                 </ul>

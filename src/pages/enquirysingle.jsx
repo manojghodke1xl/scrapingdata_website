@@ -1,20 +1,23 @@
-import React, { useContext, useState, useEffect } from "react";
+import { useContext, useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { GlobalContext } from "../GlobalContext";
 
-const enquirysingle = () => {
+const Enquirysingle = () => {
   const { id } = useParams();
   const { alert, setLoading } = useContext(GlobalContext);
   const [enquiry, setEnquiry] = useState(null);
   useEffect(() => {
     setLoading(true);
     (async () => {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/enquiry/${id}`, {
-        method: "GET",
-        headers: {
-          Authorization: localStorage.getItem("auth"),
-        },
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/enquiry/${id}?p=1`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: localStorage.getItem("auth"),
+          },
+        }
+      );
       const { data, error } = await res.json();
       if (res.ok) {
         setEnquiry(data.enquiry);
@@ -26,7 +29,7 @@ const enquirysingle = () => {
         alert({ type: "danger", title: "Error !", text: error.message })
       )
       .finally(() => setLoading(false));
-  }, [alert, setLoading]);
+  }, [alert, id, setLoading]);
 
   console.log(enquiry);
 
@@ -63,7 +66,11 @@ const enquirysingle = () => {
                       <input
                         type="text"
                         className="form-control"
-                        defaultValue={enquiry?.ccode + " " + enquiry?.mobile}
+                        defaultValue={
+                          !enquiry.ccode
+                            ? ""
+                            : enquiry?.ccode + " " + enquiry?.mobile
+                        }
                       />
                     </div>
                   </div>
@@ -146,7 +153,7 @@ const enquirysingle = () => {
                       <input
                         type="datetime-local"
                         className="form-control"
-                        defaultValue={(enquiry?.createdAt).slice(0, 16)}
+                        defaultValue={enquiry?.createdAt?.slice(0, 16)}
                       />
                     </div>
                   </div>
@@ -160,4 +167,4 @@ const enquirysingle = () => {
   );
 };
 
-export default enquirysingle;
+export default Enquirysingle;

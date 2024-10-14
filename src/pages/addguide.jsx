@@ -47,8 +47,7 @@ export default function AddGuide() {
         const { data, error } = await res.json();
 
         if (res.ok) {
-          const { title, desc, sites, image, pdf, isActive, isGlobal } =
-            data.guide;
+          const { title, desc, sites, image, pdf, isActive } = data.guide;
           setDetail((prev) => ({
             ...prev,
             title,
@@ -57,7 +56,6 @@ export default function AddGuide() {
             image,
             pdf,
             isActive,
-            isGlobal,
           }));
         } else {
           alert({ type: "warning", title: "Warning !", text: error });
