@@ -7,6 +7,8 @@ export default function AddAdmin() {
   const { id = "" } = useParams();
   const { auth, alert, setLoading } = useContext(GlobalContext);
 
+
+
   const [detail, setDetail] = useState({
     email: "",
     name: "",
@@ -16,6 +18,7 @@ export default function AddAdmin() {
     isSuperAdmin: false,
   });
   const [availableSites, setAvailableSites] = useState([]);
+  const [errors, setErrors] = useState({});
 
   useLayoutEffect(() => {
     if (!auth.isSuperAdmin) navigate("/dashboard");
@@ -78,8 +81,19 @@ export default function AddAdmin() {
     }
   }, [id, alert, setLoading]);
 
+  const validate = () => {
+    const newErrors = {};
+    if (!detail.email) newErrors.email = "Email is required";
+    if (!detail.name) newErrors.name = "Name is required";
+    if (!detail.password) newErrors.password = "Password is required";
+    if (!detail.sites.length) newErrors.sites = "At least one site must be selected";
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleDetails = async (e) => {
     e.preventDefault();
+    if (!validate()) return;
     setLoading(true);
     const { password, ...rest } = detail;
     if (password) rest.password = password;
@@ -121,6 +135,8 @@ export default function AddAdmin() {
     });
   };
 
+
+
   return (
     <div className="page-body">
       <div className="container container-tight py-4">
@@ -143,8 +159,10 @@ export default function AddAdmin() {
                   onChange={(e) =>
                     setDetail((prev) => ({ ...prev, name: e.target.value }))
                   }
-                  required={!id}
                 />
+                {errors.name && (
+                  <small className="alert alert-danger mt-2">{errors.name}</small>
+                )}
               </div>
               <div className="mb-3">
                 <label className={!id ? "form-label required" : "form-label "}>
@@ -159,8 +177,10 @@ export default function AddAdmin() {
                   onChange={(e) =>
                     setDetail((prev) => ({ ...prev, email: e.target.value }))
                   }
-                  required={!id}
                 />
+                {errors.email && (
+                  <small className="alert alert-danger mt-2">{errors.email}</small>
+                )}
               </div>
               <div className="mb-3">
                 <label className={!id ? "form-label required" : "form-label"}>
@@ -178,16 +198,16 @@ export default function AddAdmin() {
                       password: e.target.value,
                     }))
                   }
-                  required={!id}
                 />
+                {errors.password && (
+                  <small className="alert alert-danger mt-2">{errors.password}</small>
+                )}
               </div>
               <div className="mb-3">
                 {detail.isSuperAdmin ? (
                   <label className="form-label">All Sites</label>
                 ) : (
-                  <label
-                    className="form-label"
-                  >
+                  <label className={!id ? "form-label required" : "form-label"}>
                     Select Sites
                   </label>
                 )}
@@ -213,7 +233,11 @@ export default function AddAdmin() {
                       <span className="form-check-label">{site.name}</span>
                     </label>
                   ))}
+                  
                 </div>
+                {errors.sites && (
+                  <small className="alert alert-danger mt-2">{errors.sites}</small>
+                )}
               </div>
               {!detail.isSuperAdmin && (
                 <div className="mb-3">

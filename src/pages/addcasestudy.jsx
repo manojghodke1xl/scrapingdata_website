@@ -11,13 +11,12 @@ export default function AddCaseStudy() {
     title: "",
     sdesc: "",
     ldesc: "",
-    isActive: false,
+    isActive: true,
     isGlobal: false,
     sites: [],
-    image: "",
-    pdf: "",
   });
   const [availableSites, setAvailableSites] = useState([]);
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     (async () => {
@@ -75,18 +74,29 @@ export default function AddCaseStudy() {
     }
   }, [id, alert, setLoading]);
 
+  const validate = () => {
+    const newErrors = {};
+    if (!detail.title) newErrors.title = "Title is required";
+    if (!detail.sites.length) newErrors.sites = "Minimum one site is required";
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleDetails = async (e) => {
     e.preventDefault();
+    if (!validate()) return;
     setLoading(true);
     try {
-      if (!id && (!detail.image || !detail.pdf)) {
-        alert({
-          type: "warning",
-          title: "Warning !",
-          text: "Image and PDF are required for new case studies.",
-        });
-        setLoading(false);
-        return;
+      if (!id) {
+        if (!detail.image || !detail.pdf) {
+          const confirmProceed = window.confirm(
+            "Image and PDF are not provided. Do you want to proceed without them?"
+          );
+          if (!confirmProceed) {
+            setLoading(false);
+            return;
+          }
+        }
       }
 
       const res = await fetch(
@@ -100,15 +110,16 @@ export default function AddCaseStudy() {
           body: JSON.stringify(detail),
         }
       );
+
       const { message, error } = await res.json();
       if (res.ok) {
-        alert({ type: "success", title: "Success !", text: message });
+        alert({ type: "success", title: "Success!", text: message });
         navigate("/casestudy-list");
       } else {
-        alert({ type: "warning", title: "Warning !", text: error });
+        alert({ type: "warning", title: "Warning!", text: error });
       }
     } catch (error) {
-      alert({ type: "danger", title: "Error !", text: error.message });
+      alert({ type: "danger", title: "Error!", text: error.message });
     } finally {
       setLoading(false);
     }
@@ -186,13 +197,13 @@ export default function AddCaseStudy() {
                   onChange={(e) =>
                     setDetail((d) => ({ ...d, title: e.target.value }))
                   }
-                  required={!id}
                 />
+                {errors.title && (
+                  <div className="alert alert-danger mt-2">{errors.title}</div>
+                )}
               </div>
               <div className="mb-3">
-                <label className={!id ? "form-label required" : "form-label "}>
-                  Short Description
-                </label>
+                <label className="form-label">Short Description</label>
                 <textarea
                   className="form-control"
                   name="example-textarea-input"
@@ -202,13 +213,10 @@ export default function AddCaseStudy() {
                   onChange={(e) =>
                     setDetail((d) => ({ ...d, sdesc: e.target.value }))
                   }
-                  required={!id}
                 />
               </div>
               <div className="mb-3">
-                <label className={!id ? "form-label required" : "form-label "}>
-                  Long Description
-                </label>
+                <label className="form-label">Long Description</label>
                 <textarea
                   className="form-control"
                   name="example-textarea-input"
@@ -218,37 +226,32 @@ export default function AddCaseStudy() {
                   onChange={(e) =>
                     setDetail((d) => ({ ...d, ldesc: e.target.value }))
                   }
-                  required={!id}
                 />
               </div>
               <div className="mb-3">
-                <label className={!id ? "form-label required" : "form-label "}>
-                  Upload Image
-                </label>
+                <label className="form-label">Upload Image</label>
                 <input
                   type="file"
                   name="image"
                   className="form-control"
                   onChange={(e) => uploadFile(e, true)}
                   accept="image/*"
-                  required={!id}
                 />
               </div>
               <div className="mb-3">
-                <label className={!id ? "form-label required" : "form-label "}>
-                  Upload PDF
-                </label>
+                <label className="form-label">Upload PDF</label>
                 <input
                   type="file"
                   name="pdf"
                   className="form-control"
                   onChange={(e) => uploadFile(e, false)}
                   accept="application/pdf"
-                  required={!id}
                 />
               </div>
               <div className="mb-3">
-                <label className="form-label">Select Sites</label>
+                <label className={!id ? "form-label required" : "form-label "}>
+                  Select Sites
+                </label>
                 <div
                   style={{
                     maxHeight: "150px",
@@ -285,6 +288,9 @@ export default function AddCaseStudy() {
                     </label>
                   ))}
                 </div>
+                {errors.sites && (
+                  <div className="alert alert-danger mt-2">{errors.sites}</div>
+                )}
               </div>
               <div className="mb-3">
                 <label className="row">

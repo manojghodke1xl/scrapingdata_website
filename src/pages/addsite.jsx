@@ -8,18 +8,19 @@ export default function AddSite() {
 
   const { alert, setLoading } = useContext(GlobalContext);
   const [email, setEmail] = useState("");
+  const [errors, setErrors] = useState({});
+  const [emailError, setEmailError] = useState(false);
 
   const [smtpOptions, setSmtpOptions] = useState([]);
   const [detail, setDetail] = useState({
     name: "",
     host: "",
-    isActive: false,
+    isActive: true,
     forward: false,
     smtp: "",
-    forwardEmails: [], // To store emails
+    forwardEmails: [],
   });
 
-  // Fetch SMTP options
   useEffect(() => {
     const fetchSmtpOptions = async () => {
       const res = await fetch(`${import.meta.env.VITE_API_URL}/smtps`, {
@@ -39,7 +40,6 @@ export default function AddSite() {
     fetchSmtpOptions();
   }, [alert]);
 
-  // Fetch site details if updating
   useEffect(() => {
     if (id) {
       setLoading(true);
@@ -52,16 +52,24 @@ export default function AddSite() {
         });
         const { data, error } = await res.json();
         if (res.ok) {
-          const { name, host, smtp, isActive, forward, forwardEmails } =
-            data.site;
-          setDetail((prev) => ({
-            ...prev,
+          const {
             name,
             host,
             smtp,
             isActive,
             forward,
-            forwardEmails: forwardEmails || [], // Populate forwardEmails from response
+            forwardEmails,
+            webhookUrl,
+          } = data.site;
+          setDetail((prev) => ({
+            ...prev,
+            name,
+            host,
+            smtp,
+            webhookUrl,
+            isActive,
+            forward,
+            forwardEmails: forwardEmails || [],
           }));
         } else {
           alert({ type: "warning", title: "Warning !", text: error });
@@ -74,8 +82,27 @@ export default function AddSite() {
     }
   }, [id, setLoading, alert]);
 
+  const validate = () => {
+    const newErrors = {};
+    if (!detail.name) {
+      newErrors.name = "Name is required";
+    }
+    if (!detail.host) {
+      newErrors.host = "Host is required";
+    }
+    if (!detail.smtp) {
+      newErrors.smtp = "SMTP is required";
+    }
+    if (detail.forward == true && !detail.forwardEmails.length) {
+      newErrors.forwardEmails = "Forward Emails is required";
+    }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleDetails = async (e) => {
     e.preventDefault();
+    if (!validate()) return;
     setLoading(true);
     try {
       const res = await fetch(
@@ -103,19 +130,18 @@ export default function AddSite() {
     }
   };
 
-  const addEmail = (e) => {
-    e.preventDefault();
-    if (email) {
-      setDetail((d) => ({ ...d, forwardEmails: [...d.forwardEmails, email] }));
-      setEmail("");
-    }
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
   };
 
-  const removeEmail = (index) => {
-    setDetail((d) => ({
-      ...d,
-      forwardEmails: d.forwardEmails.filter((_, i) => i !== index),
-    }));
+  const validateAndAddEmail = () => {
+    if (validateEmail(email)) {
+      setEmailError(false);
+      addEmail();
+    } else {
+      setEmailError(true);
+    }
   };
 
   return (
@@ -140,8 +166,10 @@ export default function AddSite() {
                   onChange={(e) =>
                     setDetail((d) => ({ ...d, name: e.target.value }))
                   }
-                  required={!id}
                 />
+                {errors.name && (
+                  <div className="alert alert-danger mt-2">{errors.name}</div>
+                )}
               </div>
               <div className="mb-3">
                 <label className={!id ? "form-label required" : "form-label"}>
@@ -156,8 +184,10 @@ export default function AddSite() {
                   onChange={(e) =>
                     setDetail((d) => ({ ...d, host: e.target.value }))
                   }
-                  required={!id}
                 />
+                {errors.host && (
+                  <div className="alert alert-danger mt-2">{errors.host}</div>
+                )}
               </div>
               <div className="mb-3">
                 <label className="row">
@@ -194,9 +224,18 @@ export default function AddSite() {
                     onChange={(e) => setEmail(e.target.value)}
                   />
 
-                  <button className="btn btn-primary mt-2" onClick={addEmail}>
+                  <button
+                    className="btn btn-primary mt-2"
+                    onClick={validateAndAddEmail}
+                  >
                     Add Email
                   </button>
+                  {emailError && (
+                    <div className="alert alert-danger mt-2">
+                      Please enter a valid email address.
+                    </div>
+                  )}
+
                   <ul className="list-group mt-3">
                     {detail.forwardEmails.map((email, index) => (
                       <li key={index} className="list-group-item">
@@ -215,6 +254,7 @@ export default function AddSite() {
               ) : (
                 ""
               )}
+
               <div className="mb-3">
                 <label className={!id ? "form-label required" : "form-label"}>
                   SMTP
@@ -227,7 +267,6 @@ export default function AddSite() {
                   onChange={(e) =>
                     setDetail((d) => ({ ...d, smtp: e.target.value }))
                   }
-                  required={!id}
                 >
                   {smtpOptions.map((smtp, index) => (
                     <option key={index} value={smtp._id}>
@@ -235,6 +274,22 @@ export default function AddSite() {
                     </option>
                   ))}
                 </select>
+                {errors.smtp && (
+                  <div className="alert alert-danger mt-2">{errors.smtp}</div>
+                )}
+              </div>
+              <div className="mb-3">
+                <label className="form-label">Webhook URL</label>
+                <input
+                  type="text"
+                  name="name"
+                  className="form-control"
+                  placeholder="URL..."
+                  value={detail.name}
+                  onChange={(e) =>
+                    setDetail((d) => ({ ...d, webhookUrl: e.target.value }))
+                  }
+                />
               </div>
               <div className="mb-3">
                 <label className="row">

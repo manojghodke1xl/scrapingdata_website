@@ -3,6 +3,7 @@ import { GlobalContext } from "../GlobalContext";
 import { useNavigate } from "react-router-dom";
 import Table from "../comps/table";
 import useSetTimeout from "../Hooks/useDebounce";
+
 export default function SiteList() {
   const navigate = useNavigate();
   const { alert, auth } = useContext(GlobalContext);
@@ -64,7 +65,7 @@ export default function SiteList() {
       <div className="container-xl">
         <div className="card">
           <div className="card-header">
-            <h3 className="card-title">All Web sites</h3>
+            <h3 className="card-title">All Websites</h3>
             <div className="card-options">
               {auth.isSuperAdmin && (
                 <button
