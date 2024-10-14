@@ -80,6 +80,9 @@ export default function AddPopup() {
     const newErrors = {};
     if (!popupDetails.name) newErrors.name = "Name is required";
     if (!popupDetails.position) newErrors.position = "Position is required";
+    if (!popupDetails.site)
+      (newErrors.site = "At least one site must be selected"),
+        (newErrors.position = "At least one site must be selected");
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -298,7 +301,6 @@ export default function AddPopup() {
                         afterPageLoad: e.target.value,
                       }))
                     }
-                    required={!id}
                   />
                 </div>
                 <div className="col-md-3">
@@ -315,7 +317,6 @@ export default function AddPopup() {
                         atPageScroll: e.target.value,
                       }))
                     }
-                    required={!id}
                   />
                 </div>
               </div>
@@ -334,7 +335,6 @@ export default function AddPopup() {
                         againWhenCanceled: e.target.value,
                       }))
                     }
-                    required={!id}
                   />
                 </div>
                 <div className="col-md-3">
@@ -370,7 +370,6 @@ export default function AddPopup() {
                         publishDate: e.target.value,
                       }))
                     }
-                    required={!id}
                   />
                 </div>
                 <div className="col-md-3">
@@ -387,7 +386,6 @@ export default function AddPopup() {
                         archiveDate: e.target.value,
                       }))
                     }
-                    required={!id}
                   />
                 </div>
               </div>
@@ -427,7 +425,6 @@ export default function AddPopup() {
                             title: e.target.value,
                           }))
                         }
-                        required={!id}
                       />
                     </div>
                     <div className="col-md-3">
@@ -523,6 +520,11 @@ export default function AddPopup() {
                           <span className="form-check-label">
                             All Site Guides
                           </span>
+                          {errors.site && (
+                            <small className="alert alert-danger mt-2">
+                              {errors.site}
+                            </small>
+                          )}
                         </>
                       )}
 
@@ -598,7 +600,7 @@ export default function AddPopup() {
                 )}
 
                 <div className="col-md-3">
-                  <label className="form-label">Select site</label>
+                  <label className="form-label required">Select site</label>
                   <select
                     className="form-select"
                     value={popupDetails.site}
@@ -616,6 +618,11 @@ export default function AddPopup() {
                       </option>
                     ))}
                   </select>
+                  {errors.site && (
+                    <small className="alert alert-danger mt-2">
+                      {errors.site}
+                    </small>
+                  )}
                 </div>
 
                 {popupDetails.contentType === "basic" && (
@@ -630,12 +637,32 @@ export default function AddPopup() {
                       onChange={(e) =>
                         setPopupDetails((d) => ({ ...d, desc: e.target.value }))
                       }
-                      required={!id}
                     />
                   </div>
                 )}
-              </div>
 
+                <div className="col-md-3 mb-3">
+                  <label className="form-label">Popup Status</label>
+                  <label className="row">
+                    <span className="col">Is Popup active ?</span>
+                    <span className="col-auto">
+                      <label className="form-check form-check-single form-switch">
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          checked={popupDetails.isActive}
+                          onChange={() =>
+                            setPopupDetails((prev) => ({
+                              ...prev,
+                              isActive: !prev.isActive,
+                            }))
+                          }
+                        />
+                      </label>
+                    </span>
+                  </label>
+                </div>
+              </div>
               <div className="form-footer ">
                 <button
                   type="submit"
