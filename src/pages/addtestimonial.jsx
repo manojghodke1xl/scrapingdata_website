@@ -16,7 +16,7 @@ export default function AddTestimonial() {
     isGlobal: false,
     sites: [],
   });
-  const [availableSites, setAvailableSites] = useState([]);
+  const [availableSites, setAvailableSites] = useState([]); 
 
   useEffect(() => {
     (async () => {

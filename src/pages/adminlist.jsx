@@ -62,13 +62,6 @@ export default function AdminList() {
     </button>,
   ]);
 
-  const handlePageChange = (newPage) => setPage(newPage);
-
-  const handleLimitChange = (newLimit) => {
-    setLimit(newLimit);
-    setPage(0); // Reset to the first page on limit change
-  };
-
   return (
     <div className="page-body">
       <div className="container-xl">
@@ -90,14 +83,13 @@ export default function AdminList() {
               headers={headers}
               rows={rows}
               currentPage={page}
-              totalPages={Math.ceil(totalCount / limit)} // Calculate total pages based on count
-              onPageChange={handlePageChange}
-              
+              totalPages={Math.ceil(totalCount / limit)}
+              onPageChange={setPage}
               entriesPerPage={limit}
               setSearchTerm={setSearchTerm}
               setSearchKey={setSearchKey}
               searchAbleKeys={searchAbleKeys}
-              onEntriesChange={handleLimitChange}
+              onEntriesChange={setLimit}
               totalCount={totalCount}
             />
           </div>

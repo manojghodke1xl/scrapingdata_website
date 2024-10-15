@@ -1,60 +1,49 @@
-import { useContext, useEffect, useState } from "react";
-import { GlobalContext } from "../GlobalContext";
+import { useContext, useEffect, useLayoutEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Table from "../comps/table";
-import ConfirmationModal from "../comps/confirmation";
 import useSetTimeout from "../Hooks/useDebounce";
+import { GlobalContext } from "../GlobalContext";
+import ConfirmationModal from "../comps/confirmation";
 
-export default function MailingList() {
+export default function CategoryList() {
   const navigate = useNavigate();
-  const { alert, setLoading } = useContext(GlobalContext);
+  const { auth, alert, setLoading } = useContext(GlobalContext);
 
-  const [lists, setLists] = useState([]);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [categorys, setCategorys] = useState([]);
+  const [categoryToDelete, setCategoryToDelete] = useState(null);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(8);
-  const [mailingToDelete, setMailingToDelete] = useState(null);
-  const [modalOpen, setModalOpen] = useState(false);
   const [totalCount, setTotalCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchKey, setSearchKey] = useState("");
-
-  const searchAbleKeys = ["email"];
+  const searchAbleKeys = ["name", "email"];
 
   const [err, data] = useSetTimeout(
-    "lists",
+    "categories",
     page - 1,
     limit,
     searchTerm,
     searchKey
   );
 
-  useEffect(() => {
-    if (data) {
-      setLists(data.lists);
-      setTotalCount(data.count);
-    } else if (err) {
-      alert({ type: "warning", title: "Warning!", text: err.message });
-    }
-  }, [data, err, alert]);
+  const headers = [{ label: "Name" }];
+  const openDeleteModal = (id) => {
+    setCategoryToDelete(id);
+    setModalOpen(true);
+  };
 
-  const headers = [
-    { label: "Customer Email" },
-    { label: "Site Name" },
-    { label: "Actions" },
-  ];
-
-  const rows = lists.map((lst) => [
-    lst.email,
-    lst.site.name,
-    <div key={lst._id}>
+  const rows = categorys.map((category) => [
+    category.name,
+    <div key={category._id}>
       <button
-        onClick={() => navigate(`/mailing/${lst._id}`)}
-        className="btn btn-primary me-1" // Adjusted for spacing
+        onClick={() => navigate(`/add-category/${category._id}`)}
+        className="btn btn-primary me-1"
       >
         View
       </button>
       <button
-        onClick={() => openDeleteModal(lst._id)}
+        onClick={() => openDeleteModal(category._id)}
         className="btn btn-danger "
       >
         Delete
@@ -62,18 +51,12 @@ export default function MailingList() {
     </div>,
   ]);
 
-  const openDeleteModal = (id) => {
-    setMailingToDelete(id);
-    setModalOpen(true);
-  };
-
-  const deleteMailingList = async () => {
-    if (!mailingToDelete) return;
-
+  const deleteCategoryList = async () => {
+    if (!categoryToDelete) return;
     setLoading(true);
     try {
       const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/list/${mailingToDelete}`, // Ensure your API endpoint is correct
+        `${import.meta.env.VITE_API_URL}/category/${categoryToDelete}`,
         {
           method: "DELETE",
           headers: {
@@ -83,8 +66,8 @@ export default function MailingList() {
       );
       const { error } = await res.json();
       if (res.ok) {
-        setLists((prevLists) =>
-          prevLists.filter((list) => list._id !== mailingToDelete)
+        setCategorys((prevLists) =>
+          prevLists.filter((list) => list._id !== categoryToDelete)
         );
         alert({
           type: "success",
@@ -98,17 +81,38 @@ export default function MailingList() {
       alert({ type: "danger", title: "Error!", text: error.message });
     } finally {
       setLoading(false);
-      setModalOpen(false); 
-      setMailingToDelete(null); 
+      setModalOpen(false);
+      setCategoryToDelete(null);
     }
   };
+
+  useLayoutEffect(() => {
+    if (!auth.isSuperAdmin) navigate("/dashboard");
+  }, [auth, navigate]);
+
+  useEffect(() => {
+    if (data) {
+      setCategorys(data.categorys);
+      setTotalCount(data.count);
+    } else if (err) {
+      alert({ type: "warning", title: "Warning!", text: err.message });
+    }
+  }, [data, err, alert]);
 
   return (
     <div className="page-body">
       <div className="container-xl">
         <div className="card">
           <div className="card-header">
-            <h3 className="card-title">All Mailing Lists</h3>
+            <h3 className="card-title">All Category List</h3>
+            <div className="card-options">
+              <button
+                onClick={() => navigate("/add-category")}
+                className="btn btn-primary "
+              >
+                Add Category
+              </button>
+            </div>
           </div>
 
           <div className="table-responsive">
@@ -128,11 +132,10 @@ export default function MailingList() {
           </div>
         </div>
       </div>
-
       <ConfirmationModal
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
-        onConfirm={deleteMailingList}
+        onConfirm={deleteCategoryList}
         message="Are you sure you want to delete this mailing list? "
       />
     </div>

@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useLayoutEffect, useState } from "react";
 import { GlobalContext } from "../GlobalContext";
 import { useNavigate } from "react-router-dom";
 import Table from "../comps/table";
@@ -7,7 +7,7 @@ import useSetTimeout from "../Hooks/useDebounce";
 
 export default function PopupList() {
   const navigate = useNavigate();
-  const { alert, setLoading } = useContext(GlobalContext);
+  const { auth, alert, setLoading } = useContext(GlobalContext);
 
   const [popups, setPopups] = useState([]);
   const [page, setPage] = useState(1);
@@ -68,6 +68,10 @@ export default function PopupList() {
       setPopupToDelete(null);
     }
   };
+
+  useLayoutEffect(() => {
+    if (!auth.isSuperAdmin) navigate("/dashboard");
+  }, [auth, navigate]);
 
   useEffect(() => {
     if (data) {
