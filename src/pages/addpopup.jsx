@@ -16,10 +16,10 @@ export default function AddPopup() {
     atPageScroll: 0,
     offOnceSubmited: false,
     againWhenCanceled: 1,
-    showOnDeviceType: "",
-    publishDate: new Date(),
-    archiveDate: new Date(),
-    contentType: "",
+    showOnDeviceType: "all",
+    publishDate: new Date().toISOString().slice(0, 10),
+    archiveDate: new Date().toISOString().slice(0, 10),
+    contentType: "basic",
     title: "",
     desc: "",
     // image: "",
@@ -35,6 +35,7 @@ export default function AddPopup() {
 
   const [contentDetials, setContentDetials] = useState([]);
   const [availableSites, setAvailableSites] = useState([]);
+  const [errors, setErrors] = useState({});
 
   const positions = ["center-popup", "center-popup", "topbar-notifications"];
   const deviceTypes = ["all", "desktop", "mobile"];
@@ -74,6 +75,17 @@ export default function AddPopup() {
       }
     })();
   }, [alert, popupDetails.contentType]);
+
+  const validate = () => {
+    const newErrors = {};
+    if (!popupDetails.name) newErrors.name = "Name is required";
+    if (!popupDetails.position) newErrors.position = "Position is required";
+    if (!popupDetails.site)
+      (newErrors.site = "At least one site must be selected"),
+        (newErrors.position = "At least one site must be selected");
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   useEffect(() => {
     if (id) {
@@ -146,6 +158,7 @@ export default function AddPopup() {
 
   const handleDetails = async (e) => {
     e.preventDefault();
+    if (!validate()) return;
     setLoading(true);
     try {
       const res = await fetch(
@@ -232,9 +245,7 @@ export default function AddPopup() {
             <form onSubmit={handleDetails}>
               <div className="row">
                 <div className="col-md-3 mb-3">
-                  <label className={!id ? "form-label required" : "form-label"}>
-                    Name
-                  </label>
+                  <label className="form-label required">Name</label>
                   <input
                     type="text"
                     name="name"
@@ -244,13 +255,15 @@ export default function AddPopup() {
                     onChange={(e) =>
                       setPopupDetails((d) => ({ ...d, name: e.target.value }))
                     }
-                    required={!id}
                   />
+                  {errors.name && (
+                    <small className="alert alert-danger mt-2">
+                      {errors.name}
+                    </small>
+                  )}
                 </div>
                 <div className="col-md-3">
-                  <label className={!id ? "form-label required" : "form-label"}>
-                    Position
-                  </label>
+                  <label className="form-label required">Position</label>
                   <select
                     className="form-select"
                     value={popupDetails.position}
@@ -268,11 +281,14 @@ export default function AddPopup() {
                       </option>
                     ))}
                   </select>
+                  {errors.position && (
+                    <small className="alert alert-danger mt-2">
+                      {errors.position}
+                    </small>
+                  )}
                 </div>
                 <div className="col-md-3">
-                  <label className={!id ? "form-label required" : "form-label"}>
-                    After Page Load
-                  </label>
+                  <label className="form-label">After Page Load</label>
                   <input
                     type="number"
                     name="afterPageLoad"
@@ -285,13 +301,10 @@ export default function AddPopup() {
                         afterPageLoad: e.target.value,
                       }))
                     }
-                    required={!id}
                   />
                 </div>
                 <div className="col-md-3">
-                  <label className={!id ? "form-label required" : "form-label"}>
-                    At Page Scroll
-                  </label>
+                  <label className="form-label">At Page Scroll</label>
                   <input
                     type="number"
                     name="atPageScroll"
@@ -304,15 +317,12 @@ export default function AddPopup() {
                         atPageScroll: e.target.value,
                       }))
                     }
-                    required={!id}
                   />
                 </div>
               </div>
               <div className="row">
                 <div className="col-md-3 mb-3">
-                  <label className={!id ? "form-label required" : "form-label"}>
-                    Again When Canceled
-                  </label>
+                  <label className="form-label">Again When Canceled</label>
                   <input
                     type="number"
                     name="againWhenCanceled"
@@ -325,13 +335,10 @@ export default function AddPopup() {
                         againWhenCanceled: e.target.value,
                       }))
                     }
-                    required={!id}
                   />
                 </div>
                 <div className="col-md-3">
-                  <label className={!id ? "form-label required" : "form-label"}>
-                    Device Type
-                  </label>
+                  <label className="form-label required">Device Type</label>
                   <select
                     className="form-select"
                     value={popupDetails.showOnDeviceType}
@@ -342,7 +349,6 @@ export default function AddPopup() {
                       }))
                     }
                   >
-                    <option value={""}>Select</option>
                     {deviceTypes.map((device, i) => (
                       <option key={i} value={device}>
                         {device}
@@ -351,9 +357,7 @@ export default function AddPopup() {
                   </select>
                 </div>
                 <div className="col-md-3">
-                  <label className={!id ? "form-label required" : "form-label"}>
-                    Publish Date
-                  </label>
+                  <label className="form-label">Publish Date</label>
                   <input
                     type="date"
                     name="publishDate"
@@ -366,13 +370,10 @@ export default function AddPopup() {
                         publishDate: e.target.value,
                       }))
                     }
-                    required={!id}
                   />
                 </div>
                 <div className="col-md-3">
-                  <label className={!id ? "form-label required" : "form-label"}>
-                    Archive Date
-                  </label>
+                  <label className="form-label">Archive Date</label>
                   <input
                     type="date"
                     name="archiveDate"
@@ -385,15 +386,12 @@ export default function AddPopup() {
                         archiveDate: e.target.value,
                       }))
                     }
-                    required={!id}
                   />
                 </div>
               </div>
               <div className="row">
                 <div className="col-md-3 mb-3">
-                  <label className={!id ? "form-label required" : "form-label"}>
-                    Content Type
-                  </label>
+                  <label className="form-label required">Content Type</label>
                   <select
                     className="form-select"
                     value={popupDetails.contentType}
@@ -404,7 +402,6 @@ export default function AddPopup() {
                       }))
                     }
                   >
-                    <option value={""}>Select</option>
                     {contentTypes.map((contentType, i) => (
                       <option key={i} value={contentType}>
                         {contentType}
@@ -415,11 +412,7 @@ export default function AddPopup() {
                 {popupDetails.contentType === "basic" ? (
                   <>
                     <div className="col-md-3 mb-3">
-                      <label
-                        className={!id ? "form-label required" : "form-label"}
-                      >
-                        Title
-                      </label>
+                      <label className="form-label">Title</label>
                       <input
                         type="text"
                         name="title"
@@ -432,7 +425,6 @@ export default function AddPopup() {
                             title: e.target.value,
                           }))
                         }
-                        required={!id}
                       />
                     </div>
                     <div className="col-md-3">
@@ -450,9 +442,7 @@ export default function AddPopup() {
                   <> </>
                 )}
                 <div className="col-md-3 mb-3">
-                  <label className={!id ? "form-label required" : "form-label"}>
-                    Settings
-                  </label>
+                  <label className="form-label">Settings</label>
                   <div
                     style={{
                       maxHeight: "100px",
@@ -530,6 +520,11 @@ export default function AddPopup() {
                           <span className="form-check-label">
                             All Site Guides
                           </span>
+                          {errors.site && (
+                            <small className="alert alert-danger mt-2">
+                              {errors.site}
+                            </small>
+                          )}
                         </>
                       )}
 
@@ -573,9 +568,7 @@ export default function AddPopup() {
                 {(popupDetails.contentType === "guide" ||
                   popupDetails.contentType === "casestudy") && (
                   <div className="col-md-3">
-                    <label
-                      className={!id ? "form-label required" : "form-label"}
-                    >
+                    <label className="form-label">
                       {popupDetails.contentType === "guide"
                         ? "Additional Guides"
                         : "Additional Case Study"}
@@ -607,9 +600,7 @@ export default function AddPopup() {
                 )}
 
                 <div className="col-md-3">
-                  <label className={!id ? "form-label required" : "form-label"}>
-                    Select site
-                  </label>
+                  <label className="form-label required">Select site</label>
                   <select
                     className="form-select"
                     value={popupDetails.site}
@@ -627,15 +618,16 @@ export default function AddPopup() {
                       </option>
                     ))}
                   </select>
+                  {errors.site && (
+                    <small className="alert alert-danger mt-2">
+                      {errors.site}
+                    </small>
+                  )}
                 </div>
 
                 {popupDetails.contentType === "basic" && (
                   <div className=" col-md-6 mb-3">
-                    <label
-                      className={!id ? "form-label required" : "form-label"}
-                    >
-                      Description
-                    </label>
+                    <label className="form-label">Description</label>
                     <textarea
                       className="form-control"
                       name="example-textarea-input"
@@ -645,18 +637,38 @@ export default function AddPopup() {
                       onChange={(e) =>
                         setPopupDetails((d) => ({ ...d, desc: e.target.value }))
                       }
-                      required={!id}
                     />
                   </div>
                 )}
-              </div>
 
+                <div className="col-md-3 mb-3">
+                  <label className="form-label">Popup Status</label>
+                  <label className="row">
+                    <span className="col">Is Popup active ?</span>
+                    <span className="col-auto">
+                      <label className="form-check form-check-single form-switch">
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          checked={popupDetails.isActive}
+                          onChange={() =>
+                            setPopupDetails((prev) => ({
+                              ...prev,
+                              isActive: !prev.isActive,
+                            }))
+                          }
+                        />
+                      </label>
+                    </span>
+                  </label>
+                </div>
+              </div>
               <div className="form-footer ">
                 <button
                   type="submit"
                   className="btn btn-primary d-block mx-auto"
                 >
-                  {id ? "Update Guide" : "Add Guide"}
+                  {id ? "Update Popup" : "Add Popup"}
                 </button>
               </div>
             </form>
