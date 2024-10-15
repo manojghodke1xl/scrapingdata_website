@@ -17,11 +17,13 @@ export default function PopupList() {
   const [totalCount, setTotalCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchKey, setSearchKey] = useState("");
+  const [selectedPopups, setSelectedPopups] = useState([]);
+  const [selectAll, setSelectAll] = useState(false);
 
   const searchAbleKeys = ["name", "host"];
 
   const [err, data] = useSetTimeout(
-    "popups",
+    "Popups",
     page - 1,
     limit,
     searchTerm,
@@ -33,42 +35,6 @@ export default function PopupList() {
     setModalOpen(true);
   };
 
-  const deletePopup = async () => {
-    if (!popupToDelete) return;
-
-    setLoading(true);
-    try {
-      const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/popup/${popupToDelete}`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: localStorage.getItem("auth"),
-          },
-        }
-      );
-      const { error } = await res.json();
-      if (res.ok) {
-        setPopups((prevLists) =>
-          prevLists.filter((list) => list._id !== popupToDelete)
-        );
-        alert({
-          type: "success",
-          title: "Deleted!",
-          text: "Guide has been deleted.",
-        });
-      } else {
-        alert({ type: "danger", title: "Error!", text: error });
-      }
-    } catch (error) {
-      alert({ type: "danger", title: "Error!", text: error.message });
-    } finally {
-      setLoading(false);
-      setModalOpen(false);
-      setPopupToDelete(null);
-    }
-  };
-
   useEffect(() => {
     if (data) {
       setPopups(data.popups);
@@ -78,7 +44,82 @@ export default function PopupList() {
     }
   }, [data, err, alert]);
 
+  const deleteSelectedPopup = async () => {
+    if (!selectedPopups.length) {
+      alert({
+        type: "warning",
+        title: "No Selection",
+        text: "Please select at least one enquiry to delete.",
+      });
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/popup`, {
+        method: "DELETE",
+        headers: {
+          Authorization: localStorage.getItem("auth"),
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ ids: selectedPopups }),
+      });
+
+      const { error } = await res.json();
+
+      if (res.ok) {
+        setPopups((prevEnquiries) =>
+          prevEnquiries.filter((enq) => !selectedPopups.includes(enq._id))
+        );
+        alert({
+          type: "success",
+          title: "Deleted!",
+          text: `Selected enquiry have been deleted.`,
+        });
+      } else {
+        alert({ type: "danger", title: "Error!", text: error });
+      }
+    } catch (error) {
+      alert({ type: "danger", title: "Error!", text: error.message });
+    } finally {
+      setLoading(false);
+      setModalOpen(false);
+      setSelectedPopups([]);
+    }
+  };
+
+  const handleCheckboxChange = (popupId) => {
+    setSelectedPopups((prevSelected) => {
+      if (prevSelected.includes(popupId)) {
+        return prevSelected.filter((id) => id !== popupId);
+      } else {
+        return [...prevSelected, popupId];
+      }
+    });
+  };
+
+  const handleSelectAll = () => {
+    if (selectAll) {
+      setSelectedPopups([]);
+    } else {
+      setSelectedPopups(
+        popups.map((popup) => popup._id)
+      );
+    }
+    setSelectAll(!selectAll);
+  };
+
   const headers = [
+    {
+      label: (
+        <input
+          className="form-check-input "
+          type="checkbox"
+          checked={selectAll}
+          onChange={handleSelectAll}
+        />
+      ),
+    },
     { label: "Name" },
     { label: "Device Type" },
     { label: "Type" },
@@ -87,6 +128,12 @@ export default function PopupList() {
   ];
 
   const rows = popups.map((popup) => [
+    <input
+      className="form-check-input"
+      type="checkbox"
+      checked={selectedPopups.includes(popup._id)}
+      onChange={() => handleCheckboxChange(popup._id)}
+    />,
     popup.name,
     popup.showOnDeviceType,
     popup.contentType,
@@ -117,7 +164,15 @@ export default function PopupList() {
         <div className="card">
           <div className="card-header">
             <h3 className="card-title">All Popups List</h3>
-            <div className="card-options">
+            <div className="card-options d-flex gap-2">
+            {selectedPopups.length ? (
+                <button
+                  onClick={() => setModalOpen(true)}
+                  className="btn btn-danger"
+                >
+                  Delete Selected
+                </button>
+              ) : null}
               <button
                 onClick={() => navigate("/add-popup")}
                 className="btn btn-primary"
@@ -149,8 +204,8 @@ export default function PopupList() {
       <ConfirmationModal
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
-        onConfirm={deletePopup}
-        message="Are you sure you want to delete this guide?"
+        onConfirm={deleteSelectedPopup}
+        message="Are you sure you want to delete this Popup?"
       />
     </div>
   );

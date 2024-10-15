@@ -213,7 +213,7 @@ export default function AddTestimonial() {
                   name="text"
                   className="form-control"
                   placeholder="text"
-                  value={detail.name} // Changed from detail.title to detail.name
+                  value={detail.text} 
                   onChange={(e) =>
                     setDetail((d) => ({ ...d, text: e.target.value }))
                   }
@@ -289,6 +289,26 @@ export default function AddTestimonial() {
                           setDetail((prev) => ({
                             ...prev,
                             isActive: !prev.isActive,
+                          }))
+                        }
+                      />
+                    </label>
+                  </span>
+                </label>
+              </div>
+              <div className="mb-3">
+                <label className="row">
+                  <span className="col">Is Testimonial Global?</span>
+                  <span className="col-auto">
+                    <label className="form-check form-check-single form-switch">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        checked={detail.isGlobal}
+                        onChange={() =>
+                          setDetail((prev) => ({
+                            ...prev,
+                            isGlobal: !prev.isGlobal,
                           }))
                         }
                       />

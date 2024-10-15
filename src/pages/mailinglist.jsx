@@ -17,6 +17,8 @@ export default function MailingList() {
   const [totalCount, setTotalCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchKey, setSearchKey] = useState("");
+  const [selectedLists, setSelectedLists] = useState([]);
+  const [selectAll, setSelectAll] = useState(false);
 
   const searchAbleKeys = ["email"];
 
@@ -37,59 +39,39 @@ export default function MailingList() {
     }
   }, [data, err, alert]);
 
-  const headers = [
-    { label: "Customer Email" },
-    { label: "Site Name" },
-    { label: "Actions" },
-  ];
-
-  const rows = lists.map((lst) => [
-    lst.email,
-    lst.site.name,
-    <div key={lst._id}>
-      <button
-        onClick={() => navigate(`/mailing/${lst._id}`)}
-        className="btn btn-primary me-1" // Adjusted for spacing
-      >
-        View
-      </button>
-      <button
-        onClick={() => openDeleteModal(lst._id)}
-        className="btn btn-danger "
-      >
-        Delete
-      </button>
-    </div>,
-  ]);
-
-  const openDeleteModal = (id) => {
-    setMailingToDelete(id);
-    setModalOpen(true);
-  };
+  
 
   const deleteMailingList = async () => {
-    if (!mailingToDelete) return;
+    if (!selectedLists.length) {
+      alert({
+        type: "warning",
+        title: "No Selection",
+        text: "Please select at least one List to delete.",
+      });
+      return;
+    }
 
     setLoading(true);
     try {
-      const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/list/${mailingToDelete}`, // Ensure your API endpoint is correct
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: localStorage.getItem("auth"),
-          },
-        }
-      );
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/list`, {
+        method: "DELETE",
+        headers: {
+          Authorization: localStorage.getItem("auth"),
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ ids: selectedLists }),
+      });
+
       const { error } = await res.json();
+
       if (res.ok) {
-        setLists((prevLists) =>
-          prevLists.filter((list) => list._id !== mailingToDelete)
+        setLists((prevList) =>
+          prevList.filter((enq) => !selectedLists.includes(enq._id))
         );
         alert({
           type: "success",
           title: "Deleted!",
-          text: "Mailing list has been deleted.",
+          text: `Selected List have been deleted.`,
         });
       } else {
         alert({ type: "danger", title: "Error!", text: error });
@@ -98,10 +80,58 @@ export default function MailingList() {
       alert({ type: "danger", title: "Error!", text: error.message });
     } finally {
       setLoading(false);
-      setModalOpen(false); // Close the modal after deletion
-      setMailingToDelete(null); // Reset the mailing ID
+      setModalOpen(false);
+      setSelectedLists([]);
     }
   };
+
+  const handleCheckboxChange = (enqId) => {
+    setSelectedLists((prevSelected) => {
+      if (prevSelected.includes(enqId)) {
+        return prevSelected.filter((id) => id !== enqId);
+      } else {
+        return [...prevSelected, enqId];
+      }
+    });
+  };
+
+  const handleSelectAll = () => {
+    if (selectAll) {
+      setSelectedLists([]);
+    } else {
+      setSelectedLists(lists.map((lst) => lst._id));
+    }
+    setSelectAll(!selectAll);
+  };
+
+  const headers = [
+    {
+      label: (
+        <input type="checkbox" checked={selectAll} onChange={handleSelectAll} />
+      ),
+    },
+    { label: "Customer Email" },
+    { label: "Site Name" },
+    { label: "Actions" },
+  ];
+
+  const rows = lists.map((lst) => [
+    <input
+      type="checkbox"
+      checked={selectedLists.includes(lst._id)}
+      onChange={() => handleCheckboxChange(lst._id)}
+    />,
+    lst.email,
+    lst.site.name,
+    <div key={lst._id}>
+      <button
+        onClick={() => navigate(`/mailing/${lst._id}`)}
+        className="btn btn-primary me-1" 
+      >
+        View
+      </button>
+    </div>,
+  ]);
 
   return (
     <div className="page-body">
@@ -109,6 +139,18 @@ export default function MailingList() {
         <div className="card">
           <div className="card-header">
             <h3 className="card-title">All Mailing Lists</h3>
+            <div className="card-options">
+              {selectedLists.length ? (
+                <button
+                  onClick={() => setModalOpen(true)}
+                  className="btn btn-danger"
+                >
+                  Delete Selected
+                </button>
+              ) : (
+                ""
+              )}
+            </div>
           </div>
 
           <div className="table-responsive">

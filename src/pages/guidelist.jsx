@@ -12,11 +12,12 @@ export default function GuideList() {
   const [guides, setGuides] = useState([]);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(8);
-  const [guideToDelete, setGuideToDelete] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [totalCount, setTotalCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchKey, setSearchKey] = useState("");
+  const [selectedGuides, setSelectedGuides] = useState([]);
+  const [selectAll, setSelectAll] = useState(false);
 
   const searchAbleKeys = ["title"];
 
@@ -37,34 +38,37 @@ export default function GuideList() {
     }
   }, [data, err, alert]);
 
-  const openDeleteModal = (id) => {
-    setGuideToDelete(id);
-    setModalOpen(true);
-  };
-
-  const deleteGuide = async () => {
-    if (!guideToDelete) return;
+  const deleteSelectedGuides = async () => {
+    if (!selectedGuides.length) {
+      alert({
+        type: "warning",
+        title: "No Selection",
+        text: "Please select at least one enquiry to delete.",
+      });
+      return;
+    }
 
     setLoading(true);
     try {
-      const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/guide/${guideToDelete}`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: localStorage.getItem("auth"),
-          },
-        }
-      );
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/guide`, {
+        method: "DELETE",
+        headers: {
+          Authorization: localStorage.getItem("auth"),
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ ids: selectedGuides }),
+      });
+
       const { error } = await res.json();
+
       if (res.ok) {
-        setGuides((prevLists) =>
-          prevLists.filter((list) => list._id !== guideToDelete)
+        setGuides((prevEnquiries) =>
+          prevEnquiries.filter((enq) => !selectedGuides.includes(enq._id))
         );
         alert({
           type: "success",
           title: "Deleted!",
-          text: "Guide has been deleted.",
+          text: `Selected enquiry have been deleted.`,
         });
       } else {
         alert({ type: "danger", title: "Error!", text: error });
@@ -74,17 +78,52 @@ export default function GuideList() {
     } finally {
       setLoading(false);
       setModalOpen(false);
-      setGuideToDelete(null);
+      setSelectedGuides([]);
     }
   };
 
+  const handleCheckboxChange = (guideId) => {
+    setSelectedGuides((prevSelected) => {
+      if (prevSelected.includes(guideId)) {
+        return prevSelected.filter((id) => id !== guideId);
+      } else {
+        return [...prevSelected, guideId];
+      }
+    });
+  };
+
+  const handleSelectAll = () => {
+    if (selectAll) {
+      setSelectedGuides([]);
+    } else {
+      setSelectedGuides(guides.map((guide) => guide._id));
+    }
+    setSelectAll(!selectAll);
+  };
+
   const headers = [
+    {
+      label: (
+        <input
+          className="form-check-input "
+          type="checkbox"
+          checked={selectAll}
+          onChange={handleSelectAll}
+        />
+      ),
+    },
     { label: "Title" },
     { label: "status" },
     { label: "Actions" },
   ];
 
   const rows = guides.map((guide) => [
+    <input
+      className="form-check-input"
+      type="checkbox"
+      checked={selectedGuides.includes(guide._id)}
+      onChange={() => handleCheckboxChange(guide._id)}
+    />,
     guide.title,
     guide.isActive === true ? (
       <span className="badge bg-success">Active</span>
@@ -97,12 +136,6 @@ export default function GuideList() {
         className="btn btn-primary  me-1"
       >
         Edit
-      </button>
-      <button
-        onClick={() => openDeleteModal(guide._id)}
-        className="btn btn-danger"
-      >
-        Delete
       </button>
     </div>,
   ]);
@@ -119,7 +152,15 @@ export default function GuideList() {
         <div className="card">
           <div className="card-header">
             <h3 className="card-title">All Guides List</h3>
-            <div className="card-options">
+            <div className="card-options d-flex gap-2">
+              {selectedGuides.length ? (
+                <button
+                  onClick={() => setModalOpen(true)}
+                  className="btn btn-danger"
+                >
+                  Delete Selected
+                </button>
+              ) : null}
               <button
                 onClick={() => navigate("/add-guide")}
                 className="btn btn-primary"
@@ -150,7 +191,7 @@ export default function GuideList() {
       <ConfirmationModal
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
-        onConfirm={deleteGuide}
+        onConfirm={deleteSelectedGuides}
         message="Are you sure you want to delete this guide?"
       />
     </div>

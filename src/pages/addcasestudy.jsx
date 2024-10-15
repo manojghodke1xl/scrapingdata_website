@@ -51,7 +51,7 @@ export default function AddCaseStudy() {
         const { data, error } = await res.json();
 
         if (res.ok) {
-          const { title, sdesc, ldesc, isActive, sites, image, pdf } =
+          const { title, sdesc, ldesc, isActive, sites, image, pdf, isGlobal } =
             data.casestudy;
           setDetail((prev) => ({
             ...prev,
@@ -59,6 +59,7 @@ export default function AddCaseStudy() {
             sdesc,
             ldesc,
             isActive,
+            isGlobal,
             sites,
             image,
             pdf,
@@ -305,6 +306,26 @@ export default function AddCaseStudy() {
                           setDetail((prev) => ({
                             ...prev,
                             isActive: !prev.isActive,
+                          }))
+                        }
+                      />
+                    </label>
+                  </span>
+                </label>
+              </div>
+              <div className="mb-3">
+                <label className="row">
+                  <span className="col">Is Casestudy Global?</span>
+                  <span className="col-auto">
+                    <label className="form-check form-check-single form-switch">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        checked={detail.isGlobal}
+                        onChange={() =>
+                          setDetail((prev) => ({
+                            ...prev,
+                            isGlobal: !prev.isGlobal,
                           }))
                         }
                       />

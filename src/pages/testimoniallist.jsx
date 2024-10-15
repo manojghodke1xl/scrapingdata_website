@@ -12,11 +12,12 @@ export default function TestimonialList() {
   const [testimonials, setTestimonials] = useState([]);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(8);
-  const [testimonialToDelete, setTestimonialToDelete] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [totalCount, setTotalCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchKey, setSearchKey] = useState("");
+  const [selectedTestimonials, setSelectedTestimonials] = useState([]);
+  const [selectAll, setSelectAll] = useState(false);
 
   const searchAbleKeys = ["name"];
 
@@ -37,34 +38,37 @@ export default function TestimonialList() {
     }
   }, [data, err, alert]);
 
-  const openDeleteModal = (id) => {
-    setTestimonialToDelete(id);
-    setModalOpen(true);
-  };
-
-  const deleteTestimonial = async () => {
-    if (!testimonialToDelete) return;
+  const deleteSelectedTestimonial = async () => {
+    if (!selectedTestimonials.length) {
+      alert({
+        type: "warning",
+        title: "No Selection",
+        text: "Please select at least one enquiry to delete.",
+      });
+      return;
+    }
 
     setLoading(true);
     try {
-      const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/testimonial/${testimonialToDelete}`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: localStorage.getItem("auth"),
-          },
-        }
-      );
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/testimonial`, {
+        method: "DELETE",
+        headers: {
+          Authorization: localStorage.getItem("auth"),
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ ids: selectedTestimonials }),
+      });
+
       const { error } = await res.json();
+
       if (res.ok) {
-        setTestimonials((prevLists) =>
-          prevLists.filter((list) => list._id !== testimonialToDelete)
+        setTestimonials((prevEnquiries) =>
+          prevEnquiries.filter((enq) => !selectedTestimonials.includes(enq._id))
         );
         alert({
           type: "success",
           title: "Deleted!",
-          text: "Testimonial has been deleted.",
+          text: `Selected enquiry have been deleted.`,
         });
       } else {
         alert({ type: "danger", title: "Error!", text: error });
@@ -74,17 +78,54 @@ export default function TestimonialList() {
     } finally {
       setLoading(false);
       setModalOpen(false);
-      setTestimonialToDelete(null);
+      setSelectedTestimonials([]);
     }
   };
 
+  const handleCheckboxChange = (testimonialId) => {
+    setSelectedTestimonials((prevSelected) => {
+      if (prevSelected.includes(testimonialId)) {
+        return prevSelected.filter((id) => id !== testimonialId);
+      } else {
+        return [...prevSelected, testimonialId];
+      }
+    });
+  };
+
+  const handleSelectAll = () => {
+    if (selectAll) {
+      setSelectedTestimonials([]);
+    } else {
+      setSelectedTestimonials(
+        testimonials.map((testimonial) => testimonial._id)
+      );
+    }
+    setSelectAll(!selectAll);
+  };
+
   const headers = [
+    {
+      label: (
+        <input
+          className="form-check-input "
+          type="checkbox"
+          checked={selectAll}
+          onChange={handleSelectAll}
+        />
+      ),
+    },
     { label: "Name" },
     { label: "Status" },
     { label: "Actions" },
   ];
 
   const rows = testimonials.map((testimonial) => [
+    <input
+      className="form-check-input"
+      type="checkbox"
+      checked={selectedTestimonials.includes(testimonial._id)}
+      onChange={() => handleCheckboxChange(testimonial._id)}
+    />,
     testimonial.name,
     testimonial.isActive === true ? (
       <span className="badge bg-success">Active</span>
@@ -98,12 +139,6 @@ export default function TestimonialList() {
       >
         Edit
       </button>
-      <button
-        onClick={() => openDeleteModal(testimonial._id)}
-        className="btn btn-danger"
-      >
-        Delete
-      </button>
     </div>,
   ]);
 
@@ -113,7 +148,15 @@ export default function TestimonialList() {
         <div className="card">
           <div className="card-header">
             <h3 className="card-title">All Testimonials List</h3>
-            <div className="card-options">
+            <div className="card-options d-flex gap-2">
+              {selectedTestimonials.length ? (
+                <button
+                  onClick={() => setModalOpen(true)}
+                  className="btn btn-danger"
+                >
+                  Delete Selected
+                </button>
+              ) : null}
               <button
                 onClick={() => navigate("/add-testimonial")}
                 className="btn btn-primary"
@@ -146,7 +189,7 @@ export default function TestimonialList() {
       <ConfirmationModal
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
-        onConfirm={deleteTestimonial}
+        onConfirm={deleteSelectedTestimonial}
         message="Are you sure you want to delete this Testimonial?"
       />
     </div>

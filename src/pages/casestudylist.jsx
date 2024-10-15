@@ -17,6 +17,8 @@ export default function CaseStudyList() {
   const [totalCount, setTotalCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchKey, setSearchKey] = useState("");
+  const [selectedCaseStudies, setSelectedCaseStudies] = useState([]);
+  const [selectAll, setSelectAll] = useState(false);
 
   const searchAbleKeys = ["title"];
 
@@ -37,69 +39,106 @@ export default function CaseStudyList() {
     }
   }, [data, err, alert]);
 
-  const openDeleteModal = (id) => {
-    setCaseStudyToDelete(id);
-    setModalOpen(true);
-  };
 
-  const deleteCaseStudy = async () => {
-    if (!casestudyToDelete) return;
 
-    setLoading(true);
-    try {
-      const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/casestudy/${casestudyToDelete}`,
-        {
+    const deleteSelectedCaseStudies = async () => {
+      if (!selectedCaseStudies.length) {
+        alert({
+          type: "warning",
+          title: "No Selection",
+          text: "Please select at least one Case study to delete.",
+        });
+        return;
+      }
+  
+      setLoading(true);
+      try {
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/casestudy`, {
           method: "DELETE",
           headers: {
             Authorization: localStorage.getItem("auth"),
+            "Content-Type": "application/json",
           },
-        }
-      );
-      const { error } = await res.json();
-      if (res.ok) {
-        setCaseStudies((prevLists) =>
-          prevLists.filter((list) => list._id !== casestudyToDelete)
-        );
-        alert({
-          type: "success",
-          title: "Deleted!",
-          text: "CaseStudy has been deleted.",
+          body: JSON.stringify({ ids: selectedCaseStudies }),
         });
-      } else {
-        alert({ type: "danger", title: "Error!", text: error });
+  
+        const { error } = await res.json();
+  
+        if (res.ok) {
+          setCaseStudies((prevCaseStudies) =>
+            prevCaseStudies.filter((casestudy) => !selectedCaseStudies.includes(casestudy._id))
+          );
+          alert({
+            type: "success",
+            title: "Deleted!",
+            text: `Selected case study have been deleted.`,
+          });
+        } else {
+          alert({ type: "danger", title: "Error!", text: error });
+        }
+      } catch (error) {
+        alert({ type: "danger", title: "Error!", text: error.message });
+      } finally {
+        setLoading(false);
+        setModalOpen(false);
+        setSelectedCaseStudies([]);
       }
-    } catch (error) {
-      alert({ type: "danger", title: "Error!", text: error.message });
-    } finally {
-      setLoading(false);
-      setModalOpen(false);
-      setCaseStudyToDelete(null);
-    }
+    };
+
+  const handleCheckboxChange = (casestudyId) => {
+    setSelectedCaseStudies((prevSelected) => {
+      if (prevSelected.includes(casestudyId)) {
+        return prevSelected.filter((id) => id !== casestudyId);
+      } else {
+        return [...prevSelected, casestudyId];
+      }
+    });
   };
 
-  const headers = [{ label: "Title" }, { label: "Status" }, { label: "Actions" }];
+  const handleSelectAll = () => {
+    if (selectAll) {
+      setSelectedCaseStudies([]);
+    } else {
+      setSelectedCaseStudies(caseStudies.map((casestudy) => casestudy._id));
+    }
+    setSelectAll(!selectAll);
+  };
+
+  const headers = [
+    {
+      label: (
+        <input
+          className="form-check-input "
+          type="checkbox"
+          checked={selectAll}
+          onChange={handleSelectAll}
+        />
+      ),
+    },
+    { label: "Title" },
+    { label: "Status" },
+    { label: "Actions" },
+  ];
 
   const rows = caseStudies.map((casestudy) => [
+    <input
+      className="form-check-input"
+      type="checkbox"
+      checked={selectedCaseStudies.includes(casestudy._id)}
+      onChange={() => handleCheckboxChange(casestudy._id)}
+    />,
     casestudy.title,
-
     casestudy.isActive === true ? (
-      <span className="badge bg-success">Active</span>  
+      <span className="badge bg-success">Active</span>
     ) : (
       <span className="badge bg-danger">Inactive</span>
     ),
-      <div key={casestudy._id}>
+    <div key={casestudy._id}>
       <button
         onClick={() => navigate(`/add-casestudy/${casestudy._id}`)}
         className="btn btn-primary me-1"
       >
         Edit
-      </button>
-      <button
-        onClick={() => openDeleteModal(casestudy._id)}
-        className="btn btn-danger"
-      >
-        Delete
       </button>
     </div>,
   ]);
@@ -110,7 +149,15 @@ export default function CaseStudyList() {
         <div className="card">
           <div className="card-header">
             <h3 className="card-title">All Case Study List</h3>
-            <div className="card-options">
+            <div className="card-options d-flex gap-2">
+            {selectedCaseStudies.length ? (
+                <button
+                  onClick={() => setModalOpen(true)}
+                  className="btn btn-danger"
+                >
+                  Delete Selected
+                </button>
+              ) : null}
               <button
                 onClick={() => navigate("/add-casestudy")}
                 className="btn btn-primary"
@@ -143,7 +190,7 @@ export default function CaseStudyList() {
       <ConfirmationModal
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
-        onConfirm={deleteCaseStudy}
+        onConfirm={deleteSelectedCaseStudies}
         message="Are you sure you want to delete this casestudy?"
       />
     </div>
