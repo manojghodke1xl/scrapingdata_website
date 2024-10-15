@@ -91,28 +91,35 @@ export default function EnquiryList() {
 
   const handleCheckboxChange = (enqId) => {
     setSelectedEnquiries((prevSelected) => {
+      let updatedSelected;
       if (prevSelected.includes(enqId)) {
-        return prevSelected.filter((id) => id !== enqId);
+        updatedSelected = prevSelected.filter((id) => id !== enqId);
       } else {
-        return [...prevSelected, enqId];
+        updatedSelected = [...prevSelected, enqId];
       }
+      if (updatedSelected.length !== enquiries.length) {
+        setSelectAll(false);
+      }
+  
+      return updatedSelected;
     });
   };
+  
 
   const handleSelectAll = () => {
     if (selectAll) {
-      setSelectedEnquiries([]);
+      setSelectedEnquiries([]); 
     } else {
-      setSelectedEnquiries(enquiries.map((enq) => enq._id));
+      setSelectedEnquiries(enquiries.map((enq) => enq._id)); 
     }
-    setSelectAll(!selectAll);
+    setSelectAll(!selectAll); 
   };
 
   const headers = [
     {
       label: (
         <input
-          className="form-check-input"
+        className="form-check-input"
           type="checkbox"
           checked={selectAll}
           onChange={handleSelectAll}
@@ -126,7 +133,7 @@ export default function EnquiryList() {
     { label: "Enquiry Subject" },
     { label: "Enquiry Message" },
     { label: "Site Name" },
-    { label: "Actions" },
+    { label: "Actions" }, 
   ];
 
   const rows = enquiries.map((enq) => [

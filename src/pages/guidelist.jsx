@@ -84,11 +84,17 @@ export default function GuideList() {
 
   const handleCheckboxChange = (guideId) => {
     setSelectedGuides((prevSelected) => {
+      let updatedSelected;
       if (prevSelected.includes(guideId)) {
-        return prevSelected.filter((id) => id !== guideId);
+        updatedSelected = prevSelected.filter((id) => id !== guideId);
       } else {
-        return [...prevSelected, guideId];
+        updatedSelected = [...prevSelected, enqId];
       }
+      if (updatedSelected.length !== guides.length) {
+        setSelectAll(false);
+      }
+  
+      return updatedSelected;
     });
   };
 

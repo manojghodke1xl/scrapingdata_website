@@ -84,11 +84,17 @@ export default function TestimonialList() {
 
   const handleCheckboxChange = (testimonialId) => {
     setSelectedTestimonials((prevSelected) => {
+      let updatedSelected;
       if (prevSelected.includes(testimonialId)) {
-        return prevSelected.filter((id) => id !== testimonialId);
+        updatedSelected = prevSelected.filter((id) => id !== testimonialId);
       } else {
-        return [...prevSelected, testimonialId];
+        updatedSelected = [...prevSelected, enqId];
       }
+      if (updatedSelected.length !== testimonials.length) {
+        setSelectAll(false);
+      }
+
+      return updatedSelected;
     });
   };
 

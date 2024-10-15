@@ -85,15 +85,21 @@ export default function CaseStudyList() {
       }
     };
 
-  const handleCheckboxChange = (casestudyId) => {
-    setSelectedCaseStudies((prevSelected) => {
-      if (prevSelected.includes(casestudyId)) {
-        return prevSelected.filter((id) => id !== casestudyId);
-      } else {
-        return [...prevSelected, casestudyId];
-      }
-    });
-  };
+    const handleCheckboxChange = (casestudyId) => {
+      setSelectedCaseStudies((prevSelected) => {
+        let updatedSelected;
+        if (prevSelected.includes(casestudyId)) {
+          updatedSelected = prevSelected.filter((id) => id !== casestudyId);
+        } else {
+          updatedSelected = [...prevSelected, enqId];
+        }
+        if (updatedSelected.length !== caseStudies.length) {
+          setSelectAll(false);
+        }
+    
+        return updatedSelected;
+      });
+    };
 
   const handleSelectAll = () => {
     if (selectAll) {

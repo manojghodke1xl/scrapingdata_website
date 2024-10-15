@@ -90,11 +90,17 @@ export default function PopupList() {
 
   const handleCheckboxChange = (popupId) => {
     setSelectedPopups((prevSelected) => {
+      let updatedSelected;
       if (prevSelected.includes(popupId)) {
-        return prevSelected.filter((id) => id !== popupId);
+        updatedSelected = prevSelected.filter((id) => id !== popupId);
       } else {
-        return [...prevSelected, popupId];
+        updatedSelected = [...prevSelected, enqId];
       }
+      if (updatedSelected.length !== popups.length) {
+        setSelectAll(false);
+      }
+  
+      return updatedSelected;
     });
   };
 
