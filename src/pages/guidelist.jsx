@@ -147,7 +147,7 @@ export default function GuideList() {
     ),
     <div key={guide._id}>
       <button
-        onClick={() => navigate(`/add-guide/${guide._id}`)}
+        onClick={() => navigate(`/edit-guide/${guide._id}`)}
         className="btn btn-primary  me-1"
       >
         Edit

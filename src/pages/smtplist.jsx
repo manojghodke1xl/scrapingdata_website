@@ -20,7 +20,7 @@ export default function SmtpList() {
   const [err, data] = useSetTimeout(
     "smtps",
     page - 1,
-    limit, 
+    limit,
     searchTerm,
     searchKey
   );
@@ -42,7 +42,7 @@ export default function SmtpList() {
 
     <button
       key={smtp._id}
-      onClick={() => navigate(`/add-smtp/${smtp._id}`)}
+      onClick={() => navigate(`/edit-smtp/${smtp._id}`)}
       className="btn btn-primary "
     >
       Edit

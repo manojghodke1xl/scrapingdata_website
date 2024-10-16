@@ -7,7 +7,7 @@ export default function Header() {
   const location = useLocation(); // Get the current location
 
   // Helper function to check if a link is active
-  const isActive = (path) => location.pathname === path;
+  const isActive = (...paths) => paths.some((path) => location.pathname.startsWith(path));
 
   return (
     <header className="navbar navbar-expand-md navbar-light d-print-none">
@@ -31,11 +31,7 @@ export default function Header() {
             <div className="collapse navbar-collapse" id="navbar-menu">
               <div className="d-flex flex-column flex-md-row flex-fill align-items-stretch align-items-md-center">
                 <ul className="navbar-nav">
-                  <li
-                    className={`nav-item ${
-                      isActive("/dashboard") ? "active" : ""
-                    }`}
-                  >
+                  <li className={`nav-item ${isActive("/dashboard") ? "active" : ""}`}>
                     <Link className="nav-link" to="/dashboard">
                       <span className="nav-link-icon d-md-none d-lg-inline-block">
                         <svg
@@ -58,11 +54,7 @@ export default function Header() {
                       <span className="nav-link-title">Dashboard</span>
                     </Link>
                   </li>
-                  <li
-                    className={`nav-item ${
-                      isActive("/enquiry-list") ? "active" : ""
-                    }`}
-                  >
+                  <li className={`nav-item ${isActive("/enquiry-list", "/enquiry") ? "active" : ""}`}>
                     <Link className="nav-link" to="/enquiry-list">
                       <span className="nav-link-icon d-md-none d-lg-inline-block">
                         <svg
@@ -85,11 +77,7 @@ export default function Header() {
                       <span className="nav-link-title">Enquiries</span>
                     </Link>
                   </li>
-                  <li
-                    className={`nav-item ${
-                      isActive("/mailing-list") ? "active" : ""
-                    }`}
-                  >
+                  <li className={`nav-item ${isActive("/mailing-list", "/mailing") ? "active" : ""}`}>
                     <Link className="nav-link" to="/mailing-list">
                       <span className="nav-link-icon d-md-none d-lg-inline-block">
                         <svg
@@ -112,11 +100,7 @@ export default function Header() {
                       <span className="nav-link-title">Maling Lists</span>
                     </Link>
                   </li>
-                  <li
-                    className={`nav-item ${
-                      isActive("/site-list") ? "active" : ""
-                    }`}
-                  >
+                  <li className={`nav-item ${isActive("/site-list", "/add-site", "/edit-site") ? "active" : ""}`}>
                     <Link className="nav-link" to="/site-list">
                       <span className="nav-link-icon d-md-none d-lg-inline-block">
                         <svg
@@ -140,11 +124,7 @@ export default function Header() {
                     </Link>
                   </li>
                   {auth.isSuperAdmin && (
-                    <li
-                      className={`nav-item ${
-                        isActive("/admin-list") ? "active" : ""
-                      }`}
-                    >
+                    <li className={`nav-item ${isActive("/admin-list", "/add-admin", "/edit-admin") ? "active" : ""}`}>
                       <Link className="nav-link" to="/admin-list">
                         <span className="nav-link-icon d-md-none d-lg-inline-block">
                           <svg
@@ -168,11 +148,7 @@ export default function Header() {
                       </Link>
                     </li>
                   )}
-                  <li
-                    className={`nav-item ${
-                      isActive("/guide-list") ? "active" : ""
-                    }`}
-                  >
+                  <li className={`nav-item ${isActive("/guide-list", "/add-guide", "/edit-guide") ? "active" : ""}`}>
                     <Link className="nav-link" to="/guide-list">
                       <span className="nav-link-icon d-md-none d-lg-inline-block">
                         <svg
@@ -197,7 +173,7 @@ export default function Header() {
                   </li>
                   <li
                     className={`nav-item ${
-                      isActive("/casestudy-list") ? "active" : ""
+                      isActive("/casestudy-list", "/add-casestudy", "/edit-casestudy") ? "active" : ""
                     }`}
                   >
                     <Link className="nav-link" to="/casestudy-list">
@@ -224,7 +200,7 @@ export default function Header() {
                   </li>
                   <li
                     className={`nav-item ${
-                      isActive("/Testimonial-list") ? "active" : ""
+                      isActive("/Testimonial-list", "/add-testimonial", "/edit-testimonial") ? "active" : ""
                     }`}
                   >
                     <Link className="nav-link" to="/Testimonial-list">
@@ -249,11 +225,7 @@ export default function Header() {
                       <span className="nav-link-title">Testimonials</span>
                     </Link>
                   </li>
-                  <li
-                    className={`nav-item ${
-                      isActive("/smtp-list") ? "active" : ""
-                    }`}
-                  >
+                  <li className={`nav-item ${isActive("/smtp-list", "/add-smtp", "/edit-smtp") ? "active" : ""}`}>
                     <Link className="nav-link" to="/smtp-list">
                       <span className="nav-link-icon d-md-none d-lg-inline-block">
                         <svg
@@ -276,11 +248,7 @@ export default function Header() {
                       <span className="nav-link-title">SMTPs</span>
                     </Link>
                   </li>
-                  <li
-                    className={`nav-item ${
-                      isActive("/popup-list") ? "active" : ""
-                    }`}
-                  >
+                  <li className={`nav-item ${isActive("/popup-list", "/add-popup", "/edit-popup") ? "active" : ""}`}>
                     <Link className="nav-link" to="/popup-list">
                       <span className="nav-link-icon d-md-none d-lg-inline-block">
                         <svg
@@ -306,7 +274,7 @@ export default function Header() {
 
                   <li
                     className={`nav-item ${
-                      isActive("/category-list") ? "active" : ""
+                      isActive("/category-list", "/add-category", "/edit-category") ? "active" : ""
                     }`}
                   >
                     <Link className="nav-link" to="/category-list">
@@ -335,10 +303,7 @@ export default function Header() {
               </div>
             </div>
             <div className="btn-list">
-              <button
-                className="btn"
-                onClick={() => dispatch({ type: "SIGNOUT" })}
-              >
+              <button className="btn" onClick={() => dispatch({ type: "SIGNOUT" })}>
                 Log Out
               </button>
             </div>

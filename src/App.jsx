@@ -55,34 +55,32 @@ function App() {
               <Route path="/site-list" element={<SiteList />} />
               <Route path="/admin-list" element={<AdminList />} />
               <Route path="/add-admin" element={<AddAdmin />} />
-              <Route path="/add-admin/:id" element={<AddAdmin />} />
+              <Route path="/edit-admin/:id" element={<AddAdmin />} />
               <Route path="/add-site" element={<AddSite />} />
               <Route path="/edit-site/:id" element={<AddSite />} />
               <Route path="/guide-list" element={<GuideList />} />
               <Route path="/add-guide" element={<AddGuide />} />
-              <Route path="/add-guide/:id" element={<AddGuide />} />
+              <Route path="/edit-guide/:id" element={<AddGuide />} />
 
               <Route path="/casestudy-list" element={<CaseStudyList />} />
               <Route path="/add-casestudy" element={<AddCaseStudy />} />
-              <Route path="/add-casestudy/:id" element={<AddCaseStudy />} />
+              <Route path="/edit-casestudy/:id" element={<AddCaseStudy />} />
 
               <Route path="/testimonial-list" element={<TestimonialList />} />
               <Route path="/add-testimonial" element={<AddTestimonial />} />
-              <Route path="/add-testimonial/:id" element={<AddTestimonial />} />
+              <Route path="/edit-testimonial/:id" element={<AddTestimonial />} />
 
               <Route path="/smtp-list" element={<SmtpList />} />
               <Route path="/add-smtp" element={<AddSmtp />} />
-              <Route path="/add-smtp/:id" element={<AddSmtp />} />
+              <Route path="/edit-smtp/:id" element={<AddSmtp />} />
 
               <Route path="/popup-list" element={<PopupList />} />
               <Route path="/add-popup" element={<AddPopup />} />
-              <Route path="/add-popup/:id" element={<AddPopup />} />
+              <Route path="/edit-popup/:id" element={<AddPopup />} />
 
               <Route path="/category-list" element={<CategoryList />} />
               <Route path="/add-category" element={<AddCategory />} />
-              <Route path="/add-category/:id" element={<AddCategory />} />
-
-
+              <Route path="/edit-category/:id" element={<AddCategory />} />
             </Route>
 
             <Route path="*" element={<Missing />} />

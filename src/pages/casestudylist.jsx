@@ -149,7 +149,7 @@ export default function CaseStudyList() {
     ),
     <div key={casestudy._id}>
       <button
-        onClick={() => navigate(`/add-casestudy/${casestudy._id}`)}
+        onClick={() => navigate(`/edit-casestudy/${casestudy._id}`)}
         className="btn btn-primary me-1"
       >
         Edit

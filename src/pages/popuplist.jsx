@@ -151,7 +151,7 @@ export default function PopupList() {
     ),
     <div key={popup._id}>
       <button
-        onClick={() => navigate(`/add-popup/${popup._id}`)}
+        onClick={() => navigate(`/edit-popup/${popup._id}`)}
         className="btn btn-primary  me-1"
       >
         Edit

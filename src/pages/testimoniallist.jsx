@@ -150,7 +150,7 @@ export default function TestimonialList() {
     ),
     <div key={testimonial._id}>
       <button
-        onClick={() => navigate(`/add-testimonial/${testimonial._id}`)}
+        onClick={() => navigate(`/edit-testimonial/${testimonial._id}`)}
         className="btn btn-primary me-1"
       >
         Edit

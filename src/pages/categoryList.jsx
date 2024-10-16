@@ -58,7 +58,7 @@ export default function CategoryList() {
     category.name,
     <button
       key={category._id}
-      onClick={() => navigate(`/add-category/${category._id}`)}
+      onClick={() => navigate(`/edit-category/${category._id}`)}
       className="btn btn-primary me-1"
     >
       Edit
