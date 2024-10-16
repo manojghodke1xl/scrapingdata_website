@@ -17,15 +17,19 @@ export default function TestimonialList() {
   const [totalCount, setTotalCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchKey, setSearchKey] = useState("");
+  const [statusFilter, setStatusFilter] = useState("All");
 
   const searchAbleKeys = ["name"];
+
+  const filter = ["All", "Active", "Inactive"];
 
   const [err, data] = useSetTimeout(
     "testimonials",
     page - 1,
     limit,
     searchTerm,
-    searchKey
+    searchKey,
+    statusFilter
   );
 
   useEffect(() => {
@@ -114,6 +118,16 @@ export default function TestimonialList() {
           <div className="card-header">
             <h3 className="card-title">All Testimonials List</h3>
             <div className="card-options">
+              <select
+                className="form-select mx-2"
+                onChange={(e) => setStatusFilter(e.target.value)}
+              >
+                {filter.map((key, i) => (
+                  <option key={i} value={key.toLowerCase()}>
+                    {key}
+                  </option>
+                ))}
+              </select>
               <button
                 onClick={() => navigate("/add-testimonial")}
                 className="btn btn-primary"

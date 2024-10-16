@@ -17,18 +17,21 @@ export default function GuideList() {
   const [totalCount, setTotalCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchKey, setSearchKey] = useState("");
+  const [statusFilter, setStatusFilter] = useState("All");
 
   const searchAbleKeys = ["title"];
+  const filter = ["All", "Active", "Inactive"];
 
   const [err, data] = useSetTimeout(
     "guides",
     page - 1,
     limit,
     searchTerm,
-    searchKey
+    searchKey,
+    statusFilter
   );
 
-  useEffect(() => {
+  useEffect(() => { 
     if (data) {
       setGuides(data.guides);
       setTotalCount(data.count);
@@ -120,6 +123,16 @@ export default function GuideList() {
           <div className="card-header">
             <h3 className="card-title">All Guides List</h3>
             <div className="card-options">
+              <select
+                className="form-select mx-2"
+                onChange={(e) => setStatusFilter(e.target.value)}
+              >
+                {filter.map((key, i) => (
+                  <option key={i} value={key.toLowerCase()}>
+                    {key}
+                  </option>
+                ))}
+              </select>
               <button
                 onClick={() => navigate("/add-guide")}
                 className="btn btn-primary"

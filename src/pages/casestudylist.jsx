@@ -17,15 +17,18 @@ export default function CaseStudyList() {
   const [totalCount, setTotalCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchKey, setSearchKey] = useState("");
+  const [statusFilter, setStatusFilter] = useState("All");
 
   const searchAbleKeys = ["title"];
+  const filter = ["All", "Active", "Inactive"];
 
   const [err, data] = useSetTimeout(
     "casestudies",
     page - 1,
     limit,
     searchTerm,
-    searchKey
+    searchKey,
+    statusFilter
   );
 
   useEffect(() => {
@@ -78,17 +81,21 @@ export default function CaseStudyList() {
     }
   };
 
-  const headers = [{ label: "Title" }, { label: "Status" }, { label: "Actions" }];
+  const headers = [
+    { label: "Title" },
+    { label: "Status" },
+    { label: "Actions" },
+  ];
 
   const rows = caseStudies.map((casestudy) => [
     casestudy.title,
 
     casestudy.isActive === true ? (
-      <span className="badge bg-success">Active</span>  
+      <span className="badge bg-success">Active</span>
     ) : (
       <span className="badge bg-danger">Inactive</span>
     ),
-      <div key={casestudy._id}>
+    <div key={casestudy._id}>
       <button
         onClick={() => navigate(`/add-casestudy/${casestudy._id}`)}
         className="btn btn-primary me-1"
@@ -111,6 +118,16 @@ export default function CaseStudyList() {
           <div className="card-header">
             <h3 className="card-title">All Case Study List</h3>
             <div className="card-options">
+              <select
+                className="form-select mx-2"
+                onChange={(e) => setStatusFilter(e.target.value)}
+              >
+                {filter.map((key, i) => (
+                  <option key={i} value={key.toLowerCase()}>
+                    {key}
+                  </option>
+                ))}
+              </select>
               <button
                 onClick={() => navigate("/add-casestudy")}
                 className="btn btn-primary"

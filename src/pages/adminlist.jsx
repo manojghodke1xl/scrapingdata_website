@@ -14,15 +14,18 @@ export default function AdminList() {
   const [totalCount, setTotalCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchKey, setSearchKey] = useState("");
+  const [statusFilter, setStatusFilter] = useState("All");
 
   const searchAbleKeys = ["name", "email"];
+  const filter = ["All", "Active", "Inactive"];
 
   const [err, data] = useSetTimeout(
     "admins",
     page - 1,
     limit,
     searchTerm,
-    searchKey
+    searchKey,
+    statusFilter
   );
 
   useEffect(() => {
@@ -69,6 +72,16 @@ export default function AdminList() {
           <div className="card-header">
             <h3 className="card-title">All Admins List</h3>
             <div className="card-options">
+              <select
+                className="form-select mx-2"
+                onChange={(e) => setStatusFilter(e.target.value)}
+              >
+                {filter.map((key, i) => (
+                  <option key={i} value={key.toLowerCase()}>
+                    {key}
+                  </option>
+                ))}
+              </select>
               <button
                 onClick={() => navigate("/add-admin")}
                 className="btn btn-primary "

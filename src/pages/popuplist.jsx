@@ -17,15 +17,18 @@ export default function PopupList() {
   const [totalCount, setTotalCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchKey, setSearchKey] = useState("");
+  const [statusFilter, setStatusFilter] = useState("All");
 
   const searchAbleKeys = ["name", "host"];
+  const filter = ["All", "Active", "Inactive"];
 
   const [err, data] = useSetTimeout(
     "popups",
     page - 1,
     limit,
     searchTerm,
-    searchKey
+    searchKey,
+    statusFilter
   );
 
   const openDeleteModal = (id) => {
@@ -122,6 +125,16 @@ export default function PopupList() {
           <div className="card-header">
             <h3 className="card-title">All Popups List</h3>
             <div className="card-options">
+              <select
+                className="form-select mx-2"
+                onChange={(e) => setStatusFilter(e.target.value)}
+              >
+                {filter.map((key, i) => (
+                  <option key={i} value={key.toLowerCase()}>
+                    {key}
+                  </option>
+                ))}
+              </select>
               <button
                 onClick={() => navigate("/add-popup")}
                 className="btn btn-primary"
