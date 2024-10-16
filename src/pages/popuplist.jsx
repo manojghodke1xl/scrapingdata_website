@@ -12,7 +12,6 @@ export default function PopupList() {
   const [popups, setPopups] = useState([]);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(8);
-  const [popupToDelete, setPopupToDelete] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [totalCount, setTotalCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
@@ -32,11 +31,6 @@ export default function PopupList() {
     searchKey,
     statusFilter
   );
-
-  const openDeleteModal = (id) => {
-    setPopupToDelete(id);
-    setModalOpen(true);
-  };
 
   useEffect(() => {
     if (data) {
@@ -155,12 +149,6 @@ export default function PopupList() {
         className="btn btn-primary  me-1"
       >
         Edit
-      </button>
-      <button
-        onClick={() => openDeleteModal(popup._id)}
-        className="btn btn-danger"
-      >
-        Delete
       </button>
     </div>,
   ]);

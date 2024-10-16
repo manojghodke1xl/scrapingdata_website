@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { GlobalContext } from "../GlobalContext";
 
@@ -126,11 +126,39 @@ export default function AddCaseStudy() {
     }
   };
 
+  const imageInputRef = useRef(null);
+  const fileInputRef = useRef(null);
+
+
   const uploadFile = async (e, isImage) => {
     const file = e.target.files[0];
     if (!file) return;
 
     const { name, size, type } = file;
+
+    const validImageTypes = ["image/jpeg", "image/png"];
+    const validPdfTypes = ["application/pdf"];
+
+    if (isImage && !validImageTypes.includes(type)) {
+      alert({
+        type: "warning",
+        title: "Invalid File Type",
+        text: "Only PNG or JPEG formats are allowed for image uploads.",
+      });
+      imageInputRef.current.value = "";
+      return;
+    }
+
+    if (!validPdfTypes.includes(type)) {
+      alert({
+          type: "warning",
+          title: "Invalid File Type",
+          text: "Only PDF files are allowed for uploads.",
+      });
+      fileInputRef.current.value = "";
+      return;
+  }
+  
 
     try {
       const res = await fetch(`${import.meta.env.VITE_API_URL}/upload`, {
@@ -237,6 +265,7 @@ export default function AddCaseStudy() {
                   className="form-control"
                   onChange={(e) => uploadFile(e, true)}
                   accept="image/*"
+                  ref={imageInputRef}
                 />
               </div>
               <div className="mb-3">
@@ -247,6 +276,7 @@ export default function AddCaseStudy() {
                   className="form-control"
                   onChange={(e) => uploadFile(e, false)}
                   accept="application/pdf"
+                  ref={fileInputRef}
                 />
               </div>
               <div className="mb-3">

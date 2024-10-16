@@ -78,7 +78,7 @@ export default function AddTestimonial() {
             image,
             video,
             url,
-          } = data.testimonial; // Get isGlobal from response
+          } = data.testimonial; 
           setDetail((prev) => ({
             ...prev,
             image,

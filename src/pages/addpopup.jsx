@@ -1,4 +1,4 @@
-import { useContext, useEffect, useLayoutEffect, useState } from "react";
+import { useContext, useEffect, useLayoutEffect, useState, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { GlobalContext } from "../GlobalContext";
 
@@ -22,7 +22,6 @@ export default function AddPopup() {
     contentType: "basic",
     title: "",
     desc: "",
-    // image: "",
     allGlobalGuides: false,
     allSiteGuides: false,
     moreGuides: [],
@@ -183,11 +182,25 @@ export default function AddPopup() {
     }
   };
 
+  const imageInputRef = useRef(null);
+
   const uploadFile = async (e, isImage) => {
     const file = e.target.files[0];
     if (!file) return;
 
     const { name, size, type } = file;
+
+    const validImageTypes = ["image/jpeg", "image/png"];
+
+    if (isImage && !validImageTypes.includes(type)) {
+      alert({
+        type: "warning",
+        title: "Invalid File Type",
+        text: "Only PNG or JPEG formats are allowed for image uploads.",
+      });
+      imageInputRef.current.value = "";
+      return;
+    }
 
     try {
       const res = await fetch(`${import.meta.env.VITE_API_URL}/upload`, {
@@ -432,6 +445,7 @@ export default function AddPopup() {
                         className="form-control"
                         onChange={(e) => uploadFile(e, true)}
                         accept="image/*"
+                        ref={imageInputRef}
                       />
                     </div>
                   </>
