@@ -21,7 +21,13 @@ export default function CategoryList() {
 
   const searchAbleKeys = ["name"];
 
-  const [err, data] = useSetTimeout("categories", page - 1, limit, searchTerm, searchKey);
+  const [err, data] = useSetTimeout(
+    "categories",
+    page - 1,
+    limit,
+    searchTerm,
+    searchKey
+  );
 
   const handleCheckboxChange = (catId) => {
     setSelectedCategories((prevSelected) => {
@@ -50,7 +56,14 @@ export default function CategoryList() {
 
   const headers = [
     {
-      label: <input className="form-check-input" type="checkbox" checked={selectAll} onChange={handleSelectAll} />,
+      label: (
+        <input
+          className="form-check-input"
+          type="checkbox"
+          checked={selectAll}
+          onChange={handleSelectAll}
+        />
+      ),
     },
     { label: "Name" },
     { label: "Actions" },
@@ -96,7 +109,11 @@ export default function CategoryList() {
 
       const { error } = await res.json();
       if (res.ok) {
-        setCategories((prevCategory) => prevCategory.filter((category) => !selectedCategories.includes(category._id)));
+        setCategories((prevCategory) =>
+          prevCategory.filter(
+            (category) => !selectedCategories.includes(category._id)
+          )
+        );
         alert({
           type: "success",
           title: "Deleted!",
@@ -134,16 +151,22 @@ export default function CategoryList() {
           <div className="card-header">
             <h3 className="card-title">All Categories</h3>
             <div className="card-options">
-              <button onClick={() => navigate("/add-category")} className="btn btn-primary ">
-                Add Category
-              </button>
               {selectedCategories.length ? (
-                <button onClick={() => setModalOpen(true)} className="btn btn-danger mx-2">
+                <button
+                  onClick={() => setModalOpen(true)}
+                  className="btn btn-danger mx-2"
+                >
                   Delete Selected
                 </button>
               ) : (
                 ""
               )}
+              <button
+                onClick={() => navigate("/add-category")}
+                className="btn btn-primary "
+              >
+                Add Category
+              </button>
             </div>
           </div>
 

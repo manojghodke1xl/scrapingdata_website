@@ -26,7 +26,15 @@ export default function GuideList() {
   const searchAbleKeys = ["title"];
   const filter = ["All", "Active", "Inactive"];
 
-  const [err, data] = useSetTimeout("guides", page - 1, limit, searchTerm, searchKey, statusFilter, siteId);
+  const [err, data] = useSetTimeout(
+    "guides",
+    page - 1,
+    limit,
+    searchTerm,
+    searchKey,
+    statusFilter,
+    siteId
+  );
 
   useEffect(() => {
     if (data) {
@@ -61,7 +69,9 @@ export default function GuideList() {
       const { error } = await res.json();
 
       if (res.ok) {
-        setGuides((prevEnquiries) => prevEnquiries.filter((enq) => !selectedGuides.includes(enq._id)));
+        setGuides((prevEnquiries) =>
+          prevEnquiries.filter((enq) => !selectedGuides.includes(enq._id))
+        );
         alert({
           type: "success",
           title: "Deleted!",
@@ -106,7 +116,14 @@ export default function GuideList() {
 
   const headers = [
     {
-      label: <input className="form-check-input " type="checkbox" checked={selectAll} onChange={handleSelectAll} />,
+      label: (
+        <input
+          className="form-check-input "
+          type="checkbox"
+          checked={selectAll}
+          onChange={handleSelectAll}
+        />
+      ),
     },
     { label: "Title" },
     { label: "status" },
@@ -129,7 +146,10 @@ export default function GuideList() {
       <span className="badge bg-danger">Inactive</span>
     ),
     <div key={guide._id}>
-      <button onClick={() => navigate(`/add-guide/${guide._id}`)} className="btn btn-primary  me-1">
+      <button
+        onClick={() => navigate(`/add-guide/${guide._id}`)}
+        className="btn btn-primary  me-1"
+      >
         Edit
       </button>
     </div>,
@@ -149,20 +169,37 @@ export default function GuideList() {
           <div className="card-header">
             <h3 className="card-title">All Guides List</h3>
             <div className="card-options d-flex gap-2">
-              {selectedGuides.length ? (
-                <button onClick={() => setModalOpen(true)} className="btn btn-danger">
-                  Delete Selected
-                </button>
-              ) : null}
               <div className="card-options">
-                <select className="form-select mx-2" onChange={(e) => setStatusFilter(e.target.value)}>
+                <select
+                  className="form-select mx-2"
+                  onChange={(e) => setStatusFilter(e.target.value)}
+                >
                   {filter.map((key, i) => (
                     <option key={i} value={key.toLowerCase()}>
                       {key}
                     </option>
                   ))}
                 </select>
-                <button onClick={() => navigate("/add-guide")} className="btn btn-primary">
+                {selectedGuides.length ? (
+                  <button
+                    onClick={() => setModalOpen(true)}
+                    className="btn btn-success mx-2"
+                  >
+                    All Active
+                  </button>
+                ) : null}
+                {selectedGuides.length ? (
+                  <button
+                    onClick={() => setModalOpen(true)}
+                    className="btn btn-danger mx-2"
+                  >
+                    All Inactive
+                  </button>
+                ) : null}
+                <button
+                  onClick={() => navigate("/add-guide")}
+                  className="btn btn-primary"
+                >
                   Add Guide
                 </button>
               </div>

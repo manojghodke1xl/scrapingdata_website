@@ -26,7 +26,15 @@ export default function CaseStudyList() {
   const searchAbleKeys = ["title"];
   const filter = ["All", "Active", "Inactive"];
 
-  const [err, data] = useSetTimeout("casestudies", page - 1, limit, searchTerm, searchKey, statusFilter, siteId);
+  const [err, data] = useSetTimeout(
+    "casestudies",
+    page - 1,
+    limit,
+    searchTerm,
+    searchKey,
+    statusFilter,
+    siteId
+  );
 
   useEffect(() => {
     if (data) {
@@ -62,7 +70,9 @@ export default function CaseStudyList() {
 
       if (res.ok) {
         setCaseStudies((prevCaseStudies) =>
-          prevCaseStudies.filter((casestudy) => !selectedCaseStudies.includes(casestudy._id))
+          prevCaseStudies.filter(
+            (casestudy) => !selectedCaseStudies.includes(casestudy._id)
+          )
         );
         alert({
           type: "success",
@@ -108,7 +118,14 @@ export default function CaseStudyList() {
 
   const headers = [
     {
-      label: <input className="form-check-input " type="checkbox" checked={selectAll} onChange={handleSelectAll} />,
+      label: (
+        <input
+          className="form-check-input "
+          type="checkbox"
+          checked={selectAll}
+          onChange={handleSelectAll}
+        />
+      ),
     },
     { label: "Title" },
     { label: "Status" },
@@ -131,7 +148,10 @@ export default function CaseStudyList() {
       <span className="badge bg-danger">Inactive</span>
     ),
     <div key={casestudy._id}>
-      <button onClick={() => navigate(`/add-casestudy/${casestudy._id}`)} className="btn btn-primary me-1">
+      <button
+        onClick={() => navigate(`/add-casestudy/${casestudy._id}`)}
+        className="btn btn-primary me-1"
+      >
         Edit
       </button>
     </div>,
@@ -145,20 +165,37 @@ export default function CaseStudyList() {
           <div className="card-header">
             <h3 className="card-title">All Case Study List</h3>
             <div className="card-options d-flex gap-2">
-              {selectedCaseStudies.length ? (
-                <button onClick={() => setModalOpen(true)} className="btn btn-danger">
-                  Delete Selected
-                </button>
-              ) : null}
               <div className="card-options">
-                <select className="form-select mx-2" onChange={(e) => setStatusFilter(e.target.value)}>
+                <select
+                  className="form-select mx-2"
+                  onChange={(e) => setStatusFilter(e.target.value)}
+                >
                   {filter.map((key, i) => (
                     <option key={i} value={key.toLowerCase()}>
                       {key}
                     </option>
                   ))}
                 </select>
-                <button onClick={() => navigate("/add-casestudy")} className="btn btn-primary">
+                {selectedCaseStudies.length ? (
+                  <button
+                    onClick={() => setModalOpen(true)}
+                    className="btn btn-success mx-2"
+                  >
+                    All Active
+                  </button>
+                ) : null}
+                {selectedCaseStudies.length ? (
+                  <button
+                    onClick={() => setModalOpen(true)}
+                    className="btn btn-danger mx-2"
+                  >
+                    All Inactive
+                  </button>
+                ) : null}
+                <button
+                  onClick={() => navigate("/add-casestudy")}
+                  className="btn btn-primary"
+                >
                   Add CaseStudy
                 </button>
               </div>

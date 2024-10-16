@@ -27,7 +27,15 @@ export default function TestimonialList() {
 
   const filter = ["All", "Active", "Inactive"];
 
-  const [err, data] = useSetTimeout("testimonials", page - 1, limit, searchTerm, searchKey, statusFilter, siteId);
+  const [err, data] = useSetTimeout(
+    "testimonials",
+    page - 1,
+    limit,
+    searchTerm,
+    searchKey,
+    statusFilter,
+    siteId
+  );
 
   useEffect(() => {
     if (data) {
@@ -62,7 +70,9 @@ export default function TestimonialList() {
       const { error } = await res.json();
 
       if (res.ok) {
-        setTestimonials((prevEnquiries) => prevEnquiries.filter((enq) => !selectedTestimonials.includes(enq._id)));
+        setTestimonials((prevEnquiries) =>
+          prevEnquiries.filter((enq) => !selectedTestimonials.includes(enq._id))
+        );
         alert({
           type: "success",
           title: "Deleted!",
@@ -100,14 +110,23 @@ export default function TestimonialList() {
     if (selectAll) {
       setSelectedTestimonials([]);
     } else {
-      setSelectedTestimonials(testimonials.map((testimonial) => testimonial._id));
+      setSelectedTestimonials(
+        testimonials.map((testimonial) => testimonial._id)
+      );
     }
     setSelectAll(!selectAll);
   };
 
   const headers = [
     {
-      label: <input className="form-check-input " type="checkbox" checked={selectAll} onChange={handleSelectAll} />,
+      label: (
+        <input
+          className="form-check-input "
+          type="checkbox"
+          checked={selectAll}
+          onChange={handleSelectAll}
+        />
+      ),
     },
     { label: "Name" },
     { label: "Status" },
@@ -130,7 +149,10 @@ export default function TestimonialList() {
       <span className="badge bg-danger">Inactive</span>
     ),
     <div key={testimonial._id}>
-      <button onClick={() => navigate(`/add-testimonial/${testimonial._id}`)} className="btn btn-primary me-1">
+      <button
+        onClick={() => navigate(`/add-testimonial/${testimonial._id}`)}
+        className="btn btn-primary me-1"
+      >
         Edit
       </button>
     </div>,
@@ -144,20 +166,29 @@ export default function TestimonialList() {
           <div className="card-header">
             <h3 className="card-title">All Testimonials List</h3>
             <div className="card-options d-flex gap-2">
-              {selectedTestimonials.length ? (
-                <button onClick={() => setModalOpen(true)} className="btn btn-danger">
-                  Delete Selected
-                </button>
-              ) : null}
               <div className="card-options">
-                <select className="form-select mx-2" onChange={(e) => setStatusFilter(e.target.value)}>
+                <select
+                  className="form-select mx-2"
+                  onChange={(e) => setStatusFilter(e.target.value)}
+                >
                   {filter.map((key, i) => (
                     <option key={i} value={key.toLowerCase()}>
                       {key}
                     </option>
                   ))}
                 </select>
-                <button onClick={() => navigate("/add-testimonial")} className="btn btn-primary">
+                {selectedTestimonials.length ? (
+                  <button
+                    onClick={() => setModalOpen(true)}
+                    className="btn btn-danger mx-2"
+                  >
+                    Delete Selected
+                  </button>
+                ) : null}
+                <button
+                  onClick={() => navigate("/add-testimonial")}
+                  className="btn btn-primary"
+                >
                   Add Testimonial
                 </button>
               </div>
