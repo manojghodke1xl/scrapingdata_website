@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Table from "../comps/table";
 import ConfirmationModal from "../comps/confirmation";
 import useSetTimeout from "../Hooks/useDebounce";
+import useGetAllSites from "../Hooks/useGetAllSites";
 
 export default function GuideList() {
   const navigate = useNavigate();
@@ -17,16 +18,12 @@ export default function GuideList() {
   const [totalCount, setTotalCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchKey, setSearchKey] = useState("");
+  const [siteId, setSiteId] = useState("");
+  const allsites = useGetAllSites();
 
   const searchAbleKeys = ["title"];
 
-  const [err, data] = useSetTimeout(
-    "guides",
-    page - 1,
-    limit,
-    searchTerm,
-    searchKey
-  );
+  const [err, data] = useSetTimeout("guides", page - 1, limit, searchTerm, searchKey, siteId);
 
   useEffect(() => {
     if (data) {
@@ -47,20 +44,15 @@ export default function GuideList() {
 
     setLoading(true);
     try {
-      const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/guide/${guideToDelete}`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: localStorage.getItem("auth"),
-          },
-        }
-      );
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/guide/${guideToDelete}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: localStorage.getItem("auth"),
+        },
+      });
       const { error } = await res.json();
       if (res.ok) {
-        setGuides((prevLists) =>
-          prevLists.filter((list) => list._id !== guideToDelete)
-        );
+        setGuides((prevLists) => prevLists.filter((list) => list._id !== guideToDelete));
         alert({
           type: "success",
           title: "Deleted!",
@@ -78,11 +70,7 @@ export default function GuideList() {
     }
   };
 
-  const headers = [
-    { label: "Title" },
-    { label: "status" },
-    { label: "Actions" },
-  ];
+  const headers = [{ label: "Title" }, { label: "status" }, { label: "Actions" }, { label: "Sites" }];
 
   const rows = guides.map((guide) => [
     guide.title,
@@ -92,19 +80,14 @@ export default function GuideList() {
       <span className="badge bg-danger">Inactive</span>
     ),
     <div key={guide._id}>
-      <button
-        onClick={() => navigate(`/add-guide/${guide._id}`)}
-        className="btn btn-primary  me-1"
-      >
+      <button onClick={() => navigate(`/add-guide/${guide._id}`)} className="btn btn-primary  me-1">
         Edit
       </button>
-      <button
-        onClick={() => openDeleteModal(guide._id)}
-        className="btn btn-danger"
-      >
+      <button onClick={() => openDeleteModal(guide._id)} className="btn btn-danger">
         Delete
       </button>
     </div>,
+    guide.sites.map((s) => `${s.name} (${s.host})`).join(", "),
   ]);
 
   const handlePageChange = (newPage) => setPage(newPage);
@@ -120,10 +103,7 @@ export default function GuideList() {
           <div className="card-header">
             <h3 className="card-title">All Guides List</h3>
             <div className="card-options">
-              <button
-                onClick={() => navigate("/add-guide")}
-                className="btn btn-primary"
-              >
+              <button onClick={() => navigate("/add-guide")} className="btn btn-primary">
                 Add Guide
               </button>
             </div>
@@ -139,6 +119,8 @@ export default function GuideList() {
               entriesPerPage={limit}
               setSearchTerm={setSearchTerm}
               setSearchKey={setSearchKey}
+              allsites={allsites}
+              setSiteId={setSiteId}
               searchAbleKeys={searchAbleKeys}
               onEntriesChange={handleLimitChange}
               totalCount={totalCount}

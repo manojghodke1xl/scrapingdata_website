@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Table from "../comps/table";
 import ConfirmationModal from "../comps/confirmation";
 import useSetTimeout from "../Hooks/useDebounce";
+import useGetAllSites from "../Hooks/useGetAllSites";
 
 export default function EnquiryList() {
   const { alert, setLoading } = useContext(GlobalContext);
@@ -17,16 +18,12 @@ export default function EnquiryList() {
   const [totalCount, setTotalCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchKey, setSearchKey] = useState("");
+  const [siteId, setSiteId] = useState("");
+  const allsites = useGetAllSites();
 
-  const searchAbleKeys = ["name", "email", "mobile", "service", "subject",'site'];
+  const searchAbleKeys = ["name", "email", "mobile", "service", "subject", "site"];
 
-  const [err, data] = useSetTimeout(
-    "enquiries",
-    page - 1,
-    limit,
-    searchTerm,
-    searchKey
-  );
+  const [err, data] = useSetTimeout("enquiries", page - 1, limit, searchTerm, searchKey, siteId);
 
   useEffect(() => {
     if (data) {
@@ -42,21 +39,16 @@ export default function EnquiryList() {
 
     setLoading(true);
     try {
-      const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/enquiry/${enquiryToDelete}`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: localStorage.getItem("auth"),
-          },
-        }
-      );
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/enquiry/${enquiryToDelete}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: localStorage.getItem("auth"),
+        },
+      });
       const { error } = await res.json();
 
       if (res.ok) {
-        setEnquiries((prevEnquiries) =>
-          prevEnquiries.filter((enq) => enq._id !== enquiryToDelete)
-        );
+        setEnquiries((prevEnquiries) => prevEnquiries.filter((enq) => enq._id !== enquiryToDelete));
         alert({
           type: "success",
           title: "Deleted!",
@@ -94,10 +86,7 @@ export default function EnquiryList() {
     enq.message,
     enq.site.name,
     <div key={enq._id}>
-      <button
-        onClick={() => navigate(`/enquiry/${enq._id}`)}
-        className="btn btn-primary me-1"
-      >
+      <button onClick={() => navigate(`/enquiry/${enq._id}`)} className="btn btn-primary me-1">
         View
       </button>
       <button
@@ -129,6 +118,8 @@ export default function EnquiryList() {
               entriesPerPage={limit}
               setSearchTerm={setSearchTerm}
               setSearchKey={setSearchKey}
+              allsites={allsites}
+              setSiteId={setSiteId}
               searchAbleKeys={searchAbleKeys}
               onEntriesChange={(newLimit) => {
                 setLimit(newLimit);

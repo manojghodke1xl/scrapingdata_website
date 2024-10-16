@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Table from "../comps/table";
 import ConfirmationModal from "../comps/confirmation";
 import useSetTimeout from "../Hooks/useDebounce";
+import useGetAllSites from "../Hooks/useGetAllSites";
 
 export default function TestimonialList() {
   const navigate = useNavigate();
@@ -17,16 +18,12 @@ export default function TestimonialList() {
   const [totalCount, setTotalCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchKey, setSearchKey] = useState("");
+  const [siteId, setSiteId] = useState("");
+  const allsites = useGetAllSites();
 
   const searchAbleKeys = ["name"];
 
-  const [err, data] = useSetTimeout(
-    "testimonials",
-    page - 1,
-    limit,
-    searchTerm,
-    searchKey
-  );
+  const [err, data] = useSetTimeout("testimonials", page - 1, limit, searchTerm, searchKey, siteId);
 
   useEffect(() => {
     if (data) {
@@ -47,20 +44,15 @@ export default function TestimonialList() {
 
     setLoading(true);
     try {
-      const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/testimonial/${testimonialToDelete}`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: localStorage.getItem("auth"),
-          },
-        }
-      );
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/testimonial/${testimonialToDelete}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: localStorage.getItem("auth"),
+        },
+      });
       const { error } = await res.json();
       if (res.ok) {
-        setTestimonials((prevLists) =>
-          prevLists.filter((list) => list._id !== testimonialToDelete)
-        );
+        setTestimonials((prevLists) => prevLists.filter((list) => list._id !== testimonialToDelete));
         alert({
           type: "success",
           title: "Deleted!",
@@ -78,11 +70,7 @@ export default function TestimonialList() {
     }
   };
 
-  const headers = [
-    { label: "Name" },
-    { label: "Status" },
-    { label: "Actions" },
-  ];
+  const headers = [{ label: "Name" }, { label: "Status" }, { label: "Actions" }, { label: "Sites" }];
 
   const rows = testimonials.map((testimonial) => [
     testimonial.name,
@@ -92,19 +80,14 @@ export default function TestimonialList() {
       <span className="badge bg-danger">Inactive</span>
     ),
     <div key={testimonial._id}>
-      <button
-        onClick={() => navigate(`/add-testimonial/${testimonial._id}`)}
-        className="btn btn-primary me-1"
-      >
+      <button onClick={() => navigate(`/add-testimonial/${testimonial._id}`)} className="btn btn-primary me-1">
         Edit
       </button>
-      <button
-        onClick={() => openDeleteModal(testimonial._id)}
-        className="btn btn-danger"
-      >
+      <button onClick={() => openDeleteModal(testimonial._id)} className="btn btn-danger">
         Delete
       </button>
     </div>,
+    testimonial.sites.map((s) => `${s.name} (${s.host})`).join(", "),
   ]);
 
   return (
@@ -114,10 +97,7 @@ export default function TestimonialList() {
           <div className="card-header">
             <h3 className="card-title">All Testimonials List</h3>
             <div className="card-options">
-              <button
-                onClick={() => navigate("/add-testimonial")}
-                className="btn btn-primary"
-              >
+              <button onClick={() => navigate("/add-testimonial")} className="btn btn-primary">
                 Add Testimonial
               </button>
             </div>
@@ -133,6 +113,8 @@ export default function TestimonialList() {
               entriesPerPage={limit}
               setSearchTerm={setSearchTerm}
               setSearchKey={setSearchKey}
+              allsites={allsites}
+              setSiteId={setSiteId}
               searchAbleKeys={searchAbleKeys}
               onEntriesChange={(newLimit) => {
                 setLimit(newLimit);

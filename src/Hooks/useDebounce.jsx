@@ -1,20 +1,18 @@
 import { useState, useEffect, useRef, useContext } from "react";
 import { GlobalContext } from "../GlobalContext";
 
-const useSetTimeout = (apiUrl, page, limit, val, key, delay = 500) => {
+const useSetTimeout = (apiUrl, page, limit, val, key, site, delay = 500) => {
   const { setLoading } = useContext(GlobalContext);
   const timeOutRef = useRef(0);
   const [error, setError] = useState(null);
   const [data, setData] = useState(null);
 
   useEffect(() => {
-      timeOutRef.current = setTimeout(async () => {
-        setLoading(true);
+    timeOutRef.current = setTimeout(async () => {
+      setLoading(true);
       try {
         const res = await fetch(
-          `${
-            import.meta.env.VITE_API_URL
-          }/${apiUrl}?p=${page}&n=${limit}&s=${val}&k=${key}`,
+          `${import.meta.env.VITE_API_URL}/${apiUrl}?p=${page}&n=${limit}&s=${val}&k=${key}&ws=${site}`,
           {
             method: "GET",
             headers: {
@@ -25,8 +23,7 @@ const useSetTimeout = (apiUrl, page, limit, val, key, delay = 500) => {
 
         const { data, error } = await res.json();
 
-        if (!res.ok)
-          throw new Error(`HTTP error! status: ${res.status} - ${error}`);
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status} - ${error}`);
 
         setData(data);
       } catch (err) {
@@ -36,7 +33,7 @@ const useSetTimeout = (apiUrl, page, limit, val, key, delay = 500) => {
       }
     }, delay);
     return () => clearTimeout(timeOutRef.current);
-  }, [val, delay, apiUrl, page, limit, key, setLoading]);
+  }, [val, delay, apiUrl, page, limit, key, setLoading, site]);
 
   return [error, data];
 };

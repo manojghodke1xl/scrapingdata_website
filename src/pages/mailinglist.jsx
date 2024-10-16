@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Table from "../comps/table";
 import ConfirmationModal from "../comps/confirmation";
 import useSetTimeout from "../Hooks/useDebounce";
+import useGetAllSites from "../Hooks/useGetAllSites";
 
 export default function MailingList() {
   const navigate = useNavigate();
@@ -17,16 +18,12 @@ export default function MailingList() {
   const [totalCount, setTotalCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchKey, setSearchKey] = useState("");
+  const [siteId, setSiteId] = useState("");
+  const allsites = useGetAllSites();
 
   const searchAbleKeys = ["email"];
 
-  const [err, data] = useSetTimeout(
-    "lists",
-    page - 1,
-    limit,
-    searchTerm,
-    searchKey
-  );
+  const [err, data] = useSetTimeout("lists", page - 1, limit, searchTerm, searchKey, siteId);
 
   useEffect(() => {
     if (data) {
@@ -37,11 +34,7 @@ export default function MailingList() {
     }
   }, [data, err, alert]);
 
-  const headers = [
-    { label: "Customer Email" },
-    { label: "Site Name" },
-    { label: "Actions" },
-  ];
+  const headers = [{ label: "Customer Email" }, { label: "Site Name" }, { label: "Actions" }];
 
   const rows = lists.map((lst) => [
     lst.email,
@@ -53,10 +46,7 @@ export default function MailingList() {
       >
         View
       </button>
-      <button
-        onClick={() => openDeleteModal(lst._id)}
-        className="btn btn-danger "
-      >
+      <button onClick={() => openDeleteModal(lst._id)} className="btn btn-danger ">
         Delete
       </button>
     </div>,
@@ -83,9 +73,7 @@ export default function MailingList() {
       );
       const { error } = await res.json();
       if (res.ok) {
-        setLists((prevLists) =>
-          prevLists.filter((list) => list._id !== mailingToDelete)
-        );
+        setLists((prevLists) => prevLists.filter((list) => list._id !== mailingToDelete));
         alert({
           type: "success",
           title: "Deleted!",
@@ -121,6 +109,8 @@ export default function MailingList() {
               entriesPerPage={limit}
               setSearchTerm={setSearchTerm}
               setSearchKey={setSearchKey}
+              allsites={allsites}
+              setSiteId={setSiteId}
               searchAbleKeys={searchAbleKeys}
               onEntriesChange={(newLimit) => {
                 setLimit(newLimit);

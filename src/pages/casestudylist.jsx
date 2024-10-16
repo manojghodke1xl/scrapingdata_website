@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Table from "../comps/table";
 import ConfirmationModal from "../comps/confirmation";
 import useSetTimeout from "../Hooks/useDebounce";
+import useGetAllSites from "../Hooks/useGetAllSites";
 
 export default function CaseStudyList() {
   const navigate = useNavigate();
@@ -17,16 +18,12 @@ export default function CaseStudyList() {
   const [totalCount, setTotalCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchKey, setSearchKey] = useState("");
+  const [siteId, setSiteId] = useState("");
+  const allsites = useGetAllSites();
 
   const searchAbleKeys = ["title"];
 
-  const [err, data] = useSetTimeout(
-    "casestudies",
-    page - 1,
-    limit,
-    searchTerm,
-    searchKey
-  );
+  const [err, data] = useSetTimeout("casestudies", page - 1, limit, searchTerm, searchKey, siteId);
 
   useEffect(() => {
     if (data) {
@@ -47,20 +44,15 @@ export default function CaseStudyList() {
 
     setLoading(true);
     try {
-      const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/casestudy/${casestudyToDelete}`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: localStorage.getItem("auth"),
-          },
-        }
-      );
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/casestudy/${casestudyToDelete}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: localStorage.getItem("auth"),
+        },
+      });
       const { error } = await res.json();
       if (res.ok) {
-        setCaseStudies((prevLists) =>
-          prevLists.filter((list) => list._id !== casestudyToDelete)
-        );
+        setCaseStudies((prevLists) => prevLists.filter((list) => list._id !== casestudyToDelete));
         alert({
           type: "success",
           title: "Deleted!",
@@ -78,30 +70,25 @@ export default function CaseStudyList() {
     }
   };
 
-  const headers = [{ label: "Title" }, { label: "Status" }, { label: "Actions" }];
+  const headers = [{ label: "Title" }, { label: "Status" }, { label: "Actions" }, { label: "Sites" }];
 
   const rows = caseStudies.map((casestudy) => [
     casestudy.title,
 
     casestudy.isActive === true ? (
-      <span className="badge bg-success">Active</span>  
+      <span className="badge bg-success">Active</span>
     ) : (
       <span className="badge bg-danger">Inactive</span>
     ),
-      <div key={casestudy._id}>
-      <button
-        onClick={() => navigate(`/add-casestudy/${casestudy._id}`)}
-        className="btn btn-primary me-1"
-      >
+    <div key={casestudy._id}>
+      <button onClick={() => navigate(`/add-casestudy/${casestudy._id}`)} className="btn btn-primary me-1">
         Edit
       </button>
-      <button
-        onClick={() => openDeleteModal(casestudy._id)}
-        className="btn btn-danger"
-      >
+      <button onClick={() => openDeleteModal(casestudy._id)} className="btn btn-danger">
         Delete
       </button>
     </div>,
+    casestudy.sites.map((s) => `${s.name} (${s.host})`).join(", "),
   ]);
 
   return (
@@ -111,10 +98,7 @@ export default function CaseStudyList() {
           <div className="card-header">
             <h3 className="card-title">All Case Study List</h3>
             <div className="card-options">
-              <button
-                onClick={() => navigate("/add-casestudy")}
-                className="btn btn-primary"
-              >
+              <button onClick={() => navigate("/add-casestudy")} className="btn btn-primary">
                 Add CaseStudy
               </button>
             </div>
@@ -130,6 +114,8 @@ export default function CaseStudyList() {
               entriesPerPage={limit}
               setSearchTerm={setSearchTerm}
               setSearchKey={setSearchKey}
+              allsites={allsites}
+              setSiteId={setSiteId}
               searchAbleKeys={searchAbleKeys}
               onEntriesChange={(newLimit) => {
                 setLimit(newLimit);

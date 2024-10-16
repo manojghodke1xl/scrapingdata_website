@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Table from "../comps/table";
 import ConfirmationModal from "../comps/confirmation";
 import useSetTimeout from "../Hooks/useDebounce";
+import useGetAllSites from "../Hooks/useGetAllSites";
 
 export default function PopupList() {
   const navigate = useNavigate();
@@ -17,16 +18,12 @@ export default function PopupList() {
   const [totalCount, setTotalCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchKey, setSearchKey] = useState("");
+  const [siteId, setSiteId] = useState("");
+  const allsites = useGetAllSites();
 
   const searchAbleKeys = ["name", "host"];
 
-  const [err, data] = useSetTimeout(
-    "popups",
-    page - 1,
-    limit,
-    searchTerm,
-    searchKey
-  );
+  const [err, data] = useSetTimeout("popups", page - 1, limit, searchTerm, searchKey, siteId);
 
   const openDeleteModal = (id) => {
     setPopupToDelete(id);
@@ -38,20 +35,15 @@ export default function PopupList() {
 
     setLoading(true);
     try {
-      const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/popup/${popupToDelete}`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: localStorage.getItem("auth"),
-          },
-        }
-      );
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/popup/${popupToDelete}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: localStorage.getItem("auth"),
+        },
+      });
       const { error } = await res.json();
       if (res.ok) {
-        setPopups((prevLists) =>
-          prevLists.filter((list) => list._id !== popupToDelete)
-        );
+        setPopups((prevLists) => prevLists.filter((list) => list._id !== popupToDelete));
         alert({
           type: "success",
           title: "Deleted!",
@@ -84,6 +76,7 @@ export default function PopupList() {
     { label: "Type" },
     { label: "status" },
     { label: "Actions" },
+    { label: "Sites" },
   ];
 
   const rows = popups.map((popup) => [
@@ -96,19 +89,14 @@ export default function PopupList() {
       <span className="badge bg-danger">Inactive</span>
     ),
     <div key={popup._id}>
-      <button
-        onClick={() => navigate(`/add-popup/${popup._id}`)}
-        className="btn btn-primary  me-1"
-      >
+      <button onClick={() => navigate(`/add-popup/${popup._id}`)} className="btn btn-primary  me-1">
         Edit
       </button>
-      <button
-        onClick={() => openDeleteModal(popup._id)}
-        className="btn btn-danger"
-      >
+      <button onClick={() => openDeleteModal(popup._id)} className="btn btn-danger">
         Delete
       </button>
     </div>,
+    `${popup.site.name} (${popup.site.host})`,
   ]);
 
   return (
@@ -118,10 +106,7 @@ export default function PopupList() {
           <div className="card-header">
             <h3 className="card-title">All Popups List</h3>
             <div className="card-options">
-              <button
-                onClick={() => navigate("/add-popup")}
-                className="btn btn-primary"
-              >
+              <button onClick={() => navigate("/add-popup")} className="btn btn-primary">
                 Add Popup
               </button>
             </div>
@@ -137,6 +122,8 @@ export default function PopupList() {
               entriesPerPage={limit}
               setSearchTerm={setSearchTerm}
               setSearchKey={setSearchKey}
+              allsites={allsites}
+              setSiteId={setSiteId}
               searchAbleKeys={searchAbleKeys}
               onEntriesChange={(newLimit) => {
                 setLimit(newLimit);

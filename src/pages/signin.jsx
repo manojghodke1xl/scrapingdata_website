@@ -3,13 +3,12 @@ import { Link, useNavigate } from "react-router-dom";
 import { GlobalContext } from "../GlobalContext";
 
 export default function SignIn() {
-
   const navigate = useNavigate();
   const { alert, dispatch, setLoading } = useContext(GlobalContext);
 
   const [show, setShow] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState(import.meta.env.DEV ? "envato@1xl.com" : "");
+  const [password, setPassword] = useState(import.meta.env.DEV ? "Hitesh@1536" : "");
 
   const loginAccount = async (e) => {
     e.preventDefault();
