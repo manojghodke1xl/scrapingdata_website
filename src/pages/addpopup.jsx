@@ -37,9 +37,9 @@ export default function AddPopup() {
   const [availableSites, setAvailableSites] = useState([]);
   const [errors, setErrors] = useState({});
 
-  const positions = ["center-popup", "center-popup", "topbar-notifications"];
-  const deviceTypes = ["all", "desktop", "mobile"];
-  const contentTypes = ["basic", "guide", "casestudy"];
+  const positions = ["Center-Popup", "Topbar-Notifications"];
+  const deviceTypes = ["All", "Desktop", "Mobile"];
+  const contentTypes = ["Basic", "Guide", "Casestudy"];
 
   useLayoutEffect(() => {
     if (!auth.isSuperAdmin) navigate("/dashboard");
@@ -273,7 +273,7 @@ export default function AddPopup() {
                   >
                     <option value={""}>Select</option>
                     {positions.map((position, i) => (
-                      <option key={i} value={position}>
+                      <option key={i} value={position.toLowerCase()}>
                         {position}
                       </option>
                     ))}
@@ -347,7 +347,7 @@ export default function AddPopup() {
                     }
                   >
                     {deviceTypes.map((device, i) => (
-                      <option key={i} value={device}>
+                      <option key={i} value={device.toLowerCase()}>
                         {device}
                       </option>
                     ))}
@@ -356,7 +356,7 @@ export default function AddPopup() {
                 <div className="col-md-3">
                   <label className="form-label">Publish Date</label>
                   <input
-                    type="date"
+                    type="datetime-local"
                     name="publishDate"
                     className="form-control"
                     placeholder="Title"
@@ -372,7 +372,7 @@ export default function AddPopup() {
                 <div className="col-md-3">
                   <label className="form-label">Archive Date</label>
                   <input
-                    type="date"
+                    type="datetime-local"
                     name="archiveDate"
                     className="form-control"
                     placeholder="Title"
@@ -400,7 +400,7 @@ export default function AddPopup() {
                     }
                   >
                     {contentTypes.map((contentType, i) => (
-                      <option key={i} value={contentType}>
+                      <option key={i} value={contentType.toLowerCase()}>
                         {contentType}
                       </option>
                     ))}
