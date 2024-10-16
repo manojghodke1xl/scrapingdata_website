@@ -88,7 +88,7 @@ export default function GuideList() {
       if (prevSelected.includes(guideId)) {
         updatedSelected = prevSelected.filter((id) => id !== guideId);
       } else {
-        updatedSelected = [...prevSelected, enqId];
+        updatedSelected = [...prevSelected, guideId];
       }
       if (updatedSelected.length !== guides.length) {
         setSelectAll(false);

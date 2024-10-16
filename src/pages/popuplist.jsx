@@ -94,7 +94,7 @@ export default function PopupList() {
       if (prevSelected.includes(popupId)) {
         updatedSelected = prevSelected.filter((id) => id !== popupId);
       } else {
-        updatedSelected = [...prevSelected, enqId];
+        updatedSelected = [...prevSelected, popupId];
       }
       if (updatedSelected.length !== popups.length) {
         setSelectAll(false);

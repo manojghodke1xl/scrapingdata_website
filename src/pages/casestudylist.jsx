@@ -91,7 +91,7 @@ export default function CaseStudyList() {
         if (prevSelected.includes(casestudyId)) {
           updatedSelected = prevSelected.filter((id) => id !== casestudyId);
         } else {
-          updatedSelected = [...prevSelected, enqId];
+          updatedSelected = [...prevSelected, casestudyId];
         }
         if (updatedSelected.length !== caseStudies.length) {
           setSelectAll(false);

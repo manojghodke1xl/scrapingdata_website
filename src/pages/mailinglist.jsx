@@ -85,12 +85,12 @@ export default function MailingList() {
     }
   };
 
-  const handleCheckboxChange = (enqId) => {
+  const handleCheckboxChange = (listId) => {
     setSelectedLists((prevSelected) => {
-      if (prevSelected.includes(enqId)) {
-        return prevSelected.filter((id) => id !== enqId);
+      if (prevSelected.includes(listId)) {
+        return prevSelected.filter((id) => id !== listId);
       } else {
-        return [...prevSelected, enqId];
+        return [...prevSelected, listId];
       }
     });
   };

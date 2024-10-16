@@ -88,7 +88,7 @@ export default function TestimonialList() {
       if (prevSelected.includes(testimonialId)) {
         updatedSelected = prevSelected.filter((id) => id !== testimonialId);
       } else {
-        updatedSelected = [...prevSelected, enqId];
+        updatedSelected = [...prevSelected, testimonialId];
       }
       if (updatedSelected.length !== testimonials.length) {
         setSelectAll(false);
