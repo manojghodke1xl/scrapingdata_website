@@ -1,13 +1,14 @@
-import { useContext, useEffect, useLayoutEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { GlobalContext } from "../GlobalContext";
 import { useNavigate } from "react-router-dom";
 import Table from "../comps/table";
 import ConfirmationModal from "../comps/confirmation";
 import useSetTimeout from "../Hooks/useDebounce";
+import useGetAllSites from "../Hooks/useGetAllSites";
 
 export default function PopupList() {
   const navigate = useNavigate();
-  const { auth, alert, setLoading } = useContext(GlobalContext);
+  const { alert, setLoading } = useContext(GlobalContext);
 
   const [popups, setPopups] = useState([]);
   const [page, setPage] = useState(1);
@@ -19,18 +20,13 @@ export default function PopupList() {
   const [selectedPopups, setSelectedPopups] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
   const [statusFilter, setStatusFilter] = useState("All");
+  const [siteId, setSiteId] = useState("");
+  const allsites = useGetAllSites();
 
   const searchAbleKeys = ["name", "host"];
   const filter = ["All", "Active", "Inactive"];
 
-  const [err, data] = useSetTimeout(
-    "Popups",
-    page - 1,
-    limit,
-    searchTerm,
-    searchKey,
-    statusFilter
-  );
+  const [err, data] = useSetTimeout("Popups", page - 1, limit, searchTerm, searchKey, statusFilter, siteId);
 
   useEffect(() => {
     if (data) {
@@ -65,9 +61,7 @@ export default function PopupList() {
       const { error } = await res.json();
 
       if (res.ok) {
-        setPopups((prevEnquiries) =>
-          prevEnquiries.filter((enq) => !selectedPopups.includes(enq._id))
-        );
+        setPopups((prevEnquiries) => prevEnquiries.filter((enq) => !selectedPopups.includes(enq._id)));
         alert({
           type: "success",
           title: "Deleted!",
@@ -112,24 +106,19 @@ export default function PopupList() {
 
   const headers = [
     {
-      label: (
-        <input
-          className="form-check-input "
-          type="checkbox"
-          checked={selectAll}
-          onChange={handleSelectAll}
-        />
-      ),
+      label: <input className="form-check-input " type="checkbox" checked={selectAll} onChange={handleSelectAll} />,
     },
     { label: "Name" },
     { label: "Device Type" },
     { label: "Type" },
     { label: "status" },
     { label: "Actions" },
+    { label: "Sites" },
   ];
 
   const rows = popups.map((popup) => [
     <input
+      key={popup._id}
       className="form-check-input"
       type="checkbox"
       checked={selectedPopups.includes(popup._id)}
@@ -144,13 +133,11 @@ export default function PopupList() {
       <span className="badge bg-danger">Inactive</span>
     ),
     <div key={popup._id}>
-      <button
-        onClick={() => navigate(`/add-popup/${popup._id}`)}
-        className="btn btn-primary  me-1"
-      >
+      <button onClick={() => navigate(`/add-popup/${popup._id}`)} className="btn btn-primary  me-1">
         Edit
       </button>
     </div>,
+    `${popup.site.name} (${popup.site.host})`,
   ]);
 
   return (
@@ -161,28 +148,19 @@ export default function PopupList() {
             <h3 className="card-title">All Popups List</h3>
             <div className="card-options d-flex gap-2">
               {selectedPopups.length ? (
-                <button
-                  onClick={() => setModalOpen(true)}
-                  className="btn btn-danger"
-                >
+                <button onClick={() => setModalOpen(true)} className="btn btn-danger">
                   Delete Selected
                 </button>
               ) : null}
               <div className="card-options">
-                <select
-                  className="form-select mx-2"
-                  onChange={(e) => setStatusFilter(e.target.value)}
-                >
+                <select className="form-select mx-2" onChange={(e) => setStatusFilter(e.target.value)}>
                   {filter.map((key, i) => (
                     <option key={i} value={key.toLowerCase()}>
                       {key}
                     </option>
                   ))}
                 </select>
-                <button
-                  onClick={() => navigate("/add-popup")}
-                  className="btn btn-primary"
-                >
+                <button onClick={() => navigate("/add-popup")} className="btn btn-primary">
                   Add Popup
                 </button>
               </div>
@@ -198,6 +176,8 @@ export default function PopupList() {
               entriesPerPage={limit}
               setSearchTerm={setSearchTerm}
               setSearchKey={setSearchKey}
+              allsites={allsites}
+              setSiteId={setSiteId}
               searchAbleKeys={searchAbleKeys}
               onEntriesChange={(newLimit) => {
                 setLimit(newLimit);

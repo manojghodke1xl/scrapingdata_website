@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Table from "../comps/table";
 import ConfirmationModal from "../comps/confirmation";
 import useSetTimeout from "../Hooks/useDebounce";
+import useGetAllSites from "../Hooks/useGetAllSites";
 
 export default function MailingList() {
   const navigate = useNavigate();
@@ -12,23 +13,18 @@ export default function MailingList() {
   const [lists, setLists] = useState([]);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(8);
-  const [mailingToDelete, setMailingToDelete] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [totalCount, setTotalCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchKey, setSearchKey] = useState("");
   const [selectedLists, setSelectedLists] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
+  const [siteId, setSiteId] = useState("");
+  const allsites = useGetAllSites();
 
   const searchAbleKeys = ["email"];
 
-  const [err, data] = useSetTimeout(
-    "lists",
-    page - 1,
-    limit,
-    searchTerm,
-    searchKey
-  );
+  const [err, data] = useSetTimeout("lists", page - 1, limit, searchTerm, searchKey, "", siteId);
 
   useEffect(() => {
     if (data) {
@@ -38,8 +34,6 @@ export default function MailingList() {
       alert({ type: "warning", title: "Warning!", text: err.message });
     }
   }, [data, err, alert]);
-
-  
 
   const deleteMailingList = async () => {
     if (!selectedLists.length) {
@@ -65,9 +59,7 @@ export default function MailingList() {
       const { error } = await res.json();
 
       if (res.ok) {
-        setLists((prevList) =>
-          prevList.filter((enq) => !selectedLists.includes(enq._id))
-        );
+        setLists((prevList) => prevList.filter((enq) => !selectedLists.includes(enq._id)));
         alert({
           type: "success",
           title: "Deleted!",
@@ -106,9 +98,7 @@ export default function MailingList() {
 
   const headers = [
     {
-      label: (
-        <input type="checkbox" checked={selectAll} onChange={handleSelectAll} />
-      ),
+      label: <input className="form-check-input" type="checkbox" checked={selectAll} onChange={handleSelectAll} />,
     },
     { label: "Customer Email" },
     { label: "Site Name" },
@@ -117,6 +107,8 @@ export default function MailingList() {
 
   const rows = lists.map((lst) => [
     <input
+      key={lst._id}
+      className="form-check-input"
       type="checkbox"
       checked={selectedLists.includes(lst._id)}
       onChange={() => handleCheckboxChange(lst._id)}
@@ -124,10 +116,7 @@ export default function MailingList() {
     lst.email,
     lst.site.name,
     <div key={lst._id}>
-      <button
-        onClick={() => navigate(`/mailing/${lst._id}`)}
-        className="btn btn-primary me-1" 
-      >
+      <button onClick={() => navigate(`/mailing/${lst._id}`)} className="btn btn-primary me-1">
         View
       </button>
     </div>,
@@ -141,10 +130,7 @@ export default function MailingList() {
             <h3 className="card-title">All Mailing Lists</h3>
             <div className="card-options">
               {selectedLists.length ? (
-                <button
-                  onClick={() => setModalOpen(true)}
-                  className="btn btn-danger"
-                >
+                <button onClick={() => setModalOpen(true)} className="btn btn-danger">
                   Delete Selected
                 </button>
               ) : (
@@ -163,6 +149,8 @@ export default function MailingList() {
               entriesPerPage={limit}
               setSearchTerm={setSearchTerm}
               setSearchKey={setSearchKey}
+              allsites={allsites}
+              setSiteId={setSiteId}
               searchAbleKeys={searchAbleKeys}
               onEntriesChange={setLimit}
               totalCount={totalCount}

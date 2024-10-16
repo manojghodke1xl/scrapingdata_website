@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Table from "../comps/table";
 import ConfirmationModal from "../comps/confirmation";
 import useSetTimeout from "../Hooks/useDebounce";
+import useGetAllSites from "../Hooks/useGetAllSites";
 
 export default function EnquiryList() {
   const { alert, setLoading } = useContext(GlobalContext);
@@ -18,23 +19,12 @@ export default function EnquiryList() {
   const [searchKey, setSearchKey] = useState("");
   const [selectedEnquiries, setSelectedEnquiries] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
+  const [siteId, setSiteId] = useState("");
+  const allsites = useGetAllSites();
 
-  const searchAbleKeys = [
-    "name",
-    "email",
-    "mobile",
-    "service",
-    "subject",
-    "site",
-  ];
+  const searchAbleKeys = ["name", "email", "mobile", "service", "subject", "site"];
 
-  const [err, data] = useSetTimeout(
-    "enquiries",
-    page - 1,
-    limit,
-    searchTerm,
-    searchKey
-  );
+  const [err, data] = useSetTimeout("enquiries", page - 1, limit, searchTerm, searchKey, "", siteId);
 
   useEffect(() => {
     if (data) {
@@ -69,9 +59,7 @@ export default function EnquiryList() {
       const { error } = await res.json();
 
       if (res.ok) {
-        setEnquiries((prevEnquiries) =>
-          prevEnquiries.filter((enq) => !selectedEnquiries.includes(enq._id))
-        );
+        setEnquiries((prevEnquiries) => prevEnquiries.filter((enq) => !selectedEnquiries.includes(enq._id)));
         alert({
           type: "success",
           title: "Deleted!",
@@ -100,31 +88,23 @@ export default function EnquiryList() {
       if (updatedSelected.length !== enquiries.length) {
         setSelectAll(false);
       }
-  
+
       return updatedSelected;
     });
   };
-  
 
   const handleSelectAll = () => {
     if (selectAll) {
-      setSelectedEnquiries([]); 
+      setSelectedEnquiries([]);
     } else {
-      setSelectedEnquiries(enquiries.map((enq) => enq._id)); 
+      setSelectedEnquiries(enquiries.map((enq) => enq._id));
     }
-    setSelectAll(!selectAll); 
+    setSelectAll(!selectAll);
   };
 
   const headers = [
     {
-      label: (
-        <input
-        className="form-check-input"
-          type="checkbox"
-          checked={selectAll}
-          onChange={handleSelectAll}
-        />
-      ),
+      label: <input className="form-check-input" type="checkbox" checked={selectAll} onChange={handleSelectAll} />,
     },
     { label: "Customer Name" },
     { label: "Customer Email" },
@@ -133,11 +113,12 @@ export default function EnquiryList() {
     { label: "Enquiry Subject" },
     { label: "Enquiry Message" },
     { label: "Site Name" },
-    { label: "Actions" }, 
+    { label: "Actions" },
   ];
 
   const rows = enquiries.map((enq) => [
     <input
+      key={enq._id}
       className="form-check-input"
       type="checkbox"
       checked={selectedEnquiries.includes(enq._id)}
@@ -150,12 +131,11 @@ export default function EnquiryList() {
     enq.subject,
     enq.message,
     enq.site.name,
-    <button
-      onClick={() => navigate(`/enquiry/${enq._id}`)}
-      className="btn btn-primary me-1"
-    >
-      View
-    </button>,
+    <div key={enq._id}>
+      <button onClick={() => navigate(`/enquiry/${enq._id}`)} className="btn btn-primary me-1">
+        View
+      </button>
+    </div>,
   ]);
 
   return (
@@ -166,10 +146,7 @@ export default function EnquiryList() {
             <h3 className="card-title">All Enquiries</h3>
             <div className="card-options">
               {selectedEnquiries.length ? (
-                <button
-                  onClick={() => setModalOpen(true)}
-                  className="btn btn-danger"
-                >
+                <button onClick={() => setModalOpen(true)} className="btn btn-danger">
                   Delete Selected
                 </button>
               ) : (
@@ -188,6 +165,8 @@ export default function EnquiryList() {
               entriesPerPage={limit}
               setSearchTerm={setSearchTerm}
               setSearchKey={setSearchKey}
+              allsites={allsites}
+              setSiteId={setSiteId}
               searchAbleKeys={searchAbleKeys}
               onEntriesChange={(newLimit) => {
                 setLimit(newLimit);

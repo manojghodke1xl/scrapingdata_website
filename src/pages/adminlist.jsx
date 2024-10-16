@@ -3,6 +3,7 @@ import { GlobalContext } from "../GlobalContext";
 import { useNavigate } from "react-router-dom";
 import Table from "../comps/table";
 import useSetTimeout from "../Hooks/useDebounce";
+import useGetAllSites from "../Hooks/useGetAllSites";
 
 export default function AdminList() {
   const navigate = useNavigate();
@@ -15,18 +16,14 @@ export default function AdminList() {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchKey, setSearchKey] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
+  const [siteId, setSiteId] = useState("");
+  const allsites = useGetAllSites();
 
   const searchAbleKeys = ["name", "email"];
   const filter = ["All", "Active", "Inactive"];
 
-  const [err, data] = useSetTimeout(
-    "admins",
-    page - 1,
-    limit,
-    searchTerm,
-    searchKey,
-    statusFilter
-  );
+  const [err, data] = useSetTimeout("admins", page - 1, limit, searchTerm, searchKey,
+    statusFilter, siteId);
 
   useEffect(() => {
     if (data) {
@@ -46,6 +43,7 @@ export default function AdminList() {
     { label: "Admin Email" },
     { label: "Status" },
     { label: "Actions" },
+    { label: "Sites" },
   ];
 
   const rows = admins.map((admin) => [
@@ -56,13 +54,12 @@ export default function AdminList() {
     ) : (
       <span className="badge bg-success">Active</span>
     ),
-    <button
-      key={admin._id}
-      onClick={() => navigate(`/add-admin/${admin._id}`)}
-      className="btn btn-primary "
-    >
+    <button key={admin._id} onClick={() => navigate(`/add-admin/${admin._id}`)} className="btn btn-primary ">
       Edit
     </button>,
+    admin.isSuperAdmin
+      ? allsites.map((s) => `${s.name} (${s.host})`).join(", ")
+      : admin.sites.map((s) => `${s.name} (${s.host})`).join(", "),
   ]);
 
   return (
@@ -82,10 +79,7 @@ export default function AdminList() {
                   </option>
                 ))}
               </select>
-              <button
-                onClick={() => navigate("/add-admin")}
-                className="btn btn-primary "
-              >
+              <button onClick={() => navigate("/add-admin")} className="btn btn-primary ">
                 Add Admin
               </button>
             </div>
@@ -93,13 +87,15 @@ export default function AdminList() {
 
           <div className="table-responsive">
             <Table
-              headers={headers}
               rows={rows}
+              headers={headers}
               currentPage={page}
               totalPages={Math.ceil(totalCount / limit)}
               onPageChange={setPage}
               entriesPerPage={limit}
               setSearchTerm={setSearchTerm}
+              allsites={allsites}
+              setSiteId={setSiteId}
               setSearchKey={setSearchKey}
               searchAbleKeys={searchAbleKeys}
               onEntriesChange={setLimit}

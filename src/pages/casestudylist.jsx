@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Table from "../comps/table";
 import ConfirmationModal from "../comps/confirmation";
 import useSetTimeout from "../Hooks/useDebounce";
+import useGetAllSites from "../Hooks/useGetAllSites";
 
 export default function CaseStudyList() {
   const navigate = useNavigate();
@@ -12,7 +13,6 @@ export default function CaseStudyList() {
   const [caseStudies, setCaseStudies] = useState([]);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(8);
-  const [casestudyToDelete, setCaseStudyToDelete] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [totalCount, setTotalCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
@@ -20,18 +20,13 @@ export default function CaseStudyList() {
   const [selectedCaseStudies, setSelectedCaseStudies] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
   const [statusFilter, setStatusFilter] = useState("All");
+  const [siteId, setSiteId] = useState("");
+  const allsites = useGetAllSites();
 
   const searchAbleKeys = ["title"];
   const filter = ["All", "Active", "Inactive"];
 
-  const [err, data] = useSetTimeout(
-    "casestudies",
-    page - 1,
-    limit,
-    searchTerm,
-    searchKey,
-    statusFilter
-  );
+  const [err, data] = useSetTimeout("casestudies", page - 1, limit, searchTerm, searchKey, statusFilter, siteId);
 
   useEffect(() => {
     if (data) {
@@ -67,9 +62,7 @@ export default function CaseStudyList() {
 
       if (res.ok) {
         setCaseStudies((prevCaseStudies) =>
-          prevCaseStudies.filter(
-            (casestudy) => !selectedCaseStudies.includes(casestudy._id)
-          )
+          prevCaseStudies.filter((casestudy) => !selectedCaseStudies.includes(casestudy._id))
         );
         alert({
           type: "success",
@@ -115,22 +108,17 @@ export default function CaseStudyList() {
 
   const headers = [
     {
-      label: (
-        <input
-          className="form-check-input "
-          type="checkbox"
-          checked={selectAll}
-          onChange={handleSelectAll}
-        />
-      ),
+      label: <input className="form-check-input " type="checkbox" checked={selectAll} onChange={handleSelectAll} />,
     },
     { label: "Title" },
     { label: "Status" },
     { label: "Actions" },
+    { label: "Sites" },
   ];
 
   const rows = caseStudies.map((casestudy) => [
     <input
+      key={casestudy._id}
       className="form-check-input"
       type="checkbox"
       checked={selectedCaseStudies.includes(casestudy._id)}
@@ -143,13 +131,11 @@ export default function CaseStudyList() {
       <span className="badge bg-danger">Inactive</span>
     ),
     <div key={casestudy._id}>
-      <button
-        onClick={() => navigate(`/add-casestudy/${casestudy._id}`)}
-        className="btn btn-primary me-1"
-      >
+      <button onClick={() => navigate(`/add-casestudy/${casestudy._id}`)} className="btn btn-primary me-1">
         Edit
       </button>
     </div>,
+    casestudy.sites.map((s) => `${s.name} (${s.host})`).join(", "),
   ]);
 
   return (
@@ -160,28 +146,19 @@ export default function CaseStudyList() {
             <h3 className="card-title">All Case Study List</h3>
             <div className="card-options d-flex gap-2">
               {selectedCaseStudies.length ? (
-                <button
-                  onClick={() => setModalOpen(true)}
-                  className="btn btn-danger"
-                >
+                <button onClick={() => setModalOpen(true)} className="btn btn-danger">
                   Delete Selected
                 </button>
               ) : null}
               <div className="card-options">
-                <select
-                  className="form-select mx-2"
-                  onChange={(e) => setStatusFilter(e.target.value)}
-                >
+                <select className="form-select mx-2" onChange={(e) => setStatusFilter(e.target.value)}>
                   {filter.map((key, i) => (
                     <option key={i} value={key.toLowerCase()}>
                       {key}
                     </option>
                   ))}
                 </select>
-                <button
-                  onClick={() => navigate("/add-casestudy")}
-                  className="btn btn-primary"
-                >
+                <button onClick={() => navigate("/add-casestudy")} className="btn btn-primary">
                   Add CaseStudy
                 </button>
               </div>
@@ -198,6 +175,8 @@ export default function CaseStudyList() {
               entriesPerPage={limit}
               setSearchTerm={setSearchTerm}
               setSearchKey={setSearchKey}
+              allsites={allsites}
+              setSiteId={setSiteId}
               searchAbleKeys={searchAbleKeys}
               onEntriesChange={(newLimit) => {
                 setLimit(newLimit);

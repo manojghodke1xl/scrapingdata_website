@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Table from "../comps/table";
 import ConfirmationModal from "../comps/confirmation";
 import useSetTimeout from "../Hooks/useDebounce";
+import useGetAllSites from "../Hooks/useGetAllSites";
 
 export default function GuideList() {
   const navigate = useNavigate();
@@ -19,18 +20,13 @@ export default function GuideList() {
   const [selectedGuides, setSelectedGuides] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
   const [statusFilter, setStatusFilter] = useState("All");
+  const [siteId, setSiteId] = useState("");
+  const allsites = useGetAllSites();
 
   const searchAbleKeys = ["title"];
   const filter = ["All", "Active", "Inactive"];
 
-  const [err, data] = useSetTimeout(
-    "guides",
-    page - 1,
-    limit,
-    searchTerm,
-    searchKey,
-    statusFilter
-  );
+  const [err, data] = useSetTimeout("guides", page - 1, limit, searchTerm, searchKey, statusFilter, siteId);
 
   useEffect(() => {
     if (data) {
@@ -65,9 +61,7 @@ export default function GuideList() {
       const { error } = await res.json();
 
       if (res.ok) {
-        setGuides((prevEnquiries) =>
-          prevEnquiries.filter((enq) => !selectedGuides.includes(enq._id))
-        );
+        setGuides((prevEnquiries) => prevEnquiries.filter((enq) => !selectedGuides.includes(enq._id)));
         alert({
           type: "success",
           title: "Deleted!",
@@ -112,22 +106,17 @@ export default function GuideList() {
 
   const headers = [
     {
-      label: (
-        <input
-          className="form-check-input "
-          type="checkbox"
-          checked={selectAll}
-          onChange={handleSelectAll}
-        />
-      ),
+      label: <input className="form-check-input " type="checkbox" checked={selectAll} onChange={handleSelectAll} />,
     },
     { label: "Title" },
     { label: "status" },
     { label: "Actions" },
+    { label: "Sites" },
   ];
 
   const rows = guides.map((guide) => [
     <input
+      key={guide._id}
       className="form-check-input"
       type="checkbox"
       checked={selectedGuides.includes(guide._id)}
@@ -140,13 +129,11 @@ export default function GuideList() {
       <span className="badge bg-danger">Inactive</span>
     ),
     <div key={guide._id}>
-      <button
-        onClick={() => navigate(`/add-guide/${guide._id}`)}
-        className="btn btn-primary  me-1"
-      >
+      <button onClick={() => navigate(`/add-guide/${guide._id}`)} className="btn btn-primary  me-1">
         Edit
       </button>
     </div>,
+    guide.sites.map((s) => `${s.name} (${s.host})`).join(", "),
   ]);
 
   const handlePageChange = (newPage) => setPage(newPage);
@@ -163,28 +150,19 @@ export default function GuideList() {
             <h3 className="card-title">All Guides List</h3>
             <div className="card-options d-flex gap-2">
               {selectedGuides.length ? (
-                <button
-                  onClick={() => setModalOpen(true)}
-                  className="btn btn-danger"
-                >
+                <button onClick={() => setModalOpen(true)} className="btn btn-danger">
                   Delete Selected
                 </button>
               ) : null}
               <div className="card-options">
-                <select
-                  className="form-select mx-2"
-                  onChange={(e) => setStatusFilter(e.target.value)}
-                >
+                <select className="form-select mx-2" onChange={(e) => setStatusFilter(e.target.value)}>
                   {filter.map((key, i) => (
                     <option key={i} value={key.toLowerCase()}>
                       {key}
                     </option>
                   ))}
                 </select>
-                <button
-                  onClick={() => navigate("/add-guide")}
-                  className="btn btn-primary"
-                >
+                <button onClick={() => navigate("/add-guide")} className="btn btn-primary">
                   Add Guide
                 </button>
               </div>
@@ -201,6 +179,8 @@ export default function GuideList() {
               entriesPerPage={limit}
               setSearchTerm={setSearchTerm}
               setSearchKey={setSearchKey}
+              allsites={allsites}
+              setSiteId={setSiteId}
               searchAbleKeys={searchAbleKeys}
               onEntriesChange={handleLimitChange}
               totalCount={totalCount}
