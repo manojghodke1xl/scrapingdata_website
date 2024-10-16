@@ -15,12 +15,14 @@ export default function AddTestimonial() {
     isActive: true,
     isGlobal: false,
     sites: [],
+    categories: [],
   });
-  const [availableSites, setAvailableSites] = useState([]); 
+  const [availableSites, setAvailableSites] = useState([]);
+  const [availableCategories, setAvailableCategories] = useState([]);
 
   useEffect(() => {
     (async () => {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/sites`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/allsites`, {
         method: "GET",
         headers: {
           Authorization: localStorage.getItem("auth"),
@@ -29,6 +31,21 @@ export default function AddTestimonial() {
       const { data, error } = await res.json();
       if (res.ok) {
         setAvailableSites(data.sites);
+      } else {
+        alert({ type: "warning", title: "Warning !", text: error });
+      }
+    })();
+
+    (async () => {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/allcategories`, {
+        method: "GET",
+        headers: {
+          Authorization: localStorage.getItem("auth"),
+        },
+      });
+      const { data, error } = await res.json();
+      if (res.ok) {
+        setAvailableCategories(data.categories);
       } else {
         alert({ type: "warning", title: "Warning !", text: error });
       }
@@ -80,6 +97,8 @@ export default function AddTestimonial() {
     if (!detail.text) newErrors.text = "Text is required";
     if (!detail.sites.length)
       newErrors.sites = "At least one site must be selected";
+    if (!detail.categories.length)
+      newErrors.categories = "At least one category must be selected";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -213,7 +232,7 @@ export default function AddTestimonial() {
                   name="text"
                   className="form-control"
                   placeholder="text"
-                  value={detail.name} // Changed from detail.title to detail.name
+                  value={detail.name}
                   onChange={(e) =>
                     setDetail((d) => ({ ...d, text: e.target.value }))
                   }
@@ -276,6 +295,54 @@ export default function AddTestimonial() {
                   <div className="alert alert-danger mt-2">{errors.sites}</div>
                 )}
               </div>
+
+              <div className="mb-3">
+                <label className={!id ? "form-label required" : "form-label"}>
+                  Select Category
+                </label>
+                <div
+                  style={{
+                    maxHeight: "150px",
+                    overflowY: "auto",
+                    border: "1px solid #ccc",
+                    padding: "10px",
+                    borderRadius: "4px",
+                  }}
+                >
+                  {availableCategories.map((category) => (
+                    <label key={category._id} className="form-check">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        value={category._id}
+                        checked={detail.categories.includes(category._id)}
+                        onChange={() => {
+                          setDetail((prevDetail) => {
+                            const isSelected = prevDetail.categories.includes(
+                              category._id
+                            );
+                            return {
+                              ...prevDetail,
+                              categories: isSelected
+                                ? prevDetail.categories.filter(
+                                    (id) => id !== category._id
+                                  )
+                                : [...prevDetail.categories, category._id],
+                            };
+                          });
+                        }}
+                      />
+                      <span className="form-check-label">{category.name}</span>
+                    </label>
+                  ))}
+                </div>
+                {errors.categories && (
+                  <div className="alert alert-danger mt-2">
+                    {errors.categories}
+                  </div>
+                )}
+              </div>
+
               <div className="mb-3">
                 <label className="row">
                   <span className="col">Is Testimonial Active?</span>

@@ -70,7 +70,7 @@ export default function AddCategory() {
       const { message, error } = await res.json();
       if (res.ok) {
         alert({ type: "success", title: "Success !", text: message });
-        // navigate("/category-list");
+        navigate("/category-list");
       } else {
         alert({ type: "warning", title: "Warning !", text: error });
       }
@@ -92,13 +92,13 @@ export default function AddCategory() {
             <form onSubmit={handleSubmit}>
               <div className="mb-3">
                 <label className={!id ? "form-label required" : "form-label "}>
-                  Admin Name
+                  Category Name
                 </label>
                 <input
                   type="text"
                   name="name"
                   className="form-control"
-                  placeholder="Admin Name"
+                  placeholder="Category Name"
                   value={categoryName}
                   onChange={(e) => setCategoryName(e.target.value)}
                 />
