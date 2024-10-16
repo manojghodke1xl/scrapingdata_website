@@ -5,12 +5,11 @@ import { GlobalContext } from "../GlobalContext";
 export default function AddSite() {
   const navigate = useNavigate();
   const { id = "" } = useParams();
-
   const { alert, setLoading } = useContext(GlobalContext);
-  const [email, setEmail] = useState("");
+  
+  const [emailInput, setEmailInput] = useState(""); // Handle individual email input
   const [errors, setErrors] = useState({});
   const [emailError, setEmailError] = useState(false);
-
   const [smtpOptions, setSmtpOptions] = useState([]);
   const [detail, setDetail] = useState({
     name: "",
@@ -19,8 +18,10 @@ export default function AddSite() {
     forward: false,
     smtp: "",
     forwardEmails: [],
+    webhookUrl: ""
   });
 
+  // Fetch SMTP options
   useEffect(() => {
     const fetchSmtpOptions = async () => {
       const res = await fetch(`${import.meta.env.VITE_API_URL}/smtps`, {
@@ -40,6 +41,7 @@ export default function AddSite() {
     fetchSmtpOptions();
   }, [alert]);
 
+  // Fetch details for editing if `id` is provided
   useEffect(() => {
     if (id) {
       setLoading(true);
@@ -52,15 +54,7 @@ export default function AddSite() {
         });
         const { data, error } = await res.json();
         if (res.ok) {
-          const {
-            name,
-            host,
-            smtp,
-            isActive,
-            forward,
-            forwardEmails,
-            webhookUrl,
-          } = data.site;
+          const { name, host, smtp, isActive, forward, forwardEmails, webhookUrl } = data.site;
           setDetail((prev) => ({
             ...prev,
             name,
@@ -82,20 +76,13 @@ export default function AddSite() {
     }
   }, [id, setLoading, alert]);
 
+  // Validation function
   const validate = () => {
     const newErrors = {};
-    if (!detail.name) {
-      newErrors.name = "Name is required";
-    }
-    if (!detail.host) {
-      newErrors.host = "Host is required";
-    }
-    if (!detail.smtp) {
-      newErrors.smtp = "SMTP is required";
-    }
-    if (detail.forward == true && !detail.forwardEmails.length) {
-      newErrors.forwardEmails = "Forward Emails is required";
-    }
+    if (!detail.name) newErrors.name = "Name is required";
+    if (!detail.host) newErrors.host = "Host is required";
+    if (!detail.smtp) newErrors.smtp = "SMTP is required";
+    if (detail.forward && !detail.forwardEmails.length) newErrors.forwardEmails = "Forward Emails are required";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -130,18 +117,27 @@ export default function AddSite() {
     }
   };
 
-  const validateEmail = (email) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
+  // Validate and add emails
+  const validateAndAddEmail = (e) => {
+    e.preventDefault();
+    if (emailInput && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput)) {
+      setDetail((prev) => ({
+        ...prev,
+        forwardEmails: [...prev.forwardEmails, emailInput],
+      }));
+      setEmailInput(""); // Reset input after adding
+      setEmailError(false);
+    } else {
+      setEmailError(true); // Show error if email is invalid
+    }
   };
 
-  const validateAndAddEmail = () => {
-    if (validateEmail(email)) {
-      setEmailError(false);
-      addEmail();
-    } else {
-      setEmailError(true);
-    }
+  // Remove an email from the list
+  const removeEmail = (indexToRemove) => {
+    setDetail((prev) => ({
+      ...prev,
+      forwardEmails: prev.forwardEmails.filter((_, index) => index !== indexToRemove),
+    }));
   };
 
   return (
@@ -154,9 +150,7 @@ export default function AddSite() {
             </h2>
             <form onSubmit={handleDetails}>
               <div className="mb-3">
-                <label className={!id ? "form-label required" : "form-label"}>
-                  Site Name
-                </label>
+                <label className="form-label required">Site Name</label>
                 <input
                   type="text"
                   name="name"
@@ -172,9 +166,7 @@ export default function AddSite() {
                 )}
               </div>
               <div className="mb-3">
-                <label className={!id ? "form-label required" : "form-label"}>
-                  Site host
-                </label>
+                <label className="form-label required">Site Host</label>
                 <input
                   type="text"
                   name="host"
@@ -210,20 +202,17 @@ export default function AddSite() {
                   </span>
                 </label>
               </div>
-              {detail.forward === true ? (
+              {detail.forward && (
                 <div className="mb-3">
-                  <label className={!id ? "form-label required" : "form-label"}>
-                    Forward Emails
-                  </label>
+                  <label className="form-label required">Forward Emails</label>
                   <input
                     type="text"
                     name="email"
                     className="form-control"
                     placeholder="Enter email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    value={emailInput}
+                    onChange={(e) => setEmailInput(e.target.value)}
                   />
-
                   <button
                     className="btn btn-primary mt-2"
                     onClick={validateAndAddEmail}
@@ -251,18 +240,13 @@ export default function AddSite() {
                     ))}
                   </ul>
                 </div>
-              ) : (
-                ""
               )}
 
               <div className="mb-3">
-                <label className={!id ? "form-label required" : "form-label"}>
-                  SMTP
-                </label>
+                <label className="form-label required">SMTP</label>
                 <select
                   name="smtp"
                   className="form-control"
-                  placeholder="SMTP"
                   value={detail.smtp}
                   onChange={(e) =>
                     setDetail((d) => ({ ...d, smtp: e.target.value }))
@@ -278,28 +262,30 @@ export default function AddSite() {
                   <div className="alert alert-danger mt-2">{errors.smtp}</div>
                 )}
               </div>
+
               <div className="mb-3">
                 <label className="form-label">Webhook URL</label>
                 <input
                   type="text"
-                  name="name"
+                  name="webhookUrl"
                   className="form-control"
-                  placeholder="URL..."
-                  value={detail.name}
+                  placeholder="Webhook URL"
+                  value={detail.webhookUrl}
                   onChange={(e) =>
                     setDetail((d) => ({ ...d, webhookUrl: e.target.value }))
                   }
                 />
               </div>
+
               <div className="mb-3">
                 <label className="row">
-                  <span className="col">Site Status</span>
+                  <span className="col">Active</span>
                   <span className="col-auto">
                     <label className="form-check form-check-single form-switch">
                       <input
                         className="form-check-input"
                         type="checkbox"
-                        name="status"
+                        name="isActive"
                         checked={detail.isActive}
                         onChange={() =>
                           setDetail((prev) => ({
@@ -312,9 +298,10 @@ export default function AddSite() {
                   </span>
                 </label>
               </div>
+
               <div className="form-footer">
                 <button type="submit" className="btn btn-primary w-100">
-                  {id ? "Update Site" : "Add Site"}
+                  {id ? "Update" : "Create"}
                 </button>
               </div>
             </form>

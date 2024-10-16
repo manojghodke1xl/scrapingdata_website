@@ -14,16 +14,12 @@ export default function SiteList() {
   const [totalCount, setTotalCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchKey, setSearchKey] = useState("");
+  const [statusFilter, setStatusFilter] = useState("All");
 
   const searchAbleKeys = ["name", "host"];
+  const filter = ["All", "Active", "Inactive"];
 
-  const [err, data] = useSetTimeout(
-    "sites",
-    page - 1,
-    limit,
-    searchTerm,
-    searchKey
-  );
+  const [err, data] = useSetTimeout("sites", page - 1, limit, searchTerm, searchKey, statusFilter, "");
 
   useEffect(() => {
     if (data) {
@@ -51,11 +47,7 @@ export default function SiteList() {
     ) : (
       <span className="badge bg-danger">Inactive</span>
     ),
-    <button
-      key={site._id}
-      onClick={() => navigate(`/edit-site/${site._id}`)}
-      className="btn btn-primary"
-    >
+    <button key={site._id} onClick={() => navigate(`/edit-site/${site._id}`)} className="btn btn-primary">
       Edit
     </button>,
   ]);
@@ -68,12 +60,18 @@ export default function SiteList() {
             <h3 className="card-title">All Websites</h3>
             <div className="card-options">
               {auth.isSuperAdmin && (
-                <button
-                  onClick={() => navigate("/add-site")}
-                  className="btn btn-primary "
-                >
-                  Add Site
-                </button>
+                <>
+                  <select className="form-select mx-2" onChange={(e) => setStatusFilter(e.target.value)}>
+                    {filter.map((key, i) => (
+                      <option key={i} value={key.toLowerCase()}>
+                        {key}
+                      </option>
+                    ))}
+                  </select>
+                  <button onClick={() => navigate("/add-site")} className="btn btn-primary ">
+                    Add Site
+                  </button>
+                </>
               )}
             </div>
           </div>

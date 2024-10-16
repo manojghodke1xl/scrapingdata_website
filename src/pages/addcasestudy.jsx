@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { GlobalContext } from "../GlobalContext";
 
@@ -51,7 +51,7 @@ export default function AddCaseStudy() {
         const { data, error } = await res.json();
 
         if (res.ok) {
-          const { title, sdesc, ldesc, isActive, sites, image, pdf } =
+          const { title, sdesc, ldesc, isActive, sites, image, pdf, isGlobal } =
             data.casestudy;
           setDetail((prev) => ({
             ...prev,
@@ -59,6 +59,7 @@ export default function AddCaseStudy() {
             sdesc,
             ldesc,
             isActive,
+            isGlobal,
             sites,
             image,
             pdf,
@@ -125,11 +126,39 @@ export default function AddCaseStudy() {
     }
   };
 
+  const imageInputRef = useRef(null);
+  const fileInputRef = useRef(null);
+
+
   const uploadFile = async (e, isImage) => {
     const file = e.target.files[0];
     if (!file) return;
 
     const { name, size, type } = file;
+
+    const validImageTypes = ["image/jpeg", "image/png"];
+    const validPdfTypes = ["application/pdf"];
+
+    if (isImage && !validImageTypes.includes(type)) {
+      alert({
+        type: "warning",
+        title: "Invalid File Type",
+        text: "Only PNG or JPEG formats are allowed for image uploads.",
+      });
+      imageInputRef.current.value = "";
+      return;
+    }
+
+    if (!validPdfTypes.includes(type)) {
+      alert({
+          type: "warning",
+          title: "Invalid File Type",
+          text: "Only PDF files are allowed for uploads.",
+      });
+      fileInputRef.current.value = "";
+      return;
+  }
+  
 
     try {
       const res = await fetch(`${import.meta.env.VITE_API_URL}/upload`, {
@@ -236,6 +265,7 @@ export default function AddCaseStudy() {
                   className="form-control"
                   onChange={(e) => uploadFile(e, true)}
                   accept="image/*"
+                  ref={imageInputRef}
                 />
               </div>
               <div className="mb-3">
@@ -246,6 +276,7 @@ export default function AddCaseStudy() {
                   className="form-control"
                   onChange={(e) => uploadFile(e, false)}
                   accept="application/pdf"
+                  ref={fileInputRef}
                 />
               </div>
               <div className="mb-3">
@@ -305,6 +336,26 @@ export default function AddCaseStudy() {
                           setDetail((prev) => ({
                             ...prev,
                             isActive: !prev.isActive,
+                          }))
+                        }
+                      />
+                    </label>
+                  </span>
+                </label>
+              </div>
+              <div className="mb-3">
+                <label className="row">
+                  <span className="col">Is Casestudy Global?</span>
+                  <span className="col-auto">
+                    <label className="form-check form-check-single form-switch">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        checked={detail.isGlobal}
+                        onChange={() =>
+                          setDetail((prev) => ({
+                            ...prev,
+                            isGlobal: !prev.isGlobal,
                           }))
                         }
                       />

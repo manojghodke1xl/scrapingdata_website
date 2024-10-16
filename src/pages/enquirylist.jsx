@@ -13,17 +13,18 @@ export default function EnquiryList() {
   const [enquiries, setEnquiries] = useState([]);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(8);
-  const [enquiryToDelete, setEnquiryToDelete] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [totalCount, setTotalCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchKey, setSearchKey] = useState("");
+  const [selectedEnquiries, setSelectedEnquiries] = useState([]);
+  const [selectAll, setSelectAll] = useState(false);
   const [siteId, setSiteId] = useState("");
   const allsites = useGetAllSites();
 
   const searchAbleKeys = ["name", "email", "mobile", "service", "subject", "site"];
 
-  const [err, data] = useSetTimeout("enquiries", page - 1, limit, searchTerm, searchKey, siteId);
+  const [err, data] = useSetTimeout("enquiries", page - 1, limit, searchTerm, searchKey, "", siteId);
 
   useEffect(() => {
     if (data) {
@@ -34,25 +35,35 @@ export default function EnquiryList() {
     }
   }, [data, err, alert]);
 
-  const deleteEnquiry = async () => {
-    if (!enquiryToDelete) return;
+  const deleteSelectedEnquiries = async () => {
+    if (!selectedEnquiries.length) {
+      alert({
+        type: "warning",
+        title: "No Selection",
+        text: "Please select at least one enquiry to delete.",
+      });
+      return;
+    }
 
     setLoading(true);
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/enquiry/${enquiryToDelete}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/enquiry`, {
         method: "DELETE",
         headers: {
           Authorization: localStorage.getItem("auth"),
+          "Content-Type": "application/json",
         },
+        body: JSON.stringify({ ids: selectedEnquiries }),
       });
+
       const { error } = await res.json();
 
       if (res.ok) {
-        setEnquiries((prevEnquiries) => prevEnquiries.filter((enq) => enq._id !== enquiryToDelete));
+        setEnquiries((prevEnquiries) => prevEnquiries.filter((enq) => !selectedEnquiries.includes(enq._id)));
         alert({
           type: "success",
           title: "Deleted!",
-          text: "Enquiry has been deleted.",
+          text: `Selected enquiry have been deleted.`,
         });
       } else {
         alert({ type: "danger", title: "Error!", text: error });
@@ -62,11 +73,39 @@ export default function EnquiryList() {
     } finally {
       setLoading(false);
       setModalOpen(false);
-      setEnquiryToDelete(null);
+      setSelectedEnquiries([]);
     }
   };
 
+  const handleCheckboxChange = (enqId) => {
+    setSelectedEnquiries((prevSelected) => {
+      let updatedSelected;
+      if (prevSelected.includes(enqId)) {
+        updatedSelected = prevSelected.filter((id) => id !== enqId);
+      } else {
+        updatedSelected = [...prevSelected, enqId];
+      }
+      if (updatedSelected.length !== enquiries.length) {
+        setSelectAll(false);
+      }
+
+      return updatedSelected;
+    });
+  };
+
+  const handleSelectAll = () => {
+    if (selectAll) {
+      setSelectedEnquiries([]);
+    } else {
+      setSelectedEnquiries(enquiries.map((enq) => enq._id));
+    }
+    setSelectAll(!selectAll);
+  };
+
   const headers = [
+    {
+      label: <input className="form-check-input" type="checkbox" checked={selectAll} onChange={handleSelectAll} />,
+    },
     { label: "Customer Name" },
     { label: "Customer Email" },
     { label: "Customer Mobile" },
@@ -78,6 +117,13 @@ export default function EnquiryList() {
   ];
 
   const rows = enquiries.map((enq) => [
+    <input
+      key={enq._id}
+      className="form-check-input"
+      type="checkbox"
+      checked={selectedEnquiries.includes(enq._id)}
+      onChange={() => handleCheckboxChange(enq._id)}
+    />,
     enq.name,
     enq.email,
     enq.mobile,
@@ -89,15 +135,6 @@ export default function EnquiryList() {
       <button onClick={() => navigate(`/enquiry/${enq._id}`)} className="btn btn-primary me-1">
         View
       </button>
-      <button
-        onClick={() => {
-          setEnquiryToDelete(enq._id);
-          setModalOpen(true);
-        }}
-        className="btn btn-danger"
-      >
-        Delete
-      </button>
     </div>,
   ]);
 
@@ -107,7 +144,17 @@ export default function EnquiryList() {
         <div className="card">
           <div className="card-header">
             <h3 className="card-title">All Enquiries</h3>
+            <div className="card-options">
+              {selectedEnquiries.length ? (
+                <button onClick={() => setModalOpen(true)} className="btn btn-danger">
+                  Delete Selected
+                </button>
+              ) : (
+                ""
+              )}
+            </div>
           </div>
+
           <div className="table-responsive">
             <Table
               headers={headers}
@@ -130,12 +177,11 @@ export default function EnquiryList() {
         </div>
       </div>
 
-      {/* Confirmation Modal */}
       <ConfirmationModal
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
-        onConfirm={deleteEnquiry}
-        message="Are you sure you want to delete this enquiry? If you proceed, you will lose this record."
+        onConfirm={deleteSelectedEnquiries}
+        message={`Are you sure you want to delete selected enquiry? This action cannot be undone.`}
       />
     </div>
   );

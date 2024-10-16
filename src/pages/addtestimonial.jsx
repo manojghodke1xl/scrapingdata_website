@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { GlobalContext } from "../GlobalContext";
 
@@ -15,12 +15,14 @@ export default function AddTestimonial() {
     isActive: true,
     isGlobal: false,
     sites: [],
+    categories: [],
   });
   const [availableSites, setAvailableSites] = useState([]);
+  const [availableCategories, setAvailableCategories] = useState([]);
 
   useEffect(() => {
     (async () => {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/sites`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/allsites`, {
         method: "GET",
         headers: {
           Authorization: localStorage.getItem("auth"),
@@ -29,6 +31,21 @@ export default function AddTestimonial() {
       const { data, error } = await res.json();
       if (res.ok) {
         setAvailableSites(data.sites);
+      } else {
+        alert({ type: "warning", title: "Warning !", text: error });
+      }
+    })();
+
+    (async () => {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/allcategories`, {
+        method: "GET",
+        headers: {
+          Authorization: localStorage.getItem("auth"),
+        },
+      });
+      const { data, error } = await res.json();
+      if (res.ok) {
+        setAvailableCategories(data.categories);
       } else {
         alert({ type: "warning", title: "Warning !", text: error });
       }
@@ -51,17 +68,28 @@ export default function AddTestimonial() {
         const { data, error } = await res.json();
 
         if (res.ok) {
-          const { name, desg, text, isGlobal, sites, isActive, image } =
-            data.testimonial; // Get isGlobal from response
-          setDetail((prev) => ({
-            ...prev,
-            image,
+          const {
             name,
             desg,
             text,
             isGlobal,
             sites,
             isActive,
+            image,
+            video,
+            url,
+          } = data.testimonial; 
+          setDetail((prev) => ({
+            ...prev,
+            image,
+            video,
+            name,
+            desg,
+            text,
+            isGlobal,
+            sites,
+            isActive,
+            url,
           }));
         } else {
           alert({ type: "warning", title: "Warning !", text: error });
@@ -80,6 +108,8 @@ export default function AddTestimonial() {
     if (!detail.text) newErrors.text = "Text is required";
     if (!detail.sites.length)
       newErrors.sites = "At least one site must be selected";
+    if (!detail.categories.length)
+      newErrors.categories = "At least one category must be selected";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -113,12 +143,37 @@ export default function AddTestimonial() {
       setLoading(false);
     }
   };
+  const imageInputRef = useRef(null);
+  const videoInputRef = useRef(null);
 
   const uploadFile = async (e, isImage) => {
     const file = e.target.files[0];
     if (!file) return;
 
     const { name, size, type } = file;
+
+    const validImageTypes = ["image/jpeg", "image/png"];
+    const validVideoTypes = ["video/mp4", "video/mov"];
+
+    if (isImage && !validImageTypes.includes(type)) {
+      alert({
+        type: "warning",
+        title: "Invalid File Type",
+        text: "Only PNG or JPEG formats are allowed for image uploads.",
+      });
+      imageInputRef.current.value = "";
+      return;
+    }
+
+    if (!isImage && !validVideoTypes.includes(type)) {
+      alert({
+        type: "warning",
+        title: "Invalid File Type",
+        text: "Only MP4 or MOV formats are allowed for video uploads.",
+      });
+      videoInputRef.current.value = "";
+      return;
+    }
 
     try {
       const res = await fetch(`${import.meta.env.VITE_API_URL}/upload`, {
@@ -151,10 +206,13 @@ export default function AddTestimonial() {
       if (!uploadRes.ok) {
         throw new Error("File upload failed");
       }
+
       const fileId = data._id;
 
       if (isImage) {
         setDetail((prevDetail) => ({ ...prevDetail, image: fileId }));
+      } else {
+        setDetail((prevDetail) => ({ ...prevDetail, video: fileId }));
       }
     } catch (error) {
       console.error("Upload error:", error);
@@ -213,7 +271,7 @@ export default function AddTestimonial() {
                   name="text"
                   className="form-control"
                   placeholder="text"
-                  value={detail.name} // Changed from detail.title to detail.name
+                  value={detail.text}
                   onChange={(e) =>
                     setDetail((d) => ({ ...d, text: e.target.value }))
                   }
@@ -230,6 +288,31 @@ export default function AddTestimonial() {
                   className="form-control"
                   onChange={(e) => uploadFile(e, true)}
                   accept="image/*"
+                  ref={imageInputRef}
+                />
+              </div>
+              <div className="mb-3">
+                <label className="form-label">Upload Video</label>
+                <input
+                  type="file"
+                  name="video"
+                  className="form-control"
+                  onChange={(e) => uploadFile(e, false)}
+                  accept="video/*"
+                  ref={videoInputRef}
+                />
+              </div>
+              <div className="mb-3">
+                <label className="form-label">Text</label>
+                <input
+                  type="text"
+                  name="url"
+                  className="form-control"
+                  placeholder="Url.."
+                  value={detail.url}
+                  onChange={(e) =>
+                    setDetail((d) => ({ ...d, url: e.target.value }))
+                  }
                 />
               </div>
               <div className="mb-3">
@@ -276,6 +359,54 @@ export default function AddTestimonial() {
                   <div className="alert alert-danger mt-2">{errors.sites}</div>
                 )}
               </div>
+
+              <div className="mb-3">
+                <label className={!id ? "form-label required" : "form-label"}>
+                  Select Category
+                </label>
+                <div
+                  style={{
+                    maxHeight: "150px",
+                    overflowY: "auto",
+                    border: "1px solid #ccc",
+                    padding: "10px",
+                    borderRadius: "4px",
+                  }}
+                >
+                  {availableCategories.map((category) => (
+                    <label key={category._id} className="form-check">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        value={category._id}
+                        checked={detail.categories.includes(category._id)}
+                        onChange={() => {
+                          setDetail((prevDetail) => {
+                            const isSelected = prevDetail.categories.includes(
+                              category._id
+                            );
+                            return {
+                              ...prevDetail,
+                              categories: isSelected
+                                ? prevDetail.categories.filter(
+                                    (id) => id !== category._id
+                                  )
+                                : [...prevDetail.categories, category._id],
+                            };
+                          });
+                        }}
+                      />
+                      <span className="form-check-label">{category.name}</span>
+                    </label>
+                  ))}
+                </div>
+                {errors.categories && (
+                  <div className="alert alert-danger mt-2">
+                    {errors.categories}
+                  </div>
+                )}
+              </div>
+
               <div className="mb-3">
                 <label className="row">
                   <span className="col">Is Testimonial Active?</span>
@@ -289,6 +420,26 @@ export default function AddTestimonial() {
                           setDetail((prev) => ({
                             ...prev,
                             isActive: !prev.isActive,
+                          }))
+                        }
+                      />
+                    </label>
+                  </span>
+                </label>
+              </div>
+              <div className="mb-3">
+                <label className="row">
+                  <span className="col">Is Testimonial Global?</span>
+                  <span className="col-auto">
+                    <label className="form-check form-check-single form-switch">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        checked={detail.isGlobal}
+                        onChange={() =>
+                          setDetail((prev) => ({
+                            ...prev,
+                            isGlobal: !prev.isGlobal,
                           }))
                         }
                       />

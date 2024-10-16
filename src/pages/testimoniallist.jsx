@@ -13,17 +13,21 @@ export default function TestimonialList() {
   const [testimonials, setTestimonials] = useState([]);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(8);
-  const [testimonialToDelete, setTestimonialToDelete] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [totalCount, setTotalCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchKey, setSearchKey] = useState("");
+  const [selectedTestimonials, setSelectedTestimonials] = useState([]);
+  const [selectAll, setSelectAll] = useState(false);
+  const [statusFilter, setStatusFilter] = useState("All");
   const [siteId, setSiteId] = useState("");
   const allsites = useGetAllSites();
 
   const searchAbleKeys = ["name"];
 
-  const [err, data] = useSetTimeout("testimonials", page - 1, limit, searchTerm, searchKey, siteId);
+  const filter = ["All", "Active", "Inactive"];
+
+  const [err, data] = useSetTimeout("testimonials", page - 1, limit, searchTerm, searchKey, statusFilter, siteId);
 
   useEffect(() => {
     if (data) {
@@ -34,29 +38,35 @@ export default function TestimonialList() {
     }
   }, [data, err, alert]);
 
-  const openDeleteModal = (id) => {
-    setTestimonialToDelete(id);
-    setModalOpen(true);
-  };
-
-  const deleteTestimonial = async () => {
-    if (!testimonialToDelete) return;
+  const deleteSelectedTestimonial = async () => {
+    if (!selectedTestimonials.length) {
+      alert({
+        type: "warning",
+        title: "No Selection",
+        text: "Please select at least one enquiry to delete.",
+      });
+      return;
+    }
 
     setLoading(true);
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/testimonial/${testimonialToDelete}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/testimonial`, {
         method: "DELETE",
         headers: {
           Authorization: localStorage.getItem("auth"),
+          "Content-Type": "application/json",
         },
+        body: JSON.stringify({ ids: selectedTestimonials }),
       });
+
       const { error } = await res.json();
+
       if (res.ok) {
-        setTestimonials((prevLists) => prevLists.filter((list) => list._id !== testimonialToDelete));
+        setTestimonials((prevEnquiries) => prevEnquiries.filter((enq) => !selectedTestimonials.includes(enq._id)));
         alert({
           type: "success",
           title: "Deleted!",
-          text: "Testimonial has been deleted.",
+          text: `Selected enquiry have been deleted.`,
         });
       } else {
         alert({ type: "danger", title: "Error!", text: error });
@@ -66,13 +76,53 @@ export default function TestimonialList() {
     } finally {
       setLoading(false);
       setModalOpen(false);
-      setTestimonialToDelete(null);
+      setSelectedTestimonials([]);
     }
   };
 
-  const headers = [{ label: "Name" }, { label: "Status" }, { label: "Actions" }, { label: "Sites" }];
+  const handleCheckboxChange = (testimonialId) => {
+    setSelectedTestimonials((prevSelected) => {
+      let updatedSelected;
+      if (prevSelected.includes(testimonialId)) {
+        updatedSelected = prevSelected.filter((id) => id !== testimonialId);
+      } else {
+        updatedSelected = [...prevSelected, testimonialId];
+      }
+      if (updatedSelected.length !== testimonials.length) {
+        setSelectAll(false);
+      }
+
+      return updatedSelected;
+    });
+  };
+
+  const handleSelectAll = () => {
+    if (selectAll) {
+      setSelectedTestimonials([]);
+    } else {
+      setSelectedTestimonials(testimonials.map((testimonial) => testimonial._id));
+    }
+    setSelectAll(!selectAll);
+  };
+
+  const headers = [
+    {
+      label: <input className="form-check-input " type="checkbox" checked={selectAll} onChange={handleSelectAll} />,
+    },
+    { label: "Name" },
+    { label: "Status" },
+    { label: "Actions" },
+    { label: "Sites" },
+  ];
 
   const rows = testimonials.map((testimonial) => [
+    <input
+      key={testimonial._id}
+      className="form-check-input"
+      type="checkbox"
+      checked={selectedTestimonials.includes(testimonial._id)}
+      onChange={() => handleCheckboxChange(testimonial._id)}
+    />,
     testimonial.name,
     testimonial.isActive === true ? (
       <span className="badge bg-success">Active</span>
@@ -82,9 +132,6 @@ export default function TestimonialList() {
     <div key={testimonial._id}>
       <button onClick={() => navigate(`/add-testimonial/${testimonial._id}`)} className="btn btn-primary me-1">
         Edit
-      </button>
-      <button onClick={() => openDeleteModal(testimonial._id)} className="btn btn-danger">
-        Delete
       </button>
     </div>,
     testimonial.sites.map((s) => `${s.name} (${s.host})`).join(", "),
@@ -96,10 +143,24 @@ export default function TestimonialList() {
         <div className="card">
           <div className="card-header">
             <h3 className="card-title">All Testimonials List</h3>
-            <div className="card-options">
-              <button onClick={() => navigate("/add-testimonial")} className="btn btn-primary">
-                Add Testimonial
-              </button>
+            <div className="card-options d-flex gap-2">
+              {selectedTestimonials.length ? (
+                <button onClick={() => setModalOpen(true)} className="btn btn-danger">
+                  Delete Selected
+                </button>
+              ) : null}
+              <div className="card-options">
+                <select className="form-select mx-2" onChange={(e) => setStatusFilter(e.target.value)}>
+                  {filter.map((key, i) => (
+                    <option key={i} value={key.toLowerCase()}>
+                      {key}
+                    </option>
+                  ))}
+                </select>
+                <button onClick={() => navigate("/add-testimonial")} className="btn btn-primary">
+                  Add Testimonial
+                </button>
+              </div>
             </div>
           </div>
 
@@ -128,7 +189,7 @@ export default function TestimonialList() {
       <ConfirmationModal
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
-        onConfirm={deleteTestimonial}
+        onConfirm={deleteSelectedTestimonial}
         message="Are you sure you want to delete this Testimonial?"
       />
     </div>

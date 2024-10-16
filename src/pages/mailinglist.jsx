@@ -13,17 +13,18 @@ export default function MailingList() {
   const [lists, setLists] = useState([]);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(8);
-  const [mailingToDelete, setMailingToDelete] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [totalCount, setTotalCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchKey, setSearchKey] = useState("");
+  const [selectedLists, setSelectedLists] = useState([]);
+  const [selectAll, setSelectAll] = useState(false);
   const [siteId, setSiteId] = useState("");
   const allsites = useGetAllSites();
 
   const searchAbleKeys = ["email"];
 
-  const [err, data] = useSetTimeout("lists", page - 1, limit, searchTerm, searchKey, siteId);
+  const [err, data] = useSetTimeout("lists", page - 1, limit, searchTerm, searchKey, "", siteId);
 
   useEffect(() => {
     if (data) {
@@ -34,50 +35,35 @@ export default function MailingList() {
     }
   }, [data, err, alert]);
 
-  const headers = [{ label: "Customer Email" }, { label: "Site Name" }, { label: "Actions" }];
-
-  const rows = lists.map((lst) => [
-    lst.email,
-    lst.site.name,
-    <div key={lst._id}>
-      <button
-        onClick={() => navigate(`/mailing/${lst._id}`)}
-        className="btn btn-primary me-1" // Adjusted for spacing
-      >
-        View
-      </button>
-      <button onClick={() => openDeleteModal(lst._id)} className="btn btn-danger ">
-        Delete
-      </button>
-    </div>,
-  ]);
-
-  const openDeleteModal = (id) => {
-    setMailingToDelete(id);
-    setModalOpen(true);
-  };
-
   const deleteMailingList = async () => {
-    if (!mailingToDelete) return;
+    if (!selectedLists.length) {
+      alert({
+        type: "warning",
+        title: "No Selection",
+        text: "Please select at least one List to delete.",
+      });
+      return;
+    }
 
     setLoading(true);
     try {
-      const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/list/${mailingToDelete}`, // Ensure your API endpoint is correct
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: localStorage.getItem("auth"),
-          },
-        }
-      );
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/list`, {
+        method: "DELETE",
+        headers: {
+          Authorization: localStorage.getItem("auth"),
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ ids: selectedLists }),
+      });
+
       const { error } = await res.json();
+
       if (res.ok) {
-        setLists((prevLists) => prevLists.filter((list) => list._id !== mailingToDelete));
+        setLists((prevList) => prevList.filter((enq) => !selectedLists.includes(enq._id)));
         alert({
           type: "success",
           title: "Deleted!",
-          text: "Mailing list has been deleted.",
+          text: `Selected List have been deleted.`,
         });
       } else {
         alert({ type: "danger", title: "Error!", text: error });
@@ -86,10 +72,55 @@ export default function MailingList() {
       alert({ type: "danger", title: "Error!", text: error.message });
     } finally {
       setLoading(false);
-      setModalOpen(false); // Close the modal after deletion
-      setMailingToDelete(null); // Reset the mailing ID
+      setModalOpen(false);
+      setSelectedLists([]);
     }
   };
+
+  const handleCheckboxChange = (listId) => {
+    setSelectedLists((prevSelected) => {
+      if (prevSelected.includes(listId)) {
+        return prevSelected.filter((id) => id !== listId);
+      } else {
+        return [...prevSelected, listId];
+      }
+    });
+  };
+
+  const handleSelectAll = () => {
+    if (selectAll) {
+      setSelectedLists([]);
+    } else {
+      setSelectedLists(lists.map((lst) => lst._id));
+    }
+    setSelectAll(!selectAll);
+  };
+
+  const headers = [
+    {
+      label: <input className="form-check-input" type="checkbox" checked={selectAll} onChange={handleSelectAll} />,
+    },
+    { label: "Customer Email" },
+    { label: "Site Name" },
+    { label: "Actions" },
+  ];
+
+  const rows = lists.map((lst) => [
+    <input
+      key={lst._id}
+      className="form-check-input"
+      type="checkbox"
+      checked={selectedLists.includes(lst._id)}
+      onChange={() => handleCheckboxChange(lst._id)}
+    />,
+    lst.email,
+    lst.site.name,
+    <div key={lst._id}>
+      <button onClick={() => navigate(`/mailing/${lst._id}`)} className="btn btn-primary me-1">
+        View
+      </button>
+    </div>,
+  ]);
 
   return (
     <div className="page-body">
@@ -97,6 +128,15 @@ export default function MailingList() {
         <div className="card">
           <div className="card-header">
             <h3 className="card-title">All Mailing Lists</h3>
+            <div className="card-options">
+              {selectedLists.length ? (
+                <button onClick={() => setModalOpen(true)} className="btn btn-danger">
+                  Delete Selected
+                </button>
+              ) : (
+                ""
+              )}
+            </div>
           </div>
 
           <div className="table-responsive">
@@ -112,9 +152,7 @@ export default function MailingList() {
               allsites={allsites}
               setSiteId={setSiteId}
               searchAbleKeys={searchAbleKeys}
-              onEntriesChange={(newLimit) => {
-                setLimit(newLimit);
-              }}
+              onEntriesChange={setLimit}
               totalCount={totalCount}
             />
           </div>

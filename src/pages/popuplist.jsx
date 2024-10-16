@@ -13,53 +13,20 @@ export default function PopupList() {
   const [popups, setPopups] = useState([]);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(8);
-  const [popupToDelete, setPopupToDelete] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [totalCount, setTotalCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchKey, setSearchKey] = useState("");
+  const [selectedPopups, setSelectedPopups] = useState([]);
+  const [selectAll, setSelectAll] = useState(false);
+  const [statusFilter, setStatusFilter] = useState("All");
   const [siteId, setSiteId] = useState("");
   const allsites = useGetAllSites();
 
   const searchAbleKeys = ["name", "host"];
+  const filter = ["All", "Active", "Inactive"];
 
-  const [err, data] = useSetTimeout("popups", page - 1, limit, searchTerm, searchKey, siteId);
-
-  const openDeleteModal = (id) => {
-    setPopupToDelete(id);
-    setModalOpen(true);
-  };
-
-  const deletePopup = async () => {
-    if (!popupToDelete) return;
-
-    setLoading(true);
-    try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/popup/${popupToDelete}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: localStorage.getItem("auth"),
-        },
-      });
-      const { error } = await res.json();
-      if (res.ok) {
-        setPopups((prevLists) => prevLists.filter((list) => list._id !== popupToDelete));
-        alert({
-          type: "success",
-          title: "Deleted!",
-          text: "Guide has been deleted.",
-        });
-      } else {
-        alert({ type: "danger", title: "Error!", text: error });
-      }
-    } catch (error) {
-      alert({ type: "danger", title: "Error!", text: error.message });
-    } finally {
-      setLoading(false);
-      setModalOpen(false);
-      setPopupToDelete(null);
-    }
-  };
+  const [err, data] = useSetTimeout("Popups", page - 1, limit, searchTerm, searchKey, statusFilter, siteId);
 
   useEffect(() => {
     if (data) {
@@ -70,7 +37,77 @@ export default function PopupList() {
     }
   }, [data, err, alert]);
 
+  const deleteSelectedPopup = async () => {
+    if (!selectedPopups.length) {
+      alert({
+        type: "warning",
+        title: "No Selection",
+        text: "Please select at least one enquiry to delete.",
+      });
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/popup`, {
+        method: "DELETE",
+        headers: {
+          Authorization: localStorage.getItem("auth"),
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ ids: selectedPopups }),
+      });
+
+      const { error } = await res.json();
+
+      if (res.ok) {
+        setPopups((prevEnquiries) => prevEnquiries.filter((enq) => !selectedPopups.includes(enq._id)));
+        alert({
+          type: "success",
+          title: "Deleted!",
+          text: `Selected enquiry have been deleted.`,
+        });
+      } else {
+        alert({ type: "danger", title: "Error!", text: error });
+      }
+    } catch (error) {
+      alert({ type: "danger", title: "Error!", text: error.message });
+    } finally {
+      setLoading(false);
+      setModalOpen(false);
+      setSelectedPopups([]);
+    }
+  };
+
+  const handleCheckboxChange = (popupId) => {
+    setSelectedPopups((prevSelected) => {
+      let updatedSelected;
+      if (prevSelected.includes(popupId)) {
+        updatedSelected = prevSelected.filter((id) => id !== popupId);
+      } else {
+        updatedSelected = [...prevSelected, popupId];
+      }
+      if (updatedSelected.length !== popups.length) {
+        setSelectAll(false);
+      }
+
+      return updatedSelected;
+    });
+  };
+
+  const handleSelectAll = () => {
+    if (selectAll) {
+      setSelectedPopups([]);
+    } else {
+      setSelectedPopups(popups.map((popup) => popup._id));
+    }
+    setSelectAll(!selectAll);
+  };
+
   const headers = [
+    {
+      label: <input className="form-check-input " type="checkbox" checked={selectAll} onChange={handleSelectAll} />,
+    },
     { label: "Name" },
     { label: "Device Type" },
     { label: "Type" },
@@ -80,6 +117,13 @@ export default function PopupList() {
   ];
 
   const rows = popups.map((popup) => [
+    <input
+      key={popup._id}
+      className="form-check-input"
+      type="checkbox"
+      checked={selectedPopups.includes(popup._id)}
+      onChange={() => handleCheckboxChange(popup._id)}
+    />,
     popup.name,
     popup.showOnDeviceType,
     popup.contentType,
@@ -92,9 +136,6 @@ export default function PopupList() {
       <button onClick={() => navigate(`/add-popup/${popup._id}`)} className="btn btn-primary  me-1">
         Edit
       </button>
-      <button onClick={() => openDeleteModal(popup._id)} className="btn btn-danger">
-        Delete
-      </button>
     </div>,
     `${popup.site.name} (${popup.site.host})`,
   ]);
@@ -105,13 +146,26 @@ export default function PopupList() {
         <div className="card">
           <div className="card-header">
             <h3 className="card-title">All Popups List</h3>
-            <div className="card-options">
-              <button onClick={() => navigate("/add-popup")} className="btn btn-primary">
-                Add Popup
-              </button>
+            <div className="card-options d-flex gap-2">
+              {selectedPopups.length ? (
+                <button onClick={() => setModalOpen(true)} className="btn btn-danger">
+                  Delete Selected
+                </button>
+              ) : null}
+              <div className="card-options">
+                <select className="form-select mx-2" onChange={(e) => setStatusFilter(e.target.value)}>
+                  {filter.map((key, i) => (
+                    <option key={i} value={key.toLowerCase()}>
+                      {key}
+                    </option>
+                  ))}
+                </select>
+                <button onClick={() => navigate("/add-popup")} className="btn btn-primary">
+                  Add Popup
+                </button>
+              </div>
             </div>
           </div>
-
           <div className="table-responsive">
             <Table
               headers={headers}
@@ -136,8 +190,8 @@ export default function PopupList() {
       <ConfirmationModal
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
-        onConfirm={deletePopup}
-        message="Are you sure you want to delete this guide?"
+        onConfirm={deleteSelectedPopup}
+        message="Are you sure you want to delete this Popup?"
       />
     </div>
   );

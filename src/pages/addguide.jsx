@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { GlobalContext } from "../GlobalContext";
 
@@ -47,7 +47,8 @@ export default function AddGuide() {
         const { data, error } = await res.json();
 
         if (res.ok) {
-          const { title, desc, sites, image, pdf, isActive } = data.guide;
+          const { title, desc, sites, image, pdf, isActive, isGlobal } =
+            data.guide;
           setDetail((prev) => ({
             ...prev,
             title,
@@ -56,6 +57,7 @@ export default function AddGuide() {
             image,
             pdf,
             isActive,
+            isGlobal,
           }));
         } else {
           alert({ type: "warning", title: "Warning !", text: error });
@@ -110,11 +112,37 @@ export default function AddGuide() {
     }
   };
 
+  const imageInputRef = useRef(null);
+  const fileInputRef = useRef(null);
+
   const uploadFile = async (e, isImage) => {
     const file = e.target.files[0];
     if (!file) return;
 
     const { name, size, type } = file;
+
+    const validImageTypes = ["image/jpeg", "image/png"];
+    const validPdfTypes = ["application/pdf"];
+
+    if (isImage && !validImageTypes.includes(type)) {
+      alert({
+        type: "warning",
+        title: "Invalid File Type",
+        text: "Only PNG or JPEG formats are allowed for image uploads.",
+      });
+      imageInputRef.current.value = "";
+      return;
+    }
+
+    if (!validPdfTypes.includes(type)) {
+      alert({
+        type: "warning",
+        title: "Invalid File Type",
+        text: "Only PDF files are allowed for uploads.",
+      });
+      fileInputRef.current.value = "";
+      return;
+    }
 
     try {
       const res = await fetch(`${import.meta.env.VITE_API_URL}/upload`, {
@@ -209,6 +237,7 @@ export default function AddGuide() {
                   className="form-control"
                   onChange={(e) => uploadFile(e, true)}
                   accept="image/*"
+                  ref={imageInputRef}
                 />
               </div>
 
@@ -220,6 +249,7 @@ export default function AddGuide() {
                   className="form-control"
                   onChange={(e) => uploadFile(e, false)}
                   accept="application/pdf"
+                  ref={fileInputRef}
                 />
               </div>
 
@@ -269,7 +299,7 @@ export default function AddGuide() {
               </div>
               <div className="mb-3">
                 <label className="row">
-                  <span className="col">Guide Status</span>
+                  <span className="col">Is Guide Active?</span>
                   <span className="col-auto">
                     <label className="form-check form-check-singl  e form-switch">
                       <input
@@ -288,7 +318,26 @@ export default function AddGuide() {
                   </span>
                 </label>
               </div>
-
+              <div className="mb-3">
+                <label className="row">
+                  <span className="col">Is Guide Global?</span>
+                  <span className="col-auto">
+                    <label className="form-check form-check-single form-switch">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        checked={detail.isGlobal}
+                        onChange={() =>
+                          setDetail((prev) => ({
+                            ...prev,
+                            isGlobal: !prev.isGlobal,
+                          }))
+                        }
+                      />
+                    </label>
+                  </span>
+                </label>
+              </div>
               <div className="form-footer">
                 <button type="submit" className="btn btn-primary w-100">
                   {id ? "Update Guide" : "Add Guide"}

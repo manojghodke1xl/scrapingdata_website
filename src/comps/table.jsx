@@ -30,7 +30,7 @@ const Table = ({
   entriesPerPage,
   setSearchTerm,
   setSearchKey,
-  allsites,
+  allsites = [],
   setSiteId,
   searchAbleKeys,
   onEntriesChange,
