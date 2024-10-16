@@ -18,15 +18,19 @@ export default function TestimonialList() {
   const [searchKey, setSearchKey] = useState("");
   const [selectedTestimonials, setSelectedTestimonials] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
+  const [statusFilter, setStatusFilter] = useState("All");
 
   const searchAbleKeys = ["name"];
+
+  const filter = ["All", "Active", "Inactive"];
 
   const [err, data] = useSetTimeout(
     "testimonials",
     page - 1,
     limit,
     searchTerm,
-    searchKey
+    searchKey,
+    statusFilter
   );
 
   useEffect(() => {
@@ -163,15 +167,26 @@ export default function TestimonialList() {
                   Delete Selected
                 </button>
               ) : null}
-              <button
-                onClick={() => navigate("/add-testimonial")}
-                className="btn btn-primary"
-              >
-                Add Testimonial
-              </button>
+              <div className="card-options">
+                <select
+                  className="form-select mx-2"
+                  onChange={(e) => setStatusFilter(e.target.value)}
+                >
+                  {filter.map((key, i) => (
+                    <option key={i} value={key.toLowerCase()}>
+                      {key}
+                    </option>
+                  ))}
+                </select>
+                <button
+                  onClick={() => navigate("/add-testimonial")}
+                  className="btn btn-primary"
+                >
+                  Add Testimonial
+                </button>
+              </div>
             </div>
           </div>
-
           <div className="table-responsive">
             <Table
               headers={headers}

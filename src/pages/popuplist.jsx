@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useLayoutEffect, useState } from "react";
 import { GlobalContext } from "../GlobalContext";
 import { useNavigate } from "react-router-dom";
 import Table from "../comps/table";
@@ -7,7 +7,7 @@ import useSetTimeout from "../Hooks/useDebounce";
 
 export default function PopupList() {
   const navigate = useNavigate();
-  const { alert, setLoading } = useContext(GlobalContext);
+  const { auth, alert, setLoading } = useContext(GlobalContext);
 
   const [popups, setPopups] = useState([]);
   const [page, setPage] = useState(1);
@@ -19,15 +19,18 @@ export default function PopupList() {
   const [searchKey, setSearchKey] = useState("");
   const [selectedPopups, setSelectedPopups] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
+  const [statusFilter, setStatusFilter] = useState("All");
 
   const searchAbleKeys = ["name", "host"];
+  const filter = ["All", "Active", "Inactive"];
 
   const [err, data] = useSetTimeout(
     "Popups",
     page - 1,
     limit,
     searchTerm,
-    searchKey
+    searchKey,
+    statusFilter
   );
 
   const openDeleteModal = (id) => {
@@ -99,7 +102,7 @@ export default function PopupList() {
       if (updatedSelected.length !== popups.length) {
         setSelectAll(false);
       }
-  
+
       return updatedSelected;
     });
   };
@@ -108,9 +111,7 @@ export default function PopupList() {
     if (selectAll) {
       setSelectedPopups([]);
     } else {
-      setSelectedPopups(
-        popups.map((popup) => popup._id)
-      );
+      setSelectedPopups(popups.map((popup) => popup._id));
     }
     setSelectAll(!selectAll);
   };
@@ -171,7 +172,7 @@ export default function PopupList() {
           <div className="card-header">
             <h3 className="card-title">All Popups List</h3>
             <div className="card-options d-flex gap-2">
-            {selectedPopups.length ? (
+              {selectedPopups.length ? (
                 <button
                   onClick={() => setModalOpen(true)}
                   className="btn btn-danger"
@@ -179,15 +180,26 @@ export default function PopupList() {
                   Delete Selected
                 </button>
               ) : null}
-              <button
-                onClick={() => navigate("/add-popup")}
-                className="btn btn-primary"
-              >
-                Add Popup
-              </button>
+              <div className="card-options">
+                <select
+                  className="form-select mx-2"
+                  onChange={(e) => setStatusFilter(e.target.value)}
+                >
+                  {filter.map((key, i) => (
+                    <option key={i} value={key.toLowerCase()}>
+                      {key}
+                    </option>
+                  ))}
+                </select>
+                <button
+                  onClick={() => navigate("/add-popup")}
+                  className="btn btn-primary"
+                >
+                  Add Popup
+                </button>
+              </div>
             </div>
           </div>
-
           <div className="table-responsive">
             <Table
               headers={headers}

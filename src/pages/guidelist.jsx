@@ -18,15 +18,18 @@ export default function GuideList() {
   const [searchKey, setSearchKey] = useState("");
   const [selectedGuides, setSelectedGuides] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
+  const [statusFilter, setStatusFilter] = useState("All");
 
   const searchAbleKeys = ["title"];
+  const filter = ["All", "Active", "Inactive"];
 
   const [err, data] = useSetTimeout(
     "guides",
     page - 1,
     limit,
     searchTerm,
-    searchKey
+    searchKey,
+    statusFilter
   );
 
   useEffect(() => {
@@ -93,7 +96,7 @@ export default function GuideList() {
       if (updatedSelected.length !== guides.length) {
         setSelectAll(false);
       }
-  
+
       return updatedSelected;
     });
   };
@@ -167,12 +170,24 @@ export default function GuideList() {
                   Delete Selected
                 </button>
               ) : null}
-              <button
-                onClick={() => navigate("/add-guide")}
-                className="btn btn-primary"
-              >
-                Add Guide
-              </button>
+              <div className="card-options">
+                <select
+                  className="form-select mx-2"
+                  onChange={(e) => setStatusFilter(e.target.value)}
+                >
+                  {filter.map((key, i) => (
+                    <option key={i} value={key.toLowerCase()}>
+                      {key}
+                    </option>
+                  ))}
+                </select>
+                <button
+                  onClick={() => navigate("/add-guide")}
+                  className="btn btn-primary"
+                >
+                  Add Guide
+                </button>
+              </div>
             </div>
           </div>
 

@@ -14,15 +14,18 @@ export default function AdminList() {
   const [totalCount, setTotalCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchKey, setSearchKey] = useState("");
+  const [statusFilter, setStatusFilter] = useState("All");
 
   const searchAbleKeys = ["name", "email"];
+  const filter = ["All", "Active", "Inactive"];
 
   const [err, data] = useSetTimeout(
     "admins",
     page - 1,
     limit,
     searchTerm,
-    searchKey
+    searchKey,
+    statusFilter
   );
 
   useEffect(() => {
@@ -62,13 +65,6 @@ export default function AdminList() {
     </button>,
   ]);
 
-  const handlePageChange = (newPage) => setPage(newPage);
-
-  const handleLimitChange = (newLimit) => {
-    setLimit(newLimit);
-    setPage(0); // Reset to the first page on limit change
-  };
-
   return (
     <div className="page-body">
       <div className="container-xl">
@@ -76,6 +72,16 @@ export default function AdminList() {
           <div className="card-header">
             <h3 className="card-title">All Admins List</h3>
             <div className="card-options">
+              <select
+                className="form-select mx-2"
+                onChange={(e) => setStatusFilter(e.target.value)}
+              >
+                {filter.map((key, i) => (
+                  <option key={i} value={key.toLowerCase()}>
+                    {key}
+                  </option>
+                ))}
+              </select>
               <button
                 onClick={() => navigate("/add-admin")}
                 className="btn btn-primary "
@@ -90,14 +96,13 @@ export default function AdminList() {
               headers={headers}
               rows={rows}
               currentPage={page}
-              totalPages={Math.ceil(totalCount / limit)} // Calculate total pages based on count
-              onPageChange={handlePageChange}
-              
+              totalPages={Math.ceil(totalCount / limit)}
+              onPageChange={setPage}
               entriesPerPage={limit}
               setSearchTerm={setSearchTerm}
               setSearchKey={setSearchKey}
               searchAbleKeys={searchAbleKeys}
-              onEntriesChange={handleLimitChange}
+              onEntriesChange={setLimit}
               totalCount={totalCount}
             />
           </div>

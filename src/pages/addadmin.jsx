@@ -7,8 +7,6 @@ export default function AddAdmin() {
   const { id = "" } = useParams();
   const { auth, alert, setLoading } = useContext(GlobalContext);
 
-
-
   const [detail, setDetail] = useState({
     email: "",
     name: "",
@@ -91,7 +89,7 @@ export default function AddAdmin() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleDetails = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
     setLoading(true);
@@ -135,8 +133,6 @@ export default function AddAdmin() {
     });
   };
 
-
-
   return (
     <div className="page-body">
       <div className="container container-tight py-4">
@@ -145,7 +141,7 @@ export default function AddAdmin() {
             <h2 className="h2 text-center mb-4">
               {id ? "Edit Admin" : "Add Admin"}
             </h2>
-            <form onSubmit={handleDetails}>
+            <form onSubmit={handleSubmit}>
               <div className="mb-3">
                 <label className={!id ? "form-label required" : "form-label "}>
                   Admin Name
@@ -161,7 +157,9 @@ export default function AddAdmin() {
                   }
                 />
                 {errors.name && (
-                  <small className="alert alert-danger mt-2">{errors.name}</small>
+                  <small className="alert alert-danger mt-2">
+                    {errors.name}
+                  </small>
                 )}
               </div>
               <div className="mb-3">
@@ -179,7 +177,9 @@ export default function AddAdmin() {
                   }
                 />
                 {errors.email && (
-                  <small className="alert alert-danger mt-2">{errors.email}</small>
+                  <small className="alert alert-danger mt-2">
+                    {errors.email}
+                  </small>
                 )}
               </div>
               <div className="mb-3">
@@ -200,7 +200,9 @@ export default function AddAdmin() {
                   }
                 />
                 {errors.password && (
-                  <small className="alert alert-danger mt-2">{errors.password}</small>
+                  <small className="alert alert-danger mt-2">
+                    {errors.password}
+                  </small>
                 )}
               </div>
               <div className="mb-3">
@@ -233,10 +235,11 @@ export default function AddAdmin() {
                       <span className="form-check-label">{site.name}</span>
                     </label>
                   ))}
-                  
                 </div>
                 {errors.sites && (
-                  <small className="alert alert-danger mt-2">{errors.sites}</small>
+                  <small className="alert alert-danger mt-2">
+                    {errors.sites}
+                  </small>
                 )}
               </div>
               {!detail.isSuperAdmin && (

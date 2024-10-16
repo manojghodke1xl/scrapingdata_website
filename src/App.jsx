@@ -28,6 +28,8 @@ import SmtpList from "./pages/smtplist";
 import AddSmtp from "./pages/addsmtp";
 import PopupList from "./pages/popuplist";
 import AddPopup from "./pages/addpopup";
+import AddCategory from "./pages/addCategory";
+import CategoryList from "./pages/categoryList";
 
 function App() {
   const [alerts, alert] = useAlert();
@@ -75,6 +77,12 @@ function App() {
               <Route path="/popup-list" element={<PopupList />} />
               <Route path="/add-popup" element={<AddPopup />} />
               <Route path="/add-popup/:id" element={<AddPopup />} />
+
+              <Route path="/category-list" element={<CategoryList />} />
+              <Route path="/add-category" element={<AddCategory />} />
+              <Route path="/add-category/:id" element={<AddCategory />} />
+
+
             </Route>
 
             <Route path="*" element={<Missing />} />

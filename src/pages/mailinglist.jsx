@@ -164,9 +164,7 @@ export default function MailingList() {
               setSearchTerm={setSearchTerm}
               setSearchKey={setSearchKey}
               searchAbleKeys={searchAbleKeys}
-              onEntriesChange={(newLimit) => {
-                setLimit(newLimit);
-              }}
+              onEntriesChange={setLimit}
               totalCount={totalCount}
             />
           </div>

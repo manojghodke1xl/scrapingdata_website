@@ -1,11 +1,11 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useLayoutEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { GlobalContext } from "../GlobalContext";
 
 export default function AddPopup() {
   const navigate = useNavigate();
   const { id = "" } = useParams();
-  const { alert, setLoading } = useContext(GlobalContext);
+  const { auth, alert, setLoading } = useContext(GlobalContext);
 
   const [popupDetails, setPopupDetails] = useState({
     name: "",
@@ -37,9 +37,13 @@ export default function AddPopup() {
   const [availableSites, setAvailableSites] = useState([]);
   const [errors, setErrors] = useState({});
 
-  const positions = ["center-popup", "center-popup", "topbar-notifications"];
-  const deviceTypes = ["all", "desktop", "mobile"];
-  const contentTypes = ["basic", "guide", "casestudy"];
+  const positions = ["Center-Popup", "Topbar-Notifications"];
+  const deviceTypes = ["All", "Desktop", "Mobile"];
+  const contentTypes = ["Basic", "Guide", "Casestudy"];
+
+  useLayoutEffect(() => {
+    if (!auth.isSuperAdmin) navigate("/dashboard");
+  }, [auth, navigate]);
 
   useEffect(() => {
     (async () => {
@@ -134,25 +138,18 @@ export default function AddPopup() {
     fetchAvailableSites();
   }, [alert]);
 
-  const handleSiteSelection = (id) => {
-    setPopupDetails((prev) => {
-      if (popupDetails.contentType === "guide") {
-        const isSelected = prev.moreGuides.includes(id);
-        return {
-          ...prev,
-          moreGuides: isSelected
-            ? prev.moreGuides.filter((id) => id !== id)
-            : [...prev.moreGuides, id],
-        };
-      } else if (popupDetails.contentType === "casestudy") {
-        const isSelected = prev.moreGuides.includes(id);
-        return {
-          ...prev,
-          moreGuides: isSelected
-            ? prev.moreGuides.filter((id) => id !== id)
-            : [...prev.moreGuides, id],
-        };
-      }
+  const handleSelection = (checked, id) => {
+    const refProp =
+      popupDetails.contentType === "guide"
+        ? "moreGuides"
+        : popupDetails.contentType === "casestudy"
+        ? "moreCaseStudy"
+        : "";
+    setPopupDetails({
+      ...popupDetails,
+      [refProp]: checked
+        ? popupDetails[refProp].concat(id)
+        : popupDetails[refProp].filter((_id) => id !== _id),
     });
   };
 
@@ -276,7 +273,7 @@ export default function AddPopup() {
                   >
                     <option value={""}>Select</option>
                     {positions.map((position, i) => (
-                      <option key={i} value={position}>
+                      <option key={i} value={position.toLowerCase()}>
                         {position}
                       </option>
                     ))}
@@ -350,7 +347,7 @@ export default function AddPopup() {
                     }
                   >
                     {deviceTypes.map((device, i) => (
-                      <option key={i} value={device}>
+                      <option key={i} value={device.toLowerCase()}>
                         {device}
                       </option>
                     ))}
@@ -359,7 +356,7 @@ export default function AddPopup() {
                 <div className="col-md-3">
                   <label className="form-label">Publish Date</label>
                   <input
-                    type="date"
+                    type="datetime-local"
                     name="publishDate"
                     className="form-control"
                     placeholder="Title"
@@ -375,7 +372,7 @@ export default function AddPopup() {
                 <div className="col-md-3">
                   <label className="form-label">Archive Date</label>
                   <input
-                    type="date"
+                    type="datetime-local"
                     name="archiveDate"
                     className="form-control"
                     placeholder="Title"
@@ -403,7 +400,7 @@ export default function AddPopup() {
                     }
                   >
                     {contentTypes.map((contentType, i) => (
-                      <option key={i} value={contentType}>
+                      <option key={i} value={contentType.toLowerCase()}>
                         {contentType}
                       </option>
                     ))}
@@ -463,6 +460,9 @@ export default function AddPopup() {
                         }
                       />
                       <span className="form-check-label">On Page Load</span>
+                    </label>
+
+                    <label className="form-check">
                       <input
                         className="form-check-input"
                         type="checkbox"
@@ -475,6 +475,9 @@ export default function AddPopup() {
                         }
                       />
                       <span className="form-check-label">On Page Unload</span>
+                    </label>
+
+                    <label className="form-check">
                       <input
                         className="form-check-input"
                         type="checkbox"
@@ -489,9 +492,10 @@ export default function AddPopup() {
                       <span className="form-check-label">
                         Off Once Submited
                       </span>
-
-                      {popupDetails.contentType === "guide" && (
-                        <>
+                    </label>
+                    {popupDetails.contentType === "guide" && (
+                      <>
+                        <label className="form-check">
                           <input
                             className="form-check-input"
                             type="checkbox"
@@ -506,6 +510,8 @@ export default function AddPopup() {
                           <span className="form-check-label">
                             All Global Guides
                           </span>
+                        </label>
+                        <label className="form-check">
                           <input
                             className="form-check-input"
                             type="checkbox"
@@ -525,11 +531,12 @@ export default function AddPopup() {
                               {errors.site}
                             </small>
                           )}
-                        </>
-                      )}
-
-                      {popupDetails.contentType === "casestudy" && (
-                        <>
+                        </label>
+                      </>
+                    )}
+                    {popupDetails.contentType === "casestudy" && (
+                      <>
+                        <label className="form-check">
                           <input
                             className="form-check-input"
                             type="checkbox"
@@ -545,6 +552,8 @@ export default function AddPopup() {
                           <span className="form-check-label">
                             All Global CaseStudies
                           </span>
+                        </label>
+                        <label className="form-check">
                           <input
                             className="form-check-input"
                             type="checkbox"
@@ -559,9 +568,9 @@ export default function AddPopup() {
                           <span className="form-check-label">
                             All Site CaseStudies
                           </span>
-                        </>
-                      )}
-                    </label>
+                        </label>
+                      </>
+                    )}
                   </div>
                 </div>
 
@@ -590,7 +599,9 @@ export default function AddPopup() {
                                 ? popupDetails.moreGuides.includes(data._id)
                                 : popupDetails.moreCaseStudy.includes(data._id)
                             }
-                            onChange={() => handleSiteSelection(data._id)}
+                            onChange={(e) =>
+                              handleSelection(e.target.checked, data._id)
+                            }
                           />
                           <span className="form-check-label">{data.title}</span>
                         </label>

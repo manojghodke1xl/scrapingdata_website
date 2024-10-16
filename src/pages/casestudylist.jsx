@@ -19,15 +19,18 @@ export default function CaseStudyList() {
   const [searchKey, setSearchKey] = useState("");
   const [selectedCaseStudies, setSelectedCaseStudies] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
+  const [statusFilter, setStatusFilter] = useState("All");
 
   const searchAbleKeys = ["title"];
+  const filter = ["All", "Active", "Inactive"];
 
   const [err, data] = useSetTimeout(
     "casestudies",
     page - 1,
     limit,
     searchTerm,
-    searchKey
+    searchKey,
+    statusFilter
   );
 
   useEffect(() => {
@@ -39,67 +42,67 @@ export default function CaseStudyList() {
     }
   }, [data, err, alert]);
 
-
-
-    const deleteSelectedCaseStudies = async () => {
-      if (!selectedCaseStudies.length) {
-        alert({
-          type: "warning",
-          title: "No Selection",
-          text: "Please select at least one Case study to delete.",
-        });
-        return;
-      }
-  
-      setLoading(true);
-      try {
-        const res = await fetch(`${import.meta.env.VITE_API_URL}/casestudy`, {
-          method: "DELETE",
-          headers: {
-            Authorization: localStorage.getItem("auth"),
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ ids: selectedCaseStudies }),
-        });
-  
-        const { error } = await res.json();
-  
-        if (res.ok) {
-          setCaseStudies((prevCaseStudies) =>
-            prevCaseStudies.filter((casestudy) => !selectedCaseStudies.includes(casestudy._id))
-          );
-          alert({
-            type: "success",
-            title: "Deleted!",
-            text: `Selected case study have been deleted.`,
-          });
-        } else {
-          alert({ type: "danger", title: "Error!", text: error });
-        }
-      } catch (error) {
-        alert({ type: "danger", title: "Error!", text: error.message });
-      } finally {
-        setLoading(false);
-        setModalOpen(false);
-        setSelectedCaseStudies([]);
-      }
-    };
-
-    const handleCheckboxChange = (casestudyId) => {
-      setSelectedCaseStudies((prevSelected) => {
-        let updatedSelected;
-        if (prevSelected.includes(casestudyId)) {
-          updatedSelected = prevSelected.filter((id) => id !== casestudyId);
-        } else {
-          updatedSelected = [...prevSelected, casestudyId];
-        }
-        if (updatedSelected.length !== caseStudies.length) {
-          setSelectAll(false);
-        }
-    
-        return updatedSelected;
+  const deleteSelectedCaseStudies = async () => {
+    if (!selectedCaseStudies.length) {
+      alert({
+        type: "warning",
+        title: "No Selection",
+        text: "Please select at least one Case study to delete.",
       });
-    };
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/casestudy`, {
+        method: "DELETE",
+        headers: {
+          Authorization: localStorage.getItem("auth"),
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ ids: selectedCaseStudies }),
+      });
+
+      const { error } = await res.json();
+
+      if (res.ok) {
+        setCaseStudies((prevCaseStudies) =>
+          prevCaseStudies.filter(
+            (casestudy) => !selectedCaseStudies.includes(casestudy._id)
+          )
+        );
+        alert({
+          type: "success",
+          title: "Deleted!",
+          text: `Selected case study have been deleted.`,
+        });
+      } else {
+        alert({ type: "danger", title: "Error!", text: error });
+      }
+    } catch (error) {
+      alert({ type: "danger", title: "Error!", text: error.message });
+    } finally {
+      setLoading(false);
+      setModalOpen(false);
+      setSelectedCaseStudies([]);
+    }
+  };
+
+  const handleCheckboxChange = (casestudyId) => {
+    setSelectedCaseStudies((prevSelected) => {
+      let updatedSelected;
+      if (prevSelected.includes(casestudyId)) {
+        updatedSelected = prevSelected.filter((id) => id !== casestudyId);
+      } else {
+        updatedSelected = [...prevSelected, casestudyId];
+      }
+      if (updatedSelected.length !== caseStudies.length) {
+        setSelectAll(false);
+      }
+
+      return updatedSelected;
+    });
+  };
 
   const handleSelectAll = () => {
     if (selectAll) {
@@ -156,7 +159,7 @@ export default function CaseStudyList() {
           <div className="card-header">
             <h3 className="card-title">All Case Study List</h3>
             <div className="card-options d-flex gap-2">
-            {selectedCaseStudies.length ? (
+              {selectedCaseStudies.length ? (
                 <button
                   onClick={() => setModalOpen(true)}
                   className="btn btn-danger"
@@ -164,12 +167,24 @@ export default function CaseStudyList() {
                   Delete Selected
                 </button>
               ) : null}
-              <button
-                onClick={() => navigate("/add-casestudy")}
-                className="btn btn-primary"
-              >
-                Add CaseStudy
-              </button>
+              <div className="card-options">
+                <select
+                  className="form-select mx-2"
+                  onChange={(e) => setStatusFilter(e.target.value)}
+                >
+                  {filter.map((key, i) => (
+                    <option key={i} value={key.toLowerCase()}>
+                      {key}
+                    </option>
+                  ))}
+                </select>
+                <button
+                  onClick={() => navigate("/add-casestudy")}
+                  className="btn btn-primary"
+                >
+                  Add CaseStudy
+                </button>
+              </div>
             </div>
           </div>
 
