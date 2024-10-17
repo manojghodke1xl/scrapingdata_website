@@ -79,11 +79,20 @@ export default function MailingList() {
 
   const handleCheckboxChange = (listId) => {
     setSelectedLists((prevSelected) => {
+      let updatedSelected;
       if (prevSelected.includes(listId)) {
-        return prevSelected.filter((id) => id !== listId);
+        updatedSelected = prevSelected.filter((id) => id !== listId);
       } else {
-        return [...prevSelected, listId];
+        updatedSelected = [...prevSelected, listId];
       }
+
+      if(updatedSelected.length === lists.length) {
+        setSelectAll(true);
+      } else {
+        setSelectAll(false);
+      }
+
+      return updatedSelected;
     });
   };
 

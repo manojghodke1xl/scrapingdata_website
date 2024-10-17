@@ -98,7 +98,9 @@ export default function TestimonialList() {
       } else {
         updatedSelected = [...prevSelected, testimonialId];
       }
-      if (updatedSelected.length !== testimonials.length) {
+      if (updatedSelected.length === testimonials.length) {
+        setSelectAll(true);
+      }else{
         setSelectAll(false);
       }
 

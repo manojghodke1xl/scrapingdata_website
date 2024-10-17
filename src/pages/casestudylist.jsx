@@ -45,51 +45,51 @@ export default function CaseStudyList() {
     }
   }, [data, err, alert]);
 
-  const deleteSelectedCaseStudies = async () => {
-    if (!selectedCaseStudies.length) {
-      alert({
-        type: "warning",
-        title: "No Selection",
-        text: "Please select at least one Case study to delete.",
-      });
-      return;
-    }
+  // const deleteSelectedCaseStudies = async () => {
+  //   if (!selectedCaseStudies.length) {
+  //     alert({
+  //       type: "warning",
+  //       title: "No Selection",
+  //       text: "Please select at least one Case study to delete.",
+  //     });
+  //     return;
+  //   }
 
-    setLoading(true);
-    try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/casestudy`, {
-        method: "DELETE",
-        headers: {
-          Authorization: localStorage.getItem("auth"),
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ ids: selectedCaseStudies }),
-      });
+  //   setLoading(true);
+  //   try {
+  //     const res = await fetch(`${import.meta.env.VITE_API_URL}/casestudy`, {
+  //       method: "DELETE",
+  //       headers: {
+  //         Authorization: localStorage.getItem("auth"),
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({ ids: selectedCaseStudies }),
+  //     });
 
-      const { error } = await res.json();
+  //     const { error } = await res.json();
 
-      if (res.ok) {
-        setCaseStudies((prevCaseStudies) =>
-          prevCaseStudies.filter(
-            (casestudy) => !selectedCaseStudies.includes(casestudy._id)
-          )
-        );
-        alert({
-          type: "success",
-          title: "Deleted!",
-          text: `Selected case study have been deleted.`,
-        });
-      } else {
-        alert({ type: "danger", title: "Error!", text: error });
-      }
-    } catch (error) {
-      alert({ type: "danger", title: "Error!", text: error.message });
-    } finally {
-      setLoading(false);
-      setModalOpen(false);
-      setSelectedCaseStudies([]);
-    }
-  };
+  //     if (res.ok) {
+  //       setCaseStudies((prevCaseStudies) =>
+  //         prevCaseStudies.filter(
+  //           (casestudy) => !selectedCaseStudies.includes(casestudy._id)
+  //         )
+  //       );
+  //       alert({
+  //         type: "success",
+  //         title: "Deleted!",
+  //         text: `Selected case study have been deleted.`,
+  //       });
+  //     } else {
+  //       alert({ type: "danger", title: "Error!", text: error });
+  //     }
+  //   } catch (error) {
+  //     alert({ type: "danger", title: "Error!", text: error.message });
+  //   } finally {
+  //     setLoading(false);
+  //     setModalOpen(false);
+  //     setSelectedCaseStudies([]);
+  //   }
+  // };
 
   const handleCheckboxChange = (casestudyId) => {
     setSelectedCaseStudies((prevSelected) => {
@@ -99,7 +99,9 @@ export default function CaseStudyList() {
       } else {
         updatedSelected = [...prevSelected, casestudyId];
       }
-      if (updatedSelected.length !== caseStudies.length) {
+      if (updatedSelected.length === caseStudies.length) {
+        setSelectAll(true);
+      } else {
         setSelectAll(false);
       }
 
@@ -178,7 +180,7 @@ export default function CaseStudyList() {
                 </select>
                 {selectedCaseStudies.length ? (
                   <button
-                    onClick={() => setModalOpen(true)}
+                    // onClick={() => setModalOpen(true)}
                     className="btn btn-success mx-2"
                   >
                     All Active
@@ -186,7 +188,7 @@ export default function CaseStudyList() {
                 ) : null}
                 {selectedCaseStudies.length ? (
                   <button
-                    onClick={() => setModalOpen(true)}
+                    // onClick={() => setModalOpen(true)}
                     className="btn btn-danger mx-2"
                   >
                     All Inactive
@@ -226,10 +228,11 @@ export default function CaseStudyList() {
 
       <ConfirmationModal
         isOpen={modalOpen}
-        onClose={() => setModalOpen(false)}
-        onConfirm={deleteSelectedCaseStudies}
+        // onClose={() => setModalOpen(false)}
+        // onConfirm={deleteSelectedCaseStudies}
         message="Are you sure you want to delete this casestudy?"
       />
+      
     </div>
   );
 }

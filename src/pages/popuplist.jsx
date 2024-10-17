@@ -97,7 +97,9 @@ export default function PopupList() {
       } else {
         updatedSelected = [...prevSelected, popupId];
       }
-      if (updatedSelected.length !== popups.length) {
+      if (updatedSelected.length === popups.length) {
+        setSelectAll(true);
+      } else {
         setSelectAll(false);
       }
 

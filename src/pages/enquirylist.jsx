@@ -85,13 +85,17 @@ export default function EnquiryList() {
       } else {
         updatedSelected = [...prevSelected, enqId];
       }
-      if (updatedSelected.length !== enquiries.length) {
+  
+      if (updatedSelected.length === enquiries.length) {
+        setSelectAll(true);
+      } else {
         setSelectAll(false);
       }
-
+  
       return updatedSelected;
     });
   };
+  
 
   const handleSelectAll = () => {
     if (selectAll) {

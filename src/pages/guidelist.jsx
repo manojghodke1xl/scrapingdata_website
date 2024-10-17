@@ -45,50 +45,6 @@ export default function GuideList() {
     }
   }, [data, err, alert]);
 
-  const deleteSelectedGuides = async () => {
-    if (!selectedGuides.length) {
-      alert({
-        type: "warning",
-        title: "No Selection",
-        text: "Please select at least one enquiry to delete.",
-      });
-      return;
-    }
-
-    setLoading(true);
-    try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/guide`, {
-        method: "DELETE",
-        headers: {
-          Authorization: localStorage.getItem("auth"),
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ ids: selectedGuides }),
-      });
-
-      const { error } = await res.json();
-
-      if (res.ok) {
-        setGuides((prevEnquiries) =>
-          prevEnquiries.filter((enq) => !selectedGuides.includes(enq._id))
-        );
-        alert({
-          type: "success",
-          title: "Deleted!",
-          text: `Selected enquiry have been deleted.`,
-        });
-      } else {
-        alert({ type: "danger", title: "Error!", text: error });
-      }
-    } catch (error) {
-      alert({ type: "danger", title: "Error!", text: error.message });
-    } finally {
-      setLoading(false);
-      setModalOpen(false);
-      setSelectedGuides([]);
-    }
-  };
-
   const handleCheckboxChange = (guideId) => {
     setSelectedGuides((prevSelected) => {
       let updatedSelected;
@@ -97,7 +53,9 @@ export default function GuideList() {
       } else {
         updatedSelected = [...prevSelected, guideId];
       }
-      if (updatedSelected.length !== guides.length) {
+      if (updatedSelected.length === guides.length) {
+        setSelectAll(true);
+      } else {
         setSelectAll(false);
       }
 
@@ -126,7 +84,7 @@ export default function GuideList() {
       ),
     },
     { label: "Title" },
-    { label: "status" },
+    { label: "Status" },
     { label: "Actions" },
     { label: "Sites" },
   ];
@@ -148,7 +106,7 @@ export default function GuideList() {
     <div key={guide._id}>
       <button
         onClick={() => navigate(`/edit-guide/${guide._id}`)}
-        className="btn btn-primary  me-1"
+        className="btn btn-primary me-1"
       >
         Edit
       </button>
@@ -181,20 +139,10 @@ export default function GuideList() {
                   ))}
                 </select>
                 {selectedGuides.length ? (
-                  <button
-                    onClick={() => setModalOpen(true)}
-                    className="btn btn-success mx-2"
-                  >
-                    All Active
-                  </button>
+                  <button className="btn btn-success mx-2">All Active</button>
                 ) : null}
                 {selectedGuides.length ? (
-                  <button
-                    onClick={() => setModalOpen(true)}
-                    className="btn btn-danger mx-2"
-                  >
-                    All Inactive
-                  </button>
+                  <button className="btn btn-danger mx-2">All Inactive</button>
                 ) : null}
                 <button
                   onClick={() => navigate("/add-guide")}
@@ -228,8 +176,8 @@ export default function GuideList() {
 
       <ConfirmationModal
         isOpen={modalOpen}
-        onClose={() => setModalOpen(false)}
-        onConfirm={deleteSelectedGuides}
+        // onClose={() => setModalOpen(false)}
+        // onConfirm={updateSelectedGuidesStatus}
         message="Are you sure you want to delete this guide?"
       />
     </div>
