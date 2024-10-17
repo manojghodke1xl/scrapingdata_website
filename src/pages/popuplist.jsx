@@ -106,7 +106,6 @@ export default function PopupList() {
       const { error } = await res.json();
 
       if (res.ok) {
-        // setPopups((prevEnquiries) => prevEnquiries.filter((enq) => !selectedPopups.includes(enq._id)));
         alert({
           type: "success",
           title: "Deleted!",
