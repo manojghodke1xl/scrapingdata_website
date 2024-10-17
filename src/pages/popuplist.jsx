@@ -5,6 +5,7 @@ import Table from "../comps/table";
 import ConfirmationModal from "../comps/confirmation";
 import useSetTimeout from "../Hooks/useDebounce";
 import useGetAllSites from "../Hooks/useGetAllSites";
+import DuplicateModal from "../comps/duplicate";
 
 export default function PopupList() {
   const navigate = useNavigate();
@@ -13,20 +14,21 @@ export default function PopupList() {
   const [popups, setPopups] = useState([]);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(8);
+  const [dupModalOpen, setDupModalOpen] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [totalCount, setTotalCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchKey, setSearchKey] = useState("");
   const [selectedPopups, setSelectedPopups] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
-  const [statusFilter, setStatusFilter] = useState("All");
+  const [statusFilter, setStatusFilter] = useState("");
   const [siteId, setSiteId] = useState("");
   const allsites = useGetAllSites();
 
   const searchAbleKeys = ["Name", "Host"];
-  const filter = ["All", "Active", "Inactive"];
+  const filter = ["Active", "Inactive"];
 
-  const [err, data] = useSetTimeout("Popups", page - 1, limit, searchTerm, searchKey, statusFilter, siteId);
+  const [err, data, setRefresh] = useSetTimeout("popups", page - 1, limit, searchTerm, searchKey, statusFilter, siteId);
 
   useEffect(() => {
     if (data) {
@@ -37,7 +39,7 @@ export default function PopupList() {
     }
   }, [data, err, alert]);
 
-  const updateCaseStudiesStatus = async (status) => {
+  const updateSelectedPopupsStatus = async (status) => {
     setLoading(true);
     try {
       const res = await fetch(
@@ -105,7 +107,6 @@ export default function PopupList() {
       const { error } = await res.json();
 
       if (res.ok) {
-        setPopups((prevEnquiries) => prevEnquiries.filter((enq) => !selectedPopups.includes(enq._id)));
         alert({
           type: "success",
           title: "Deleted!",
@@ -113,6 +114,7 @@ export default function PopupList() {
         });
         setSelectedPopups([]);
         setSelectAll(false);
+        setRefresh((r) => !r);
       } else {
         alert({ type: "danger", title: "Error!", text: error });
       }
@@ -133,9 +135,7 @@ export default function PopupList() {
       } else {
         updatedSelected = [...prevSelected, popupId];
       }
-      if (updatedSelected.length === popups.length) {
-        setSelectAll(true);
-      } else {
+      if (updatedSelected.length !== popups.length) {
         setSelectAll(false);
       }
 
@@ -216,7 +216,7 @@ export default function PopupList() {
                 ) : null}
                 {selectedPopups.length ? (
                   <button
-                    onClick={() => updateCaseStudiesStatus(true)}
+                    onClick={() => updateSelectedPopupsStatus(true)}
                     className="btn btn-success mx-2"
                   >
                     All Active
@@ -224,12 +224,31 @@ export default function PopupList() {
                 ) : null}
                 {selectedPopups.length ? (
                   <button
-                    onClick={() => updateCaseStudiesStatus(false)}
+                    onClick={() => updateSelectedPopupsStatus(false)}
                     className="btn btn-danger mx-2"
                   >
                     All Inactive
                   </button>
                 ) : null}
+                <select className="form-select mx-2" onChange={(e) => setStatusFilter(e.target.value)}>
+                  <option value="">All</option>
+                  {filter.map((key, i) => (
+                    <option key={i} value={key.toLowerCase()}>
+                      {key}
+                    </option>
+                  ))}
+                </select>
+                {selectedPopups.length > 0 && (
+                  <>
+                    <button onClick={() => setDupModalOpen(true)} className="btn btn-primary mx-2">
+                      Duplicate Selected
+                    </button>
+
+                    <button onClick={() => setModalOpen(true)} className="btn btn-danger mx-2">
+                      Delete Selected
+                    </button>
+                  </>
+                )}
                 <button onClick={() => navigate("/add-popup")} className="btn btn-primary">
                   Add Popup
                 </button>
@@ -263,6 +282,14 @@ export default function PopupList() {
         onConfirm={deleteSelectedPopup}
         message="Are you sure you want to delete this Popup?"
       />
+      <DuplicateModal
+        allsites={allsites}
+        isOpen={dupModalOpen}
+        onClose={setDupModalOpen}
+        onConfirm={duplicateSelectedPopup}
+        title="Duplicate Popups"
+        confirmText="Duplicate"
+      />
     </div>
   );
-}
+}}

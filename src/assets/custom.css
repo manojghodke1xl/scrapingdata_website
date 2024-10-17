@@ -26,3 +26,7 @@
   cursor: pointer;
   z-index: 0;
 }
+
+.container-xl{
+  max-width:1450px
+}

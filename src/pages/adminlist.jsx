@@ -26,15 +26,7 @@ export default function AdminList() {
   const searchAbleKeys = ["Name", "Email"];
   const filter = ["All", "Active", "Inactive"];
 
-  const [err, data] = useSetTimeout(
-    "admins",
-    page - 1,
-    limit,
-    searchTerm,
-    searchKey,
-    statusFilter,
-    siteId
-  );
+  const [err, data] = useSetTimeout("admins", page - 1, limit, searchTerm, searchKey, statusFilter, siteId);
 
   useEffect(() => {
     if (data) {
@@ -142,11 +134,7 @@ export default function AdminList() {
     ) : (
       <span className="badge bg-success">Active</span>
     ),
-    <button
-      key={admin._id}
-      onClick={() => navigate(`/edit-admin/${admin._id}`)}
-      className="btn btn-primary "
-    >
+    <button key={admin._id} onClick={() => navigate(`/edit-admin/${admin._id}`)} className="btn btn-primary ">
       Edit
     </button>,
     admin.isSuperAdmin

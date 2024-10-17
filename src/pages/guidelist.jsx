@@ -24,15 +24,8 @@ export default function GuideList() {
   const searchAbleKeys = ["Title"];
   const filter = ["All", "Active", "Inactive"];
 
-  const [err, data] = useSetTimeout(
-    "guides",
-    page - 1,
-    limit,
-    searchTerm,
-    searchKey,
-    statusFilter,
-    siteId
-  );
+  
+  const [err, data, setRefresh] = useSetTimeout("guides", page - 1, limit, searchTerm, searchKey, statusFilter, siteId);
 
   useEffect(() => {
     if (data) {
