@@ -26,7 +26,15 @@ export default function CaseStudyList() {
   const searchAbleKeys = ["Title"];
   const filter = ["All", "Active", "Inactive"];
 
-  const [err, data] = useSetTimeout("casestudies", page - 1, limit, searchTerm, searchKey, statusFilter, siteId);
+  const [err, data] = useSetTimeout(
+    "casestudies",
+    page - 1,
+    limit,
+    searchTerm,
+    searchKey,
+    statusFilter,
+    siteId
+  );
 
   useEffect(() => {
     if (data) {
@@ -83,6 +91,48 @@ export default function CaseStudyList() {
   //   }
   // };
 
+  const updateCaseStudiesStatus = async (status) => {
+    setLoading(true);
+    try {
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/casestudies/status`,
+        {
+          method: "PUT",
+          headers: {
+            Authorization: localStorage.getItem("auth"),
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ ids: selectedCaseStudies, isActive: status }),
+        }
+      );
+
+      const { error } = await res.json();
+
+      if (res.ok) {
+        setCaseStudies((prevCaseStudies) =>
+          prevCaseStudies.map((caseStudy) =>
+            selectedCaseStudies.includes(caseStudy._id)
+              ? { ...caseStudy, isActive: status }
+              : caseStudy
+          )
+        );
+        alert({
+          type: "success",
+          title: "Updated!",
+          text: `Selected case studies have been marked as ${
+            status ? "Active" : "Inactive"
+          }.`,
+        });
+      } else {
+        alert({ type: "danger", title: "Error!", text: error });
+      }
+    } catch (error) {
+      alert({ type: "danger", title: "Error!", text: error.message });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleCheckboxChange = (casestudyId) => {
     setSelectedCaseStudies((prevSelected) => {
       let updatedSelected;
@@ -112,7 +162,14 @@ export default function CaseStudyList() {
 
   const headers = [
     {
-      label: <input className="form-check-input " type="checkbox" checked={selectAll} onChange={handleSelectAll} />,
+      label: (
+        <input
+          className="form-check-input "
+          type="checkbox"
+          checked={selectAll}
+          onChange={handleSelectAll}
+        />
+      ),
     },
     { label: "Title" },
     { label: "Status" },
@@ -135,7 +192,10 @@ export default function CaseStudyList() {
       <span className="badge bg-danger">Inactive</span>
     ),
     <div key={casestudy._id}>
-      <button onClick={() => navigate(`/edit-casestudy/${casestudy._id}`)} className="btn btn-primary me-1">
+      <button
+        onClick={() => navigate(`/edit-casestudy/${casestudy._id}`)}
+        className="btn btn-primary me-1"
+      >
         Edit
       </button>
     </div>,
@@ -153,7 +213,10 @@ export default function CaseStudyList() {
                 <div className="text-secondary">
                   Filter
                   <div className="mx-2 d-inline-block">
-                    <select className="form-select form-control-sm" onChange={(e) => setStatusFilter(e.target.value)}>
+                    <select
+                      className="form-select form-control-sm"
+                      onChange={(e) => setStatusFilter(e.target.value)}
+                    >
                       {filter.map((key, i) => (
                         <option key={i} value={key.toLowerCase()}>
                           {key}
@@ -164,7 +227,7 @@ export default function CaseStudyList() {
                 </div>
                 {selectedCaseStudies.length ? (
                   <button
-                    // onClick={() => setModalOpen(true)}
+                    onClick={() => updateCaseStudiesStatus(true)} // All Active
                     className="btn btn-success mx-2"
                   >
                     All Active
@@ -172,13 +235,17 @@ export default function CaseStudyList() {
                 ) : null}
                 {selectedCaseStudies.length ? (
                   <button
-                    // onClick={() => setModalOpen(true)}
+                    onClick={() => updateCaseStudiesStatus(false)} // All Inactive
                     className="btn btn-danger mx-2"
                   >
                     All Inactive
                   </button>
                 ) : null}
-                <button onClick={() => navigate("/add-casestudy")} className="btn btn-primary">
+
+                <button
+                  onClick={() => navigate("/add-casestudy")}
+                  className="btn btn-primary"
+                >
                   Add CaseStudy
                 </button>
               </div>

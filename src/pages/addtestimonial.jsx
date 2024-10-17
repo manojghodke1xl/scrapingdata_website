@@ -77,7 +77,7 @@ export default function AddTestimonial() {
             isActive,
             image,
             video,
-            url,
+            videoUrl,
           } = data.testimonial; 
           setDetail((prev) => ({
             ...prev,
@@ -89,7 +89,7 @@ export default function AddTestimonial() {
             isGlobal,
             sites,
             isActive,
-            url,
+            videoUrl,
           }));
         } else {
           alert({ type: "warning", title: "Warning !", text: error });
@@ -303,15 +303,15 @@ export default function AddTestimonial() {
                 />
               </div>
               <div className="mb-3">
-                <label className="form-label">Text</label>
+                <label className="form-label">Video URL</label>
                 <input
-                  type="text"
+                  type="url"
                   name="url"
                   className="form-control"
                   placeholder="Url.."
-                  value={detail.url}
+                  value={detail.videoUrl}
                   onChange={(e) =>
-                    setDetail((d) => ({ ...d, url: e.target.value }))
+                    setDetail((d) => ({ ...d, videoUrl: e.target.value }))
                   }
                 />
               </div>
