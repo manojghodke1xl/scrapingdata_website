@@ -7,7 +7,9 @@ export default function AddTestimonial() {
   const { id = "" } = useParams();
   const { alert, setLoading } = useContext(GlobalContext);
   const [errors, setErrors] = useState({});
+  const [selectedType, setSelectedType] = useState("text");
 
+  console.log(selectedType);
   const [detail, setDetail] = useState({
     name: "",
     desg: "",
@@ -16,9 +18,14 @@ export default function AddTestimonial() {
     isGlobal: false,
     sites: [],
     categories: [],
+    image: "",
+    video: "",
+    videoUrl: "",
   });
   const [availableSites, setAvailableSites] = useState([]);
   const [availableCategories, setAvailableCategories] = useState([]);
+
+  const type = ["Text", "Image", "Video"];
 
   useEffect(() => {
     (async () => {
@@ -56,16 +63,30 @@ export default function AddTestimonial() {
     if (id) {
       setLoading(true);
       (async () => {
-        const res = await fetch(`${import.meta.env.VITE_API_URL}/testimonial/${id}`, {
-          method: "GET",
-          headers: {
-            Authorization: localStorage.getItem("auth"),
-          },
-        });
+        const res = await fetch(
+          `${import.meta.env.VITE_API_URL}/testimonial/${id}`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: localStorage.getItem("auth"),
+            },
+          }
+        );
         const { data, error } = await res.json();
 
         if (res.ok) {
-          const { name, desg, text, isGlobal, sites, isActive, categories, image, video, videoUrl } = data.testimonial;
+          const {
+            name,
+            desg,
+            text,
+            isGlobal,
+            sites,
+            isActive,
+            categories,
+            image,
+            video,
+            videoUrl,
+          } = data.testimonial;
           setDetail((prev) => ({
             ...prev,
             image,
@@ -83,7 +104,9 @@ export default function AddTestimonial() {
           alert({ type: "warning", title: "Warning !", text: error });
         }
       })()
-        .catch((error) => alert({ type: "danger", title: "Error !", text: error.message }))
+        .catch((error) =>
+          alert({ type: "danger", title: "Error !", text: error.message })
+        )
         .finally(() => setLoading(false));
     }
   }, [id, alert, setLoading]);
@@ -91,9 +114,10 @@ export default function AddTestimonial() {
   const validate = () => {
     const newErrors = {};
     if (!detail.name) newErrors.name = "Name is required";
-    if (!detail.text) newErrors.text = "Text is required";
-    if (!detail.sites.length) newErrors.sites = "At least one site must be selected";
-    if (!detail.categories.length) newErrors.categories = "At least one category must be selected";
+    if (!detail.sites.length)
+      newErrors.sites = "At least one site must be selected";
+    if (!detail.categories.length)
+      newErrors.categories = "At least one category must be selected";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -103,14 +127,17 @@ export default function AddTestimonial() {
     if (!validate()) return;
     setLoading(true);
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/testimonial${id ? `/${id}` : ""}`, {
-        method: id ? "PUT" : "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: localStorage.getItem("auth"),
-        },
-        body: JSON.stringify(detail),
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/testimonial${id ? `/${id}` : ""}`,
+        {
+          method: id ? "PUT" : "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: localStorage.getItem("auth"),
+          },
+          body: JSON.stringify(detail),
+        }
+      );
       const { message, error } = await res.json();
       if (res.ok) {
         alert({ type: "success", title: "Success !", text: message });
@@ -206,81 +233,111 @@ export default function AddTestimonial() {
       <div className="container container-tight py-4">
         <div className="card card-md">
           <div className="card-body">
-            <h2 className="h2 text-center mb-4">{!id ? "Add Testimonial" : "Edit Testimonial"}</h2>
+            <h2 className="h2 text-center mb-4">
+              {!id ? "Add Testimonial" : "Edit Testimonial"}
+            </h2>
             <form onSubmit={handleDetails}>
               <div className="mb-3">
-                <label className={!id ? "form-label required" : "form-label"}>Name</label>
+                <label className={!id ? "form-label required" : "form-label"}>
+                  Name
+                </label>
                 <input
                   type="text"
                   name="title"
                   className="form-control"
-                  placeholder="Name"
+                  placeholder="Title"
                   value={detail.name}
-                  onChange={(e) => {
-                    setDetail((d) => ({ ...d, name: e.target.value }));
-                    if (errors.name) setErrors((prev) => ({ ...prev, name: "" }));
-                  }}
+                  onChange={(e) =>
+                    setDetail((d) => ({ ...d, name: e.target.value }))
+                  }
                 />
-                {errors.name && <div className="alert alert-danger mt-2">{errors.name}</div>}
+                {errors.name && (
+                  <div className="alert alert-danger mt-2">{errors.name}</div>
+                )}
               </div>
               <div className="mb-3">
-                <label className={!id ? "form-label required" : "form-label"}>short Description</label>
+                <label className={!id ? "form-label required" : "form-label"}>
+                  short Description
+                </label>
                 <textarea
                   className="form-control"
                   name="example-textarea-input"
                   rows={6}
                   placeholder="Description.."
                   value={detail.desg}
-                  onChange={(e) => setDetail((d) => ({ ...d, desg: e.target.value }))}
+                  onChange={(e) =>
+                    setDetail((d) => ({ ...d, desg: e.target.value }))
+                  }
                 />
               </div>
               <div className="mb-3">
-                <label className={!id ? "form-label required" : "form-label"}>Text</label>
-                <input
-                  type="text"
-                  name="text"
-                  className="form-control"
-                  placeholder="Text"
-                  value={detail.text}
-                  onChange={(e) => setDetail((d) => ({ ...d, text: e.target.value }))}
-                />
-                {errors.text && <div className="alert alert-danger mt-2">{errors.text}</div>}
+                <label className="form-label required">Select Type</label>
+                <select
+                  className="form-select"
+                  value={selectedType}
+                  onChange={(e) => setSelectedType(e.target.value)}
+                >
+                  {type.map((t, i) => (
+                    <option key={i} value={t.toLowerCase()}>
+                      {t}
+                    </option>
+                  ))}
+                </select>
               </div>
+
+              {selectedType === "text" && (
+                <div className="mb-3">
+                  <label className={id ? "form-label" : "form-label required"}>
+                    Text
+                  </label>
+                  <textarea
+                    className="form-control"
+                    name="example-textarea-input"
+                    rows={6}
+                    placeholder="Text.."
+                    value={detail.text}
+                    onChange={(e) =>
+                      setDetail((d) => ({ ...d, text: e.target.value }))
+                    }
+                  />
+                </div>
+              )}
+
+              {selectedType === "image" && (
+                <div className="mb-3">
+                  <label className={id ? "form-label" : "form-label required"}>
+                    Upload Image
+                  </label>
+                  <input
+                    type="file"
+                    name="image"
+                    className="form-control"
+                    onChange={(e) => uploadFile(e, true)}
+                    accept="image/*"
+                    ref={imageInputRef}
+                  />
+                </div>
+              )}
+              {selectedType === "video" && (
+                <div className="mb-3">
+                  <label className={id ? "form-label" : "form-label required"}>
+                    Upload Video
+                  </label>
+                  <input
+                    type="file"
+                    name="video"
+                    className="form-control"
+                    onChange={(e) => uploadFile(e, true)}
+                    accept="image/*"
+                    ref={videoInputRef}
+                  />
+                </div>
+              )}
+
               <div className="mb-3">
-                <label className="form-label">Upload Image</label>
-                <input
-                  type="file"
-                  name="image"
-                  className="form-control"
-                  onChange={(e) => uploadFile(e, true)}
-                  accept="image/*"
-                  ref={imageInputRef}
-                />
-              </div>
-              <div className="mb-3">
-                <label className="form-label">Upload Video</label>
-                <input
-                  type="file"
-                  name="video"
-                  className="form-control"
-                  onChange={(e) => uploadFile(e, false)}
-                  accept="video/*"
-                  ref={videoInputRef}
-                />
-              </div>
-              <div className="mb-3">
-                <label className="form-label">Video URL</label>
-                <input
-                  type="url"
-                  name="url"
-                  className="form-control"
-                  placeholder="Url.."
-                  value={detail.videoUrl}
-                  onChange={(e) => setDetail((d) => ({ ...d, videoUrl: e.target.value }))}
-                />
-              </div>
-              <div className="mb-3">
-                <label className={!id ? "form-label required" : "form-label"}>Select Sites</label>
+                <label className={!id ? "form-label required" : "form-label"}>
+                  Select Sites
+                </label>
                 <div
                   style={{
                     maxHeight: "150px",
@@ -298,13 +355,16 @@ export default function AddTestimonial() {
                         value={site._id}
                         checked={detail.sites.includes(site._id)}
                         onChange={() => {
-                          if (detail.sites) setErrors((prev) => ({ ...prev, sites: "" }));
                           setDetail((prevDetail) => {
-                            const isSelected = prevDetail.sites.includes(site._id);
+                            const isSelected = prevDetail.sites.includes(
+                              site._id
+                            );
                             return {
                               ...prevDetail,
                               sites: isSelected
-                                ? prevDetail.sites.filter((id) => id !== site._id)
+                                ? prevDetail.sites.filter(
+                                    (id) => id !== site._id
+                                  )
                                 : [...prevDetail.sites, site._id],
                             };
                           });
@@ -314,11 +374,15 @@ export default function AddTestimonial() {
                     </label>
                   ))}
                 </div>
-                {errors.sites && <div className="alert alert-danger mt-2">{errors.sites}</div>}
+                {errors.sites && (
+                  <div className="alert alert-danger mt-2">{errors.sites}</div>
+                )}
               </div>
 
               <div className="mb-3">
-                <label className={!id ? "form-label required" : "form-label"}>Select Category</label>
+                <label className={!id ? "form-label required" : "form-label"}>
+                  Select Category
+                </label>
                 <div
                   style={{
                     maxHeight: "150px",
@@ -336,13 +400,16 @@ export default function AddTestimonial() {
                         value={category._id}
                         checked={detail.categories.includes(category._id)}
                         onChange={() => {
-                          if (detail.categories) setErrors((prev) => ({ ...prev, categories: "" }));
                           setDetail((prevDetail) => {
-                            const isSelected = prevDetail.categories.includes(category._id);
+                            const isSelected = prevDetail.categories.includes(
+                              category._id
+                            );
                             return {
                               ...prevDetail,
                               categories: isSelected
-                                ? prevDetail.categories.filter((id) => id !== category._id)
+                                ? prevDetail.categories.filter(
+                                    (id) => id !== category._id
+                                  )
                                 : [...prevDetail.categories, category._id],
                             };
                           });
@@ -352,7 +419,11 @@ export default function AddTestimonial() {
                     </label>
                   ))}
                 </div>
-                {errors.categories && <div className="alert alert-danger mt-2">{errors.categories}</div>}
+                {errors.categories && (
+                  <div className="alert alert-danger mt-2">
+                    {errors.categories}
+                  </div>
+                )}
               </div>
 
               <div className="mb-3">
