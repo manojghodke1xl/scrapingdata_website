@@ -15,7 +15,7 @@ export default function SmtpList() {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchKey, setSearchKey] = useState("");
 
-  const searchAbleKeys = ["name", "host"];
+  const searchAbleKeys = ["Name", "Host"];
 
   const [err, data] = useSetTimeout(
     "smtps",

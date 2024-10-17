@@ -19,7 +19,7 @@ export default function AdminList() {
   const [siteId, setSiteId] = useState("");
   const allsites = useGetAllSites();
 
-  const searchAbleKeys = ["name", "email"];
+  const searchAbleKeys = ["Name", "Email"];
   const filter = ["All", "Active", "Inactive"];
 
   const [err, data] = useSetTimeout(

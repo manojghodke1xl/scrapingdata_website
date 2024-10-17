@@ -22,7 +22,7 @@ export default function EnquiryList() {
   const [siteId, setSiteId] = useState("");
   const allsites = useGetAllSites();
 
-  const searchAbleKeys = ["name", "email", "mobile", "service", "subject", "site"];
+  const searchAbleKeys = ["Name", "Email", "Mobile", "Service", "Subject", "Site"];
 
   const [err, data] = useSetTimeout("enquiries", page - 1, limit, searchTerm, searchKey, "", siteId);
 

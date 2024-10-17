@@ -23,7 +23,7 @@ export default function TestimonialList() {
   const [siteId, setSiteId] = useState("");
   const allsites = useGetAllSites();
 
-  const searchAbleKeys = ["name"];
+  const searchAbleKeys = ["Name"];
 
   const filter = ["All", "Active", "Inactive"];
 
@@ -100,7 +100,7 @@ export default function TestimonialList() {
       }
       if (updatedSelected.length === testimonials.length) {
         setSelectAll(true);
-      }else{
+      } else {
         setSelectAll(false);
       }
 

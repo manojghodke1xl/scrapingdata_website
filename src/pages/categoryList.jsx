@@ -17,7 +17,7 @@ export default function CategoryList() {
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
 
-  const searchAbleKeys = ["name"];
+  const searchAbleKeys = ["Name"];
 
   const [err, data] = useSetTimeout(
     "categories",

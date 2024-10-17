@@ -23,7 +23,7 @@ export default function PopupList() {
   const [siteId, setSiteId] = useState("");
   const allsites = useGetAllSites();
 
-  const searchAbleKeys = ["name", "host"];
+  const searchAbleKeys = ["Name", "Host"];
   const filter = ["All", "Active", "Inactive"];
 
   const [err, data] = useSetTimeout(

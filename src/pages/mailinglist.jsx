@@ -22,7 +22,7 @@ export default function MailingList() {
   const [siteId, setSiteId] = useState("");
   const allsites = useGetAllSites();
 
-  const searchAbleKeys = ["email"];
+  const searchAbleKeys = ["Email"];
 
   const [err, data] = useSetTimeout("lists", page - 1, limit, searchTerm, searchKey, "", siteId);
 

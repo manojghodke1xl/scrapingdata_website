@@ -16,7 +16,7 @@ export default function SiteList() {
   const [searchKey, setSearchKey] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
 
-  const searchAbleKeys = ["name", "host"];
+  const searchAbleKeys = ["Name", "Host"];
   const filter = ["All", "Active", "Inactive"];
 
   const [err, data] = useSetTimeout("sites", page - 1, limit, searchTerm, searchKey, statusFilter, "");

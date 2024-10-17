@@ -61,7 +61,10 @@ const Table = ({
                   <div className="text-secondary">
                     Site
                     <div className="mx-2 d-inline-block">
-                      <select className="form-select form-control-sm" onChange={(e) => setSiteId(e.target.value)}>
+                      <select
+                        className="form-select form-control-sm"
+                        onChange={(e) => setSiteId(e.target.value)}
+                      >
                         <option value={""}>All</option>
                         {allsites.map((site) => (
                           <option key={site._id} value={site._id}>
@@ -75,10 +78,13 @@ const Table = ({
                 <div className="text-secondary">
                   Search:
                   <div className="ms-2 d-inline-block">
-                    <select className="form-select form-control-sm" onChange={(e) => setSearchKey(e.target.value)}>
+                    <select
+                      className="form-select form-control-sm"
+                      onChange={(e) => setSearchKey(e.target.value)}
+                    >
                       <option value={""}>Select</option>
                       {searchAbleKeys.map((key, i) => (
-                        <option key={i} value={key}>
+                        <option key={i} value={key.toLowerCase()}>
                           {key}
                         </option>
                       ))}
@@ -125,9 +131,14 @@ const Table = ({
             </div>
             <div className="card-footer d-flex align-items-center">
               <p className="m-0 text-secondary">
-                Showing {currentPage} of {totalPages} pages, total entries: {totalCount}
+                Showing {currentPage} of {totalPages} pages, total entries:{" "}
+                {totalCount}
               </p>
-              <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} />
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={onPageChange}
+              />
             </div>
           </div>
         </div>

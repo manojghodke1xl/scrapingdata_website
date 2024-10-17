@@ -23,7 +23,7 @@ export default function CaseStudyList() {
   const [siteId, setSiteId] = useState("");
   const allsites = useGetAllSites();
 
-  const searchAbleKeys = ["title"];
+  const searchAbleKeys = ["Title"];
   const filter = ["All", "Active", "Inactive"];
 
   const [err, data] = useSetTimeout(
