@@ -80,16 +80,18 @@ export default function AdminList() {
           <div className="card-header">
             <h3 className="card-title">All Admins List</h3>
             <div className="card-options">
-              <select
-                className="form-select mx-2"
-                onChange={(e) => setStatusFilter(e.target.value)}
-              >
-                {filter.map((key, i) => (
-                  <option key={i} value={key.toLowerCase()}>
-                    {key}
-                  </option>
-                ))}
-              </select>
+            <div className="text-secondary">
+                Filter
+                <div className="mx-2 d-inline-block">
+                  <select className="form-select form-control-sm" onChange={(e) => setStatusFilter(e.target.value)}>
+                    {filter.map((key, i) => (
+                      <option key={i} value={key.toLowerCase()}>
+                        {key}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
               <button
                 onClick={() => navigate("/add-admin")}
                 className="btn btn-primary "

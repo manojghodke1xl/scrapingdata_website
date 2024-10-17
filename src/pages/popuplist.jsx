@@ -26,15 +26,7 @@ export default function PopupList() {
   const searchAbleKeys = ["Name", "Host"];
   const filter = ["All", "Active", "Inactive"];
 
-  const [err, data] = useSetTimeout(
-    "Popups",
-    page - 1,
-    limit,
-    searchTerm,
-    searchKey,
-    statusFilter,
-    siteId
-  );
+  const [err, data] = useSetTimeout("Popups", page - 1, limit, searchTerm, searchKey, statusFilter, siteId);
 
   useEffect(() => {
     if (data) {
@@ -69,9 +61,7 @@ export default function PopupList() {
       const { error } = await res.json();
 
       if (res.ok) {
-        setPopups((prevEnquiries) =>
-          prevEnquiries.filter((enq) => !selectedPopups.includes(enq._id))
-        );
+        setPopups((prevEnquiries) => prevEnquiries.filter((enq) => !selectedPopups.includes(enq._id)));
         alert({
           type: "success",
           title: "Deleted!",
@@ -118,14 +108,7 @@ export default function PopupList() {
 
   const headers = [
     {
-      label: (
-        <input
-          className="form-check-input "
-          type="checkbox"
-          checked={selectAll}
-          onChange={handleSelectAll}
-        />
-      ),
+      label: <input className="form-check-input " type="checkbox" checked={selectAll} onChange={handleSelectAll} />,
     },
     { label: "Name" },
     { label: "Device Type" },
@@ -152,10 +135,7 @@ export default function PopupList() {
       <span className="badge bg-danger">Inactive</span>
     ),
     <div key={popup._id}>
-      <button
-        onClick={() => navigate(`/edit-popup/${popup._id}`)}
-        className="btn btn-primary  me-1"
-      >
+      <button onClick={() => navigate(`/edit-popup/${popup._id}`)} className="btn btn-primary  me-1">
         Edit
       </button>
     </div>,
@@ -170,28 +150,24 @@ export default function PopupList() {
             <h3 className="card-title">All Popups List</h3>
             <div className="card-options d-flex gap-2">
               <div className="card-options">
-                <select
-                  className="form-select mx-2"
-                  onChange={(e) => setStatusFilter(e.target.value)}
-                >
-                  {filter.map((key, i) => (
-                    <option key={i} value={key.toLowerCase()}>
-                      {key}
-                    </option>
-                  ))}
-                </select>
+                <div className="text-secondary">
+                  Filter
+                  <div className="mx-2 d-inline-block">
+                    <select className="form-select form-control-sm" onChange={(e) => setStatusFilter(e.target.value)}>
+                      {filter.map((key, i) => (
+                        <option key={i} value={key.toLowerCase()}>
+                          {key}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
                 {selectedPopups.length ? (
-                  <button
-                    onClick={() => setModalOpen(true)}
-                    className="btn btn-danger mx-2"
-                  >
+                  <button onClick={() => setModalOpen(true)} className="btn btn-danger mx-2">
                     Delete Selected
                   </button>
                 ) : null}
-                <button
-                  onClick={() => navigate("/add-popup")}
-                  className="btn btn-primary"
-                >
+                <button onClick={() => navigate("/add-popup")} className="btn btn-primary">
                   Add Popup
                 </button>
               </div>

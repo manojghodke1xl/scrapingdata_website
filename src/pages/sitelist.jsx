@@ -61,13 +61,18 @@ export default function SiteList() {
             <div className="card-options">
               {auth.isSuperAdmin && (
                 <>
-                  <select className="form-select mx-2" onChange={(e) => setStatusFilter(e.target.value)}>
-                    {filter.map((key, i) => (
-                      <option key={i} value={key.toLowerCase()}>
-                        {key}
-                      </option>
-                    ))}
-                  </select>
+                  <div className="text-secondary">
+                    Filter
+                    <div className="mx-2 d-inline-block">
+                      <select className="form-select form-control-sm" onChange={(e) => setStatusFilter(e.target.value)}>
+                        {filter.map((key, i) => (
+                          <option key={i} value={key.toLowerCase()}>
+                            {key}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
                   <button onClick={() => navigate("/add-site")} className="btn btn-primary ">
                     Add Site
                   </button>

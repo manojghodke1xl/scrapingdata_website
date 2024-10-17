@@ -26,15 +26,7 @@ export default function GuideList() {
   const searchAbleKeys = ["Title"];
   const filter = ["All", "Active", "Inactive"];
 
-  const [err, data] = useSetTimeout(
-    "guides",
-    page - 1,
-    limit,
-    searchTerm,
-    searchKey,
-    statusFilter,
-    siteId
-  );
+  const [err, data] = useSetTimeout("guides", page - 1, limit, searchTerm, searchKey, statusFilter, siteId);
 
   useEffect(() => {
     if (data) {
@@ -74,14 +66,7 @@ export default function GuideList() {
 
   const headers = [
     {
-      label: (
-        <input
-          className="form-check-input "
-          type="checkbox"
-          checked={selectAll}
-          onChange={handleSelectAll}
-        />
-      ),
+      label: <input className="form-check-input " type="checkbox" checked={selectAll} onChange={handleSelectAll} />,
     },
     { label: "Title" },
     { label: "Status" },
@@ -104,10 +89,7 @@ export default function GuideList() {
       <span className="badge bg-danger">Inactive</span>
     ),
     <div key={guide._id}>
-      <button
-        onClick={() => navigate(`/edit-guide/${guide._id}`)}
-        className="btn btn-primary me-1"
-      >
+      <button onClick={() => navigate(`/edit-guide/${guide._id}`)} className="btn btn-primary me-1">
         Edit
       </button>
     </div>,
@@ -128,26 +110,21 @@ export default function GuideList() {
             <h3 className="card-title">All Guides List</h3>
             <div className="card-options d-flex gap-2">
               <div className="card-options">
-                <select
-                  className="form-select mx-2"
-                  onChange={(e) => setStatusFilter(e.target.value)}
-                >
-                  {filter.map((key, i) => (
-                    <option key={i} value={key.toLowerCase()}>
-                      {key}
-                    </option>
-                  ))}
-                </select>
-                {selectedGuides.length ? (
-                  <button className="btn btn-success mx-2">All Active</button>
-                ) : null}
-                {selectedGuides.length ? (
-                  <button className="btn btn-danger mx-2">All Inactive</button>
-                ) : null}
-                <button
-                  onClick={() => navigate("/add-guide")}
-                  className="btn btn-primary"
-                >
+                <div className="text-secondary">
+                  Filter
+                  <div className="mx-2 d-inline-block">
+                    <select className="form-select form-control-sm" onChange={(e) => setStatusFilter(e.target.value)}>
+                      {filter.map((key, i) => (
+                        <option key={i} value={key.toLowerCase()}>
+                          {key}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+                {selectedGuides.length ? <button className="btn btn-success mx-2">All Active</button> : null}
+                {selectedGuides.length ? <button className="btn btn-danger mx-2">All Inactive</button> : null}
+                <button onClick={() => navigate("/add-guide")} className="btn btn-primary">
                   Add Guide
                 </button>
               </div>
