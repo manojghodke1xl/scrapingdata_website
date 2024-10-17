@@ -5,6 +5,7 @@ import Table from "../comps/table";
 import ConfirmationModal from "../comps/confirmation";
 import useSetTimeout from "../Hooks/useDebounce";
 import useGetAllSites from "../Hooks/useGetAllSites";
+import DuplicateModal from "../comps/duplicate";
 
 export default function PopupList() {
   const navigate = useNavigate();
@@ -13,20 +14,21 @@ export default function PopupList() {
   const [popups, setPopups] = useState([]);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(8);
+  const [dupModalOpen, setDupModalOpen] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [totalCount, setTotalCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchKey, setSearchKey] = useState("");
   const [selectedPopups, setSelectedPopups] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
-  const [statusFilter, setStatusFilter] = useState("All");
+  const [statusFilter, setStatusFilter] = useState("");
   const [siteId, setSiteId] = useState("");
   const allsites = useGetAllSites();
 
   const searchAbleKeys = ["Name", "Host"];
-  const filter = ["All", "Active", "Inactive"];
+  const filter = ["Active", "Inactive"];
 
-  const [err, data] = useSetTimeout("Popups", page - 1, limit, searchTerm, searchKey, statusFilter, siteId);
+  const [err, data, setRefresh] = useSetTimeout("popups", page - 1, limit, searchTerm, searchKey, statusFilter, siteId);
 
   useEffect(() => {
     if (data) {
@@ -36,6 +38,49 @@ export default function PopupList() {
       alert({ type: "warning", title: "Warning!", text: err.message });
     }
   }, [data, err, alert]);
+
+  const duplicateSelectedPopup = async (selectedSites) => {
+    if (!selectedPopups.length) {
+      alert({
+        type: "warning",
+        title: "No Selection",
+        text: "Please select at least one enquiry to delete.",
+      });
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/duplicate-popup`, {
+        method: "POST",
+        headers: {
+          Authorization: localStorage.getItem("auth"),
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ pids: selectedPopups, sids: selectedSites }),
+      });
+
+      const { error } = await res.json();
+
+      if (res.ok) {
+        // setPopups((prevEnquiries) => prevEnquiries.filter((enq) => !selectedPopups.includes(enq._id)));
+        alert({
+          type: "success",
+          title: "Duplicated!",
+          text: `Selected popups have been duplicated.`,
+        });
+        setRefresh((r) => !r);
+      } else {
+        alert({ type: "danger", title: "Error!", text: error });
+      }
+    } catch (error) {
+      alert({ type: "danger", title: "Error!", text: error.message });
+    } finally {
+      setLoading(false);
+      setModalOpen(false);
+      setSelectedPopups([]);
+    }
+  };
 
   const deleteSelectedPopup = async () => {
     if (!selectedPopups.length) {
@@ -61,12 +106,13 @@ export default function PopupList() {
       const { error } = await res.json();
 
       if (res.ok) {
-        setPopups((prevEnquiries) => prevEnquiries.filter((enq) => !selectedPopups.includes(enq._id)));
+        // setPopups((prevEnquiries) => prevEnquiries.filter((enq) => !selectedPopups.includes(enq._id)));
         alert({
           type: "success",
           title: "Deleted!",
           text: `Selected enquiry have been deleted.`,
         });
+        setRefresh((r) => !r);
       } else {
         alert({ type: "danger", title: "Error!", text: error });
       }
@@ -87,9 +133,7 @@ export default function PopupList() {
       } else {
         updatedSelected = [...prevSelected, popupId];
       }
-      if (updatedSelected.length === popups.length) {
-        setSelectAll(true);
-      } else {
+      if (updatedSelected.length !== popups.length) {
         setSelectAll(false);
       }
 
@@ -150,23 +194,25 @@ export default function PopupList() {
             <h3 className="card-title">All Popups List</h3>
             <div className="card-options d-flex gap-2">
               <div className="card-options">
-                <div className="text-secondary">
-                  Filter
-                  <div className="mx-2 d-inline-block">
-                    <select className="form-select form-control-sm" onChange={(e) => setStatusFilter(e.target.value)}>
-                      {filter.map((key, i) => (
-                        <option key={i} value={key.toLowerCase()}>
-                          {key}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-                {selectedPopups.length ? (
-                  <button onClick={() => setModalOpen(true)} className="btn btn-danger mx-2">
-                    Delete Selected
-                  </button>
-                ) : null}
+                <select className="form-select mx-2" onChange={(e) => setStatusFilter(e.target.value)}>
+                  <option value="">All</option>
+                  {filter.map((key, i) => (
+                    <option key={i} value={key.toLowerCase()}>
+                      {key}
+                    </option>
+                  ))}
+                </select>
+                {selectedPopups.length > 0 && (
+                  <>
+                    <button onClick={() => setDupModalOpen(true)} className="btn btn-primary mx-2">
+                      Duplicate Selected
+                    </button>
+
+                    <button onClick={() => setModalOpen(true)} className="btn btn-danger mx-2">
+                      Delete Selected
+                    </button>
+                  </>
+                )}
                 <button onClick={() => navigate("/add-popup")} className="btn btn-primary">
                   Add Popup
                 </button>
@@ -199,6 +245,14 @@ export default function PopupList() {
         onClose={() => setModalOpen(false)}
         onConfirm={deleteSelectedPopup}
         message="Are you sure you want to delete this Popup?"
+      />
+      <DuplicateModal
+        allsites={allsites}
+        isOpen={dupModalOpen}
+        onClose={setDupModalOpen}
+        onConfirm={duplicateSelectedPopup}
+        title="Duplicate Popups"
+        confirmText="Duplicate"
       />
     </div>
   );
