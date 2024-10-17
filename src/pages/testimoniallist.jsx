@@ -19,13 +19,13 @@ export default function TestimonialList() {
   const [searchKey, setSearchKey] = useState("");
   const [selectedTestimonials, setSelectedTestimonials] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
-  const [statusFilter, setStatusFilter] = useState("All");
+  const [statusFilter, setStatusFilter] = useState("");
   const [siteId, setSiteId] = useState("");
   const allsites = useGetAllSites();
 
   const searchAbleKeys = ["Name"];
 
-  const filter = ["All", "Active", "Inactive"];
+  const filter = ["Active", "Inactive"];
 
   const [err, data] = useSetTimeout("testimonials", page - 1, limit, searchTerm, searchKey, statusFilter, siteId);
 
@@ -43,7 +43,7 @@ export default function TestimonialList() {
       alert({
         type: "warning",
         title: "No Selection",
-        text: "Please select at least one enquiry to delete.",
+        text: "Please select at least one testimonial to delete.",
       });
       return;
     }
@@ -66,7 +66,7 @@ export default function TestimonialList() {
         alert({
           type: "success",
           title: "Deleted!",
-          text: `Selected enquiry have been deleted.`,
+          text: `Selected testimonials have been deleted.`,
         });
       } else {
         alert({ type: "danger", title: "Error!", text: error });
@@ -151,6 +151,7 @@ export default function TestimonialList() {
                   Filter
                   <div className="mx-2 d-inline-block">
                     <select className="form-select form-control-sm" onChange={(e) => setStatusFilter(e.target.value)}>
+                      <option value="">All</option>
                       {filter.map((key, i) => (
                         <option key={i} value={key.toLowerCase()}>
                           {key}

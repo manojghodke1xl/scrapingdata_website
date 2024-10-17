@@ -1,10 +1,4 @@
-import {
-  useContext,
-  useEffect,
-  useLayoutEffect,
-  useState,
-  useRef,
-} from "react";
+import { useContext, useEffect, useLayoutEffect, useState, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { GlobalContext } from "../GlobalContext";
 
@@ -66,15 +60,12 @@ export default function AddPopup() {
           alert({ type: "warning", title: "Warning !", text: error });
         }
       } else if (popupDetails.contentType === "casestudy") {
-        const res = await fetch(
-          `${import.meta.env.VITE_API_URL}/allcasestudies`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: localStorage.getItem("auth"),
-            },
-          }
-        );
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/allcasestudies`, {
+          method: "GET",
+          headers: {
+            Authorization: localStorage.getItem("auth"),
+          },
+        });
         const { data, error } = await res.json();
         if (res.ok) {
           setContentDetials(data.casestudies);
@@ -89,9 +80,8 @@ export default function AddPopup() {
     const newErrors = {};
     if (!popupDetails.name) newErrors.name = "Name is required";
     if (!popupDetails.position) newErrors.position = "Position is required";
-    if (!popupDetails.site)
-      (newErrors.site = "At least one site must be selected"),
-        (newErrors.position = "At least one site must be selected");
+    if (!popupDetails.site) newErrors.site = "At least one site must be selected";
+    if (!popupDetails.position) newErrors.position = "At least one position must be selected";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -117,9 +107,7 @@ export default function AddPopup() {
           alert({ type: "warning", title: "Warning !", text: error });
         }
       })()
-        .catch((error) =>
-          alert({ type: "danger", title: "Error !", text: error.message })
-        )
+        .catch((error) => alert({ type: "danger", title: "Error !", text: error.message }))
         .finally(() => setLoading(false));
     }
   }, [id, alert, setLoading]);
@@ -152,9 +140,7 @@ export default function AddPopup() {
         : "";
     setPopupDetails({
       ...popupDetails,
-      [refProp]: checked
-        ? popupDetails[refProp].concat(id)
-        : popupDetails[refProp].filter((_id) => id !== _id),
+      [refProp]: checked ? popupDetails[refProp].concat(id) : popupDetails[refProp].filter((_id) => id !== _id),
     });
   };
 
@@ -163,17 +149,14 @@ export default function AddPopup() {
     if (!validate()) return;
     setLoading(true);
     try {
-      const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/popup${id ? `/${id}` : ""}`,
-        {
-          method: id ? "PUT" : "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: localStorage.getItem("auth"),
-          },
-          body: JSON.stringify(popupDetails),
-        }
-      );
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/popup${id ? `/${id}` : ""}`, {
+        method: id ? "PUT" : "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: localStorage.getItem("auth"),
+        },
+        body: JSON.stringify(popupDetails),
+      });
       const { message, error } = await res.json();
       if (res.ok) {
         alert({ type: "success", title: "Success !", text: message });
@@ -255,9 +238,7 @@ export default function AddPopup() {
       <div className="container container py-4">
         <div className="card card-md">
           <div className="card-body">
-            <h2 className="h2 text-center mb-4">
-              {id ? "Edit Popup" : "Add Popup"}
-            </h2>
+            <h2 className="h2 text-center mb-4">{id ? "Edit Popup" : "Add Popup"}</h2>
             <form onSubmit={handleDetails}>
               <div className="row">
                 <div className="col-md-3 mb-3">
@@ -268,27 +249,25 @@ export default function AddPopup() {
                     className="form-control"
                     placeholder="Name"
                     value={popupDetails.name}
-                    onChange={(e) =>
-                      setPopupDetails((d) => ({ ...d, name: e.target.value }))
-                    }
+                    onChange={(e) => {
+                      setPopupDetails((d) => ({ ...d, name: e.target.value }));
+                      if (errors.name) setErrors((prev) => ({ ...prev, name: "" }));
+                    }}
                   />
-                  {errors.name && (
-                    <small className="alert alert-danger mt-2">
-                      {errors.name}
-                    </small>
-                  )}
+                  {errors.name && <small className="alert alert-danger mt-2">{errors.name}</small>}
                 </div>
                 <div className="col-md-3">
                   <label className="form-label required">Position</label>
                   <select
                     className="form-select"
                     value={popupDetails.position}
-                    onChange={(e) =>
+                    onChange={(e) => {
                       setPopupDetails((d) => ({
                         ...d,
                         position: e.target.value,
-                      }))
-                    }
+                      }));
+                      if (errors.position) setErrors((prev) => ({ ...prev, position: "" }));
+                    }}
                   >
                     <option value={""}>Select</option>
                     {positions.map((position, i) => (
@@ -297,11 +276,7 @@ export default function AddPopup() {
                       </option>
                     ))}
                   </select>
-                  {errors.position && (
-                    <small className="alert alert-danger mt-2">
-                      {errors.position}
-                    </small>
-                  )}
+                  {errors.position && <small className="alert alert-danger mt-2">{errors.position}</small>}
                 </div>
                 <div className="col-md-3">
                   <label className="form-label">After Page Load</label>
@@ -509,9 +484,7 @@ export default function AddPopup() {
                           }))
                         }
                       />
-                      <span className="form-check-label">
-                        Off Once Submited
-                      </span>
+                      <span className="form-check-label">Off Once Submited</span>
                     </label>
                     {popupDetails.contentType === "guide" && (
                       <>
@@ -527,9 +500,7 @@ export default function AddPopup() {
                               }))
                             }
                           />
-                          <span className="form-check-label">
-                            All Global Guides
-                          </span>
+                          <span className="form-check-label">All Global Guides</span>
                         </label>
                         <label className="form-check">
                           <input
@@ -543,14 +514,8 @@ export default function AddPopup() {
                               }))
                             }
                           />
-                          <span className="form-check-label">
-                            All Site Guides
-                          </span>
-                          {errors.site && (
-                            <small className="alert alert-danger mt-2">
-                              {errors.site}
-                            </small>
-                          )}
+                          <span className="form-check-label">All Site Guides</span>
+                          {errors.site && <small className="alert alert-danger mt-2">{errors.site}</small>}
                         </label>
                       </>
                     )}
@@ -564,14 +529,11 @@ export default function AddPopup() {
                             onChange={() =>
                               setPopupDetails((prev) => ({
                                 ...prev,
-                                allGlobalCaseStudies:
-                                  !prev.allGlobalCaseStudies,
+                                allGlobalCaseStudies: !prev.allGlobalCaseStudies,
                               }))
                             }
                           />
-                          <span className="form-check-label">
-                            All Global CaseStudies
-                          </span>
+                          <span className="form-check-label">All Global CaseStudies</span>
                         </label>
                         <label className="form-check">
                           <input
@@ -585,22 +547,17 @@ export default function AddPopup() {
                               }))
                             }
                           />
-                          <span className="form-check-label">
-                            All Site CaseStudies
-                          </span>
+                          <span className="form-check-label">All Site CaseStudies</span>
                         </label>
                       </>
                     )}
                   </div>
                 </div>
 
-                {(popupDetails.contentType === "guide" ||
-                  popupDetails.contentType === "casestudy") && (
+                {(popupDetails.contentType === "guide" || popupDetails.contentType === "casestudy") && (
                   <div className="col-md-3">
                     <label className="form-label">
-                      {popupDetails.contentType === "guide"
-                        ? "Additional Guides"
-                        : "Additional Case Study"}
+                      {popupDetails.contentType === "guide" ? "Additional Guides" : "Additional Case Study"}
                     </label>
                     <div
                       style={{
@@ -619,9 +576,7 @@ export default function AddPopup() {
                                 ? popupDetails.moreGuides.includes(data._id)
                                 : popupDetails.moreCaseStudy.includes(data._id)
                             }
-                            onChange={(e) =>
-                              handleSelection(e.target.checked, data._id)
-                            }
+                            onChange={(e) => handleSelection(e.target.checked, data._id)}
                           />
                           <span className="form-check-label">{data.title}</span>
                         </label>
@@ -635,12 +590,13 @@ export default function AddPopup() {
                   <select
                     className="form-select"
                     value={popupDetails.site}
-                    onChange={(e) =>
+                    onChange={(e) => {
                       setPopupDetails((d) => ({
                         ...d,
                         site: e.target.value,
-                      }))
-                    }
+                      }));
+                      if (errors.site) setErrors((prev) => ({ ...prev, site: "" }));
+                    }}
                   >
                     <option value={""}>Select</option>
                     {availableSites.map((site, i) => (
@@ -649,11 +605,7 @@ export default function AddPopup() {
                       </option>
                     ))}
                   </select>
-                  {errors.site && (
-                    <small className="alert alert-danger mt-2">
-                      {errors.site}
-                    </small>
-                  )}
+                  {errors.site && <small className="alert alert-danger mt-2">{errors.site}</small>}
                 </div>
 
                 {popupDetails.contentType === "basic" && (
@@ -665,9 +617,7 @@ export default function AddPopup() {
                       rows={4}
                       placeholder="Description.."
                       value={popupDetails.desc}
-                      onChange={(e) =>
-                        setPopupDetails((d) => ({ ...d, desc: e.target.value }))
-                      }
+                      onChange={(e) => setPopupDetails((d) => ({ ...d, desc: e.target.value }))}
                     />
                   </div>
                 )}
@@ -695,10 +645,7 @@ export default function AddPopup() {
                 </div>
               </div>
               <div className="form-footer ">
-                <button
-                  type="submit"
-                  className="btn btn-primary d-block mx-auto"
-                >
+                <button type="submit" className="btn btn-primary d-block mx-auto">
                   {id ? "Update Popup" : "Add Popup"}
                 </button>
               </div>

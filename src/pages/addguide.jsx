@@ -47,8 +47,7 @@ export default function AddGuide() {
         const { data, error } = await res.json();
 
         if (res.ok) {
-          const { title, desc, sites, image, pdf, isActive, isGlobal } =
-            data.guide;
+          const { title, desc, sites, image, pdf, isActive, isGlobal } = data.guide;
           setDetail((prev) => ({
             ...prev,
             title,
@@ -63,9 +62,7 @@ export default function AddGuide() {
           alert({ type: "warning", title: "Warning !", text: error });
         }
       })()
-        .catch((error) =>
-          alert({ type: "danger", title: "Error !", text: error.message })
-        )
+        .catch((error) => alert({ type: "danger", title: "Error !", text: error.message }))
         .finally(() => setLoading(false));
     }
   }, [id, alert, setLoading]);
@@ -87,17 +84,14 @@ export default function AddGuide() {
     if (!validate()) return;
     setLoading(true);
     try {
-      const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/guide${id ? `/${id}` : ""}`,
-        {
-          method: id ? "PUT" : "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: localStorage.getItem("auth"),
-          },
-          body: JSON.stringify(detail),
-        }
-      );
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/guide${id ? `/${id}` : ""}`, {
+        method: id ? "PUT" : "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: localStorage.getItem("auth"),
+        },
+        body: JSON.stringify(detail),
+      });
       const { message, error } = await res.json();
       if (res.ok) {
         alert({ type: "success", title: "Success !", text: message });
@@ -193,27 +187,22 @@ export default function AddGuide() {
       <div className="container container-tight py-4">
         <div className="card card-md">
           <div className="card-body">
-            <h2 className="h2 text-center mb-4">
-              {id ? "Edit Guide" : "Add Guide"}
-            </h2>
+            <h2 className="h2 text-center mb-4">{id ? "Edit Guide" : "Add Guide"}</h2>
             <form onSubmit={handleDetails}>
               <div className="mb-3">
-                <label className={!id ? "form-label required" : "form-label"}>
-                  Title
-                </label>
+                <label className={!id ? "form-label required" : "form-label"}>Title</label>
                 <input
                   type="text"
                   name="title"
                   className="form-control"
                   placeholder="Title"
                   value={detail.title}
-                  onChange={(e) =>
-                    setDetail((d) => ({ ...d, title: e.target.value }))
-                  }
+                  onChange={(e) => {
+                    setDetail((d) => ({ ...d, title: e.target.value }));
+                    if (errors.title) setErrors((prev) => ({ ...prev, title: "" }));
+                  }}
                 />
-                {errors.title && (
-                  <div className="alert alert-danger mt-2">{errors.title}</div>
-                )}
+                {errors.title && <div className="alert alert-danger mt-2">{errors.title}</div>}
               </div>
               <div className="mb-3">
                 <label className="form-label">Description</label>
@@ -223,9 +212,7 @@ export default function AddGuide() {
                   rows={6}
                   placeholder="Description.."
                   value={detail.desc}
-                  onChange={(e) =>
-                    setDetail((d) => ({ ...d, desc: e.target.value }))
-                  }
+                  onChange={(e) => setDetail((d) => ({ ...d, desc: e.target.value }))}
                 />
               </div>
 
@@ -254,9 +241,7 @@ export default function AddGuide() {
               </div>
 
               <div className="mb-3">
-                <label className={!id ? "form-label required" : "form-label"}>
-                  Select Sites
-                </label>
+                <label className={!id ? "form-label required" : "form-label"}>Select Sites</label>
                 <div
                   style={{
                     maxHeight: "150px",
@@ -274,16 +259,14 @@ export default function AddGuide() {
                         value={site._id}
                         checked={detail.sites.includes(site._id)}
                         onChange={() => {
+                          if (detail.sites) setErrors((prev) => ({ ...prev, sites: "" }));
+
                           setDetail((prevDetail) => {
-                            const isSelected = prevDetail.sites.includes(
-                              site._id
-                            );
+                            const isSelected = prevDetail.sites.includes(site._id);
                             return {
                               ...prevDetail,
                               sites: isSelected
-                                ? prevDetail.sites.filter(
-                                    (id) => id !== site._id
-                                  )
+                                ? prevDetail.sites.filter((id) => id !== site._id)
                                 : [...prevDetail.sites, site._id],
                             };
                           });
@@ -293,9 +276,7 @@ export default function AddGuide() {
                     </label>
                   ))}
                 </div>
-                {errors.sites && (
-                  <div className="alert alert-danger mt-2">{errors.sites}</div>
-                )}
+                {errors.sites && <div className="alert alert-danger mt-2">{errors.sites}</div>}
               </div>
               <div className="mb-3">
                 <label className="row">

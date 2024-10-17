@@ -42,7 +42,7 @@ export default function PopupList() {
     }
   }, [data, err, alert]);
 
-  const updateCaseStudiesStatus = async (status) => {
+  const updatePopupStatus = async (status) => {
     setLoading(true);
     try {
       const res = await fetch(
@@ -60,8 +60,8 @@ export default function PopupList() {
       const { error } = await res.json();
 
       if (res.ok) {
-        setPopups((prevCaseStudies) =>
-          prevCaseStudies.map((popup) =>
+        setPopups((prevPopup) =>
+          prevPopup.map((popup) =>
             selectedPopups.includes(popup._id)
               ? { ...popup, isActive: status }
               : popup
@@ -70,7 +70,7 @@ export default function PopupList() {
         alert({
           type: "success",
           title: "Updated!",
-          text: `Selected case studies have been marked as ${
+          text: `Selected popups have been marked as ${
             status ? "Active" : "Inactive"
           }.`,
         });
@@ -93,7 +93,7 @@ export default function PopupList() {
       alert({
         type: "warning",
         title: "No Selection",
-        text: "Please select at least one enquiry to delete.",
+        text: "Please select at least one popup to delete.",
       });
       return;
     }
@@ -260,13 +260,13 @@ export default function PopupList() {
                 {selectedPopups.length > 0 && (
                   <>
                     <button
-                      onClick={() => updateCaseStudiesStatus(true)}
+                      onClick={() => updatePopupStatus(true)}
                       className="btn btn-success mx-2"
                     >
                       All Active
                     </button>
                     <button
-                      onClick={() => updateCaseStudiesStatus(false)}
+                      onClick={() => updatePopupStatus(false)}
                       className="btn btn-danger mx-2"
                     >
                       All Inactive

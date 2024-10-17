@@ -16,10 +16,10 @@ export default function SiteList() {
   const [searchKey, setSearchKey] = useState("");
   const [selectedSites, setSelectedSites] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
-  const [statusFilter, setStatusFilter] = useState("All");
+  const [statusFilter, setStatusFilter] = useState("");
 
   const searchAbleKeys = ["Name", "Host"];
-  const filter = ["All", "Active", "Inactive"];
+  const filter = ["Active", "Inactive"];
 
   const [err, data] = useSetTimeout("sites", page - 1, limit, searchTerm, searchKey, statusFilter, "");
 
@@ -35,38 +35,29 @@ export default function SiteList() {
   const updateCaseStudiesStatus = async (status) => {
     setLoading(true);
     try {
-      const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/site-status`,
-        {
-          method: "PUT",
-          headers: {
-            Authorization: localStorage.getItem("auth"),
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ ids: selectedSites, isActive: status }),
-        }
-      );
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/site-status`, {
+        method: "PUT",
+        headers: {
+          Authorization: localStorage.getItem("auth"),
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ ids: selectedSites, isActive: status }),
+      });
 
       const { error } = await res.json();
 
       if (res.ok) {
         setSites((prevCaseStudies) =>
-          prevCaseStudies.map((site) =>
-            selectedSites.includes(site._id)
-              ? { ...site, isActive: status }
-              : site
-          )
+          prevCaseStudies.map((site) => (selectedSites.includes(site._id) ? { ...site, isActive: status } : site))
         );
         alert({
           type: "success",
           title: "Updated!",
-          text: `Selected site(s) have been marked as ${
-            status ? "Active" : "Inactive"
-          }.`,
+          text: `Selected site(s) have been marked as ${status ? "Active" : "Inactive"}.`,
         });
 
         setSelectedSites([]);
-        setSelectAll(false);  
+        setSelectAll(false);
       } else {
         alert({ type: "danger", title: "Error!", text: error });
       }
@@ -106,14 +97,7 @@ export default function SiteList() {
 
   const headers = [
     {
-      label: (
-        <input
-          className="form-check-input "
-          type="checkbox"
-          checked={selectAll}
-          onChange={handleSelectAll}
-        />
-      ),
+      label: <input className="form-check-input " type="checkbox" checked={selectAll} onChange={handleSelectAll} />,
     },
     { label: "Keys" },
     { label: "Website Name" },
@@ -156,6 +140,7 @@ export default function SiteList() {
                     Filter
                     <div className="mx-2 d-inline-block">
                       <select className="form-select form-control-sm" onChange={(e) => setStatusFilter(e.target.value)}>
+                        <option value="">All</option>
                         {filter.map((key, i) => (
                           <option key={i} value={key.toLowerCase()}>
                             {key}
@@ -165,21 +150,15 @@ export default function SiteList() {
                     </div>
                   </div>
                   {selectedSites.length ? (
-                  <button
-                    onClick={() => updateCaseStudiesStatus(true)}
-                    className="btn btn-success mx-2"
-                  >
-                    All Active
-                  </button>
-                ) : null}
-                {selectedSites.length ? (
-                  <button
-                    onClick={() => updateCaseStudiesStatus(false)}
-                    className="btn btn-danger mx-2"
-                  >
-                    All Inactive
-                  </button>
-                ) : null}
+                    <button onClick={() => updateCaseStudiesStatus(true)} className="btn btn-success mx-2">
+                      All Active
+                    </button>
+                  ) : null}
+                  {selectedSites.length ? (
+                    <button onClick={() => updateCaseStudiesStatus(false)} className="btn btn-danger mx-2">
+                      All Inactive
+                    </button>
+                  ) : null}
                   <button onClick={() => navigate("/add-site")} className="btn btn-primary ">
                     Add Site
                   </button>
