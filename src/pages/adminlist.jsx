@@ -7,7 +7,7 @@ import useGetAllSites from "../Hooks/useGetAllSites";
 
 export default function AdminList() {
   const navigate = useNavigate();
-  const { auth, alert } = useContext(GlobalContext);
+  const { auth, alert, setLoading } = useContext(GlobalContext);
 
   const [admins, setAdmins] = useState([]);
   const [page, setPage] = useState(1);
@@ -16,7 +16,11 @@ export default function AdminList() {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchKey, setSearchKey] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
+
   const [siteId, setSiteId] = useState("");
+
+  const [selectedAdmins, setSelectedAdmins] = useState([]);
+  const [selectAll, setSelectAll] = useState(false);
   const allsites = useGetAllSites();
 
   const searchAbleKeys = ["Name", "Email"];
@@ -33,19 +37,96 @@ export default function AdminList() {
     }
   }, [data, err, alert]);
 
+
+  const updateSelectedAdminsStatus = async (status) => {
+    setLoading(true);
+    try {
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/admin-status`,
+        {
+          method: "PUT",
+          headers: {
+            Authorization: localStorage.getItem("auth"),
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ ids: selectedAdmins, isBlocked: status }),
+        }
+      );
+  
+      const { error } = await res.json();
+  
+      if (res.ok) {
+        setAdmins((prevAdmins) =>
+          prevAdmins.map((admin) =>
+            selectedAdmins.includes(admin._id)
+              ? { ...admin, isBlocked: status }
+              : admin
+          )
+        );
+        alert({
+          type: "success",
+          title: "Updated!",
+          text: `Selected admin(s) have been marked as ${
+            status ? "Inactive" : "Active"
+          }.`,
+        });
+        setSelectedAdmins([]);
+        setSelectAll(false);
+      } else {
+        alert({ type: "danger", title: "Error!", text: error });
+      }
+    } catch (error) {
+      alert({ type: "danger", title: "Error!", text: error.message });
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+
   useLayoutEffect(() => {
     if (!auth.isSuperAdmin) navigate("/dashboard");
   }, [auth, navigate]);
 
-  const headers = [
-    { label: "Admin Name" },
-    { label: "Admin Email" },
-    { label: "Status" },
-    { label: "Actions" },
-    { label: "Sites" },
-  ];
-
+  const handleCheckboxChange = (adminId) => {
+    setSelectedAdmins((prevSelected) => {
+      let updatedSelected;
+      if (prevSelected.includes(adminId)) {
+        updatedSelected = prevSelected.filter((id) => id !== adminId);
+      } else {
+        updatedSelected = [...prevSelected, adminId];
+      }
+  
+      const nonSuperAdminIds = admins
+        .filter((admin) => !admin.isSuperAdmin)
+        .map((admin) => admin._id);
+  
+      const allSelected = nonSuperAdminIds.every((id) => updatedSelected.includes(id));
+      setSelectAll(allSelected);
+  
+      return updatedSelected;
+    });
+  };
+  
+  const handleSelectAll = () => {
+    if (selectAll) {
+      setSelectedAdmins([]); 
+    } else {
+      const nonSuperAdminIds = admins
+        .filter((admin) => !admin.isSuperAdmin)
+        .map((admin) => admin._id);
+      setSelectedAdmins(nonSuperAdminIds);
+    }
+    setSelectAll(!selectAll);
+  };
+  
   const rows = admins.map((admin) => [
+    !admin.isSuperAdmin ?<input
+        key={admin._id}
+        className="form-check-input"
+        type="checkbox"
+        checked={selectedAdmins.includes(admin._id)}
+        onChange={() => handleCheckboxChange(admin._id)}
+      /> : null,
     admin.name,
     admin.email,
     admin.isBlocked === true ? (
@@ -71,7 +152,10 @@ export default function AdminList() {
               <div className="text-secondary">
                 Filter
                 <div className="mx-2 d-inline-block">
-                  <select className="form-select form-control-sm" onChange={(e) => setStatusFilter(e.target.value)}>
+                  <select
+                    className="form-select form-control-sm"
+                    onChange={(e) => setStatusFilter(e.target.value)}
+                  >
                     {filter.map((key, i) => (
                       <option key={i} value={key.toLowerCase()}>
                         {key}
@@ -80,7 +164,27 @@ export default function AdminList() {
                   </select>
                 </div>
               </div>
-              <button onClick={() => navigate("/add-admin")} className="btn btn-primary ">
+              {selectedAdmins.length ? (
+                <button
+                  onClick={() => updateSelectedAdminsStatus(false)}
+                  className="btn btn-success mx-2"
+                >
+                  All Active
+                </button>
+              ) : null}
+              {selectedAdmins.length ? (
+                <button
+                  onClick={() => updateSelectedAdminsStatus(true)}
+                  className="btn btn-danger mx-2"
+                >
+                  All Inactive
+                </button>
+              ) : null}
+
+              <button
+                onClick={() => navigate("/add-admin")}
+                className="btn btn-primary "
+              >
                 Add Admin
               </button>
             </div>
@@ -89,7 +193,23 @@ export default function AdminList() {
           <div className="table-responsive">
             <Table
               rows={rows}
-              headers={headers}
+              headers={[
+                {
+                  label: (
+                    <input
+                      className="form-check-input "
+                      type="checkbox"
+                      checked={selectAll}
+                      onChange={handleSelectAll}
+                    />
+                  ),
+                },
+                { label: "Admin Name" },
+                { label: "Admin Email" },
+                { label: "Status" },
+                { label: "Actions" },
+                { label: "Sites" },
+              ]}
               currentPage={page}
               totalPages={Math.ceil(totalCount / limit)}
               onPageChange={setPage}

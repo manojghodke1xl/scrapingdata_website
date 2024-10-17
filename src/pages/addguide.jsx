@@ -19,7 +19,7 @@ export default function AddGuide() {
 
   useEffect(() => {
     (async () => {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/sites`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/allSites`, {
         method: "GET",
         headers: {
           Authorization: localStorage.getItem("auth"),

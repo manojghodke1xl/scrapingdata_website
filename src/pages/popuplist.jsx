@@ -6,11 +6,9 @@ import ConfirmationModal from "../comps/confirmation";
 import useSetTimeout from "../Hooks/useDebounce";
 import useGetAllSites from "../Hooks/useGetAllSites";
 import DuplicateModal from "../comps/duplicate";
-
 export default function PopupList() {
   const navigate = useNavigate();
   const { alert, setLoading } = useContext(GlobalContext);
-
   const [popups, setPopups] = useState([]);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(8);
@@ -24,12 +22,17 @@ export default function PopupList() {
   const [statusFilter, setStatusFilter] = useState("");
   const [siteId, setSiteId] = useState("");
   const allsites = useGetAllSites();
-
   const searchAbleKeys = ["Name", "Host"];
   const filter = ["Active", "Inactive"];
-
-  const [err, data, setRefresh] = useSetTimeout("popups", page - 1, limit, searchTerm, searchKey, statusFilter, siteId);
-
+  const [err, data, setRefresh] = useSetTimeout(
+    "popups",
+    page - 1,
+    limit,
+    searchTerm,
+    searchKey,
+    statusFilter,
+    siteId
+  );
   useEffect(() => {
     if (data) {
       setPopups(data.popups);
@@ -38,6 +41,52 @@ export default function PopupList() {
       alert({ type: "warning", title: "Warning!", text: err.message });
     }
   }, [data, err, alert]);
+
+  const updateCaseStudiesStatus = async (status) => {
+    setLoading(true);
+    try {
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/popup-status`,
+        {
+          method: "PUT",
+          headers: {
+            Authorization: localStorage.getItem("auth"),
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ ids: selectedPopups, isActive: status }),
+        }
+      );
+
+      const { error } = await res.json();
+
+      if (res.ok) {
+        setPopups((prevCaseStudies) =>
+          prevCaseStudies.map((popup) =>
+            selectedPopups.includes(popup._id)
+              ? { ...popup, isActive: status }
+              : popup
+          )
+        );
+        alert({
+          type: "success",
+          title: "Updated!",
+          text: `Selected case studies have been marked as ${
+            status ? "Active" : "Inactive"
+          }.`,
+        });
+        setRefresh((r) => !r);
+        setSelectedPopups([]);
+        setSelectAll(false);
+      } else {
+        alert({ type: "danger", title: "Error!", text: error });
+      }
+    } catch (error) {
+      alert({ type: "danger", title: "Error!", text: error.message });
+    } finally {
+      setLoading(false);
+    }
+  };
+
 
   const duplicateSelectedPopup = async (selectedSites) => {
     if (!selectedPopups.length) {
@@ -48,20 +97,20 @@ export default function PopupList() {
       });
       return;
     }
-
     setLoading(true);
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/duplicate-popup`, {
-        method: "POST",
-        headers: {
-          Authorization: localStorage.getItem("auth"),
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ pids: selectedPopups, sids: selectedSites }),
-      });
-
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/duplicate-popup`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: localStorage.getItem("auth"),
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ pids: selectedPopups, sids: selectedSites }),
+        }
+      );
       const { error } = await res.json();
-
       if (res.ok) {
         // setPopups((prevEnquiries) => prevEnquiries.filter((enq) => !selectedPopups.includes(enq._id)));
         alert({
@@ -70,6 +119,8 @@ export default function PopupList() {
           text: `Selected popups have been duplicated.`,
         });
         setRefresh((r) => !r);
+        setSelectedPopups([]);
+        setSelectAll(false);
       } else {
         alert({ type: "danger", title: "Error!", text: error });
       }
@@ -81,7 +132,6 @@ export default function PopupList() {
       setSelectedPopups([]);
     }
   };
-
   const deleteSelectedPopup = async () => {
     if (!selectedPopups.length) {
       alert({
@@ -91,7 +141,6 @@ export default function PopupList() {
       });
       return;
     }
-
     setLoading(true);
     try {
       const res = await fetch(`${import.meta.env.VITE_API_URL}/popup`, {
@@ -102,9 +151,7 @@ export default function PopupList() {
         },
         body: JSON.stringify({ ids: selectedPopups }),
       });
-
       const { error } = await res.json();
-
       if (res.ok) {
         alert({
           type: "success",
@@ -112,6 +159,8 @@ export default function PopupList() {
           text: `Selected popups have been deleted.`,
         });
         setRefresh((r) => !r);
+        setSelectedPopups([]);
+        setSelectAll(false);
       } else {
         alert({ type: "danger", title: "Error!", text: error });
       }
@@ -123,7 +172,6 @@ export default function PopupList() {
       setSelectedPopups([]);
     }
   };
-
   const handleCheckboxChange = (popupId) => {
     setSelectedPopups((prevSelected) => {
       let updatedSelected;
@@ -135,11 +183,9 @@ export default function PopupList() {
       if (updatedSelected.length !== popups.length) {
         setSelectAll(false);
       }
-
       return updatedSelected;
     });
   };
-
   const handleSelectAll = () => {
     if (selectAll) {
       setSelectedPopups([]);
@@ -148,10 +194,16 @@ export default function PopupList() {
     }
     setSelectAll(!selectAll);
   };
-
   const headers = [
     {
-      label: <input className="form-check-input " type="checkbox" checked={selectAll} onChange={handleSelectAll} />,
+      label: (
+        <input
+          className="form-check-input "
+          type="checkbox"
+          checked={selectAll}
+          onChange={handleSelectAll}
+        />
+      ),
     },
     { label: "Name" },
     { label: "Device Type" },
@@ -160,7 +212,6 @@ export default function PopupList() {
     { label: "Actions" },
     { label: "Sites" },
   ];
-
   const rows = popups.map((popup) => [
     <input
       key={popup._id}
@@ -178,13 +229,15 @@ export default function PopupList() {
       <span className="badge bg-danger">Inactive</span>
     ),
     <div key={popup._id}>
-      <button onClick={() => navigate(`/edit-popup/${popup._id}`)} className="btn btn-primary  me-1">
+      <button
+        onClick={() => navigate(`/edit-popup/${popup._id}`)}
+        className="btn btn-primary  me-1"
+      >
         Edit
       </button>
     </div>,
     `${popup.site.name} (${popup.site.host})`,
   ]);
-
   return (
     <div className="page-body">
       <div className="container-xl">
@@ -193,7 +246,10 @@ export default function PopupList() {
             <h3 className="card-title">All Popups List</h3>
             <div className="card-options d-flex gap-2">
               <div className="card-options">
-                <select className="form-select mx-2" onChange={(e) => setStatusFilter(e.target.value)}>
+                <select
+                  className="form-select mx-2"
+                  onChange={(e) => setStatusFilter(e.target.value)}
+                >
                   <option value="">All</option>
                   {filter.map((key, i) => (
                     <option key={i} value={key.toLowerCase()}>
@@ -203,16 +259,36 @@ export default function PopupList() {
                 </select>
                 {selectedPopups.length > 0 && (
                   <>
-                    <button onClick={() => setDupModalOpen(true)} className="btn btn-primary mx-2">
+                    <button
+                      onClick={() => updateCaseStudiesStatus(true)}
+                      className="btn btn-success mx-2"
+                    >
+                      All Active
+                    </button>
+                    <button
+                      onClick={() => updateCaseStudiesStatus(false)}
+                      className="btn btn-danger mx-2"
+                    >
+                      All Inactive
+                    </button>
+                    <button
+                      onClick={() => setDupModalOpen(true)}
+                      className="btn btn-primary mx-2"
+                    >
                       Duplicate Selected
                     </button>
-
-                    <button onClick={() => setModalOpen(true)} className="btn btn-danger mx-2">
+                    <button
+                      onClick={() => setModalOpen(true)}
+                      className="btn btn-danger mx-2"
+                    >
                       Delete Selected
                     </button>
                   </>
                 )}
-                <button onClick={() => navigate("/add-popup")} className="btn btn-primary">
+                <button
+                  onClick={() => navigate("/add-popup")}
+                  className="btn btn-primary"
+                >
                   Add Popup
                 </button>
               </div>

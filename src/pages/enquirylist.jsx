@@ -65,6 +65,8 @@ export default function EnquiryList() {
           title: "Deleted!",
           text: `Selected enquiry have been deleted.`,
         });
+        setSelectedEnquiries([]);
+        setSelectAll(false);
       } else {
         alert({ type: "danger", title: "Error!", text: error });
       }
