@@ -6,6 +6,7 @@ const useSetTimeout = (apiUrl, page, limit, val, key, a, site, delay = 500) => {
   const timeOutRef = useRef(0);
   const [error, setError] = useState(null);
   const [data, setData] = useState(null);
+  const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
     timeOutRef.current = setTimeout(async () => {
@@ -33,9 +34,9 @@ const useSetTimeout = (apiUrl, page, limit, val, key, a, site, delay = 500) => {
       }
     }, delay);
     return () => clearTimeout(timeOutRef.current);
-  }, [val, delay, apiUrl, page, limit, key, setLoading, a, site]);
+  }, [val, delay, apiUrl, page, limit, key, setLoading, a, site, refresh]);
 
-  return [error, data];
+  return [error, data, setRefresh];
 };
 
 export default useSetTimeout;

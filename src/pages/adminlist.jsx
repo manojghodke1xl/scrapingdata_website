@@ -22,15 +22,7 @@ export default function AdminList() {
   const searchAbleKeys = ["Name", "Email"];
   const filter = ["All", "Active", "Inactive"];
 
-  const [err, data] = useSetTimeout(
-    "admins",
-    page - 1,
-    limit,
-    searchTerm,
-    searchKey,
-    statusFilter,
-    siteId
-  );
+  const [err, data] = useSetTimeout("admins", page - 1, limit, searchTerm, searchKey, statusFilter, siteId);
 
   useEffect(() => {
     if (data) {
@@ -61,11 +53,7 @@ export default function AdminList() {
     ) : (
       <span className="badge bg-success">Active</span>
     ),
-    <button
-      key={admin._id}
-      onClick={() => navigate(`/edit-admin/${admin._id}`)}
-      className="btn btn-primary "
-    >
+    <button key={admin._id} onClick={() => navigate(`/edit-admin/${admin._id}`)} className="btn btn-primary ">
       Edit
     </button>,
     admin.isSuperAdmin
@@ -80,7 +68,7 @@ export default function AdminList() {
           <div className="card-header">
             <h3 className="card-title">All Admins List</h3>
             <div className="card-options">
-            <div className="text-secondary">
+              <div className="text-secondary">
                 Filter
                 <div className="mx-2 d-inline-block">
                   <select className="form-select form-control-sm" onChange={(e) => setStatusFilter(e.target.value)}>
@@ -92,10 +80,7 @@ export default function AdminList() {
                   </select>
                 </div>
               </div>
-              <button
-                onClick={() => navigate("/add-admin")}
-                className="btn btn-primary "
-              >
+              <button onClick={() => navigate("/add-admin")} className="btn btn-primary ">
                 Add Admin
               </button>
             </div>
