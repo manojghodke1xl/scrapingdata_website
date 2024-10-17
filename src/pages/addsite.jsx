@@ -20,7 +20,6 @@ export default function AddSite() {
     webhookUrl: "",
   });
 
-  // Fetch SMTP options
   useEffect(() => {
     const fetchSmtpOptions = async () => {
       const res = await fetch(`${import.meta.env.VITE_API_URL}/smtps`, {
@@ -40,7 +39,6 @@ export default function AddSite() {
     fetchSmtpOptions();
   }, [alert]);
 
-  // Fetch details for editing if `id` is provided
   useEffect(() => {
     if (id) {
       setLoading(true);
@@ -111,7 +109,6 @@ export default function AddSite() {
     }
   };
 
-  // Validate and add emails
   const validateAndAddEmail = (e) => {
     e.preventDefault();
     if (emailInput && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput)) {
@@ -119,14 +116,13 @@ export default function AddSite() {
         ...prev,
         forwardEmails: [...prev.forwardEmails, emailInput],
       }));
-      setEmailInput(""); // Reset input after adding
+      setEmailInput(""); 
       setEmailError(false);
     } else {
-      setEmailError(true); // Show error if email is invalid
+      setEmailError(true); 
     }
   };
 
-  // Remove an email from the list
   const removeEmail = (indexToRemove) => {
     setDetail((prev) => ({
       ...prev,
@@ -229,7 +225,7 @@ export default function AddSite() {
               )}
 
               <div className="mb-3">
-                <label className="form-label required">SMTP</label>
+                <label className={id ? "form-label" : "form-label required"}>SMTP</label>
                 <select
                   name="smtp"
                   className="form-control"
