@@ -149,7 +149,10 @@ export default function AddSite() {
                   className="form-control"
                   placeholder="Site Name"
                   value={detail.name}
-                  onChange={(e) => setDetail((d) => ({ ...d, name: e.target.value }))}
+                  onChange={(e) => {
+                    setDetail((d) => ({ ...d, name: e.target.value }));
+                    if (errors.name) setErrors((prev) => ({ ...prev, name: "" }));
+                  }}
                 />
                 {errors.name && <div className="alert alert-danger mt-2">{errors.name}</div>}
               </div>
@@ -161,7 +164,10 @@ export default function AddSite() {
                   className="form-control"
                   placeholder="Site host"
                   value={detail.host}
-                  onChange={(e) => setDetail((d) => ({ ...d, host: e.target.value }))}
+                  onChange={(e) => {
+                    setDetail((d) => ({ ...d, host: e.target.value }));
+                    if (errors.host) setErrors((prev) => ({ ...prev, host: "" }));
+                  }}
                 />
                 {errors.host && <div className="alert alert-danger mt-2">{errors.host}</div>}
               </div>
@@ -195,7 +201,10 @@ export default function AddSite() {
                     className="form-control"
                     placeholder="Enter email"
                     value={emailInput}
-                    onChange={(e) => setEmailInput(e.target.value)}
+                    onChange={(e) => {
+                      setEmailInput(e.target.value);
+                      setEmailError(false);
+                    }}
                   />
                   <button className="btn btn-primary mt-2" onClick={validateAndAddEmail}>
                     Add Email
@@ -225,7 +234,10 @@ export default function AddSite() {
                   name="smtp"
                   className="form-control"
                   value={detail.smtp}
-                  onChange={(e) => setDetail((d) => ({ ...d, smtp: e.target.value }))}
+                  onChange={(e) => {
+                    setDetail((d) => ({ ...d, smtp: e.target.value }));
+                    if (errors.smtp) setErrors((prev) => ({ ...prev, smtp: "" }));
+                  }}
                 >
                   <option value={""}>Select</option>
                   {smtpOptions.map((smtp, index) => (
