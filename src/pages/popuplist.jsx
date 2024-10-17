@@ -87,7 +87,7 @@ export default function PopupList() {
       alert({
         type: "warning",
         title: "No Selection",
-        text: "Please select at least one enquiry to delete.",
+        text: "Please select at least one popup to delete.",
       });
       return;
     }
@@ -109,7 +109,7 @@ export default function PopupList() {
         alert({
           type: "success",
           title: "Deleted!",
-          text: `Selected enquiry have been deleted.`,
+          text: `Selected popups have been deleted.`,
         });
         setRefresh((r) => !r);
       } else {
