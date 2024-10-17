@@ -6,7 +6,7 @@ import useSetTimeout from "../Hooks/useDebounce";
 
 export default function SiteList() {
   const navigate = useNavigate();
-  const { alert, auth } = useContext(GlobalContext);
+  const { alert, auth, setLoading } = useContext(GlobalContext);
 
   const [sites, setSites] = useState([]);
   const [page, setPage] = useState(1);
@@ -14,6 +14,8 @@ export default function SiteList() {
   const [totalCount, setTotalCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchKey, setSearchKey] = useState("");
+  const [selectedSites, setSelectedSites] = useState([]);
+  const [selectAll, setSelectAll] = useState(false);
   const [statusFilter, setStatusFilter] = useState("All");
 
   const searchAbleKeys = ["Name", "Host"];
@@ -30,7 +32,89 @@ export default function SiteList() {
     }
   }, [data, err, alert]);
 
+  const updateCaseStudiesStatus = async (status) => {
+    setLoading(true);
+    try {
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/site-status`,
+        {
+          method: "PUT",
+          headers: {
+            Authorization: localStorage.getItem("auth"),
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ ids: selectedSites, isActive: status }),
+        }
+      );
+
+      const { error } = await res.json();
+
+      if (res.ok) {
+        setSites((prevCaseStudies) =>
+          prevCaseStudies.map((site) =>
+            selectedSites.includes(site._id)
+              ? { ...site, isActive: status }
+              : site
+          )
+        );
+        alert({
+          type: "success",
+          title: "Updated!",
+          text: `Selected site(s) have been marked as ${
+            status ? "Active" : "Inactive"
+          }.`,
+        });
+
+        setSelectedSites([]);
+        setSelectAll(false);  
+      } else {
+        alert({ type: "danger", title: "Error!", text: error });
+      }
+    } catch (error) {
+      alert({ type: "danger", title: "Error!", text: error.message });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCheckboxChange = (siteId) => {
+    setSelectedSites((prevSelected) => {
+      let updatedSelected;
+      if (prevSelected.includes(siteId)) {
+        updatedSelected = prevSelected.filter((id) => id !== siteId);
+      } else {
+        updatedSelected = [...prevSelected, siteId];
+      }
+      if (updatedSelected.length === sites.length) {
+        setSelectAll(true);
+      } else {
+        setSelectAll(false);
+      }
+
+      return updatedSelected;
+    });
+  };
+
+  const handleSelectAll = () => {
+    if (selectAll) {
+      setSelectedSites([]);
+    } else {
+      setSelectedSites(sites.map((site) => site._id));
+    }
+    setSelectAll(!selectAll);
+  };
+
   const headers = [
+    {
+      label: (
+        <input
+          className="form-check-input "
+          type="checkbox"
+          checked={selectAll}
+          onChange={handleSelectAll}
+        />
+      ),
+    },
     { label: "Keys" },
     { label: "Website Name" },
     { label: "Web Address" },
@@ -39,6 +123,13 @@ export default function SiteList() {
   ];
 
   const rows = sites.map((site) => [
+    <input
+      key={site._id}
+      className="form-check-input"
+      type="checkbox"
+      checked={selectedSites.includes(site._id)}
+      onChange={() => handleCheckboxChange(site._id)}
+    />,
     site._id,
     site.name,
     site.host,
@@ -73,6 +164,22 @@ export default function SiteList() {
                       </select>
                     </div>
                   </div>
+                  {selectedSites.length ? (
+                  <button
+                    onClick={() => updateCaseStudiesStatus(true)}
+                    className="btn btn-success mx-2"
+                  >
+                    All Active
+                  </button>
+                ) : null}
+                {selectedSites.length ? (
+                  <button
+                    onClick={() => updateCaseStudiesStatus(false)}
+                    className="btn btn-danger mx-2"
+                  >
+                    All Inactive
+                  </button>
+                ) : null}
                   <button onClick={() => navigate("/add-site")} className="btn btn-primary ">
                     Add Site
                   </button>

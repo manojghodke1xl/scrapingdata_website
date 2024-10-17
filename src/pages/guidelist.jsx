@@ -2,7 +2,6 @@ import { useContext, useEffect, useState } from "react";
 import { GlobalContext } from "../GlobalContext";
 import { useNavigate } from "react-router-dom";
 import Table from "../comps/table";
-import ConfirmationModal from "../comps/confirmation";
 import useSetTimeout from "../Hooks/useDebounce";
 import useGetAllSites from "../Hooks/useGetAllSites";
 
@@ -13,7 +12,6 @@ export default function GuideList() {
   const [guides, setGuides] = useState([]);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(8);
-  const [modalOpen, setModalOpen] = useState(false);
   const [totalCount, setTotalCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchKey, setSearchKey] = useState("");
@@ -26,7 +24,15 @@ export default function GuideList() {
   const searchAbleKeys = ["Title"];
   const filter = ["All", "Active", "Inactive"];
 
-  const [err, data] = useSetTimeout("guides", page - 1, limit, searchTerm, searchKey, statusFilter, siteId);
+  const [err, data] = useSetTimeout(
+    "guides",
+    page - 1,
+    limit,
+    searchTerm,
+    searchKey,
+    statusFilter,
+    siteId
+  );
 
   useEffect(() => {
     if (data) {
@@ -36,6 +42,52 @@ export default function GuideList() {
       alert({ type: "warning", title: "Warning!", text: err.message });
     }
   }, [data, err, alert]);
+
+  const updateSelectedGuidesStatus = async (status) => {
+    setLoading(true);
+    try {
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/guide-status`,
+        {
+          method: "PUT",
+          headers: {
+            Authorization: localStorage.getItem("auth"),
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ ids: selectedGuides, isActive: status }),
+        }
+      );
+
+      const { error } = await res.json();
+
+      if (res.ok) {
+        setGuides((prevCaseStudies) =>
+          prevCaseStudies.map((guide) =>
+            selectedGuides.includes(guide._id)
+              ? { ...guide, isActive: status }
+              : guide
+          )
+        );
+        alert({
+          type: "success",
+          title: "Updated!",
+          text: `Selected case studies have been marked as ${
+            status ? "Active" : "Inactive"
+          }.`,
+        });
+
+        setSelectedGuides([]);
+        setSelectAll(false);
+      } else {
+        alert({ type: "danger", title: "Error!", text: error });
+      }
+    } catch (error) {
+      alert({ type: "danger", title: "Error!", text: error.message });
+    } finally {
+      setLoading(false);
+    }
+  };
+
 
   const handleCheckboxChange = (guideId) => {
     setSelectedGuides((prevSelected) => {
@@ -66,7 +118,14 @@ export default function GuideList() {
 
   const headers = [
     {
-      label: <input className="form-check-input " type="checkbox" checked={selectAll} onChange={handleSelectAll} />,
+      label: (
+        <input
+          className="form-check-input "
+          type="checkbox"
+          checked={selectAll}
+          onChange={handleSelectAll}
+        />
+      ),
     },
     { label: "Title" },
     { label: "Status" },
@@ -89,7 +148,10 @@ export default function GuideList() {
       <span className="badge bg-danger">Inactive</span>
     ),
     <div key={guide._id}>
-      <button onClick={() => navigate(`/edit-guide/${guide._id}`)} className="btn btn-primary me-1">
+      <button
+        onClick={() => navigate(`/edit-guide/${guide._id}`)}
+        className="btn btn-primary me-1"
+      >
         Edit
       </button>
     </div>,
@@ -113,7 +175,10 @@ export default function GuideList() {
                 <div className="text-secondary">
                   Filter
                   <div className="mx-2 d-inline-block">
-                    <select className="form-select form-control-sm" onChange={(e) => setStatusFilter(e.target.value)}>
+                    <select
+                      className="form-select form-control-sm"
+                      onChange={(e) => setStatusFilter(e.target.value)}
+                    >
                       {filter.map((key, i) => (
                         <option key={i} value={key.toLowerCase()}>
                           {key}
@@ -122,9 +187,26 @@ export default function GuideList() {
                     </select>
                   </div>
                 </div>
-                {selectedGuides.length ? <button className="btn btn-success mx-2">All Active</button> : null}
-                {selectedGuides.length ? <button className="btn btn-danger mx-2">All Inactive</button> : null}
-                <button onClick={() => navigate("/add-guide")} className="btn btn-primary">
+                {selectedGuides.length ? (
+                  <>
+                    <button
+                      className="btn btn-success mx-2"
+                      onClick={() => updateSelectedGuidesStatus(true)}
+                    >
+                      All Active
+                    </button>
+                    <button
+                      className="btn btn-danger mx-2"
+                      onClick={() => updateSelectedGuidesStatus(false)} 
+                    >
+                      All Inactive
+                    </button>
+                  </>
+                ) : null}
+                <button
+                  onClick={() => navigate("/add-guide")}
+                  className="btn btn-primary"
+                >
                   Add Guide
                 </button>
               </div>
@@ -150,13 +232,6 @@ export default function GuideList() {
           </div>
         </div>
       </div>
-
-      <ConfirmationModal
-        isOpen={modalOpen}
-        // onClose={() => setModalOpen(false)}
-        // onConfirm={updateSelectedGuidesStatus}
-        message="Are you sure you want to delete this guide?"
-      />
     </div>
   );
 }

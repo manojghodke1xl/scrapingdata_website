@@ -2,7 +2,6 @@ import { useContext, useEffect, useState } from "react";
 import { GlobalContext } from "../GlobalContext";
 import { useNavigate } from "react-router-dom";
 import Table from "../comps/table";
-import ConfirmationModal from "../comps/confirmation";
 import useSetTimeout from "../Hooks/useDebounce";
 import useGetAllSites from "../Hooks/useGetAllSites";
 
@@ -13,7 +12,6 @@ export default function CaseStudyList() {
   const [caseStudies, setCaseStudies] = useState([]);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(8);
-  const [modalOpen, setModalOpen] = useState(false);
   const [totalCount, setTotalCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchKey, setSearchKey] = useState("");
@@ -45,57 +43,12 @@ export default function CaseStudyList() {
     }
   }, [data, err, alert]);
 
-  // const deleteSelectedCaseStudies = async () => {
-  //   if (!selectedCaseStudies.length) {
-  //     alert({
-  //       type: "warning",
-  //       title: "No Selection",
-  //       text: "Please select at least one Case study to delete.",
-  //     });
-  //     return;
-  //   }
-
-  //   setLoading(true);
-  //   try {
-  //     const res = await fetch(`${import.meta.env.VITE_API_URL}/casestudy`, {
-  //       method: "DELETE",
-  //       headers: {
-  //         Authorization: localStorage.getItem("auth"),
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({ ids: selectedCaseStudies }),
-  //     });
-
-  //     const { error } = await res.json();
-
-  //     if (res.ok) {
-  //       setCaseStudies((prevCaseStudies) =>
-  //         prevCaseStudies.filter(
-  //           (casestudy) => !selectedCaseStudies.includes(casestudy._id)
-  //         )
-  //       );
-  //       alert({
-  //         type: "success",
-  //         title: "Deleted!",
-  //         text: `Selected case study have been deleted.`,
-  //       });
-  //     } else {
-  //       alert({ type: "danger", title: "Error!", text: error });
-  //     }
-  //   } catch (error) {
-  //     alert({ type: "danger", title: "Error!", text: error.message });
-  //   } finally {
-  //     setLoading(false);
-  //     setModalOpen(false);
-  //     setSelectedCaseStudies([]);
-  //   }
-  // };
 
   const updateCaseStudiesStatus = async (status) => {
     setLoading(true);
     try {
       const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/casestudies/status`,
+        `${import.meta.env.VITE_API_URL}/casestudy-status`,
         {
           method: "PUT",
           headers: {
@@ -123,6 +76,9 @@ export default function CaseStudyList() {
             status ? "Active" : "Inactive"
           }.`,
         });
+        
+        setSelectedCaseStudies([]);
+        setSelectAll(false);
       } else {
         alert({ type: "danger", title: "Error!", text: error });
       }
@@ -227,7 +183,7 @@ export default function CaseStudyList() {
                 </div>
                 {selectedCaseStudies.length ? (
                   <button
-                    onClick={() => updateCaseStudiesStatus(true)} // All Active
+                    onClick={() => updateCaseStudiesStatus(true)}
                     className="btn btn-success mx-2"
                   >
                     All Active
@@ -235,7 +191,7 @@ export default function CaseStudyList() {
                 ) : null}
                 {selectedCaseStudies.length ? (
                   <button
-                    onClick={() => updateCaseStudiesStatus(false)} // All Inactive
+                    onClick={() => updateCaseStudiesStatus(false)}
                     className="btn btn-danger mx-2"
                   >
                     All Inactive
@@ -273,13 +229,6 @@ export default function CaseStudyList() {
           </div>
         </div>
       </div>
-
-      <ConfirmationModal
-        isOpen={modalOpen}
-        // onClose={() => setModalOpen(false)}
-        // onConfirm={deleteSelectedCaseStudies}
-        message="Are you sure you want to delete this casestudy?"
-      />
     </div>
   );
 }

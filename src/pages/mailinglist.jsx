@@ -65,6 +65,8 @@ export default function MailingList() {
           title: "Deleted!",
           text: `Selected List have been deleted.`,
         });
+        setSelectedLists([]);
+        setSelectAll(false);  
       } else {
         alert({ type: "danger", title: "Error!", text: error });
       }

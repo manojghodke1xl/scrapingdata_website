@@ -37,6 +37,50 @@ export default function PopupList() {
     }
   }, [data, err, alert]);
 
+  const updateCaseStudiesStatus = async (status) => {
+    setLoading(true);
+    try {
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/popup-status`,
+        {
+          method: "PUT",
+          headers: {
+            Authorization: localStorage.getItem("auth"),
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ ids: selectedPopups, isActive: status }),
+        }
+      );
+
+      const { error } = await res.json();
+
+      if (res.ok) {
+        setPopups((prevCaseStudies) =>
+          prevCaseStudies.map((popup) =>
+            selectedPopups.includes(popup._id)
+              ? { ...popup, isActive: status }
+              : popup
+          )
+        );
+        alert({
+          type: "success",
+          title: "Updated!",
+          text: `Selected popup(s) have been marked as ${
+            status ? "Active" : "Inactive"
+          }.`,
+        });
+        setSelectedPopups([]);
+        setSelectAll(false);
+      } else {
+        alert({ type: "danger", title: "Error!", text: error });
+      }
+    } catch (error) {
+      alert({ type: "danger", title: "Error!", text: error.message });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const deleteSelectedPopup = async () => {
     if (!selectedPopups.length) {
       alert({
@@ -67,6 +111,8 @@ export default function PopupList() {
           title: "Deleted!",
           text: `Selected enquiry have been deleted.`,
         });
+        setSelectedPopups([]);
+        setSelectAll(false);
       } else {
         alert({ type: "danger", title: "Error!", text: error });
       }
@@ -135,12 +181,13 @@ export default function PopupList() {
       <span className="badge bg-danger">Inactive</span>
     ),
     <div key={popup._id}>
-      <button onClick={() => navigate(`/edit-popup/${popup._id}`)} className="btn btn-primary  me-1">
+      <button onClick={() => navigate(`/edit-popup/${popup._id}`)} className="btn btn-primary me-1">
         Edit
       </button>
     </div>,
-    `${popup.site.name} (${popup.site.host})`,
+    popup.site ? `${popup.site.name} (${popup.site.host})` : 'No Site Info', // Fallback for undefined site
   ]);
+  
 
   return (
     <div className="page-body">
@@ -165,6 +212,22 @@ export default function PopupList() {
                 {selectedPopups.length ? (
                   <button onClick={() => setModalOpen(true)} className="btn btn-danger mx-2">
                     Delete Selected
+                  </button>
+                ) : null}
+                {selectedPopups.length ? (
+                  <button
+                    onClick={() => updateCaseStudiesStatus(true)}
+                    className="btn btn-success mx-2"
+                  >
+                    All Active
+                  </button>
+                ) : null}
+                {selectedPopups.length ? (
+                  <button
+                    onClick={() => updateCaseStudiesStatus(false)}
+                    className="btn btn-danger mx-2"
+                  >
+                    All Inactive
                   </button>
                 ) : null}
                 <button onClick={() => navigate("/add-popup")} className="btn btn-primary">
