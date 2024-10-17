@@ -238,7 +238,7 @@ export default function AddTestimonial() {
                   name="title"
                   className="form-control"
                   placeholder="Title"
-                  value={detail.name} // Changed from detail.title to detail.name
+                  value={detail.name} 
                   onChange={(e) =>
                     setDetail((d) => ({ ...d, name: e.target.value }))
                   }
