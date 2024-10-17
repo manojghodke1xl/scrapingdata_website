@@ -75,10 +75,11 @@ export default function AddTestimonial() {
             isGlobal,
             sites,
             isActive,
+            categories,
             image,
             video,
             videoUrl,
-          } = data.testimonial; 
+          } = data.testimonial;
           setDetail((prev) => ({
             ...prev,
             image,
@@ -89,6 +90,7 @@ export default function AddTestimonial() {
             isGlobal,
             sites,
             isActive,
+            categories,
             videoUrl,
           }));
         } else {
@@ -238,7 +240,7 @@ export default function AddTestimonial() {
                   name="title"
                   className="form-control"
                   placeholder="Title"
-                  value={detail.name} 
+                  value={detail.name}
                   onChange={(e) =>
                     setDetail((d) => ({ ...d, name: e.target.value }))
                   }
