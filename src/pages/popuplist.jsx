@@ -6,11 +6,9 @@ import ConfirmationModal from "../comps/confirmation";
 import useSetTimeout from "../Hooks/useDebounce";
 import useGetAllSites from "../Hooks/useGetAllSites";
 import DuplicateModal from "../comps/duplicate";
-
 export default function PopupList() {
   const navigate = useNavigate();
   const { alert, setLoading } = useContext(GlobalContext);
-
   const [popups, setPopups] = useState([]);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(8);
@@ -24,12 +22,17 @@ export default function PopupList() {
   const [statusFilter, setStatusFilter] = useState("");
   const [siteId, setSiteId] = useState("");
   const allsites = useGetAllSites();
-
   const searchAbleKeys = ["Name", "Host"];
   const filter = ["Active", "Inactive"];
-
-  const [err, data, setRefresh] = useSetTimeout("popups", page - 1, limit, searchTerm, searchKey, statusFilter, siteId);
-
+  const [err, data, setRefresh] = useSetTimeout(
+    "popups",
+    page - 1,
+    limit,
+    searchTerm,
+    searchKey,
+    statusFilter,
+    siteId
+  );
   useEffect(() => {
     if (data) {
       setPopups(data.popups);
@@ -39,7 +42,7 @@ export default function PopupList() {
     }
   }, [data, err, alert]);
 
-  const updateSelectedPopupsStatus = async (status) => {
+  const updateCaseStudiesStatus = async (status) => {
     setLoading(true);
     try {
       const res = await fetch(
@@ -67,10 +70,11 @@ export default function PopupList() {
         alert({
           type: "success",
           title: "Updated!",
-          text: `Selected popup(s) have been marked as ${
+          text: `Selected case studies have been marked as ${
             status ? "Active" : "Inactive"
           }.`,
         });
+        setRefresh((r) => !r);
         setSelectedPopups([]);
         setSelectAll(false);
       } else {
@@ -83,7 +87,8 @@ export default function PopupList() {
     }
   };
 
-  const deleteSelectedPopup = async () => {
+
+  const duplicateSelectedPopup = async (selectedSites) => {
     if (!selectedPopups.length) {
       alert({
         type: "warning",
@@ -92,29 +97,30 @@ export default function PopupList() {
       });
       return;
     }
-
     setLoading(true);
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/popup`, {
-        method: "DELETE",
-        headers: {
-          Authorization: localStorage.getItem("auth"),
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ ids: selectedPopups }),
-      });
-
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/duplicate-popup`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: localStorage.getItem("auth"),
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ pids: selectedPopups, sids: selectedSites }),
+        }
+      );
       const { error } = await res.json();
-
       if (res.ok) {
+        // setPopups((prevEnquiries) => prevEnquiries.filter((enq) => !selectedPopups.includes(enq._id)));
         alert({
           type: "success",
-          title: "Deleted!",
-          text: `Selected enquiry have been deleted.`,
+          title: "Duplicated!",
+          text: `Selected popups have been duplicated.`,
         });
+        setRefresh((r) => !r);
         setSelectedPopups([]);
         setSelectAll(false);
-        setRefresh((r) => !r);
       } else {
         alert({ type: "danger", title: "Error!", text: error });
       }
@@ -126,7 +132,47 @@ export default function PopupList() {
       setSelectedPopups([]);
     }
   };
-
+  const deleteSelectedPopup = async () => {
+    if (!selectedPopups.length) {
+      alert({
+        type: "warning",
+        title: "No Selection",
+        text: "Please select at least one enquiry to delete.",
+      });
+      return;
+    }
+    setLoading(true);
+    try {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/popup`, {
+        method: "DELETE",
+        headers: {
+          Authorization: localStorage.getItem("auth"),
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ ids: selectedPopups }),
+      });
+      const { error } = await res.json();
+      if (res.ok) {
+        // setPopups((prevEnquiries) => prevEnquiries.filter((enq) => !selectedPopups.includes(enq._id)));
+        alert({
+          type: "success",
+          title: "Deleted!",
+          text: `Selected enquiry have been deleted.`,
+        });
+        setRefresh((r) => !r);
+        setSelectedPopups([]);
+        setSelectAll(false);
+      } else {
+        alert({ type: "danger", title: "Error!", text: error });
+      }
+    } catch (error) {
+      alert({ type: "danger", title: "Error!", text: error.message });
+    } finally {
+      setLoading(false);
+      setModalOpen(false);
+      setSelectedPopups([]);
+    }
+  };
   const handleCheckboxChange = (popupId) => {
     setSelectedPopups((prevSelected) => {
       let updatedSelected;
@@ -138,11 +184,9 @@ export default function PopupList() {
       if (updatedSelected.length !== popups.length) {
         setSelectAll(false);
       }
-
       return updatedSelected;
     });
   };
-
   const handleSelectAll = () => {
     if (selectAll) {
       setSelectedPopups([]);
@@ -151,10 +195,16 @@ export default function PopupList() {
     }
     setSelectAll(!selectAll);
   };
-
   const headers = [
     {
-      label: <input className="form-check-input " type="checkbox" checked={selectAll} onChange={handleSelectAll} />,
+      label: (
+        <input
+          className="form-check-input "
+          type="checkbox"
+          checked={selectAll}
+          onChange={handleSelectAll}
+        />
+      ),
     },
     { label: "Name" },
     { label: "Device Type" },
@@ -163,7 +213,6 @@ export default function PopupList() {
     { label: "Actions" },
     { label: "Sites" },
   ];
-
   const rows = popups.map((popup) => [
     <input
       key={popup._id}
@@ -181,14 +230,15 @@ export default function PopupList() {
       <span className="badge bg-danger">Inactive</span>
     ),
     <div key={popup._id}>
-      <button onClick={() => navigate(`/edit-popup/${popup._id}`)} className="btn btn-primary me-1">
+      <button
+        onClick={() => navigate(`/edit-popup/${popup._id}`)}
+        className="btn btn-primary  me-1"
+      >
         Edit
       </button>
     </div>,
-    popup.site ? `${popup.site.name} (${popup.site.host})` : 'No Site Info', // Fallback for undefined site
+    `${popup.site.name} (${popup.site.host})`,
   ]);
-  
-
   return (
     <div className="page-body">
       <div className="container-xl">
@@ -197,40 +247,10 @@ export default function PopupList() {
             <h3 className="card-title">All Popups List</h3>
             <div className="card-options d-flex gap-2">
               <div className="card-options">
-                <div className="text-secondary">
-                  Filter
-                  <div className="mx-2 d-inline-block">
-                    <select className="form-select form-control-sm" onChange={(e) => setStatusFilter(e.target.value)}>
-                      {filter.map((key, i) => (
-                        <option key={i} value={key.toLowerCase()}>
-                          {key}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-                {selectedPopups.length ? (
-                  <button onClick={() => setModalOpen(true)} className="btn btn-danger mx-2">
-                    Delete Selected
-                  </button>
-                ) : null}
-                {selectedPopups.length ? (
-                  <button
-                    onClick={() => updateSelectedPopupsStatus(true)}
-                    className="btn btn-success mx-2"
-                  >
-                    All Active
-                  </button>
-                ) : null}
-                {selectedPopups.length ? (
-                  <button
-                    onClick={() => updateSelectedPopupsStatus(false)}
-                    className="btn btn-danger mx-2"
-                  >
-                    All Inactive
-                  </button>
-                ) : null}
-                <select className="form-select mx-2" onChange={(e) => setStatusFilter(e.target.value)}>
+                <select
+                  className="form-select mx-2"
+                  onChange={(e) => setStatusFilter(e.target.value)}
+                >
                   <option value="">All</option>
                   {filter.map((key, i) => (
                     <option key={i} value={key.toLowerCase()}>
@@ -240,16 +260,36 @@ export default function PopupList() {
                 </select>
                 {selectedPopups.length > 0 && (
                   <>
-                    <button onClick={() => setDupModalOpen(true)} className="btn btn-primary mx-2">
+                    <button
+                      onClick={() => updateCaseStudiesStatus(true)}
+                      className="btn btn-success mx-2"
+                    >
+                      All Active
+                    </button>
+                    <button
+                      onClick={() => updateCaseStudiesStatus(false)}
+                      className="btn btn-danger mx-2"
+                    >
+                      All Inactive
+                    </button>
+                    <button
+                      onClick={() => setDupModalOpen(true)}
+                      className="btn btn-primary mx-2"
+                    >
                       Duplicate Selected
                     </button>
-
-                    <button onClick={() => setModalOpen(true)} className="btn btn-danger mx-2">
+                    <button
+                      onClick={() => setModalOpen(true)}
+                      className="btn btn-danger mx-2"
+                    >
                       Delete Selected
                     </button>
                   </>
                 )}
-                <button onClick={() => navigate("/add-popup")} className="btn btn-primary">
+                <button
+                  onClick={() => navigate("/add-popup")}
+                  className="btn btn-primary"
+                >
                   Add Popup
                 </button>
               </div>
@@ -292,4 +332,4 @@ export default function PopupList() {
       />
     </div>
   );
-}}
+}

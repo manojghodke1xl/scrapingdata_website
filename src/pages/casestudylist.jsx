@@ -24,7 +24,7 @@ export default function CaseStudyList() {
   const searchAbleKeys = ["Title"];
   const filter = ["All", "Active", "Inactive"];
 
-  const [err, data] = useSetTimeout(
+  const [err, data, setRefresh] = useSetTimeout(
     "casestudies",
     page - 1,
     limit,
@@ -75,8 +75,9 @@ export default function CaseStudyList() {
           text: `Selected case studies have been marked as ${
             status ? "Active" : "Inactive"
           }.`,
+          
         });
-        
+        setRefresh((r) => !r);
         setSelectedCaseStudies([]);
         setSelectAll(false);
       } else {

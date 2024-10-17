@@ -68,7 +68,7 @@ export default function GuideList() {
             status ? "Active" : "Inactive"
           }.`,
         });
-
+        setRefresh((r) => !r);
         setSelectedGuides([]);
         setSelectAll(false);
       } else {

@@ -24,7 +24,7 @@ export default function MailingList() {
 
   const searchAbleKeys = ["Email"];
 
-  const [err, data] = useSetTimeout("lists", page - 1, limit, searchTerm, searchKey, "", siteId);
+  const [err, data, setRefresh] = useSetTimeout("lists", page - 1, limit, searchTerm, searchKey, "", siteId);
 
   useEffect(() => {
     if (data) {
@@ -65,6 +65,7 @@ export default function MailingList() {
           title: "Deleted!",
           text: `Selected List have been deleted.`,
         });
+        setRefresh((r) => !r);
         setSelectedLists([]);
         setSelectAll(false);  
       } else {

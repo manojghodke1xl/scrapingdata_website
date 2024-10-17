@@ -88,18 +88,6 @@ export default function AddCaseStudy() {
     if (!validate()) return;
     setLoading(true);
     try {
-      if (!id) {
-        if (!detail.image || !detail.pdf) {
-          const confirmProceed = window.confirm(
-            "Image and PDF are not provided. Do you want to proceed without them?"
-          );
-          if (!confirmProceed) {
-            setLoading(false);
-            return;
-          }
-        }
-      }
-
       const res = await fetch(
         `${import.meta.env.VITE_API_URL}/casestudy${id ? `/${id}` : ""}`,
         {
@@ -129,7 +117,6 @@ export default function AddCaseStudy() {
   const imageInputRef = useRef(null);
   const fileInputRef = useRef(null);
 
-
   const uploadFile = async (e, isImage) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -151,14 +138,13 @@ export default function AddCaseStudy() {
 
     if (!validPdfTypes.includes(type)) {
       alert({
-          type: "warning",
-          title: "Invalid File Type",
-          text: "Only PDF files are allowed for uploads.",
+        type: "warning",
+        title: "Invalid File Type",
+        text: "Only PDF files are allowed for uploads.",
       });
       fileInputRef.current.value = "";
       return;
-  }
-  
+    }
 
     try {
       const res = await fetch(`${import.meta.env.VITE_API_URL}/upload`, {
