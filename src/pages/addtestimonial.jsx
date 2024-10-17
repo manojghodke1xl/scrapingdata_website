@@ -65,7 +65,7 @@ export default function AddTestimonial() {
         const { data, error } = await res.json();
 
         if (res.ok) {
-          const { name, desg, text, isGlobal, sites, isActive, image, video, videoUrl } = data.testimonial;
+          const { name, desg, text, isGlobal, sites, isActive, categories, image, video, videoUrl } = data.testimonial;
           setDetail((prev) => ({
             ...prev,
             image,
@@ -76,6 +76,7 @@ export default function AddTestimonial() {
             isGlobal,
             sites,
             isActive,
+            categories,
             videoUrl,
           }));
         } else {

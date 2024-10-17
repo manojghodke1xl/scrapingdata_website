@@ -27,7 +27,15 @@ export default function TestimonialList() {
 
   const filter = ["Active", "Inactive"];
 
-  const [err, data] = useSetTimeout("testimonials", page - 1, limit, searchTerm, searchKey, statusFilter, siteId);
+  const [err, data, setRefresh] = useSetTimeout(
+    "testimonials",
+    page - 1,
+    limit,
+    searchTerm,
+    searchKey,
+    statusFilter,
+    siteId
+  );
 
   useEffect(() => {
     if (data) {
@@ -37,6 +45,50 @@ export default function TestimonialList() {
       alert({ type: "warning", title: "Warning!", text: err.message });
     }
   }, [data, err, alert]);
+
+  const updateTestimonialStatus = async (status) => {
+    setLoading(true);
+    try {
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/testimonial-status`,
+        {
+          method: "PUT",
+          headers: {
+            Authorization: localStorage.getItem("auth"),
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ ids: selectedTestimonials, isActive: status }),
+        }
+      );
+
+      const { error } = await res.json();
+
+      if (res.ok) {
+        setTestimonials((prevTestimonials) =>
+          prevTestimonials.map((testimonial) =>
+            selectedTestimonials.includes(testimonial._id)
+              ? { ...testimonial, isActive: status }
+              : testimonial
+          )
+        );
+        alert({
+          type: "success",
+          title: "Updated!",
+          text: `Selected testimonial(s) have been marked as ${
+            status ? "Active" : "Inactive"
+          }.`,
+        });
+        setSelectedTestimonials([]);
+        setSelectAll(false);  
+      } else {
+        alert({ type: "danger", title: "Error!", text: error });
+      }
+    } catch (error) {
+      alert({ type: "danger", title: "Error!", text: error.message });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const deleteSelectedTestimonial = async () => {
     if (!selectedTestimonials.length) {
@@ -62,12 +114,15 @@ export default function TestimonialList() {
       const { error } = await res.json();
 
       if (res.ok) {
-        setTestimonials((prevEnquiries) => prevEnquiries.filter((enq) => !selectedTestimonials.includes(enq._id)));
+        setTestimonials((prevEnquiries) =>
+          prevEnquiries.filter((enq) => !selectedTestimonials.includes(enq._id))
+        );
         alert({
           type: "success",
           title: "Deleted!",
           text: `Selected testimonials have been deleted.`,
         });
+        setRefresh((r) => !r);
       } else {
         alert({ type: "danger", title: "Error!", text: error });
       }
@@ -102,14 +157,23 @@ export default function TestimonialList() {
     if (selectAll) {
       setSelectedTestimonials([]);
     } else {
-      setSelectedTestimonials(testimonials.map((testimonial) => testimonial._id));
+      setSelectedTestimonials(
+        testimonials.map((testimonial) => testimonial._id)
+      );
     }
     setSelectAll(!selectAll);
   };
 
   const headers = [
     {
-      label: <input className="form-check-input " type="checkbox" checked={selectAll} onChange={handleSelectAll} />,
+      label: (
+        <input
+          className="form-check-input "
+          type="checkbox"
+          checked={selectAll}
+          onChange={handleSelectAll}
+        />
+      ),
     },
     { label: "Name" },
     { label: "Status" },
@@ -132,7 +196,10 @@ export default function TestimonialList() {
       <span className="badge bg-danger">Inactive</span>
     ),
     <div key={testimonial._id}>
-      <button onClick={() => navigate(`/edit-testimonial/${testimonial._id}`)} className="btn btn-primary me-1">
+      <button
+        onClick={() => navigate(`/edit-testimonial/${testimonial._id}`)}
+        className="btn btn-primary me-1"
+      >
         Edit
       </button>
     </div>,
@@ -161,11 +228,31 @@ export default function TestimonialList() {
                   </div>
                 </div>
                 {selectedTestimonials.length ? (
-                  <button onClick={() => setModalOpen(true)} className="btn btn-danger mx-2">
-                    Delete Selected
-                  </button>
+                  <>
+                    <button
+                      onClick={() => updateTestimonialStatus(true)}
+                      className="btn btn-success mx-2"
+                    >
+                      All Active
+                    </button>
+                    <button
+                      onClick={() => updateTestimonialStatus(false)}
+                      className="btn btn-danger mx-2"
+                    >
+                      All Inactive
+                    </button>
+                    <button
+                      onClick={() => setModalOpen(true)}
+                      className="btn btn-danger mx-2"
+                    >
+                      Delete Selected
+                    </button>
+                  </>
                 ) : null}
-                <button onClick={() => navigate("/add-testimonial")} className="btn btn-primary">
+                <button
+                  onClick={() => navigate("/add-testimonial")}
+                  className="btn btn-primary"
+                >
                   Add Testimonial
                 </button>
               </div>
