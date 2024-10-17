@@ -48,7 +48,9 @@ export default function AddSmtp() {
     const newErrors = {};
     if (!detail.name) newErrors.name = "Name is required";
     if (!detail.host) newErrors.host = "Host is required";
-    if (!detail.secure.includes("none")) newErrors.secure = "Security Protocol is required";
+    if (detail.secure === "select") {
+      newErrors.secure = "Security protocol is required.";
+    }
     if (!detail.port) newErrors.port = "Port is required";
     if (!detail.user) newErrors.user = "User is required";
     if (!detail.password) newErrors.password = "Password is required";
@@ -157,9 +159,15 @@ export default function AddSmtp() {
                   name="secure"
                   className="form-control"
                   value={detail.secure}
-                  onChange={(e) =>
-                    setDetail((d) => ({ ...d, secure: e.target.value }))
-                  }
+                  onChange={(e) => {
+                    setDetail((d) => ({ ...d, secure: e.target.value }));
+                    if (e.target.value !== "select") {
+                      setErrors((prevErrors) => ({
+                        ...prevErrors,
+                        secure: undefined,
+                      }));
+                    }
+                  }}
                 >
                   <option value="select">Select</option>
                   <option value="SSL">SSL</option>
@@ -167,8 +175,8 @@ export default function AddSmtp() {
                   <option value="STARTTLS">STARTTLS</option>
                 </select>
                 {errors.secure && (
-                    <div className="alert alert-danger mt-2">{errors.secure}</div>
-                  )}
+                  <div className="alert alert-danger mt-2">{errors.secure}</div>
+                )}
               </div>
 
               <div className="mb-3">
@@ -204,7 +212,9 @@ export default function AddSmtp() {
                   }
                 />
                 {errors.password && (
-                  <div className="alert alert-danger mt-2">{errors.password}</div>
+                  <div className="alert alert-danger mt-2">
+                    {errors.password}
+                  </div>
                 )}
               </div>
 
