@@ -46,7 +46,7 @@ export default function AddSmtp() {
     const newErrors = {};
     if (!detail.name) newErrors.name = "Name is required";
     if (!detail.host) newErrors.host = "Host is required";
-    if (detail.secure === "select") {
+    if (detail.secure === "") {
       newErrors.secure = "Security protocol is required.";
     }
     if (!detail.port) newErrors.port = "Port is required";
