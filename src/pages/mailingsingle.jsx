@@ -11,15 +11,12 @@ const MailingSingle = () => {
   useEffect(() => {
     setLoading(true);
     (async () => {
-      const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/list/${id}?p=1`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: localStorage.getItem("auth"),
-          },
-        }
-      );
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/list/${id}?p=1`, {
+        method: "GET",
+        headers: {
+          Authorization: localStorage.getItem("auth"),
+        },
+      });
       const { data, error } = await res.json();
       if (res.ok) {
         setEnquiry(data.list);
@@ -27,9 +24,7 @@ const MailingSingle = () => {
         alert({ type: "warning", title: "Warning !", text: error });
       }
     })()
-      .catch((error) =>
-        alert({ type: "danger", title: "Error !", text: error.message })
-      )
+      .catch((error) => alert({ type: "danger", title: "Error !", text: error.message }))
       .finally(() => setLoading(false));
   }, [alert, id, setLoading]);
 
@@ -46,18 +41,14 @@ const MailingSingle = () => {
                   <div className="row g-3">
                     <div className="col-md">
                       <div className="form-label">Customer Email</div>
-                      <input
-                        type="text"
-                        className="form-control"
-                        defaultValue={enquiry?.email}
-                      />
+                      <input type="text" className="form-control" defaultValue={enquiry?.email} readOnly />
                     </div>
                   </div>
 
                   <h3 className="card-title mt-4">Request header</h3>
                   <p className="card-subtitle">
-                    Request headers are key-value pairs sent by a client to
-                    provide information about the request or the client itself.
+                    Request headers are key-value pairs sent by a client to provide information about the request or the
+                    client itself.
                   </p>
                   <div>
                     <textarea
@@ -66,13 +57,14 @@ const MailingSingle = () => {
                       rows={6}
                       placeholder="Content ..."
                       defaultValue={enquiry?.header}
+                      readOnly
                     />
                   </div>
 
                   <h3 className="card-title mt-4">User Agent String</h3>
                   <p className="card-subtitle">
-                    A User Agent String identifies the browser, version, and
-                    operating system of a client device to web servers.
+                    A User Agent String identifies the browser, version, and operating system of a client device to web
+                    servers.
                   </p>
                   <div>
                     <textarea
@@ -81,6 +73,7 @@ const MailingSingle = () => {
                       rows={6}
                       placeholder="Content ..."
                       defaultValue={enquiry?.uastring}
+                      readOnly
                     />
                   </div>
 
@@ -92,15 +85,12 @@ const MailingSingle = () => {
                         className="form-control"
                         placeholder="Not Present ..."
                         defaultValue={enquiry?.ipaddress}
+                        readOnly
                       />
                     </div>
                     <div className="col-md">
                       <div className="form-label">Site Name</div>
-                      <input
-                        type="text"
-                        className="form-control"
-                        defaultValue={enquiry?.site?.name}
-                      />
+                      <input type="text" className="form-control" defaultValue={enquiry?.site?.name} readOnly />
                     </div>
                     <div className="col-md">
                       <div className="form-label">Date Time</div>
@@ -108,6 +98,7 @@ const MailingSingle = () => {
                         type="datetime-local"
                         className="form-control"
                         defaultValue={enquiry?.createdAt?.slice(0, 16)}
+                        readOnly
                       />
                     </div>
                   </div>
