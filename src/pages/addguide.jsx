@@ -12,6 +12,8 @@ export default function AddGuide() {
     desc: "",
     isActive: true,
     isGlobal: false,
+    image: null,
+    pdf: null,
     sites: [],
   });
   const [availableSites, setAvailableSites] = useState([]);
@@ -109,7 +111,7 @@ export default function AddGuide() {
   const imageInputRef = useRef(null);
   const fileInputRef = useRef(null);
 
-  const uploadFile = async (e, isImage) => {
+  const uploadFile = async (e, isImage, isPdf) => {
     const file = e.target.files[0];
     if (!file) return;
 
@@ -128,7 +130,7 @@ export default function AddGuide() {
       return;
     }
 
-    if (!validPdfTypes.includes(type)) {
+    if (isPdf && !validPdfTypes.includes(type)) {
       alert({
         type: "warning",
         title: "Invalid File Type",

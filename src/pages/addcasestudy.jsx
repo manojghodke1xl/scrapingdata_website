@@ -11,6 +11,8 @@ export default function AddCaseStudy() {
     title: "",
     sdesc: "",
     ldesc: "",
+    image: null,
+    pdf: null,
     isActive: true,
     isGlobal: false,
     sites: [],
@@ -108,7 +110,7 @@ export default function AddCaseStudy() {
   const imageInputRef = useRef(null);
   const fileInputRef = useRef(null);
 
-  const uploadFile = async (e, isImage) => {
+  const uploadFile = async (e, isImage, ispdf) => {
     const file = e.target.files[0];
     if (!file) return;
 
@@ -127,7 +129,7 @@ export default function AddCaseStudy() {
       return;
     }
 
-    if (!validPdfTypes.includes(type)) {
+    if (ispdf && !validPdfTypes.includes(type)) {
       alert({
         type: "warning",
         title: "Invalid File Type",

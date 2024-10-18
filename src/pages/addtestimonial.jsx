@@ -7,26 +7,25 @@ export default function AddTestimonial() {
   const { id = "" } = useParams();
   const { alert, setLoading } = useContext(GlobalContext);
   const [errors, setErrors] = useState({});
-  const [selectedType, setSelectedType] = useState("text");
 
-  console.log(selectedType);
   const [detail, setDetail] = useState({
     name: "",
     desg: "",
     text: "",
+    type: "text",
     isActive: true,
     isGlobal: false,
+    videoBolean: false,
     sites: [],
     categories: [],
-    image: "",
-    video: "",
+    image: null,
+    video: null,
     videoUrl: "",
   });
   const [availableSites, setAvailableSites] = useState([]);
   const [availableCategories, setAvailableCategories] = useState([]);
 
   const type = ["Text", "Image", "Video"];
-
   useEffect(() => {
     (async () => {
       const res = await fetch(`${import.meta.env.VITE_API_URL}/allsites`, {
@@ -75,30 +74,9 @@ export default function AddTestimonial() {
         const { data, error } = await res.json();
 
         if (res.ok) {
-          const {
-            name,
-            desg,
-            text,
-            isGlobal,
-            sites,
-            isActive,
-            categories,
-            image,
-            video,
-            videoUrl,
-          } = data.testimonial;
           setDetail((prev) => ({
             ...prev,
-            image,
-            video,
-            name,
-            desg,
-            text,
-            isGlobal,
-            sites,
-            isActive,
-            categories,
-            videoUrl,
+            ...data.testimonial,
           }));
         } else {
           alert({ type: "warning", title: "Warning !", text: error });
@@ -154,14 +132,14 @@ export default function AddTestimonial() {
   const imageInputRef = useRef(null);
   const videoInputRef = useRef(null);
 
-  const uploadFile = async (e, isImage) => {
+  const uploadFile = async (e, isImage, isVideo) => {
     const file = e.target.files[0];
     if (!file) return;
 
     const { name, size, type } = file;
 
     const validImageTypes = ["image/jpeg", "image/png"];
-    const validVideoTypes = ["video/mp4", "video/mov"];
+    const validVideoTypes = ["video/mp4", "video/quicktime"];
 
     if (isImage && !validImageTypes.includes(type)) {
       alert({
@@ -173,7 +151,7 @@ export default function AddTestimonial() {
       return;
     }
 
-    if (!isImage && !validVideoTypes.includes(type)) {
+    if (isVideo && !validVideoTypes.includes(type)) {
       alert({
         type: "warning",
         title: "Invalid File Type",
@@ -274,8 +252,10 @@ export default function AddTestimonial() {
                 <label className="form-label required">Select Type</label>
                 <select
                   className="form-select"
-                  value={selectedType}
-                  onChange={(e) => setSelectedType(e.target.value)}
+                  value={detail.type}
+                  onChange={(e) =>
+                    setDetail((d) => ({ ...d, type: e.target.value }))
+                  }
                 >
                   {type.map((t, i) => (
                     <option key={i} value={t.toLowerCase()}>
@@ -285,7 +265,7 @@ export default function AddTestimonial() {
                 </select>
               </div>
 
-              {selectedType === "text" && (
+              {detail.type === "text" && (
                 <div className="mb-3">
                   <label className={id ? "form-label" : "form-label required"}>
                     Text
@@ -303,7 +283,7 @@ export default function AddTestimonial() {
                 </div>
               )}
 
-              {selectedType === "image" && (
+              {detail.type === "image" && (
                 <div className="mb-3">
                   <label className={id ? "form-label" : "form-label required"}>
                     Upload Image
@@ -318,20 +298,67 @@ export default function AddTestimonial() {
                   />
                 </div>
               )}
-              {selectedType === "video" && (
-                <div className="mb-3">
-                  <label className={id ? "form-label" : "form-label required"}>
-                    Upload Video
-                  </label>
-                  <input
-                    type="file"
-                    name="video"
-                    className="form-control"
-                    onChange={(e) => uploadFile(e, true)}
-                    accept="image/*"
-                    ref={videoInputRef}
-                  />
-                </div>
+              {detail.type === "video" && (
+                <>
+                  <div className="mb-3">
+                    <label className="row">
+                      <span className="col">Switch to Url?</span>
+                      <span className="col-auto">
+                        <label className="form-check form-check-single form-switch">
+                          <input
+                            className="form-check-input"
+                            type="checkbox"
+                            checked={detail.videoBolean}
+                            onChange={() =>
+                              setDetail((prev) => ({
+                                ...prev,
+                                videoBolean: !prev.videoBolean,
+                              }))
+                            }
+                          />
+                        </label>
+                      </span>
+                    </label>
+                  </div>
+                  {detail.videoBolean === false ? (
+                    <div className="mb-3">
+                      <label
+                        className={id ? "form-label" : "form-label required"}
+                      >
+                        Upload Video
+                      </label>
+                      <input
+                        type="file"
+                        name="video"
+                        className="form-control"
+                        onChange={(e) => uploadFile(e, true)}
+                        accept="video/*"
+                        ref={videoInputRef}
+                      />
+                    </div>
+                  ) : (
+                    <div className="mb-3">
+                      <label
+                        className={id ? "form-label" : "form-label required"}
+                      >
+                        video URL
+                      </label>
+                      <input
+                        type="url"
+                        name="videoUrl"
+                        className="form-control"
+                        placeholder="video URL"
+                        value={detail.videoUrl}
+                        onChange={(e) =>
+                          setDetail((d) => ({
+                            ...d,
+                            videoUrl: e.target.value,
+                          }))
+                        }
+                      />
+                    </div>
+                  )}
+                </>
               )}
 
               <div className="mb-3">
