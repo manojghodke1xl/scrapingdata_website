@@ -16,6 +16,7 @@ export default function AdminList() {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchKey, setSearchKey] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
+  const [statusSelect, setStatusSelect] = useState("");
 
   const [siteId, setSiteId] = useState("");
 
@@ -25,8 +26,17 @@ export default function AdminList() {
 
   const searchAbleKeys = ["Name", "Email"];
   const filter = ["Active", "Inactive"];
+  const Status = ["Active", "Block"];
 
-  const [err, data, setRefresh] = useSetTimeout("admins", page - 1, limit, searchTerm, searchKey, statusFilter, siteId);
+  const [err, data, setRefresh] = useSetTimeout(
+    "admins",
+    page - 1,
+    limit,
+    searchTerm,
+    searchKey,
+    statusFilter,
+    siteId
+  );
 
   useEffect(() => {
     if (data) {
@@ -56,7 +66,9 @@ export default function AdminList() {
         alert({
           type: "success",
           title: "Updated!",
-          text: `Selected admin(s) have been marked as ${status ? "Inactive" : "Active"}.`,
+          text: `Selected admin(s) have been marked as ${
+            status ? "Inactive" : "Active"
+          }.`,
         });
         setSelectedAdmins([]);
         setSelectAll(false);
@@ -83,9 +95,13 @@ export default function AdminList() {
         updatedSelected = [...prevSelected, adminId];
       }
 
-      const nonSuperAdminIds = admins.filter((admin) => !admin.isSuperAdmin).map((admin) => admin._id);
+      const nonSuperAdminIds = admins
+        .filter((admin) => !admin.isSuperAdmin)
+        .map((admin) => admin._id);
 
-      const allSelected = nonSuperAdminIds.every((id) => updatedSelected.includes(id));
+      const allSelected = nonSuperAdminIds.every((id) =>
+        updatedSelected.includes(id)
+      );
       setSelectAll(allSelected);
 
       return updatedSelected;
@@ -96,7 +112,9 @@ export default function AdminList() {
     if (selectAll) {
       setSelectedAdmins([]);
     } else {
-      const nonSuperAdminIds = admins.filter((admin) => !admin.isSuperAdmin).map((admin) => admin._id);
+      const nonSuperAdminIds = admins
+        .filter((admin) => !admin.isSuperAdmin)
+        .map((admin) => admin._id);
       setSelectedAdmins(nonSuperAdminIds);
     }
     setSelectAll(!selectAll);
@@ -119,7 +137,11 @@ export default function AdminList() {
     ) : (
       <span className="badge bg-success">Active</span>
     ),
-    <button key={admin._id} onClick={() => navigate(`/edit-admin/${admin._id}`)} className="btn btn-primary ">
+    <button
+      key={admin._id}
+      onClick={() => navigate(`/edit-admin/${admin._id}`)}
+      className="btn btn-primary "
+    >
       Edit
     </button>,
     admin.isSuperAdmin
@@ -137,7 +159,10 @@ export default function AdminList() {
               <div className="text-secondary">
                 Filter
                 <div className="mx-2 d-inline-block">
-                  <select className="form-select form-control-sm" onChange={(e) => setStatusFilter(e.target.value)}>
+                  <select
+                    className="form-select form-control-sm"
+                    onChange={(e) => setStatusFilter(e.target.value)}
+                  >
                     <option value={""}>All</option>
                     {filter.map((key, i) => (
                       <option key={i} value={key.toLowerCase()}>
@@ -148,17 +173,46 @@ export default function AdminList() {
                 </div>
               </div>
               {selectedAdmins.length ? (
-                <button onClick={() => updateSelectedAdminsStatus(false)} className="btn btn-success mx-2">
-                  All Active
-                </button>
-              ) : null}
-              {selectedAdmins.length ? (
-                <button onClick={() => updateSelectedAdminsStatus(true)} className="btn btn-danger mx-2">
-                  All Inactive
-                </button>
+                <>
+                  <div className="text-secondary">
+                    Status
+                    <div className="mx-2 d-inline-block">
+                      <select
+                        className="form-select form-control-sm"
+                        onChange={(e) => setStatusSelect(e.target.value)}
+                      >
+                        <option value="">Select</option>
+                        {Status.map((key, i) => (
+                          <option key={i} value={key.toLowerCase()}>
+                            {key}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                  {statusSelect === "active" && (
+                    <button
+                      onClick={() => updateSelectedAdminsStatus(false)}
+                      className="btn btn-success mx-2"
+                    >
+                      Active All
+                    </button>
+                  )}
+                  {statusSelect === "block" && (
+                    <button
+                      onClick={() => updateSelectedAdminsStatus(true)}
+                      className="btn btn-danger mx-2"
+                    >
+                      Block All
+                    </button>
+                  )}
+                </>
               ) : null}
 
-              <button onClick={() => navigate("/add-admin")} className="btn btn-primary ">
+              <button
+                onClick={() => navigate("/add-admin")}
+                className="btn btn-primary "
+              >
                 Add Admin
               </button>
             </div>

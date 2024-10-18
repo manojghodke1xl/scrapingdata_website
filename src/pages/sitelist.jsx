@@ -17,11 +17,21 @@ export default function SiteList() {
   const [selectedSites, setSelectedSites] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
   const [statusFilter, setStatusFilter] = useState("");
+  const [statusSelect, setStatusSelect] = useState("");
 
   const searchAbleKeys = ["Name", "Host"];
   const filter = ["Active", "Inactive"];
+  const Status = [ "Active", "Inactive"];
 
-  const [err, data, setRefresh] = useSetTimeout("sites", page - 1, limit, searchTerm, searchKey, statusFilter, "");
+  const [err, data, setRefresh] = useSetTimeout(
+    "sites",
+    page - 1,
+    limit,
+    searchTerm,
+    searchKey,
+    statusFilter,
+    ""
+  );
 
   useEffect(() => {
     if (data) {
@@ -51,7 +61,9 @@ export default function SiteList() {
         alert({
           type: "success",
           title: "Updated!",
-          text: `Selected site(s) have been marked as ${status ? "Active" : "Inactive"}.`,
+          text: `Selected site(s) have been marked as ${
+            status ? "Active" : "Inactive"
+          }.`,
         });
 
         setSelectedSites([]);
@@ -95,7 +107,14 @@ export default function SiteList() {
 
   const headers = [
     {
-      label: <input className="form-check-input " type="checkbox" checked={selectAll} onChange={handleSelectAll} />,
+      label: (
+        <input
+          className="form-check-input "
+          type="checkbox"
+          checked={selectAll}
+          onChange={handleSelectAll}
+        />
+      ),
     },
     { label: "Keys" },
     { label: "Website Name" },
@@ -120,7 +139,11 @@ export default function SiteList() {
     ) : (
       <span className="badge bg-danger">Inactive</span>
     ),
-    <button key={site._id} onClick={() => navigate(`/edit-site/${site._id}`)} className="btn btn-primary">
+    <button
+      key={site._id}
+      onClick={() => navigate(`/edit-site/${site._id}`)}
+      className="btn btn-primary"
+    >
       Edit
     </button>,
   ]);
@@ -137,7 +160,10 @@ export default function SiteList() {
                   <div className="text-secondary">
                     Filter
                     <div className="mx-2 d-inline-block">
-                      <select className="form-select form-control-sm" onChange={(e) => setStatusFilter(e.target.value)}>
+                      <select
+                        className="form-select form-control-sm"
+                        onChange={(e) => setStatusFilter(e.target.value)}
+                      >
                         <option value="">All</option>
                         {filter.map((key, i) => (
                           <option key={i} value={key.toLowerCase()}>
@@ -148,16 +174,46 @@ export default function SiteList() {
                     </div>
                   </div>
                   {selectedSites.length ? (
-                    <button onClick={() => updateSiteStatus(true)} className="btn btn-success mx-2">
-                      All Active
-                    </button>
+                    <>
+                      <div className="text-secondary">
+                        Status
+                        <div className="mx-2 d-inline-block">
+                          <select
+                            className="form-select form-control-sm"
+                            onChange={(e) => setStatusSelect(e.target.value)}
+                          >
+                            <option value="">Select</option>
+                            {Status.map((key, i) => (
+                              <option key={i} value={key.toLowerCase()}>
+                                {key}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      </div>
+                      {statusSelect === "active" && (
+                        <button
+                          onClick={() => updateSiteStatus(true)}
+                          className="btn btn-success mx-2"
+                        >
+                          Active All
+                        </button>
+                      )}
+                      {statusSelect === "inactive" && (
+                        <button
+                          onClick={() => updateSiteStatus(false)}
+                          className="btn btn-danger mx-2"
+                        >
+                          Inactive All
+                        </button>
+                      )}
+                    </>
                   ) : null}
-                  {selectedSites.length ? (
-                    <button onClick={() => updateSiteStatus(false)} className="btn btn-danger mx-2">
-                      All Inactive
-                    </button>
-                  ) : null}
-                  <button onClick={() => navigate("/add-site")} className="btn btn-primary ">
+
+                  <button
+                    onClick={() => navigate("/add-site")}
+                    className="btn btn-primary "
+                  >
                     Add Site
                   </button>
                 </>
@@ -175,9 +231,7 @@ export default function SiteList() {
               setSearchTerm={setSearchTerm}
               setSearchKey={setSearchKey}
               searchAbleKeys={searchAbleKeys}
-              onEntriesChange={(newLimit) => 
-                setLimit(newLimit)
-            }
+              onEntriesChange={(newLimit) => setLimit(newLimit)}
               totalCount={totalCount}
             />
           </div>
