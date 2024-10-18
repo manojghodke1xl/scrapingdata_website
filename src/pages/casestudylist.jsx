@@ -68,6 +68,7 @@ export default function CaseStudyList() {
         setRefresh((r) => !r);
         setSelectedCaseStudies([]);
         setSelectAll(false);
+        setStatusSelect("Select");
       } else {
         alert({ type: "danger", title: "Error!", text: error });
       }

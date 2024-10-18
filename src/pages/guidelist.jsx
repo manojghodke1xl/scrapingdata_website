@@ -60,6 +60,7 @@ export default function GuideList() {
         setRefresh((r) => !r);
         setSelectedGuides([]);
         setSelectAll(false);
+        setStatusSelect("Select");
       } else {
         alert({ type: "danger", title: "Error!", text: error });
       }

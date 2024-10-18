@@ -72,6 +72,7 @@ export default function AdminList() {
         });
         setSelectedAdmins([]);
         setSelectAll(false);
+        setStatusSelect("Select");
       } else {
         alert({ type: "danger", title: "Error!", text: error });
       }

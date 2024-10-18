@@ -126,6 +126,7 @@ export default function TestimonialList() {
       setLoading(false);
       setModalOpen(false);
       setSelectedTestimonials([]);
+      setStatusSelect("Select");
     }
   };
 

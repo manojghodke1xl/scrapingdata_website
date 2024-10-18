@@ -153,6 +153,7 @@ export default function PopupList() {
         setRefresh((r) => !r);
         setSelectedPopups([]);
         setSelectAll(false);
+        setStatusSelect("Select");
       } else {
         alert({ type: "danger", title: "Error!", text: error });
       }
