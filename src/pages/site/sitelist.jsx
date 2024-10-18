@@ -21,7 +21,7 @@ export default function SiteList() {
 
   const searchAbleKeys = ["Name", "Host"];
   const filter = ["Active", "Inactive"];
-  const Status = [ "Active", "Inactive"];
+  const Status = ["Active", "Inactive"];
 
   const [err, data, setRefresh] = useSetTimeout(
     "sites",
