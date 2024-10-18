@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { GlobalContext } from "../GlobalContext";
+import { GlobalContext } from "../../GlobalContext";
 
 export default function AddSite() {
   const navigate = useNavigate();
@@ -51,7 +51,15 @@ export default function AddSite() {
         });
         const { data, error } = await res.json();
         if (res.ok) {
-          const { name, host, smtp, isActive, forward, forwardEmails, webhookUrl } = data.site;
+          const {
+            name,
+            host,
+            smtp,
+            isActive,
+            forward,
+            forwardEmails,
+            webhookUrl,
+          } = data.site;
           setDetail((prev) => ({
             ...prev,
             name,
@@ -66,7 +74,9 @@ export default function AddSite() {
           alert({ type: "warning", title: "Warning !", text: error });
         }
       })()
-        .catch((error) => alert({ type: "danger", title: "Error !", text: error.message }))
+        .catch((error) =>
+          alert({ type: "danger", title: "Error !", text: error.message })
+        )
         .finally(() => setLoading(false));
     }
   }, [id, setLoading, alert]);
@@ -77,7 +87,8 @@ export default function AddSite() {
     if (!detail.name) newErrors.name = "Name is required";
     if (!detail.host) newErrors.host = "Host is required";
     if (!detail.smtp) newErrors.smtp = "SMTP is required";
-    if (detail.forward && !detail.forwardEmails.length) newErrors.forwardEmails = "Forward Emails are required";
+    if (detail.forward && !detail.forwardEmails.length)
+      newErrors.forwardEmails = "Forward Emails are required";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -87,14 +98,17 @@ export default function AddSite() {
     if (!validate()) return;
     setLoading(true);
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/site${id ? `/${id}` : ""}`, {
-        method: id ? "PUT" : "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: localStorage.getItem("auth"),
-        },
-        body: JSON.stringify(detail),
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/site${id ? `/${id}` : ""}`,
+        {
+          method: id ? "PUT" : "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: localStorage.getItem("auth"),
+          },
+          body: JSON.stringify(detail),
+        }
+      );
       const { message, error } = await res.json();
       if (res.ok) {
         alert({ type: "success", title: "Success !", text: message });
@@ -116,17 +130,19 @@ export default function AddSite() {
         ...prev,
         forwardEmails: [...prev.forwardEmails, emailInput],
       }));
-      setEmailInput(""); 
+      setEmailInput("");
       setEmailError(false);
     } else {
-      setEmailError(true); 
+      setEmailError(true);
     }
   };
 
   const removeEmail = (indexToRemove) => {
     setDetail((prev) => ({
       ...prev,
-      forwardEmails: prev.forwardEmails.filter((_, index) => index !== indexToRemove),
+      forwardEmails: prev.forwardEmails.filter(
+        (_, index) => index !== indexToRemove
+      ),
     }));
   };
 
@@ -135,7 +151,9 @@ export default function AddSite() {
       <div className="container container-tight py-4">
         <div className="card card-md">
           <div className="card-body">
-            <h2 className="h2 text-center mb-4">{id ? "Edit site" : "Add site"}</h2>
+            <h2 className="h2 text-center mb-4">
+              {id ? "Edit site" : "Add site"}
+            </h2>
             <form onSubmit={handleDetails}>
               <div className="mb-3">
                 <label className="form-label required">Site Name</label>
@@ -147,10 +165,13 @@ export default function AddSite() {
                   value={detail.name}
                   onChange={(e) => {
                     setDetail((d) => ({ ...d, name: e.target.value }));
-                    if (errors.name) setErrors((prev) => ({ ...prev, name: "" }));
+                    if (errors.name)
+                      setErrors((prev) => ({ ...prev, name: "" }));
                   }}
                 />
-                {errors.name && <div className="alert alert-danger mt-2">{errors.name}</div>}
+                {errors.name && (
+                  <div className="alert alert-danger mt-2">{errors.name}</div>
+                )}
               </div>
               <div className="mb-3">
                 <label className="form-label required">Site Host</label>
@@ -162,10 +183,13 @@ export default function AddSite() {
                   value={detail.host}
                   onChange={(e) => {
                     setDetail((d) => ({ ...d, host: e.target.value }));
-                    if (errors.host) setErrors((prev) => ({ ...prev, host: "" }));
+                    if (errors.host)
+                      setErrors((prev) => ({ ...prev, host: "" }));
                   }}
                 />
-                {errors.host && <div className="alert alert-danger mt-2">{errors.host}</div>}
+                {errors.host && (
+                  <div className="alert alert-danger mt-2">{errors.host}</div>
+                )}
               </div>
               <div className="mb-3">
                 <label className="row">
@@ -202,10 +226,17 @@ export default function AddSite() {
                       setEmailError(false);
                     }}
                   />
-                  <button className="btn btn-primary mt-2" onClick={validateAndAddEmail}>
+                  <button
+                    className="btn btn-primary mt-2"
+                    onClick={validateAndAddEmail}
+                  >
                     Add Email
                   </button>
-                  {emailError && <div className="alert alert-danger mt-2">Please enter a valid email address.</div>}
+                  {emailError && (
+                    <div className="alert alert-danger mt-2">
+                      Please enter a valid email address.
+                    </div>
+                  )}
 
                   <ul className="list-group mt-3">
                     {detail.forwardEmails.map((email, index) => (
@@ -225,14 +256,17 @@ export default function AddSite() {
               )}
 
               <div className="mb-3">
-                <label className={id ? "form-label" : "form-label required"}>SMTP</label>
+                <label className={id ? "form-label" : "form-label required"}>
+                  SMTP
+                </label>
                 <select
                   name="smtp"
                   className="form-control"
                   value={detail.smtp}
                   onChange={(e) => {
                     setDetail((d) => ({ ...d, smtp: e.target.value }));
-                    if (errors.smtp) setErrors((prev) => ({ ...prev, smtp: "" }));
+                    if (errors.smtp)
+                      setErrors((prev) => ({ ...prev, smtp: "" }));
                   }}
                 >
                   <option value={""}>Select</option>
@@ -242,7 +276,9 @@ export default function AddSite() {
                     </option>
                   ))}
                 </select>
-                {errors.smtp && <div className="alert alert-danger mt-2">{errors.smtp}</div>}
+                {errors.smtp && (
+                  <div className="alert alert-danger mt-2">{errors.smtp}</div>
+                )}
               </div>
 
               <div className="mb-3">
@@ -253,7 +289,9 @@ export default function AddSite() {
                   className="form-control"
                   placeholder="Webhook URL"
                   value={detail.webhookUrl}
-                  onChange={(e) => setDetail((d) => ({ ...d, webhookUrl: e.target.value }))}
+                  onChange={(e) =>
+                    setDetail((d) => ({ ...d, webhookUrl: e.target.value }))
+                  }
                 />
               </div>
 

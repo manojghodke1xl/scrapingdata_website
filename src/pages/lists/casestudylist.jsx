@@ -1,9 +1,9 @@
 import { useContext, useEffect, useState } from "react";
-import { GlobalContext } from "../GlobalContext";
+import { GlobalContext } from "../../GlobalContext";
 import { useNavigate } from "react-router-dom";
-import Table from "../comps/table";
-import useSetTimeout from "../Hooks/useDebounce";
-import useGetAllSites from "../Hooks/useGetAllSites";
+import Table from "../../comps/table";
+import useSetTimeout from "../../Hooks/useDebounce";
+import useGetAllSites from "../../Hooks/useGetAllSites";
 
 export default function CaseStudyList() {
   const navigate = useNavigate();
@@ -48,14 +48,17 @@ export default function CaseStudyList() {
   const updateCaseStudiesStatus = async (status) => {
     setLoading(true);
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/casestudy-status`, {
-        method: "PUT",
-        headers: {
-          Authorization: localStorage.getItem("auth"),
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ ids: selectedCaseStudies, isActive: status }),
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/casestudy-status`,
+        {
+          method: "PUT",
+          headers: {
+            Authorization: localStorage.getItem("auth"),
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ ids: selectedCaseStudies, isActive: status }),
+        }
+      );
 
       const { error } = await res.json();
 
@@ -63,7 +66,9 @@ export default function CaseStudyList() {
         alert({
           type: "success",
           title: "Updated!",
-          text: `Selected case studies have been marked as ${status ? "Active" : "Inactive"}.`,
+          text: `Selected case studies have been marked as ${
+            status ? "Active" : "Inactive"
+          }.`,
         });
         setRefresh((r) => !r);
         setSelectedCaseStudies([]);
@@ -108,7 +113,14 @@ export default function CaseStudyList() {
 
   const headers = [
     {
-      label: <input className="form-check-input " type="checkbox" checked={selectAll} onChange={handleSelectAll} />,
+      label: (
+        <input
+          className="form-check-input "
+          type="checkbox"
+          checked={selectAll}
+          onChange={handleSelectAll}
+        />
+      ),
     },
     { label: "Title" },
     { label: "Status" },
@@ -131,7 +143,10 @@ export default function CaseStudyList() {
       <span className="badge bg-danger">Inactive</span>
     ),
     <div key={casestudy._id}>
-      <button onClick={() => navigate(`/edit-casestudy/${casestudy._id}`)} className="btn btn-primary me-1">
+      <button
+        onClick={() => navigate(`/edit-casestudy/${casestudy._id}`)}
+        className="btn btn-primary me-1"
+      >
         Edit
       </button>
     </div>,
@@ -149,7 +164,10 @@ export default function CaseStudyList() {
                 <div className="text-secondary">
                   Filter
                   <div className="mx-2 d-inline-block">
-                    <select className="form-select form-control-sm" onChange={(e) => setStatusFilter(e.target.value)}>
+                    <select
+                      className="form-select form-control-sm"
+                      onChange={(e) => setStatusFilter(e.target.value)}
+                    >
                       <option value="">All</option>
                       {filter.map((key, i) => (
                         <option key={i} value={key.toLowerCase()}>
@@ -160,43 +178,46 @@ export default function CaseStudyList() {
                   </div>
                 </div>
                 {selectedCaseStudies.length ? (
-                    <>
-                      <div className="text-secondary">
-                        Status
-                        <div className="mx-2 d-inline-block">
-                          <select
-                            className="form-select form-control-sm"
-                            onChange={(e) => setStatusSelect(e.target.value)}
-                          >
-                            <option value="">Select</option>
-                            {Status.map((key, i) => (
-                              <option key={i} value={key.toLowerCase()}>
-                                {key}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
+                  <>
+                    <div className="text-secondary">
+                      Status
+                      <div className="mx-2 d-inline-block">
+                        <select
+                          className="form-select form-control-sm"
+                          onChange={(e) => setStatusSelect(e.target.value)}
+                        >
+                          <option value="">Select</option>
+                          {Status.map((key, i) => (
+                            <option key={i} value={key.toLowerCase()}>
+                              {key}
+                            </option>
+                          ))}
+                        </select>
                       </div>
-                      {statusSelect === "active" && (
-                        <button
-                          onClick={() => updateCaseStudiesStatus(true)}
-                          className="btn btn-success mx-2"
-                        >
-                          Apply
-                        </button>
-                      )}
-                      {statusSelect === "inactive" && (
-                        <button
-                          onClick={() => updateCaseStudiesStatus(false)}
-                          className="btn btn-danger mx-2"
-                        >
-                          Apply
-                        </button>
-                      )}
-                    </>
-                  ) : null}
+                    </div>
+                    {statusSelect === "active" && (
+                      <button
+                        onClick={() => updateCaseStudiesStatus(true)}
+                        className="btn btn-success mx-2"
+                      >
+                        Apply
+                      </button>
+                    )}
+                    {statusSelect === "inactive" && (
+                      <button
+                        onClick={() => updateCaseStudiesStatus(false)}
+                        className="btn btn-danger mx-2"
+                      >
+                        Apply
+                      </button>
+                    )}
+                  </>
+                ) : null}
 
-                <button onClick={() => navigate("/add-casestudy")} className="btn btn-primary">
+                <button
+                  onClick={() => navigate("/add-casestudy")}
+                  className="btn btn-primary"
+                >
                   Add CaseStudy
                 </button>
               </div>

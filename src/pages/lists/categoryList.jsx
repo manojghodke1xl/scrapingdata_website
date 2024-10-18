@@ -1,8 +1,8 @@
 import { useContext, useEffect, useLayoutEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Table from "../comps/table";
-import useSetTimeout from "../Hooks/useDebounce";
-import { GlobalContext } from "../GlobalContext";
+import Table from "../../comps/table";
+import useSetTimeout from "../../Hooks/useDebounce";
+import { GlobalContext } from "../../GlobalContext";
 
 export default function CategoryList() {
   const navigate = useNavigate();

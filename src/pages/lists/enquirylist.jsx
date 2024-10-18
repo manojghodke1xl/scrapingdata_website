@@ -1,73 +1,87 @@
 import { useContext, useEffect, useState } from "react";
-import { GlobalContext } from "../GlobalContext";
+import { GlobalContext } from "../../GlobalContext";
 import { useNavigate } from "react-router-dom";
-import Table from "../comps/table";
-import ConfirmationModal from "../comps/confirmation";
-import useSetTimeout from "../Hooks/useDebounce";
-import useGetAllSites from "../Hooks/useGetAllSites";
+import Table from "../../comps/table";
+import ConfirmationModal from "../../comps/confirmation";
+import useSetTimeout from "../../Hooks/useDebounce";
+import useGetAllSites from "../../Hooks/useGetAllSites";
 
-export default function MailingList() {
-  const navigate = useNavigate();
+export default function EnquiryList() {
   const { alert, setLoading } = useContext(GlobalContext);
+  const navigate = useNavigate();
 
-  const [lists, setLists] = useState([]);
+  const [enquiries, setEnquiries] = useState([]);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(8);
   const [modalOpen, setModalOpen] = useState(false);
   const [totalCount, setTotalCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchKey, setSearchKey] = useState("");
-  const [selectedLists, setSelectedLists] = useState([]);
+  const [selectedEnquiries, setSelectedEnquiries] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
   const [siteId, setSiteId] = useState("");
   const allsites = useGetAllSites();
 
-  const searchAbleKeys = ["Email"];
+  const searchAbleKeys = [
+    "Name",
+    "Email",
+    "Mobile",
+    "Service",
+    "Subject",
+    "Site",
+  ];
 
-  const [err, data, setRefresh] = useSetTimeout("lists", page - 1, limit, searchTerm, searchKey, "", siteId);
+  const [err, data, setRefresh] = useSetTimeout(
+    "enquiries",
+    page - 1,
+    limit,
+    searchTerm,
+    searchKey,
+    "",
+    siteId
+  );
 
   useEffect(() => {
     if (data) {
-      setLists(data.lists);
+      setEnquiries(data.enquiries);
       setTotalCount(data.count);
     } else if (err) {
       alert({ type: "warning", title: "Warning!", text: err.message });
     }
   }, [data, err, alert]);
 
-  const deleteMailingList = async () => {
-    if (!selectedLists.length) {
+  const deleteSelectedEnquiries = async () => {
+    if (!selectedEnquiries.length) {
       alert({
         type: "warning",
         title: "No Selection",
-        text: "Please select at least one List to delete.",
+        text: "Please select at least one enquiry to delete.",
       });
       return;
     }
 
     setLoading(true);
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/list`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/enquiry`, {
         method: "DELETE",
         headers: {
           Authorization: localStorage.getItem("auth"),
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ ids: selectedLists }),
+        body: JSON.stringify({ ids: selectedEnquiries }),
       });
 
       const { error } = await res.json();
 
       if (res.ok) {
-        setLists((prevList) => prevList.filter((enq) => !selectedLists.includes(enq._id)));
         alert({
           type: "success",
           title: "Deleted!",
-          text: `Selected List have been deleted.`,
+          text: `Selected enquiry have been deleted.`,
         });
         setRefresh((r) => !r);
-        setSelectedLists([]);
-        setSelectAll(false);  
+        setSelectedEnquiries([]);
+        setSelectAll(false);
       } else {
         alert({ type: "danger", title: "Error!", text: error });
       }
@@ -76,20 +90,20 @@ export default function MailingList() {
     } finally {
       setLoading(false);
       setModalOpen(false);
-      setSelectedLists([]);
+      setSelectedEnquiries([]);
     }
   };
 
-  const handleCheckboxChange = (listId) => {
-    setSelectedLists((prevSelected) => {
+  const handleCheckboxChange = (enqId) => {
+    setSelectedEnquiries((prevSelected) => {
       let updatedSelected;
-      if (prevSelected.includes(listId)) {
-        updatedSelected = prevSelected.filter((id) => id !== listId);
+      if (prevSelected.includes(enqId)) {
+        updatedSelected = prevSelected.filter((id) => id !== enqId);
       } else {
-        updatedSelected = [...prevSelected, listId];
+        updatedSelected = [...prevSelected, enqId];
       }
 
-      if(updatedSelected.length === lists.length) {
+      if (updatedSelected.length === enquiries.length) {
         setSelectAll(true);
       } else {
         setSelectAll(false);
@@ -101,34 +115,54 @@ export default function MailingList() {
 
   const handleSelectAll = () => {
     if (selectAll) {
-      setSelectedLists([]);
+      setSelectedEnquiries([]);
     } else {
-      setSelectedLists(lists.map((lst) => lst._id));
+      setSelectedEnquiries(enquiries.map((enq) => enq._id));
     }
     setSelectAll(!selectAll);
   };
 
   const headers = [
     {
-      label: <input className="form-check-input" type="checkbox" checked={selectAll} onChange={handleSelectAll} />,
+      label: (
+        <input
+          className="form-check-input"
+          type="checkbox"
+          checked={selectAll}
+          onChange={handleSelectAll}
+        />
+      ),
     },
+    { label: "Customer Name" },
     { label: "Customer Email" },
+    { label: "Customer Mobile" },
+    { label: "Enquiry Service" },
+    { label: "Enquiry Subject" },
+    { label: "Enquiry Message" },
     { label: "Site Name" },
     { label: "Actions" },
   ];
 
-  const rows = lists.map((lst) => [
+  const rows = enquiries.map((enq) => [
     <input
-      key={lst._id}
+      key={enq._id}
       className="form-check-input"
       type="checkbox"
-      checked={selectedLists.includes(lst._id)}
-      onChange={() => handleCheckboxChange(lst._id)}
+      checked={selectedEnquiries.includes(enq._id)}
+      onChange={() => handleCheckboxChange(enq._id)}
     />,
-    lst.email,
-    lst.site.name,
-    <div key={lst._id}>
-      <button onClick={() => navigate(`/mailing/${lst._id}`)} className="btn btn-primary me-1">
+    enq.name,
+    enq.email,
+    enq.mobile,
+    enq.service,
+    enq.subject,
+    enq.message,
+    enq.site.name,
+    <div key={enq._id}>
+      <button
+        onClick={() => navigate(`/enquiry/${enq._id}`)}
+        className="btn btn-primary me-1"
+      >
         View
       </button>
     </div>,
@@ -139,10 +173,13 @@ export default function MailingList() {
       <div className="container-xl">
         <div className="card">
           <div className="card-header">
-            <h3 className="card-title">All Mailing Lists</h3>
+            <h3 className="card-title">All Enquiries</h3>
             <div className="card-options">
-              {selectedLists.length ? (
-                <button onClick={() => setModalOpen(true)} className="btn btn-danger">
+              {selectedEnquiries.length ? (
+                <button
+                  onClick={() => setModalOpen(true)}
+                  className="btn btn-danger"
+                >
                   Delete Selected
                 </button>
               ) : (
@@ -164,7 +201,9 @@ export default function MailingList() {
               allsites={allsites}
               setSiteId={setSiteId}
               searchAbleKeys={searchAbleKeys}
-              onEntriesChange={setLimit}
+              onEntriesChange={(newLimit) => {
+                setLimit(newLimit);
+              }}
               totalCount={totalCount}
             />
           </div>
@@ -174,8 +213,8 @@ export default function MailingList() {
       <ConfirmationModal
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
-        onConfirm={deleteMailingList}
-        message="Are you sure you want to delete this mailing list? "
+        onConfirm={deleteSelectedEnquiries}
+        message={`Are you sure you want to delete selected enquiry? This action cannot be undone.`}
       />
     </div>
   );

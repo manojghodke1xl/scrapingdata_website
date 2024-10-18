@@ -1,11 +1,11 @@
 import { useContext, useEffect, useState } from "react";
-import { GlobalContext } from "../GlobalContext";
+import { GlobalContext } from "../../GlobalContext";
 import { useNavigate } from "react-router-dom";
-import Table from "../comps/table";
-import ConfirmationModal from "../comps/confirmation";
-import useSetTimeout from "../Hooks/useDebounce";
-import useGetAllSites from "../Hooks/useGetAllSites";
-import DuplicateModal from "../comps/duplicate";
+import Table from "../../comps/table";
+import ConfirmationModal from "../../comps/confirmation";
+import useSetTimeout from "../../Hooks/useDebounce";
+import useGetAllSites from "../../Hooks/useGetAllSites";
+import DuplicateModal from "../../comps/duplicate";
 export default function PopupList() {
   const navigate = useNavigate();
   const { alert, setLoading } = useContext(GlobalContext);

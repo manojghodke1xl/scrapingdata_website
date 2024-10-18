@@ -1,8 +1,8 @@
 import { useContext, useEffect, useState } from "react";
-import { GlobalContext } from "../GlobalContext";
+import { GlobalContext } from "../../GlobalContext";
 import { useNavigate } from "react-router-dom";
-import Table from "../comps/table";
-import useSetTimeout from "../Hooks/useDebounce";
+import Table from "../../comps/table";
+import useSetTimeout from "../../Hooks/useDebounce";
 
 export default function SmtpList() {
   const navigate = useNavigate();

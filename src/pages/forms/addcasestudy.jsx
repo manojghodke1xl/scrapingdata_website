@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { GlobalContext } from "../GlobalContext";
+import { GlobalContext } from "../../GlobalContext";
 
 export default function AddCaseStudy() {
   const navigate = useNavigate();
@@ -41,16 +41,20 @@ export default function AddCaseStudy() {
     if (id) {
       setLoading(true);
       (async () => {
-        const res = await fetch(`${import.meta.env.VITE_API_URL}/casestudy/${id}`, {
-          method: "GET",
-          headers: {
-            Authorization: localStorage.getItem("auth"),
-          },
-        });
+        const res = await fetch(
+          `${import.meta.env.VITE_API_URL}/casestudy/${id}`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: localStorage.getItem("auth"),
+            },
+          }
+        );
         const { data, error } = await res.json();
 
         if (res.ok) {
-          const { title, sdesc, ldesc, isActive, sites, image, pdf, isGlobal } = data.casestudy;
+          const { title, sdesc, ldesc, isActive, sites, image, pdf, isGlobal } =
+            data.casestudy;
           setDetail((prev) => ({
             ...prev,
             title,
@@ -66,7 +70,9 @@ export default function AddCaseStudy() {
           alert({ type: "warning", title: "Warning !", text: error });
         }
       })()
-        .catch((error) => alert({ type: "danger", title: "Error !", text: error.message }))
+        .catch((error) =>
+          alert({ type: "danger", title: "Error !", text: error.message })
+        )
         .finally(() => setLoading(false));
     }
   }, [id, alert, setLoading]);
@@ -84,14 +90,17 @@ export default function AddCaseStudy() {
     if (!validate()) return;
     setLoading(true);
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/casestudy${id ? `/${id}` : ""}`, {
-        method: id ? "PUT" : "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: localStorage.getItem("auth"),
-        },
-        body: JSON.stringify(detail),
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/casestudy${id ? `/${id}` : ""}`,
+        {
+          method: id ? "PUT" : "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: localStorage.getItem("auth"),
+          },
+          body: JSON.stringify(detail),
+        }
+      );
 
       const { message, error } = await res.json();
       if (res.ok) {
@@ -188,10 +197,14 @@ export default function AddCaseStudy() {
       <div className="container container-tight py-4">
         <div className="card card-md">
           <div className="card-body">
-            <h2 className="h2 text-center mb-4">{id ? "Edit Casestudy" : "Add Casestudy"}</h2>
+            <h2 className="h2 text-center mb-4">
+              {id ? "Edit Casestudy" : "Add Casestudy"}
+            </h2>
             <form onSubmit={handleDetails}>
               <div className="mb-3">
-                <label className={!id ? "form-label required" : "form-label "}>Title</label>
+                <label className={!id ? "form-label required" : "form-label "}>
+                  Title
+                </label>
                 <input
                   type="text"
                   name="title"
@@ -200,10 +213,13 @@ export default function AddCaseStudy() {
                   value={detail.title}
                   onChange={(e) => {
                     setDetail((d) => ({ ...d, title: e.target.value }));
-                    if (errors.title) setErrors((prev) => ({ ...prev, title: "" }));
+                    if (errors.title)
+                      setErrors((prev) => ({ ...prev, title: "" }));
                   }}
                 />
-                {errors.title && <div className="alert alert-danger mt-2">{errors.title}</div>}
+                {errors.title && (
+                  <div className="alert alert-danger mt-2">{errors.title}</div>
+                )}
               </div>
               <div className="mb-3">
                 <label className="form-label">Short Description</label>
@@ -213,7 +229,9 @@ export default function AddCaseStudy() {
                   rows={6}
                   placeholder="Description.."
                   value={detail.sdesc}
-                  onChange={(e) => setDetail((d) => ({ ...d, sdesc: e.target.value }))}
+                  onChange={(e) =>
+                    setDetail((d) => ({ ...d, sdesc: e.target.value }))
+                  }
                 />
               </div>
               <div className="mb-3">
@@ -224,7 +242,9 @@ export default function AddCaseStudy() {
                   rows={6}
                   placeholder="Description.."
                   value={detail.ldesc}
-                  onChange={(e) => setDetail((d) => ({ ...d, ldesc: e.target.value }))}
+                  onChange={(e) =>
+                    setDetail((d) => ({ ...d, ldesc: e.target.value }))
+                  }
                 />
               </div>
               <div className="mb-3">
@@ -250,7 +270,9 @@ export default function AddCaseStudy() {
                 />
               </div>
               <div className="mb-3">
-                <label className={!id ? "form-label required" : "form-label "}>Select Sites</label>
+                <label className={!id ? "form-label required" : "form-label "}>
+                  Select Sites
+                </label>
                 <div
                   style={{
                     maxHeight: "150px",
@@ -268,13 +290,18 @@ export default function AddCaseStudy() {
                         value={site._id}
                         checked={detail.sites.includes(site._id)}
                         onChange={() => {
-                          if (detail.sites) setErrors((prev) => ({ ...prev, sites: "" }));
+                          if (detail.sites)
+                            setErrors((prev) => ({ ...prev, sites: "" }));
                           setDetail((prevDetail) => {
-                            const isSelected = prevDetail.sites.includes(site._id);
+                            const isSelected = prevDetail.sites.includes(
+                              site._id
+                            );
                             return {
                               ...prevDetail,
                               sites: isSelected
-                                ? prevDetail.sites.filter((id) => id !== site._id)
+                                ? prevDetail.sites.filter(
+                                    (id) => id !== site._id
+                                  )
                                 : [...prevDetail.sites, site._id],
                             };
                           });
@@ -284,7 +311,9 @@ export default function AddCaseStudy() {
                     </label>
                   ))}
                 </div>
-                {errors.sites && <div className="alert alert-danger mt-2">{errors.sites}</div>}
+                {errors.sites && (
+                  <div className="alert alert-danger mt-2">{errors.sites}</div>
+                )}
               </div>
               <div className="mb-3">
                 <label className="row">

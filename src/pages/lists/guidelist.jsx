@@ -1,9 +1,9 @@
 import { useContext, useEffect, useState } from "react";
-import { GlobalContext } from "../GlobalContext";
+import { GlobalContext } from "../../GlobalContext";
 import { useNavigate } from "react-router-dom";
-import Table from "../comps/table";
-import useSetTimeout from "../Hooks/useDebounce";
-import useGetAllSites from "../Hooks/useGetAllSites";
+import Table from "../../comps/table";
+import useSetTimeout from "../../Hooks/useDebounce";
+import useGetAllSites from "../../Hooks/useGetAllSites";
 
 export default function GuideList() {
   const navigate = useNavigate();
@@ -26,7 +26,15 @@ export default function GuideList() {
   const filter = ["Active", "Inactive"];
   const Status = ["Active", "Inactive"];
 
-  const [err, data, setRefresh] = useSetTimeout("guides", page - 1, limit, searchTerm, searchKey, statusFilter, siteId);
+  const [err, data, setRefresh] = useSetTimeout(
+    "guides",
+    page - 1,
+    limit,
+    searchTerm,
+    searchKey,
+    statusFilter,
+    siteId
+  );
 
   useEffect(() => {
     if (data) {
@@ -55,7 +63,9 @@ export default function GuideList() {
         alert({
           type: "success",
           title: "Updated!",
-          text: `Selected case studies have been marked as ${status ? "Active" : "Inactive"}.`,
+          text: `Selected case studies have been marked as ${
+            status ? "Active" : "Inactive"
+          }.`,
         });
         setRefresh((r) => !r);
         setSelectedGuides([]);
@@ -100,7 +110,14 @@ export default function GuideList() {
 
   const headers = [
     {
-      label: <input className="form-check-input " type="checkbox" checked={selectAll} onChange={handleSelectAll} />,
+      label: (
+        <input
+          className="form-check-input "
+          type="checkbox"
+          checked={selectAll}
+          onChange={handleSelectAll}
+        />
+      ),
     },
     { label: "Title" },
     { label: "Status" },
@@ -123,7 +140,10 @@ export default function GuideList() {
       <span className="badge bg-danger">Inactive</span>
     ),
     <div key={guide._id}>
-      <button onClick={() => navigate(`/edit-guide/${guide._id}`)} className="btn btn-primary me-1">
+      <button
+        onClick={() => navigate(`/edit-guide/${guide._id}`)}
+        className="btn btn-primary me-1"
+      >
         Edit
       </button>
     </div>,
@@ -141,7 +161,10 @@ export default function GuideList() {
                 <div className="text-secondary">
                   Filter
                   <div className="mx-2 d-inline-block">
-                    <select className="form-select form-control-sm" onChange={(e) => setStatusFilter(e.target.value)}>
+                    <select
+                      className="form-select form-control-sm"
+                      onChange={(e) => setStatusFilter(e.target.value)}
+                    >
                       <option value="">All</option>
                       {filter.map((key, i) => (
                         <option key={i} value={key.toLowerCase()}>
@@ -152,43 +175,46 @@ export default function GuideList() {
                   </div>
                 </div>
                 {selectedGuides.length ? (
-                    <>
-                      <div className="text-secondary">
-                        Status
-                        <div className="mx-2 d-inline-block">
-                          <select
-                            className="form-select form-control-sm"
-                            onChange={(e) => setStatusSelect(e.target.value)}
-                          >
-                            <option value="">Select</option>
-                            {Status.map((key, i) => (
-                              <option key={i} value={key.toLowerCase()}>
-                                {key}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
+                  <>
+                    <div className="text-secondary">
+                      Status
+                      <div className="mx-2 d-inline-block">
+                        <select
+                          className="form-select form-control-sm"
+                          onChange={(e) => setStatusSelect(e.target.value)}
+                        >
+                          <option value="">Select</option>
+                          {Status.map((key, i) => (
+                            <option key={i} value={key.toLowerCase()}>
+                              {key}
+                            </option>
+                          ))}
+                        </select>
                       </div>
-                      {statusSelect === "active" && (
-                        <button
-                          onClick={() => updateSelectedGuidesStatus(true)}
-                          className="btn btn-success mx-2"
-                        >
-                          Apply
-                        </button>
-                      )}
-                      {statusSelect === "inactive" && (
-                        <button
-                          onClick={() => updateSelectedGuidesStatus(false)}
-                          className="btn btn-danger mx-2"
-                        >
-                          Apply
-                        </button>
-                      )}
-                    </>
-                  ) : null}
+                    </div>
+                    {statusSelect === "active" && (
+                      <button
+                        onClick={() => updateSelectedGuidesStatus(true)}
+                        className="btn btn-success mx-2"
+                      >
+                        Apply
+                      </button>
+                    )}
+                    {statusSelect === "inactive" && (
+                      <button
+                        onClick={() => updateSelectedGuidesStatus(false)}
+                        className="btn btn-danger mx-2"
+                      >
+                        Apply
+                      </button>
+                    )}
+                  </>
+                ) : null}
 
-                <button onClick={() => navigate("/add-guide")} className="btn btn-primary">
+                <button
+                  onClick={() => navigate("/add-guide")}
+                  className="btn btn-primary"
+                >
                   Add Guide
                 </button>
               </div>

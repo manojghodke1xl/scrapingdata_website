@@ -1,10 +1,10 @@
 import { useContext, useEffect, useState } from "react";
-import { GlobalContext } from "../GlobalContext";
+import { GlobalContext } from "../../GlobalContext";
 import { useNavigate } from "react-router-dom";
-import Table from "../comps/table";
-import ConfirmationModal from "../comps/confirmation";
-import useSetTimeout from "../Hooks/useDebounce";
-import useGetAllSites from "../Hooks/useGetAllSites";
+import Table from "../../comps/table";
+import ConfirmationModal from "../../comps/confirmation";
+import useSetTimeout from "../../Hooks/useDebounce";
+import useGetAllSites from "../../Hooks/useGetAllSites";
 
 export default function TestimonialList() {
   const navigate = useNavigate();
