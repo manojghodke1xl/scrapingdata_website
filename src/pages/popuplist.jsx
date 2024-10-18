@@ -153,7 +153,6 @@ export default function PopupList() {
         setRefresh((r) => !r);
         setSelectedPopups([]);
         setSelectAll(false);
-        setStatusSelect("Select");
       } else {
         alert({ type: "danger", title: "Error!", text: error });
       }
@@ -255,7 +254,7 @@ export default function PopupList() {
                     </select>
                   </div>
                 </div>
-                {selectedPopups.length ? (
+                {selectedPopups.length > 0 && (
                   <>
                     <div className="text-secondary">
                       Status
@@ -274,23 +273,35 @@ export default function PopupList() {
                       </div>
                     </div>
                     {statusSelect === "active" && (
-                        <button
-                          onClick={() => updatePopupStatus(true)}
-                          className="btn btn-success mx-2"
-                        >
-                          Apply
-                        </button>
-                      )}
-                      {statusSelect === "inactive" && (
-                        <button
-                          onClick={() => updatePopupStatus(false)}
-                          className="btn btn-danger mx-2"
-                        >
-                          Apply
-                        </button>
-                      )}
+                      <button
+                        onClick={() => updatePopupStatus(true)}
+                        className="btn btn-success mx-2"
+                      >
+                        Apply
+                      </button>
+                    )}
+                    {statusSelect === "inactive" && (
+                      <button
+                        onClick={() => updatePopupStatus(false)}
+                        className="btn btn-danger mx-2"
+                      >
+                        Apply
+                      </button>
+                    )}
+                    <button
+                      onClick={() => setDupModalOpen(true)}
+                      className="btn btn-primary mx-2"
+                    >
+                      Duplicate Selected
+                    </button>
+                    <button
+                      onClick={() => setModalOpen(true)}
+                      className="btn btn-danger mx-2"
+                    >
+                      Delete Selected
+                    </button>
                   </>
-                ) : null}
+                )}
                 <button
                   onClick={() => navigate("/add-popup")}
                   className="btn btn-primary"
