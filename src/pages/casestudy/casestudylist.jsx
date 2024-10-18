@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Table from "../../comps/table";
 import useSetTimeout from "../../Hooks/useDebounce";
 import useGetAllSites from "../../Hooks/useGetAllSites";
+import DuplicateModal from "../../comps/duplicate";
 
 export default function CaseStudyList() {
   const navigate = useNavigate();
@@ -20,6 +21,7 @@ export default function CaseStudyList() {
   const [statusFilter, setStatusFilter] = useState("");
   const [siteId, setSiteId] = useState("");
   const [statusSelect, setStatusSelect] = useState("");
+  const [modalOpen, setModalOpen] = useState(false);
   const allsites = useGetAllSites();
 
   const searchAbleKeys = ["Title"];
@@ -81,6 +83,47 @@ export default function CaseStudyList() {
       alert({ type: "danger", title: "Error!", text: error.message });
     } finally {
       setLoading(false);
+    }
+  };
+
+  const updateSites = async (selectedSites, selectedAction) => {
+    setLoading(true);
+    try {
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/casestudy-sites`,
+        {
+          method: "PUT",
+          headers: {
+            Authorization: localStorage.getItem("auth"),
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            cids: selectedCaseStudies,
+            sids: selectedSites,
+            action: selectedAction === "Add" ? true : false,
+          }),
+        }
+      );
+
+      const { error } = await res.json();
+      if (res.ok) {
+        alert({
+          type: "success",
+          title: "Updated!",
+          text: `Selected casestuies have been updated.`,
+        });
+        setRefresh((r) => !r);
+        setSelectedCaseStudies([]);
+        setSelectAll(false);
+      } else {
+        alert({ type: "danger", title: "Error!", text: error });
+      }
+    } catch (error) {
+      alert({ type: "danger", title: "Error!", text: error.message });
+    } finally {
+      setLoading(false);
+      setModalOpen(false);
+      setSelectedCaseStudies([]);
     }
   };
 
@@ -211,6 +254,12 @@ export default function CaseStudyList() {
                         Apply
                       </button>
                     )}
+                    <button
+                      onClick={() => setModalOpen(true)}
+                      className="btn btn-primary mx-2"
+                    >
+                      Sites
+                    </button>
                   </>
                 ) : null}
 
@@ -243,6 +292,15 @@ export default function CaseStudyList() {
           </div>
         </div>
       </div>
+      <DuplicateModal
+        allsites={allsites}
+        isOpen={modalOpen}
+        onClose={setModalOpen}
+        onConfirm={updateSites}
+        title="Update Sites"
+        action={["Add", "Remove"]}
+        confirmText="Update"
+      />
     </div>
   );
 }

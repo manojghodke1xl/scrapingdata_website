@@ -5,6 +5,7 @@ import Table from "../../comps/table";
 import ConfirmationModal from "../../comps/confirmation";
 import useSetTimeout from "../../Hooks/useDebounce";
 import useGetAllSites from "../../Hooks/useGetAllSites";
+import DuplicateModal from "../../comps/duplicate";
 
 export default function TestimonialList() {
   const navigate = useNavigate();
@@ -14,6 +15,7 @@ export default function TestimonialList() {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(8);
   const [modalOpen, setModalOpen] = useState(false);
+  const [siteModal, setSiteModal] = useState(false);
   const [totalCount, setTotalCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchKey, setSearchKey] = useState("");
@@ -84,6 +86,47 @@ export default function TestimonialList() {
       alert({ type: "danger", title: "Error!", text: error.message });
     } finally {
       setLoading(false);
+    }
+  };
+
+  const updateSites = async (selectedSites, selectedAction) => {
+    setLoading(true);
+    try {
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/testimonial-sites`,
+        {
+          method: "PUT",
+          headers: {
+            Authorization: localStorage.getItem("auth"),
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            tids: selectedTestimonials,
+            sids: selectedSites,
+            action: selectedAction === "Add" ? true : false,
+          }),
+        }
+      );
+
+      const { error } = await res.json();
+      if (res.ok) {
+        alert({
+          type: "success",
+          title: "Updated!",
+          text: `Selected guides have been updated.`,
+        });
+        setRefresh((r) => !r);
+        setSelectedTestimonials([]);
+        setSelectAll(false);
+      } else {
+        alert({ type: "danger", title: "Error!", text: error });
+      }
+    } catch (error) {
+      alert({ type: "danger", title: "Error!", text: error.message });
+    } finally {
+      setLoading(false);
+      setModalOpen(false);
+      setSelectedTestimonials([]);
     }
   };
 
@@ -259,6 +302,12 @@ export default function TestimonialList() {
                         Apply
                       </button>
                     )}
+                    <button
+                      onClick={() => setSiteModal(true)}
+                      className="btn btn-primary mx-2"
+                    >
+                      Sites
+                    </button>
                   </>
                 ) : null}
                 <button
@@ -298,6 +347,15 @@ export default function TestimonialList() {
         onClose={() => setModalOpen(false)}
         onConfirm={deleteSelectedTestimonial}
         message="Are you sure you want to delete this Testimonial?"
+      />
+      <DuplicateModal
+        allsites={allsites}
+        isOpen={siteModal}
+        onClose={() => setSiteModal(false)}
+        onConfirm={updateSites}
+        title="Update Sites"
+        action={["Add", "Remove"]}
+        confirmText="Update"
       />
     </div>
   );
