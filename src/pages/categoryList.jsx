@@ -6,7 +6,7 @@ import { GlobalContext } from "../GlobalContext";
 
 export default function CategoryList() {
   const navigate = useNavigate();
-  const { auth, alert, setLoading } = useContext(GlobalContext);
+  const { auth, alert } = useContext(GlobalContext);
 
   const [categories, setCategories] = useState([]);
   const [page, setPage] = useState(1);
@@ -14,8 +14,8 @@ export default function CategoryList() {
   const [totalCount, setTotalCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchKey, setSearchKey] = useState("");
-  const [selectedCategories, setSelectedCategories] = useState([]);
-  const [selectAll, setSelectAll] = useState(false);
+  // const [selectedCategories, setSelectedCategories] = useState([]);
+  // const [selectAll, setSelectAll] = useState(false);
 
   const searchAbleKeys = ["Name"];
 
@@ -27,30 +27,30 @@ export default function CategoryList() {
     searchKey
   );
 
-  const handleCheckboxChange = (catId) => {
-    setSelectedCategories((prevSelected) => {
-      let updatedSelected;
-      if (prevSelected.includes(catId)) {
-        updatedSelected = prevSelected.filter((id) => id !== catId);
-      } else {
-        updatedSelected = [...prevSelected, catId];
-      }
-      if (updatedSelected.length !== categories.length) {
-        setSelectAll(false);
-      }
+  // const handleCheckboxChange = (catId) => {
+  //   setSelectedCategories((prevSelected) => {
+  //     let updatedSelected;
+  //     if (prevSelected.includes(catId)) {
+  //       updatedSelected = prevSelected.filter((id) => id !== catId);
+  //     } else {
+  //       updatedSelected = [...prevSelected, catId];
+  //     }
+  //     if (updatedSelected.length !== categories.length) {
+  //       setSelectAll(false);
+  //     }
 
-      return updatedSelected;
-    });
-  };
+  //     return updatedSelected;
+  //   });
+  // };
 
-  const handleSelectAll = () => {
-    if (selectAll) {
-      setSelectedCategories([]);
-    } else {
-      setSelectedCategories(categories.map((category) => category._id));
-    }
-    setSelectAll(!selectAll);
-  };
+  // const handleSelectAll = () => {
+  //   if (selectAll) {
+  //     setSelectedCategories([]);
+  //   } else {
+  //     setSelectedCategories(categories.map((category) => category._id));
+  //   }
+  //   setSelectAll(!selectAll);
+  // };
 
   const headers = [{ label: "Name" }, { label: "Actions" }];
 

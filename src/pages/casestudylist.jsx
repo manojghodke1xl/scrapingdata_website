@@ -181,7 +181,7 @@ export default function CaseStudyList() {
                           onClick={() => updateCaseStudiesStatus(true)}
                           className="btn btn-success mx-2"
                         >
-                          Active All
+                          Apply
                         </button>
                       )}
                       {statusSelect === "inactive" && (
@@ -189,7 +189,7 @@ export default function CaseStudyList() {
                           onClick={() => updateCaseStudiesStatus(false)}
                           className="btn btn-danger mx-2"
                         >
-                          Inactive All
+                          Apply
                         </button>
                       )}
                     </>

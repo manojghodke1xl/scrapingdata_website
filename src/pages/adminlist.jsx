@@ -195,7 +195,7 @@ export default function AdminList() {
                       onClick={() => updateSelectedAdminsStatus(false)}
                       className="btn btn-success mx-2"
                     >
-                      Active All
+                      Apply
                     </button>
                   )}
                   {statusSelect === "block" && (
@@ -203,7 +203,7 @@ export default function AdminList() {
                       onClick={() => updateSelectedAdminsStatus(true)}
                       className="btn btn-danger mx-2"
                     >
-                      Block All
+                      Apply
                     </button>
                   )}
                 </>

@@ -52,14 +52,17 @@ export default function TestimonialList() {
   const updateTestimonialStatus = async (status) => {
     setLoading(true);
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/testimonial-status`, {
-        method: "PUT",
-        headers: {
-          Authorization: localStorage.getItem("auth"),
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ ids: selectedTestimonials, isActive: status }),
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/testimonial-status`,
+        {
+          method: "PUT",
+          headers: {
+            Authorization: localStorage.getItem("auth"),
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ ids: selectedTestimonials, isActive: status }),
+        }
+      );
 
       const { error } = await res.json();
 
@@ -67,7 +70,9 @@ export default function TestimonialList() {
         alert({
           type: "success",
           title: "Updated!",
-          text: `Selected testimonial(s) have been marked as ${status ? "Active" : "Inactive"}.`,
+          text: `Selected testimonial(s) have been marked as ${
+            status ? "Active" : "Inactive"
+          }.`,
         });
         setRefresh((r) => !r);
         setSelectedTestimonials([]);
@@ -146,14 +151,23 @@ export default function TestimonialList() {
     if (selectAll) {
       setSelectedTestimonials([]);
     } else {
-      setSelectedTestimonials(testimonials.map((testimonial) => testimonial._id));
+      setSelectedTestimonials(
+        testimonials.map((testimonial) => testimonial._id)
+      );
     }
     setSelectAll(!selectAll);
   };
 
   const headers = [
     {
-      label: <input className="form-check-input " type="checkbox" checked={selectAll} onChange={handleSelectAll} />,
+      label: (
+        <input
+          className="form-check-input "
+          type="checkbox"
+          checked={selectAll}
+          onChange={handleSelectAll}
+        />
+      ),
     },
     { label: "Name" },
     { label: "Status" },
@@ -176,7 +190,10 @@ export default function TestimonialList() {
       <span className="badge bg-danger">Inactive</span>
     ),
     <div key={testimonial._id}>
-      <button onClick={() => navigate(`/edit-testimonial/${testimonial._id}`)} className="btn btn-primary me-1">
+      <button
+        onClick={() => navigate(`/edit-testimonial/${testimonial._id}`)}
+        className="btn btn-primary me-1"
+      >
         Edit
       </button>
     </div>,
@@ -194,7 +211,10 @@ export default function TestimonialList() {
                 <div className="text-secondary">
                   Filter
                   <div className="mx-2 d-inline-block">
-                    <select className="form-select form-control-sm" onChange={(e) => setStatusFilter(e.target.value)}>
+                    <select
+                      className="form-select form-control-sm"
+                      onChange={(e) => setStatusFilter(e.target.value)}
+                    >
                       <option value="">All</option>
                       {filter.map((key, i) => (
                         <option key={i} value={key.toLowerCase()}>
@@ -205,42 +225,45 @@ export default function TestimonialList() {
                   </div>
                 </div>
                 {selectedTestimonials.length ? (
-                    <>
-                      <div className="text-secondary">
-                        Status
-                        <div className="mx-2 d-inline-block">
-                          <select
-                            className="form-select form-control-sm"
-                            onChange={(e) => setStatusSelect(e.target.value)}
-                          >
-                            <option value="">Select</option>
-                            {Status.map((key, i) => (
-                              <option key={i} value={key.toLowerCase()}>
-                                {key}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
+                  <>
+                    <div className="text-secondary">
+                      Status
+                      <div className="mx-2 d-inline-block">
+                        <select
+                          className="form-select form-control-sm"
+                          onChange={(e) => setStatusSelect(e.target.value)}
+                        >
+                          <option value="">Select</option>
+                          {Status.map((key, i) => (
+                            <option key={i} value={key.toLowerCase()}>
+                              {key}
+                            </option>
+                          ))}
+                        </select>
                       </div>
-                      {statusSelect === "active" && (
-                        <button
-                          onClick={() => updateTestimonialStatus(true)}
-                          className="btn btn-success mx-2"
-                        >
-                          Active All
-                        </button>
-                      )}
-                      {statusSelect === "inactive" && (
-                        <button
-                          onClick={() => updateTestimonialStatus(false)}
-                          className="btn btn-danger mx-2"
-                        >
-                          Inactive All
-                        </button>
-                      )}
-                    </>
-                  ) : null}
-                <button onClick={() => navigate("/add-testimonial")} className="btn btn-primary">
+                    </div>
+                    {statusSelect === "active" && (
+                      <button
+                        onClick={() => updateTestimonialStatus(true)}
+                        className="btn btn-success mx-2"
+                      >
+                        Apply
+                      </button>
+                    )}
+                    {statusSelect === "inactive" && (
+                      <button
+                        onClick={() => updateTestimonialStatus(false)}
+                        className="btn btn-danger mx-2"
+                      >
+                        Apply
+                      </button>
+                    )}
+                  </>
+                ) : null}
+                <button
+                  onClick={() => navigate("/add-testimonial")}
+                  className="btn btn-primary"
+                >
                   Add Testimonial
                 </button>
               </div>

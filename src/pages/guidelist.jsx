@@ -173,7 +173,7 @@ export default function GuideList() {
                           onClick={() => updateSelectedGuidesStatus(true)}
                           className="btn btn-success mx-2"
                         >
-                          Active All
+                          Apply
                         </button>
                       )}
                       {statusSelect === "inactive" && (
@@ -181,7 +181,7 @@ export default function GuideList() {
                           onClick={() => updateSelectedGuidesStatus(false)}
                           className="btn btn-danger mx-2"
                         >
-                          Inactive All
+                          Apply
                         </button>
                       )}
                     </>

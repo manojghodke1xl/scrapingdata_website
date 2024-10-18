@@ -277,7 +277,7 @@ export default function PopupList() {
                           onClick={() => updatePopupStatus(true)}
                           className="btn btn-success mx-2"
                         >
-                          Active All
+                          Apply
                         </button>
                       )}
                       {statusSelect === "inactive" && (
@@ -285,7 +285,7 @@ export default function PopupList() {
                           onClick={() => updatePopupStatus(false)}
                           className="btn btn-danger mx-2"
                         >
-                          Inactive All
+                          Apply
                         </button>
                       )}
                   </>
