@@ -50,9 +50,6 @@ export default function GuideList() {
       const { error } = await res.json();
 
       if (res.ok) {
-        setGuides((prevCaseStudies) =>
-          prevCaseStudies.map((guide) => (selectedGuides.includes(guide._id) ? { ...guide, isActive: status } : guide))
-        );
         alert({
           type: "success",
           title: "Updated!",
@@ -130,12 +127,6 @@ export default function GuideList() {
     guide.sites.map((s) => `${s.name} (${s.host})`).join(", "),
   ]);
 
-  const handlePageChange = (newPage) => setPage(newPage);
-
-  const handleLimitChange = (newLimit) => {
-    setLimit(newLimit);
-  };
-
   return (
     <div className="page-body">
       <div className="container-xl">
@@ -179,15 +170,15 @@ export default function GuideList() {
               headers={headers}
               rows={rows}
               currentPage={page}
-              totalPages={Math.ceil(guides.length / limit)}
-              onPageChange={handlePageChange}
+              totalPages={Math.ceil(totalCount / limit)}
+              onPageChange={(newPage) => setPage(newPage)}
               entriesPerPage={limit}
               setSearchTerm={setSearchTerm}
               setSearchKey={setSearchKey}
               allsites={allsites}
               setSiteId={setSiteId}
               searchAbleKeys={searchAbleKeys}
-              onEntriesChange={handleLimitChange}
+              onEntriesChange={(newLimit) => setLimit(newLimit)}
               totalCount={totalCount}
             />
           </div>

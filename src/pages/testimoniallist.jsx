@@ -49,37 +49,26 @@ export default function TestimonialList() {
   const updateTestimonialStatus = async (status) => {
     setLoading(true);
     try {
-      const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/testimonial-status`,
-        {
-          method: "PUT",
-          headers: {
-            Authorization: localStorage.getItem("auth"),
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ ids: selectedTestimonials, isActive: status }),
-        }
-      );
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/testimonial-status`, {
+        method: "PUT",
+        headers: {
+          Authorization: localStorage.getItem("auth"),
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ ids: selectedTestimonials, isActive: status }),
+      });
 
       const { error } = await res.json();
 
       if (res.ok) {
-        setTestimonials((prevTestimonials) =>
-          prevTestimonials.map((testimonial) =>
-            selectedTestimonials.includes(testimonial._id)
-              ? { ...testimonial, isActive: status }
-              : testimonial
-          )
-        );
         alert({
           type: "success",
           title: "Updated!",
-          text: `Selected testimonial(s) have been marked as ${
-            status ? "Active" : "Inactive"
-          }.`,
+          text: `Selected testimonial(s) have been marked as ${status ? "Active" : "Inactive"}.`,
         });
+        setRefresh((r) => !r);
         setSelectedTestimonials([]);
-        setSelectAll(false);  
+        setSelectAll(false);
       } else {
         alert({ type: "danger", title: "Error!", text: error });
       }
@@ -114,9 +103,6 @@ export default function TestimonialList() {
       const { error } = await res.json();
 
       if (res.ok) {
-        setTestimonials((prevEnquiries) =>
-          prevEnquiries.filter((enq) => !selectedTestimonials.includes(enq._id))
-        );
         alert({
           type: "success",
           title: "Deleted!",
@@ -157,23 +143,14 @@ export default function TestimonialList() {
     if (selectAll) {
       setSelectedTestimonials([]);
     } else {
-      setSelectedTestimonials(
-        testimonials.map((testimonial) => testimonial._id)
-      );
+      setSelectedTestimonials(testimonials.map((testimonial) => testimonial._id));
     }
     setSelectAll(!selectAll);
   };
 
   const headers = [
     {
-      label: (
-        <input
-          className="form-check-input "
-          type="checkbox"
-          checked={selectAll}
-          onChange={handleSelectAll}
-        />
-      ),
+      label: <input className="form-check-input " type="checkbox" checked={selectAll} onChange={handleSelectAll} />,
     },
     { label: "Name" },
     { label: "Status" },
@@ -196,10 +173,7 @@ export default function TestimonialList() {
       <span className="badge bg-danger">Inactive</span>
     ),
     <div key={testimonial._id}>
-      <button
-        onClick={() => navigate(`/edit-testimonial/${testimonial._id}`)}
-        className="btn btn-primary me-1"
-      >
+      <button onClick={() => navigate(`/edit-testimonial/${testimonial._id}`)} className="btn btn-primary me-1">
         Edit
       </button>
     </div>,
@@ -229,30 +203,18 @@ export default function TestimonialList() {
                 </div>
                 {selectedTestimonials.length ? (
                   <>
-                    <button
-                      onClick={() => updateTestimonialStatus(true)}
-                      className="btn btn-success mx-2"
-                    >
+                    <button onClick={() => updateTestimonialStatus(true)} className="btn btn-success mx-2">
                       All Active
                     </button>
-                    <button
-                      onClick={() => updateTestimonialStatus(false)}
-                      className="btn btn-danger mx-2"
-                    >
+                    <button onClick={() => updateTestimonialStatus(false)} className="btn btn-danger mx-2">
                       All Inactive
                     </button>
-                    <button
-                      onClick={() => setModalOpen(true)}
-                      className="btn btn-danger mx-2"
-                    >
+                    <button onClick={() => setModalOpen(true)} className="btn btn-danger mx-2">
                       Delete Selected
                     </button>
                   </>
                 ) : null}
-                <button
-                  onClick={() => navigate("/add-testimonial")}
-                  className="btn btn-primary"
-                >
+                <button onClick={() => navigate("/add-testimonial")} className="btn btn-primary">
                   Add Testimonial
                 </button>
               </div>

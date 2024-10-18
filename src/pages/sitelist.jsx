@@ -21,7 +21,7 @@ export default function SiteList() {
   const searchAbleKeys = ["Name", "Host"];
   const filter = ["Active", "Inactive"];
 
-  const [err, data] = useSetTimeout("sites", page - 1, limit, searchTerm, searchKey, statusFilter, "");
+  const [err, data, setRefresh] = useSetTimeout("sites", page - 1, limit, searchTerm, searchKey, statusFilter, "");
 
   useEffect(() => {
     if (data) {
@@ -32,7 +32,7 @@ export default function SiteList() {
     }
   }, [data, err, alert]);
 
-  const updateCaseStudiesStatus = async (status) => {
+  const updateSiteStatus = async (status) => {
     setLoading(true);
     try {
       const res = await fetch(`${import.meta.env.VITE_API_URL}/site-status`, {
@@ -47,9 +47,7 @@ export default function SiteList() {
       const { error } = await res.json();
 
       if (res.ok) {
-        setSites((prevCaseStudies) =>
-          prevCaseStudies.map((site) => (selectedSites.includes(site._id) ? { ...site, isActive: status } : site))
-        );
+        setRefresh((r) => !r);
         alert({
           type: "success",
           title: "Updated!",
@@ -150,12 +148,12 @@ export default function SiteList() {
                     </div>
                   </div>
                   {selectedSites.length ? (
-                    <button onClick={() => updateCaseStudiesStatus(true)} className="btn btn-success mx-2">
+                    <button onClick={() => updateSiteStatus(true)} className="btn btn-success mx-2">
                       All Active
                     </button>
                   ) : null}
                   {selectedSites.length ? (
-                    <button onClick={() => updateCaseStudiesStatus(false)} className="btn btn-danger mx-2">
+                    <button onClick={() => updateSiteStatus(false)} className="btn btn-danger mx-2">
                       All Inactive
                     </button>
                   ) : null}
@@ -177,9 +175,9 @@ export default function SiteList() {
               setSearchTerm={setSearchTerm}
               setSearchKey={setSearchKey}
               searchAbleKeys={searchAbleKeys}
-              onEntriesChange={(newLimit) => {
-                setLimit(newLimit);
-              }}
+              onEntriesChange={(newLimit) => 
+                setLimit(newLimit)
+            }
               totalCount={totalCount}
             />
           </div>

@@ -97,11 +97,14 @@ export default function AddPopup() {
           },
         });
         const { data, error } = await res.json();
-
         if (res.ok) {
+          const formattedPublishDate = new Date(data.popup.publishDate).toISOString().slice(0, 16);
+          const formattedArchiveDate = new Date(data.popup.archiveDate).toISOString().slice(0, 16);
           setPopupDetails((prev) => ({
             ...prev,
             ...data.popup,
+            publishDate: formattedPublishDate,
+            archiveDate: formattedArchiveDate,
           }));
         } else {
           alert({ type: "warning", title: "Warning !", text: error });
@@ -355,11 +358,10 @@ export default function AddPopup() {
                     className="form-control"
                     placeholder="Title"
                     value={popupDetails.publishDate}
-                    onChange={(e) =>
-                      setPopupDetails((d) => ({
-                        ...d,
-                        publishDate: e.target.value,
-                      }))
+                    onChange={
+                      (e) => console.log(e.target.value)
+
+                      // setPopupDetails((d) => ({...d,publishDate: e.target.value,}))
                     }
                   />
                 </div>

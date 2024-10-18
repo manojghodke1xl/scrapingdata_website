@@ -58,11 +58,6 @@ export default function CaseStudyList() {
       const { error } = await res.json();
 
       if (res.ok) {
-        setCaseStudies((prevCaseStudies) =>
-          prevCaseStudies.map((caseStudy) =>
-            selectedCaseStudies.includes(caseStudy._id) ? { ...caseStudy, isActive: status } : caseStudy
-          )
-        );
         alert({
           type: "success",
           title: "Updated!",
@@ -184,7 +179,7 @@ export default function CaseStudyList() {
               headers={headers}
               rows={rows}
               currentPage={page}
-              totalPages={Math.ceil(caseStudies.length / limit)}
+              totalPages={Math.ceil(totalCount / limit)}
               onPageChange={setPage}
               entriesPerPage={limit}
               setSearchTerm={setSearchTerm}
@@ -192,9 +187,7 @@ export default function CaseStudyList() {
               allsites={allsites}
               setSiteId={setSiteId}
               searchAbleKeys={searchAbleKeys}
-              onEntriesChange={(newLimit) => {
-                setLimit(newLimit);
-              }}
+              onEntriesChange={(newLimit) => setLimit(newLimit)}
               totalCount={totalCount}
             />
           </div>

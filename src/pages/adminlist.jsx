@@ -26,7 +26,7 @@ export default function AdminList() {
   const searchAbleKeys = ["Name", "Email"];
   const filter = ["Active", "Inactive"];
 
-  const [err, data] = useSetTimeout("admins", page - 1, limit, searchTerm, searchKey, statusFilter, siteId);
+  const [err, data, setRefresh] = useSetTimeout("admins", page - 1, limit, searchTerm, searchKey, statusFilter, siteId);
 
   useEffect(() => {
     if (data) {
@@ -52,9 +52,7 @@ export default function AdminList() {
       const { error } = await res.json();
 
       if (res.ok) {
-        setAdmins((prevAdmins) =>
-          prevAdmins.map((admin) => (selectedAdmins.includes(admin._id) ? { ...admin, isBlocked: status } : admin))
-        );
+        setRefresh((r) => !r);
         alert({
           type: "success",
           title: "Updated!",

@@ -24,7 +24,7 @@ export default function EnquiryList() {
 
   const searchAbleKeys = ["Name", "Email", "Mobile", "Service", "Subject", "Site"];
 
-  const [err, data] = useSetTimeout("enquiries", page - 1, limit, searchTerm, searchKey, "", siteId);
+  const [err, data, setRefresh] = useSetTimeout("enquiries", page - 1, limit, searchTerm, searchKey, "", siteId);
 
   useEffect(() => {
     if (data) {
@@ -59,12 +59,12 @@ export default function EnquiryList() {
       const { error } = await res.json();
 
       if (res.ok) {
-        setEnquiries((prevEnquiries) => prevEnquiries.filter((enq) => !selectedEnquiries.includes(enq._id)));
         alert({
           type: "success",
           title: "Deleted!",
           text: `Selected enquiry have been deleted.`,
         });
+        setRefresh((r) => !r);
         setSelectedEnquiries([]);
         setSelectAll(false);
       } else {
@@ -87,17 +87,16 @@ export default function EnquiryList() {
       } else {
         updatedSelected = [...prevSelected, enqId];
       }
-  
+
       if (updatedSelected.length === enquiries.length) {
         setSelectAll(true);
       } else {
         setSelectAll(false);
       }
-  
+
       return updatedSelected;
     });
   };
-  
 
   const handleSelectAll = () => {
     if (selectAll) {

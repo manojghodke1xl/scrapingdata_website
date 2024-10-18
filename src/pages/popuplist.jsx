@@ -24,15 +24,7 @@ export default function PopupList() {
   const allsites = useGetAllSites();
   const searchAbleKeys = ["Name", "Host"];
   const filter = ["Active", "Inactive"];
-  const [err, data, setRefresh] = useSetTimeout(
-    "popups",
-    page - 1,
-    limit,
-    searchTerm,
-    searchKey,
-    statusFilter,
-    siteId
-  );
+  const [err, data, setRefresh] = useSetTimeout("popups", page - 1, limit, searchTerm, searchKey, statusFilter, siteId);
   useEffect(() => {
     if (data) {
       setPopups(data.popups);
@@ -45,34 +37,22 @@ export default function PopupList() {
   const updatePopupStatus = async (status) => {
     setLoading(true);
     try {
-      const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/popup-status`,
-        {
-          method: "PUT",
-          headers: {
-            Authorization: localStorage.getItem("auth"),
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ ids: selectedPopups, isActive: status }),
-        }
-      );
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/popup-status`, {
+        method: "PUT",
+        headers: {
+          Authorization: localStorage.getItem("auth"),
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ ids: selectedPopups, isActive: status }),
+      });
 
       const { error } = await res.json();
 
       if (res.ok) {
-        setPopups((prevPopup) =>
-          prevPopup.map((popup) =>
-            selectedPopups.includes(popup._id)
-              ? { ...popup, isActive: status }
-              : popup
-          )
-        );
         alert({
           type: "success",
           title: "Updated!",
-          text: `Selected popups have been marked as ${
-            status ? "Active" : "Inactive"
-          }.`,
+          text: `Selected popups have been marked as ${status ? "Active" : "Inactive"}.`,
         });
         setRefresh((r) => !r);
         setSelectedPopups([]);
@@ -87,7 +67,6 @@ export default function PopupList() {
     }
   };
 
-
   const duplicateSelectedPopup = async (selectedSites) => {
     if (!selectedPopups.length) {
       alert({
@@ -99,20 +78,16 @@ export default function PopupList() {
     }
     setLoading(true);
     try {
-      const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/duplicate-popup`,
-        {
-          method: "POST",
-          headers: {
-            Authorization: localStorage.getItem("auth"),
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ pids: selectedPopups, sids: selectedSites }),
-        }
-      );
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/duplicate-popup`, {
+        method: "POST",
+        headers: {
+          Authorization: localStorage.getItem("auth"),
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ pids: selectedPopups, sids: selectedSites }),
+      });
       const { error } = await res.json();
       if (res.ok) {
-        // setPopups((prevEnquiries) => prevEnquiries.filter((enq) => !selectedPopups.includes(enq._id)));
         alert({
           type: "success",
           title: "Duplicated!",
@@ -196,14 +171,7 @@ export default function PopupList() {
   };
   const headers = [
     {
-      label: (
-        <input
-          className="form-check-input "
-          type="checkbox"
-          checked={selectAll}
-          onChange={handleSelectAll}
-        />
-      ),
+      label: <input className="form-check-input " type="checkbox" checked={selectAll} onChange={handleSelectAll} />,
     },
     { label: "Name" },
     { label: "Device Type" },
@@ -229,10 +197,7 @@ export default function PopupList() {
       <span className="badge bg-danger">Inactive</span>
     ),
     <div key={popup._id}>
-      <button
-        onClick={() => navigate(`/edit-popup/${popup._id}`)}
-        className="btn btn-primary  me-1"
-      >
+      <button onClick={() => navigate(`/edit-popup/${popup._id}`)} className="btn btn-primary  me-1">
         Edit
       </button>
     </div>,
@@ -246,10 +211,7 @@ export default function PopupList() {
             <h3 className="card-title">All Popups List</h3>
             <div className="card-options d-flex gap-2">
               <div className="card-options">
-                <select
-                  className="form-select mx-2"
-                  onChange={(e) => setStatusFilter(e.target.value)}
-                >
+                <select className="form-select mx-2" onChange={(e) => setStatusFilter(e.target.value)}>
                   <option value="">All</option>
                   {filter.map((key, i) => (
                     <option key={i} value={key.toLowerCase()}>
@@ -259,36 +221,21 @@ export default function PopupList() {
                 </select>
                 {selectedPopups.length > 0 && (
                   <>
-                    <button
-                      onClick={() => updatePopupStatus(true)}
-                      className="btn btn-success mx-2"
-                    >
+                    <button onClick={() => updatePopupStatus(true)} className="btn btn-success mx-2">
                       All Active
                     </button>
-                    <button
-                      onClick={() => updatePopupStatus(false)}
-                      className="btn btn-danger mx-2"
-                    >
+                    <button onClick={() => updatePopupStatus(false)} className="btn btn-danger mx-2">
                       All Inactive
                     </button>
-                    <button
-                      onClick={() => setDupModalOpen(true)}
-                      className="btn btn-primary mx-2"
-                    >
+                    <button onClick={() => setDupModalOpen(true)} className="btn btn-primary mx-2">
                       Duplicate Selected
                     </button>
-                    <button
-                      onClick={() => setModalOpen(true)}
-                      className="btn btn-danger mx-2"
-                    >
+                    <button onClick={() => setModalOpen(true)} className="btn btn-danger mx-2">
                       Delete Selected
                     </button>
                   </>
                 )}
-                <button
-                  onClick={() => navigate("/add-popup")}
-                  className="btn btn-primary"
-                >
+                <button onClick={() => navigate("/add-popup")} className="btn btn-primary">
                   Add Popup
                 </button>
               </div>

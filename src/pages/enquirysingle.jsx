@@ -96,7 +96,7 @@ const Enquirysingle = () => {
                     <textarea
                       className="form-control"
                       name="example-textarea-input"
-                      rows={6}
+                      rows={1}
                       placeholder="Content.."
                       defaultValue={enquiry?.uastring}
                       readOnly
