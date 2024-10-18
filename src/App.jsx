@@ -10,26 +10,46 @@ import Loading from "./comps/loading";
 import Signin from "./pages/signin";
 import Layout from "./comps/layout";
 import Dashboard from "./pages/dashboard";
-import EnquiryList from "./pages/enquirylist";
-import MailingList from "./pages/mailinglist";
-import SiteList from "./pages/sitelist";
-import AddSite from "./pages/addsite";
-import EnquirySingle from "./pages/enquirysingle";
-import MailingSingle from "./pages/mailingsingle";
-import AdminList from "./pages/adminlist";
-import AddAdmin from "./pages/addadmin";
-import GuideList from "./pages/guidelist";
-import AddGuide from "./pages/addguide";
-import CaseStudyList from "./pages/casestudylist";
-import AddCaseStudy from "./pages/addcasestudy";
-import TestimonialList from "./pages/testimoniallist";
-import AddTestimonial from "./pages/addtestimonial";
-import SmtpList from "./pages/smtplist";
-import AddSmtp from "./pages/addsmtp";
-import PopupList from "./pages/popuplist";
-import AddPopup from "./pages/addpopup";
-import AddCategory from "./pages/addCategory";
-import CategoryList from "./pages/categoryList";
+import EnquiryList from "./pages/enquiry/enquirylist";
+import Enquirysingle from "./pages/enquiry/enquirysingle";
+import MailingList from "./pages/mailing/mailinglist";
+import MailingSingle from "./pages/mailing/mailingsingle";
+import SiteList from "./pages/site/sitelist";
+import AdminList from "./pages/admin/adminlist";
+import AddAdmin from "./pages/admin/addadmin";
+import AddSite from "./pages/site/addsite";
+import GuideList from "./pages/guide/guidelist";
+import AddGuide from "./pages/guide/addguide";
+import CaseStudyList from "./pages/casestudy/casestudylist";
+import AddCaseStudy from "./pages/casestudy/addcasestudy";
+import TestimonialList from "./pages/testimonial/testimoniallist";
+import AddTestimonial from "./pages/testimonial/addtestimonial";
+import SmtpList from "./pages/smtp/smtplist";
+import AddSmtp from "./pages/smtp/addsmtp";
+import PopupList from "./pages/popup/popuplist";
+import AddPopup from "./pages/popup/addpopup";
+import CategoryList from "./pages/category/categoryList";
+import AddCategory from "./pages/category/addCategory";
+// import EnquiryList from "./pages/enquirylist";
+// import MailingList from "./pages/mailinglist";
+// import SiteList from "./pages/sitelist";
+// import AddSite from "./pages/addsite";
+// import EnquirySingle from "./pages/enquirysingle";
+// import MailingSingle from "./pages/mailingsingle";
+// import AdminList from "./pages/adminlist";
+// import AddAdmin from "./pages/addadmin";
+// import GuideList from "./pages/guidelist";
+// import AddGuide from "./pages/addguide";
+// import CaseStudyList from "./pages/casestudylist";
+// import AddCaseStudy from "./pages/addcasestudy";
+// import TestimonialList from "./pages/testimoniallist";
+// import AddTestimonial from "./pages/addtestimonial";
+// import SmtpList from "./pages/smtplist";
+// import AddSmtp from "./pages/addsmtp";
+// import PopupList from "./pages/popuplist";
+// import AddPopup from "./pages/addpopup";
+// import AddCategory from "./pages/addCategory";
+// import CategoryList from "./pages/categoryList";
 
 function App() {
   const [alerts, alert] = useAlert();
@@ -49,7 +69,7 @@ function App() {
             <Route element={<Auth />}>
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/enquiry-list" element={<EnquiryList />} />
-              <Route path="/enquiry/:id" element={<EnquirySingle />} />
+              <Route path="/enquiry/:id" element={<Enquirysingle />} />
               <Route path="/mailing-list" element={<MailingList />} />
               <Route path="/mailing/:id" element={<MailingSingle />} />
               <Route path="/site-list" element={<SiteList />} />
