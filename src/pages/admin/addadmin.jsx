@@ -30,7 +30,7 @@ export default function AddAdmin() {
       if (status) {
         setAvailableSites(data.sites);
       } else {
-        alert({ type: "warning", title: "Warning !", text: "Sites not found" });
+        alert({ type: "warning", text: "Sites not found" });
       }
     })();
   }, [alert]);
@@ -48,10 +48,10 @@ export default function AddAdmin() {
             sites: data.admin.sites,
           }));
         } else {
-          alert({ type: "warning", title: "Warning !", text: data });
+          alert({ type: "warning", text: data });
         }
       })()
-        .catch((error) => alert({ type: "danger", title: "Error !", text: error.message }))
+        .catch((error) => alert({ type: "danger", text: error.message }))
         .finally(() => setLoading(false));
     }
   }, [id, alert, setLoading]);
@@ -73,15 +73,15 @@ export default function AddAdmin() {
     const { password, ...rest } = adminDetails;
     if (password) rest.password = password;
     try {
-      const { status, data } = id ? await updateAdminApi(id, rest) : await addAdminApi(rest);
+      const { status, data } = await (id ? updateAdminApi(id, rest) : addAdminApi(rest));
       if (status) {
-        alert({ type: "success", title: "Success !", text: data.message });
+        alert({ type: "success", text: data.message });
         navigate("/admin-list");
       } else {
-        alert({ type: "warning", title: "Warning !", text: data });
+        alert({ type: "warning", text: data });
       }
     } catch (error) {
-      alert({ type: "danger", title: "Error !", text: error.message });
+      alert({ type: "danger", text: error.message });
     } finally {
       setLoading(false);
     }

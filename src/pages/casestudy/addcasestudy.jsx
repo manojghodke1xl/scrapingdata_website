@@ -26,7 +26,7 @@ export default function AddCaseStudy() {
       if (status) {
         setAvailableSites(data.sites);
       } else {
-        alert({ type: "warning", title: "Warning !", text: "Sites not found" });
+        alert({ type: "warning", text: "Sites not found" });
       }
     })();
   }, [alert]);
@@ -47,10 +47,10 @@ export default function AddCaseStudy() {
             imageFile: image,
           }));
         } else {
-          alert({ type: "warning", title: "Warning !", text: data });
+          alert({ type: "warning", text: data });
         }
       })()
-        .catch((error) => alert({ type: "danger", title: "Error !", text: error.message }))
+        .catch((error) => alert({ type: "danger", text: error.message }))
         .finally(() => setLoading(false));
     }
   }, [id, alert, setLoading]);
@@ -68,17 +68,17 @@ export default function AddCaseStudy() {
     if (!validate()) return;
     setLoading(true);
     try {
-      const { status, data } = id
-        ? await updateCaseStudyApi(id, caseStudyDetails)
-        : await addCaseStudyApi(caseStudyDetails);
+      const { status, data } = await (id
+        ? updateCaseStudyApi(id, caseStudyDetails)
+        : addCaseStudyApi(caseStudyDetails));
       if (status) {
-        alert({ type: "success", title: "Success!", text: data.message });
+        alert({ type: "success", text: data.message });
         navigate("/casestudy-list");
       } else {
-        alert({ type: "warning", title: "Warning!", text: data });
+        alert({ type: "warning", text: data });
       }
     } catch (error) {
-      alert({ type: "danger", title: "Error!", text: error.message });
+      alert({ type: "danger", text: error.message });
     } finally {
       setLoading(false);
     }
@@ -97,21 +97,13 @@ export default function AddCaseStudy() {
     const validPdfTypes = ["application/pdf"];
 
     if (isImage && !validImageTypes.includes(type)) {
-      alert({
-        type: "warning",
-        title: "Invalid File Type",
-        text: "Only PNG or JPEG formats are allowed for image uploads.",
-      });
+      alert({ type: "warning", text: "Only PNG or JPEG formats are allowed for image uploads." });
       imageInputRef.current.value = "";
       return;
     }
 
     if (ispdf && !validPdfTypes.includes(type)) {
-      alert({
-        type: "warning",
-        title: "Invalid File Type",
-        text: "Only PDF files are allowed for uploads.",
-      });
+      alert({ type: "warning", text: "Only PDF files are allowed for uploads." });
       fileInputRef.current.value = "";
       return;
     }
@@ -156,7 +148,7 @@ export default function AddCaseStudy() {
       }
     } catch (error) {
       console.error("Upload error:", error);
-      alert({ type: "danger", title: "Error !", text: error.message });
+      alert({ type: "danger", text: error.message });
     }
   };
 

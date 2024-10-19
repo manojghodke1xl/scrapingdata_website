@@ -14,5 +14,3 @@ export function useAlert() {
 
   return [list, addAlert];
 }
-
-

@@ -22,8 +22,6 @@
 .alert {
   position: relative;
   margin-top: 1rem;
-  padding: 8px;
-  cursor: pointer;
   z-index: 0;
 }
 
@@ -36,6 +34,14 @@
   max-height: 150px;
   overflow-y: auto;
   border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 4px;
+}
+
+.duplicate-box{
+  max-height: 200px;
+  overflow-y: auto;
+  border: 1px solid #ced4da;
   padding: 10px;
   border-radius: 4px;
 }

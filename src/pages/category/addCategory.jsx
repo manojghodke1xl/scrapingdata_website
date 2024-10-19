@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { GlobalContext } from "../../GlobalContext";
+import { addCategoryApi, getCategoryByIdApi, updateCategoryApi } from "../../apis/category-apis";
 
 export default function AddCategory() {
   const navigate = useNavigate();
@@ -19,53 +20,41 @@ export default function AddCategory() {
   useEffect(() => {
     if (id) {
       setLoading(true);
-      const fetchAdminDetails = async () => {
+      (async () => {
         try {
-          const res = await fetch(`${import.meta.env.VITE_API_URL}/category/${id}`, {
-            method: "GET",
-            headers: {
-              Authorization: localStorage.getItem("auth"),
-            },
-          });
-          const { data, error } = await res.json();
-          if (res.ok) {
+          const { status, data } = await getCategoryByIdApi(id);
+
+          if (status) {
             const { name } = data.category;
             setCategoryName(name);
           } else {
-            alert({ type: "warning", title: "Warning !", text: error });
+            alert({ type: "warning", text: "Category not found" });
           }
         } catch (error) {
-          alert({ type: "danger", title: "Error !", text: error.message });
+          alert({ type: "danger", text: error.message });
         } finally {
           setLoading(false);
         }
-      };
-      fetchAdminDetails();
+      })();
     }
   }, [id, alert, setLoading]);
-  console.log(categoryName);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
     setLoading(true);
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/category${id ? `/${id}` : ""}`, {
-        method: id ? "PUT" : "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: localStorage.getItem("auth"),
-        },
-        body: JSON.stringify({ name: categoryName }),
-      });
-      const { message, error } = await res.json();
-      if (res.ok) {
-        alert({ type: "success", title: "Success !", text: message });
+      const name = { name: categoryName };
+      const { status, data } = await (id ? updateCategoryApi(id, name) : addCategoryApi(name));
+      console.log(data);
+      if (status) {
+        alert({ type: "success", text: data.message });
         navigate("/category-list");
       } else {
-        alert({ type: "warning", title: "Warning !", text: error });
+        alert({ type: "warning", text: data });
       }
     } catch (error) {
-      alert({ type: "danger", title: "Error !", text: error.message });
+      alert({ type: "danger", text: error.message });
     } finally {
       setLoading(false);
     }

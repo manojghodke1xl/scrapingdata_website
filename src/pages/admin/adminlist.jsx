@@ -34,7 +34,7 @@ export default function AdminList() {
       setAdmins(data.admins);
       setTotalCount(data.count);
     } else if (err) {
-      alert({ type: "warning", title: "Warning!", text: err.message });
+      alert({ type: "warning", text: err.message });
     }
   }, [data, err, alert]);
 
@@ -44,20 +44,16 @@ export default function AdminList() {
       const { status, data } = await updateAdminStatusApi(selectedAdmins, userStatus);
 
       if (status) {
+        alert({ type: "success", text: data.message });
         setRefresh((r) => !r);
-        alert({
-          type: "success",
-          title: "Updated!",
-          text: data.message,
-        });
         setSelectedAdmins([]);
         setSelectAll(false);
         setStatusSelect("Select");
       } else {
-        alert({ type: "danger", title: "Error!", text: data });
+        alert({ type: "danger", text: data });
       }
     } catch (error) {
-      alert({ type: "danger", title: "Error!", text: error.message });
+      alert({ type: "danger", text: error.message });
     } finally {
       setLoading(false);
     }

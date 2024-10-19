@@ -5,6 +5,7 @@ import Table from "../../comps/table";
 import ConfirmationModal from "../../comps/confirmation";
 import useSetTimeout from "../../Hooks/useDebounce";
 import useGetAllSites from "../../Hooks/useGetAllSites";
+import { deleteEnquiryApi } from "../../apis/enquiry-apis";
 
 export default function EnquiryList() {
   const { alert, setLoading } = useContext(GlobalContext);
@@ -22,71 +23,36 @@ export default function EnquiryList() {
   const [siteId, setSiteId] = useState("");
   const allsites = useGetAllSites();
 
-  const searchAbleKeys = [
-    "Name",
-    "Email",
-    "Mobile",
-    "Service",
-    "Subject",
-    "Site",
-  ];
+  const searchAbleKeys = ["Name", "Email", "Mobile", "Service", "Subject", "Site"];
 
-  const [err, data, setRefresh] = useSetTimeout(
-    "enquiries",
-    page - 1,
-    limit,
-    searchTerm,
-    searchKey,
-    "",
-    siteId
-  );
+  const [err, data, setRefresh] = useSetTimeout("enquiries", page - 1, limit, searchTerm, searchKey, "", siteId);
 
   useEffect(() => {
     if (data) {
       setEnquiries(data.enquiries);
       setTotalCount(data.count);
     } else if (err) {
-      alert({ type: "warning", title: "Warning!", text: err.message });
+      alert({ type: "warning", text: err.message });
     }
   }, [data, err, alert]);
 
   const deleteSelectedEnquiries = async () => {
-    if (!selectedEnquiries.length) {
-      alert({
-        type: "warning",
-        title: "No Selection",
-        text: "Please select at least one enquiry to delete.",
-      });
-      return;
-    }
-
+    if (!selectedEnquiries.length)
+      return alert({ type: "warning", text: "Please select at least one enquiry to delete." });
+    
     setLoading(true);
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/enquiry`, {
-        method: "DELETE",
-        headers: {
-          Authorization: localStorage.getItem("auth"),
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ ids: selectedEnquiries }),
-      });
-
-      const { error } = await res.json();
-
-      if (res.ok) {
-        alert({
-          type: "success",
-          title: "Deleted!",
-          text: `Selected enquiry have been deleted.`,
-        });
+      const { status, data } = await deleteEnquiryApi(selectedEnquiries);
+      if (status) {
+        alert({ type: "success", text: data.message });
         setRefresh((r) => !r);
         setSelectedEnquiries([]);
         setSelectAll(false);
       } else {
-        alert({ type: "danger", title: "Error!", text: error });
+        alert({ type: "danger", text: data });
       }
     } catch (error) {
-      alert({ type: "danger", title: "Error!", text: error.message });
+      alert({ type: "danger", text: error.message });
     } finally {
       setLoading(false);
       setModalOpen(false);
@@ -124,14 +90,7 @@ export default function EnquiryList() {
 
   const headers = [
     {
-      label: (
-        <input
-          className="form-check-input"
-          type="checkbox"
-          checked={selectAll}
-          onChange={handleSelectAll}
-        />
-      ),
+      label: <input className="form-check-input" type="checkbox" checked={selectAll} onChange={handleSelectAll} />,
     },
     { label: "Customer Name" },
     { label: "Customer Email" },
@@ -159,10 +118,7 @@ export default function EnquiryList() {
     enq.message,
     enq.site.name,
     <div key={enq._id}>
-      <button
-        onClick={() => navigate(`/enquiry/${enq._id}`)}
-        className="btn btn-primary me-1"
-      >
+      <button onClick={() => navigate(`/enquiry/${enq._id}`)} className="btn btn-primary me-1">
         View
       </button>
     </div>,
@@ -176,10 +132,7 @@ export default function EnquiryList() {
             <h3 className="card-title">All Enquiries</h3>
             <div className="card-options">
               {selectedEnquiries.length ? (
-                <button
-                  onClick={() => setModalOpen(true)}
-                  className="btn btn-danger"
-                >
+                <button onClick={() => setModalOpen(true)} className="btn btn-danger">
                   Delete Selected
                 </button>
               ) : (

@@ -1,33 +1,24 @@
 import { useContext, useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { GlobalContext } from "../../GlobalContext";
+import { getEnquiryById } from "../../apis/enquiry-apis";
 
 const Enquirysingle = () => {
   const { id } = useParams();
   const { alert, setLoading } = useContext(GlobalContext);
   const [enquiry, setEnquiry] = useState(null);
+
   useEffect(() => {
     setLoading(true);
     (async () => {
-      const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/enquiry/${id}?p=1`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: localStorage.getItem("auth"),
-          },
-        }
-      );
-      const { data, error } = await res.json();
-      if (res.ok) {
+      const { status, data } = await getEnquiryById(id);
+      if (status) {
         setEnquiry(data.enquiry);
       } else {
-        alert({ type: "warning", title: "Warning !", text: error });
+        alert({ type: "warning", text: data });
       }
     })()
-      .catch((error) =>
-        alert({ type: "danger", title: "Error !", text: error.message })
-      )
+      .catch((error) => alert({ type: "danger", text: error.message }))
       .finally(() => setLoading(false));
   }, [alert, id, setLoading]);
 
@@ -40,37 +31,22 @@ const Enquirysingle = () => {
               <div className="col-12  d-flex flex-column">
                 <div className="card-body">
                   <h2 className="mb-4">Enquiry Details</h2>
-
                   <h3 className="card-title mt-4">Customer Details</h3>
                   <div className="row g-3">
                     <div className="col-md">
                       <div className="form-label">Customer Name</div>
-                      <input
-                        type="text"
-                        className="form-control"
-                        defaultValue={enquiry?.name}
-                        readOnly
-                      />
+                      <input type="text" className="form-control" defaultValue={enquiry?.name} readOnly />
                     </div>
                     <div className="col-md">
                       <div className="form-label">Customer Email</div>
-                      <input
-                        type="text"
-                        className="form-control"
-                        defaultValue={enquiry?.email}
-                        readOnly
-                      />
+                      <input type="text" className="form-control" defaultValue={enquiry?.email} readOnly />
                     </div>
                     <div className="col-md">
                       <div className="form-label">Mobile Number</div>
                       <input
                         type="text"
                         className="form-control"
-                        defaultValue={
-                          !enquiry.ccode
-                            ? ""
-                            : enquiry?.ccode + " " + enquiry?.mobile
-                        }
+                        defaultValue={!enquiry.ccode ? "" : enquiry?.ccode + " " + enquiry?.mobile}
                         readOnly
                       />
                     </div>
@@ -78,37 +54,21 @@ const Enquirysingle = () => {
                   <div className="row g-3 mt-2">
                     <div className="col-md">
                       <div className="form-label">Customer Message</div>
-                      <input
-                        type="text"
-                        className="form-control"
-                        defaultValue={enquiry?.message}
-                        readOnly
-                      />
+                      <input type="text" className="form-control" defaultValue={enquiry?.message} readOnly />
                     </div>
                     <div className="col-md">
                       <div className="form-label">Customer service</div>
-                      <input
-                        type="text"
-                        className="form-control"
-                        defaultValue={enquiry?.service}
-                        readOnly
-                      />
+                      <input type="text" className="form-control" defaultValue={enquiry?.service} readOnly />
                     </div>
                     <div className="col-md">
                       <div className="form-label">Customer subject</div>
-                      <input
-                        type="text"
-                        className="form-control"
-                        defaultValue={enquiry?.subject}
-                        readOnly
-                      />
+                      <input type="text" className="form-control" defaultValue={enquiry?.subject} readOnly />
                     </div>
                   </div>
-
                   <h3 className="card-title mt-4">Request header</h3>
                   <p className="card-subtitle">
-                    Request headers are key-value pairs sent by a client to
-                    provide information about the request or the client itself.
+                    Request headers are key-value pairs sent by a client to provide information about the request or the
+                    client itself.
                   </p>
                   <div>
                     <textarea
@@ -120,11 +80,10 @@ const Enquirysingle = () => {
                       readOnly
                     />
                   </div>
-
                   <h3 className="card-title mt-4">User Agent String</h3>
                   <p className="card-subtitle">
-                    A User Agent String identifies the browser, version, and
-                    operating system of a client device to web servers.
+                    A User Agent String identifies the browser, version, and operating system of a client device to web
+                    servers.
                   </p>
                   <div>
                     <textarea
@@ -136,25 +95,14 @@ const Enquirysingle = () => {
                       readOnly
                     />
                   </div>
-
                   <div className="row g-3 mt-2">
                     <div className="col-md">
                       <div className="form-label">Ip Address</div>
-                      <input
-                        type="text"
-                        className="form-control"
-                        defaultValue={enquiry?.ipaddress}
-                        readOnly
-                      />
+                      <input type="text" className="form-control" defaultValue={enquiry?.ipaddress} readOnly />
                     </div>
                     <div className="col-md">
                       <div className="form-label">Site Name</div>
-                      <input
-                        type="text"
-                        className="form-control"
-                        defaultValue={enquiry?.site?.name}
-                        readOnly
-                      />
+                      <input type="text" className="form-control" defaultValue={enquiry?.site?.name} readOnly />
                     </div>
                     <div className="col-md">
                       <div className="form-label">Date Time</div>

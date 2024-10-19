@@ -5,6 +5,7 @@ export const getMethodCall = async (url) => {
       headers: { Authorization: localStorage.getItem("auth") },
     });
     const data = await response.json();
+    
     if (response.ok) {
       return { status: true, data: data.data };
     } else {
@@ -28,7 +29,7 @@ export const postMethodCall = async (url, userData, contentType = "application/j
 
     const data = await response.json();
     if (response.ok) {
-      return { status: true, data: data.message };
+      return { status: true, data: data };
     } else {
       return { status: false, data: data.error };
     }
@@ -49,7 +50,6 @@ export const putMethodCall = async (url, userData, contentType = "application/js
     });
 
     const data = await response.json();
-    console.log(data);
     if (response.ok) {
       return { status: true, data: data };
     } else {
@@ -62,7 +62,7 @@ export const putMethodCall = async (url, userData, contentType = "application/js
 
 export const deleteMethodCall = async (url, ids, contentType = "application/json") => {
   try {
-    const res = await fetch(url, {
+    const response = await fetch(url, {
       method: "DELETE",
       headers: {
         Authorization: localStorage.getItem("auth"),
@@ -71,11 +71,11 @@ export const deleteMethodCall = async (url, ids, contentType = "application/json
       body: JSON.stringify({ ids }),
     });
 
-    const { data } = await res.json();
-    if (res.ok) {
+    const data = await response.json();
+    if (response.ok) {
       return { status: true, data: data };
     } else {
-      return { status: false, data: data };
+      return { status: false, data: data.error };
     }
   } catch (error) {
     return { status: false, data: error.message };

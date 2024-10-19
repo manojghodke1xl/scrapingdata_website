@@ -14,37 +14,9 @@ export default function CategoryList() {
   const [totalCount, setTotalCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchKey, setSearchKey] = useState("");
-  // const [selectedCategories, setSelectedCategories] = useState([]);
-  // const [selectAll, setSelectAll] = useState(false);
-
   const searchAbleKeys = ["Name"];
 
   const [err, data] = useSetTimeout("categories", page - 1, limit, searchTerm, searchKey);
-
-  // const handleCheckboxChange = (catId) => {
-  //   setSelectedCategories((prevSelected) => {
-  //     let updatedSelected;
-  //     if (prevSelected.includes(catId)) {
-  //       updatedSelected = prevSelected.filter((id) => id !== catId);
-  //     } else {
-  //       updatedSelected = [...prevSelected, catId];
-  //     }
-  //     if (updatedSelected.length !== categories.length) {
-  //       setSelectAll(false);
-  //     }
-
-  //     return updatedSelected;
-  //   });
-  // };
-
-  // const handleSelectAll = () => {
-  //   if (selectAll) {
-  //     setSelectedCategories([]);
-  //   } else {
-  //     setSelectedCategories(categories.map((category) => category._id));
-  //   }
-  //   setSelectAll(!selectAll);
-  // };
 
   const headers = [{ label: "Name" }, { label: "Actions" }];
 
@@ -64,7 +36,7 @@ export default function CategoryList() {
       setCategories(data.categorys);
       setTotalCount(data.count);
     } else if (err) {
-      alert({ type: "warning", title: "Warning!", text: err.message });
+      alert({ type: "warning", text: err.message });
     }
   }, [data, err, alert]);
 
