@@ -29,4 +29,13 @@
 
 .container-xl{
   max-width:1450px
+
+}
+
+.form-multi-check-box {
+  max-height: 150px;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 4px;
 }

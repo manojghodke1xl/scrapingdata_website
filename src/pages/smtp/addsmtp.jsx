@@ -9,7 +9,7 @@ export default function AddSmtp() {
 
   const [errors, setErrors] = useState({});
 
-  const [detail, setDetail] = useState({
+  const [smtpDetails, setSmtpDetails] = useState({
     name: "",
     host: "",
     port: "",
@@ -31,29 +31,25 @@ export default function AddSmtp() {
         const { data, error } = await res.json();
 
         if (res.ok) {
-          const { name, host, port, secure, user } = data.smtp; // Get isGlobal from response
-          setDetail({ name, host, port, secure, user });
+          const { name, host, port, secure, user } = data.smtp;
+          setSmtpDetails({ name, host, port, secure, user });
         } else {
           alert({ type: "warning", title: "Warning !", text: error });
         }
       })()
-        .catch((error) =>
-          alert({ type: "danger", title: "Error !", text: error.message })
-        )
+        .catch((error) => alert({ type: "danger", title: "Error !", text: error.message }))
         .finally(() => setLoading(false));
     }
   }, [id, alert, setLoading]);
 
   const validate = () => {
     const newErrors = {};
-    if (!detail.name) newErrors.name = "Name is required";
-    if (!detail.host) newErrors.host = "Host is required";
-    if (detail.secure === "") {
-      newErrors.secure = "Security protocol is required.";
-    }
-    if (!detail.port) newErrors.port = "Port is required";
-    if (!detail.user) newErrors.user = "User is required";
-    if (!detail.password && !id) newErrors.password = "Password is required";
+    if (!smtpDetails.name) newErrors.name = "Name is required";
+    if (!smtpDetails.host) newErrors.host = "Host is required";
+    if (smtpDetails.secure === "") newErrors.secure = "Security protocol is required.";
+    if (!smtpDetails.port) newErrors.port = "Port is required";
+    if (!smtpDetails.user) newErrors.user = "User is required";
+    if (!smtpDetails.password && !id) newErrors.password = "Password is required";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -63,17 +59,14 @@ export default function AddSmtp() {
     if (!validate()) return;
     setLoading(true);
     try {
-      const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/smtp${id ? `/${id}` : ""}`,
-        {
-          method: id ? "PUT" : "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: localStorage.getItem("auth"),
-          },
-          body: JSON.stringify(detail),
-        }
-      );
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/smtp${id ? `/${id}` : ""}`, {
+        method: id ? "PUT" : "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: localStorage.getItem("auth"),
+        },
+        body: JSON.stringify(smtpDetails),
+      });
       const { message, error } = await res.json();
       if (res.ok) {
         alert({ type: "success", title: "Success !", text: message });
@@ -93,82 +86,62 @@ export default function AddSmtp() {
       <div className="container container-tight py-4">
         <div className="card card-md">
           <div className="card-body">
-            <h2 className="h2 text-center mb-4">
-              {!id ? "Add SMTP" : "Edit SMTP"}
-            </h2>
+            <h2 className="h2 text-center mb-4">{!id ? "Add SMTP" : "Edit SMTP"}</h2>
             <form onSubmit={handleDetails}>
               <div className="mb-3">
-                <label className={!id ? "form-label required" : "form-label"}>
-                  Name
-                </label>
+                <label className={!id ? "form-label required" : "form-label"}>Name</label>
                 <input
                   type="text"
                   name="title"
-                  className="form-control"
+                  className={`form-control ${errors.name ? "is-invalid" : ""}`}
                   placeholder="Title"
-                  value={detail.name}
+                  value={smtpDetails.name}
                   onChange={(e) => {
-                    setDetail((d) => ({ ...d, name: e.target.value }));
-                    if (errors.name)
-                      setErrors((prev) => ({ ...prev, name: "" }));
+                    setSmtpDetails((d) => ({ ...d, name: e.target.value }));
+                    if (errors.name) setErrors((prev) => ({ ...prev, name: "" }));
                   }}
                 />
-                {errors.name && (
-                  <div className="alert alert-danger mt-2">{errors.name}</div>
-                )}
+                {errors.name && <div className="invalid-feedback">{errors.name}</div>}
               </div>
               <div className="mb-3">
-                <label className={!id ? "form-label required" : "form-label"}>
-                  Host
-                </label>
+                <label className={!id ? "form-label required" : "form-label"}>Host</label>
                 <input
                   type="text"
                   name="title"
-                  className="form-control"
+                  className={`form-control ${errors.host ? "is-invalid" : ""}`}
                   placeholder="Title"
-                  value={detail.host}
+                  value={smtpDetails.host}
                   onChange={(e) => {
-                    setDetail((d) => ({ ...d, host: e.target.value }));
-                    if (errors.host)
-                      setErrors((prev) => ({ ...prev, host: "" }));
+                    setSmtpDetails((d) => ({ ...d, host: e.target.value }));
+                    if (errors.host) setErrors((prev) => ({ ...prev, host: "" }));
                   }}
                 />
-                {errors.host && (
-                  <div className="alert alert-danger mt-2">{errors.host}</div>
-                )}
+                {errors.host && <div className="invalid-feedback">{errors.host}</div>}
               </div>
               <div className="mb-3">
-                <label className={!id ? "form-label required" : "form-label"}>
-                  Port
-                </label>
+                <label className={!id ? "form-label required" : "form-label"}>Port</label>
                 <input
                   type="text"
                   name="name"
-                  className="form-control"
-                  placeholder="Name"
-                  value={detail.port}
+                  className={`form-control ${errors.port ? "is-invalid" : ""}`}
+                  placeholder="Port"
+                  value={smtpDetails.port}
                   onChange={(e) => {
-                    setDetail((d) => ({ ...d, port: e.target.value }));
-                    if (errors.port)
-                      setErrors((prev) => ({ ...prev, port: "" }));
+                    setSmtpDetails((d) => ({ ...d, port: e.target.value }));
+                    if (errors.port) setErrors((prev) => ({ ...prev, port: "" }));
                   }}
                 />
-                {errors.port && (
-                  <div className="alert alert-danger mt-2">{errors.port}</div>
-                )}
+                {errors.port && <div className="invalid-feedback">{errors.port}</div>}
               </div>
-              <div className="mb-3 ">
-                <label className={!id ? "form-label required" : "form-label"}>
-                  Security Protocol
-                </label>
+              <div className="mb-3">
+                <label className={!id ? "form-label required" : "form-label"}>Security Protocol</label>
                 <select
                   name="secure"
-                  className="form-control"
-                  value={detail.secure}
+                  className={`form-control ${errors.secure ? "is-invalid" : ""}`}
+                  value={smtpDetails.secure}
                   onChange={(e) => {
-                    if (errors.secure)
-                      setErrors((prev) => ({ ...prev, secure: "" }));
-                    setDetail((d) => ({ ...d, secure: e.target.value }));
+                    if (errors.secure) setErrors((prev) => ({ ...prev, secure: "" }));
+                    setSmtpDetails((d) => ({ ...d, secure: e.target.value }));
                   }}
                 >
                   <option value="select">Select</option>
@@ -176,52 +149,38 @@ export default function AddSmtp() {
                   <option value="TLS">TLS</option>
                   <option value="STARTTLS">STARTTLS</option>
                 </select>
-                {errors.secure && (
-                  <div className="alert alert-danger mt-2">{errors.secure}</div>
-                )}
+                {errors.secure && <div className="invalid-feedback">{errors.secure}</div>}
               </div>
 
               <div className="mb-3">
-                <label className={!id ? "form-label required" : "form-label"}>
-                  User
-                </label>
+                <label className={!id ? "form-label required" : "form-label"}>User</label>
                 <input
                   type="text"
                   name="user"
-                  className="form-control"
+                  className={`form-control ${errors.user ? "is-invalid" : ""}`}
                   placeholder="User"
-                  value={detail.user}
+                  value={smtpDetails.user}
                   onChange={(e) => {
-                    setDetail((d) => ({ ...d, user: e.target.value }));
-                    if (errors.user)
-                      setErrors((prev) => ({ ...prev, user: "" }));
+                    setSmtpDetails((d) => ({ ...d, user: e.target.value }));
+                    if (errors.user) setErrors((prev) => ({ ...prev, user: "" }));
                   }}
                 />
-                {errors.user && (
-                  <div className="alert alert-danger mt-2">{errors.user}</div>
-                )}
+                {errors.user && <div className="invalid-feedback">{errors.user}</div>}
               </div>
               <div className="mb-3">
-                <label className={!id ? "form-label required" : "form-label"}>
-                  Password
-                </label>
+                <label className={!id ? "form-label required" : "form-label"}>Password</label>
                 <input
                   type="password"
                   name="password"
-                  className="form-control"
-                  placeholder="Passsword"
-                  value={detail.password}
+                  className={`form-control ${errors.password ? "is-invalid" : ""}`}
+                  placeholder="Password"
+                  value={smtpDetails.password}
                   onChange={(e) => {
-                    setDetail((d) => ({ ...d, password: e.target.value }));
-                    if (errors.password)
-                      setErrors((prev) => ({ ...prev, password: "" }));
+                    setSmtpDetails((d) => ({ ...d, password: e.target.value }));
+                    if (errors.password) setErrors((prev) => ({ ...prev, password: "" }));
                   }}
                 />
-                {errors.password && (
-                  <div className="alert alert-danger mt-2">
-                    {errors.password}
-                  </div>
-                )}
+                {errors.password && <div className="invalid-feedback">{errors.password}</div>}
               </div>
 
               <div className="form-footer">

@@ -1,6 +1,7 @@
 import { useReducer, useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { AlertContainer, useAlert } from "./comps/alerts";
+import { AlertContainer } from "./comps/alert";
+import { useAlert } from "./Hooks/useAlerts";
 import { authReducer, authState, GlobalContext } from "./GlobalContext";
 import Auth from "./comps/auth";
 import DeAuth from "./comps/deauth";
@@ -30,26 +31,6 @@ import PopupList from "./pages/popup/popuplist";
 import AddPopup from "./pages/popup/addpopup";
 import CategoryList from "./pages/category/categoryList";
 import AddCategory from "./pages/category/addCategory";
-// import EnquiryList from "./pages/enquirylist";
-// import MailingList from "./pages/mailinglist";
-// import SiteList from "./pages/sitelist";
-// import AddSite from "./pages/addsite";
-// import EnquirySingle from "./pages/enquirysingle";
-// import MailingSingle from "./pages/mailingsingle";
-// import AdminList from "./pages/adminlist";
-// import AddAdmin from "./pages/addadmin";
-// import GuideList from "./pages/guidelist";
-// import AddGuide from "./pages/addguide";
-// import CaseStudyList from "./pages/casestudylist";
-// import AddCaseStudy from "./pages/addcasestudy";
-// import TestimonialList from "./pages/testimoniallist";
-// import AddTestimonial from "./pages/addtestimonial";
-// import SmtpList from "./pages/smtplist";
-// import AddSmtp from "./pages/addsmtp";
-// import PopupList from "./pages/popuplist";
-// import AddPopup from "./pages/addpopup";
-// import AddCategory from "./pages/addCategory";
-// import CategoryList from "./pages/categoryList";
 
 function App() {
   const [alerts, alert] = useAlert();
@@ -81,23 +62,18 @@ function App() {
               <Route path="/guide-list" element={<GuideList />} />
               <Route path="/add-guide" element={<AddGuide />} />
               <Route path="/edit-guide/:id" element={<AddGuide />} />
-
               <Route path="/casestudy-list" element={<CaseStudyList />} />
               <Route path="/add-casestudy" element={<AddCaseStudy />} />
               <Route path="/edit-casestudy/:id" element={<AddCaseStudy />} />
-
               <Route path="/testimonial-list" element={<TestimonialList />} />
               <Route path="/add-testimonial" element={<AddTestimonial />} />
               <Route path="/edit-testimonial/:id" element={<AddTestimonial />} />
-
               <Route path="/smtp-list" element={<SmtpList />} />
               <Route path="/add-smtp" element={<AddSmtp />} />
               <Route path="/edit-smtp/:id" element={<AddSmtp />} />
-
               <Route path="/popup-list" element={<PopupList />} />
               <Route path="/add-popup" element={<AddPopup />} />
               <Route path="/edit-popup/:id" element={<AddPopup />} />
-
               <Route path="/category-list" element={<CategoryList />} />
               <Route path="/add-category" element={<AddCategory />} />
               <Route path="/edit-category/:id" element={<AddCategory />} />

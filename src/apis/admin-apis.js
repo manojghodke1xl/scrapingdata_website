@@ -1,0 +1,17 @@
+import { getMethodCall, postMethodCall, putMethodCall } from "./api-handler";
+
+export const getAdminById = async (id) => {
+  return await getMethodCall(`${import.meta.env.VITE_API_URL}/admin/${id}`);
+};
+
+export const addAdminApi = async (userData) => {
+  return await postMethodCall(`${import.meta.env.VITE_API_URL}/admin`, userData);
+};
+
+export const updateAdminApi = async (id, userData) => {
+  return await putMethodCall(`${import.meta.env.VITE_API_URL}/admin/${id}`, userData);
+};
+
+export const updateAdminStatusApi = async (ids, isBlocked) => {
+  return await putMethodCall(`${import.meta.env.VITE_API_URL}/admin-status`, { ids, isBlocked });
+};

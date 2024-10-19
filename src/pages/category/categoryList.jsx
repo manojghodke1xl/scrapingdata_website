@@ -1,4 +1,4 @@
-import { useContext, useEffect, useLayoutEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Table from "../../comps/table";
 import useSetTimeout from "../../Hooks/useDebounce";
@@ -6,7 +6,7 @@ import { GlobalContext } from "../../GlobalContext";
 
 export default function CategoryList() {
   const navigate = useNavigate();
-  const { auth, alert } = useContext(GlobalContext);
+  const { alert } = useContext(GlobalContext);
 
   const [categories, setCategories] = useState([]);
   const [page, setPage] = useState(1);
@@ -19,13 +19,7 @@ export default function CategoryList() {
 
   const searchAbleKeys = ["Name"];
 
-  const [err, data] = useSetTimeout(
-    "categories",
-    page - 1,
-    limit,
-    searchTerm,
-    searchKey
-  );
+  const [err, data] = useSetTimeout("categories", page - 1, limit, searchTerm, searchKey);
 
   // const handleCheckboxChange = (catId) => {
   //   setSelectedCategories((prevSelected) => {
@@ -65,10 +59,6 @@ export default function CategoryList() {
     </button>,
   ]);
 
-  useLayoutEffect(() => {
-    if (!auth.isSuperAdmin) navigate("/dashboard");
-  }, [auth, navigate]);
-
   useEffect(() => {
     if (data) {
       setCategories(data.categorys);
@@ -85,10 +75,7 @@ export default function CategoryList() {
           <div className="card-header">
             <h3 className="card-title">All Categories</h3>
             <div className="card-options">
-              <button
-                onClick={() => navigate("/add-category")}
-                className="btn btn-primary "
-              >
+              <button onClick={() => navigate("/add-category")} className="btn btn-primary ">
                 Add Category
               </button>
             </div>

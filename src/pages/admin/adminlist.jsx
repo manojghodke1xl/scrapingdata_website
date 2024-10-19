@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Table from "../../comps/table";
 import useSetTimeout from "../../Hooks/useDebounce";
 import useGetAllSites from "../../Hooks/useGetAllSites";
+import { updateAdminStatusApi } from "../../apis/admin-apis";
 
 export default function AdminList() {
   const navigate = useNavigate();
@@ -17,9 +18,7 @@ export default function AdminList() {
   const [searchKey, setSearchKey] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [statusSelect, setStatusSelect] = useState("");
-
   const [siteId, setSiteId] = useState("");
-
   const [selectedAdmins, setSelectedAdmins] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
   const allsites = useGetAllSites();
@@ -28,15 +27,7 @@ export default function AdminList() {
   const filter = ["Active", "Inactive"];
   const Status = ["Active", "Block"];
 
-  const [err, data, setRefresh] = useSetTimeout(
-    "admins",
-    page - 1,
-    limit,
-    searchTerm,
-    searchKey,
-    statusFilter,
-    siteId
-  );
+  const [err, data, setRefresh] = useSetTimeout("admins", page - 1, limit, searchTerm, searchKey, statusFilter, siteId);
 
   useEffect(() => {
     if (data) {
@@ -47,34 +38,23 @@ export default function AdminList() {
     }
   }, [data, err, alert]);
 
-  const updateSelectedAdminsStatus = async (status) => {
+  const updateSelectedAdminsStatus = async (userStatus) => {
     setLoading(true);
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/admin-status`, {
-        method: "PUT",
-        headers: {
-          Authorization: localStorage.getItem("auth"),
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ ids: selectedAdmins, isBlocked: status }),
-      });
+      const { status, data } = await updateAdminStatusApi(selectedAdmins, userStatus);
 
-      const { error } = await res.json();
-
-      if (res.ok) {
+      if (status) {
         setRefresh((r) => !r);
         alert({
           type: "success",
           title: "Updated!",
-          text: `Selected admin(s) have been marked as ${
-            status ? "Inactive" : "Active"
-          }.`,
+          text: data.message,
         });
         setSelectedAdmins([]);
         setSelectAll(false);
         setStatusSelect("Select");
       } else {
-        alert({ type: "danger", title: "Error!", text: error });
+        alert({ type: "danger", title: "Error!", text: data });
       }
     } catch (error) {
       alert({ type: "danger", title: "Error!", text: error.message });
@@ -95,16 +75,9 @@ export default function AdminList() {
       } else {
         updatedSelected = [...prevSelected, adminId];
       }
-
-      const nonSuperAdminIds = admins
-        .filter((admin) => !admin.isSuperAdmin)
-        .map((admin) => admin._id);
-
-      const allSelected = nonSuperAdminIds.every((id) =>
-        updatedSelected.includes(id)
-      );
+      const nonSuperAdminIds = admins.filter((admin) => !admin.isSuperAdmin).map((admin) => admin._id);
+      const allSelected = nonSuperAdminIds.every((id) => updatedSelected.includes(id));
       setSelectAll(allSelected);
-
       return updatedSelected;
     });
   };
@@ -113,9 +86,7 @@ export default function AdminList() {
     if (selectAll) {
       setSelectedAdmins([]);
     } else {
-      const nonSuperAdminIds = admins
-        .filter((admin) => !admin.isSuperAdmin)
-        .map((admin) => admin._id);
+      const nonSuperAdminIds = admins.filter((admin) => !admin.isSuperAdmin).map((admin) => admin._id);
       setSelectedAdmins(nonSuperAdminIds);
     }
     setSelectAll(!selectAll);
@@ -138,11 +109,7 @@ export default function AdminList() {
     ) : (
       <span className="badge bg-success">Active</span>
     ),
-    <button
-      key={admin._id}
-      onClick={() => navigate(`/edit-admin/${admin._id}`)}
-      className="btn btn-primary "
-    >
+    <button key={admin._id} onClick={() => navigate(`/edit-admin/${admin._id}`)} className="btn btn-primary ">
       Edit
     </button>,
     admin.isSuperAdmin
@@ -160,10 +127,7 @@ export default function AdminList() {
               <div className="text-secondary">
                 Filter
                 <div className="mx-2 d-inline-block">
-                  <select
-                    className="form-select form-control-sm"
-                    onChange={(e) => setStatusFilter(e.target.value)}
-                  >
+                  <select className="form-select form-control-sm" onChange={(e) => setStatusFilter(e.target.value)}>
                     <option value={""}>All</option>
                     {filter.map((key, i) => (
                       <option key={i} value={key.toLowerCase()}>
@@ -178,10 +142,7 @@ export default function AdminList() {
                   <div className="text-secondary">
                     Status
                     <div className="mx-2 d-inline-block">
-                      <select
-                        className="form-select form-control-sm"
-                        onChange={(e) => setStatusSelect(e.target.value)}
-                      >
+                      <select className="form-select form-control-sm" onChange={(e) => setStatusSelect(e.target.value)}>
                         <option value="">Select</option>
                         {Status.map((key, i) => (
                           <option key={i} value={key.toLowerCase()}>
@@ -192,28 +153,19 @@ export default function AdminList() {
                     </div>
                   </div>
                   {statusSelect === "active" && (
-                    <button
-                      onClick={() => updateSelectedAdminsStatus(false)}
-                      className="btn btn-success mx-2"
-                    >
+                    <button onClick={() => updateSelectedAdminsStatus(false)} className="btn btn-success mx-2">
                       Apply
                     </button>
                   )}
                   {statusSelect === "block" && (
-                    <button
-                      onClick={() => updateSelectedAdminsStatus(true)}
-                      className="btn btn-danger mx-2"
-                    >
+                    <button onClick={() => updateSelectedAdminsStatus(true)} className="btn btn-danger mx-2">
                       Apply
                     </button>
                   )}
                 </>
               ) : null}
 
-              <button
-                onClick={() => navigate("/add-admin")}
-                className="btn btn-primary "
-              >
+              <button onClick={() => navigate("/add-admin")} className="btn btn-primary ">
                 Add Admin
               </button>
             </div>
