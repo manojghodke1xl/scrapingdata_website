@@ -141,16 +141,6 @@ export default function AddTestimonial() {
     const validImageTypes = ["image/jpeg", "image/png"];
     const validVideoTypes = ["video/mp4", "video/quicktime"];
 
-    if (isImage && !validImageTypes.includes(type)) {
-      alert({
-        type: "warning",
-        title: "Invalid File Type",
-        text: "Only PNG or JPEG formats are allowed for image uploads.",
-      });
-      imageInputRef.current.value = "";
-      return;
-    }
-
     if (isVideo && !validVideoTypes.includes(type)) {
       alert({
         type: "warning",
@@ -158,6 +148,16 @@ export default function AddTestimonial() {
         text: "Only MP4 or MOV formats are allowed for video uploads.",
       });
       videoInputRef.current.value = "";
+      return;
+    }
+
+    if (isImage && !validImageTypes.includes(type)) {
+      alert({
+        type: "warning",
+        title: "Invalid File Type",
+        text: "Only PNG or JPEG formats are allowed for image uploads.",
+      });
+      imageInputRef.current.value = "";
       return;
     }
 
@@ -194,11 +194,20 @@ export default function AddTestimonial() {
       }
 
       const fileId = data._id;
+      const fileUrl = `${data.url}/${fileId}`;
 
       if (isImage) {
-        setDetail((prevDetail) => ({ ...prevDetail, image: fileId }));
+        setDetail((prevDetail) => ({
+          ...prevDetail,
+          image: fileId,
+          imageUrl: fileUrl,
+        }));
       } else {
-        setDetail((prevDetail) => ({ ...prevDetail, video: fileId }));
+        setDetail((prevDetail) => ({
+          ...prevDetail,
+          video: fileId,
+          videoUrl: fileUrl,
+        }));
       }
     } catch (error) {
       console.error("Upload error:", error);
@@ -296,6 +305,15 @@ export default function AddTestimonial() {
                     accept="image/*"
                     ref={imageInputRef}
                   />
+                  {detail.imageUrl && (
+                    <a
+                      href={detail.imageUrl}
+                      download
+                      className="btn btn-success mt-2"
+                    >
+                      Download Image
+                    </a>
+                  )}
                 </div>
               )}
               {detail.type === "video" && (
@@ -331,7 +349,7 @@ export default function AddTestimonial() {
                         type="file"
                         name="video"
                         className="form-control"
-                        onChange={(e) => uploadFile(e, true)}
+                        onChange={(e) => uploadFile(e, false)}
                         accept="video/*"
                         ref={videoInputRef}
                       />
