@@ -132,6 +132,7 @@ export default function CaseStudyList() {
       let updatedSelected;
       if (prevSelected.includes(casestudyId)) {
         updatedSelected = prevSelected.filter((id) => id !== casestudyId);
+        setStatusSelect("Select");
       } else {
         updatedSelected = [...prevSelected, casestudyId];
       }

@@ -169,6 +169,7 @@ export default function PopupList() {
       let updatedSelected;
       if (prevSelected.includes(popupId)) {
         updatedSelected = prevSelected.filter((id) => id !== popupId);
+        setStatusSelect("Select");
       } else {
         updatedSelected = [...prevSelected, popupId];
       }

@@ -178,6 +178,7 @@ export default function TestimonialList() {
       let updatedSelected;
       if (prevSelected.includes(testimonialId)) {
         updatedSelected = prevSelected.filter((id) => id !== testimonialId);
+        setStatusSelect("Select");
       } else {
         updatedSelected = [...prevSelected, testimonialId];
       }

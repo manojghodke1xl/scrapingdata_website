@@ -126,6 +126,7 @@ export default function GuideList() {
       let updatedSelected;
       if (prevSelected.includes(guideId)) {
         updatedSelected = prevSelected.filter((id) => id !== guideId);
+        setStatusSelect("Select");
       } else {
         updatedSelected = [...prevSelected, guideId];
       }
