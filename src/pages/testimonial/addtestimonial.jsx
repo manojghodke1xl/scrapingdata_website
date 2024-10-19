@@ -1,6 +1,12 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { GlobalContext } from "../../GlobalContext";
+import { getAllSitesApi } from "../../apis/site-apis";
+import {
+  getTestimonialById,
+  addTestimonialApi,
+  updateTestimonialApi,
+} from "../../apis/testimonial-apis";
 
 export default function AddTestimonial() {
   const navigate = useNavigate();
@@ -28,20 +34,16 @@ export default function AddTestimonial() {
   const type = ["Text", "Image", "Video"];
   useEffect(() => {
     (async () => {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/allsites`, {
-        method: "GET",
-        headers: {
-          Authorization: localStorage.getItem("auth"),
-        },
-      });
-      const { data, error } = await res.json();
-      if (res.ok) {
+      const { status, data } = await getAllSitesApi();
+      if (status) {
         setAvailableSites(data.sites);
       } else {
-        alert({ type: "warning", title: "Warning !", text: error });
+        alert({ type: "warning", title: "Warning !", text: "Sites not found" });
       }
     })();
+  }, [alert]);
 
+  useEffect(() => {
     (async () => {
       const res = await fetch(`${import.meta.env.VITE_API_URL}/allcategories`, {
         method: "GET",
@@ -62,24 +64,19 @@ export default function AddTestimonial() {
     if (id) {
       setLoading(true);
       (async () => {
-        const res = await fetch(
-          `${import.meta.env.VITE_API_URL}/testimonial/${id}`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: localStorage.getItem("auth"),
-            },
-          }
-        );
-        const { data, error } = await res.json();
+        const { status, data } = await getTestimonialById(id);
+        if (status) {
+          const { image, video, sites, ...rest } = data.testimonial;
 
-        if (res.ok) {
           setDetail((prev) => ({
             ...prev,
-            ...data.testimonial,
+            ...rest,
+            sites: sites.map((s) => s._id),
+            videoFile: video,
+            imageFile: image,
           }));
         } else {
-          alert({ type: "warning", title: "Warning !", text: error });
+          alert({ type: "warning", title: "Warning !", text: data });
         }
       })()
         .catch((error) =>
@@ -100,35 +97,27 @@ export default function AddTestimonial() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleDetails = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
     setLoading(true);
     try {
-      const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/testimonial${id ? `/${id}` : ""}`,
-        {
-          method: id ? "PUT" : "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: localStorage.getItem("auth"),
-          },
-          body: JSON.stringify(detail),
-        }
-      );
-      const { message, error } = await res.json();
-      if (res.ok) {
-        alert({ type: "success", title: "Success !", text: message });
+      const { status, data } = id
+        ? await updateTestimonialApi(id, detail)
+        : await addTestimonialApi(detail);
+      if (status) {
+        alert({ type: "success", title: "Success!", text: data.message });
         navigate("/testimonial-list");
       } else {
-        alert({ type: "warning", title: "Warning !", text: error });
+        alert({ type: "warning", title: "Warning!", text: data });
       }
     } catch (error) {
-      alert({ type: "danger", title: "Error !", text: error.message });
+      alert({ type: "danger", title: "Error!", text: error.message });
     } finally {
       setLoading(false);
     }
   };
+
   const imageInputRef = useRef(null);
   const videoInputRef = useRef(null);
 
@@ -223,7 +212,7 @@ export default function AddTestimonial() {
             <h2 className="h2 text-center mb-4">
               {!id ? "Add Testimonial" : "Edit Testimonial"}
             </h2>
-            <form onSubmit={handleDetails}>
+            <form onSubmit={handleSubmit}>
               <div className="mb-3">
                 <label className={!id ? "form-label required" : "form-label"}>
                   Name
@@ -294,8 +283,17 @@ export default function AddTestimonial() {
 
               {detail.type === "image" && (
                 <div className="mb-3">
-                  <label className={id ? "form-label" : "form-label required"}>
+                  <label className={id ? "form-label d-flex justify-content-between" : "form-label required"}>
                     Upload Image
+                    {id && detail.imageFile && (
+                      <a
+                        href={detail.imageFile.url}
+                        download={detail.imageFile.name}
+                        target="_blank"
+                      >
+                        Download Image
+                      </a>
+                  )}
                   </label>
                   <input
                     type="file"
@@ -305,15 +303,7 @@ export default function AddTestimonial() {
                     accept="image/*"
                     ref={imageInputRef}
                   />
-                  {detail.imageUrl && (
-                    <a
-                      href={detail.imageUrl}
-                      download
-                      className="btn btn-success mt-2"
-                    >
-                      Download Image
-                    </a>
-                  )}
+                  
                 </div>
               )}
               {detail.type === "video" && (
@@ -341,10 +331,20 @@ export default function AddTestimonial() {
                   {detail.videoBolean === false ? (
                     <div className="mb-3">
                       <label
-                        className={id ? "form-label" : "form-label required"}
+                        className={id ? "form-label d-flex justify-content-between" : "form-label required " }
                       >
                         Upload Video
+                        {id && detail.videoFile && (
+                          <a
+                            href={detail.videoFile.url}
+                            download={detail.videoFile.name}
+                            target="_blank"
+                          >
+                            Download Video
+                          </a>
+                        )}
                       </label>
+
                       <input
                         type="file"
                         name="video"

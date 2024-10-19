@@ -84,6 +84,7 @@ export default function SiteList() {
       let updatedSelected;
       if (prevSelected.includes(siteId)) {
         updatedSelected = prevSelected.filter((id) => id !== siteId);
+        setStatusSelect("Select");
       } else {
         updatedSelected = [...prevSelected, siteId];
       }

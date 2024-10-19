@@ -1,6 +1,12 @@
 import { useContext, useEffect, useState, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { GlobalContext } from "../../GlobalContext";
+import { getAllSitesApi } from "../../apis/site-apis";
+import {
+  getGuideById,
+  addGuideApi,
+  updateGuideApi,
+} from "../../apis/guide-apis";
 
 export default function AddGuide() {
   const navigate = useNavigate();
@@ -21,17 +27,11 @@ export default function AddGuide() {
 
   useEffect(() => {
     (async () => {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/allSites`, {
-        method: "GET",
-        headers: {
-          Authorization: localStorage.getItem("auth"),
-        },
-      });
-      const { data, error } = await res.json();
-      if (res.ok) {
+      const { status, data } = await getAllSitesApi();
+      if (status) {
         setAvailableSites(data.sites);
       } else {
-        alert({ type: "warning", title: "Warning !", text: error });
+        alert({ type: "warning", title: "Warning !", text: "Sites not found" });
       }
     })();
   }, [alert]);
@@ -40,29 +40,20 @@ export default function AddGuide() {
     if (id) {
       setLoading(true);
       (async () => {
-        const res = await fetch(`${import.meta.env.VITE_API_URL}/guide/${id}`, {
-          method: "GET",
-          headers: {
-            Authorization: localStorage.getItem("auth"),
-          },
-        });
-        const { data, error } = await res.json();
+        const { status, data } = await getGuideById(id);
+        if (status) {
+          const { image, pdf, sites, ...rest } = data.guide;
 
-        if (res.ok) {
-          const { title, desc, sites, image, pdf, isActive, isGlobal } =
-            data.guide;
           setDetail((prev) => ({
             ...prev,
-            title,
-            desc,
-            sites,
-            image,
-            pdf,
-            isActive,
-            isGlobal,
+            ...rest,
+            sites: sites.map((s) => s._id),
+            pdfFile: pdf,
+            imageFile: image,
           }));
+          console.log(data);
         } else {
-          alert({ type: "warning", title: "Warning !", text: error });
+          alert({ type: "warning", title: "Warning !", text: data });
         }
       })()
         .catch((error) =>
@@ -84,31 +75,22 @@ export default function AddGuide() {
     return Object.keys(newErrors).length === 0; // Return true if no errors
   };
 
-  const handleDetails = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
     setLoading(true);
     try {
-      const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/guide${id ? `/${id}` : ""}`,
-        {
-          method: id ? "PUT" : "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: localStorage.getItem("auth"),
-          },
-          body: JSON.stringify(detail),
-        }
-      );
-      const { message, error } = await res.json();
-      if (res.ok) {
-        alert({ type: "success", title: "Success !", text: message });
+      const { status, data } = id
+        ? await updateGuideApi(id, detail)
+        : await addGuideApi(detail);
+      if (status) {
+        alert({ type: "success", title: "Success!", text: data.message });
         navigate("/guide-list");
       } else {
-        alert({ type: "warning", title: "Warning !", text: error });
+        alert({ type: "warning", title: "Warning!", text: data });
       }
     } catch (error) {
-      alert({ type: "danger", title: "Error !", text: error.message });
+      alert({ type: "danger", title: "Error!", text: error.message });
     } finally {
       setLoading(false);
     }
@@ -198,7 +180,7 @@ export default function AddGuide() {
             <h2 className="h2 text-center mb-4">
               {id ? "Edit Guide" : "Add Guide"}
             </h2>
-            <form onSubmit={handleDetails}>
+            <form onSubmit={handleSubmit}>
               <div className="mb-3">
                 <label className={!id ? "form-label required" : "form-label"}>
                   Title
@@ -234,7 +216,24 @@ export default function AddGuide() {
               </div>
 
               <div className="mb-3">
-                <label className="form-label">Upload Image</label>
+                <label
+                  className={
+                    id
+                      ? "form-label d-flex justify-content-between"
+                      : "form-label required"
+                  }
+                >
+                  Upload Image
+                  {id && detail.imageFile && (
+                    <a
+                      href={detail.imageFile.url}
+                      download={detail.imageFile.name}
+                      target="_blank"
+                    >
+                      Download Image
+                    </a>
+                  )}
+                </label>
                 <input
                   type="file"
                   name="image"
@@ -246,7 +245,24 @@ export default function AddGuide() {
               </div>
 
               <div className="mb-3">
-                <label className="form-label">Upload PDF</label>
+                <label
+                  className={
+                    id
+                      ? "form-label d-flex justify-content-between"
+                      : "form-label required"
+                  }
+                >
+                  Upload Pdf
+                  {id && detail.pdfFile && (
+                    <a
+                      href={detail.pdfFile.url}
+                      download={detail.pdfFile.name}
+                      target="_blank"
+                    >
+                      Download Pdf
+                    </a>
+                  )}
+                </label>
                 <input
                   type="file"
                   name="pdf"
