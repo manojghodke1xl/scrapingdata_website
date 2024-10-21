@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import Pagination from "./Pagination";
 
 const TableHeader = ({ headers }) => (
@@ -37,6 +38,14 @@ const Table = ({
   totalCount,
   actions,
 }) => {
+  const [isOptionSelected, setIsOptionSelected] = useState(false); // Track option selection
+
+  const handleSearchKeyChange = (e) => {
+    const value = e.target.value;
+    setSearchKey(value);
+    setIsOptionSelected(value !== ""); // Disable search input if an option is selected
+  };
+
   return (
     <div className="page-body">
       <div className="container-xl">
@@ -75,7 +84,7 @@ const Table = ({
                   )}
                   Search:
                   <div className="ms-2 d-inline-block">
-                    <select className="form-select form-control-sm" onChange={(e) => setSearchKey(e.target.value)}>
+                    <select className="form-select form-control-sm" onChange={handleSearchKeyChange}>
                       <option value={""}>Select</option>
                       {searchAbleKeys.map((key, i) => (
                         <option key={i} value={key.toLowerCase()}>
@@ -108,13 +117,14 @@ const Table = ({
                       placeholder="Search…"
                       aria-label="Search"
                       onChange={(e) => setSearchTerm(e.target.value)}
+                      disabled={!isOptionSelected} 
                     />
                   </div>
                 </div>
               </div>
             </div>
             <div className="table-responsive ">
-              <table className="table card-table table-vcenter text-nowrap  datatable">
+              <table className="table card-table table-vcenter text-nowrap datatable">
                 <TableHeader headers={headers} />
                 <tbody>
                   {rows.map((row, index) => (

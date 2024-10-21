@@ -197,7 +197,18 @@ export default function AddCaseStudy() {
                 />
               </div>
               <div className="mb-3">
-                <label className="form-label">Upload Image</label>
+              <label className={id ? "form-label d-flex justify-content-between" : "form-label required"}>
+                    Upload Image
+                    {id && caseStudyDetails.imageFile && (
+                      <a
+                        href={caseStudyDetails.imageFile.url}
+                        download={caseStudyDetails.imageFile.name}
+                        target="_blank"
+                      >
+                        Download Image
+                      </a>
+                  )}
+                  </label>
                 <input
                   type="file"
                   name="image"
@@ -208,7 +219,24 @@ export default function AddCaseStudy() {
                 />
               </div>
               <div className="mb-3">
-                <label className="form-label">Upload PDF</label>
+              <label
+                  className={
+                    id
+                      ? "form-label d-flex justify-content-between"
+                      : "form-label required"
+                  }
+                >
+                  Upload Pdf
+                  {id && caseStudyDetails.pdfFile && (
+                    <a
+                      href={caseStudyDetails.pdfFile.url}
+                      download={caseStudyDetails.pdfFile.name}
+                      target="_blank"
+                    >
+                      Download Pdf
+                    </a>
+                  )}
+                </label>
                 <input
                   type="file"
                   name="pdf"

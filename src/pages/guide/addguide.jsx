@@ -1,13 +1,15 @@
 import { useContext, useEffect, useState, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { GlobalContext } from "../../GlobalContext";
+import { getAllSitesApi } from "../../apis/site-apis";
+import { getGuideById, addGuideApi, updateGuideApi } from "../../apis/guide-apis";
 
 export default function AddGuide() {
   const navigate = useNavigate();
   const { id = "" } = useParams();
   const { alert, setLoading } = useContext(GlobalContext);
 
-  const [detail, setDetail] = useState({
+  const [guideDetails, setGuideDetails] = useState({
     title: "",
     desc: "",
     isActive: true,
@@ -21,17 +23,11 @@ export default function AddGuide() {
 
   useEffect(() => {
     (async () => {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/allSites`, {
-        method: "GET",
-        headers: {
-          Authorization: localStorage.getItem("auth"),
-        },
-      });
-      const { data, error } = await res.json();
-      if (res.ok) {
+      const { status, data } = await getAllSitesApi();
+      if (status) {
         setAvailableSites(data.sites);
       } else {
-        alert({ type: "warning", text: error });
+        alert({ type: "warning", text: data });
       }
     })();
   }, [alert]);
@@ -40,28 +36,20 @@ export default function AddGuide() {
     if (id) {
       setLoading(true);
       (async () => {
-        const res = await fetch(`${import.meta.env.VITE_API_URL}/guide/${id}`, {
-          method: "GET",
-          headers: {
-            Authorization: localStorage.getItem("auth"),
-          },
-        });
-        const { data, error } = await res.json();
+        const { status, data } = await getGuideById(id);
+        if (status) {
+          const { image, pdf, sites, ...rest } = data.guide;
 
-        if (res.ok) {
-          const { title, desc, sites, image, pdf, isActive, isGlobal } = data.guide;
-          setDetail((prev) => ({
+          setGuideDetails((prev) => ({
             ...prev,
-            title,
-            desc,
-            sites,
-            image,
-            pdf,
-            isActive,
-            isGlobal,
+            ...rest,
+            sites: sites.map((s) => s._id),
+            pdfFile: pdf,
+            imageFile: image,
           }));
+          console.log(data);
         } else {
-          alert({ type: "warning", text: error });
+          alert({ type: "warning", text: data });
         }
       })()
         .catch((error) => alert({ type: "danger", text: error.message }))
@@ -71,35 +59,27 @@ export default function AddGuide() {
 
   const validate = () => {
     const newErrors = {};
-    if (!detail.title.trim()) {
+    if (!guideDetails.title.trim()) {
       newErrors.title = "Title is required";
     }
-    if (detail.sites.length === 0) {
+    if (guideDetails.sites.length === 0) {
       newErrors.sites = "At least one site must be selected";
     }
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0; // Return true if no errors
+    return Object.keys(newErrors).length === 0;
   };
 
-  const handleDetails = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
     setLoading(true);
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/guide${id ? `/${id}` : ""}`, {
-        method: id ? "PUT" : "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: localStorage.getItem("auth"),
-        },
-        body: JSON.stringify(detail),
-      });
-      const { message, error } = await res.json();
-      if (res.ok) {
-        alert({ type: "success", text: message });
+      const { status, data } = await (id ? updateGuideApi(id, guideDetails) : addGuideApi(guideDetails));
+      if (status) {
+        alert({ type: "success", text: data.message });
         navigate("/guide-list");
       } else {
-        alert({ type: "warning", text: error });
+        alert({ type: "warning", text: data });
       }
     } catch (error) {
       alert({ type: "danger", text: error.message });
@@ -166,9 +146,9 @@ export default function AddGuide() {
       const fileId = data._id;
 
       if (isImage) {
-        setDetail((prevDetail) => ({ ...prevDetail, image: fileId }));
+        setGuideDetails((prevDetail) => ({ ...prevDetail, image: fileId }));
       } else {
-        setDetail((prevDetail) => ({ ...prevDetail, pdf: fileId }));
+        setGuideDetails((prevDetail) => ({ ...prevDetail, pdf: fileId }));
       }
     } catch (error) {
       console.error("Upload error:", error);
@@ -182,7 +162,7 @@ export default function AddGuide() {
         <div className="card card-md">
           <div className="card-body">
             <h2 className="h2 text-center mb-4">{id ? "Edit Guide" : "Add Guide"}</h2>
-            <form onSubmit={handleDetails}>
+            <form onSubmit={handleSubmit}>
               <div className="mb-3">
                 <label className={!id ? "form-label required" : "form-label"}>Title</label>
                 <input
@@ -190,9 +170,9 @@ export default function AddGuide() {
                   name="title"
                   className={`form-control ${errors.title ? "is-invalid" : ""}`}
                   placeholder="Title"
-                  value={detail.title}
+                  value={guideDetails.title}
                   onChange={(e) => {
-                    setDetail((d) => ({ ...d, title: e.target.value }));
+                    setGuideDetails((d) => ({ ...d, title: e.target.value }));
                     if (errors.title) setErrors((prev) => ({ ...prev, title: "" }));
                   }}
                 />
@@ -205,12 +185,19 @@ export default function AddGuide() {
                   name="example-textarea-input"
                   rows={6}
                   placeholder="Description.."
-                  value={detail.desc}
-                  onChange={(e) => setDetail((d) => ({ ...d, desc: e.target.value }))}
+                  value={guideDetails.desc}
+                  onChange={(e) => setGuideDetails((d) => ({ ...d, desc: e.target.value }))}
                 />
               </div>
               <div className="mb-3">
-                <label className="form-label">Upload Image</label>
+                <label className={id ? "form-label d-flex justify-content-between" : "form-label required"}>
+                  Upload Image
+                  {id && guideDetails.imageFile && (
+                    <a href={guideDetails.imageFile.url} download={guideDetails.imageFile.name} target="_blank">
+                      Download Image
+                    </a>
+                  )}
+                </label>
                 <input
                   type="file"
                   name="image"
@@ -221,7 +208,14 @@ export default function AddGuide() {
                 />
               </div>
               <div className="mb-3">
-                <label className="form-label">Upload PDF</label>
+                <label className={id ? "form-label d-flex justify-content-between" : "form-label required"}>
+                  Upload Pdf
+                  {id && guideDetails.pdfFile && (
+                    <a href={guideDetails.pdfFile.url} download={guideDetails.pdfFile.name} target="_blank">
+                      Download Pdf
+                    </a>
+                  )}
+                </label>
                 <input
                   type="file"
                   name="pdf"
@@ -240,11 +234,11 @@ export default function AddGuide() {
                         className={`form-check-input ${errors.sites ? "is-invalid" : ""}`}
                         type="checkbox"
                         value={site._id}
-                        checked={detail.sites.includes(site._id)}
+                        checked={guideDetails.sites.includes(site._id)}
                         onChange={() => {
-                          if (detail.sites) setErrors((prev) => ({ ...prev, sites: "" }));
+                          if (guideDetails.sites) setErrors((prev) => ({ ...prev, sites: "" }));
 
-                          setDetail((prevDetail) => {
+                          setGuideDetails((prevDetail) => {
                             const isSelected = prevDetail.sites.includes(site._id);
                             return {
                               ...prevDetail,
@@ -270,8 +264,8 @@ export default function AddGuide() {
                         className="form-check-input"
                         type="checkbox"
                         name="status"
-                        checked={detail.isActive}
-                        onChange={() => setDetail((prev) => ({ ...prev, isActive: !prev.isActive }))}
+                        checked={guideDetails.isActive}
+                        onChange={() => setGuideDetails((prev) => ({ ...prev, isActive: !prev.isActive }))}
                       />
                     </label>
                   </span>
@@ -285,8 +279,8 @@ export default function AddGuide() {
                       <input
                         className="form-check-input"
                         type="checkbox"
-                        checked={detail.isGlobal}
-                        onChange={() => setDetail((prev) => ({ ...prev, isGlobal: !prev.isGlobal }))}
+                        checked={guideDetails.isGlobal}
+                        onChange={() => setGuideDetails((prev) => ({ ...prev, isGlobal: !prev.isGlobal }))}
                       />
                     </label>
                   </span>

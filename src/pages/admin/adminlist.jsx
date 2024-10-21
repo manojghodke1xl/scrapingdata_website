@@ -63,11 +63,12 @@ export default function AdminList() {
     if (!auth.isSuperAdmin) navigate("/dashboard");
   }, [auth, navigate]);
 
-  const handleCheckboxChange = (adminId) => {
+  const handleCheckboxChange = (adminId) => {   
     setSelectedAdmins((prevSelected) => {
       let updatedSelected;
       if (prevSelected.includes(adminId)) {
         updatedSelected = prevSelected.filter((id) => id !== adminId);
+        setStatusSelect("Select");
       } else {
         updatedSelected = [...prevSelected, adminId];
       }
