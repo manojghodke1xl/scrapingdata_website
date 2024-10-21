@@ -19,3 +19,7 @@ export const updateCaseStudyStatusApi = async (ids, isActive) => {
 export const updateCaseStudySitesApi = async (cids, sids, action) => {
   return await putMethodCall(`${import.meta.env.VITE_API_URL}/casestudy-sites`, { cids, sids, action });
 };
+
+export const getAllCaseStudyApi = async () => {
+  return await getMethodCall(`${import.meta.env.VITE_API_URL}/allcasestudies`);
+};

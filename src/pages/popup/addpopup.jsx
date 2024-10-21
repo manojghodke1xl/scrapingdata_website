@@ -1,6 +1,10 @@
 import { useContext, useEffect, useState, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { GlobalContext } from "../../GlobalContext";
+import { getAllGuidesApi } from "../../apis/guide-apis";
+import { getAllCaseStudyApi } from "../../apis/caseStudy-apis";
+import { getPopupById } from "../../apis/popup-apis";
+import { addPopupApi, getAllSitesApi, updatePopupApi } from "../../apis/site-apis";
 
 export default function AddPopup() {
   const navigate = useNavigate();
@@ -42,32 +46,19 @@ export default function AddPopup() {
 
   useEffect(() => {
     (async () => {
-      if (popupDetails.contentType === "guide") {
-        const res = await fetch(`${import.meta.env.VITE_API_URL}/allguides`, {
-          method: "GET",
-          headers: {
-            Authorization: localStorage.getItem("auth"),
-          },
-        });
-        const { data, error } = await res.json();
-        if (res.ok) {
-          setContentDetials(data.guides);
-        } else {
-          alert({ type: "warning", title: "Warning !", text: error });
-        }
-      } else if (popupDetails.contentType === "casestudy") {
-        const res = await fetch(`${import.meta.env.VITE_API_URL}/allcasestudies`, {
-          method: "GET",
-          headers: {
-            Authorization: localStorage.getItem("auth"),
-          },
-        });
-        const { data, error } = await res.json();
-        if (res.ok) {
-          setContentDetials(data.casestudies);
-        } else {
-          alert({ type: "warning", title: "Warning !", text: error });
-        }
+      const { status, data } = await (popupDetails.contentType === "guide"
+        ? getAllGuidesApi()
+        : popupDetails.contentType === "casestudy"
+        ? getAllCaseStudyApi()
+        : Promise.resolve({ status: false }));
+      if (status) {
+        popupDetails.contentType === "guide"
+          ? setContentDetials(data.guides)
+          : popupDetails.contentType === "casestudy"
+          ? setContentDetials(data.casestudies)
+          : "";
+      } else if (data) {
+        alert({ type: "warning", text: data });
       }
     })();
   }, [alert, popupDetails.contentType]);
@@ -86,48 +77,36 @@ export default function AddPopup() {
     if (id) {
       setLoading(true);
       (async () => {
-        const res = await fetch(`${import.meta.env.VITE_API_URL}/popup/${id}`, {
-          method: "GET",
-          headers: {
-            Authorization: localStorage.getItem("auth"),
-          },
-        });
-        const { data, error } = await res.json();
-        if (res.ok) {
-          const formattedPublishDate = new Date(data.popup.publishDate).toISOString().slice(0, 16);
-          const formattedArchiveDate = new Date(data.popup.archiveDate).toISOString().slice(0, 16);
+        const { status, data } = await getPopupById(id);
+        if (status) {
+          const { publishDate, archiveDate, ...rest } = data.popup;
+          const [formattedPublishDate, formattedArchiveDate] = [new Date(publishDate), new Date(archiveDate)].map(
+            (date) => date.toISOString().slice(0, 16)
+          );
           setPopupDetails((prev) => ({
             ...prev,
-            ...data.popup,
+            ...rest,
             publishDate: formattedPublishDate,
             archiveDate: formattedArchiveDate,
           }));
         } else {
-          alert({ type: "warning", title: "Warning !", text: error });
+          alert({ type: "warning", text: data });
         }
       })()
-        .catch((error) => alert({ type: "danger", title: "Error !", text: error.message }))
+        .catch((error) => alert({ type: "danger", text: error.message }))
         .finally(() => setLoading(false));
     }
   }, [id, alert, setLoading]);
 
   useEffect(() => {
-    const fetchAvailableSites = async () => {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/allSites`, {
-        method: "GET",
-        headers: {
-          Authorization: localStorage.getItem("auth"),
-        },
-      });
-      const { data, error } = await res.json();
-      if (res.ok) {
+    (async () => {
+      const { status, data } = await getAllSitesApi();
+      if (status) {
         setAvailableSites(data.sites);
       } else {
-        alert({ type: "warning", title: "Warning !", text: error });
+        alert({ type: "warning", text: data });
       }
-    };
-
-    fetchAvailableSites();
+    })().catch((error) => alert({ type: "danger", text: error.message }));
   }, [alert]);
 
   const handleSelection = (checked, id) => {
@@ -148,23 +127,15 @@ export default function AddPopup() {
     if (!validate()) return;
     setLoading(true);
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/popup${id ? `/${id}` : ""}`, {
-        method: id ? "PUT" : "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: localStorage.getItem("auth"),
-        },
-        body: JSON.stringify(popupDetails),
-      });
-      const { message, error } = await res.json();
-      if (res.ok) {
-        alert({ type: "success", title: "Success !", text: message });
+      const { status, data } = await (id ? updatePopupApi(id, popupDetails) : addPopupApi(popupDetails));
+      if (status) {
+        alert({ type: "success", text: data.message });
         navigate("/popup-list");
       } else {
-        alert({ type: "warning", title: "Warning !", text: error });
+        alert({ type: "warning", text: data });
       }
     } catch (error) {
-      alert({ type: "danger", title: "Error !", text: error.message });
+      alert({ type: "danger", text: error.message });
     } finally {
       setLoading(false);
     }
@@ -181,11 +152,7 @@ export default function AddPopup() {
     const validImageTypes = ["image/jpeg", "image/png"];
 
     if (isImage && !validImageTypes.includes(type)) {
-      alert({
-        type: "warning",
-        title: "Invalid File Type",
-        text: "Only PNG or JPEG formats are allowed for image uploads.",
-      });
+      alert({ type: "warning", text: "Only PNG or JPEG formats are allowed for image uploads." });
       imageInputRef.current.value = "";
       return;
     }
@@ -245,7 +212,7 @@ export default function AddPopup() {
                   <input
                     type="text"
                     name="name"
-                    className="form-control"
+                    className={`form-control ${errors.name ? "is-invalid" : ""}`}
                     placeholder="Name"
                     value={popupDetails.name}
                     onChange={(e) => {
@@ -253,12 +220,12 @@ export default function AddPopup() {
                       if (errors.name) setErrors((prev) => ({ ...prev, name: "" }));
                     }}
                   />
-                  {errors.name && <small className="alert alert-danger mt-2">{errors.name}</small>}
+                  {errors.name && <div className="invalid-feedback mt-2">{errors.name}</div>}
                 </div>
                 <div className="col-md-3">
                   <label className="form-label required">Position</label>
                   <select
-                    className="form-select"
+                    className={`form-select ${errors.position ? "is-invalid" : ""}`}
                     value={popupDetails.position}
                     onChange={(e) => {
                       setPopupDetails((d) => ({
@@ -275,7 +242,7 @@ export default function AddPopup() {
                       </option>
                     ))}
                   </select>
-                  {errors.position && <small className="alert alert-danger mt-2">{errors.position}</small>}
+                  {errors.position && <div className="invalid-feedback mt-2">{errors.position}</div>}
                 </div>
                 <div className="col-md-3">
                   <label className="form-label">After Page Load</label>
@@ -576,7 +543,7 @@ export default function AddPopup() {
                 <div className="col-md-3">
                   <label className="form-label required">Select site</label>
                   <select
-                    className="form-select"
+                    className={`form-select ${errors.site ? "is-invalid" : ""}`}
                     value={popupDetails.site}
                     onChange={(e) => {
                       setPopupDetails((d) => ({
@@ -593,7 +560,7 @@ export default function AddPopup() {
                       </option>
                     ))}
                   </select>
-                  {errors.site && <small className="alert alert-danger mt-2">{errors.site}</small>}
+                  {errors.site && <div className="invalid-feedback mt-2">{errors.site}</div>}
                 </div>
 
                 {popupDetails.contentType === "basic" && (

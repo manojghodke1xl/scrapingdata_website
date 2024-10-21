@@ -23,7 +23,6 @@ const useSetTimeout = (apiUrl, page, limit, val, key, a, site, delay = 500) => {
         );
 
         const { data, error } = await res.json();
-        console.log(res.status, error);
         if (res.status === 403 && error === "jwt expired") dispatch({ type: "SIGNOUT" });
         if (!res.ok) throw new Error(`HTTP error! status: ${res.status} - ${error}`);
 

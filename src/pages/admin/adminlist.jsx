@@ -48,7 +48,7 @@ export default function AdminList() {
         setRefresh((r) => !r);
         setSelectedAdmins([]);
         setSelectAll(false);
-        setStatusSelect("Select");
+        setStatusSelect("");
       } else {
         alert({ type: "danger", text: data });
       }
@@ -63,12 +63,12 @@ export default function AdminList() {
     if (!auth.isSuperAdmin) navigate("/dashboard");
   }, [auth, navigate]);
 
-  const handleCheckboxChange = (adminId) => {   
+  const handleCheckboxChange = (adminId) => {
     setSelectedAdmins((prevSelected) => {
       let updatedSelected;
       if (prevSelected.includes(adminId)) {
         updatedSelected = prevSelected.filter((id) => id !== adminId);
-        setStatusSelect("Select");
+        setStatusSelect("");
       } else {
         updatedSelected = [...prevSelected, adminId];
       }
@@ -88,6 +88,17 @@ export default function AdminList() {
     }
     setSelectAll(!selectAll);
   };
+
+  const headers = [
+    {
+      label: <input className="form-check-input " type="checkbox" checked={selectAll} onChange={handleSelectAll} />,
+    },
+    { label: "Admin Name" },
+    { label: "Admin Email" },
+    { label: "Status" },
+    { label: "Actions" },
+    { label: "Sites" },
+  ];
 
   const rows = admins.map((admin) => [
     !admin.isSuperAdmin ? (
@@ -171,23 +182,7 @@ export default function AdminList() {
           <div className="table-responsive">
             <Table
               rows={rows}
-              headers={[
-                {
-                  label: (
-                    <input
-                      className="form-check-input "
-                      type="checkbox"
-                      checked={selectAll}
-                      onChange={handleSelectAll}
-                    />
-                  ),
-                },
-                { label: "Admin Name" },
-                { label: "Admin Email" },
-                { label: "Status" },
-                { label: "Actions" },
-                { label: "Sites" },
-              ]}
+              headers={headers}
               currentPage={page}
               totalPages={Math.ceil(totalCount / limit)}
               onPageChange={setPage}

@@ -58,7 +58,7 @@ export default function SiteList() {
 
         setSelectedSites([]);
         setSelectAll(false);
-        setStatusSelect("Select");
+        setStatusSelect("");
       } else {
         alert({ type: "danger", title: "Error!", text: error });
       }
@@ -74,7 +74,7 @@ export default function SiteList() {
       let updatedSelected;
       if (prevSelected.includes(siteId)) {
         updatedSelected = prevSelected.filter((id) => id !== siteId);
-        setStatusSelect("Select");
+        setStatusSelect("");
       } else {
         updatedSelected = [...prevSelected, siteId];
       }

@@ -17,20 +17,14 @@ export default function SmtpList() {
 
   const searchAbleKeys = ["Name", "Host"];
 
-  const [err, data] = useSetTimeout(
-    "smtps",
-    page - 1,
-    limit,
-    searchTerm,
-    searchKey
-  );
+  const [err, data] = useSetTimeout("smtps", page - 1, limit, searchTerm, searchKey);
 
   useEffect(() => {
     if (data) {
       setSmtps(data.smtps);
       setTotalCount(data.count);
     } else if (err) {
-      alert({ type: "warning", title: "Warning!", text: err.message });
+      alert({ type: "warning", text: err.message });
     }
   }, [data, err, alert]);
 
@@ -40,11 +34,7 @@ export default function SmtpList() {
     smtp.name,
     smtp.host,
 
-    <button
-      key={smtp._id}
-      onClick={() => navigate(`/edit-smtp/${smtp._id}`)}
-      className="btn btn-primary "
-    >
+    <button key={smtp._id} onClick={() => navigate(`/edit-smtp/${smtp._id}`)} className="btn btn-primary ">
       Edit
     </button>,
   ]);
@@ -56,10 +46,7 @@ export default function SmtpList() {
           <div className="card-header">
             <h3 className="card-title">All SMTPs List</h3>
             <div className="card-options">
-              <button
-                onClick={() => navigate("/add-smtp")}
-                className="btn btn-primary"
-              >
+              <button onClick={() => navigate("/add-smtp")} className="btn btn-primary">
                 Add SMTP
               </button>
             </div>

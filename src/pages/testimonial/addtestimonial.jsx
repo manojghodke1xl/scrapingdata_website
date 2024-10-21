@@ -2,19 +2,15 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { GlobalContext } from "../../GlobalContext";
 import { getAllSitesApi } from "../../apis/site-apis";
-import {
-  getTestimonialById,
-  addTestimonialApi,
-  updateTestimonialApi,
-} from "../../apis/testimonial-apis";
+import { getTestimonialById, addTestimonialApi, updateTestimonialApi } from "../../apis/testimonial-apis";
+import { getAllCategoriesApi } from "../../apis/category-apis";
 
 export default function AddTestimonial() {
   const navigate = useNavigate();
   const { id = "" } = useParams();
   const { alert, setLoading } = useContext(GlobalContext);
   const [errors, setErrors] = useState({});
-
-  const [detail, setDetail] = useState({
+  const [testimonialDetails, setTestimonialDetails] = useState({
     name: "",
     desg: "",
     text: "",
@@ -32,32 +28,27 @@ export default function AddTestimonial() {
   const [availableCategories, setAvailableCategories] = useState([]);
 
   const type = ["Text", "Image", "Video"];
+
   useEffect(() => {
     (async () => {
       const { status, data } = await getAllSitesApi();
       if (status) {
         setAvailableSites(data.sites);
       } else {
-        alert({ type: "warning", title: "Warning !", text: "Sites not found" });
+        alert({ type: "warning", text: "Sites not found" });
       }
     })();
   }, [alert]);
 
   useEffect(() => {
     (async () => {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/allcategories`, {
-        method: "GET",
-        headers: {
-          Authorization: localStorage.getItem("auth"),
-        },
-      });
-      const { data, error } = await res.json();
-      if (res.ok) {
+      const { status, data } = await getAllCategoriesApi();
+      if (status) {
         setAvailableCategories(data.categories);
       } else {
-        alert({ type: "warning", title: "Warning !", text: error });
+        alert({ type: "warning", text: data });
       }
-    })();
+    })().catch((error) => alert({ type: "danger", text: error.message }));
   }, [alert]);
 
   useEffect(() => {
@@ -67,8 +58,7 @@ export default function AddTestimonial() {
         const { status, data } = await getTestimonialById(id);
         if (status) {
           const { image, video, sites, ...rest } = data.testimonial;
-
-          setDetail((prev) => ({
+          setTestimonialDetails((prev) => ({
             ...prev,
             ...rest,
             sites: sites.map((s) => s._id),
@@ -76,23 +66,19 @@ export default function AddTestimonial() {
             imageFile: image,
           }));
         } else {
-          alert({ type: "warning", title: "Warning !", text: data });
+          alert({ type: "warning", text: data });
         }
       })()
-        .catch((error) =>
-          alert({ type: "danger", title: "Error !", text: error.message })
-        )
+        .catch((error) => alert({ type: "danger", text: error.message }))
         .finally(() => setLoading(false));
     }
   }, [id, alert, setLoading]);
 
   const validate = () => {
     const newErrors = {};
-    if (!detail.name) newErrors.name = "Name is required";
-    if (!detail.sites.length)
-      newErrors.sites = "At least one site must be selected";
-    if (!detail.categories.length)
-      newErrors.categories = "At least one category must be selected";
+    if (!testimonialDetails.name) newErrors.name = "Name is required";
+    if (!testimonialDetails.sites.length) newErrors.sites = "At least one site must be selected";
+    if (!testimonialDetails.categories.length) newErrors.categories = "At least one category must be selected";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -103,16 +89,16 @@ export default function AddTestimonial() {
     setLoading(true);
     try {
       const { status, data } = id
-        ? await updateTestimonialApi(id, detail)
-        : await addTestimonialApi(detail);
+        ? await updateTestimonialApi(id, testimonialDetails)
+        : await addTestimonialApi(testimonialDetails);
       if (status) {
-        alert({ type: "success", title: "Success!", text: data.message });
+        alert({ type: "success", text: data.message });
         navigate("/testimonial-list");
       } else {
-        alert({ type: "warning", title: "Warning!", text: data });
+        alert({ type: "warning", text: data });
       }
     } catch (error) {
-      alert({ type: "danger", title: "Error!", text: error.message });
+      alert({ type: "danger", text: error.message });
     } finally {
       setLoading(false);
     }
@@ -131,21 +117,13 @@ export default function AddTestimonial() {
     const validVideoTypes = ["video/mp4", "video/quicktime"];
 
     if (isVideo && !validVideoTypes.includes(type)) {
-      alert({
-        type: "warning",
-        title: "Invalid File Type",
-        text: "Only MP4 or MOV formats are allowed for video uploads.",
-      });
+      alert({ type: "warning", text: "Only MP4 or MOV formats are allowed for video uploads." });
       videoInputRef.current.value = "";
       return;
     }
 
     if (isImage && !validImageTypes.includes(type)) {
-      alert({
-        type: "warning",
-        title: "Invalid File Type",
-        text: "Only PNG or JPEG formats are allowed for image uploads.",
-      });
+      alert({ type: "warning", text: "Only PNG or JPEG formats are allowed for image uploads." });
       imageInputRef.current.value = "";
       return;
     }
@@ -186,13 +164,13 @@ export default function AddTestimonial() {
       const fileUrl = `${data.url}/${fileId}`;
 
       if (isImage) {
-        setDetail((prevDetail) => ({
+        setTestimonialDetails((prevDetail) => ({
           ...prevDetail,
           image: fileId,
           imageUrl: fileUrl,
         }));
       } else {
-        setDetail((prevDetail) => ({
+        setTestimonialDetails((prevDetail) => ({
           ...prevDetail,
           video: fileId,
           videoUrl: fileUrl,
@@ -200,7 +178,7 @@ export default function AddTestimonial() {
       }
     } catch (error) {
       console.error("Upload error:", error);
-      alert({ type: "danger", title: "Error !", text: error.message });
+      alert({ type: "danger", text: error.message });
     }
   };
 
@@ -209,51 +187,37 @@ export default function AddTestimonial() {
       <div className="container container-tight py-4">
         <div className="card card-md">
           <div className="card-body">
-            <h2 className="h2 text-center mb-4">
-              {!id ? "Add Testimonial" : "Edit Testimonial"}
-            </h2>
+            <h2 className="h2 text-center mb-4">{!id ? "Add Testimonial" : "Edit Testimonial"}</h2>
             <form onSubmit={handleSubmit}>
               <div className="mb-3">
-                <label className={!id ? "form-label required" : "form-label"}>
-                  Name
-                </label>
+                <label className={!id ? "form-label required" : "form-label"}>Name</label>
                 <input
                   type="text"
                   name="title"
-                  className="form-control"
+                  className={`form-control ${errors.name ? "is-invalid" : ""}`}
                   placeholder="Title"
-                  value={detail.name}
-                  onChange={(e) =>
-                    setDetail((d) => ({ ...d, name: e.target.value }))
-                  }
+                  value={testimonialDetails.name}
+                  onChange={(e) => setTestimonialDetails((d) => ({ ...d, name: e.target.value }))}
                 />
-                {errors.name && (
-                  <div className="alert alert-danger mt-2">{errors.name}</div>
-                )}
+                {errors.name && <div className="invalid-feedback mt-2">{errors.name}</div>}
               </div>
               <div className="mb-3">
-                <label className={!id ? "form-label required" : "form-label"}>
-                  short Description
-                </label>
+                <label className={!id ? "form-label required" : "form-label"}>short Description</label>
                 <textarea
                   className="form-control"
                   name="example-textarea-input"
                   rows={6}
                   placeholder="Description.."
-                  value={detail.desg}
-                  onChange={(e) =>
-                    setDetail((d) => ({ ...d, desg: e.target.value }))
-                  }
+                  value={testimonialDetails.desg}
+                  onChange={(e) => setTestimonialDetails((d) => ({ ...d, desg: e.target.value }))}
                 />
               </div>
               <div className="mb-3">
                 <label className="form-label required">Select Type</label>
                 <select
                   className="form-select"
-                  value={detail.type}
-                  onChange={(e) =>
-                    setDetail((d) => ({ ...d, type: e.target.value }))
-                  }
+                  value={testimonialDetails.type}
+                  onChange={(e) => setTestimonialDetails((d) => ({ ...d, type: e.target.value }))}
                 >
                   {type.map((t, i) => (
                     <option key={i} value={t.toLowerCase()}>
@@ -263,37 +227,33 @@ export default function AddTestimonial() {
                 </select>
               </div>
 
-              {detail.type === "text" && (
+              {testimonialDetails.type === "text" && (
                 <div className="mb-3">
-                  <label className={id ? "form-label" : "form-label required"}>
-                    Text
-                  </label>
+                  <label className={id ? "form-label" : "form-label required"}>Text</label>
                   <textarea
                     className="form-control"
                     name="example-textarea-input"
                     rows={6}
                     placeholder="Text.."
-                    value={detail.text}
-                    onChange={(e) =>
-                      setDetail((d) => ({ ...d, text: e.target.value }))
-                    }
+                    value={testimonialDetails.text}
+                    onChange={(e) => setTestimonialDetails((d) => ({ ...d, text: e.target.value }))}
                   />
                 </div>
               )}
 
-              {detail.type === "image" && (
+              {testimonialDetails.type === "image" && (
                 <div className="mb-3">
                   <label className={id ? "form-label d-flex justify-content-between" : "form-label required"}>
                     Upload Image
-                    {id && detail.imageFile && (
+                    {id && testimonialDetails.imageFile && (
                       <a
-                        href={detail.imageFile.url}
-                        download={detail.imageFile.name}
+                        href={testimonialDetails.imageFile.url}
+                        download={testimonialDetails.imageFile.name}
                         target="_blank"
                       >
                         Download Image
                       </a>
-                  )}
+                    )}
                   </label>
                   <input
                     type="file"
@@ -303,10 +263,9 @@ export default function AddTestimonial() {
                     accept="image/*"
                     ref={imageInputRef}
                   />
-                  
                 </div>
               )}
-              {detail.type === "video" && (
+              {testimonialDetails.type === "video" && (
                 <>
                   <div className="mb-3">
                     <label className="row">
@@ -316,9 +275,9 @@ export default function AddTestimonial() {
                           <input
                             className="form-check-input"
                             type="checkbox"
-                            checked={detail.videoBolean}
+                            checked={testimonialDetails.videoBolean}
                             onChange={() =>
-                              setDetail((prev) => ({
+                              setTestimonialDetails((prev) => ({
                                 ...prev,
                                 videoBolean: !prev.videoBolean,
                               }))
@@ -328,16 +287,14 @@ export default function AddTestimonial() {
                       </span>
                     </label>
                   </div>
-                  {detail.videoBolean === false ? (
+                  {testimonialDetails.videoBolean === false ? (
                     <div className="mb-3">
-                      <label
-                        className={id ? "form-label d-flex justify-content-between" : "form-label required " }
-                      >
+                      <label className={id ? "form-label d-flex justify-content-between" : "form-label required "}>
                         Upload Video
-                        {id && detail.videoFile && (
+                        {id && testimonialDetails.videoFile && (
                           <a
-                            href={detail.videoFile.url}
-                            download={detail.videoFile.name}
+                            href={testimonialDetails.videoFile.url}
+                            download={testimonialDetails.videoFile.name}
                             target="_blank"
                           >
                             Download Video
@@ -356,19 +313,15 @@ export default function AddTestimonial() {
                     </div>
                   ) : (
                     <div className="mb-3">
-                      <label
-                        className={id ? "form-label" : "form-label required"}
-                      >
-                        video URL
-                      </label>
+                      <label className={id ? "form-label" : "form-label required"}>video URL</label>
                       <input
                         type="url"
                         name="videoUrl"
                         className="form-control"
                         placeholder="video URL"
-                        value={detail.videoUrl}
+                        value={testimonialDetails.videoUrl}
                         onChange={(e) =>
-                          setDetail((d) => ({
+                          setTestimonialDetails((d) => ({
                             ...d,
                             videoUrl: e.target.value,
                           }))
@@ -380,36 +333,22 @@ export default function AddTestimonial() {
               )}
 
               <div className="mb-3">
-                <label className={!id ? "form-label required" : "form-label"}>
-                  Select Sites
-                </label>
-                <div
-                  style={{
-                    maxHeight: "150px",
-                    overflowY: "auto",
-                    border: "1px solid #ccc",
-                    padding: "10px",
-                    borderRadius: "4px",
-                  }}
-                >
+                <label className={!id ? "form-label required" : "form-label"}>Select Sites</label>
+                <div className={`form-multi-check-box ${errors.sites ? "is-invalid" : ""}`}>
                   {availableSites.map((site) => (
                     <label key={site._id} className="form-check">
                       <input
-                        className="form-check-input"
+                        className={`form-check-input ${errors.sites ? "is-invalid" : ""}`}
                         type="checkbox"
                         value={site._id}
-                        checked={detail.sites.includes(site._id)}
+                        checked={testimonialDetails.sites.includes(site._id)}
                         onChange={() => {
-                          setDetail((prevDetail) => {
-                            const isSelected = prevDetail.sites.includes(
-                              site._id
-                            );
+                          setTestimonialDetails((prevDetail) => {
+                            const isSelected = prevDetail.sites.includes(site._id);
                             return {
                               ...prevDetail,
                               sites: isSelected
-                                ? prevDetail.sites.filter(
-                                    (id) => id !== site._id
-                                  )
+                                ? prevDetail.sites.filter((id) => id !== site._id)
                                 : [...prevDetail.sites, site._id],
                             };
                           });
@@ -419,42 +358,26 @@ export default function AddTestimonial() {
                     </label>
                   ))}
                 </div>
-                {errors.sites && (
-                  <div className="alert alert-danger mt-2">{errors.sites}</div>
-                )}
+                {errors.sites && <div className="invalid-feedback mx-2 mb-2">{errors.sites}</div>}
               </div>
 
               <div className="mb-3">
-                <label className={!id ? "form-label required" : "form-label"}>
-                  Select Category
-                </label>
-                <div
-                  style={{
-                    maxHeight: "150px",
-                    overflowY: "auto",
-                    border: "1px solid #ccc",
-                    padding: "10px",
-                    borderRadius: "4px",
-                  }}
-                >
+                <label className={!id ? "form-label required" : "form-label"}>Select Category</label>
+                <div className={`form-multi-check-box ${errors.categories ? "is-invalid" : ""}`}>
                   {availableCategories.map((category) => (
                     <label key={category._id} className="form-check">
                       <input
-                        className="form-check-input"
+                        className={`form-check-input ${errors.categories ? "is-invalid" : ""}`}
                         type="checkbox"
                         value={category._id}
-                        checked={detail.categories.includes(category._id)}
+                        checked={testimonialDetails.categories.includes(category._id)}
                         onChange={() => {
-                          setDetail((prevDetail) => {
-                            const isSelected = prevDetail.categories.includes(
-                              category._id
-                            );
+                          setTestimonialDetails((prevDetail) => {
+                            const isSelected = prevDetail.categories.includes(category._id);
                             return {
                               ...prevDetail,
                               categories: isSelected
-                                ? prevDetail.categories.filter(
-                                    (id) => id !== category._id
-                                  )
+                                ? prevDetail.categories.filter((id) => id !== category._id)
                                 : [...prevDetail.categories, category._id],
                             };
                           });
@@ -464,11 +387,7 @@ export default function AddTestimonial() {
                     </label>
                   ))}
                 </div>
-                {errors.categories && (
-                  <div className="alert alert-danger mt-2">
-                    {errors.categories}
-                  </div>
-                )}
+                {errors.categories && <div className="invalid-feedback mx-2 mb-2">{errors.categories}</div>}
               </div>
 
               <div className="mb-3">
@@ -479,9 +398,9 @@ export default function AddTestimonial() {
                       <input
                         className="form-check-input"
                         type="checkbox"
-                        checked={detail.isActive}
+                        checked={testimonialDetails.isActive}
                         onChange={() =>
-                          setDetail((prev) => ({
+                          setTestimonialDetails((prev) => ({
                             ...prev,
                             isActive: !prev.isActive,
                           }))
@@ -499,9 +418,9 @@ export default function AddTestimonial() {
                       <input
                         className="form-check-input"
                         type="checkbox"
-                        checked={detail.isGlobal}
+                        checked={testimonialDetails.isGlobal}
                         onChange={() =>
-                          setDetail((prev) => ({
+                          setTestimonialDetails((prev) => ({
                             ...prev,
                             isGlobal: !prev.isGlobal,
                           }))

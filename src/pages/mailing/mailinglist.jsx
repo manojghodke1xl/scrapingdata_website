@@ -5,6 +5,7 @@ import Table from "../../comps/table";
 import ConfirmationModal from "../../comps/confirmation";
 import useSetTimeout from "../../Hooks/useDebounce";
 import useGetAllSites from "../../Hooks/useGetAllSites";
+import { deleteMailingListApi } from "../../apis/mailing-apis";
 
 export default function MailingList() {
   const navigate = useNavigate();
@@ -24,65 +25,34 @@ export default function MailingList() {
 
   const searchAbleKeys = ["Email"];
 
-  const [err, data, setRefresh] = useSetTimeout(
-    "lists",
-    page - 1,
-    limit,
-    searchTerm,
-    searchKey,
-    "",
-    siteId
-  );
+  const [err, data, setRefresh] = useSetTimeout("lists", page - 1, limit, searchTerm, searchKey, "", siteId);
 
   useEffect(() => {
     if (data) {
       setLists(data.lists);
       setTotalCount(data.count);
     } else if (err) {
-      alert({ type: "warning", title: "Warning!", text: err.message });
+      alert({ type: "warning", text: err.message });
     }
   }, [data, err, alert]);
 
   const deleteMailingList = async () => {
-    if (!selectedLists.length) {
-      alert({
-        type: "warning",
-        title: "No Selection",
-        text: "Please select at least one List to delete.",
-      });
-      return;
-    }
+    if (!selectedLists.length) return alert({ type: "warning", text: "Please select at least one List to delete." });
 
     setLoading(true);
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/list`, {
-        method: "DELETE",
-        headers: {
-          Authorization: localStorage.getItem("auth"),
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ ids: selectedLists }),
-      });
-
-      const { error } = await res.json();
-
-      if (res.ok) {
-        setLists((prevList) =>
-          prevList.filter((enq) => !selectedLists.includes(enq._id))
-        );
-        alert({
-          type: "success",
-          title: "Deleted!",
-          text: `Selected List have been deleted.`,
-        });
+      const { status, data } = await deleteMailingListApi(selectedLists);
+      if (status) {
+        setLists((prevList) => prevList.filter((enq) => !selectedLists.includes(enq._id)));
+        alert({ type: "success", text: data.message });
         setRefresh((r) => !r);
         setSelectedLists([]);
         setSelectAll(false);
       } else {
-        alert({ type: "danger", title: "Error!", text: error });
+        alert({ type: "danger", text: data });
       }
     } catch (error) {
-      alert({ type: "danger", title: "Error!", text: error.message });
+      alert({ type: "danger", text: error.message });
     } finally {
       setLoading(false);
       setModalOpen(false);
@@ -120,14 +90,7 @@ export default function MailingList() {
 
   const headers = [
     {
-      label: (
-        <input
-          className="form-check-input"
-          type="checkbox"
-          checked={selectAll}
-          onChange={handleSelectAll}
-        />
-      ),
+      label: <input className="form-check-input" type="checkbox" checked={selectAll} onChange={handleSelectAll} />,
     },
     { label: "Customer Email" },
     { label: "Site Name" },
@@ -145,10 +108,7 @@ export default function MailingList() {
     lst.email,
     lst.site.name,
     <div key={lst._id}>
-      <button
-        onClick={() => navigate(`/mailing/${lst._id}`)}
-        className="btn btn-primary me-1"
-      >
+      <button onClick={() => navigate(`/mailing/${lst._id}`)} className="btn btn-primary me-1">
         View
       </button>
     </div>,
@@ -162,10 +122,7 @@ export default function MailingList() {
             <h3 className="card-title">All Mailing Lists</h3>
             <div className="card-options">
               {selectedLists.length ? (
-                <button
-                  onClick={() => setModalOpen(true)}
-                  className="btn btn-danger"
-                >
+                <button onClick={() => setModalOpen(true)} className="btn btn-danger">
                   Delete Selected
                 </button>
               ) : (

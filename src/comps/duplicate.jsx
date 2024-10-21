@@ -61,16 +61,18 @@ export default function DuplicateModal({ allsites = [], isOpen, onClose, onConfi
               </div>
             </div>
             <div className="mb-3">
-              <label className="form-label required">Select Action</label>
               {action.length > 0 ? (
-                <select className="form-select" onChange={(e) => setSelectedAction(e.target.value)}>
-                  <option value={""}>Select</option>
-                  {action.map((val, i) => (
-                    <option key={i} value={val}>
-                      {val}
-                    </option>
-                  ))}
-                </select>
+                <>
+                  <label className="form-label required">Select Action</label>
+                  <select className="form-select" onChange={(e) => setSelectedAction(e.target.value)}>
+                    <option value={""}>Select</option>
+                    {action.map((val, i) => (
+                      <option key={i} value={val}>
+                        {val}
+                      </option>
+                    ))}
+                  </select>
+                </>
               ) : (
                 <></>
               )}

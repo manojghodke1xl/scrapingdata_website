@@ -47,7 +47,6 @@ export default function AddGuide() {
             pdfFile: pdf,
             imageFile: image,
           }));
-          console.log(data);
         } else {
           alert({ type: "warning", text: data });
         }

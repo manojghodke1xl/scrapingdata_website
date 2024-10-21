@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { GlobalContext } from "../../GlobalContext";
+import { addSmtpApi, getSmtpByIdApi, updateSmtpApi } from "../../apis/smtp-apis";
 
 export default function AddSmtp() {
   const navigate = useNavigate();
@@ -18,26 +19,21 @@ export default function AddSmtp() {
     password: "",
   });
 
+  const smtpSecure = ["SSL", "TLS", "STARTTLS"];
+
   useEffect(() => {
     if (id) {
       setLoading(true);
       (async () => {
-        const res = await fetch(`${import.meta.env.VITE_API_URL}/smtp/${id}`, {
-          method: "GET",
-          headers: {
-            Authorization: localStorage.getItem("auth"),
-          },
-        });
-        const { data, error } = await res.json();
-
-        if (res.ok) {
-          const { name, host, port, secure, user } = data.smtp;
-          setSmtpDetails({ name, host, port, secure, user });
+        const { status, data } = await getSmtpByIdApi(id);
+        if (status) {
+          const { ...rest } = data.smtp;
+          setSmtpDetails({ ...rest, password: "" });
         } else {
-          alert({ type: "warning", title: "Warning !", text: error });
+          alert({ type: "warning", text: data });
         }
       })()
-        .catch((error) => alert({ type: "danger", title: "Error !", text: error.message }))
+        .catch((error) => alert({ type: "danger", text: error.message }))
         .finally(() => setLoading(false));
     }
   }, [id, alert, setLoading]);
@@ -59,23 +55,15 @@ export default function AddSmtp() {
     if (!validate()) return;
     setLoading(true);
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/smtp${id ? `/${id}` : ""}`, {
-        method: id ? "PUT" : "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: localStorage.getItem("auth"),
-        },
-        body: JSON.stringify(smtpDetails),
-      });
-      const { message, error } = await res.json();
-      if (res.ok) {
-        alert({ type: "success", title: "Success !", text: message });
+      const { status, data } = await (id ? updateSmtpApi(id, smtpDetails) : addSmtpApi(smtpDetails));
+      if (status) {
+        alert({ type: "success", text: data.message });
         navigate("/smtp-list");
       } else {
-        alert({ type: "warning", title: "Warning !", text: error });
+        alert({ type: "warning", text: data });
       }
     } catch (error) {
-      alert({ type: "danger", title: "Error !", text: error.message });
+      alert({ type: "danger", text: error.message });
     } finally {
       setLoading(false);
     }
@@ -137,17 +125,19 @@ export default function AddSmtp() {
                 <label className={!id ? "form-label required" : "form-label"}>Security Protocol</label>
                 <select
                   name="secure"
-                  className={`form-control ${errors.secure ? "is-invalid" : ""}`}
+                  className={`form-select ${errors.secure ? "is-invalid" : ""}`}
                   value={smtpDetails.secure}
                   onChange={(e) => {
                     if (errors.secure) setErrors((prev) => ({ ...prev, secure: "" }));
                     setSmtpDetails((d) => ({ ...d, secure: e.target.value }));
                   }}
                 >
-                  <option value="select">Select</option>
-                  <option value="SSL">SSL</option>
-                  <option value="TLS">TLS</option>
-                  <option value="STARTTLS">STARTTLS</option>
+                  <option value="">Select</option>
+                  {smtpSecure.map((s, i) => (
+                    <option key={i} value={s}>
+                      {s}
+                    </option>
+                  ))}
                 </select>
                 {errors.secure && <div className="invalid-feedback">{errors.secure}</div>}
               </div>

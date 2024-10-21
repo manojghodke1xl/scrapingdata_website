@@ -40,12 +40,13 @@ export default function AddAdmin() {
       setLoading(true);
       (async () => {
         const { status, data } = await getAdminById(id);
+        const { sites, ...rest } = data.admin;
         if (status) {
           setAdminDetails((prev) => ({
             ...prev,
-            ...data.admin,
+            ...rest,
             password: "",
-            sites: data.admin.sites,
+            sites,
           }));
         } else {
           alert({ type: "warning", text: data });

@@ -5,6 +5,7 @@ import Table from "../../comps/table";
 import useSetTimeout from "../../Hooks/useDebounce";
 import useGetAllSites from "../../Hooks/useGetAllSites";
 import DuplicateModal from "../../comps/duplicate";
+import { updateGuideSitesApi, updateGuideStatusApi } from "../../apis/guide-apis";
 
 export default function GuideList() {
   const navigate = useNavigate();
@@ -28,53 +29,33 @@ export default function GuideList() {
   const filter = ["Active", "Inactive"];
   const Status = ["Active", "Inactive"];
 
-  const [err, data, setRefresh] = useSetTimeout(
-    "guides",
-    page - 1,
-    limit,
-    searchTerm,
-    searchKey,
-    statusFilter,
-    siteId
-  );
+  const [err, data, setRefresh] = useSetTimeout("guides", page - 1, limit, searchTerm, searchKey, statusFilter, siteId);
 
   useEffect(() => {
     if (data) {
       setGuides(data.guides);
       setTotalCount(data.count);
     } else if (err) {
-      alert({ type: "warning", title: "Warning!", text: err.message });
+      alert({ type: "warning", text: err.message });
     }
   }, [data, err, alert]);
 
-  const updateSelectedGuidesStatus = async (status) => {
+  const updateSelectedGuidesStatus = async (guideStatus) => {
     setLoading(true);
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/guide-status`, {
-        method: "PUT",
-        headers: {
-          Authorization: localStorage.getItem("auth"),
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ ids: selectedGuides, isActive: status }),
-      });
+      const { status, data } = await updateGuideStatusApi(selectedGuides, guideStatus);
 
-      const { error } = await res.json();
-
-      if (res.ok) {
+      if (status) {
         alert({
           type: "success",
-          title: "Updated!",
-          text: `Selected case studies have been marked as ${
-            status ? "Active" : "Inactive"
-          }.`,
+          text: data.message,
         });
         setRefresh((r) => !r);
         setSelectedGuides([]);
         setSelectAll(false);
-        setStatusSelect("Select");
+        setStatusSelect("");
       } else {
-        alert({ type: "danger", title: "Error!", text: error });
+        alert({ type: "danger", title: "Error!", text: data });
       }
     } catch (error) {
       alert({ type: "danger", title: "Error!", text: error.message });
@@ -86,34 +67,21 @@ export default function GuideList() {
   const updateSites = async (selectedSites, selectedAction) => {
     setLoading(true);
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/guide-sites`, {
-        method: "PUT",
-        headers: {
-          Authorization: localStorage.getItem("auth"),
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          gids: selectedGuides,
-          sids: selectedSites,
-          action: selectedAction === "Add" ? true : false,
-        }),
-      });
-
-      const { error } = await res.json();
-      if (res.ok) {
+      const action = selectedAction === "Add" ? true : false;
+      const { status, data } = await updateGuideSitesApi(selectedGuides, selectedSites, action);
+      if (status) {
         alert({
           type: "success",
-          title: "Updated!",
-          text: `Selected guides have been updated.`,
+          text: data.message,
         });
         setRefresh((r) => !r);
         setSelectedGuides([]);
         setSelectAll(false);
       } else {
-        alert({ type: "danger", title: "Error!", text: error });
+        alert({ type: "danger", text: data });
       }
     } catch (error) {
-      alert({ type: "danger", title: "Error!", text: error.message });
+      alert({ type: "danger", text: error.message });
     } finally {
       setLoading(false);
       setModalOpen(false);
@@ -126,6 +94,7 @@ export default function GuideList() {
       let updatedSelected;
       if (prevSelected.includes(guideId)) {
         updatedSelected = prevSelected.filter((id) => id !== guideId);
+        setStatusSelect("");
       } else {
         updatedSelected = [...prevSelected, guideId];
       }
@@ -134,7 +103,6 @@ export default function GuideList() {
       } else {
         setSelectAll(false);
       }
-
       return updatedSelected;
     });
   };
@@ -150,14 +118,7 @@ export default function GuideList() {
 
   const headers = [
     {
-      label: (
-        <input
-          className="form-check-input "
-          type="checkbox"
-          checked={selectAll}
-          onChange={handleSelectAll}
-        />
-      ),
+      label: <input className="form-check-input " type="checkbox" checked={selectAll} onChange={handleSelectAll} />,
     },
     { label: "Title" },
     { label: "Status" },
@@ -180,10 +141,7 @@ export default function GuideList() {
       <span className="badge bg-danger">Inactive</span>
     ),
     <div key={guide._id}>
-      <button
-        onClick={() => navigate(`/edit-guide/${guide._id}`)}
-        className="btn btn-primary me-1"
-      >
+      <button onClick={() => navigate(`/edit-guide/${guide._id}`)} className="btn btn-primary me-1">
         Edit
       </button>
     </div>,
@@ -201,10 +159,7 @@ export default function GuideList() {
                 <div className="text-secondary">
                   Filter
                   <div className="mx-2 d-inline-block">
-                    <select
-                      className="form-select form-control-sm"
-                      onChange={(e) => setStatusFilter(e.target.value)}
-                    >
+                    <select className="form-select form-control-sm" onChange={(e) => setStatusFilter(e.target.value)}>
                       <option value="">All</option>
                       {filter.map((key, i) => (
                         <option key={i} value={key.toLowerCase()}>
@@ -233,40 +188,27 @@ export default function GuideList() {
                       </div>
                     </div>
                     {statusSelect === "active" && (
-                      <button
-                        onClick={() => updateSelectedGuidesStatus(true)}
-                        className="btn btn-success mx-2"
-                      >
+                      <button onClick={() => updateSelectedGuidesStatus(true)} className="btn btn-success mx-2">
                         Apply
                       </button>
                     )}
                     {statusSelect === "inactive" && (
-                      <button
-                        onClick={() => updateSelectedGuidesStatus(false)}
-                        className="btn btn-danger mx-2"
-                      >
+                      <button onClick={() => updateSelectedGuidesStatus(false)} className="btn btn-danger mx-2">
                         Apply
                       </button>
                     )}
-                    <button
-                      onClick={() => setModalOpen(true)}
-                      className="btn btn-primary mx-2"
-                    >
+                    <button onClick={() => setModalOpen(true)} className="btn btn-primary mx-2">
                       Sites
                     </button>
                   </>
                 ) : null}
 
-                <button
-                  onClick={() => navigate("/add-guide")}
-                  className="btn btn-primary"
-                >
+                <button onClick={() => navigate("/add-guide")} className="btn btn-primary">
                   Add Guide
                 </button>
               </div>
             </div>
           </div>
-
           <div className="table-responsive">
             <Table
               headers={headers}

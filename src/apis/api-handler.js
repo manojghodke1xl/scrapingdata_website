@@ -5,7 +5,6 @@ export const getMethodCall = async (url) => {
       headers: { Authorization: localStorage.getItem("auth") },
     });
     const data = await response.json();
-    
     if (response.ok) {
       return { status: true, data: data.data };
     } else {
