@@ -31,7 +31,7 @@ export default function AddPopup() {
     moreGuides: [],
     allGlobalCaseStudy: false,
     allSiteCaseStudy: false,
-    moreCaseStudy: [],
+    moreCaseStudies: [],
     isActive: true,
     site: "",
   });
@@ -114,7 +114,7 @@ export default function AddPopup() {
       popupDetails.contentType === "guide"
         ? "moreGuides"
         : popupDetails.contentType === "casestudy"
-        ? "moreCaseStudy"
+        ? "moreCaseStudies"
         : "";
     setPopupDetails({
       ...popupDetails,
@@ -391,13 +391,7 @@ export default function AddPopup() {
                 )}
                 <div className="col-md-3 mb-3">
                   <label className="form-label">Settings</label>
-                  <div
-                    style={{
-                      maxHeight: "100px",
-                      overflowY: "auto",
-                      padding: "10px",
-                    }}
-                  >
+                  <div className="popup-form-multi-check-box">
                     <label className="form-check">
                       <input
                         className="form-check-input"
@@ -514,13 +508,7 @@ export default function AddPopup() {
                     <label className="form-label">
                       {popupDetails.contentType === "guide" ? "Additional Guides" : "Additional Case Study"}
                     </label>
-                    <div
-                      style={{
-                        maxHeight: "100px",
-                        overflowY: "auto",
-                        padding: "10px",
-                      }}
-                    >
+                    <div className="popup-form-multi-check-box">
                       {contentDetials.map((data) => (
                         <label key={data._id} className="form-check">
                           <input
@@ -529,7 +517,7 @@ export default function AddPopup() {
                             checked={
                               popupDetails.contentType === "guide"
                                 ? popupDetails.moreGuides.includes(data._id)
-                                : popupDetails.moreCaseStudy.includes(data._id)
+                                : popupDetails.moreCaseStudies.includes(data._id)
                             }
                             onChange={(e) => handleSelection(e.target.checked, data._id)}
                           />
