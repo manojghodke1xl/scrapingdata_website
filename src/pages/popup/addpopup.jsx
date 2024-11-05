@@ -1,16 +1,18 @@
-import { useContext, useEffect, useState, useRef } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { GlobalContext } from "../../GlobalContext";
 import { getAllGuidesApi } from "../../apis/guide-apis";
 import { getAllCaseStudyApi } from "../../apis/caseStudy-apis";
 import { getPopupById } from "../../apis/popup-apis";
-import { addPopupApi, getAllSitesApi, updatePopupApi } from "../../apis/site-apis";
+import { addPopupApi, updatePopupApi } from "../../apis/site-apis";
+import useGetAllSites from "../../Hooks/useGetAllSites";
+import { uploadFile } from "../../utils/fileUpload";
 
 export default function AddPopup() {
   const navigate = useNavigate();
   const { id = "" } = useParams();
   const { alert, setLoading } = useContext(GlobalContext);
-
+  const availableSites = useGetAllSites();
   const [popupDetails, setPopupDetails] = useState({
     name: "",
     position: "",
@@ -37,7 +39,6 @@ export default function AddPopup() {
   });
 
   const [contentDetials, setContentDetials] = useState([]);
-  const [availableSites, setAvailableSites] = useState([]);
   const [errors, setErrors] = useState({});
 
   const positions = ["Center-Popup", "Topbar-Notifications"];
@@ -98,17 +99,6 @@ export default function AddPopup() {
     }
   }, [id, alert, setLoading]);
 
-  useEffect(() => {
-    (async () => {
-      const { status, data } = await getAllSitesApi();
-      if (status) {
-        setAvailableSites(data.sites);
-      } else {
-        alert({ type: "warning", text: data });
-      }
-    })().catch((error) => alert({ type: "danger", text: error.message }));
-  }, [alert]);
-
   const handleSelection = (checked, id) => {
     const refProp =
       popupDetails.contentType === "guide"
@@ -141,61 +131,17 @@ export default function AddPopup() {
     }
   };
 
-  const imageInputRef = useRef(null);
-
-  const uploadFile = async (e, isImage) => {
+  const handleFileUpload = (e, isImage, isPdf) => {
     const file = e.target.files[0];
-    if (!file) return;
-
-    const { name, size, type } = file;
-
-    const validImageTypes = ["image/jpeg", "image/png"];
-
-    if (isImage && !validImageTypes.includes(type)) {
-      alert({ type: "warning", text: "Only PNG or JPEG formats are allowed for image uploads." });
-      imageInputRef.current.value = "";
-      return;
-    }
-
-    try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/upload`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: localStorage.getItem("auth"),
-        },
-        body: JSON.stringify({ name, size, mime: type }),
+    if (file) {
+      uploadFile({
+        file,
+        isImage,
+        isPdf,
+        alert,
+        setPopupDetails,
+        fieldName: "image",
       });
-
-      if (!res.ok) {
-        const { error } = await res.json();
-        throw new Error(error || "Failed to get upload URL");
-      }
-
-      const { data } = await res.json();
-      const fd = new FormData();
-      for (const [key, val] of Object.entries(data.fields)) {
-        fd.append(key, val);
-      }
-
-      fd.append("file", file);
-
-      const uploadRes = await fetch(data.url, {
-        method: "POST",
-        body: fd,
-      });
-
-      if (!uploadRes.ok) {
-        throw new Error("File upload failed");
-      }
-      const fileId = data._id;
-
-      if (isImage) {
-        setPopupDetails((prevDetail) => ({ ...prevDetail, image: fileId }));
-      }
-    } catch (error) {
-      console.error("Upload error:", error);
-      alert({ type: "danger", title: "Error !", text: error.message });
     }
   };
 
@@ -380,9 +326,8 @@ export default function AddPopup() {
                         type="file"
                         name="image"
                         className="form-control"
-                        onChange={(e) => uploadFile(e, true)}
+                        onChange={(e) => handleFileUpload(e, true, false, false)}
                         accept="image/*"
-                        ref={imageInputRef}
                       />
                     </div>
                   </>

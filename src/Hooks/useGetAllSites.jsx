@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { GlobalContext } from "../GlobalContext";
+import { getAllSitesApi } from "../apis/site-apis";
 
 export default function useGetAllSites() {
   const { alert, setLoading } = useContext(GlobalContext);
@@ -8,18 +9,10 @@ export default function useGetAllSites() {
   useEffect(() => {
     setLoading(true);
     (async () => {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/allsites`, {
-        method: "GET",
-        headers: { authorization: localStorage.getItem("auth") },
-      });
-
-      const { data, error } = await res.json();
-
-      if (!res.ok) alert({ type: "warning", title: "Warning!", text: `HTTP error! status: ${res.status} - ${error}` });
-      else setAllsites(data.sites);
-    })()
-      .catch((e) => alert({ type: "error", title: "Error!", text: e.message }))
-      .finally(() => setLoading(false));
+      const { status, data } = await getAllSitesApi();
+      if (status) setAllsites(data.sites);
+      else alert({ type: "warning", title: "Warning!", text: "Sites not found" });
+    })().finally(() => setLoading(false));
   }, [alert, setLoading]);
 
   return allsites;

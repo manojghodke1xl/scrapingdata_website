@@ -1,8 +1,8 @@
 import { useContext, useEffect, useLayoutEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { GlobalContext } from "../../GlobalContext";
-import { getAllSitesApi } from "../../apis/site-apis";
 import { getAdminById, addAdminApi, updateAdminApi } from "../../apis/admin-apis";
+import useGetAllSites from "../../Hooks/useGetAllSites";
 
 export default function AddAdmin() {
   const navigate = useNavigate();
@@ -17,23 +17,13 @@ export default function AddAdmin() {
     isBlocked: false,
     isSuperAdmin: false,
   });
-  const [availableSites, setAvailableSites] = useState([]);
+  const [selectAll, setSelectAll] = useState(false);
   const [errors, setErrors] = useState({});
+  const availableSites = useGetAllSites();
 
   useLayoutEffect(() => {
     if (!auth.isSuperAdmin) navigate("/dashboard");
   }, [auth, navigate]);
-
-  useEffect(() => {
-    (async () => {
-      const { status, data } = await getAllSitesApi();
-      if (status) {
-        setAvailableSites(data.sites);
-      } else {
-        alert({ type: "warning", text: "Sites not found" });
-      }
-    })();
-  }, [alert]);
 
   useEffect(() => {
     if (id) {
@@ -98,6 +88,19 @@ export default function AddAdmin() {
     });
   };
 
+  const handleSelectAllChange = () => {
+    if (selectAll) setAdminDetails((prev) => ({ ...prev, sites: [] }));
+    else
+      setAdminDetails((prev) => ({
+        ...prev,
+        sites: availableSites.map((site) => site._id),
+      }));
+
+    setSelectAll(!selectAll);
+  };
+
+  const isAllSelected = adminDetails.sites.length === availableSites.length;
+
   return (
     <div className="page-body">
       <div className="container container-tight py-4">
@@ -154,11 +157,22 @@ export default function AddAdmin() {
                 {errors.password && <div className="invalid-feedback">{errors.password}</div>}
               </div>
               <div className="mb-3">
-                {adminDetails.isSuperAdmin ? (
-                  <label className="form-label">All Sites</label>
-                ) : (
-                  <label className={!id ? "form-label required" : "form-label"}>Select Sites</label>
-                )}
+                <div className="d-flex justify-content-between mb-2">
+                  {adminDetails.isSuperAdmin ? (
+                    <label className="form-label">All Sites</label>
+                  ) : (
+                    <label className={!id ? "form-label required" : "form-label"}>Select Sites</label>
+                  )}
+                  <label className="form-check mb-0">
+                    <input
+                      type="checkbox"
+                      className="form-check-input me-2"
+                      checked={isAllSelected}
+                      onChange={handleSelectAllChange}
+                    />
+                    <span className="form-check-label">Select All</span>
+                  </label>
+                </div>
                 <div className={`form-multi-check-box ${errors.sites ? "is-invalid" : ""}`}>
                   {availableSites.map((site) => (
                     <label key={site._id} className="form-check">

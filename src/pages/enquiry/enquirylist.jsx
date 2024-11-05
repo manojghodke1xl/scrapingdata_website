@@ -39,7 +39,7 @@ export default function EnquiryList() {
   const deleteSelectedEnquiries = async () => {
     if (!selectedEnquiries.length)
       return alert({ type: "warning", text: "Please select at least one enquiry to delete." });
-    
+
     setLoading(true);
     try {
       const { status, data } = await deleteEnquiryApi(selectedEnquiries);
@@ -112,7 +112,7 @@ export default function EnquiryList() {
     />,
     enq.name,
     enq.email,
-    enq.mobile,
+    (enq.ccode ?? "") + " " + (enq.mobile ?? ""),
     enq.service,
     enq.subject,
     enq.message,

@@ -1,13 +1,15 @@
-import { useContext, useEffect, useState, useRef } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { GlobalContext } from "../../GlobalContext";
-import { getAllSitesApi } from "../../apis/site-apis";
 import { addCaseStudyApi, getCaseStudyById, updateCaseStudyApi } from "../../apis/caseStudy-apis";
+import useGetAllSites from "../../Hooks/useGetAllSites";
+import { uploadFile } from "../../utils/fileUpload";
 
 export default function AddCaseStudy() {
   const navigate = useNavigate();
   const { id = "" } = useParams();
   const { alert, setLoading } = useContext(GlobalContext);
+  const availableSites = useGetAllSites();
 
   const [caseStudyDetails, setCaseStudyDetails] = useState({
     title: "",
@@ -17,19 +19,8 @@ export default function AddCaseStudy() {
     isGlobal: false,
     sites: [],
   });
-  const [availableSites, setAvailableSites] = useState([]);
+  const [selectAll, setSelectAll] = useState(false);
   const [errors, setErrors] = useState({});
-
-  useEffect(() => {
-    (async () => {
-      const { status, data } = await getAllSitesApi();
-      if (status) {
-        setAvailableSites(data.sites);
-      } else {
-        alert({ type: "warning", text: "Sites not found" });
-      }
-    })();
-  }, [alert]);
 
   useEffect(() => {
     if (id) {
@@ -84,73 +75,32 @@ export default function AddCaseStudy() {
     }
   };
 
-  const imageInputRef = useRef(null);
-  const fileInputRef = useRef(null);
-
-  const uploadFile = async (e, isImage, ispdf) => {
+  const handleFileUpload = (e, isImage, isPdf) => {
     const file = e.target.files[0];
-    if (!file) return;
-
-    const { name, size, type } = file;
-
-    const validImageTypes = ["image/jpeg", "image/png"];
-    const validPdfTypes = ["application/pdf"];
-
-    if (isImage && !validImageTypes.includes(type)) {
-      alert({ type: "warning", text: "Only PNG or JPEG formats are allowed for image uploads." });
-      imageInputRef.current.value = "";
-      return;
-    }
-
-    if (ispdf && !validPdfTypes.includes(type)) {
-      alert({ type: "warning", text: "Only PDF files are allowed for uploads." });
-      fileInputRef.current.value = "";
-      return;
-    }
-
-    try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/upload`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: localStorage.getItem("auth"),
-        },
-        body: JSON.stringify({ name, size, mime: type }),
+    if (file) {
+      uploadFile({
+        file,
+        isImage,
+        isPdf,
+        alert,
+        setCaseStudyDetails,
+        fieldName: isImage ? "image" : "pdf",
       });
-
-      if (!res.ok) {
-        const { error } = await res.json();
-        throw new Error(error || "Failed to get upload URL");
-      }
-
-      const { data } = await res.json();
-      const fd = new FormData();
-      for (const [key, val] of Object.entries(data.fields)) {
-        fd.append(key, val);
-      }
-
-      fd.append("file", file);
-
-      const uploadRes = await fetch(data.url, {
-        method: "POST",
-        body: fd,
-      });
-
-      if (!uploadRes.ok) {
-        throw new Error("File upload failed");
-      }
-      const fileId = data._id;
-
-      if (isImage) {
-        setCaseStudyDetails((prevDetail) => ({ ...prevDetail, image: fileId }));
-      } else {
-        setCaseStudyDetails((prevDetail) => ({ ...prevDetail, pdf: fileId }));
-      }
-    } catch (error) {
-      console.error("Upload error:", error);
-      alert({ type: "danger", text: error.message });
     }
   };
+
+  const handleSelectAllChange = () => {
+    if (selectAll) setCaseStudyDetails((prev) => ({ ...prev, sites: [] }));
+    else
+      setCaseStudyDetails((prev) => ({
+        ...prev,
+        sites: availableSites.map((site) => site._id),
+      }));
+
+    setSelectAll(!selectAll);
+  };
+
+  const isAllSelected = caseStudyDetails.sites.length === availableSites.length;
 
   return (
     <div className="page-body">
@@ -197,42 +147,27 @@ export default function AddCaseStudy() {
                 />
               </div>
               <div className="mb-3">
-              <label className={id ? "form-label d-flex justify-content-between" : "form-label required"}>
-                    Upload Image
-                    {id && caseStudyDetails.imageFile && (
-                      <a
-                        href={caseStudyDetails.imageFile.url}
-                        download={caseStudyDetails.imageFile.name}
-                        target="_blank"
-                      >
-                        Download Image
-                      </a>
+                <label className={id ? "form-label d-flex justify-content-between" : "form-label required"}>
+                  Upload Image
+                  {id && caseStudyDetails.imageFile && (
+                    <a href={caseStudyDetails.imageFile.url} download={caseStudyDetails.imageFile.name} target="_blank">
+                      Download Image
+                    </a>
                   )}
-                  </label>
+                </label>
                 <input
                   type="file"
                   name="image"
                   className="form-control"
-                  onChange={(e) => uploadFile(e, true)}
+                  onChange={(e) => handleFileUpload(e, true, false, false)}
                   accept="image/*"
-                  ref={imageInputRef}
                 />
               </div>
               <div className="mb-3">
-              <label
-                  className={
-                    id
-                      ? "form-label d-flex justify-content-between"
-                      : "form-label required"
-                  }
-                >
+                <label className={id ? "form-label d-flex justify-content-between" : "form-label required"}>
                   Upload Pdf
                   {id && caseStudyDetails.pdfFile && (
-                    <a
-                      href={caseStudyDetails.pdfFile.url}
-                      download={caseStudyDetails.pdfFile.name}
-                      target="_blank"
-                    >
+                    <a href={caseStudyDetails.pdfFile.url} download={caseStudyDetails.pdfFile.name} target="_blank">
                       Download Pdf
                     </a>
                   )}
@@ -241,13 +176,23 @@ export default function AddCaseStudy() {
                   type="file"
                   name="pdf"
                   className="form-control"
-                  onChange={(e) => uploadFile(e, false)}
+                  onChange={(e) => handleFileUpload(e, false, true, false)}
                   accept="application/pdf"
-                  ref={fileInputRef}
                 />
               </div>
               <div className="mb-3">
-                <label className={!id ? "form-label required" : "form-label "}>Select Sites</label>
+                <div className="d-flex justify-content-between mb-3">
+                  <label className={!id ? "form-label required mb-0 me-2" : "form-label mb-0 me-2"}>Select Sites</label>
+                  <label className="form-check mb-0">
+                    <input
+                      type="checkbox"
+                      className="form-check-input me-2"
+                      checked={isAllSelected}
+                      onChange={handleSelectAllChange}
+                    />
+                    <span className="form-check-label">Select All</span>
+                  </label>
+                </div>
                 <div className={`form-multi-check-box ${errors.sites ? "is-invalid" : ""}`}>
                   {availableSites.map((site) => (
                     <label key={site._id} className="form-check">

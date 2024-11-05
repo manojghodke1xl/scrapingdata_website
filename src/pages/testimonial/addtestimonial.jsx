@@ -1,15 +1,19 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { GlobalContext } from "../../GlobalContext";
-import { getAllSitesApi } from "../../apis/site-apis";
 import { getTestimonialById, addTestimonialApi, updateTestimonialApi } from "../../apis/testimonial-apis";
 import { getAllCategoriesApi } from "../../apis/category-apis";
+import useGetAllSites from "../../Hooks/useGetAllSites";
+import { uploadFile } from "../../utils/fileUpload";
 
 export default function AddTestimonial() {
   const navigate = useNavigate();
   const { id = "" } = useParams();
   const { alert, setLoading } = useContext(GlobalContext);
+  const availableSites = useGetAllSites();
+
   const [errors, setErrors] = useState({});
+  const [selectAll, setSelectAll] = useState(false);
   const [testimonialDetails, setTestimonialDetails] = useState({
     name: "",
     desg: "",
@@ -24,21 +28,9 @@ export default function AddTestimonial() {
     video: null,
     videoUrl: "",
   });
-  const [availableSites, setAvailableSites] = useState([]);
   const [availableCategories, setAvailableCategories] = useState([]);
 
   const type = ["Text", "Image", "Video"];
-
-  useEffect(() => {
-    (async () => {
-      const { status, data } = await getAllSitesApi();
-      if (status) {
-        setAvailableSites(data.sites);
-      } else {
-        alert({ type: "warning", text: "Sites not found" });
-      }
-    })();
-  }, [alert]);
 
   useEffect(() => {
     (async () => {
@@ -104,83 +96,32 @@ export default function AddTestimonial() {
     }
   };
 
-  const imageInputRef = useRef(null);
-  const videoInputRef = useRef(null);
-
-  const uploadFile = async (e, isImage, isVideo) => {
+  const handleFileUpload = (e, isImage, isPdf) => {
     const file = e.target.files[0];
-    if (!file) return;
-
-    const { name, size, type } = file;
-
-    const validImageTypes = ["image/jpeg", "image/png"];
-    const validVideoTypes = ["video/mp4", "video/quicktime"];
-
-    if (isVideo && !validVideoTypes.includes(type)) {
-      alert({ type: "warning", text: "Only MP4 or MOV formats are allowed for video uploads." });
-      videoInputRef.current.value = "";
-      return;
-    }
-
-    if (isImage && !validImageTypes.includes(type)) {
-      alert({ type: "warning", text: "Only PNG or JPEG formats are allowed for image uploads." });
-      imageInputRef.current.value = "";
-      return;
-    }
-
-    try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/upload`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: localStorage.getItem("auth"),
-        },
-        body: JSON.stringify({ name, size, mime: type }),
+    if (file) {
+      uploadFile({
+        file,
+        isImage,
+        isPdf,
+        alert,
+        setTestimonialDetails,
+        fieldName: isImage ? "image" : "video",
       });
-
-      if (!res.ok) {
-        const { error } = await res.json();
-        throw new Error(error || "Failed to get upload URL");
-      }
-
-      const { data } = await res.json();
-      const fd = new FormData();
-      for (const [key, val] of Object.entries(data.fields)) {
-        fd.append(key, val);
-      }
-
-      fd.append("file", file);
-
-      const uploadRes = await fetch(data.url, {
-        method: "POST",
-        body: fd,
-      });
-
-      if (!uploadRes.ok) {
-        throw new Error("File upload failed");
-      }
-
-      const fileId = data._id;
-      const fileUrl = `${data.url}/${fileId}`;
-
-      if (isImage) {
-        setTestimonialDetails((prevDetail) => ({
-          ...prevDetail,
-          image: fileId,
-          imageUrl: fileUrl,
-        }));
-      } else {
-        setTestimonialDetails((prevDetail) => ({
-          ...prevDetail,
-          video: fileId,
-          videoUrl: fileUrl,
-        }));
-      }
-    } catch (error) {
-      console.error("Upload error:", error);
-      alert({ type: "danger", text: error.message });
     }
   };
+
+  const handleSelectAllChange = () => {
+    if (selectAll) setTestimonialDetails((prev) => ({ ...prev, sites: [] }));
+    else
+      setTestimonialDetails((prev) => ({
+        ...prev,
+        sites: availableSites.map((site) => site._id),
+      }));
+
+    setSelectAll(!selectAll);
+  };
+
+  const isAllSelected = testimonialDetails.sites.length === availableSites.length;
 
   return (
     <div className="page-body">
@@ -259,9 +200,8 @@ export default function AddTestimonial() {
                     type="file"
                     name="image"
                     className="form-control"
-                    onChange={(e) => uploadFile(e, true)}
+                    onChange={(e) => handleFileUpload(e, true, false, false)}
                     accept="image/*"
-                    ref={imageInputRef}
                   />
                 </div>
               )}
@@ -306,9 +246,8 @@ export default function AddTestimonial() {
                         type="file"
                         name="video"
                         className="form-control"
-                        onChange={(e) => uploadFile(e, false)}
+                        onChange={(e) => handleFileUpload(e, false, false, true)}
                         accept="video/*"
-                        ref={videoInputRef}
                       />
                     </div>
                   ) : (
@@ -333,7 +272,18 @@ export default function AddTestimonial() {
               )}
 
               <div className="mb-3">
-                <label className={!id ? "form-label required" : "form-label"}>Select Sites</label>
+                <div className="d-flex justify-content-between mb-3">
+                  <label className={!id ? "form-label required mb-0 me-2" : "form-label mb-0 me-2"}>Select Sites</label>
+                  <label className="form-check mb-0">
+                    <input
+                      type="checkbox"
+                      className="form-check-input me-2"
+                      checked={isAllSelected}
+                      onChange={handleSelectAllChange}
+                    />
+                    <span className="form-check-label">Select All</span>
+                  </label>
+                </div>
                 <div className={`form-multi-check-box ${errors.sites ? "is-invalid" : ""}`}>
                   {availableSites.map((site) => (
                     <label key={site._id} className="form-check">
