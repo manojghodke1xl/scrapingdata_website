@@ -83,7 +83,7 @@ export default function AddCaseStudy() {
         isImage,
         isPdf,
         alert,
-        setCaseStudyDetails,
+        setDetails: setCaseStudyDetails,
         fieldName: isImage ? "image" : "pdf",
       });
     }

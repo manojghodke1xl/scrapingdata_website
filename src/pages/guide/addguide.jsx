@@ -86,7 +86,7 @@ export default function AddGuide() {
         isImage,
         isPdf,
         alert,
-        setGuideDetails,
+        setDetails: setGuideDetails,
         fieldName: isImage ? "image" : "pdf",
       });
     }

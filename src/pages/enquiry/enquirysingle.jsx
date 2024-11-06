@@ -31,17 +31,17 @@ const Enquirysingle = () => {
               <div className="col-12  d-flex flex-column">
                 <div className="card-body">
                   <h2 className="mb-4">Enquiry Details</h2>
-                  <h3 className="card-title mt-4">Customer Details</h3>
+                  <h3 className="card-title mt-3">Customer Details</h3>
                   <div className="row g-3">
-                    <div className="col-md">
+                    <div className="col-md-4">
                       <div className="form-label">Customer Name</div>
                       <input type="text" className="form-control" defaultValue={enquiry?.name} readOnly />
                     </div>
-                    <div className="col-md">
+                    <div className="col-md-4">
                       <div className="form-label">Customer Email</div>
                       <input type="text" className="form-control" defaultValue={enquiry?.email} readOnly />
                     </div>
-                    <div className="col-md">
+                    <div className="col-md-4">
                       <div className="form-label">Mobile Number</div>
                       <input
                         type="text"
@@ -52,20 +52,46 @@ const Enquirysingle = () => {
                     </div>
                   </div>
                   <div className="row g-3 mt-2">
-                    <div className="col-md">
-                      <div className="form-label">Customer Message</div>
-                      <input type="text" className="form-control" defaultValue={enquiry?.message} readOnly />
-                    </div>
-                    <div className="col-md">
+                    <div className="col-md-4">
                       <div className="form-label">Customer service</div>
                       <input type="text" className="form-control" defaultValue={enquiry?.service} readOnly />
                     </div>
-                    <div className="col-md">
+                    <div className="col-md-4">
                       <div className="form-label">Customer subject</div>
                       <input type="text" className="form-control" defaultValue={enquiry?.subject} readOnly />
                     </div>
+                    <div className="col-md-4">
+                      <div className="form-label">Ip Address</div>
+                      <input type="text" className="form-control" defaultValue={enquiry?.ipaddress} readOnly />
+                    </div>
                   </div>
-                  <h3 className="card-title mt-4">Request header</h3>
+                  <div className="row g-3 mt-2">
+                    <div className="col-md-4">
+                      <div className="form-label">Site Name</div>
+                      <input type="text" className="form-control" defaultValue={enquiry?.site?.name} readOnly />
+                    </div>
+                    <div className="col-md-4">
+                      <div className="form-label">Date Time</div>
+                      <input
+                        type="datetime-local"
+                        className="form-control"
+                        defaultValue={enquiry?.createdAt?.slice(0, 16)}
+                        readOnly
+                      />
+                    </div>
+                  </div>
+                  <h3 className="card-title mt-3">Customer Message</h3>
+                  <div>
+                    <textarea
+                      className="form-control"
+                      name="example-textarea-input"
+                      rows={6}
+                      placeholder="Content.."
+                      defaultValue={enquiry?.message}
+                      readOnly
+                    />
+                  </div>
+                  <h3 className="card-title mt-3">Request header</h3>
                   <p className="card-subtitle">
                     Request headers are key-value pairs sent by a client to provide information about the request or the
                     client itself.
@@ -80,7 +106,7 @@ const Enquirysingle = () => {
                       readOnly
                     />
                   </div>
-                  <h3 className="card-title mt-4">User Agent String</h3>
+                  <h3 className="card-title mt-3">User Agent String</h3>
                   <p className="card-subtitle">
                     A User Agent String identifies the browser, version, and operating system of a client device to web
                     servers.
@@ -94,25 +120,6 @@ const Enquirysingle = () => {
                       defaultValue={enquiry?.uastring}
                       readOnly
                     />
-                  </div>
-                  <div className="row g-3 mt-2">
-                    <div className="col-md">
-                      <div className="form-label">Ip Address</div>
-                      <input type="text" className="form-control" defaultValue={enquiry?.ipaddress} readOnly />
-                    </div>
-                    <div className="col-md">
-                      <div className="form-label">Site Name</div>
-                      <input type="text" className="form-control" defaultValue={enquiry?.site?.name} readOnly />
-                    </div>
-                    <div className="col-md">
-                      <div className="form-label">Date Time</div>
-                      <input
-                        type="datetime-local"
-                        className="form-control"
-                        defaultValue={enquiry?.createdAt?.slice(0, 16)}
-                        readOnly
-                      />
-                    </div>
                   </div>
                 </div>
               </div>

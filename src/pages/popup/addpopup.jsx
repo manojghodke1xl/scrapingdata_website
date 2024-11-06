@@ -139,7 +139,7 @@ export default function AddPopup() {
         isImage,
         isPdf,
         alert,
-        setPopupDetails,
+        setDetails: setPopupDetails,
         fieldName: "image",
       });
     }

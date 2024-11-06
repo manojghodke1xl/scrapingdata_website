@@ -104,7 +104,7 @@ export default function AddTestimonial() {
         isImage,
         isPdf,
         alert,
-        setTestimonialDetails,
+        setDetails: setTestimonialDetails,
         fieldName: isImage ? "image" : "video",
       });
     }
