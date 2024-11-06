@@ -95,35 +95,54 @@ export default function AdminList() {
     },
     { label: "Admin Name" },
     { label: "Admin Email" },
+    { label: "Created Date" },
+    { label: "Updated Date" },
     { label: "Status" },
     { label: "Actions" },
     { label: "Sites" },
   ];
 
-  const rows = admins.map((admin) => [
-    !admin.isSuperAdmin ? (
-      <input
-        key={admin._id}
-        className="form-check-input"
-        type="checkbox"
-        checked={selectedAdmins.includes(admin._id)}
-        onChange={() => handleCheckboxChange(admin._id)}
-      />
-    ) : null,
-    admin.name,
-    admin.email,
-    admin.isBlocked === true ? (
-      <span className="badge bg-danger">Blocked</span>
-    ) : (
-      <span className="badge bg-success">Active</span>
-    ),
-    <button key={admin._id} onClick={() => navigate(`/edit-admin/${admin._id}`)} className="btn btn-primary ">
-      Edit
-    </button>,
-    admin.isSuperAdmin
-      ? allsites.map((s) => `${s.name} (${s.host})`).join(", ")
-      : admin.sites.map((s) => `${s.name} (${s.host})`).join(", "),
-  ]);
+  const rows = admins.map((admin) => {
+    const { _id, name, email, isBlocked, isSuperAdmin, createdAt, updatedAt } = admin;
+    return {
+      _id,
+      checkedBox: !isSuperAdmin ? (
+        <input
+          key={_id}
+          className="form-check-input"
+          type="checkbox"
+          checked={selectedAdmins.includes(_id)}
+          onChange={() => handleCheckboxChange(_id)}
+        />
+      ) : null,
+      name,
+      email,
+      created: new Date(createdAt).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      }),
+      updated: new Date(updatedAt).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      }),
+      status:
+        isBlocked === true ? (
+          <span className="badge bg-danger">Blocked</span>
+        ) : (
+          <span className="badge bg-success">Active</span>
+        ),
+      actions: (
+        <button key={_id} onClick={() => navigate(`/edit-admin/${_id}`)} className="btn btn-primary ">
+          Edit
+        </button>
+      ),
+      sites: isSuperAdmin
+        ? allsites.map((s) => `${s.name} (${s.host})`).join(", ")
+        : admin.sites.map((s) => `${s.name} (${s.host})`).join(", "),
+    };
+  });
 
   return (
     <div className="page-body">

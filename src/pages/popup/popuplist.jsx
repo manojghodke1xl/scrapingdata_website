@@ -147,56 +147,55 @@ export default function PopupList() {
     { label: "Name" },
     { label: "Device Type" },
     { label: "Type" },
-    { label: "status" },
-    { label: "Actions" },
     { label: "Created Date" },
     { label: "Updated Date" },
+    { label: "status" },
+    { label: "Actions" },
     { label: "Sites" },
   ];
 
   const rows = popups.map((popup) => {
-    const {_id,name,showOnDeviceType,contentType,isActive,site,createdAt,updatedAt}=popup
-    return{
+    const { _id, name, showOnDeviceType, contentType, isActive, site, createdAt, updatedAt } = popup;
+    return {
       _id,
-      checkedbox: <input
-           key={_id}
-           className="form-check-input"
-           type="checkbox"
-           checked={selectedPopups.includes(_id)}
-           onChange={() => handleCheckboxChange(_id)}
-         />,
-         name,
-         showOnDeviceType,
-         contentType,
-         status:isActive === true ? (
-               <span className="badge bg-success">Active</span>
-             ) : (
-               <span className="badge bg-danger">Inactive</span>
-             ),
-             action:<div key={_id}>
-                 <button onClick={() => navigate(`/edit-popup/${_id}`)} className="btn btn-primary  me-1">
-                   Edit
-                 </button>
-               </div>,
-                 Created: new Date(createdAt).toLocaleDateString('en-US', {
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric',
-                }),
-                updated: new Date(updatedAt).toLocaleDateString('en-US', {
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric',
-                }),
-
-             sites: `${site.name} (${site.host})`,
-
-
-        
-    }
-  }
-
-);
+      checkedbox: (
+        <input
+          key={_id}
+          className="form-check-input"
+          type="checkbox"
+          checked={selectedPopups.includes(_id)}
+          onChange={() => handleCheckboxChange(_id)}
+        />
+      ),
+      name,
+      deviceType: showOnDeviceType === "mobile" ? "Mobile" : showOnDeviceType === "desktop" ? "Desktop" : "All",
+      type: contentType === "guide" ? "Guide" : contentType === "casestudy" ? "Case Study" : "Basic",
+      Created: new Date(createdAt).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      }),
+      updated: new Date(updatedAt).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      }),
+      status:
+        isActive === true ? (
+          <span className="badge bg-success">Active</span>
+        ) : (
+          <span className="badge bg-danger">Inactive</span>
+        ),
+      action: (
+        <div key={_id}>
+          <button onClick={() => navigate(`/edit-popup/${_id}`)} className="btn btn-primary  me-1">
+            Edit
+          </button>
+        </div>
+      ),
+      sites: `${site.name} (${site.host})`,
+    };
+  });
 
   return (
     <div className="page-body">
