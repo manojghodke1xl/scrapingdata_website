@@ -1,24 +1,26 @@
 import { useState } from 'react';
-import Pagination from "./Pagination";
+import Pagination from './Pagination';
 
 const TableHeader = ({ headers }) => (
   <thead>
     <tr>
       {headers.map((header, index) => (
-        <th key={index} className={header.className || ""}>
+        <th
+          key={`${header.label}-${index}`}
+          className={header.className || ''}
+        >
           {header.label}
         </th>
       ))}
-      <th />
     </tr>
   </thead>
 );
 
 const TableRow = ({ rowData }) => (
-  <tr>
-    {rowData.map((data, index) => (
-      <td key={index}>{data}</td>
-    ))}
+  <tr key={rowData._id}>
+    {Object.entries(rowData).map(([key, value]) =>
+      key !== '_id' ? <td key={key}>{value}</td> : null
+    )}
   </tr>
 );
 
@@ -38,12 +40,12 @@ const Table = ({
   totalCount,
   actions,
 }) => {
-  const [isOptionSelected, setIsOptionSelected] = useState(false); // Track option selection
+  const [isOptionSelected, setIsOptionSelected] = useState(false);
 
   const handleSearchKeyChange = (e) => {
     const value = e.target.value;
     setSearchKey(value);
-    setIsOptionSelected(value !== ""); // Disable search input if an option is selected
+    setIsOptionSelected(value !== '');
   };
 
   return (
@@ -71,10 +73,16 @@ const Table = ({
                     <>
                       Site
                       <div className="mx-2 d-inline-block">
-                        <select className="form-select form-control-sm" onChange={(e) => setSiteId(e.target.value)}>
-                          <option value={""}>All</option>
+                        <select
+                          className="form-select form-control-sm"
+                          onChange={(e) => setSiteId(e.target.value)}
+                        >
+                          <option value={''}>All</option>
                           {allsites.map((site) => (
-                            <option key={site._id} value={site._id}>
+                            <option
+                              key={site._id}
+                              value={site._id}
+                            >
                               {site.name}
                             </option>
                           ))}
@@ -84,10 +92,16 @@ const Table = ({
                   )}
                   Search:
                   <div className="ms-2 d-inline-block">
-                    <select className="form-select form-control-sm" onChange={handleSearchKeyChange}>
-                      <option value={""}>Select</option>
+                    <select
+                      className="form-select form-control-sm"
+                      onChange={handleSearchKeyChange}
+                    >
+                      <option value={''}>Select</option>
                       {searchAbleKeys.map((key, i) => (
-                        <option key={i} value={key.toLowerCase()}>
+                        <option
+                          key={i}
+                          value={key.toLowerCase()}
+                        >
                           {key}
                         </option>
                       ))}
@@ -106,7 +120,11 @@ const Table = ({
                         strokeLinejoin="round"
                         className="icon"
                       >
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path
+                          stroke="none"
+                          d="M0 0h24v24H0z"
+                          fill="none"
+                        />
                         <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
                         <path d="M21 21l-6 -6" />
                       </svg>
@@ -117,7 +135,7 @@ const Table = ({
                       placeholder="Search…"
                       aria-label="Search"
                       onChange={(e) => setSearchTerm(e.target.value)}
-                      disabled={!isOptionSelected} 
+                      disabled={!isOptionSelected}
                     />
                   </div>
                 </div>
@@ -127,17 +145,26 @@ const Table = ({
               <table className="table card-table table-vcenter text-nowrap datatable">
                 <TableHeader headers={headers} />
                 <tbody>
-                  {rows.map((row, index) => (
-                    <TableRow key={index} rowData={row} actions={actions} />
+                  {rows.map((row) => (
+                    <TableRow
+                      key={row._id}
+                      rowData={row}
+                      actions={actions}
+                    />
                   ))}
                 </tbody>
               </table>
             </div>
             <div className="card-footer d-flex align-items-center">
               <p className="m-0 text-secondary">
-                Showing {currentPage} of {totalPages} pages, total entries: {totalCount}
+                Showing {currentPage} of {totalPages} pages, total entries:{' '}
+                {totalCount}
               </p>
-              <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} />
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={onPageChange}
+              />
             </div>
           </div>
         </div>

@@ -30,11 +30,10 @@ export default function SmtpList() {
 
   const headers = [{ label: "Name" }, { label: "Host" }, { label: "Actions" }];
 
-  const rows = smtps.map((smtp) => [
+  const rows = smtps.map((smtp,index) => [
     smtp.name,
     smtp.host,
-
-    <button key={smtp._id} onClick={() => navigate(`/edit-smtp/${smtp._id}`)} className="btn btn-primary ">
+    <button key={index} onClick={() => navigate(`/edit-smtp/${smtp._id}`)} className="btn btn-primary ">
       Edit
     </button>,
   ]);

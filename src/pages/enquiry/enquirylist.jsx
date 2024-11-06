@@ -1,11 +1,11 @@
-import { useContext, useEffect, useState } from "react";
-import { GlobalContext } from "../../GlobalContext";
-import { useNavigate } from "react-router-dom";
-import Table from "../../comps/table";
-import ConfirmationModal from "../../comps/confirmation";
-import useSetTimeout from "../../Hooks/useDebounce";
-import useGetAllSites from "../../Hooks/useGetAllSites";
-import { deleteEnquiryApi } from "../../apis/enquiry-apis";
+import { useContext, useEffect, useState } from 'react';
+import { GlobalContext } from '../../GlobalContext';
+import { useNavigate } from 'react-router-dom';
+import Table from '../../comps/table';
+import ConfirmationModal from '../../comps/confirmation';
+import useSetTimeout from '../../Hooks/useDebounce';
+import useGetAllSites from '../../Hooks/useGetAllSites';
+import { deleteEnquiryApi } from '../../apis/enquiry-apis';
 
 export default function EnquiryList() {
   const { alert, setLoading } = useContext(GlobalContext);
@@ -16,43 +16,61 @@ export default function EnquiryList() {
   const [limit, setLimit] = useState(8);
   const [modalOpen, setModalOpen] = useState(false);
   const [totalCount, setTotalCount] = useState(0);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [searchKey, setSearchKey] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
+  const [searchKey, setSearchKey] = useState('');
   const [selectedEnquiries, setSelectedEnquiries] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
-  const [siteId, setSiteId] = useState("");
+  const [siteId, setSiteId] = useState('');
   const allsites = useGetAllSites();
 
-  const searchAbleKeys = ["Name", "Email", "Mobile", "Service", "Subject", "Site"];
+  const searchAbleKeys = [
+    'Name',
+    'Email',
+    'Mobile',
+    'Service',
+    'Subject',
+    'Site',
+  ];
 
-  const [err, data, setRefresh] = useSetTimeout("enquiries", page - 1, limit, searchTerm, searchKey, "", siteId);
+  const [err, data, setRefresh] = useSetTimeout(
+    'enquiries',
+    page - 1,
+    limit,
+    searchTerm,
+    searchKey,
+    '',
+    siteId
+  );
 
   useEffect(() => {
     if (data) {
       setEnquiries(data.enquiries);
       setTotalCount(data.count);
     } else if (err) {
-      alert({ type: "warning", text: err.message });
+      alert({ type: 'warning', text: err.message });
     }
   }, [data, err, alert]);
 
   const deleteSelectedEnquiries = async () => {
     if (!selectedEnquiries.length)
-      return alert({ type: "warning", text: "Please select at least one enquiry to delete." });
+      return alert({
+        type: 'warning',
+        text: 'Please select at least one enquiry to delete.',
+      });
 
     setLoading(true);
     try {
       const { status, data } = await deleteEnquiryApi(selectedEnquiries);
       if (status) {
-        alert({ type: "success", text: data.message });
+        alert({ type: 'success', text: data.message });
         setRefresh((r) => !r);
         setSelectedEnquiries([]);
         setSelectAll(false);
       } else {
-        alert({ type: "danger", text: data });
+        alert({ type: 'danger', text: data });
       }
     } catch (error) {
-      alert({ type: "danger", text: error.message });
+      alert({ type: 'danger', text: error.message });
     } finally {
       setLoading(false);
       setModalOpen(false);
@@ -90,39 +108,103 @@ export default function EnquiryList() {
 
   const headers = [
     {
-      label: <input className="form-check-input" type="checkbox" checked={selectAll} onChange={handleSelectAll} />,
+      label: (
+        <input
+          className="form-check-input"
+          type="checkbox"
+          checked={selectAll}
+          onChange={handleSelectAll}
+        />
+      ),
     },
-    { label: "Customer Name" },
-    { label: "Customer Email" },
-    { label: "Customer Mobile" },
-    { label: "Enquiry Service" },
-    { label: "Enquiry Subject" },
-    { label: "Enquiry Message" },
-    { label: "Site Name" },
-    { label: "Actions" },
+    { label: 'Customer Name' },
+    { label: 'Customer Email' },
+    { label: 'Customer Mobile' },
+    { label: 'Enquiry Service' },
+    { label: 'Enquiry Subject' },
+    { label: 'Enquiry Message' },
+    { label: 'Site' },
+    { label: 'Created Date' },
+    { label: 'Updated Date' },
+    { label: 'Actions' },
   ];
 
-  const rows = enquiries.map((enq) => [
-    <input
-      key={enq._id}
-      className="form-check-input"
-      type="checkbox"
-      checked={selectedEnquiries.includes(enq._id)}
-      onChange={() => handleCheckboxChange(enq._id)}
-    />,
-    enq.name,
-    enq.email,
-    (enq.ccode ?? "") + " " + (enq.mobile ?? ""),
-    enq.service,
-    enq.subject,
-    enq.message,
-    enq.site.name,
-    <div key={enq._id}>
-      <button onClick={() => navigate(`/enquiry/${enq._id}`)} className="btn btn-primary me-1">
-        View
-      </button>
-    </div>,
-  ]);
+  const rows = enquiries.map(
+    (enq) => {
+      const {
+        _id,
+        name,
+        email,
+        ccode,
+        mobile,
+        service,
+        subject,
+        message,
+        createdAt,
+        updatedAt,
+        site,
+      } = enq;
+      return {
+        _id,
+        checkbox: (
+          <input
+            key={_id}
+            className="form-check-input"
+            type="checkbox"
+            checked={selectedEnquiries.includes(_id)}
+            onChange={() => handleCheckboxChange(_id)}
+          />
+        ),
+        name,
+        email,
+        code: (ccode ?? '') + ' ' + (mobile ?? ''),
+        service,
+        subject,
+        message,
+        siteName:   `${site.name} (${site.host}) `,
+        created: new Date(createdAt).toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        }),
+        updated: new Date(updatedAt).toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        }),
+        action: (
+          <div key={_id}>
+            <button
+              onClick={() => navigate(`/enquiry/${_id}`)}
+              className="btn btn-primary me-1">
+              View
+            </button>
+          </div>
+        ),
+      };
+    }
+    // [
+    //   <input
+    //     key={enq._id}
+    //     className="form-check-input"
+    //     type="checkbox"
+    //     checked={selectedEnquiries.includes(enq._id)}
+    //     onChange={() => handleCheckboxChange(enq._id)}
+    //   />,
+    //   enq.name,
+    //   enq.email,
+    //   (enq.ccode ?? "") + " " + (enq.mobile ?? ""),
+    //   enq.service,
+    //   enq.subject,
+    //   enq.message,
+    //   enq.site.name,
+    //   <div key={enq._id}>
+    //     <button onClick={() => navigate(`/enquiry/${enq._id}`)} className="btn btn-primary me-1">
+    //       View
+    //     </button>
+    //   </div>,
+    // ]
+  );
 
   return (
     <div className="page-body">
@@ -132,11 +214,13 @@ export default function EnquiryList() {
             <h3 className="card-title">All Enquiries</h3>
             <div className="card-options">
               {selectedEnquiries.length ? (
-                <button onClick={() => setModalOpen(true)} className="btn btn-danger">
+                <button
+                  onClick={() => setModalOpen(true)}
+                  className="btn btn-danger">
                   Delete Selected
                 </button>
               ) : (
-                ""
+                ''
               )}
             </div>
           </div>
