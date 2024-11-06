@@ -14,6 +14,7 @@ export default function AddTestimonial() {
 
   const [errors, setErrors] = useState({});
   const [selectAll, setSelectAll] = useState(false);
+  const [selectAllCategories, setSelectAllCategories] = useState(false);
   const [testimonialDetails, setTestimonialDetails] = useState({
     name: "",
     desg: "",
@@ -121,7 +122,18 @@ export default function AddTestimonial() {
     setSelectAll(!selectAll);
   };
 
+  const handleSelectAllCategoriesChange = () => {
+    if (selectAllCategories) setTestimonialDetails((prev) => ({ ...prev, categories: [] }));
+    else
+      setTestimonialDetails((prev) => ({
+        ...prev,
+        categories: availableCategories.map((category) => category._id),
+      }));
+    setSelectAllCategories(!selectAllCategories);
+  };
+
   const isAllSelected = testimonialDetails.sites.length === availableSites.length;
+  const isAllCategoriesSelected = testimonialDetails.categories.length === availableCategories.length; // New check for categories
 
   return (
     <div className="page-body">
@@ -310,9 +322,21 @@ export default function AddTestimonial() {
                 </div>
                 {errors.sites && <div className="invalid-feedback mx-2 mb-2">{errors.sites}</div>}
               </div>
-
               <div className="mb-3">
-                <label className={!id ? "form-label required" : "form-label"}>Select Category</label>
+                <div className="d-flex justify-content-between mb-3">
+                  <label className={!id ? "form-label required mb-0 me-2" : "form-label mb-0 me-2"}>
+                    Select Category
+                  </label>
+                  <label className="form-check mb-0">
+                    <input
+                      type="checkbox"
+                      className="form-check-input me-2"
+                      checked={isAllCategoriesSelected}
+                      onChange={handleSelectAllCategoriesChange}
+                    />
+                    <span className="form-check-label">Select All</span>
+                  </label>
+                </div>
                 <div className={`form-multi-check-box ${errors.categories ? "is-invalid" : ""}`}>
                   {availableCategories.map((category) => (
                     <label key={category._id} className="form-check">
