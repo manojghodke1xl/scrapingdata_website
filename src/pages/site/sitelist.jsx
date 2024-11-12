@@ -105,29 +105,52 @@ export default function SiteList() {
     { label: "Website Name" },
     { label: "Web Address" },
     { label: "Status" },
+    { label: "Created Date" },
+    { label: "Updated Date" },
     { label: "Actions" },
   ];
 
-  const rows = sites.map((site) => [
-    <input
-      key={site._id}
-      className="form-check-input"
-      type="checkbox"
-      checked={selectedSites.includes(site._id)}
-      onChange={() => handleCheckboxChange(site._id)}
-    />,
-    site._id,
-    site.name,
-    site.host,
-    site.isActive === true ? (
-      <span className="badge bg-success">Active</span>
-    ) : (
-      <span className="badge bg-danger">Inactive</span>
-    ),
-    <button key={site._id} onClick={() => navigate(`/edit-site/${site._id}`)} className="btn btn-primary">
-      Edit
-    </button>,
-  ]);
+  const rows = sites.map((site) => {
+    const { _id, name, host, isActive, createdAt, updatedAt } = site;
+
+    return {
+      _id,
+      checkedbox: (
+        <input
+          key={site._id}
+          className="form-check-input"
+          type="checkbox"
+          checked={selectedSites.includes(site._id)}
+          onChange={() => handleCheckboxChange(site._id)}
+        />
+      ),
+      keys: _id,
+      name,
+      host,
+      status:
+        isActive === true ? (
+          <span className="badge bg-success">Active</span>
+        ) : (
+          <span className="badge bg-danger">Inactive</span>
+        ),
+      Created: new Date(createdAt).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      }),
+      updated: new Date(updatedAt).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      }),
+
+      action: (
+        <button key={site._id} onClick={() => navigate(`/edit-site/${site._id}`)} className="btn btn-primary">
+          Edit
+        </button>
+      ),
+    };
+  });
 
   return (
     <div className="page-body">

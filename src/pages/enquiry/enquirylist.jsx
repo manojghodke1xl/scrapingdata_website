@@ -38,7 +38,10 @@ export default function EnquiryList() {
 
   const deleteSelectedEnquiries = async () => {
     if (!selectedEnquiries.length)
-      return alert({ type: "warning", text: "Please select at least one enquiry to delete." });
+      return alert({
+        type: "warning",
+        text: "Please select at least one enquiry to delete.",
+      });
 
     setLoading(true);
     try {
@@ -98,31 +101,51 @@ export default function EnquiryList() {
     { label: "Enquiry Service" },
     { label: "Enquiry Subject" },
     { label: "Enquiry Message" },
-    { label: "Site Name" },
+    { label: "Site" },
+    { label: "Created Date" },
+    { label: "Updated Date" },
     { label: "Actions" },
   ];
 
-  const rows = enquiries.map((enq) => [
-    <input
-      key={enq._id}
-      className="form-check-input"
-      type="checkbox"
-      checked={selectedEnquiries.includes(enq._id)}
-      onChange={() => handleCheckboxChange(enq._id)}
-    />,
-    enq.name,
-    enq.email,
-    (enq.ccode ?? "") + " " + (enq.mobile ?? ""),
-    enq.service,
-    enq.subject,
-    enq.message,
-    enq.site.name,
-    <div key={enq._id}>
-      <button onClick={() => navigate(`/enquiry/${enq._id}`)} className="btn btn-primary me-1">
-        View
-      </button>
-    </div>,
-  ]);
+  const rows = enquiries.map((enq) => {
+    const { _id, name, email, ccode, mobile, service, subject, message, createdAt, updatedAt, site } = enq;
+    return {
+      _id,
+      checkbox: (
+        <input
+          key={_id}
+          className="form-check-input"
+          type="checkbox"
+          checked={selectedEnquiries.includes(_id)}
+          onChange={() => handleCheckboxChange(_id)}
+        />
+      ),
+      name,
+      email,
+      code: (ccode ?? "") + " " + (mobile ?? ""),
+      service,
+      subject,
+      message,
+      siteName: `${site.name} (${site.host}) `,
+      created: new Date(createdAt).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      }),
+      updated: new Date(updatedAt).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      }),
+      action: (
+        <div key={_id}>
+          <button onClick={() => navigate(`/enquiry/${_id}`)} className="btn btn-primary me-1">
+            View
+          </button>
+        </div>
+      ),
+    };
+  });
 
   return (
     <div className="page-body">

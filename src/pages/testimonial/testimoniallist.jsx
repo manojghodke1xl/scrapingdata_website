@@ -161,27 +161,33 @@ export default function TestimonialList() {
     { label: "Sites" },
   ];
 
-  const rows = testimonials.map((testimonial) => [
-    <input
-      key={testimonial._id}
-      className="form-check-input"
-      type="checkbox"
-      checked={selectedTestimonials.includes(testimonial._id)}
-      onChange={() => handleCheckboxChange(testimonial._id)}
-    />,
-    testimonial.name,
-    testimonial.isActive === true ? (
-      <span className="badge bg-success">Active</span>
-    ) : (
-      <span className="badge bg-danger">Inactive</span>
-    ),
-    <div key={testimonial._id}>
-      <button onClick={() => navigate(`/edit-testimonial/${testimonial._id}`)} className="btn btn-primary me-1">
-        Edit
-      </button>
-    </div>,
-    testimonial.sites.map((s) => `${s.name} (${s.host})`).join(", "),
-  ]);
+  const rows = testimonials.map((testimonial) => {
+    const { _id, name, isActive, sites } = testimonial;
+    return {
+      _id,
+      checkedbox: (
+        <input
+          key={_id}
+          className="form-check-input"
+          type="checkbox"
+          checked={selectedTestimonials.includes(_id)}
+          onChange={() => handleCheckboxChange(_id)}
+        />
+      ),
+      name,
+      status: isActive ? (
+        <span className="badge bg-success">Active</span>
+      ) : (
+        <span className="badge bg-danger">Inactive</span>
+      ),
+      actions: (
+        <button key={_id} onClick={() => navigate(`/edit-testimonial/${_id}`)} className="btn btn-primary me-1">
+          Edit
+        </button>
+      ),
+      sites: sites.map((s) => `${s.name} (${s.host})`).join(", "),
+    };
+  });
 
   return (
     <div className="page-body">

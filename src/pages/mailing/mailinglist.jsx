@@ -37,7 +37,11 @@ export default function MailingList() {
   }, [data, err, alert]);
 
   const deleteMailingList = async () => {
-    if (!selectedLists.length) return alert({ type: "warning", text: "Please select at least one List to delete." });
+    if (!selectedLists.length)
+      return alert({
+        type: "warning",
+        text: "Please select at least one List to delete.",
+      });
 
     setLoading(true);
     try {
@@ -93,26 +97,47 @@ export default function MailingList() {
       label: <input className="form-check-input" type="checkbox" checked={selectAll} onChange={handleSelectAll} />,
     },
     { label: "Customer Email" },
-    { label: "Site Name" },
+    { label: "Site" },
+    { label: "Created Date" },
+    { label: "Updated Date" },
     { label: "Actions" },
   ];
 
-  const rows = lists.map((lst) => [
-    <input
-      key={lst._id}
-      className="form-check-input"
-      type="checkbox"
-      checked={selectedLists.includes(lst._id)}
-      onChange={() => handleCheckboxChange(lst._id)}
-    />,
-    lst.email,
-    lst.site.name,
-    <div key={lst._id}>
-      <button onClick={() => navigate(`/mailing/${lst._id}`)} className="btn btn-primary me-1">
-        View
-      </button>
-    </div>,
-  ]);
+  const rows = lists.map((lst) => {
+    const { _id, email, site, createdAt, updatedAt } = lst;
+    return {
+      _id,
+      checkedbox: (
+        <input
+          key={lst._id}
+          className="form-check-input"
+          type="checkbox"
+          checked={selectedLists.includes(lst._id)}
+          onChange={() => handleCheckboxChange(lst._id)}
+        />
+      ),
+      email,
+      siteName: `${site.name} (${site.host})`,
+
+      created: new Date(createdAt).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      }),
+      udpated: new Date(updatedAt).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      }),
+      action: (
+        <div key={lst._id}>
+          <button onClick={() => navigate(`/mailing/${lst._id}`)} className="btn btn-primary me-1">
+            View
+          </button>
+        </div>
+      ),
+    };
+  });
 
   return (
     <div className="page-body">

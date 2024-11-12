@@ -121,32 +121,53 @@ export default function GuideList() {
       label: <input className="form-check-input " type="checkbox" checked={selectAll} onChange={handleSelectAll} />,
     },
     { label: "Title" },
+    { label: "Created Date" },
+    { label: "Updated Date" },
     { label: "Status" },
     { label: "Actions" },
     { label: "Sites" },
   ];
 
-  const rows = guides.map((guide) => [
-    <input
-      key={guide._id}
-      className="form-check-input"
-      type="checkbox"
-      checked={selectedGuides.includes(guide._id)}
-      onChange={() => handleCheckboxChange(guide._id)}
-    />,
-    guide.title,
-    guide.isActive === true ? (
-      <span className="badge bg-success">Active</span>
-    ) : (
-      <span className="badge bg-danger">Inactive</span>
-    ),
-    <div key={guide._id}>
-      <button onClick={() => navigate(`/edit-guide/${guide._id}`)} className="btn btn-primary me-1">
-        Edit
-      </button>
-    </div>,
-    guide.sites.map((s) => `${s.name} (${s.host})`).join(", "),
-  ]);
+  const rows = guides.map((guide) => {
+    const { _id, title, isActive, sites, createdAt, updatedAt } = guide;
+    return {
+      _id,
+      checkedbox: (
+        <input
+          key={guide._id}
+          className="form-check-input"
+          type="checkbox"
+          checked={selectedGuides.includes(guide._id)}
+          onChange={() => handleCheckboxChange(guide._id)}
+        />
+      ),
+      title,
+      created: new Date(createdAt).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      }),
+      updated: new Date(updatedAt).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      }),
+      status:
+        isActive === true ? (
+          <span className="badge bg-success">Active</span>
+        ) : (
+          <span className="badge bg-danger">Inactive</span>
+        ),
+      action: (
+        <div key={guide._id}>
+          <button onClick={() => navigate(`/edit-guide/${guide._id}`)} className="btn btn-primary me-1">
+            Edit
+          </button>
+        </div>
+      ),
+      siteName: sites.map((s) => `${s.name} (${s.host})`).join(", "),
+    };
+  });
 
   return (
     <div className="page-body">

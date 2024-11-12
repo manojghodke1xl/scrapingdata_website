@@ -1,24 +1,21 @@
-import { useState } from 'react';
+import { useState } from "react";
 import Pagination from "./Pagination";
 
 const TableHeader = ({ headers }) => (
   <thead>
     <tr>
       {headers.map((header, index) => (
-        <th key={index} className={header.className || ""}>
+        <th key={`${header.label}-${index}`} className={header.className || ""}>
           {header.label}
         </th>
       ))}
-      <th />
     </tr>
   </thead>
 );
 
 const TableRow = ({ rowData }) => (
-  <tr>
-    {rowData.map((data, index) => (
-      <td key={index}>{data}</td>
-    ))}
+  <tr key={rowData._id}>
+    {Object.entries(rowData).map(([key, value]) => (key !== "_id" ? <td key={key}>{value}</td> : null))}
   </tr>
 );
 
@@ -38,12 +35,12 @@ const Table = ({
   totalCount,
   actions,
 }) => {
-  const [isOptionSelected, setIsOptionSelected] = useState(false); // Track option selection
+  const [isOptionSelected, setIsOptionSelected] = useState(false);
 
   const handleSearchKeyChange = (e) => {
     const value = e.target.value;
     setSearchKey(value);
-    setIsOptionSelected(value !== ""); // Disable search input if an option is selected
+    setIsOptionSelected(value !== "");
   };
 
   return (
@@ -117,7 +114,7 @@ const Table = ({
                       placeholder="Search…"
                       aria-label="Search"
                       onChange={(e) => setSearchTerm(e.target.value)}
-                      disabled={!isOptionSelected} 
+                      disabled={!isOptionSelected}
                     />
                   </div>
                 </div>
@@ -127,8 +124,8 @@ const Table = ({
               <table className="table card-table table-vcenter text-nowrap datatable">
                 <TableHeader headers={headers} />
                 <tbody>
-                  {rows.map((row, index) => (
-                    <TableRow key={index} rowData={row} actions={actions} />
+                  {rows.map((row) => (
+                    <TableRow key={row._id} rowData={row} actions={actions} />
                   ))}
                 </tbody>
               </table>

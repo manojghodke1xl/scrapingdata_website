@@ -124,32 +124,54 @@ export default function CaseStudyList() {
       label: <input className="form-check-input " type="checkbox" checked={selectAll} onChange={handleSelectAll} />,
     },
     { label: "Title" },
+    { label: "Created Date" },
+    { label: "Updated Date" },
     { label: "Status" },
     { label: "Actions" },
     { label: "Sites" },
   ];
 
-  const rows = caseStudies.map((casestudy) => [
-    <input
-      key={casestudy._id}
-      className="form-check-input"
-      type="checkbox"
-      checked={selectedCaseStudies.includes(casestudy._id)}
-      onChange={() => handleCheckboxChange(casestudy._id)}
-    />,
-    casestudy.title,
-    casestudy.isActive === true ? (
-      <span className="badge bg-success">Active</span>
-    ) : (
-      <span className="badge bg-danger">Inactive</span>
-    ),
-    <div key={casestudy._id}>
-      <button onClick={() => navigate(`/edit-casestudy/${casestudy._id}`)} className="btn btn-primary me-1">
-        Edit
-      </button>
-    </div>,
-    casestudy.sites.map((s) => `${s.name} (${s.host})`).join(", "),
-  ]);
+  const rows = caseStudies.map((casestudy) => {
+    const { _id, title, isActive, sites, createdAt, updatedAt } = casestudy;
+    return {
+      _id,
+      checkedBox: (
+        <input
+          key={_id}
+          className="form-check-input"
+          type="checkbox"
+          checked={selectedCaseStudies.includes(_id)}
+          onChange={() => handleCheckboxChange(_id)}
+        />
+      ),
+      title,
+      created: new Date(createdAt).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      }),
+      updated: new Date(updatedAt).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      }),
+      status:
+        isActive === true ? (
+          <span className="badge bg-success">Active</span>
+        ) : (
+          <span className="badge bg-danger">Inactive</span>
+        ),
+
+      action: (
+        <div key={_id}>
+          <button onClick={() => navigate(`/edit-casestudy/${_id}`)} className="btn btn-primary me-1">
+            Edit
+          </button>
+        </div>
+      ),
+      sites: sites.map((s) => `${s.name} (${s.host})`).join(", "),
+    };
+  });
 
   return (
     <div className="page-body">
