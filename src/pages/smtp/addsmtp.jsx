@@ -191,7 +191,7 @@ export default function AddSmtp() {
                   Password
                 </label>
                 <input
-                  type="password"
+                  type="text"
                   name="password"
                   className={`form-control ${
                     errors.password ? "is-invalid" : ""
