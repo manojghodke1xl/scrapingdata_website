@@ -18,12 +18,12 @@ export default function AddSmtp() {
     name: "",
     host: "",
     port: "",
-    secure: "",
+    secure: "None",
     user: "",
     password: "",
   });
 
-  const smtpSecure = ["SSL", "TLS", "STARTTLS"];
+  const smtpSecure = ["None", "SSL", "TLS", "STARTTLS"];
 
   useEffect(() => {
     if (id) {
@@ -46,8 +46,6 @@ export default function AddSmtp() {
     const newErrors = {};
     if (!smtpDetails.name) newErrors.name = "Name is required";
     if (!smtpDetails.host) newErrors.host = "Host is required";
-    if (smtpDetails.secure === "")
-      newErrors.secure = "Security protocol is required.";
     if (!smtpDetails.port) newErrors.port = "Port is required";
     if (!smtpDetails.user) newErrors.user = "User is required";
     if (!smtpDetails.password && !id)
@@ -160,16 +158,12 @@ export default function AddSmtp() {
                     setSmtpDetails((d) => ({ ...d, secure: e.target.value }));
                   }}
                 >
-                  <option value="">Select</option>
                   {smtpSecure.map((s, i) => (
                     <option key={i} value={s}>
                       {s}
                     </option>
                   ))}
                 </select>
-                {errors.secure && (
-                  <div className="invalid-feedback">{errors.secure}</div>
-                )}
               </div>
 
               <div className="mb-3">
