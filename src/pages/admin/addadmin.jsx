@@ -216,7 +216,7 @@ export default function AddAdmin() {
               )}
               <div className="form-footer">
                 <button type="submit" className="btn btn-primary w-100">
-                  {id ? "Update Admin" : "Add Admin"}
+                  {id ? "Update" : "Add"}
                 </button>
               </div>
             </form>

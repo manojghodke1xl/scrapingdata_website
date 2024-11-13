@@ -1,7 +1,11 @@
 import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { GlobalContext } from "../../GlobalContext";
-import { addCategoryApi, getCategoryByIdApi, updateCategoryApi } from "../../apis/category-apis";
+import {
+  addCategoryApi,
+  getCategoryByIdApi,
+  updateCategoryApi,
+} from "../../apis/category-apis";
 
 export default function AddCategory() {
   const navigate = useNavigate();
@@ -45,7 +49,9 @@ export default function AddCategory() {
     setLoading(true);
     try {
       const name = { name: categoryName };
-      const { status, data } = await (id ? updateCategoryApi(id, name) : addCategoryApi(name));
+      const { status, data } = await (id
+        ? updateCategoryApi(id, name)
+        : addCategoryApi(name));
       console.log(data);
       if (status) {
         alert({ type: "success", text: data.message });
@@ -65,10 +71,14 @@ export default function AddCategory() {
       <div className="container container-tight py-4">
         <div className="card card-md">
           <div className="card-body">
-            <h2 className="h2 text-center mb-4">{id ? "Edit Category" : "Add Category"}</h2>
+            <h2 className="h2 text-center mb-4">
+              {id ? "Edit Category" : "Add Category"}
+            </h2>
             <form onSubmit={handleSubmit}>
               <div className="mb-3">
-                <label className={!id ? "form-label required" : "form-label "}>Category Name</label>
+                <label className={!id ? "form-label required" : "form-label "}>
+                  Category Name
+                </label>
                 <input
                   type="text"
                   name="name"
@@ -77,14 +87,17 @@ export default function AddCategory() {
                   value={categoryName}
                   onChange={(e) => {
                     setCategoryName(e.target.value);
-                    if (errors.name) setErrors((prev) => ({ ...prev, name: "" }));
+                    if (errors.name)
+                      setErrors((prev) => ({ ...prev, name: "" }));
                   }}
                 />
-                {errors.name && <div className="invalid-feedback mt-2">{errors.name}</div>}
+                {errors.name && (
+                  <div className="invalid-feedback mt-2">{errors.name}</div>
+                )}
               </div>
               <div className="form-footer">
                 <button type="submit" className="btn btn-primary w-100">
-                  {id ? "Update Category" : "Add Category"}
+                  {id ? "Update" : "Add"}
                 </button>
               </div>
             </form>
