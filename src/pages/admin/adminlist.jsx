@@ -1,10 +1,11 @@
-import { useContext, useEffect, useLayoutEffect, useState } from "react";
-import { GlobalContext } from "../../GlobalContext";
-import { useNavigate } from "react-router-dom";
-import Table from "../../comps/table";
-import useSetTimeout from "../../Hooks/useDebounce";
-import useGetAllSites from "../../Hooks/useGetAllSites";
-import { updateAdminStatusApi } from "../../apis/admin-apis";
+import { useContext, useEffect, useLayoutEffect, useState } from 'react';
+import { GlobalContext } from '../../GlobalContext';
+import { useNavigate } from 'react-router-dom';
+import Table from '../../comps/table';
+import useSetTimeout from '../../Hooks/useDebounce';
+import useGetAllSites from '../../Hooks/useGetAllSites';
+import { updateAdminStatusApi } from '../../apis/admin-apis';
+import Addnote from '../../comps/addnote';
 
 export default function AdminList() {
   const navigate = useNavigate();
@@ -14,27 +15,27 @@ export default function AdminList() {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(8);
   const [totalCount, setTotalCount] = useState(0);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [searchKey, setSearchKey] = useState("");
-  const [statusFilter, setStatusFilter] = useState("");
-  const [statusSelect, setStatusSelect] = useState("");
-  const [siteId, setSiteId] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
+  const [searchKey, setSearchKey] = useState('');
+  const [statusFilter, setStatusFilter] = useState('');
+  const [statusSelect, setStatusSelect] = useState('');
+  const [siteId, setSiteId] = useState('');
   const [selectedAdmins, setSelectedAdmins] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
   const allsites = useGetAllSites();
 
-  const searchAbleKeys = ["Name", "Email"];
-  const filter = ["Active", "Inactive"];
-  const Status = ["Active", "Block"];
+  const searchAbleKeys = ['Name', 'Email'];
+  const filter = ['Active', 'Inactive'];
+  const Status = ['Active', 'Block'];
 
-  const [err, data, setRefresh] = useSetTimeout("admins", page - 1, limit, searchTerm, searchKey, statusFilter, siteId);
+  const [err, data, setRefresh] = useSetTimeout('admins', page - 1, limit, searchTerm, searchKey, statusFilter, siteId);
 
   useEffect(() => {
     if (data) {
       setAdmins(data.admins);
       setTotalCount(data.count);
     } else if (err) {
-      alert({ type: "warning", text: err.message });
+      alert({ type: 'warning', text: err.message });
     }
   }, [data, err, alert]);
 
@@ -44,23 +45,23 @@ export default function AdminList() {
       const { status, data } = await updateAdminStatusApi(selectedAdmins, userStatus);
 
       if (status) {
-        alert({ type: "success", text: data.message });
+        alert({ type: 'success', text: data.message });
         setRefresh((r) => !r);
         setSelectedAdmins([]);
         setSelectAll(false);
-        setStatusSelect("");
+        setStatusSelect('');
       } else {
-        alert({ type: "danger", text: data });
+        alert({ type: 'danger', text: data });
       }
     } catch (error) {
-      alert({ type: "danger", text: error.message });
+      alert({ type: 'danger', text: error.message });
     } finally {
       setLoading(false);
     }
   };
 
   useLayoutEffect(() => {
-    if (!auth.isSuperAdmin) navigate("/dashboard");
+    if (!auth.isSuperAdmin) navigate('/dashboard');
   }, [auth, navigate]);
 
   const handleCheckboxChange = (adminId) => {
@@ -68,7 +69,7 @@ export default function AdminList() {
       let updatedSelected;
       if (prevSelected.includes(adminId)) {
         updatedSelected = prevSelected.filter((id) => id !== adminId);
-        setStatusSelect("");
+        setStatusSelect('');
       } else {
         updatedSelected = [...prevSelected, adminId];
       }
@@ -91,15 +92,22 @@ export default function AdminList() {
 
   const headers = [
     {
-      label: <input className="form-check-input " type="checkbox" checked={selectAll} onChange={handleSelectAll} />,
+      label: (
+        <input
+          className="form-check-input "
+          type="checkbox"
+          checked={selectAll}
+          onChange={handleSelectAll}
+        />
+      ),
     },
-    { label: "Admin Name" },
-    { label: "Admin Email" },
-    { label: "Created Date" },
-    { label: "Updated Date" },
-    { label: "Status" },
-    { label: "Actions" },
-    { label: "Sites" },
+    { label: 'Admin Name' },
+    { label: 'Admin Email' },
+    { label: 'Created Date' },
+    { label: 'Updated Date' },
+    { label: 'Status' },
+    { label: 'Actions' },
+    { label: 'Sites' },
   ];
 
   const rows = admins.map((admin) => {
@@ -117,15 +125,15 @@ export default function AdminList() {
       ) : null,
       name,
       email,
-      created: new Date(createdAt).toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
+      created: new Date(createdAt).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
       }),
-      updated: new Date(updatedAt).toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
+      updated: new Date(updatedAt).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
       }),
       status:
         isBlocked === true ? (
@@ -134,13 +142,16 @@ export default function AdminList() {
           <span className="badge bg-success">Active</span>
         ),
       actions: (
-        <button key={_id} onClick={() => navigate(`/edit-admin/${_id}`)} className="btn btn-primary ">
+        <button
+          key={_id}
+          onClick={() => navigate(`/edit-admin/${_id}`)}
+          className="btn btn-primary ">
           Edit
         </button>
       ),
       sites: isSuperAdmin
-        ? allsites.map((s) => `${s.name} (${s.host})`).join(", ")
-        : admin.sites.map((s) => `${s.name} (${s.host})`).join(", "),
+        ? allsites.map((s) => `${s.name} (${s.host})`).join(', ')
+        : admin.sites.map((s) => `${s.name} (${s.host})`).join(', '),
     };
   });
 
@@ -154,10 +165,14 @@ export default function AdminList() {
               <div className="text-secondary">
                 Filter
                 <div className="mx-2 d-inline-block">
-                  <select className="form-select form-control-sm" onChange={(e) => setStatusFilter(e.target.value)}>
-                    <option value={""}>All</option>
+                  <select
+                    className="form-select form-control-sm"
+                    onChange={(e) => setStatusFilter(e.target.value)}>
+                    <option value={''}>All</option>
                     {filter.map((key, i) => (
-                      <option key={i} value={key.toLowerCase()}>
+                      <option
+                        key={i}
+                        value={key.toLowerCase()}>
                         {key}
                       </option>
                     ))}
@@ -169,30 +184,40 @@ export default function AdminList() {
                   <div className="text-secondary">
                     Status
                     <div className="mx-2 d-inline-block">
-                      <select className="form-select form-control-sm" onChange={(e) => setStatusSelect(e.target.value)}>
+                      <select
+                        className="form-select form-control-sm"
+                        onChange={(e) => setStatusSelect(e.target.value)}>
                         <option value="">Select</option>
                         {Status.map((key, i) => (
-                          <option key={i} value={key.toLowerCase()}>
+                          <option
+                            key={i}
+                            value={key.toLowerCase()}>
                             {key}
                           </option>
                         ))}
                       </select>
                     </div>
                   </div>
-                  {statusSelect === "active" && (
-                    <button onClick={() => updateSelectedAdminsStatus(false)} className="btn btn-success mx-2">
+                  {statusSelect === 'active' && (
+                    <button
+                      onClick={() => updateSelectedAdminsStatus(false)}
+                      className="btn btn-success mx-2">
                       Apply
                     </button>
                   )}
-                  {statusSelect === "block" && (
-                    <button onClick={() => updateSelectedAdminsStatus(true)} className="btn btn-danger mx-2">
+                  {statusSelect === 'block' && (
+                    <button
+                      onClick={() => updateSelectedAdminsStatus(true)}
+                      className="btn btn-danger mx-2">
                       Apply
                     </button>
                   )}
                 </>
               ) : null}
 
-              <button onClick={() => navigate("/add-admin")} className="btn btn-primary ">
+              <button
+                onClick={() => navigate('/add-admin')}
+                className="btn btn-primary ">
                 Add Admin
               </button>
             </div>
@@ -217,6 +242,9 @@ export default function AdminList() {
           </div>
         </div>
       </div>
+      <Addnote
+        des={`This is the All Admin List Page. Here, there is a filter dropdown that filters details by status, allowing you to view all Admins and their sub-Admins. The table includes the name of the Admin, Admin email ID, created date, updated date, status indicating whether the Admin or sub-Admin is active or inactive, the site assigned to the sub-Admin, and a Edit button to Editing specific Admin details. There is also a site dropdown that lists all website names; selecting a specific website will show only the details related to that website in the table. Additionally, the table has a checkbox for changing the status of a particular sub-Admin or multiple sub-Admins. The checkbox is not available for Admins, as their status cannot be changed. There is a search dropdown, and when you select an option, you can search the table based on the selected option. `}
+      />
     </div>
   );
 }
