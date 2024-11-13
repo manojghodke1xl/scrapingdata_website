@@ -168,7 +168,7 @@ export default function AddSite() {
                       setEmailInput(e.target.value);
                     }}
                   />
-                  <button className="btn btn-primary mt-2" onClick={() => validateAndAddEmail()}>
+                  <button type="button" className="btn btn-primary mt-2" onClick={() => validateAndAddEmail()}>
                     Add Email
                   </button>
                   {errors.forwardEmails && (

@@ -28,7 +28,7 @@ export default function AddSmtp() {
         const { status, data } = await getSmtpByIdApi(id);
         if (status) {
           const { ...rest } = data.smtp;
-          setSmtpDetails({ ...rest, password: "" });
+          setSmtpDetails({ ...rest});
         } else {
           alert({ type: "warning", text: data });
         }

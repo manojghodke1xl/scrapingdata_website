@@ -275,8 +275,8 @@ export default function TestimonialList() {
       <DuplicateModal
         allsites={allsites}
         isOpen={siteModal}
-        onClose={() => setSiteModal(false)}
-        onConfirm={() => updateTestimonialSites()}
+        onClose={setSiteModal}
+        onConfirm={updateTestimonialSites}
         title="Update Sites"
         action={["Add", "Remove"]}
         confirmText="Update"
