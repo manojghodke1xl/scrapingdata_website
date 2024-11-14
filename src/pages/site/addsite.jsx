@@ -2,7 +2,11 @@ import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { GlobalContext } from "../../GlobalContext";
 import { getSmtpsApi } from "../../apis/smtp-apis";
-import { addSiteApi, getSiteByIdApi, updateSiteApi } from "../../apis/site-apis";
+import {
+  addSiteApi,
+  getSiteByIdApi,
+  updateSiteApi,
+} from "../../apis/site-apis";
 
 export default function AddSite() {
   const navigate = useNavigate();
@@ -69,7 +73,9 @@ export default function AddSite() {
     if (!validate()) return;
     setLoading(true);
     try {
-      const { status, data } = await (id ? updateSiteApi(id, siteDetails) : addSiteApi(siteDetails));
+      const { status, data } = await (id
+        ? updateSiteApi(id, siteDetails)
+        : addSiteApi(siteDetails));
       if (status) {
         alert({ type: "success", text: data.message });
         navigate("/site-list");
@@ -97,7 +103,9 @@ export default function AddSite() {
   const removeEmail = (indexToRemove) => {
     setSiteDetails((prev) => ({
       ...prev,
-      forwardEmails: prev.forwardEmails.filter((_, index) => index !== indexToRemove),
+      forwardEmails: prev.forwardEmails.filter(
+        (_, index) => index !== indexToRemove
+      ),
     }));
   };
 
@@ -106,7 +114,9 @@ export default function AddSite() {
       <div className="container container-tight py-4">
         <div className="card card-md">
           <div className="card-body">
-            <h2 className="h2 text-center mb-4">{id ? "Edit site" : "Add site"}</h2>
+            <h2 className="h2 text-center mb-4">
+              {id ? "Edit site" : "Add site"}
+            </h2>
             <form onSubmit={handleDetails}>
               <div className="mb-3">
                 <label className="form-label required">Site Name</label>
@@ -118,10 +128,13 @@ export default function AddSite() {
                   value={siteDetails.name}
                   onChange={(e) => {
                     setSiteDetails((d) => ({ ...d, name: e.target.value }));
-                    if (errors.name) setErrors((prev) => ({ ...prev, name: "" }));
+                    if (errors.name)
+                      setErrors((prev) => ({ ...prev, name: "" }));
                   }}
                 />
-                {errors.name && <div className="invalid-feedback mt-2">{errors.name}</div>}
+                {errors.name && (
+                  <div className="invalid-feedback mt-2">{errors.name}</div>
+                )}
               </div>
               <div className="mb-3">
                 <label className="form-label required">Site Host</label>
@@ -133,10 +146,13 @@ export default function AddSite() {
                   value={siteDetails.host}
                   onChange={(e) => {
                     setSiteDetails((d) => ({ ...d, host: e.target.value }));
-                    if (errors.host) setErrors((prev) => ({ ...prev, host: "" }));
+                    if (errors.host)
+                      setErrors((prev) => ({ ...prev, host: "" }));
                   }}
                 />
-                {errors.host && <div className="invalid-feedback mt-2">{errors.host}</div>}
+                {errors.host && (
+                  <div className="invalid-feedback mt-2">{errors.host}</div>
+                )}
               </div>
               <div className="mb-3">
                 <label className="row">
@@ -148,7 +164,12 @@ export default function AddSite() {
                         type="checkbox"
                         name="forward"
                         checked={siteDetails.forward}
-                        onChange={() => setSiteDetails((prev) => ({ ...prev, forward: !prev.forward }))}
+                        onChange={() =>
+                          setSiteDetails((prev) => ({
+                            ...prev,
+                            forward: !prev.forward,
+                          }))
+                        }
                       />
                     </label>
                   </span>
@@ -160,19 +181,28 @@ export default function AddSite() {
                   <input
                     type="email"
                     name="email"
-                    className={`form-control ${errors.forwardEmails ? "is-invalid" : ""}`}
+                    className={`form-control ${
+                      errors.forwardEmails ? "is-invalid" : ""
+                    }`}
                     placeholder="Enter email"
                     value={emailInput}
                     onChange={(e) => {
-                      if (errors.forwardEmails) setErrors((prev) => ({ ...prev, forwardEmails: "" }));
+                      if (errors.forwardEmails)
+                        setErrors((prev) => ({ ...prev, forwardEmails: "" }));
                       setEmailInput(e.target.value);
                     }}
                   />
-                  <button className="btn btn-primary mt-2" onClick={() => validateAndAddEmail()}>
+                  <button
+                    type="button"
+                    className="btn btn-primary mt-2"
+                    onClick={validateAndAddEmail}
+                  >
                     Add Email
                   </button>
                   {errors.forwardEmails && (
-                    <div className="invalid-feedback mt-2">Please enter a valid email address.</div>
+                    <div className="invalid-feedback mt-2">
+                      Please enter a valid email address.
+                    </div>
                   )}
 
                   <ul className="list-group mt-3">
@@ -193,14 +223,17 @@ export default function AddSite() {
               )}
 
               <div className="mb-3">
-                <label className={id ? "form-label" : "form-label required"}>SMTP</label>
+                <label className={id ? "form-label" : "form-label required"}>
+                  SMTP
+                </label>
                 <select
                   name="smtp"
                   className={`form-select ${errors.smtp ? "is-invalid" : ""}`}
                   value={siteDetails.smtp}
                   onChange={(e) => {
                     setSiteDetails((d) => ({ ...d, smtp: e.target.value }));
-                    if (errors.smtp) setErrors((prev) => ({ ...prev, smtp: "" }));
+                    if (errors.smtp)
+                      setErrors((prev) => ({ ...prev, smtp: "" }));
                   }}
                 >
                   <option value={""}>Select</option>
@@ -210,7 +243,9 @@ export default function AddSite() {
                     </option>
                   ))}
                 </select>
-                {errors.smtp && <div className="invalid-feedback mt-2">{errors.smtp}</div>}
+                {errors.smtp && (
+                  <div className="invalid-feedback mt-2">{errors.smtp}</div>
+                )}
               </div>
 
               <div className="mb-3">
@@ -221,7 +256,12 @@ export default function AddSite() {
                   className="form-control"
                   placeholder="Webhook URL"
                   value={siteDetails.webhookUrl}
-                  onChange={(e) => setSiteDetails((d) => ({ ...d, webhookUrl: e.target.value }))}
+                  onChange={(e) =>
+                    setSiteDetails((d) => ({
+                      ...d,
+                      webhookUrl: e.target.value,
+                    }))
+                  }
                 />
               </div>
 
@@ -235,7 +275,12 @@ export default function AddSite() {
                         type="checkbox"
                         name="isActive"
                         checked={siteDetails.isActive}
-                        onChange={() => setSiteDetails((prev) => ({ ...prev, isActive: !prev.isActive }))}
+                        onChange={() =>
+                          setSiteDetails((prev) => ({
+                            ...prev,
+                            isActive: !prev.isActive,
+                          }))
+                        }
                       />
                     </label>
                   </span>
@@ -244,7 +289,7 @@ export default function AddSite() {
 
               <div className="form-footer">
                 <button type="submit" className="btn btn-primary w-100">
-                  {id ? "Update" : "Create"}
+                  {id ? "Update" : "Add"}
                 </button>
               </div>
             </form>

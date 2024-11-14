@@ -2,6 +2,7 @@ import { useContext, useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { GlobalContext } from "../../GlobalContext";
 import { getEnquiryById } from "../../apis/enquiry-apis";
+import { formatDateTime } from "../../utils/function";
 
 const Enquirysingle = () => {
   const { id } = useParams();
@@ -35,18 +36,32 @@ const Enquirysingle = () => {
                   <div className="row g-3">
                     <div className="col-md-4">
                       <div className="form-label">Customer Name</div>
-                      <input type="text" className="form-control" defaultValue={enquiry?.name} readOnly />
+                      <input
+                        type="text"
+                        className="form-control"
+                        defaultValue={enquiry?.name}
+                        readOnly
+                      />
                     </div>
                     <div className="col-md-4">
                       <div className="form-label">Customer Email</div>
-                      <input type="text" className="form-control" defaultValue={enquiry?.email} readOnly />
+                      <input
+                        type="text"
+                        className="form-control"
+                        defaultValue={enquiry?.email}
+                        readOnly
+                      />
                     </div>
                     <div className="col-md-4">
                       <div className="form-label">Mobile Number</div>
                       <input
                         type="text"
                         className="form-control"
-                        defaultValue={!enquiry.ccode ? "" : enquiry?.ccode + " " + enquiry?.mobile}
+                        defaultValue={
+                          !enquiry.ccode
+                            ? ""
+                            : enquiry?.ccode + " " + enquiry?.mobile
+                        }
                         readOnly
                       />
                     </div>
@@ -54,28 +69,48 @@ const Enquirysingle = () => {
                   <div className="row g-3 mt-2">
                     <div className="col-md-4">
                       <div className="form-label">Customer service</div>
-                      <input type="text" className="form-control" defaultValue={enquiry?.service} readOnly />
+                      <input
+                        type="text"
+                        className="form-control"
+                        defaultValue={enquiry?.service}
+                        readOnly
+                      />
                     </div>
                     <div className="col-md-4">
                       <div className="form-label">Customer subject</div>
-                      <input type="text" className="form-control" defaultValue={enquiry?.subject} readOnly />
+                      <input
+                        type="text"
+                        className="form-control"
+                        defaultValue={enquiry?.subject}
+                        readOnly
+                      />
                     </div>
                     <div className="col-md-4">
                       <div className="form-label">Ip Address</div>
-                      <input type="text" className="form-control" defaultValue={enquiry?.ipaddress} readOnly />
+                      <input
+                        type="text"
+                        className="form-control"
+                        defaultValue={enquiry?.ipaddress}
+                        readOnly
+                      />
                     </div>
                   </div>
                   <div className="row g-3 mt-2">
                     <div className="col-md-4">
                       <div className="form-label">Site Name</div>
-                      <input type="text" className="form-control" defaultValue={enquiry?.site?.name} readOnly />
+                      <input
+                        type="text"
+                        className="form-control"
+                        defaultValue={enquiry?.site?.name}
+                        readOnly
+                      />
                     </div>
                     <div className="col-md-4">
                       <div className="form-label">Date Time</div>
                       <input
-                        type="datetime-local"
+                        type="text"
                         className="form-control"
-                        defaultValue={enquiry?.createdAt?.slice(0, 16)}
+                        value={formatDateTime(enquiry?.createdAt)}
                         readOnly
                       />
                     </div>
@@ -93,8 +128,8 @@ const Enquirysingle = () => {
                   </div>
                   <h3 className="card-title mt-3">Request header</h3>
                   <p className="card-subtitle">
-                    Request headers are key-value pairs sent by a client to provide information about the request or the
-                    client itself.
+                    Request headers are key-value pairs sent by a client to
+                    provide information about the request or the client itself.
                   </p>
                   <div>
                     <textarea
@@ -108,8 +143,8 @@ const Enquirysingle = () => {
                   </div>
                   <h3 className="card-title mt-3">User Agent String</h3>
                   <p className="card-subtitle">
-                    A User Agent String identifies the browser, version, and operating system of a client device to web
-                    servers.
+                    A User Agent String identifies the browser, version, and
+                    operating system of a client device to web servers.
                   </p>
                   <div>
                     <textarea

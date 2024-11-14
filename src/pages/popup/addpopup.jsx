@@ -534,7 +534,7 @@ export default function AddPopup() {
               </div>
               <div className="form-footer ">
                 <button type="submit" className="btn btn-primary d-block mx-auto">
-                  {id ? "Update Popup" : "Add Popup"}
+                  {id ? "Update" : "Add"}
                 </button>
               </div>
             </form>

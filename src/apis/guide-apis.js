@@ -5,19 +5,32 @@ export const getGuideById = async (id) => {
 };
 
 export const addGuideApi = async (userData) => {
-  return await postMethodCall(`${import.meta.env.VITE_API_URL}/guide`, userData);
+  return await postMethodCall(
+    `${import.meta.env.VITE_API_URL}/guide`,
+    userData
+  );
 };
 
 export const updateGuideApi = async (id, userData) => {
-  return await putMethodCall(`${import.meta.env.VITE_API_URL}/guide/${id}`, userData);
+  return await putMethodCall(
+    `${import.meta.env.VITE_API_URL}/guide/${id}`,
+    userData
+  );
 };
 
 export const updateGuideStatusApi = async (ids, isActive) => {
-  return await putMethodCall(`${import.meta.env.VITE_API_URL}/guide-status`, { ids, isActive });
+  return await putMethodCall(`${import.meta.env.VITE_API_URL}/guide-status`, {
+    ids,
+    isActive,
+  });
 };
 
 export const updateGuideSitesApi = async (gids, sids, action) => {
-  return await putMethodCall(`${import.meta.env.VITE_API_URL}/guide-sites`, { cids: gids, sids, action });
+  return await putMethodCall(`${import.meta.env.VITE_API_URL}/guide-sites`, {
+    gids,
+    sids,
+    action,
+  });
 };
 
 export const getAllGuidesApi = async () => {

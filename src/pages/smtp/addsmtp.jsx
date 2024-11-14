@@ -1,7 +1,11 @@
 import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { GlobalContext } from "../../GlobalContext";
-import { addSmtpApi, getSmtpByIdApi, updateSmtpApi } from "../../apis/smtp-apis";
+import {
+  addSmtpApi,
+  getSmtpByIdApi,
+  updateSmtpApi,
+} from "../../apis/smtp-apis";
 
 export default function AddSmtp() {
   const navigate = useNavigate();
@@ -14,12 +18,12 @@ export default function AddSmtp() {
     name: "",
     host: "",
     port: "",
-    secure: "",
+    secure: "None",
     user: "",
     password: "",
   });
 
-  const smtpSecure = ["SSL", "TLS", "STARTTLS"];
+  const smtpSecure = ["None", "SSL", "TLS", "STARTTLS"];
 
   useEffect(() => {
     if (id) {
@@ -28,7 +32,7 @@ export default function AddSmtp() {
         const { status, data } = await getSmtpByIdApi(id);
         if (status) {
           const { ...rest } = data.smtp;
-          setSmtpDetails({ ...rest, password: "" });
+          setSmtpDetails({ ...rest });
         } else {
           alert({ type: "warning", text: data });
         }
@@ -42,10 +46,10 @@ export default function AddSmtp() {
     const newErrors = {};
     if (!smtpDetails.name) newErrors.name = "Name is required";
     if (!smtpDetails.host) newErrors.host = "Host is required";
-    if (smtpDetails.secure === "") newErrors.secure = "Security protocol is required.";
     if (!smtpDetails.port) newErrors.port = "Port is required";
     if (!smtpDetails.user) newErrors.user = "User is required";
-    if (!smtpDetails.password && !id) newErrors.password = "Password is required";
+    if (!smtpDetails.password && !id)
+      newErrors.password = "Password is required";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -55,7 +59,9 @@ export default function AddSmtp() {
     if (!validate()) return;
     setLoading(true);
     try {
-      const { status, data } = await (id ? updateSmtpApi(id, smtpDetails) : addSmtpApi(smtpDetails));
+      const { status, data } = await (id
+        ? updateSmtpApi(id, smtpDetails)
+        : addSmtpApi(smtpDetails));
       if (status) {
         alert({ type: "success", text: data.message });
         navigate("/smtp-list");
@@ -74,10 +80,14 @@ export default function AddSmtp() {
       <div className="container container-tight py-4">
         <div className="card card-md">
           <div className="card-body">
-            <h2 className="h2 text-center mb-4">{!id ? "Add SMTP" : "Edit SMTP"}</h2>
+            <h2 className="h2 text-center mb-4">
+              {!id ? "Add SMTP" : "Edit SMTP"}
+            </h2>
             <form onSubmit={handleDetails}>
               <div className="mb-3">
-                <label className={!id ? "form-label required" : "form-label"}>Name</label>
+                <label className={!id ? "form-label required" : "form-label"}>
+                  Name
+                </label>
                 <input
                   type="text"
                   name="title"
@@ -86,13 +96,18 @@ export default function AddSmtp() {
                   value={smtpDetails.name}
                   onChange={(e) => {
                     setSmtpDetails((d) => ({ ...d, name: e.target.value }));
-                    if (errors.name) setErrors((prev) => ({ ...prev, name: "" }));
+                    if (errors.name)
+                      setErrors((prev) => ({ ...prev, name: "" }));
                   }}
                 />
-                {errors.name && <div className="invalid-feedback">{errors.name}</div>}
+                {errors.name && (
+                  <div className="invalid-feedback">{errors.name}</div>
+                )}
               </div>
               <div className="mb-3">
-                <label className={!id ? "form-label required" : "form-label"}>Host</label>
+                <label className={!id ? "form-label required" : "form-label"}>
+                  Host
+                </label>
                 <input
                   type="text"
                   name="title"
@@ -101,13 +116,18 @@ export default function AddSmtp() {
                   value={smtpDetails.host}
                   onChange={(e) => {
                     setSmtpDetails((d) => ({ ...d, host: e.target.value }));
-                    if (errors.host) setErrors((prev) => ({ ...prev, host: "" }));
+                    if (errors.host)
+                      setErrors((prev) => ({ ...prev, host: "" }));
                   }}
                 />
-                {errors.host && <div className="invalid-feedback">{errors.host}</div>}
+                {errors.host && (
+                  <div className="invalid-feedback">{errors.host}</div>
+                )}
               </div>
               <div className="mb-3">
-                <label className={!id ? "form-label required" : "form-label"}>Port</label>
+                <label className={!id ? "form-label required" : "form-label"}>
+                  Port
+                </label>
                 <input
                   type="text"
                   name="name"
@@ -116,34 +136,40 @@ export default function AddSmtp() {
                   value={smtpDetails.port}
                   onChange={(e) => {
                     setSmtpDetails((d) => ({ ...d, port: e.target.value }));
-                    if (errors.port) setErrors((prev) => ({ ...prev, port: "" }));
+                    if (errors.port)
+                      setErrors((prev) => ({ ...prev, port: "" }));
                   }}
                 />
-                {errors.port && <div className="invalid-feedback">{errors.port}</div>}
+                {errors.port && (
+                  <div className="invalid-feedback">{errors.port}</div>
+                )}
               </div>
               <div className="mb-3">
-                <label className={!id ? "form-label required" : "form-label"}>Security Protocol</label>
+                <label className={!id ? "form-label required" : "form-label"}>
+                  Security Protocol
+                </label>
                 <select
                   name="secure"
                   className={`form-select ${errors.secure ? "is-invalid" : ""}`}
                   value={smtpDetails.secure}
                   onChange={(e) => {
-                    if (errors.secure) setErrors((prev) => ({ ...prev, secure: "" }));
+                    if (errors.secure)
+                      setErrors((prev) => ({ ...prev, secure: "" }));
                     setSmtpDetails((d) => ({ ...d, secure: e.target.value }));
                   }}
                 >
-                  <option value="">Select</option>
                   {smtpSecure.map((s, i) => (
                     <option key={i} value={s}>
                       {s}
                     </option>
                   ))}
                 </select>
-                {errors.secure && <div className="invalid-feedback">{errors.secure}</div>}
               </div>
 
               <div className="mb-3">
-                <label className={!id ? "form-label required" : "form-label"}>User</label>
+                <label className={!id ? "form-label required" : "form-label"}>
+                  User
+                </label>
                 <input
                   type="text"
                   name="user"
@@ -152,30 +178,40 @@ export default function AddSmtp() {
                   value={smtpDetails.user}
                   onChange={(e) => {
                     setSmtpDetails((d) => ({ ...d, user: e.target.value }));
-                    if (errors.user) setErrors((prev) => ({ ...prev, user: "" }));
+                    if (errors.user)
+                      setErrors((prev) => ({ ...prev, user: "" }));
                   }}
                 />
-                {errors.user && <div className="invalid-feedback">{errors.user}</div>}
+                {errors.user && (
+                  <div className="invalid-feedback">{errors.user}</div>
+                )}
               </div>
               <div className="mb-3">
-                <label className={!id ? "form-label required" : "form-label"}>Password</label>
+                <label className={!id ? "form-label required" : "form-label"}>
+                  Password
+                </label>
                 <input
-                  type="password"
+                  type="text"
                   name="password"
-                  className={`form-control ${errors.password ? "is-invalid" : ""}`}
+                  className={`form-control ${
+                    errors.password ? "is-invalid" : ""
+                  }`}
                   placeholder="Password"
                   value={smtpDetails.password}
                   onChange={(e) => {
                     setSmtpDetails((d) => ({ ...d, password: e.target.value }));
-                    if (errors.password) setErrors((prev) => ({ ...prev, password: "" }));
+                    if (errors.password)
+                      setErrors((prev) => ({ ...prev, password: "" }));
                   }}
                 />
-                {errors.password && <div className="invalid-feedback">{errors.password}</div>}
+                {errors.password && (
+                  <div className="invalid-feedback">{errors.password}</div>
+                )}
               </div>
 
               <div className="form-footer">
                 <button type="submit" className="btn btn-primary w-100">
-                  {id ? "Edit Smtp" : "Add Smtp"}
+                  {id ? "Update" : "Add"}
                 </button>
               </div>
             </form>
