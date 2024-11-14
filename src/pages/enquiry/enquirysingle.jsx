@@ -2,6 +2,7 @@ import { useContext, useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { GlobalContext } from "../../GlobalContext";
 import { getEnquiryById } from "../../apis/enquiry-apis";
+import { formatDateTime } from "../../utils/function";
 
 const Enquirysingle = () => {
   const { id } = useParams();
@@ -109,22 +110,7 @@ const Enquirysingle = () => {
                       <input
                         type="text"
                         className="form-control"
-                        value={
-                          enquiry?.createdAt
-                            ? new Date(enquiry.createdAt)
-                                .toLocaleString("en-GB", {
-                                  day: "2-digit",
-                                  month: "2-digit",
-                                  year: "numeric",
-                                  hour: "2-digit",
-                                  minute: "2-digit",
-                                  second: "2-digit",
-                                  hour12: true,
-                                })
-                                .replace("am", "AM")
-                                .replace("pm", "PM")
-                            : ""
-                        }
+                        value={formatDateTime(enquiry?.createdAt)}
                         readOnly
                       />
                     </div>
