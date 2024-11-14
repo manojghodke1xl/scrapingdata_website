@@ -4,6 +4,10 @@ export const getSmtpsApi = async () => {
   return await getMethodCall(`${import.meta.env.VITE_API_URL}/smtps`);
 };
 
+export const getAllSmtpsApi = async () => {
+  return await getMethodCall(`${import.meta.env.VITE_API_URL}/allSmtps`);
+};
+
 export const getSmtpByIdApi = async (id) => {
   return await getMethodCall(`${import.meta.env.VITE_API_URL}/smtp/${id}`);
 };

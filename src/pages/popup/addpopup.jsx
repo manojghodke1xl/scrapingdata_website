@@ -142,7 +142,7 @@ export default function AddPopup() {
         isPdf,
         alert,
         setPopupDetails,
-        fieldName: 'image',
+        fieldName: "image",
       });
     }
   };
@@ -541,10 +541,8 @@ export default function AddPopup() {
                 </div>
               </div>
               <div className="form-footer ">
-                <button
-                  type="submit"
-                  className="btn btn-primary d-block mx-auto">
-                  {id ? 'Update Popup' : 'Add Popup'}
+                <button type="submit" className="btn btn-primary d-block mx-auto">
+                  {id ? "Update" : "Add"}
                 </button>
               </div>
             </form>

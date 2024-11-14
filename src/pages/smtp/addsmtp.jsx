@@ -13,15 +13,15 @@ export default function AddSmtp() {
   const [errors, setErrors] = useState({});
 
   const [smtpDetails, setSmtpDetails] = useState({
-    name: '',
-    host: '',
-    port: '',
-    secure: '',
-    user: '',
-    password: '',
+    name: "",
+    host: "",
+    port: "",
+    secure: "None",
+    user: "",
+    password: "",
   });
 
-  const smtpSecure = ['SSL', 'TLS', 'STARTTLS'];
+  const smtpSecure = ["SSL", "TLS", "STARTTLS"];
 
   useEffect(() => {
     if (id) {
@@ -30,7 +30,7 @@ export default function AddSmtp() {
         const { status, data } = await getSmtpByIdApi(id);
         if (status) {
           const { ...rest } = data.smtp;
-          setSmtpDetails({ ...rest, password: '' });
+          setSmtpDetails({ ...rest, password: "" });
         } else {
           alert({ type: 'warning', text: data });
         }
@@ -42,12 +42,12 @@ export default function AddSmtp() {
 
   const validate = () => {
     const newErrors = {};
-    if (!smtpDetails.name) newErrors.name = 'Name is required';
-    if (!smtpDetails.host) newErrors.host = 'Host is required';
-    if (smtpDetails.secure === '') newErrors.secure = 'Security protocol is required.';
-    if (!smtpDetails.port) newErrors.port = 'Port is required';
-    if (!smtpDetails.user) newErrors.user = 'User is required';
-    if (!smtpDetails.password && !id) newErrors.password = 'Password is required';
+    if (!smtpDetails.name) newErrors.name = "Name is required";
+    if (!smtpDetails.host) newErrors.host = "Host is required";
+    if (smtpDetails.secure === "") newErrors.secure = "Security protocol is required.";
+    if (!smtpDetails.port) newErrors.port = "Port is required";
+    if (!smtpDetails.user) newErrors.user = "User is required";
+    if (!smtpDetails.password && !id) newErrors.password = "Password is required";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -94,6 +94,21 @@ export default function AddSmtp() {
                 {errors.name && <div className="invalid-feedback">{errors.name}</div>}
               </div>
               <div className="mb-3">
+                <label className={!id ? "form-label required" : "form-label"}>Sender Email</label>
+                <input
+                  type="email"
+                  name="senderEmail"
+                  className={`form-control ${errors.senderEmail ? "is-invalid" : ""}`}
+                  placeholder="Sender Email"
+                  value={smtpDetails.senderEmail}
+                  onChange={(e) => {
+                    setSmtpDetails((d) => ({ ...d, senderEmail: e.target.value }));
+                    if (errors.senderEmail) setErrors((prev) => ({ ...prev, senderEmail: "" }));
+                  }}
+                />
+                {errors.senderEmail && <div className="invalid-feedback">{errors.senderEmail}</div>}
+              </div>
+              <div className="mb-3">
                 <label className={!id ? 'form-label required' : 'form-label'}>Host</label>
                 <input
                   type="text"
@@ -132,7 +147,8 @@ export default function AddSmtp() {
                   onChange={(e) => {
                     if (errors.secure) setErrors((prev) => ({ ...prev, secure: '' }));
                     setSmtpDetails((d) => ({ ...d, secure: e.target.value }));
-                  }}>
+                  }}
+                >
                   <option value="">Select</option>
                   {smtpSecure.map((s, i) => (
                     <option
@@ -142,7 +158,6 @@ export default function AddSmtp() {
                     </option>
                   ))}
                 </select>
-                {errors.secure && <div className="invalid-feedback">{errors.secure}</div>}
               </div>
 
               <div className="mb-3">
@@ -163,7 +178,7 @@ export default function AddSmtp() {
               <div className="mb-3">
                 <label className={!id ? 'form-label required' : 'form-label'}>Password</label>
                 <input
-                  type="password"
+                  type="text"
                   name="password"
                   className={`form-control ${errors.password ? 'is-invalid' : ''}`}
                   placeholder="Password"
@@ -177,10 +192,8 @@ export default function AddSmtp() {
               </div>
 
               <div className="form-footer">
-                <button
-                  type="submit"
-                  className="btn btn-primary w-100">
-                  {id ? 'Edit Smtp' : 'Add Smtp'}
+                <button type="submit" className="btn btn-primary w-100">
+                  {id ? "Edit Smtp" : "Add Smtp"}
                 </button>
               </div>
             </form>

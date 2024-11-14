@@ -1,9 +1,9 @@
-import { useContext, useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { GlobalContext } from '../../GlobalContext';
-import { addCaseStudyApi, getCaseStudyById, updateCaseStudyApi } from '../../apis/caseStudy-apis';
-import useGetAllSites from '../../Hooks/useGetAllSites';
-import { uploadFile } from '../../utils/fileUpload';
+import { useContext, useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { GlobalContext } from "../../GlobalContext";
+import { addCaseStudyApi, getCaseStudyById, updateCaseStudyApi } from "../../apis/caseStudy-apis";
+import useGetAllSites from "../../Hooks/useGetAllSites";
+import { uploadFile } from "../../utils/fileUpload";
 import Addnote from '../../comps/addnote';
 import { addCasestudyNote, editAdminNote } from '../notes/notes-message';
 
@@ -86,7 +86,7 @@ export default function AddCaseStudy() {
         isPdf,
         alert,
         setCaseStudyDetails,
-        fieldName: isImage ? 'image' : 'pdf',
+        fieldName: isImage ? "image" : "pdf",
       });
     }
   };
@@ -109,10 +109,14 @@ export default function AddCaseStudy() {
       <div className="container container-tight py-4">
         <div className="card card-md">
           <div className="card-body">
-            <h2 className="h2 text-center mb-4">{id ? 'Edit Casestudy' : 'Add Casestudy'}</h2>
+            <h2 className="h2 text-center mb-4">
+              {id ? "Edit Casestudy" : "Add Casestudy"}
+            </h2>
             <form onSubmit={handleSubmit}>
               <div className="mb-3">
-                <label className={!id ? 'form-label required' : 'form-label '}>Title</label>
+                <label className={!id ? "form-label required" : "form-label "}>
+                  Title
+                </label>
                 <input
                   type="text"
                   name="title"
@@ -120,11 +124,17 @@ export default function AddCaseStudy() {
                   placeholder="Title"
                   value={caseStudyDetails.title}
                   onChange={(e) => {
-                    setCaseStudyDetails((d) => ({ ...d, title: e.target.value }));
-                    if (errors.title) setErrors((prev) => ({ ...prev, title: '' }));
+                    setCaseStudyDetails((d) => ({
+                      ...d,
+                      title: e.target.value,
+                    }));
+                    if (errors.title)
+                      setErrors((prev) => ({ ...prev, title: "" }));
                   }}
                 />
-                {errors.title && <div className="invalid-feedback">{errors.title}</div>}
+                {errors.title && (
+                  <div className="invalid-feedback">{errors.title}</div>
+                )}
               </div>
               <div className="mb-3">
                 <label className="form-label">Short Description</label>
@@ -134,7 +144,12 @@ export default function AddCaseStudy() {
                   rows={3}
                   placeholder="Description.."
                   value={caseStudyDetails.sdesc}
-                  onChange={(e) => setCaseStudyDetails((d) => ({ ...d, sdesc: e.target.value }))}
+                  onChange={(e) =>
+                    setCaseStudyDetails((d) => ({
+                      ...d,
+                      sdesc: e.target.value,
+                    }))
+                  }
                 />
               </div>
               <div className="mb-3">
@@ -145,17 +160,25 @@ export default function AddCaseStudy() {
                   rows={6}
                   placeholder="Description.."
                   value={caseStudyDetails.ldesc}
-                  onChange={(e) => setCaseStudyDetails((d) => ({ ...d, ldesc: e.target.value }))}
+                  onChange={(e) =>
+                    setCaseStudyDetails((d) => ({
+                      ...d,
+                      ldesc: e.target.value,
+                    }))
+                  }
                 />
               </div>
               <div className="mb-3">
-                <label className={id ? 'form-label d-flex justify-content-between' : 'form-label required'}>
+                <label
+                  className={
+                    id
+                      ? "form-label d-flex justify-content-between"
+                      : "form-label required"
+                  }
+                >
                   Upload Image
                   {id && caseStudyDetails.imageFile && (
-                    <a
-                      href={caseStudyDetails.imageFile.url}
-                      download={caseStudyDetails.imageFile.name}
-                      target="_blank">
+                    <a href={caseStudyDetails.imageFile.url} download={caseStudyDetails.imageFile.name} target="_blank">
                       Download Image
                     </a>
                   )}
@@ -169,13 +192,20 @@ export default function AddCaseStudy() {
                 />
               </div>
               <div className="mb-3">
-                <label className={id ? 'form-label d-flex justify-content-between' : 'form-label required'}>
+                <label
+                  className={
+                    id
+                      ? "form-label d-flex justify-content-between"
+                      : "form-label required"
+                  }
+                >
                   Upload Pdf
                   {id && caseStudyDetails.pdfFile && (
                     <a
                       href={caseStudyDetails.pdfFile.url}
                       download={caseStudyDetails.pdfFile.name}
-                      target="_blank">
+                      target="_blank"
+                    >
                       Download Pdf
                     </a>
                   )}
@@ -190,7 +220,15 @@ export default function AddCaseStudy() {
               </div>
               <div className="mb-3">
                 <div className="d-flex justify-content-between mb-3">
-                  <label className={!id ? 'form-label required mb-0 me-2' : 'form-label mb-0 me-2'}>Select Sites</label>
+                  <label
+                    className={
+                      !id
+                        ? "form-label required mb-0 me-2"
+                        : "form-label mb-0 me-2"
+                    }
+                  >
+                    Select Sites
+                  </label>
                   <label className="form-check mb-0">
                     <input
                       type="checkbox"
@@ -201,24 +239,31 @@ export default function AddCaseStudy() {
                     <span className="form-check-label">Select All</span>
                   </label>
                 </div>
-                <div className={`form-multi-check-box ${errors.sites ? 'is-invalid' : ''}`}>
+                <div className={`form-multi-check-box ${errors.sites ? "is-invalid" : ""}`}>
                   {availableSites.map((site) => (
                     <label
                       key={site._id}
                       className="form-check">
                       <input
-                        className={`form-check-input ${errors.sites ? 'is-invalid' : ''}`}
+                        className={`form-check-input ${
+                          errors.sites ? "is-invalid" : ""
+                        }`}
                         type="checkbox"
                         value={site._id}
                         checked={caseStudyDetails.sites.includes(site._id)}
                         onChange={() => {
-                          if (caseStudyDetails.sites) setErrors((prev) => ({ ...prev, sites: '' }));
+                          if (caseStudyDetails.sites)
+                            setErrors((prev) => ({ ...prev, sites: "" }));
                           setCaseStudyDetails((prevDetail) => {
-                            const isSelected = prevDetail.sites.includes(site._id);
+                            const isSelected = prevDetail.sites.includes(
+                              site._id
+                            );
                             return {
                               ...prevDetail,
                               sites: isSelected
-                                ? prevDetail.sites.filter((id) => id !== site._id)
+                                ? prevDetail.sites.filter(
+                                    (id) => id !== site._id
+                                  )
                                 : [...prevDetail.sites, site._id],
                             };
                           });
@@ -228,7 +273,9 @@ export default function AddCaseStudy() {
                     </label>
                   ))}
                 </div>
-                {errors.sites && <div className="invalid-feedback mt-2">{errors.sites}</div>}
+                {errors.sites && (
+                  <div className="invalid-feedback mt-2">{errors.sites}</div>
+                )}
               </div>
               <div className="mb-3">
                 <label className="row">
@@ -271,10 +318,8 @@ export default function AddCaseStudy() {
                 </label>
               </div>
               <div className="form-footer">
-                <button
-                  type="submit"
-                  className="btn btn-primary w-100">
-                  {id ? 'Update Casestudy' : 'Add Casestudy'}
+                <button type="submit" className="btn btn-primary w-100">
+                  {id ? "Update" : "Add"}
                 </button>
               </div>
             </form>

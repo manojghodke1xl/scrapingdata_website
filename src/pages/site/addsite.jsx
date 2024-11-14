@@ -1,8 +1,8 @@
-import { useContext, useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { GlobalContext } from '../../GlobalContext';
-import { getSmtpsApi } from '../../apis/smtp-apis';
-import { addSiteApi, getSiteByIdApi, updateSiteApi } from '../../apis/site-apis';
+import { useContext, useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { GlobalContext } from "../../GlobalContext";
+import { getSmtpsApi } from "../../apis/smtp-apis";
+import { addSiteApi, getSiteByIdApi, updateSiteApi } from "../../apis/site-apis";
 import Addnote from '../../comps/addnote';
 import { addWebsiteNote, editWebsiteNote } from '../notes/notes-message';
 
@@ -10,22 +10,27 @@ export default function AddSite() {
   const navigate = useNavigate();
   const { id = '' } = useParams();
   const { alert, setLoading } = useContext(GlobalContext);
-  const [emailInput, setEmailInput] = useState('');
+  const [emailInput, setEmailInput] = useState("");
   const [errors, setErrors] = useState({});
   const [smtpOptions, setSmtpOptions] = useState([]);
   const [siteDetails, setSiteDetails] = useState({
     name: '',
     host: '',
     isActive: true,
-    forward: false,
-    smtp: '',
-    forwardEmails: [],
-    webhookUrl: '',
+    smtp: "",
+    sendUserEnquiry: false,
+    sendUserMailingList: false,
+    sendAdminEnquiry: false,
+    adminEnquiryEmails: [],
+    sendAdminMailingList: false,
+    adminMailingListEmails: [],
+    enquiryWebhookUrl: "",
+    mailinglistWebhookUrl: "",
   });
 
   useEffect(() => {
     (async () => {
-      const { status, data } = await getSmtpsApi();
+      const { status, data } = await getAllSmtpsApi();
       if (status) {
         setSmtpOptions(data.smtps);
       } else {
@@ -57,11 +62,9 @@ export default function AddSite() {
 
   const validate = () => {
     const newErrors = {};
-    if (!siteDetails.name) newErrors.name = 'Name is required';
-    if (!siteDetails.host) newErrors.host = 'Host is required';
-    if (!siteDetails.smtp) newErrors.smtp = 'SMTP is required';
-    if (siteDetails.forward && !siteDetails.forwardEmails.length)
-      newErrors.forwardEmails = 'Forward Emails are required';
+    if (!siteDetails.name) newErrors.name = "Name is required";
+    if (!siteDetails.host) newErrors.host = "Host is required";
+    if (!siteDetails.smtp) newErrors.smtp = "SMTP is required";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -85,21 +88,45 @@ export default function AddSite() {
     }
   };
 
-  const validateAndAddEmail = (e) => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  const validateAndAddInput = (e, inputValue, setInputValue, setStateDetails, key, regexPattern) => {
     e.preventDefault();
-    if (emailInput && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput)) {
-      setSiteDetails((prev) => ({
+
+    if (inputValue && regexPattern.test(inputValue)) {
+      setStateDetails((prev) => ({
         ...prev,
-        forwardEmails: [...prev.forwardEmails, emailInput],
+        [key]: [...(prev[key] || []), inputValue],
       }));
-      setEmailInput('');
+      setInputValue("");
+      setErrors((prev) => ({ ...prev, forwardEmails: "" }));
+    } else {
+      setErrors((prev) => ({
+        ...prev,
+        forwardEmails: "Please enter a valid email address.",
+      }));
     }
   };
 
-  const removeEmail = (indexToRemove) => {
+  const removeItemAtIndex = (setStateDetails, key, indexToRemove) => {
+    setStateDetails((prev) => ({
+      ...prev,
+      [key]: prev[key].filter((_, index) => index !== indexToRemove),
+    }));
+  };
+
+  const handleAddEmail = (e, key) => {
+    validateAndAddInput(e, emailInput, setEmailInput, setSiteDetails, key, emailRegex);
+  };
+
+  const handleRemoveEmail = (index, key) => {
+    removeItemAtIndex(setSiteDetails, key, index);
+  };
+
+  const handleMailDataChange = (field, type, value) => {
     setSiteDetails((prev) => ({
       ...prev,
-      forwardEmails: prev.forwardEmails.filter((_, index) => index !== indexToRemove),
+      [field]: { ...prev[field], [type]: value },
     }));
   };
 
@@ -140,55 +167,246 @@ export default function AddSite() {
                 />
                 {errors.host && <div className="invalid-feedback mt-2">{errors.host}</div>}
               </div>
+
               <div className="mb-3">
                 <label className="row">
-                  <span className="col">Forward</span>
+                  <span className="col form-label">Send User Enquiry Notification</span>
                   <span className="col-auto">
                     <label className="form-check form-check-single form-switch">
                       <input
                         className="form-check-input"
                         type="checkbox"
                         name="forward"
-                        checked={siteDetails.forward}
-                        onChange={() => setSiteDetails((prev) => ({ ...prev, forward: !prev.forward }))}
+                        checked={siteDetails.sendUserEnquiry}
+                        onChange={() =>
+                          setSiteDetails((prev) => ({
+                            ...prev,
+                            sendUserEnquiry: !prev.sendUserEnquiry,
+                          }))
+                        }
                       />
                     </label>
                   </span>
                 </label>
               </div>
-              {siteDetails.forward && (
-                <div className="mb-3">
-                  <label className="form-label required">Forward Emails</label>
-                  <input
-                    type="email"
-                    name="email"
-                    className={`form-control ${errors.forwardEmails ? 'is-invalid' : ''}`}
-                    placeholder="Enter email"
-                    value={emailInput}
-                    onChange={(e) => {
-                      if (errors.forwardEmails) setErrors((prev) => ({ ...prev, forwardEmails: '' }));
-                      setEmailInput(e.target.value);
-                    }}
-                  />
-                  <button
-                    className="btn btn-primary mt-2"
-                    onClick={() => validateAndAddEmail()}>
-                    Add Email
-                  </button>
-                  {errors.forwardEmails && (
-                    <div className="invalid-feedback mt-2">Please enter a valid email address.</div>
-                  )}
+              {siteDetails.sendUserEnquiry && (
+                <>
+                  <div className="mb-3">
+                    <label className={id ? "form-label" : "form-label required"}>Subject</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={siteDetails.userEnquiryMailData?.subject ?? ""}
+                      onChange={(e) => handleMailDataChange("userEnquiryMailData", "subject", e.target.value)}
+                    />
+                  </div>
+                  <div className="mb-3">
+                    <label className={id ? "form-label" : "form-label required"}>Body</label>
+                    <textarea
+                      className="form-control"
+                      value={siteDetails.userEnquiryMailData?.body ?? ""}
+                      onChange={(e) => handleMailDataChange("userEnquiryMailData", "body", e.target.value)}
+                    />
+                  </div>
+                </>
+              )}
+              <div className="mb-3">
+                <label className="row">
+                  <span className="col form-label">Send User Mailing Notification</span>
+                  <span className="col-auto">
+                    <label className="form-check form-check-single form-switch">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        name="forward"
+                        checked={siteDetails.sendUserMailingList}
+                        onChange={() =>
+                          setSiteDetails((prev) => ({
+                            ...prev,
+                            sendUserMailingList: !prev.sendUserMailingList,
+                          }))
+                        }
+                      />
+                    </label>
+                  </span>
+                </label>
+              </div>
+              {siteDetails.sendUserMailingList && (
+                <>
+                  <div className="mb-3">
+                    <label className={id ? "form-label" : "form-label required"}>Subject</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={siteDetails.userMailingListMailData?.subject ?? ""}
+                      onChange={(e) => handleMailDataChange("userMailingListMailData", "subject", e.target.value)}
+                    />
+                  </div>
+                  <div className="mb-3">
+                    <label className={id ? "form-label" : "form-label required"}>Body</label>
+                    <textarea
+                      className="form-control"
+                      value={siteDetails.userMailingListMailData?.body ?? ""}
+                      onChange={(e) => handleMailDataChange("userMailingListMailData", "body", e.target.value)}
+                    />
+                  </div>
+                </>
+              )}
+              <div className="mb-3">
+                <label className="row">
+                  <span className="col form-label">Send Admin Enquiry</span>
+                  <span className="col-auto">
+                    <label className="form-check form-check-single form-switch">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        name="forward"
+                        checked={siteDetails.sendAdminEnquiry}
+                        onChange={() =>
+                          setSiteDetails((prev) => ({
+                            ...prev,
+                            sendAdminEnquiry: !prev.sendAdminEnquiry,
+                          }))
+                        }
+                      />
+                    </label>
+                  </span>
+                </label>
+              </div>
+              {siteDetails.sendAdminEnquiry && (
+                <>
+                  <div className="mb-3">
+                    <label className={id ? "form-label" : "form-label required"}>Subject</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={siteDetails.adminEnquiryMailData?.subject ?? ""}
+                      onChange={(e) => handleMailDataChange("adminEnquiryMailData", "subject", e.target.value)}
+                    />
+                  </div>
+                  <div className="mb-3">
+                    <label className={id ? "form-label" : "form-label required"}>Body</label>
+                    <textarea
+                      className="form-control"
+                      value={siteDetails.adminEnquiryMailData?.body ?? ""}
+                      onChange={(e) => handleMailDataChange("adminEnquiryMailData", "body", e.target.value)}
+                    />
+                  </div>
+                  <div className="mb-3">
+                    <label className={id ? "form-label" : "form-label required"}>Email</label>
+                    <input
+                      type="email"
+                      name="email"
+                      className={`form-control ${errors.forwardEmails ? "is-invalid" : ""}`}
+                      placeholder="Enter email"
+                      value={emailInput}
+                      onChange={(e) => {
+                        if (errors.forwardEmails) {
+                          setErrors((prev) => ({ ...prev, forwardEmails: "" }));
+                        }
+                        setEmailInput(e.target.value);
+                      }}
+                    />
+                    <button
+                      type="button"
+                      className="btn btn-primary mt-2"
+                      onClick={(e) => handleAddEmail(e, "adminEnquiryEmails")}
+                    >
+                      Add Email
+                    </button>
+                    {errors.forwardEmails && <div className="invalid-feedback mt-2">{errors.forwardEmails}</div>}
+
+                    <ul className="list-group mt-3">
+                      {siteDetails.adminEnquiryEmails.map((email, index) => (
+                        <li key={index} className="list-group-item">
+                          {email}
+                          <button
+                            type="button"
+                            className="btn btn-danger btn-sm float-end"
+                            onClick={() => handleRemoveEmail(index, "adminEnquiryEmails")}
+                          >
+                            Remove
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </>
+              )}
+
+              <div className="mb-3">
+                <label className="row">
+                  <span className="col form-label">Send Admin Mailing List</span>
+                  <span className="col-auto">
+                    <label className="form-check form-check-single form-switch">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        name="forward"
+                        checked={siteDetails.sendAdminMailingList}
+                        onChange={() =>
+                          setSiteDetails((prev) => ({
+                            ...prev,
+                            sendAdminMailingList: !prev.sendAdminMailingList,
+                          }))
+                        }
+                      />
+                    </label>
+                  </span>
+                </label>
+              </div>
+              {siteDetails.sendAdminMailingList && (
+                <>
+                  <div className="mb-3">
+                    <label className={id ? "form-label" : "form-label required"}>Subject</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={siteDetails.adminMailingListMailData?.subject ?? ""}
+                      onChange={(e) => handleMailDataChange("adminMailingListMailData", "subject", e.target.value)}
+                    />
+                  </div>
+                  <div className="mb-3">
+                    <label className={id ? "form-label" : "form-label required"}>Body</label>
+                    <textarea
+                      className="form-control"
+                      value={siteDetails.adminMailingListMailData?.body ?? ""}
+                      onChange={(e) => handleMailDataChange("adminMailingListMailData", "body", e.target.value)}
+                    />
+                  </div>
+                  <div className="mb-3">
+                    <label className={id ? "form-label" : "form-label required"}>Email</label>
+                    <input
+                      type="email"
+                      name="email"
+                      className={`form-control ${errors.forwardEmails ? "is-invalid" : ""}`}
+                      placeholder="Enter email"
+                      value={emailInput}
+                      onChange={(e) => {
+                        if (errors.forwardEmails) {
+                          setErrors((prev) => ({ ...prev, forwardEmails: "" }));
+                        }
+                        setEmailInput(e.target.value);
+                      }}
+                    />
+                    <button
+                      type="button"
+                      className="btn btn-primary mt-2"
+                      onClick={(e) => handleAddEmail(e, "adminMailingListEmails")}
+                    >
+                      Add Email
+                    </button>
+                    {errors.forwardEmails && <div className="invalid-feedback mt-2">{errors.forwardEmails}</div>}
 
                   <ul className="list-group mt-3">
                     {siteDetails.forwardEmails.map((email, index) => (
-                      <li
-                        key={index}
-                        className="list-group-item">
+                      <li key={index} className="list-group-item">
                         {email}
                         <button
                           type="button"
                           className="btn btn-danger btn-sm float-end"
-                          onClick={() => removeEmail(index)}>
+                          onClick={() => removeEmail(index)}
+                        >
                           Remove
                         </button>
                       </li>
@@ -220,20 +438,38 @@ export default function AddSite() {
               </div>
 
               <div className="mb-3">
-                <label className="form-label">Webhook URL</label>
+                <label className="form-label">Enquiry Webhook URL</label>
                 <input
-                  type="url"
-                  name="webhookUrl"
+                  type="text"
                   className="form-control"
-                  placeholder="Webhook URL"
-                  value={siteDetails.webhookUrl}
-                  onChange={(e) => setSiteDetails((d) => ({ ...d, webhookUrl: e.target.value }))}
+                  value={siteDetails.enquiryWebhookUrl}
+                  onChange={(e) =>
+                    setSiteDetails((d) => ({
+                      ...d,
+                      enquiryWebhookUrl: e.target.value,
+                    }))
+                  }
+                />
+              </div>
+
+              <div className="mb-3">
+                <label className="form-label">Mailing List Webhook URL</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={siteDetails.mailinglistWebhookUrl}
+                  onChange={(e) =>
+                    setSiteDetails((d) => ({
+                      ...d,
+                      mailinglistWebhookUrl: e.target.value,
+                    }))
+                  }
                 />
               </div>
 
               <div className="mb-3">
                 <label className="row">
-                  <span className="col">Active</span>
+                  <span className="col form-label">Is site active?</span>
                   <span className="col-auto">
                     <label className="form-check form-check-single form-switch">
                       <input
@@ -241,7 +477,12 @@ export default function AddSite() {
                         type="checkbox"
                         name="isActive"
                         checked={siteDetails.isActive}
-                        onChange={() => setSiteDetails((prev) => ({ ...prev, isActive: !prev.isActive }))}
+                        onChange={() =>
+                          setSiteDetails((prev) => ({
+                            ...prev,
+                            isActive: !prev.isActive,
+                          }))
+                        }
                       />
                     </label>
                   </span>
@@ -249,10 +490,8 @@ export default function AddSite() {
               </div>
 
               <div className="form-footer">
-                <button
-                  type="submit"
-                  className="btn btn-primary w-100">
-                  {id ? 'Update' : 'Create'}
+                <button type="submit" className="btn btn-primary w-100">
+                  {id ? "Update" : "Add"}
                 </button>
               </div>
             </form>
