@@ -1,5 +1,5 @@
 import { useContext, useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { GlobalContext } from "../../GlobalContext";
 import { getMailingListById } from "../../apis/mailing-apis";
 import { formatDateTime } from "../../utils/function";
@@ -8,6 +8,8 @@ const MailingSingle = () => {
   const { id } = useParams();
   const { alert, setLoading } = useContext(GlobalContext);
   const [mailingList, setMailingList] = useState(null);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     setLoading(true);
@@ -27,88 +29,82 @@ const MailingSingle = () => {
     <div className="page-body">
       <div className="container-xl">
         <div className="card">
-          <div className="row g-0">
+          <div className="card-body">
             {mailingList && (
-              <div className="col-12  d-flex flex-column">
-                <div className="card-body">
-                  <h2 className="mb-4">Mailing List Details</h2>
+              <>
+                <h2 className="mb-4">Mailing List Details</h2>
 
-                  <div className="row g-3">
-                    <div className="col-md">
-                      <div className="form-label">Customer Email</div>
-                      <input
-                        type="text"
-                        className="form-control"
-                        defaultValue={mailingList?.email}
-                        readOnly
-                      />
-                    </div>
+                {/* Customer Email */}
+                <div className="card mb-4">
+                  <div className="card-header">
+                    <h3 className="card-title mb-0">Customer Email</h3>
                   </div>
-
-                  <h3 className="card-title mt-4">Request header</h3>
-                  <p className="card-subtitle">
-                    Request headers are key-value pairs sent by a client to
-                    provide information about the request or the client itself.
-                  </p>
-                  <div>
-                    <textarea
-                      className="form-control"
-                      name="example-textarea-input"
-                      rows={6}
-                      placeholder="Content ..."
-                      defaultValue={mailingList?.header}
-                      readOnly
-                    />
-                  </div>
-
-                  <h3 className="card-title mt-4">User Agent String</h3>
-                  <p className="card-subtitle">
-                    A User Agent String identifies the browser, version, and
-                    operating system of a client device to web servers.
-                  </p>
-                  <div>
-                    <textarea
-                      className="form-control"
-                      name="example-textarea-input"
-                      rows={1}
-                      placeholder="Content ..."
-                      defaultValue={mailingList?.uastring}
-                      readOnly
-                    />
-                  </div>
-
-                  <div className="row g-3 mt-2">
-                    <div className="col-md">
-                      <div className="form-label">Ip Address</div>
-                      <input
-                        type="text"
-                        className="form-control"
-                        placeholder="Not Present ..."
-                        defaultValue={mailingList?.ipaddress}
-                        readOnly
-                      />
-                    </div>
-                    <div className="col-md">
-                      <div className="form-label">Site Name</div>
-                      <input
-                        type="text"
-                        className="form-control"
-                        defaultValue={mailingList?.site?.name}
-                        readOnly
-                      />
-                    </div>
-                    <div className="col-md">
-                      <div className="form-label">Date Time</div>
-                      <input
-                        type="text"
-                        className="form-control"
-                        value={formatDateTime(mailingList?.createdAt)}
-                        readOnly
-                      />
-                    </div>
+                  <div className="card-body">
+                    <p className="form-control-plaintext">
+                      {mailingList?.email}
+                    </p>
                   </div>
                 </div>
-              </div>
+
+                {/* Request Header */}
+                <div className="card mb-4">
+                  <div className="card-header">
+                    <h3 className="card-title mb-0">Request Header</h3>
+                    <p className="card-subtitle text-muted">
+                      Request headers are key-value pairs sent by a client to
+                      provide information about the request or the client
+                      itself.
+                    </p>
+                  </div>
+                  <div className="card-body">
+                    <p className="form-control-plaintext border p-3">
+                      {mailingList?.header || "No header available"}
+                    </p>
+                  </div>
+                </div>
+                <div className="card mb-4">
+                  <div className="card-header">
+                    <h3 className="card-title mb-0">User Agent String</h3>
+                    <p className="card-subtitle text-muted">
+                      Identifies the browser, version, and operating system of a
+                      client device.
+                    </p>
+                  </div>
+                  <div className="card-body">
+                    <p className="form-control-plaintext border p-3">
+                      {mailingList?.uastring ||
+                        "No User Agent String available"}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="card mb-4">
+                  <div className="card-header">
+                    <h3 className="card-title mb-0">Additional Information</h3>
+                  </div>
+                  <ul className="list-group list-group-flush">
+                    <li className="list-group-item">
+                      <strong>IP Address:</strong>{" "}
+                      {mailingList?.ipaddress || "Not Present"}
+                    </li>
+                    <li className="list-group-item">
+                      <strong>Site Name:</strong>{" "}
+                      {mailingList?.site?.name || "No Site Name available"}
+                    </li>
+                    <li className="list-group-item">
+                      <strong>Date & Time:</strong>{" "}
+                      {formatDateTime(mailingList?.createdAt) ||
+                        "No Date & Time available"}
+                    </li>
+                  </ul>
+                </div>
+                <button
+                  className="btn btn-primary mt-4"
+                  onClick={() => navigate(-1)}
+                >
+                  Back to Mailing List
+                </button>
+              </>
             )}
           </div>
         </div>

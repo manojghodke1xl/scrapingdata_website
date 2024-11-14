@@ -1,11 +1,12 @@
 import { useContext, useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { GlobalContext } from "../../GlobalContext";
 import { getEnquiryById } from "../../apis/enquiry-apis";
 import { formatDateTime } from "../../utils/function";
 
 const Enquirysingle = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const { alert, setLoading } = useContext(GlobalContext);
   const [enquiry, setEnquiry] = useState(null);
 
@@ -27,138 +28,98 @@ const Enquirysingle = () => {
     <div className="page-body">
       <div className="container-xl">
         <div className="card">
-          <div className="row g-0">
-            {enquiry && (
-              <div className="col-12  d-flex flex-column">
-                <div className="card-body">
-                  <h2 className="mb-4">Enquiry Details</h2>
-                  <h3 className="card-title mt-3">Customer Details</h3>
-                  <div className="row g-3">
-                    <div className="col-md-4">
-                      <div className="form-label">Customer Name</div>
-                      <input
-                        type="text"
-                        className="form-control"
-                        defaultValue={enquiry?.name}
-                        readOnly
-                      />
-                    </div>
-                    <div className="col-md-4">
-                      <div className="form-label">Customer Email</div>
-                      <input
-                        type="text"
-                        className="form-control"
-                        defaultValue={enquiry?.email}
-                        readOnly
-                      />
-                    </div>
-                    <div className="col-md-4">
-                      <div className="form-label">Mobile Number</div>
-                      <input
-                        type="text"
-                        className="form-control"
-                        defaultValue={
-                          !enquiry.ccode
-                            ? ""
-                            : enquiry?.ccode + " " + enquiry?.mobile
-                        }
-                        readOnly
-                      />
-                    </div>
-                  </div>
-                  <div className="row g-3 mt-2">
-                    <div className="col-md-4">
-                      <div className="form-label">Customer service</div>
-                      <input
-                        type="text"
-                        className="form-control"
-                        defaultValue={enquiry?.service}
-                        readOnly
-                      />
-                    </div>
-                    <div className="col-md-4">
-                      <div className="form-label">Customer subject</div>
-                      <input
-                        type="text"
-                        className="form-control"
-                        defaultValue={enquiry?.subject}
-                        readOnly
-                      />
-                    </div>
-                    <div className="col-md-4">
-                      <div className="form-label">Ip Address</div>
-                      <input
-                        type="text"
-                        className="form-control"
-                        defaultValue={enquiry?.ipaddress}
-                        readOnly
-                      />
-                    </div>
-                  </div>
-                  <div className="row g-3 mt-2">
-                    <div className="col-md-4">
-                      <div className="form-label">Site Name</div>
-                      <input
-                        type="text"
-                        className="form-control"
-                        defaultValue={enquiry?.site?.name}
-                        readOnly
-                      />
-                    </div>
-                    <div className="col-md-4">
-                      <div className="form-label">Date Time</div>
-                      <input
-                        type="text"
-                        className="form-control"
-                        value={formatDateTime(enquiry?.createdAt)}
-                        readOnly
-                      />
-                    </div>
-                  </div>
-                  <h3 className="card-title mt-3">Customer Message</h3>
-                  <div>
-                    <textarea
-                      className="form-control"
-                      name="example-textarea-input"
-                      rows={6}
-                      placeholder="Content.."
-                      defaultValue={enquiry?.message}
-                      readOnly
-                    />
-                  </div>
-                  <h3 className="card-title mt-3">Request header</h3>
-                  <p className="card-subtitle">
-                    Request headers are key-value pairs sent by a client to
-                    provide information about the request or the client itself.
-                  </p>
-                  <div>
-                    <textarea
-                      className="form-control"
-                      name="example-textarea-input"
-                      rows={6}
-                      placeholder="Content.."
-                      defaultValue={enquiry?.header}
-                      readOnly
-                    />
-                  </div>
-                  <h3 className="card-title mt-3">User Agent String</h3>
-                  <p className="card-subtitle">
-                    A User Agent String identifies the browser, version, and
-                    operating system of a client device to web servers.
-                  </p>
-                  <div>
-                    <textarea
-                      className="form-control"
-                      name="example-textarea-input"
-                      rows={1}
-                      placeholder="Content.."
-                      defaultValue={enquiry?.uastring}
-                      readOnly
-                    />
-                  </div>
-                </div>
+          <div className="card-body">
+            <h2 className="mb-4">Enquiry Details</h2>
+
+            <div className="card mb-4">
+              <div className="card-header">
+                <h3 className="card-title mb-0">Customer Details</h3>
               </div>
-            )}
+              <ul className="list-group list-group-flush">
+                <li className="list-group-item">
+                  <strong>Customer Name:</strong> {enquiry?.name}
+                </li>
+                <li className="list-group-item">
+                  <strong>Email:</strong> {enquiry?.email}
+                </li>
+                <li className="list-group-item">
+                  <strong>Mobile Number:</strong>
+                  {enquiry?.ccode ? `${enquiry.ccode} ${enquiry.mobile}` : ""}
+                </li>
+                <li className="list-group-item">
+                  <strong>Service:</strong> {enquiry?.service}
+                </li>
+                <li className="list-group-item">
+                  <strong>Subject:</strong> {enquiry?.subject}
+                </li>
+                <li className="list-group-item">
+                  <strong>IP Address:</strong> {enquiry?.ipaddress}
+                </li>
+              </ul>
+            </div>
+
+            <div className="card mb-4">
+              <div className="card-header">
+                <h3 className="card-title mb-0">Additional Information</h3>
+              </div>
+              <ul className="list-group list-group-flush">
+                <li className="list-group-item">
+                  <strong>Site Name:</strong> {enquiry?.site?.name}
+                </li>
+                <li className="list-group-item">
+                  <strong>Date & Time:</strong>{" "}
+                  {formatDateTime(enquiry?.createdAt)}
+                </li>
+              </ul>
+            </div>
+
+            <div className="card mb-4">
+              <div className="card-header">
+                <h3 className="card-title mb-0">Customer Message</h3>
+              </div>
+              <div className="card-body">
+                <p className="form-control-plaintext border p-3">
+                  {enquiry?.message || "Not Provided"}
+                </p>
+              </div>
+            </div>
+
+            <div className="card mb-4">
+              <div className="card-header">
+                <h3 className="card-title mb-0">Request Header</h3>
+                <p className="card-subtitle text-muted">
+                Request headers are key-value pairs sent by a client to
+                      provide information about the request or the client
+                      itself.
+                </p>
+              </div>
+              <div className="card-body">
+                <p className="form-control-plaintext border p-3">
+                  {enquiry?.header || "No header available"}
+                </p>
+              </div>
+            </div>
+
+            <div className="card mb-4">
+              <div className="card-header">
+                <h3 className="card-title mb-0">User Agent String </h3>
+                <p className="card-subtitle text-muted">
+                  Identifies the browser, version, and operating system.
+                </p>
+              </div>
+              <div className="card-body">
+                <p className="form-control-plaintext border p-3">
+                  {enquiry?.uastring || "No User Agent String available"}
+                </p>
+              </div>
+            </div>
+
+            <button
+              className="btn btn-primary mt-4"
+              onClick={() => navigate(-1)}
+            >
+              Back to Enquiry List
+            </button>
           </div>
         </div>
       </div>
