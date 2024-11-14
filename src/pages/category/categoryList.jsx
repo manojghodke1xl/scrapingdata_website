@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import Table from '../../comps/table';
 import useSetTimeout from '../../Hooks/useDebounce';
 import { GlobalContext } from '../../GlobalContext';
+import Addnote from '../../comps/addnote';
+import { listCategoryNote } from '../notes/notes-message';
 
 export default function CategoryList() {
   const navigate = useNavigate();
@@ -16,21 +18,9 @@ export default function CategoryList() {
   const [searchKey, setSearchKey] = useState('');
   const searchAbleKeys = ['Name'];
 
-  const [err, data] = useSetTimeout(
-    'categories',
-    page - 1,
-    limit,
-    searchTerm,
-    searchKey
-  );
+  const [err, data] = useSetTimeout('categories', page - 1, limit, searchTerm, searchKey);
 
-  const headers = [
-    { label: 'Name' },
-    { label: 'Created Date' },
-    { label: 'Updated Date' },
-
-    { label: 'Actions' },
-  ];
+  const headers = [{ label: 'Name' }, { label: 'Created Date' }, { label: 'Updated Date' }, { label: 'Actions' }];
 
   const rows = categories.map((category, index) => {
     const { _id, name, createdAt, updatedAt } = category;
@@ -51,8 +41,7 @@ export default function CategoryList() {
         <button
           key={index}
           onClick={() => navigate(`/edit-category/${_id}`)}
-          className="btn btn-primary me-1"
-        >
+          className="btn btn-primary me-1">
           Edit
         </button>
       ),
@@ -77,8 +66,7 @@ export default function CategoryList() {
             <div className="card-options">
               <button
                 onClick={() => navigate('/add-category')}
-                className="btn btn-primary "
-              >
+                className="btn btn-primary ">
                 Add Category
               </button>
             </div>
@@ -103,6 +91,7 @@ export default function CategoryList() {
           </div>
         </div>
       </div>
+      <Addnote des={listCategoryNote} />
     </div>
   );
 }

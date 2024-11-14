@@ -1,11 +1,12 @@
-import { useContext, useEffect, useState } from "react";
-import { GlobalContext } from "../../GlobalContext";
-import { useNavigate } from "react-router-dom";
-import Table from "../../comps/table";
-import useSetTimeout from "../../Hooks/useDebounce";
-import useGetAllSites from "../../Hooks/useGetAllSites";
-import DuplicateModal from "../../comps/duplicate";
-import { updateGuideSitesApi, updateGuideStatusApi } from "../../apis/guide-apis";
+import { useContext, useEffect, useState } from 'react';
+import { GlobalContext } from '../../GlobalContext';
+import { useNavigate } from 'react-router-dom';
+import Table from '../../comps/table';
+import useSetTimeout from '../../Hooks/useDebounce';
+import useGetAllSites from '../../Hooks/useGetAllSites';
+import DuplicateModal from '../../comps/duplicate';
+import { updateGuideSitesApi, updateGuideStatusApi } from '../../apis/guide-apis';
+import Addnote from '../../comps/addnote';
 
 export default function GuideList() {
   const navigate = useNavigate();
@@ -15,28 +16,28 @@ export default function GuideList() {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(8);
   const [totalCount, setTotalCount] = useState(0);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [searchKey, setSearchKey] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
+  const [searchKey, setSearchKey] = useState('');
   const [selectedGuides, setSelectedGuides] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
-  const [statusFilter, setStatusFilter] = useState("");
-  const [siteId, setSiteId] = useState("");
-  const [statusSelect, setStatusSelect] = useState("");
+  const [statusFilter, setStatusFilter] = useState('');
+  const [siteId, setSiteId] = useState('');
+  const [statusSelect, setStatusSelect] = useState('');
   const [modalOpen, setModalOpen] = useState(false);
   const allsites = useGetAllSites();
 
-  const searchAbleKeys = ["Title"];
-  const filter = ["Active", "Inactive"];
-  const Status = ["Active", "Inactive"];
+  const searchAbleKeys = ['Title'];
+  const filter = ['Active', 'Inactive'];
+  const Status = ['Active', 'Inactive'];
 
-  const [err, data, setRefresh] = useSetTimeout("guides", page - 1, limit, searchTerm, searchKey, statusFilter, siteId);
+  const [err, data, setRefresh] = useSetTimeout('guides', page - 1, limit, searchTerm, searchKey, statusFilter, siteId);
 
   useEffect(() => {
     if (data) {
       setGuides(data.guides);
       setTotalCount(data.count);
     } else if (err) {
-      alert({ type: "warning", text: err.message });
+      alert({ type: 'warning', text: err.message });
     }
   }, [data, err, alert]);
 
@@ -47,18 +48,18 @@ export default function GuideList() {
 
       if (status) {
         alert({
-          type: "success",
+          type: 'success',
           text: data.message,
         });
         setRefresh((r) => !r);
         setSelectedGuides([]);
         setSelectAll(false);
-        setStatusSelect("");
+        setStatusSelect('');
       } else {
-        alert({ type: "danger", title: "Error!", text: data });
+        alert({ type: 'danger', title: 'Error!', text: data });
       }
     } catch (error) {
-      alert({ type: "danger", title: "Error!", text: error.message });
+      alert({ type: 'danger', title: 'Error!', text: error.message });
     } finally {
       setLoading(false);
     }
@@ -67,21 +68,21 @@ export default function GuideList() {
   const updateSites = async (selectedSites, selectedAction) => {
     setLoading(true);
     try {
-      const action = selectedAction === "Add" ? true : false;
+      const action = selectedAction === 'Add' ? true : false;
       const { status, data } = await updateGuideSitesApi(selectedGuides, selectedSites, action);
       if (status) {
         alert({
-          type: "success",
+          type: 'success',
           text: data.message,
         });
         setRefresh((r) => !r);
         setSelectedGuides([]);
         setSelectAll(false);
       } else {
-        alert({ type: "danger", text: data });
+        alert({ type: 'danger', text: data });
       }
     } catch (error) {
-      alert({ type: "danger", text: error.message });
+      alert({ type: 'danger', text: error.message });
     } finally {
       setLoading(false);
       setModalOpen(false);
@@ -94,7 +95,7 @@ export default function GuideList() {
       let updatedSelected;
       if (prevSelected.includes(guideId)) {
         updatedSelected = prevSelected.filter((id) => id !== guideId);
-        setStatusSelect("");
+        setStatusSelect('');
       } else {
         updatedSelected = [...prevSelected, guideId];
       }
@@ -118,14 +119,21 @@ export default function GuideList() {
 
   const headers = [
     {
-      label: <input className="form-check-input " type="checkbox" checked={selectAll} onChange={handleSelectAll} />,
+      label: (
+        <input
+          className="form-check-input "
+          type="checkbox"
+          checked={selectAll}
+          onChange={handleSelectAll}
+        />
+      ),
     },
-    { label: "Title" },
-    { label: "Created Date" },
-    { label: "Updated Date" },
-    { label: "Status" },
-    { label: "Actions" },
-    { label: "Sites" },
+    { label: 'Title' },
+    { label: 'Created Date' },
+    { label: 'Updated Date' },
+    { label: 'Status' },
+    { label: 'Actions' },
+    { label: 'Sites' },
   ];
 
   const rows = guides.map((guide) => {
@@ -142,15 +150,15 @@ export default function GuideList() {
         />
       ),
       title,
-      created: new Date(createdAt).toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
+      created: new Date(createdAt).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
       }),
-      updated: new Date(updatedAt).toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
+      updated: new Date(updatedAt).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
       }),
       status:
         isActive === true ? (
@@ -160,12 +168,14 @@ export default function GuideList() {
         ),
       action: (
         <div key={guide._id}>
-          <button onClick={() => navigate(`/edit-guide/${guide._id}`)} className="btn btn-primary me-1">
+          <button
+            onClick={() => navigate(`/edit-guide/${guide._id}`)}
+            className="btn btn-primary me-1">
             Edit
           </button>
         </div>
       ),
-      siteName: sites.map((s) => `${s.name} (${s.host})`).join(", "),
+      siteName: sites.map((s) => `${s.name} (${s.host})`).join(', '),
     };
   });
 
@@ -180,10 +190,14 @@ export default function GuideList() {
                 <div className="text-secondary">
                   Filter
                   <div className="mx-2 d-inline-block">
-                    <select className="form-select form-control-sm" onChange={(e) => setStatusFilter(e.target.value)}>
+                    <select
+                      className="form-select form-control-sm"
+                      onChange={(e) => setStatusFilter(e.target.value)}>
                       <option value="">All</option>
                       {filter.map((key, i) => (
-                        <option key={i} value={key.toLowerCase()}>
+                        <option
+                          key={i}
+                          value={key.toLowerCase()}>
                           {key}
                         </option>
                       ))}
@@ -197,34 +211,43 @@ export default function GuideList() {
                       <div className="mx-2 d-inline-block">
                         <select
                           className="form-select form-control-sm"
-                          onChange={(e) => setStatusSelect(e.target.value)}
-                        >
+                          onChange={(e) => setStatusSelect(e.target.value)}>
                           <option value="">Select</option>
                           {Status.map((key, i) => (
-                            <option key={i} value={key.toLowerCase()}>
+                            <option
+                              key={i}
+                              value={key.toLowerCase()}>
                               {key}
                             </option>
                           ))}
                         </select>
                       </div>
                     </div>
-                    {statusSelect === "active" && (
-                      <button onClick={() => updateSelectedGuidesStatus(true)} className="btn btn-success mx-2">
+                    {statusSelect === 'active' && (
+                      <button
+                        onClick={() => updateSelectedGuidesStatus(true)}
+                        className="btn btn-success mx-2">
                         Apply
                       </button>
                     )}
-                    {statusSelect === "inactive" && (
-                      <button onClick={() => updateSelectedGuidesStatus(false)} className="btn btn-danger mx-2">
+                    {statusSelect === 'inactive' && (
+                      <button
+                        onClick={() => updateSelectedGuidesStatus(false)}
+                        className="btn btn-danger mx-2">
                         Apply
                       </button>
                     )}
-                    <button onClick={() => setModalOpen(true)} className="btn btn-primary mx-2">
+                    <button
+                      onClick={() => setModalOpen(true)}
+                      className="btn btn-primary mx-2">
                       Sites
                     </button>
                   </>
                 ) : null}
 
-                <button onClick={() => navigate("/add-guide")} className="btn btn-primary">
+                <button
+                  onClick={() => navigate('/add-guide')}
+                  className="btn btn-primary">
                   Add Guide
                 </button>
               </div>
@@ -249,13 +272,18 @@ export default function GuideList() {
           </div>
         </div>
       </div>
+
+      <Addnote
+        des={`This is the All Guides List page. There is an "Add Guide" button to add a guide. A filter dropdown is available to filter details by status, allowing you to view all guides. The table includes the name of the Guide Title, created date, updated date, status indicating whether the Guide is Active or Inactive, the site assigned to the Guide, and a Edit button to Editing specific Guide details. There is also a site dropdown that lists all website names; selecting a specific website will show only the details related to that website in the table. Additionally, the table has a checkbox for changing the status of a particular Guide or multiple Guide. The checkbox is not available for Admins, as their status cannot be changed. There is a search dropdown, and when you select an option, you can search the table based on the selected option.`}
+      />
+
       <DuplicateModal
         allsites={allsites}
         isOpen={modalOpen}
         onClose={setModalOpen}
         onConfirm={updateSites}
         title="Update Sites"
-        action={["Add", "Remove"]}
+        action={['Add', 'Remove']}
         confirmText="Update"
       />
     </div>

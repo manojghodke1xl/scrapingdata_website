@@ -1,8 +1,10 @@
-import { useContext, useEffect, useState } from "react";
-import { GlobalContext } from "../../GlobalContext";
-import { useNavigate } from "react-router-dom";
-import Table from "../../comps/table";
-import useSetTimeout from "../../Hooks/useDebounce";
+import { useContext, useEffect, useState } from 'react';
+import { GlobalContext } from '../../GlobalContext';
+import { useNavigate } from 'react-router-dom';
+import Table from '../../comps/table';
+import useSetTimeout from '../../Hooks/useDebounce';
+import Addnote from '../../comps/addnote';
+import { listSMTPNote } from '../notes/notes-message';
 
 export default function SmtpList() {
   const navigate = useNavigate();
@@ -12,23 +14,23 @@ export default function SmtpList() {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(8);
   const [totalCount, setTotalCount] = useState(0);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [searchKey, setSearchKey] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
+  const [searchKey, setSearchKey] = useState('');
 
-  const searchAbleKeys = ["Name", "Host"];
+  const searchAbleKeys = ['Name', 'Host'];
 
-  const [err, data] = useSetTimeout("smtps", page - 1, limit, searchTerm, searchKey);
+  const [err, data] = useSetTimeout('smtps', page - 1, limit, searchTerm, searchKey);
 
   useEffect(() => {
     if (data) {
       setSmtps(data.smtps);
       setTotalCount(data.count);
     } else if (err) {
-      alert({ type: "warning", text: err.message });
+      alert({ type: 'warning', text: err.message });
     }
   }, [data, err, alert]);
 
-  const headers = [{ label: "Name" }, { label: "Host" }, { label: "Actions" }];
+  const headers = [{ label: 'Name' }, { label: 'Host' }, { label: 'Actions' }];
 
   const rows = smtps.map((smtp) => {
     const { _id, name, host } = smtp;
@@ -37,7 +39,10 @@ export default function SmtpList() {
       name,
       host,
       actions: (
-        <button key={_id} onClick={() => navigate(`/edit-smtp/${_id}`)} className="btn btn-primary ">
+        <button
+          key={_id}
+          onClick={() => navigate(`/edit-smtp/${_id}`)}
+          className="btn btn-primary ">
           Edit
         </button>
       ),
@@ -51,7 +56,9 @@ export default function SmtpList() {
           <div className="card-header">
             <h3 className="card-title">All SMTPs List</h3>
             <div className="card-options">
-              <button onClick={() => navigate("/add-smtp")} className="btn btn-primary">
+              <button
+                onClick={() => navigate('/add-smtp')}
+                className="btn btn-primary">
                 Add SMTP
               </button>
             </div>
@@ -76,6 +83,7 @@ export default function SmtpList() {
           </div>
         </div>
       </div>
+      <Addnote des={listSMTPNote} />
     </div>
   );
 }

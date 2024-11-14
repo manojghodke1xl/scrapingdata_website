@@ -1,11 +1,13 @@
-import { useContext, useEffect, useState } from "react";
-import { GlobalContext } from "../../GlobalContext";
-import { useNavigate } from "react-router-dom";
-import Table from "../../comps/table";
-import ConfirmationModal from "../../comps/confirmation";
-import useSetTimeout from "../../Hooks/useDebounce";
-import useGetAllSites from "../../Hooks/useGetAllSites";
-import { deleteEnquiryApi } from "../../apis/enquiry-apis";
+import { useContext, useEffect, useState } from 'react';
+import { GlobalContext } from '../../GlobalContext';
+import { useNavigate } from 'react-router-dom';
+import Table from '../../comps/table';
+import ConfirmationModal from '../../comps/confirmation';
+import useSetTimeout from '../../Hooks/useDebounce';
+import useGetAllSites from '../../Hooks/useGetAllSites';
+import { deleteEnquiryApi } from '../../apis/enquiry-apis';
+import Addnote from '../../comps/addnote';
+import { listEnquiryNote } from '../notes/notes-message';
 
 export default function EnquiryList() {
   const { alert, setLoading } = useContext(GlobalContext);
@@ -16,46 +18,46 @@ export default function EnquiryList() {
   const [limit, setLimit] = useState(8);
   const [modalOpen, setModalOpen] = useState(false);
   const [totalCount, setTotalCount] = useState(0);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [searchKey, setSearchKey] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
+  const [searchKey, setSearchKey] = useState('');
   const [selectedEnquiries, setSelectedEnquiries] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
-  const [siteId, setSiteId] = useState("");
+  const [siteId, setSiteId] = useState('');
   const allsites = useGetAllSites();
 
-  const searchAbleKeys = ["Name", "Email", "Mobile", "Service", "Subject", "Site"];
+  const searchAbleKeys = ['Name', 'Email', 'Mobile', 'Service', 'Subject', 'Site'];
 
-  const [err, data, setRefresh] = useSetTimeout("enquiries", page - 1, limit, searchTerm, searchKey, "", siteId);
+  const [err, data, setRefresh] = useSetTimeout('enquiries', page - 1, limit, searchTerm, searchKey, '', siteId);
 
   useEffect(() => {
     if (data) {
       setEnquiries(data.enquiries);
       setTotalCount(data.count);
     } else if (err) {
-      alert({ type: "warning", text: err.message });
+      alert({ type: 'warning', text: err.message });
     }
   }, [data, err, alert]);
 
   const deleteSelectedEnquiries = async () => {
     if (!selectedEnquiries.length)
       return alert({
-        type: "warning",
-        text: "Please select at least one enquiry to delete.",
+        type: 'warning',
+        text: 'Please select at least one enquiry to delete.',
       });
 
     setLoading(true);
     try {
       const { status, data } = await deleteEnquiryApi(selectedEnquiries);
       if (status) {
-        alert({ type: "success", text: data.message });
+        alert({ type: 'success', text: data.message });
         setRefresh((r) => !r);
         setSelectedEnquiries([]);
         setSelectAll(false);
       } else {
-        alert({ type: "danger", text: data });
+        alert({ type: 'danger', text: data });
       }
     } catch (error) {
-      alert({ type: "danger", text: error.message });
+      alert({ type: 'danger', text: error.message });
     } finally {
       setLoading(false);
       setModalOpen(false);
@@ -93,18 +95,25 @@ export default function EnquiryList() {
 
   const headers = [
     {
-      label: <input className="form-check-input" type="checkbox" checked={selectAll} onChange={handleSelectAll} />,
+      label: (
+        <input
+          className="form-check-input"
+          type="checkbox"
+          checked={selectAll}
+          onChange={handleSelectAll}
+        />
+      ),
     },
-    { label: "Customer Name" },
-    { label: "Customer Email" },
-    { label: "Customer Mobile" },
-    { label: "Enquiry Service" },
-    { label: "Enquiry Subject" },
-    { label: "Enquiry Message" },
-    { label: "Site" },
-    { label: "Created Date" },
-    { label: "Updated Date" },
-    { label: "Actions" },
+    { label: 'Customer Name' },
+    { label: 'Customer Email' },
+    { label: 'Customer Mobile' },
+    { label: 'Enquiry Service' },
+    { label: 'Enquiry Subject' },
+    { label: 'Enquiry Message' },
+    { label: 'Site' },
+    { label: 'Created Date' },
+    { label: 'Updated Date' },
+    { label: 'Actions' },
   ];
 
   const rows = enquiries.map((enq) => {
@@ -122,24 +131,26 @@ export default function EnquiryList() {
       ),
       name,
       email,
-      code: (ccode ?? "") + " " + (mobile ?? ""),
+      code: (ccode ?? '') + ' ' + (mobile ?? ''),
       service,
       subject,
       message,
       siteName: `${site.name} (${site.host}) `,
-      created: new Date(createdAt).toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
+      created: new Date(createdAt).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
       }),
-      updated: new Date(updatedAt).toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
+      updated: new Date(updatedAt).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
       }),
       action: (
         <div key={_id}>
-          <button onClick={() => navigate(`/enquiry/${_id}`)} className="btn btn-primary me-1">
+          <button
+            onClick={() => navigate(`/enquiry/${_id}`)}
+            className="btn btn-primary me-1">
             View
           </button>
         </div>
@@ -155,11 +166,13 @@ export default function EnquiryList() {
             <h3 className="card-title">All Enquiries</h3>
             <div className="card-options">
               {selectedEnquiries.length ? (
-                <button onClick={() => setModalOpen(true)} className="btn btn-danger">
+                <button
+                  onClick={() => setModalOpen(true)}
+                  className="btn btn-danger">
                   Delete Selected
                 </button>
               ) : (
-                ""
+                ''
               )}
             </div>
           </div>
@@ -192,6 +205,7 @@ export default function EnquiryList() {
         onConfirm={deleteSelectedEnquiries}
         message={`Are you sure you want to delete selected enquiry? This action cannot be undone.`}
       />
+      <Addnote des={listEnquiryNote} />
     </div>
   );
 }

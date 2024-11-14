@@ -1,16 +1,18 @@
-import { useContext, useEffect, useState } from "react";
-import { GlobalContext } from "../../GlobalContext";
-import { useNavigate } from "react-router-dom";
-import Table from "../../comps/table";
-import ConfirmationModal from "../../comps/confirmation";
-import useSetTimeout from "../../Hooks/useDebounce";
-import useGetAllSites from "../../Hooks/useGetAllSites";
-import DuplicateModal from "../../comps/duplicate";
+import { useContext, useEffect, useState } from 'react';
+import { GlobalContext } from '../../GlobalContext';
+import { useNavigate } from 'react-router-dom';
+import Table from '../../comps/table';
+import ConfirmationModal from '../../comps/confirmation';
+import useSetTimeout from '../../Hooks/useDebounce';
+import useGetAllSites from '../../Hooks/useGetAllSites';
+import DuplicateModal from '../../comps/duplicate';
 import {
   deleteTestimonialApi,
   updateTestimonialSitesApi,
   updateTestimonialStatusApi,
-} from "../../apis/testimonial-apis";
+} from '../../apis/testimonial-apis';
+import Addnote from '../../comps/addnote';
+import { listTestimonialNote } from '../notes/notes-message';
 
 export default function TestimonialList() {
   const navigate = useNavigate();
@@ -22,23 +24,23 @@ export default function TestimonialList() {
   const [modalOpen, setModalOpen] = useState(false);
   const [siteModal, setSiteModal] = useState(false);
   const [totalCount, setTotalCount] = useState(0);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [searchKey, setSearchKey] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
+  const [searchKey, setSearchKey] = useState('');
   const [selectedTestimonials, setSelectedTestimonials] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
-  const [statusFilter, setStatusFilter] = useState("");
-  const [siteId, setSiteId] = useState("");
-  const [statusSelect, setStatusSelect] = useState("");
+  const [statusFilter, setStatusFilter] = useState('');
+  const [siteId, setSiteId] = useState('');
+  const [statusSelect, setStatusSelect] = useState('');
 
   const allsites = useGetAllSites();
 
-  const searchAbleKeys = ["Name"];
+  const searchAbleKeys = ['Name'];
 
-  const filter = ["Active", "Inactive"];
-  const Status = ["Active", "Inactive"];
+  const filter = ['Active', 'Inactive'];
+  const Status = ['Active', 'Inactive'];
 
   const [err, data, setRefresh] = useSetTimeout(
-    "testimonials",
+    'testimonials',
     page - 1,
     limit,
     searchTerm,
@@ -52,7 +54,7 @@ export default function TestimonialList() {
       setTestimonials(data.testimonials);
       setTotalCount(data.count);
     } else if (err) {
-      alert({ type: "warning", text: err.message });
+      alert({ type: 'warning', text: err.message });
     }
   }, [data, err, alert]);
 
@@ -62,16 +64,16 @@ export default function TestimonialList() {
       const { status, data } = await updateTestimonialStatusApi(selectedTestimonials, testimonialStatus);
 
       if (status) {
-        alert({ type: "success", text: data.message });
+        alert({ type: 'success', text: data.message });
         setRefresh((r) => !r);
         setSelectedTestimonials([]);
-        setStatusSelect("");
+        setStatusSelect('');
         setSelectAll(false);
       } else {
-        alert({ type: "danger", title: "Error!", text: data });
+        alert({ type: 'danger', title: 'Error!', text: data });
       }
     } catch (error) {
-      alert({ type: "danger", title: "Error!", text: error.message });
+      alert({ type: 'danger', title: 'Error!', text: error.message });
     } finally {
       setLoading(false);
     }
@@ -80,18 +82,18 @@ export default function TestimonialList() {
   const updateTestimonialSites = async (selectedSites, selectedAction) => {
     setLoading(true);
     try {
-      const action = selectedAction === "Add" ? true : false;
+      const action = selectedAction === 'Add' ? true : false;
       const { status, data } = await updateTestimonialSitesApi(selectedTestimonials, selectedSites, action);
       if (status) {
-        alert({ type: "success", text: data.message });
+        alert({ type: 'success', text: data.message });
         setRefresh((r) => !r);
         setSelectedTestimonials([]);
         setSelectAll(false);
       } else {
-        alert({ type: "danger", text: data });
+        alert({ type: 'danger', text: data });
       }
     } catch (error) {
-      alert({ type: "danger", text: error.message });
+      alert({ type: 'danger', text: error.message });
     } finally {
       setLoading(false);
       setModalOpen(false);
@@ -101,7 +103,7 @@ export default function TestimonialList() {
 
   const deleteSelectedTestimonial = async () => {
     if (!selectedTestimonials.length) {
-      alert({ type: "warning", text: "Please select at least one testimonial to delete." });
+      alert({ type: 'warning', text: 'Please select at least one testimonial to delete.' });
       return;
     }
     setLoading(true);
@@ -109,18 +111,18 @@ export default function TestimonialList() {
       const { status, data } = await deleteTestimonialApi(selectedTestimonials);
 
       if (status) {
-        alert({ type: "success", text: data.message });
+        alert({ type: 'success', text: data.message });
         setRefresh((r) => !r);
       } else {
-        alert({ type: "danger", title: "Error!", text: data });
+        alert({ type: 'danger', title: 'Error!', text: data });
       }
     } catch (error) {
-      alert({ type: "danger", title: "Error!", text: error.message });
+      alert({ type: 'danger', title: 'Error!', text: error.message });
     } finally {
       setLoading(false);
       setModalOpen(false);
       setSelectedTestimonials([]);
-      setStatusSelect("");
+      setStatusSelect('');
     }
   };
 
@@ -129,7 +131,7 @@ export default function TestimonialList() {
       let updatedSelected;
       if (prevSelected.includes(testimonialId)) {
         updatedSelected = prevSelected.filter((id) => id !== testimonialId);
-        setStatusSelect("");
+        setStatusSelect('');
       } else {
         updatedSelected = [...prevSelected, testimonialId];
       }
@@ -153,12 +155,19 @@ export default function TestimonialList() {
 
   const headers = [
     {
-      label: <input className="form-check-input " type="checkbox" checked={selectAll} onChange={handleSelectAll} />,
+      label: (
+        <input
+          className="form-check-input "
+          type="checkbox"
+          checked={selectAll}
+          onChange={handleSelectAll}
+        />
+      ),
     },
-    { label: "Name" },
-    { label: "Status" },
-    { label: "Actions" },
-    { label: "Sites" },
+    { label: 'Name' },
+    { label: 'Status' },
+    { label: 'Actions' },
+    { label: 'Sites' },
   ];
 
   const rows = testimonials.map((testimonial) => {
@@ -181,11 +190,14 @@ export default function TestimonialList() {
         <span className="badge bg-danger">Inactive</span>
       ),
       actions: (
-        <button key={_id} onClick={() => navigate(`/edit-testimonial/${_id}`)} className="btn btn-primary me-1">
+        <button
+          key={_id}
+          onClick={() => navigate(`/edit-testimonial/${_id}`)}
+          className="btn btn-primary me-1">
           Edit
         </button>
       ),
-      sites: sites.map((s) => `${s.name} (${s.host})`).join(", "),
+      sites: sites.map((s) => `${s.name} (${s.host})`).join(', '),
     };
   });
 
@@ -200,10 +212,14 @@ export default function TestimonialList() {
                 <div className="text-secondary">
                   Filter
                   <div className="mx-2 d-inline-block">
-                    <select className="form-select form-control-sm" onChange={(e) => setStatusFilter(e.target.value)}>
+                    <select
+                      className="form-select form-control-sm"
+                      onChange={(e) => setStatusFilter(e.target.value)}>
                       <option value="">All</option>
                       {filter.map((key, i) => (
-                        <option key={i} value={key.toLowerCase()}>
+                        <option
+                          key={i}
+                          value={key.toLowerCase()}>
                           {key}
                         </option>
                       ))}
@@ -217,33 +233,42 @@ export default function TestimonialList() {
                       <div className="mx-2 d-inline-block">
                         <select
                           className="form-select form-control-sm"
-                          onChange={(e) => setStatusSelect(e.target.value)}
-                        >
+                          onChange={(e) => setStatusSelect(e.target.value)}>
                           <option value="">Select</option>
                           {Status.map((key, i) => (
-                            <option key={i} value={key.toLowerCase()}>
+                            <option
+                              key={i}
+                              value={key.toLowerCase()}>
                               {key}
                             </option>
                           ))}
                         </select>
                       </div>
                     </div>
-                    {statusSelect === "active" && (
-                      <button onClick={() => updateTestimonialStatus(true)} className="btn btn-success mx-2">
+                    {statusSelect === 'active' && (
+                      <button
+                        onClick={() => updateTestimonialStatus(true)}
+                        className="btn btn-success mx-2">
                         Apply
                       </button>
                     )}
-                    {statusSelect === "inactive" && (
-                      <button onClick={() => updateTestimonialStatus(false)} className="btn btn-danger mx-2">
+                    {statusSelect === 'inactive' && (
+                      <button
+                        onClick={() => updateTestimonialStatus(false)}
+                        className="btn btn-danger mx-2">
                         Apply
                       </button>
                     )}
-                    <button onClick={() => setSiteModal(true)} className="btn btn-primary mx-2">
+                    <button
+                      onClick={() => setSiteModal(true)}
+                      className="btn btn-primary mx-2">
                       Sites
                     </button>
                   </>
                 ) : null}
-                <button onClick={() => navigate("/add-testimonial")} className="btn btn-primary">
+                <button
+                  onClick={() => navigate('/add-testimonial')}
+                  className="btn btn-primary">
                   Add Testimonial
                 </button>
               </div>
@@ -284,9 +309,11 @@ export default function TestimonialList() {
         onClose={() => setSiteModal(false)}
         onConfirm={() => updateTestimonialSites()}
         title="Update Sites"
-        action={["Add", "Remove"]}
+        action={['Add', 'Remove']}
         confirmText="Update"
       />
+
+      <Addnote des={listTestimonialNote} />
     </div>
   );
 }

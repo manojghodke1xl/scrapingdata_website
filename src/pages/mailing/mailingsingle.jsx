@@ -1,7 +1,9 @@
-import { useContext, useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { GlobalContext } from "../../GlobalContext";
-import { getMailingListById } from "../../apis/mailing-apis";
+import { useContext, useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { GlobalContext } from '../../GlobalContext';
+import { getMailingListById } from '../../apis/mailing-apis';
+import Addnote from '../../comps/addnote';
+import { addMailingNote } from '../notes/notes-message';
 
 const MailingSingle = () => {
   const { id } = useParams();
@@ -15,10 +17,10 @@ const MailingSingle = () => {
       if (status) {
         setMailingList(data.list);
       } else {
-        alert({ type: "warning", text: data });
+        alert({ type: 'warning', text: data });
       }
     })()
-      .catch((error) => alert({ type: "danger", text: error.message }))
+      .catch((error) => alert({ type: 'danger', text: error.message }))
       .finally(() => setLoading(false));
   }, [alert, id, setLoading]);
 
@@ -35,7 +37,12 @@ const MailingSingle = () => {
                   <div className="row g-3">
                     <div className="col-md">
                       <div className="form-label">Customer Email</div>
-                      <input type="text" className="form-control" defaultValue={mailingList?.email} readOnly />
+                      <input
+                        type="text"
+                        className="form-control"
+                        defaultValue={mailingList?.email}
+                        readOnly
+                      />
                     </div>
                   </div>
 
@@ -84,7 +91,12 @@ const MailingSingle = () => {
                     </div>
                     <div className="col-md">
                       <div className="form-label">Site Name</div>
-                      <input type="text" className="form-control" defaultValue={mailingList?.site?.name} readOnly />
+                      <input
+                        type="text"
+                        className="form-control"
+                        defaultValue={mailingList?.site?.name}
+                        readOnly
+                      />
                     </div>
                     <div className="col-md">
                       <div className="form-label">Date Time</div>
@@ -102,6 +114,7 @@ const MailingSingle = () => {
           </div>
         </div>
       </div>
+      <Addnote des={addMailingNote} />
     </div>
   );
 };
