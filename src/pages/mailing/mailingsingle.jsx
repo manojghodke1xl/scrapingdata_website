@@ -35,14 +35,19 @@ const MailingSingle = () => {
                   <div className="row g-3">
                     <div className="col-md">
                       <div className="form-label">Customer Email</div>
-                      <input type="text" className="form-control" defaultValue={mailingList?.email} readOnly />
+                      <input
+                        type="text"
+                        className="form-control"
+                        defaultValue={mailingList?.email}
+                        readOnly
+                      />
                     </div>
                   </div>
 
                   <h3 className="card-title mt-4">Request header</h3>
                   <p className="card-subtitle">
-                    Request headers are key-value pairs sent by a client to provide information about the request or the
-                    client itself.
+                    Request headers are key-value pairs sent by a client to
+                    provide information about the request or the client itself.
                   </p>
                   <div>
                     <textarea
@@ -57,8 +62,8 @@ const MailingSingle = () => {
 
                   <h3 className="card-title mt-4">User Agent String</h3>
                   <p className="card-subtitle">
-                    A User Agent String identifies the browser, version, and operating system of a client device to web
-                    servers.
+                    A User Agent String identifies the browser, version, and
+                    operating system of a client device to web servers.
                   </p>
                   <div>
                     <textarea
@@ -84,14 +89,34 @@ const MailingSingle = () => {
                     </div>
                     <div className="col-md">
                       <div className="form-label">Site Name</div>
-                      <input type="text" className="form-control" defaultValue={mailingList?.site?.name} readOnly />
+                      <input
+                        type="text"
+                        className="form-control"
+                        defaultValue={mailingList?.site?.name}
+                        readOnly
+                      />
                     </div>
                     <div className="col-md">
                       <div className="form-label">Date Time</div>
                       <input
-                        type="datetime-local"
+                        type="text"
                         className="form-control"
-                        defaultValue={mailingList?.createdAt?.slice(0, 16)}
+                        value={
+                          mailingList?.createdAt
+                            ? new Date(mailingList.createdAt)
+                                .toLocaleString("en-GB", {
+                                  day: "2-digit",
+                                  month: "2-digit",
+                                  year: "numeric",
+                                  hour: "2-digit",
+                                  minute: "2-digit",
+                                  second: "2-digit",
+                                  hour12: true,
+                                })
+                                .replace("am", "AM")
+                                .replace("pm", "PM")
+                            : ""
+                        }
                         readOnly
                       />
                     </div>
