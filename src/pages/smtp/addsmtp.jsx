@@ -58,11 +58,13 @@ export default function AddSmtp() {
     setLoading(true);
     try {
       const { status, data } = await (id ? updateSmtpApi(id, smtpDetails) : addSmtpApi(smtpDetails));
+      console.log(data);
+      
       if (status) {
         alert({ type: 'success', text: data.message });
         navigate('/smtp-list');
       } else {
-        alert({ type: 'warning', text: data });
+        alert({ type: 'warning', text: data.error });
       }
     } catch (error) {
       alert({ type: 'danger', text: error.message });
@@ -193,7 +195,7 @@ export default function AddSmtp() {
 
               <div className="form-footer">
                 <button type="submit" className="btn btn-primary w-100">
-                  {id ? "Edit Smtp" : "Add Smtp"}
+                  {id ? "Update" : "Add"}
                 </button>
               </div>
             </form>

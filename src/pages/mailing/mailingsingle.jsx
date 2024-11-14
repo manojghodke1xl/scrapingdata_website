@@ -1,9 +1,10 @@
 import { useContext, useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { GlobalContext } from "../../GlobalContext";
 import { getMailingListById } from "../../apis/mailing-apis";
 import Addnote from '../../comps/addnote';
 import { addMailingNote } from '../notes/notes-message';
+import { formatDateTime } from "../../utils/function";
 
 const MailingSingle = () => {
   const { id } = useParams();
