@@ -21,14 +21,14 @@ export default function AddSite() {
     isActive: true,
     smtp: "",
     sendUserEnquiry: false,
-    userEnquiryMailData: { subject: "", body: "" },
+    // userEnquiryMailData: { subject: "", body: "" },
     sendUserMailingList: false,
-    userMailingListMailData: { subject: "", body: "" },
+    // userMailingListMailData: { subject: "", body: "" },
     sendAdminEnquiry: false,
-    adminEnquiryMailData: { subject: "", body: "" },
+    // adminEnquiryMailData: { subject: "", body: "" },
     adminEnquiryEmails: [],
     sendAdminMailingList: false,
-    adminMailingListMailData: { subject: "", body: "" },
+    // adminMailingListMailData: { subject: "", body: "" },
     adminMailingListEmails: [],
     enquiryWebhookUrl: "",
     mailinglistWebhookUrl: "",
@@ -200,7 +200,9 @@ export default function AddSite() {
 
               <div className="mb-3">
                 <label className="row">
-                  <span className="col form-label">Send User Enquiry Notification</span>
+                  <span className="col form-label">
+                    Send User Enquiry Notification
+                  </span>
                   <span className="col-auto">
                     <label className="form-check form-check-single form-switch">
                       <input
@@ -222,11 +224,15 @@ export default function AddSite() {
               {siteDetails.sendUserEnquiry && (
                 <>
                   <div className="mb-3">
-                    <label className={id ? "form-label" : "form-label required"}>Subject</label>
+                    <label
+                      className={id ? "form-label" : "form-label required"}
+                    >
+                      Subject
+                    </label>
                     <input
                       type="text"
                       className="form-control"
-                      value={siteDetails.userEnquiryMailData.subject}
+                      value={siteDetails.userEnquiryMailData?.subject ?? ""}
                       onChange={(e) =>
                         handleMailDataChange(
                           "userEnquiryMailData",
@@ -237,10 +243,14 @@ export default function AddSite() {
                     />
                   </div>
                   <div className="mb-3">
-                    <label className={id ? "form-label" : "form-label required"}>Body</label>
+                    <label
+                      className={id ? "form-label" : "form-label required"}
+                    >
+                      Body
+                    </label>
                     <textarea
                       className="form-control"
-                      value={siteDetails.userEnquiryMailData.body}
+                      value={siteDetails.userEnquiryMailData?.body ?? ""}
                       onChange={(e) =>
                         handleMailDataChange(
                           "userEnquiryMailData",
@@ -254,7 +264,9 @@ export default function AddSite() {
               )}
               <div className="mb-3">
                 <label className="row">
-                  <span className="col form-label">Send User Mailing Notification</span>
+                  <span className="col form-label">
+                    Send User Mailing Notification
+                  </span>
                   <span className="col-auto">
                     <label className="form-check form-check-single form-switch">
                       <input
@@ -276,11 +288,15 @@ export default function AddSite() {
               {siteDetails.sendUserMailingList && (
                 <>
                   <div className="mb-3">
-                    <label className={id ? "form-label" : "form-label required"}>Subject</label>
+                    <label
+                      className={id ? "form-label" : "form-label required"}
+                    >
+                      Subject
+                    </label>
                     <input
                       type="text"
                       className="form-control"
-                      value={siteDetails.userMailingListMailData.subject}
+                      value={siteDetails.userMailingListMailData?.subject ?? ""}
                       onChange={(e) =>
                         handleMailDataChange(
                           "userMailingListMailData",
@@ -291,10 +307,14 @@ export default function AddSite() {
                     />
                   </div>
                   <div className="mb-3">
-                    <label className={id ? "form-label" : "form-label required"}>Body</label>
+                    <label
+                      className={id ? "form-label" : "form-label required"}
+                    >
+                      Body
+                    </label>
                     <textarea
                       className="form-control"
-                      value={siteDetails.userMailingListMailData.body}
+                      value={siteDetails.userMailingListMailData?.body ?? ""}
                       onChange={(e) =>
                         handleMailDataChange(
                           "userMailingListMailData",
@@ -330,11 +350,15 @@ export default function AddSite() {
               {siteDetails.sendAdminEnquiry && (
                 <>
                   <div className="mb-3">
-                    <label className={id ? "form-label" : "form-label required"}>Subject</label>
+                    <label
+                      className={id ? "form-label" : "form-label required"}
+                    >
+                      Subject
+                    </label>
                     <input
                       type="text"
                       className="form-control"
-                      value={siteDetails.adminEnquiryMailData.subject}
+                      value={siteDetails.adminEnquiryMailData?.subject ?? ""}
                       onChange={(e) =>
                         handleMailDataChange(
                           "adminEnquiryMailData",
@@ -345,10 +369,14 @@ export default function AddSite() {
                     />
                   </div>
                   <div className="mb-3">
-                    <label className={id ? "form-label" : "form-label required"}>Body</label>
+                    <label
+                      className={id ? "form-label" : "form-label required"}
+                    >
+                      Body
+                    </label>
                     <textarea
                       className="form-control"
-                      value={siteDetails.adminEnquiryMailData.body}
+                      value={siteDetails.adminEnquiryMailData?.body ?? ""}
                       onChange={(e) =>
                         handleMailDataChange(
                           "adminEnquiryMailData",
@@ -359,7 +387,11 @@ export default function AddSite() {
                     />
                   </div>
                   <div className="mb-3">
-                  <label className={id ? "form-label" : "form-label required"}>Email</label>
+                    <label
+                      className={id ? "form-label" : "form-label required"}
+                    >
+                      Email
+                    </label>
                     <input
                       type="email"
                       name="email"
@@ -410,7 +442,9 @@ export default function AddSite() {
 
               <div className="mb-3">
                 <label className="row">
-                  <span className="col form-label">Send Admin Mailing List</span>
+                  <span className="col form-label">
+                    Send Admin Mailing List
+                  </span>
                   <span className="col-auto">
                     <label className="form-check form-check-single form-switch">
                       <input
@@ -432,11 +466,17 @@ export default function AddSite() {
               {siteDetails.sendAdminMailingList && (
                 <>
                   <div className="mb-3">
-                    <label className={id ? "form-label" : "form-label required"}>Subject</label>
+                    <label
+                      className={id ? "form-label" : "form-label required"}
+                    >
+                      Subject
+                    </label>
                     <input
                       type="text"
                       className="form-control"
-                      value={siteDetails.adminMailingListMailData.subject}
+                      value={
+                        siteDetails.adminMailingListMailData?.subject ?? ""
+                      }
                       onChange={(e) =>
                         handleMailDataChange(
                           "adminMailingListMailData",
@@ -447,10 +487,14 @@ export default function AddSite() {
                     />
                   </div>
                   <div className="mb-3">
-                    <label className={id ? "form-label" : "form-label required"}>Body</label>
+                    <label
+                      className={id ? "form-label" : "form-label required"}
+                    >
+                      Body
+                    </label>
                     <textarea
                       className="form-control"
-                      value={siteDetails.adminMailingListMailData.body}
+                      value={siteDetails.adminMailingListMailData?.body ?? ""}
                       onChange={(e) =>
                         handleMailDataChange(
                           "adminMailingListMailData",
@@ -461,7 +505,11 @@ export default function AddSite() {
                     />
                   </div>
                   <div className="mb-3">
-                  <label className={id ? "form-label" : "form-label required"}>Email</label>
+                    <label
+                      className={id ? "form-label" : "form-label required"}
+                    >
+                      Email
+                    </label>
                     <input
                       type="email"
                       name="email"
