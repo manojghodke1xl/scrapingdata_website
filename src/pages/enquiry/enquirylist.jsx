@@ -7,6 +7,7 @@ import useSetTimeout from '../../Hooks/useDebounce';
 import useGetAllSites from '../../Hooks/useGetAllSites';
 import { deleteEnquiryApi } from '../../apis/enquiry-apis';
 import Addnote from '../../comps/addnote';
+import { listEnquiryNote } from '../notes/notes-message';
 
 export default function EnquiryList() {
   const { alert, setLoading } = useContext(GlobalContext);
@@ -204,9 +205,7 @@ export default function EnquiryList() {
         onConfirm={deleteSelectedEnquiries}
         message={`Are you sure you want to delete selected enquiry? This action cannot be undone.`}
       />
-      <Addnote
-        des={`This is All Enquiry Page. Here, you can view all enquiries from all websites. The table includes the customer's name who created the enquiry, their email, mobile number, enquiry service, subject, message, website associated with the enquiry, the created date, the updated date, and a view button to display specific customer enquiry details. There is a site dropdown that lists all website names selecting a specific website will show only the details related to that website in the table. Additionally, In the table, there is a checkbox for deleting a particular enquiry or multiple enquiries.`}
-      />
+      <Addnote des={listEnquiryNote} />
     </div>
   );
 }

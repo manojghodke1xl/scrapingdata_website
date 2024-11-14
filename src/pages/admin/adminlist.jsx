@@ -6,6 +6,7 @@ import useSetTimeout from '../../Hooks/useDebounce';
 import useGetAllSites from '../../Hooks/useGetAllSites';
 import { updateAdminStatusApi } from '../../apis/admin-apis';
 import Addnote from '../../comps/addnote';
+import { listAdminNote } from '../notes/notes-message';
 
 export default function AdminList() {
   const navigate = useNavigate();
@@ -242,9 +243,7 @@ export default function AdminList() {
           </div>
         </div>
       </div>
-      <Addnote
-        des={`This is the All Admin List Page. Here, there is a filter dropdown that filters details by status, allowing you to view all Admins and their sub-Admins. The table includes the name of the Admin, Admin email ID, created date, updated date, status indicating whether the Admin or sub-Admin is active or inactive, the site assigned to the sub-Admin, and a Edit button to Editing specific Admin details. There is also a site dropdown that lists all website names; selecting a specific website will show only the details related to that website in the table. Additionally, the table has a checkbox for changing the status of a particular sub-Admin or multiple sub-Admins. The checkbox is not available for Admins, as their status cannot be changed. There is a search dropdown, and when you select an option, you can search the table based on the selected option. `}
-      />
+      <Addnote des={listAdminNote} />
     </div>
   );
 }

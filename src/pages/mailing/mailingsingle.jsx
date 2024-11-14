@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { GlobalContext } from '../../GlobalContext';
 import { getMailingListById } from '../../apis/mailing-apis';
 import Addnote from '../../comps/addnote';
+import { addMailingNote } from '../notes/notes-message';
 
 const MailingSingle = () => {
   const { id } = useParams();
@@ -113,9 +114,7 @@ const MailingSingle = () => {
           </div>
         </div>
       </div>
-      <Addnote
-        des={`This is the Mailing List Details page. Here, you can find the details of a particular Mail Detials. This page includes the customer's email. It also displays the request header of the specific website, the user agent string to identify the browser, version, and operating system of the client's device to web servers, the customer's IP address, the website name for that enquiry, and the date and time when the enquiry was created.`}
-      />
+      <Addnote des={addMailingNote} />
     </div>
   );
 };

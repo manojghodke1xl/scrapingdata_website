@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { GlobalContext } from '../../GlobalContext';
 import { getEnquiryById } from '../../apis/enquiry-apis';
 import Addnote from '../../comps/addnote';
+import { addEnquiryNote } from '../notes/notes-message';
 
 const Enquirysingle = () => {
   const { id } = useParams();
@@ -156,9 +157,7 @@ const Enquirysingle = () => {
           </div>
         </div>
       </div>
-      <Addnote
-        des={`This is the Enquiry Details page. Here, you can find the details of a particular enquiry. This page includes the customer's name, email, mobile number, message, service, and subject. It also displays the request header of the specific website, the user agent string to identify the browser, version, and operating system of the client's device to web servers, the customer's IP address, the website name for that enquiry, and the date and time when the enquiry was created.`}
-      />
+      <Addnote des={addEnquiryNote} />
     </div>
   );
 };

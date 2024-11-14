@@ -1,19 +1,21 @@
-import { useContext, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { GlobalContext } from "../../GlobalContext";
-import { getGuideById, addGuideApi, updateGuideApi } from "../../apis/guide-apis";
-import useGetAllSites from "../../Hooks/useGetAllSites";
-import { uploadFile } from "../../utils/fileUpload";
+import { useContext, useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { GlobalContext } from '../../GlobalContext';
+import { getGuideById, addGuideApi, updateGuideApi } from '../../apis/guide-apis';
+import useGetAllSites from '../../Hooks/useGetAllSites';
+import { uploadFile } from '../../utils/fileUpload';
+import Addnote from '../../comps/addnote';
+import { addGuideNote, editGuideNote } from '../notes/notes-message';
 
 export default function AddGuide() {
   const navigate = useNavigate();
-  const { id = "" } = useParams();
+  const { id = '' } = useParams();
   const { alert, setLoading } = useContext(GlobalContext);
   const availableSites = useGetAllSites();
 
   const [guideDetails, setGuideDetails] = useState({
-    title: "",
-    desc: "",
+    title: '',
+    desc: '',
     isActive: true,
     isGlobal: false,
     image: null,
@@ -39,10 +41,10 @@ export default function AddGuide() {
             imageFile: image,
           }));
         } else {
-          alert({ type: "warning", text: data });
+          alert({ type: 'warning', text: data });
         }
       })()
-        .catch((error) => alert({ type: "danger", text: error.message }))
+        .catch((error) => alert({ type: 'danger', text: error.message }))
         .finally(() => setLoading(false));
     }
   }, [id, alert, setLoading]);
@@ -50,10 +52,10 @@ export default function AddGuide() {
   const validate = () => {
     const newErrors = {};
     if (!guideDetails.title.trim()) {
-      newErrors.title = "Title is required";
+      newErrors.title = 'Title is required';
     }
     if (guideDetails.sites.length === 0) {
-      newErrors.sites = "At least one site must be selected";
+      newErrors.sites = 'At least one site must be selected';
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -66,13 +68,13 @@ export default function AddGuide() {
     try {
       const { status, data } = await (id ? updateGuideApi(id, guideDetails) : addGuideApi(guideDetails));
       if (status) {
-        alert({ type: "success", text: data.message });
-        navigate("/guide-list");
+        alert({ type: 'success', text: data.message });
+        navigate('/guide-list');
       } else {
-        alert({ type: "warning", text: data });
+        alert({ type: 'warning', text: data });
       }
     } catch (error) {
-      alert({ type: "danger", text: error.message });
+      alert({ type: 'danger', text: error.message });
     } finally {
       setLoading(false);
     }
@@ -87,7 +89,7 @@ export default function AddGuide() {
         isPdf,
         alert,
         setGuideDetails,
-        fieldName: isImage ? "image" : "pdf",
+        fieldName: isImage ? 'image' : 'pdf',
       });
     }
   };
@@ -110,19 +112,19 @@ export default function AddGuide() {
       <div className="container container-tight py-4">
         <div className="card card-md">
           <div className="card-body">
-            <h2 className="h2 text-center mb-4">{id ? "Edit Guide" : "Add Guide"}</h2>
+            <h2 className="h2 text-center mb-4">{id ? 'Edit Guide' : 'Add Guide'}</h2>
             <form onSubmit={handleSubmit}>
               <div className="mb-3">
-                <label className={!id ? "form-label required" : "form-label"}>Title</label>
+                <label className={!id ? 'form-label required' : 'form-label'}>Title</label>
                 <input
                   type="text"
                   name="title"
-                  className={`form-control ${errors.title ? "is-invalid" : ""}`}
+                  className={`form-control ${errors.title ? 'is-invalid' : ''}`}
                   placeholder="Title"
                   value={guideDetails.title}
                   onChange={(e) => {
                     setGuideDetails((d) => ({ ...d, title: e.target.value }));
-                    if (errors.title) setErrors((prev) => ({ ...prev, title: "" }));
+                    if (errors.title) setErrors((prev) => ({ ...prev, title: '' }));
                   }}
                 />
                 {errors.title && <div className="invalid-feedback mt-2">{errors.title}</div>}
@@ -139,10 +141,13 @@ export default function AddGuide() {
                 />
               </div>
               <div className="mb-3">
-                <label className={id ? "form-label d-flex justify-content-between" : "form-label required"}>
+                <label className={id ? 'form-label d-flex justify-content-between' : 'form-label required'}>
                   Upload Image
                   {id && guideDetails.imageFile && (
-                    <a href={guideDetails.imageFile.url} download={guideDetails.imageFile.name} target="_blank">
+                    <a
+                      href={guideDetails.imageFile.url}
+                      download={guideDetails.imageFile.name}
+                      target="_blank">
                       Download Image
                     </a>
                   )}
@@ -156,10 +161,13 @@ export default function AddGuide() {
                 />
               </div>
               <div className="mb-3">
-                <label className={id ? "form-label d-flex justify-content-between" : "form-label required"}>
+                <label className={id ? 'form-label d-flex justify-content-between' : 'form-label required'}>
                   Upload Pdf
                   {id && guideDetails.pdfFile && (
-                    <a href={guideDetails.pdfFile.url} download={guideDetails.pdfFile.name} target="_blank">
+                    <a
+                      href={guideDetails.pdfFile.url}
+                      download={guideDetails.pdfFile.name}
+                      target="_blank">
                       Download Pdf
                     </a>
                   )}
@@ -174,7 +182,7 @@ export default function AddGuide() {
               </div>
               <div className="mb-3">
                 <div className="d-flex justify-content-between mb-3">
-                  <label className={!id ? "form-label required mb-0 me-2" : "form-label mb-0 me-2"}>Select Sites</label>
+                  <label className={!id ? 'form-label required mb-0 me-2' : 'form-label mb-0 me-2'}>Select Sites</label>
                   <label className="form-check mb-0">
                     <input
                       type="checkbox"
@@ -186,16 +194,18 @@ export default function AddGuide() {
                   </label>
                 </div>
 
-                <div className={`form-multi-check-box ${errors.sites ? "is-invalid" : ""}`}>
+                <div className={`form-multi-check-box ${errors.sites ? 'is-invalid' : ''}`}>
                   {availableSites.map((site) => (
-                    <label key={site._id} className="form-check">
+                    <label
+                      key={site._id}
+                      className="form-check">
                       <input
-                        className={`form-check-input ${errors.sites ? "is-invalid" : ""}`}
+                        className={`form-check-input ${errors.sites ? 'is-invalid' : ''}`}
                         type="checkbox"
                         value={site._id}
                         checked={guideDetails.sites.includes(site._id)}
                         onChange={() => {
-                          if (guideDetails.sites) setErrors((prev) => ({ ...prev, sites: "" }));
+                          if (guideDetails.sites) setErrors((prev) => ({ ...prev, sites: '' }));
 
                           setGuideDetails((prevDetail) => {
                             const isSelected = prevDetail.sites.includes(site._id);
@@ -246,14 +256,17 @@ export default function AddGuide() {
                 </label>
               </div>
               <div className="form-footer">
-                <button type="submit" className="btn btn-primary w-100">
-                  {id ? "Update Guide" : "Add Guide"}
+                <button
+                  type="submit"
+                  className="btn btn-primary w-100">
+                  {id ? 'Update Guide' : 'Add Guide'}
                 </button>
               </div>
             </form>
           </div>
         </div>
       </div>
+      {!id ? <Addnote des={addGuideNote} /> : <Addnote des={editGuideNote} />}
     </div>
   );
 }

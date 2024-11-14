@@ -1,24 +1,26 @@
-import { useContext, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { GlobalContext } from "../../GlobalContext";
-import { getSmtpsApi } from "../../apis/smtp-apis";
-import { addSiteApi, getSiteByIdApi, updateSiteApi } from "../../apis/site-apis";
+import { useContext, useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { GlobalContext } from '../../GlobalContext';
+import { getSmtpsApi } from '../../apis/smtp-apis';
+import { addSiteApi, getSiteByIdApi, updateSiteApi } from '../../apis/site-apis';
+import Addnote from '../../comps/addnote';
+import { addWebsiteNote, editWebsiteNote } from '../notes/notes-message';
 
 export default function AddSite() {
   const navigate = useNavigate();
-  const { id = "" } = useParams();
+  const { id = '' } = useParams();
   const { alert, setLoading } = useContext(GlobalContext);
-  const [emailInput, setEmailInput] = useState("");
+  const [emailInput, setEmailInput] = useState('');
   const [errors, setErrors] = useState({});
   const [smtpOptions, setSmtpOptions] = useState([]);
   const [siteDetails, setSiteDetails] = useState({
-    name: "",
-    host: "",
+    name: '',
+    host: '',
     isActive: true,
     forward: false,
-    smtp: "",
+    smtp: '',
     forwardEmails: [],
-    webhookUrl: "",
+    webhookUrl: '',
   });
 
   useEffect(() => {
@@ -27,7 +29,7 @@ export default function AddSite() {
       if (status) {
         setSmtpOptions(data.smtps);
       } else {
-        alert({ type: "warning", text: data });
+        alert({ type: 'warning', text: data });
       }
     })();
   }, [alert]);
@@ -45,21 +47,21 @@ export default function AddSite() {
             forwardEmails: forwardEmails || [],
           }));
         } else {
-          alert({ type: "warning", text: data });
+          alert({ type: 'warning', text: data });
         }
       })()
-        .catch((error) => alert({ type: "danger", text: error.message }))
+        .catch((error) => alert({ type: 'danger', text: error.message }))
         .finally(() => setLoading(false));
     }
   }, [id, setLoading, alert]);
 
   const validate = () => {
     const newErrors = {};
-    if (!siteDetails.name) newErrors.name = "Name is required";
-    if (!siteDetails.host) newErrors.host = "Host is required";
-    if (!siteDetails.smtp) newErrors.smtp = "SMTP is required";
+    if (!siteDetails.name) newErrors.name = 'Name is required';
+    if (!siteDetails.host) newErrors.host = 'Host is required';
+    if (!siteDetails.smtp) newErrors.smtp = 'SMTP is required';
     if (siteDetails.forward && !siteDetails.forwardEmails.length)
-      newErrors.forwardEmails = "Forward Emails are required";
+      newErrors.forwardEmails = 'Forward Emails are required';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -71,13 +73,13 @@ export default function AddSite() {
     try {
       const { status, data } = await (id ? updateSiteApi(id, siteDetails) : addSiteApi(siteDetails));
       if (status) {
-        alert({ type: "success", text: data.message });
-        navigate("/site-list");
+        alert({ type: 'success', text: data.message });
+        navigate('/site-list');
       } else {
-        alert({ type: "warning", text: data });
+        alert({ type: 'warning', text: data });
       }
     } catch (error) {
-      alert({ type: "danger", text: error.message });
+      alert({ type: 'danger', text: error.message });
     } finally {
       setLoading(false);
     }
@@ -90,7 +92,7 @@ export default function AddSite() {
         ...prev,
         forwardEmails: [...prev.forwardEmails, emailInput],
       }));
-      setEmailInput("");
+      setEmailInput('');
     }
   };
 
@@ -106,19 +108,19 @@ export default function AddSite() {
       <div className="container container-tight py-4">
         <div className="card card-md">
           <div className="card-body">
-            <h2 className="h2 text-center mb-4">{id ? "Edit site" : "Add site"}</h2>
+            <h2 className="h2 text-center mb-4">{id ? 'Edit site' : 'Add site'}</h2>
             <form onSubmit={handleDetails}>
               <div className="mb-3">
                 <label className="form-label required">Site Name</label>
                 <input
                   type="text"
                   name="name"
-                  className={`form-control ${errors.name ? "is-invalid" : ""}`}
+                  className={`form-control ${errors.name ? 'is-invalid' : ''}`}
                   placeholder="Site Name"
                   value={siteDetails.name}
                   onChange={(e) => {
                     setSiteDetails((d) => ({ ...d, name: e.target.value }));
-                    if (errors.name) setErrors((prev) => ({ ...prev, name: "" }));
+                    if (errors.name) setErrors((prev) => ({ ...prev, name: '' }));
                   }}
                 />
                 {errors.name && <div className="invalid-feedback mt-2">{errors.name}</div>}
@@ -128,12 +130,12 @@ export default function AddSite() {
                 <input
                   type="text"
                   name="host"
-                  className={`form-control ${errors.host ? "is-invalid" : ""}`}
+                  className={`form-control ${errors.host ? 'is-invalid' : ''}`}
                   placeholder="Site host"
                   value={siteDetails.host}
                   onChange={(e) => {
                     setSiteDetails((d) => ({ ...d, host: e.target.value }));
-                    if (errors.host) setErrors((prev) => ({ ...prev, host: "" }));
+                    if (errors.host) setErrors((prev) => ({ ...prev, host: '' }));
                   }}
                 />
                 {errors.host && <div className="invalid-feedback mt-2">{errors.host}</div>}
@@ -160,15 +162,17 @@ export default function AddSite() {
                   <input
                     type="email"
                     name="email"
-                    className={`form-control ${errors.forwardEmails ? "is-invalid" : ""}`}
+                    className={`form-control ${errors.forwardEmails ? 'is-invalid' : ''}`}
                     placeholder="Enter email"
                     value={emailInput}
                     onChange={(e) => {
-                      if (errors.forwardEmails) setErrors((prev) => ({ ...prev, forwardEmails: "" }));
+                      if (errors.forwardEmails) setErrors((prev) => ({ ...prev, forwardEmails: '' }));
                       setEmailInput(e.target.value);
                     }}
                   />
-                  <button className="btn btn-primary mt-2" onClick={() => validateAndAddEmail()}>
+                  <button
+                    className="btn btn-primary mt-2"
+                    onClick={() => validateAndAddEmail()}>
                     Add Email
                   </button>
                   {errors.forwardEmails && (
@@ -177,13 +181,14 @@ export default function AddSite() {
 
                   <ul className="list-group mt-3">
                     {siteDetails.forwardEmails.map((email, index) => (
-                      <li key={index} className="list-group-item">
+                      <li
+                        key={index}
+                        className="list-group-item">
                         {email}
                         <button
                           type="button"
                           className="btn btn-danger btn-sm float-end"
-                          onClick={() => removeEmail(index)}
-                        >
+                          onClick={() => removeEmail(index)}>
                           Remove
                         </button>
                       </li>
@@ -193,19 +198,20 @@ export default function AddSite() {
               )}
 
               <div className="mb-3">
-                <label className={id ? "form-label" : "form-label required"}>SMTP</label>
+                <label className={id ? 'form-label' : 'form-label required'}>SMTP</label>
                 <select
                   name="smtp"
-                  className={`form-select ${errors.smtp ? "is-invalid" : ""}`}
+                  className={`form-select ${errors.smtp ? 'is-invalid' : ''}`}
                   value={siteDetails.smtp}
                   onChange={(e) => {
                     setSiteDetails((d) => ({ ...d, smtp: e.target.value }));
-                    if (errors.smtp) setErrors((prev) => ({ ...prev, smtp: "" }));
-                  }}
-                >
-                  <option value={""}>Select</option>
+                    if (errors.smtp) setErrors((prev) => ({ ...prev, smtp: '' }));
+                  }}>
+                  <option value={''}>Select</option>
                   {smtpOptions.map((smtp, index) => (
-                    <option key={index} value={smtp._id}>
+                    <option
+                      key={index}
+                      value={smtp._id}>
                       {smtp.name}
                     </option>
                   ))}
@@ -243,14 +249,17 @@ export default function AddSite() {
               </div>
 
               <div className="form-footer">
-                <button type="submit" className="btn btn-primary w-100">
-                  {id ? "Update" : "Create"}
+                <button
+                  type="submit"
+                  className="btn btn-primary w-100">
+                  {id ? 'Update' : 'Create'}
                 </button>
               </div>
             </form>
           </div>
         </div>
       </div>
+      {!id ? <Addnote des={addWebsiteNote} /> : <Addnote des={editWebsiteNote} />}
     </div>
   );
 }

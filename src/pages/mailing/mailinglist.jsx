@@ -7,6 +7,7 @@ import useSetTimeout from '../../Hooks/useDebounce';
 import useGetAllSites from '../../Hooks/useGetAllSites';
 import { deleteMailingListApi } from '../../apis/mailing-apis';
 import Addnote from '../../comps/addnote';
+import { listMailingNote } from '../notes/notes-message';
 
 export default function MailingList() {
   const navigate = useNavigate();
@@ -187,9 +188,7 @@ export default function MailingList() {
           </div>
         </div>
       </div>
-      <Addnote
-        des={`This is the Mailing Page. Here, you can view all Mail-ID of all Customer. The table includes the customer's Mail-ID who created the enquiry, website associated with the enquiry, the created date, the updated date, and a view button to display specific Email details. There is a site dropdown that lists all website names selecting a specific website will show only the details related to that website in the table. Additionally, In the table, there is a checkbox for deleting a particular enquiry or multiple Mailing. There is a search dropdown, and when you select an option, you can search the table based on the selected option. `}
-      />
+      <Addnote des={listMailingNote} />
 
       <ConfirmationModal
         isOpen={modalOpen}

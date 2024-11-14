@@ -4,6 +4,7 @@ import { GlobalContext } from '../../GlobalContext';
 import { getAdminById, addAdminApi, updateAdminApi } from '../../apis/admin-apis';
 import useGetAllSites from '../../Hooks/useGetAllSites';
 import Addnote from '../../comps/addnote';
+import { addAdminNote, editAdminNote } from '../notes/notes-message';
 
 export default function AddAdmin() {
   const navigate = useNavigate();
@@ -228,15 +229,7 @@ export default function AddAdmin() {
           </div>
         </div>
       </div>
-      {!id ? (
-        <Addnote
-          des={`This is the Add Admin page. Here, you can add sub-Admins. This page includes fields for adding the sub-Admin's name, email ID, password, and a list of sites where you can select one or multiple sites. It also has a toggle button for blocking the sub-Admin.`}
-        />
-      ) : (
-        <Addnote
-          des={`This is the Edit Admin page. Here, you can Edit sub-Admins. This page includes fields for adding the sub-Admin's name, email ID, password, and a list of sites where you can select one or multiple sites. It also has a toggle button for blocking the sub-Admin.`}
-        />
-      )}
+      {!id ? <Addnote des={addAdminNote} /> : <Addnote des={editAdminNote} />}
     </div>
   );
 }
