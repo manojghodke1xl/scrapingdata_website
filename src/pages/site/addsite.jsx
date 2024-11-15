@@ -194,12 +194,64 @@ export default function AddSite() {
     }));
   };
 
-  const handleToggle = (field) => {
-    setSiteDetails((prev) => ({
-      ...prev,
-      [field]: !prev[field],
-    }));
-    
+  const handleToggle = (checked, field) => {
+    console.log(field);
+    // setSiteDetails((prev) => ({
+    //   ...prev,
+    //   [field]: !prev[field],
+    // }));
+    switch (field) {
+      case "sendUserEnquiry":
+        {
+          setSiteDetails((prev) => ({
+            ...prev,
+            sendUserEnquiry: checked,
+            sendUserEnquiryData: {
+              subject: "",
+              body: "",
+            },
+          }));
+        }
+        break;
+      case "sendUserMailingList":
+        {
+          setSiteDetails((prev) => ({
+            ...prev,
+            sendUserMailingList: checked,
+            sendUserMailingListData: {
+              subject: "",
+              body: "",
+            },
+          }));
+        }
+        break;
+      case "sendAdminEnquiry":
+        {
+          setSiteDetails((prev) => ({
+            ...prev,
+            sendAdminEnquiry: checked,
+            adminEnquiryEmails: [],
+            sendAdminEnquiryData: {
+              subject: "",
+              body: "",
+            },
+          }));
+        }
+        break;
+      case "sendAdminMailingList":
+        {
+          setSiteDetails((prev) => ({
+            ...prev,
+            sendAdminMailingList: checked,
+            adminMailingListEmails: [],
+            sendUserEnquiryData: {
+              subject: "",
+              body: "",
+            },
+          }));
+        }
+        break;
+    }
   };
 
   return (
@@ -251,7 +303,9 @@ export default function AddSite() {
               <ToggleFormSection
                 label="Send User Enquiry Notification"
                 toggleState={siteDetails.sendUserEnquiry}
-                onToggle={() => handleToggle("sendUserEnquiry")}
+                onToggle={(e) =>
+                  handleToggle(e.target.checked, "sendUserEnquiry")
+                }
               >
                 <FormField
                   label="Subject"
@@ -287,7 +341,9 @@ export default function AddSite() {
               <ToggleFormSection
                 label="Send User Mailing Notification"
                 toggleState={siteDetails.sendUserMailingList}
-                onToggle={() => handleToggle("sendUserMailingList")}
+                onToggle={(e) =>
+                  handleToggle(e.target.checked, "sendUserMailingList")
+                }
               >
                 <FormField
                   label="Subject"
@@ -322,7 +378,9 @@ export default function AddSite() {
               <ToggleFormSection
                 label="Send Admin Enquiry"
                 toggleState={siteDetails.sendAdminEnquiry}
-                onToggle={() => handleToggle("sendAdminEnquiry")}
+                onToggle={(e) =>
+                  handleToggle(e.target.checked, "sendAdminEnquiry")
+                }
               >
                 <FormField
                   label="Subject"
@@ -402,7 +460,9 @@ export default function AddSite() {
               <ToggleFormSection
                 label="Send Admin Mailing List"
                 toggleState={siteDetails.sendAdminMailingList}
-                onToggle={() => handleToggle("sendAdminMailingList")}
+                onToggle={(e) =>
+                  handleToggle(e.target.checked, "sendAdminMailingList")
+                }
               >
                 <FormField
                   label="Subject"
