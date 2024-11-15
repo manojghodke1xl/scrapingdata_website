@@ -2,9 +2,15 @@ import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { GlobalContext } from "../../GlobalContext";
 import { getAllSmtpsApi } from "../../apis/smtp-apis";
-import { addSiteApi, getSiteByIdApi, updateSiteApi } from "../../apis/site-apis";
-import Addnote from '../../comps/addnote';
-import { addWebsiteNote, editWebsiteNote } from '../notes/notes-message';
+import {
+  addSiteApi,
+  getSiteByIdApi,
+  updateSiteApi,
+} from "../../apis/site-apis";
+import Addnote from "../../comps/addnote";
+import { addWebsiteNote, editWebsiteNote } from "../notes/notes-message";
+import FormField from "../../comps/formField";
+import ToggleFormSection from "../../comps/toggleFormSection";
 
 export default function AddSite() {
   const navigate = useNavigate();
@@ -74,7 +80,9 @@ export default function AddSite() {
     if (!validate()) return;
     setLoading(true);
     try {
-      const { status, data } = await (id ? updateSiteApi(id, siteDetails) : addSiteApi(siteDetails));
+      const { status, data } = await (id
+        ? updateSiteApi(id, siteDetails)
+        : addSiteApi(siteDetails));
       if (status) {
         alert({ type: "success", text: data.message });
         navigate("/site-list");
@@ -90,7 +98,14 @@ export default function AddSite() {
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-  const validateAndAddInput = (e, inputValue, setInputValue, setStateDetails, key, regexPattern) => {
+  const validateAndAddInput = (
+    e,
+    inputValue,
+    setInputValue,
+    setStateDetails,
+    key,
+    regexPattern
+  ) => {
     e.preventDefault();
 
     if (inputValue && regexPattern.test(inputValue)) {
@@ -116,7 +131,14 @@ export default function AddSite() {
   };
 
   const handleAddEmail = (e, key) => {
-    validateAndAddInput(e, emailInput, setEmailInput, setSiteDetails, key, emailRegex);
+    validateAndAddInput(
+      e,
+      emailInput,
+      setEmailInput,
+      setSiteDetails,
+      key,
+      emailRegex
+    );
   };
 
   const handleRemoveEmail = (index, key) => {
@@ -130,12 +152,21 @@ export default function AddSite() {
     }));
   };
 
+  const handleToggle = (field) => {
+    setSiteDetails((prev) => ({
+      ...prev,
+      [field]: !prev[field],
+    }));
+  };
+
   return (
     <div className="page-body">
       <div className="container container-tight py-4">
         <div className="card card-md">
           <div className="card-body">
-            <h2 className="h2 text-center mb-4">{id ? "Edit site" : "Add site"}</h2>
+            <h2 className="h2 text-center mb-4">
+              {id ? "Edit site" : "Add site"}
+            </h2>
             <form onSubmit={handleDetails}>
               <div className="mb-3">
                 <label className="form-label required">Site Name</label>
@@ -147,10 +178,13 @@ export default function AddSite() {
                   value={siteDetails.name}
                   onChange={(e) => {
                     setSiteDetails((d) => ({ ...d, name: e.target.value }));
-                    if (errors.name) setErrors((prev) => ({ ...prev, name: "" }));
+                    if (errors.name)
+                      setErrors((prev) => ({ ...prev, name: "" }));
                   }}
                 />
-                {errors.name && <div className="invalid-feedback mt-2">{errors.name}</div>}
+                {errors.name && (
+                  <div className="invalid-feedback mt-2">{errors.name}</div>
+                )}
               </div>
               <div className="mb-3">
                 <label className="form-label required">Site Host</label>
@@ -162,269 +196,217 @@ export default function AddSite() {
                   value={siteDetails.host}
                   onChange={(e) => {
                     setSiteDetails((d) => ({ ...d, host: e.target.value }));
-                    if (errors.host) setErrors((prev) => ({ ...prev, host: "" }));
+                    if (errors.host)
+                      setErrors((prev) => ({ ...prev, host: "" }));
                   }}
                 />
-                {errors.host && <div className="invalid-feedback mt-2">{errors.host}</div>}
+                {errors.host && (
+                  <div className="invalid-feedback mt-2">{errors.host}</div>
+                )}
               </div>
 
-              <div className="mb-3">
-                <label className="row">
-                  <span className="col form-label">Send User Enquiry Notification</span>
-                  <span className="col-auto">
-                    <label className="form-check form-check-single form-switch">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        name="forward"
-                        checked={siteDetails.sendUserEnquiry}
-                        onChange={() =>
-                          setSiteDetails((prev) => ({
-                            ...prev,
-                            sendUserEnquiry: !prev.sendUserEnquiry,
-                          }))
+              <ToggleFormSection
+                label="Send User Enquiry Notification"
+                toggleState={siteDetails.sendUserEnquiry}
+                onToggle={() => handleToggle("sendUserEnquiry")}
+              >
+                <FormField
+                  label="Subject"
+                  value={siteDetails.userEnquiryMailData?.subject ?? ""}
+                  onChange={(value) =>
+                    handleMailDataChange(
+                      "userEnquiryMailData",
+                      "subject",
+                      value
+                    )
+                  }
+                />
+                <FormField
+                  label="Body"
+                  value={siteDetails.userEnquiryMailData?.body ?? ""}
+                  onChange={(value) =>
+                    handleMailDataChange("userEnquiryMailData", "body", value)
+                  }
+                  type="textarea"
+                />
+              </ToggleFormSection>
+
+              {/* Send User Mailing Notification Section */}
+              <ToggleFormSection
+                label="Send User Mailing Notification"
+                toggleState={siteDetails.sendUserMailingList}
+                onToggle={() => handleToggle("sendUserMailingList")}
+              >
+                <FormField
+                  label="Subject"
+                  value={siteDetails.userMailingListMailData?.subject ?? ""}
+                  onChange={(value) =>
+                    handleMailDataChange(
+                      "userMailingListMailData",
+                      "subject",
+                      value
+                    )
+                  }
+                />
+                <FormField
+                  label="Body"
+                  value={siteDetails.userMailingListMailData?.body ?? ""}
+                  onChange={(value) =>
+                    handleMailDataChange(
+                      "userMailingListMailData",
+                      "body",
+                      value
+                    )
+                  }
+                  type="textarea"
+                />
+              </ToggleFormSection>
+              <ToggleFormSection
+                label="Send Admin Enquiry"
+                toggleState={siteDetails.sendAdminEnquiry}
+                onToggle={() => handleToggle("sendAdminEnquiry")}
+              >
+                <FormField
+                  label="Subject"
+                  value={siteDetails.adminEnquiryMailData?.subject ?? ""}
+                  onChange={(value) =>
+                    handleMailDataChange(
+                      "adminEnquiryMailData",
+                      "subject",
+                      value
+                    )
+                  }
+                />
+                <FormField
+                  label="Body"
+                  value={siteDetails.adminEnquiryMailData?.body ?? ""}
+                  onChange={(value) =>
+                    handleMailDataChange("adminEnquiryMailData", "body", value)
+                  }
+                  type="textarea"
+                />
+                <FormField
+                  label="Email"
+                  type="email"
+                  placeholder="Enter email"
+                  value={emailInput}
+                  onChange={(value) => {
+                    if (errors.forwardEmails) {
+                      setErrors((prev) => ({ ...prev, forwardEmails: "" }));
+                    }
+                    setEmailInput(value);
+                  }}
+                  isInvalid={!!errors.forwardEmails}
+                  errorMessage={errors.forwardEmails}
+                />
+                <button
+                  type="button"
+                  className="btn btn-primary mt-2"
+                  onClick={(e) => handleAddEmail(e, "adminEnquiryEmails")}
+                >
+                  Add Email
+                </button>
+
+                {/* List of Admin Enquiry Emails */}
+                <ul className="list-group mt-3">
+                  {siteDetails.adminEnquiryEmails.map((email, index) => (
+                    <li key={index} className="list-group-item">
+                      {email}
+                      <button
+                        type="button"
+                        className="btn btn-danger btn-sm float-end"
+                        onClick={() =>
+                          handleRemoveEmail(index, "adminEnquiryEmails")
                         }
-                      />
-                    </label>
-                  </span>
+                      >
+                        Remove
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </ToggleFormSection>
+
+              <ToggleFormSection
+                label="Send Admin Mailing List"
+                toggleState={siteDetails.sendAdminMailingList}
+                onToggle={() => handleToggle("sendAdminMailingList")}
+              >
+                <FormField
+                  label="Subject"
+                  value={siteDetails.adminMailingListMailData?.subject ?? ""}
+                  onChange={(value) =>
+                    handleMailDataChange(
+                      "adminMailingListMailData",
+                      "subject",
+                      value
+                    )
+                  }
+                />
+                <FormField
+                  label="Body"
+                  value={siteDetails.adminMailingListMailData?.body ?? ""}
+                  onChange={(value) =>
+                    handleMailDataChange(
+                      "adminMailingListMailData",
+                      "body",
+                      value
+                    )
+                  }
+                  type="textarea"
+                />
+                <FormField
+                  label="Email"
+                  type="email"
+                  placeholder="Enter email"
+                  value={emailInput}
+                  onChange={(value) => {
+                    if (errors.forwardEmails) {
+                      setErrors((prev) => ({ ...prev, forwardEmails: "" }));
+                    }
+                    setEmailInput(value);
+                  }}
+                  isInvalid={!!errors.forwardEmails}
+                  errorMessage={errors.forwardEmails}
+                />
+                <button
+                  type="button"
+                  className="btn btn-primary mt-2"
+                  onClick={(e) => handleAddEmail(e, "adminMailingListEmails")}
+                >
+                  Add Email
+                </button>
+
+                {/* List of Admin Mailing List Emails */}
+                <ul className="list-group mt-3">
+                  {siteDetails.adminMailingListEmails.map((email, index) => (
+                    <li key={index} className="list-group-item">
+                      {email}
+                      <button
+                        type="button"
+                        className="btn btn-danger btn-sm float-end"
+                        onClick={() =>
+                          handleRemoveEmail(index, "adminMailingListEmails")
+                        }
+                      >
+                        Remove
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </ToggleFormSection>
+
+              <div className="mb-3">
+                <label className={id ? "form-label" : "form-label required"}>
+                  SMTP
                 </label>
-              </div>
-              {siteDetails.sendUserEnquiry && (
-                <>
-                  <div className="mb-3">
-                    <label className={id ? "form-label" : "form-label required"}>Subject</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      value={siteDetails.userEnquiryMailData?.subject ?? ""}
-                      onChange={(e) => handleMailDataChange("userEnquiryMailData", "subject", e.target.value)}
-                    />
-                  </div>
-                  <div className="mb-3">
-                    <label className={id ? "form-label" : "form-label required"}>Body</label>
-                    <textarea
-                      className="form-control"
-                      value={siteDetails.userEnquiryMailData?.body ?? ""}
-                      onChange={(e) => handleMailDataChange("userEnquiryMailData", "body", e.target.value)}
-                    />
-                  </div>
-                </>
-              )}
-              <div className="mb-3">
-                <label className="row">
-                  <span className="col form-label">Send User Mailing Notification</span>
-                  <span className="col-auto">
-                    <label className="form-check form-check-single form-switch">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        name="forward"
-                        checked={siteDetails.sendUserMailingList}
-                        onChange={() =>
-                          setSiteDetails((prev) => ({
-                            ...prev,
-                            sendUserMailingList: !prev.sendUserMailingList,
-                          }))
-                        }
-                      />
-                    </label>
-                  </span>
-                </label>
-              </div>
-              {siteDetails.sendUserMailingList && (
-                <>
-                  <div className="mb-3">
-                    <label className={id ? "form-label" : "form-label required"}>Subject</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      value={siteDetails.userMailingListMailData?.subject ?? ""}
-                      onChange={(e) => handleMailDataChange("userMailingListMailData", "subject", e.target.value)}
-                    />
-                  </div>
-                  <div className="mb-3">
-                    <label className={id ? "form-label" : "form-label required"}>Body</label>
-                    <textarea
-                      className="form-control"
-                      value={siteDetails.userMailingListMailData?.body ?? ""}
-                      onChange={(e) => handleMailDataChange("userMailingListMailData", "body", e.target.value)}
-                    />
-                  </div>
-                </>
-              )}
-              <div className="mb-3">
-                <label className="row">
-                  <span className="col form-label">Send Admin Enquiry</span>
-                  <span className="col-auto">
-                    <label className="form-check form-check-single form-switch">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        name="forward"
-                        checked={siteDetails.sendAdminEnquiry}
-                        onChange={() =>
-                          setSiteDetails((prev) => ({
-                            ...prev,
-                            sendAdminEnquiry: !prev.sendAdminEnquiry,
-                          }))
-                        }
-                      />
-                    </label>
-                  </span>
-                </label>
-              </div>
-              {siteDetails.sendAdminEnquiry && (
-                <>
-                  <div className="mb-3">
-                    <label className={id ? "form-label" : "form-label required"}>Subject</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      value={siteDetails.adminEnquiryMailData?.subject ?? ""}
-                      onChange={(e) => handleMailDataChange("adminEnquiryMailData", "subject", e.target.value)}
-                    />
-                  </div>
-                  <div className="mb-3">
-                    <label className={id ? "form-label" : "form-label required"}>Body</label>
-                    <textarea
-                      className="form-control"
-                      value={siteDetails.adminEnquiryMailData?.body ?? ""}
-                      onChange={(e) => handleMailDataChange("adminEnquiryMailData", "body", e.target.value)}
-                    />
-                  </div>
-                  <div className="mb-3">
-                    <label className={id ? "form-label" : "form-label required"}>Email</label>
-                    <input
-                      type="email"
-                      name="email"
-                      className={`form-control ${errors.forwardEmails ? "is-invalid" : ""}`}
-                      placeholder="Enter email"
-                      value={emailInput}
-                      onChange={(e) => {
-                        if (errors.forwardEmails) {
-                          setErrors((prev) => ({ ...prev, forwardEmails: "" }));
-                        }
-                        setEmailInput(e.target.value);
-                      }}
-                    />
-                    <button
-                      type="button"
-                      className="btn btn-primary mt-2"
-                      onClick={(e) => handleAddEmail(e, "adminEnquiryEmails")}
-                    >
-                      Add Email
-                    </button>
-                    {errors.forwardEmails && <div className="invalid-feedback mt-2">{errors.forwardEmails}</div>}
-
-                    <ul className="list-group mt-3">
-                      {siteDetails.adminEnquiryEmails.map((email, index) => (
-                        <li key={index} className="list-group-item">
-                          {email}
-                          <button
-                            type="button"
-                            className="btn btn-danger btn-sm float-end"
-                            onClick={() => handleRemoveEmail(index, "adminEnquiryEmails")}
-                          >
-                            Remove
-                          </button>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </>
-              )}
-
-              <div className="mb-3">
-                <label className="row">
-                  <span className="col form-label">Send Admin Mailing List</span>
-                  <span className="col-auto">
-                    <label className="form-check form-check-single form-switch">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        name="forward"
-                        checked={siteDetails.sendAdminMailingList}
-                        onChange={() =>
-                          setSiteDetails((prev) => ({
-                            ...prev,
-                            sendAdminMailingList: !prev.sendAdminMailingList,
-                          }))
-                        }
-                      />
-                    </label>
-                  </span>
-                </label>
-              </div>
-              {siteDetails.sendAdminMailingList && (
-                <>
-                  <div className="mb-3">
-                    <label className={id ? "form-label" : "form-label required"}>Subject</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      value={siteDetails.adminMailingListMailData?.subject ?? ""}
-                      onChange={(e) => handleMailDataChange("adminMailingListMailData", "subject", e.target.value)}
-                    />
-                  </div>
-                  <div className="mb-3">
-                    <label className={id ? "form-label" : "form-label required"}>Body</label>
-                    <textarea
-                      className="form-control"
-                      value={siteDetails.adminMailingListMailData?.body ?? ""}
-                      onChange={(e) => handleMailDataChange("adminMailingListMailData", "body", e.target.value)}
-                    />
-                  </div>
-                  <div className="mb-3">
-                    <label className={id ? "form-label" : "form-label required"}>Email</label>
-                    <input
-                      type="email"
-                      name="email"
-                      className={`form-control ${errors.forwardEmails ? "is-invalid" : ""}`}
-                      placeholder="Enter email"
-                      value={emailInput}
-                      onChange={(e) => {
-                        if (errors.forwardEmails) {
-                          setErrors((prev) => ({ ...prev, forwardEmails: "" }));
-                        }
-                        setEmailInput(e.target.value);
-                      }}
-                    />
-                    <button
-                      type="button"
-                      className="btn btn-primary mt-2"
-                      onClick={(e) => handleAddEmail(e, "adminMailingListEmails")}
-                    >
-                      Add Email
-                    </button>
-                    {errors.forwardEmails && <div className="invalid-feedback mt-2">{errors.forwardEmails}</div>}
-
-                    <ul className="list-group mt-3">
-                      {siteDetails.adminMailingListEmails.map((email, index) => (
-                        <li key={index} className="list-group-item">
-                          {email}
-                          <button
-                            type="button"
-                            className="btn btn-danger btn-sm float-end"
-                            onClick={() => handleRemoveEmail(index, "adminMailingListEmails")}
-                          >
-                            Remove
-                          </button>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </>
-              )}
-
-              <div className="mb-3">
-                <label className={id ? "form-label" : "form-label required"}>SMTP</label>
                 <select
                   name="smtp"
                   className={`form-select ${errors.smtp ? "is-invalid" : ""}`}
                   value={siteDetails.smtp}
                   onChange={(e) => {
                     setSiteDetails((d) => ({ ...d, smtp: e.target.value }));
-                    if (errors.smtp) setErrors((prev) => ({ ...prev, smtp: "" }));
+                    if (errors.smtp)
+                      setErrors((prev) => ({ ...prev, smtp: "" }));
                   }}
                 >
                   <option value={""}>Select</option>
@@ -434,7 +416,9 @@ export default function AddSite() {
                     </option>
                   ))}
                 </select>
-                {errors.smtp && <div className="invalid-feedback mt-2">{errors.smtp}</div>}
+                {errors.smtp && (
+                  <div className="invalid-feedback mt-2">{errors.smtp}</div>
+                )}
               </div>
 
               <div className="mb-3">
@@ -498,8 +482,11 @@ export default function AddSite() {
           </div>
         </div>
       </div>
-      {!id ? <Addnote des={addWebsiteNote} /> : <Addnote des={editWebsiteNote} />}
+      {!id ? (
+        <Addnote des={addWebsiteNote} />
+      ) : (
+        <Addnote des={editWebsiteNote} />
+      )}
     </div>
   );
 }
-
