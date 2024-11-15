@@ -2,8 +2,8 @@ import { useContext, useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { GlobalContext } from "../../GlobalContext";
 import { getMailingListById } from "../../apis/mailing-apis";
-import Addnote from '../../comps/addnote';
-import { addMailingNote } from '../notes/notes-message';
+import Addnote from "../../comps/addnote";
+import { addMailingNote } from "../notes/notes-message";
 import { formatDateTime } from "../../utils/function";
 
 const MailingSingle = () => {
@@ -20,10 +20,10 @@ const MailingSingle = () => {
       if (status) {
         setMailingList(data.list);
       } else {
-        alert({ type: 'warning', text: data });
+        alert({ type: "warning", text: data });
       }
     })()
-      .catch((error) => alert({ type: 'danger', text: error.message }))
+      .catch((error) => alert({ type: "danger", text: error.message }))
       .finally(() => setLoading(false));
   }, [alert, id, setLoading]);
 
@@ -52,7 +52,7 @@ const MailingSingle = () => {
                 <div className="card mb-4">
                   <div className="card-header">
                     <h3 className="card-title mb-0">Request Header</h3>
-                    <p className="card-subtitle text-muted">
+                    <p className="card-subtitle text-muted m-1">
                       Request headers are key-value pairs sent by a client to
                       provide information about the request or the client
                       itself.
@@ -67,7 +67,7 @@ const MailingSingle = () => {
                 <div className="card mb-4">
                   <div className="card-header">
                     <h3 className="card-title mb-0">User Agent String</h3>
-                    <p className="card-subtitle text-muted">
+                    <p className="card-subtitle text-muted m-1">
                       Identifies the browser, version, and operating system of a
                       client device.
                     </p>

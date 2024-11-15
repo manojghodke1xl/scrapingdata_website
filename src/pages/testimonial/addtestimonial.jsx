@@ -9,12 +9,15 @@ import {
 import { getAllCategoriesApi } from "../../apis/category-apis";
 import useGetAllSites from "../../Hooks/useGetAllSites";
 import { uploadFile } from "../../utils/fileUpload";
-import Addnote from '../../comps/addnote';
-import { addTestimonialNote, editTestimonialNote } from '../notes/notes-message';
+import Addnote from "../../comps/addnote";
+import {
+  addTestimonialNote,
+  editTestimonialNote,
+} from "../notes/notes-message";
 
 export default function AddTestimonial() {
   const navigate = useNavigate();
-  const { id = '' } = useParams();
+  const { id = "" } = useParams();
   const { alert, setLoading } = useContext(GlobalContext);
   const availableSites = useGetAllSites();
 
@@ -22,10 +25,10 @@ export default function AddTestimonial() {
   const [selectAll, setSelectAll] = useState(false);
   const [selectAllCategories, setSelectAllCategories] = useState(false);
   const [testimonialDetails, setTestimonialDetails] = useState({
-    name: '',
-    desg: '',
-    text: '',
-    type: 'text',
+    name: "",
+    desg: "",
+    text: "",
+    type: "text",
     isActive: true,
     isGlobal: false,
     videoBolean: false,
@@ -33,11 +36,11 @@ export default function AddTestimonial() {
     categories: [],
     image: null,
     video: null,
-    videoUrl: '',
+    videoUrl: "",
   });
   const [availableCategories, setAvailableCategories] = useState([]);
 
-  const type = ['Text', 'Image', 'Video'];
+  const type = ["Text", "Image", "Video"];
 
   useEffect(() => {
     (async () => {
@@ -45,9 +48,9 @@ export default function AddTestimonial() {
       if (status) {
         setAvailableCategories(data.categories);
       } else {
-        alert({ type: 'warning', text: data });
+        alert({ type: "warning", text: data });
       }
-    })().catch((error) => alert({ type: 'danger', text: error.message }));
+    })().catch((error) => alert({ type: "danger", text: error.message }));
   }, [alert]);
 
   useEffect(() => {
@@ -65,10 +68,10 @@ export default function AddTestimonial() {
             imageFile: image,
           }));
         } else {
-          alert({ type: 'warning', text: data });
+          alert({ type: "warning", text: data });
         }
       })()
-        .catch((error) => alert({ type: 'danger', text: error.message }))
+        .catch((error) => alert({ type: "danger", text: error.message }))
         .finally(() => setLoading(false));
     }
   }, [id, alert, setLoading]);
@@ -93,13 +96,13 @@ export default function AddTestimonial() {
         ? await updateTestimonialApi(id, testimonialDetails)
         : await addTestimonialApi(testimonialDetails);
       if (status) {
-        alert({ type: 'success', text: data.message });
-        navigate('/testimonial-list');
+        alert({ type: "success", text: data.message });
+        navigate("/testimonial-list");
       } else {
-        alert({ type: 'warning', text: data });
+        alert({ type: "warning", text: data });
       }
     } catch (error) {
-      alert({ type: 'danger', text: error.message });
+      alert({ type: "danger", text: error.message });
     } finally {
       setLoading(false);
     }
@@ -162,7 +165,7 @@ export default function AddTestimonial() {
                 <input
                   type="text"
                   name="title"
-                  className={`form-control ${errors.name ? 'is-invalid' : ''}`}
+                  className={`form-control ${errors.name ? "is-invalid" : ""}`}
                   placeholder="Title"
                   value={testimonialDetails.name}
                   onChange={(e) =>
@@ -178,7 +181,7 @@ export default function AddTestimonial() {
               </div>
               <div className="mb-3">
                 <label className={!id ? "form-label required" : "form-label"}>
-                  short Description
+                  Short Description
                 </label>
                 <textarea
                   className="form-control"
@@ -207,16 +210,14 @@ export default function AddTestimonial() {
                   }
                 >
                   {type.map((t, i) => (
-                    <option
-                      key={i}
-                      value={t.toLowerCase()}>
+                    <option key={i} value={t.toLowerCase()}>
                       {t}
                     </option>
                   ))}
                 </select>
               </div>
 
-              {testimonialDetails.type === 'text' && (
+              {testimonialDetails.type === "text" && (
                 <div className="mb-3">
                   <label className={id ? "form-label" : "form-label required"}>
                     Text
@@ -237,7 +238,7 @@ export default function AddTestimonial() {
                 </div>
               )}
 
-              {testimonialDetails.type === 'image' && (
+              {testimonialDetails.type === "image" && (
                 <div className="mb-3">
                   <label
                     className={
@@ -251,7 +252,8 @@ export default function AddTestimonial() {
                       <a
                         href={testimonialDetails.imageFile.url}
                         download={testimonialDetails.imageFile.name}
-                        target="_blank">
+                        target="_blank"
+                      >
                         Download Image
                       </a>
                     )}
@@ -265,7 +267,7 @@ export default function AddTestimonial() {
                   />
                 </div>
               )}
-              {testimonialDetails.type === 'video' && (
+              {testimonialDetails.type === "video" && (
                 <>
                   <div className="mb-3">
                     <label className="row">
@@ -301,7 +303,8 @@ export default function AddTestimonial() {
                           <a
                             href={testimonialDetails.videoFile.url}
                             download={testimonialDetails.videoFile.name}
-                            target="_blank">
+                            target="_blank"
+                          >
                             Download Video
                           </a>
                         )}
@@ -369,9 +372,7 @@ export default function AddTestimonial() {
                   }`}
                 >
                   {availableSites.map((site) => (
-                    <label
-                      key={site._id}
-                      className="form-check">
+                    <label key={site._id} className="form-check">
                       <input
                         className={`form-check-input ${
                           errors.sites ? "is-invalid" : ""
@@ -432,9 +433,7 @@ export default function AddTestimonial() {
                   }`}
                 >
                   {availableCategories.map((category) => (
-                    <label
-                      key={category._id}
-                      className="form-check">
+                    <label key={category._id} className="form-check">
                       <input
                         className={`form-check-input ${
                           errors.categories ? "is-invalid" : ""
@@ -520,7 +519,11 @@ export default function AddTestimonial() {
           </div>
         </div>
       </div>
-      {!id ? <Addnote des={addTestimonialNote} /> : <Addnote des={editTestimonialNote} />}
+      {!id ? (
+        <Addnote des={addTestimonialNote} />
+      ) : (
+        <Addnote des={editTestimonialNote} />
+      )}
     </div>
   );
 }

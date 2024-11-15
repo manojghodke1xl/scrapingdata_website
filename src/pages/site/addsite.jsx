@@ -25,10 +25,14 @@ export default function AddSite() {
     isActive: true,
     smtp: "",
     sendUserEnquiry: false,
+    sendUserEnquiryData: { subject: "", body: "" },
     sendUserMailingList: false,
+    sendUserMailingListData: { subject: "", body: "" },
     sendAdminEnquiry: false,
+    sendAdminEnquiryData: { subject: "", body: "" },
     adminEnquiryEmails: [],
     sendAdminMailingList: false,
+    sendAdminMailingListData: { subject: "", body: "" },
     adminMailingListEmails: [],
     enquiryWebhookUrl: "",
     mailinglistWebhookUrl: "",
@@ -71,6 +75,44 @@ export default function AddSite() {
     if (!siteDetails.name) newErrors.name = "Name is required";
     if (!siteDetails.host) newErrors.host = "Host is required";
     if (!siteDetails.smtp) newErrors.smtp = "SMTP is required";
+    if (siteDetails.sendUserEnquiry) {
+      if (!siteDetails.sendUserEnquiryData?.subject) {
+        newErrors.subject = "Subject is required";
+      }
+      if (!siteDetails.sendUserEnquiryData?.body) {
+        newErrors.body = "Body is required";
+      }
+    }
+    if (siteDetails.sendUserMailingList) {
+      if (!siteDetails.sendUserMailingListData?.subject) {
+        newErrors.subject = "Subject is required";
+      }
+      if (!siteDetails.sendUserMailingListData?.body) {
+        newErrors.body = "Body is required";
+      }
+    }
+    if (siteDetails.sendAdminEnquiry) {
+      if (!siteDetails.sendAdminEnquiryData?.subject) {
+        newErrors.subject = "Subject is required";
+      }
+      if (!siteDetails.sendAdminEnquiryData?.body) {
+        newErrors.body = "Body is required";
+      }
+      if (!siteDetails.adminEnquiryEmails.length) {
+        newErrors.adminEnquiryEmails = "At least one email is required";
+      }
+    }
+    if (siteDetails.sendAdminMailingList) {
+      if (!siteDetails.sendAdminMailingListData?.subject) {
+        newErrors.subject = "Subject is required";
+      }
+      if (!siteDetails.sendAdminMailingListData?.body) {
+        newErrors.body = "Body is required";
+      }
+      if (!siteDetails.adminMailingListEmails.length) {
+        newErrors.adminMailingListEmails = "At least one email is required";
+      }
+    }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -157,6 +199,7 @@ export default function AddSite() {
       ...prev,
       [field]: !prev[field],
     }));
+    
   };
 
   return (
@@ -165,7 +208,7 @@ export default function AddSite() {
         <div className="card card-md">
           <div className="card-body">
             <h2 className="h2 text-center mb-4">
-              {id ? "Edit site" : "Add site"}
+              {id ? "Edit Site" : "Add Site"}
             </h2>
             <form onSubmit={handleDetails}>
               <div className="mb-3">
@@ -212,22 +255,31 @@ export default function AddSite() {
               >
                 <FormField
                   label="Subject"
-                  value={siteDetails.userEnquiryMailData?.subject ?? ""}
-                  onChange={(value) =>
+                  value={siteDetails.sendUserEnquiryData?.subject ?? ""}
+                  onChange={(value) => {
                     handleMailDataChange(
-                      "userEnquiryMailData",
+                      "sendUserEnquiryData",
                       "subject",
                       value
-                    )
-                  }
+                    );
+                    if (errors.subject)
+                      setErrors((prev) => ({ ...prev, subject: "" }));
+                  }}
+                  isInvalid={!!errors.subject}
+                  errorMessage={errors.subject}
                 />
+
                 <FormField
                   label="Body"
-                  value={siteDetails.userEnquiryMailData?.body ?? ""}
-                  onChange={(value) =>
-                    handleMailDataChange("userEnquiryMailData", "body", value)
-                  }
+                  value={siteDetails.sendUserEnquiryData?.body ?? ""}
+                  onChange={(value) => {
+                    handleMailDataChange("sendUserEnquiryData", "body", value);
+                    if (errors.body)
+                      setErrors((prev) => ({ ...prev, body: "" }));
+                  }}
                   type="textarea"
+                  isInvalid={!!errors.body}
+                  errorMessage={errors.body}
                 />
               </ToggleFormSection>
 
@@ -247,7 +299,10 @@ export default function AddSite() {
                       value
                     )
                   }
+                  isInvalid={!!errors.subject}
+                  errorMessage={errors.subject}
                 />
+
                 <FormField
                   label="Body"
                   value={siteDetails.userMailingListMailData?.body ?? ""}
@@ -259,8 +314,11 @@ export default function AddSite() {
                     )
                   }
                   type="textarea"
+                  isInvalid={!!errors.body}
+                  errorMessage={errors.body}
                 />
               </ToggleFormSection>
+
               <ToggleFormSection
                 label="Send Admin Enquiry"
                 toggleState={siteDetails.sendAdminEnquiry}
@@ -276,7 +334,10 @@ export default function AddSite() {
                       value
                     )
                   }
+                  isInvalid={!!errors.subject}
+                  errorMessage={errors.subject}
                 />
+
                 <FormField
                   label="Body"
                   value={siteDetails.adminEnquiryMailData?.body ?? ""}
@@ -284,7 +345,10 @@ export default function AddSite() {
                     handleMailDataChange("adminEnquiryMailData", "body", value)
                   }
                   type="textarea"
+                  isInvalid={!!errors.body}
+                  errorMessage={errors.body}
                 />
+
                 <FormField
                   label="Email"
                   type="email"
@@ -294,10 +358,19 @@ export default function AddSite() {
                     if (errors.forwardEmails) {
                       setErrors((prev) => ({ ...prev, forwardEmails: "" }));
                     }
+                    if (errors.adminEnquiryEmails)
+                      setErrors((prev) => ({
+                        ...prev,
+                        adminEnquiryEmails: "",
+                      }));
                     setEmailInput(value);
                   }}
-                  isInvalid={!!errors.forwardEmails}
-                  errorMessage={errors.forwardEmails}
+                  isInvalid={
+                    !!errors.forwardEmails || !!errors.adminEnquiryEmails
+                  }
+                  errorMessage={
+                    errors.forwardEmails || errors.adminEnquiryEmails
+                  }
                 />
                 <button
                   type="button"
@@ -341,7 +414,10 @@ export default function AddSite() {
                       value
                     )
                   }
+                  isInvalid={!!errors.subject} // Show error if subject is invalid
+                  errorMessage={errors.subject} // Display error message for subject
                 />
+
                 <FormField
                   label="Body"
                   value={siteDetails.adminMailingListMailData?.body ?? ""}
@@ -353,7 +429,10 @@ export default function AddSite() {
                     )
                   }
                   type="textarea"
+                  isInvalid={!!errors.body} // Show error if body is invalid
+                  errorMessage={errors.body} // Display error message for body
                 />
+
                 <FormField
                   label="Email"
                   type="email"
@@ -363,11 +442,21 @@ export default function AddSite() {
                     if (errors.forwardEmails) {
                       setErrors((prev) => ({ ...prev, forwardEmails: "" }));
                     }
+                    if (errors.adminMailingListEmails)
+                      setErrors((prev) => ({
+                        ...prev,
+                        adminMailingListEmails: "",
+                      }));
                     setEmailInput(value);
                   }}
-                  isInvalid={!!errors.forwardEmails}
-                  errorMessage={errors.forwardEmails}
+                  isInvalid={
+                    !!errors.forwardEmails || !!errors.adminMailingListEmails
+                  }
+                  errorMessage={
+                    errors.forwardEmails || errors.adminMailingListEmails
+                  }
                 />
+
                 <button
                   type="button"
                   className="btn btn-primary mt-2"

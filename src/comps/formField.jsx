@@ -1,25 +1,37 @@
-const FormField = ({ label, value, onChange, type = "text" }) => {
-  const labelClass = "form-label required";
-
-  return (
-    <div className="mb-3">
-      <label className={labelClass}>{label}</label>
-      {type === "textarea" ? (
-        <textarea
-          className="form-control"
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-        />
-      ) : (
-        <input
-          type={type}
-          className="form-control"
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-        />
-      )}
-    </div>
-  );
-};
-
-export default FormField;
+const FormField = ({
+    label,
+    value,
+    onChange,
+    isInvalid = false,
+    errorMessage = "",
+    type = "text",
+    placeholder = "",
+  }) => {
+    return (
+      <div className="mb-3">
+        <label className="form-label required">{label}</label>
+        {type === "textarea" ? (
+          <textarea
+            className={`form-control ${isInvalid ? "is-invalid" : ""}`}
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+            placeholder={placeholder}
+          />
+        ) : (
+          <input
+            type={type}
+            className={`form-control ${isInvalid ? "is-invalid" : ""}`}
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+            placeholder={placeholder}
+          />
+        )}
+        {isInvalid && errorMessage && (
+          <div className="invalid-feedback mt-2">{errorMessage}</div>
+        )}
+      </div>
+    );
+  };
+  
+  export default FormField;
+  
