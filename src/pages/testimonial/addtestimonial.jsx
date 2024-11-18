@@ -1,19 +1,12 @@
 import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { GlobalContext } from "../../GlobalContext";
-import {
-  getTestimonialById,
-  addTestimonialApi,
-  updateTestimonialApi,
-} from "../../apis/testimonial-apis";
+import { getTestimonialById, addTestimonialApi, updateTestimonialApi } from "../../apis/testimonial-apis";
 import { getAllCategoriesApi } from "../../apis/category-apis";
 import useGetAllSites from "../../Hooks/useGetAllSites";
 import { uploadFile } from "../../utils/fileUpload";
 import Addnote from "../../comps/addnote";
-import {
-  addTestimonialNote,
-  editTestimonialNote,
-} from "../notes/notes-message";
+import { addTestimonialNote, editTestimonialNote } from "../notes/notes-message";
 
 export default function AddTestimonial() {
   const navigate = useNavigate();
@@ -79,10 +72,8 @@ export default function AddTestimonial() {
   const validate = () => {
     const newErrors = {};
     if (!testimonialDetails.name) newErrors.name = "Name is required";
-    if (!testimonialDetails.sites.length)
-      newErrors.sites = "At least one site must be selected";
-    if (!testimonialDetails.categories.length)
-      newErrors.categories = "At least one category must be selected";
+    if (!testimonialDetails.sites.length) newErrors.sites = "At least one site must be selected";
+    if (!testimonialDetails.categories.length) newErrors.categories = "At least one category must be selected";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -108,13 +99,13 @@ export default function AddTestimonial() {
     }
   };
 
-  const handleFileUpload = (e, isImage, isPdf) => {
+  const handleFileUpload = ({ e, isImage = false, isVideo = false }) => {
     const file = e.target.files[0];
     if (file) {
       uploadFile({
         file,
         isImage,
-        isPdf,
+        isVideo,
         alert,
         setDetails: setTestimonialDetails,
         fieldName: isImage ? "image" : "video",
@@ -134,8 +125,7 @@ export default function AddTestimonial() {
   };
 
   const handleSelectAllCategoriesChange = () => {
-    if (selectAllCategories)
-      setTestimonialDetails((prev) => ({ ...prev, categories: [] }));
+    if (selectAllCategories) setTestimonialDetails((prev) => ({ ...prev, categories: [] }));
     else
       setTestimonialDetails((prev) => ({
         ...prev,
@@ -144,24 +134,18 @@ export default function AddTestimonial() {
     setSelectAllCategories(!selectAllCategories);
   };
 
-  const isAllSelected =
-    testimonialDetails.sites.length === availableSites.length;
-  const isAllCategoriesSelected =
-    testimonialDetails.categories.length === availableCategories.length; // New check for categories
+  const isAllSelected = testimonialDetails.sites.length === availableSites.length;
+  const isAllCategoriesSelected = testimonialDetails.categories.length === availableCategories.length; // New check for categories
 
   return (
     <div className="page-body">
       <div className="container container-tight py-4">
         <div className="card card-md">
           <div className="card-body">
-            <h2 className="h2 text-center mb-4">
-              {!id ? "Add Testimonial" : "Edit Testimonial"}
-            </h2>
+            <h2 className="h2 text-center mb-4">{!id ? "Add Testimonial" : "Edit Testimonial"}</h2>
             <form onSubmit={handleSubmit}>
               <div className="mb-3">
-                <label className={!id ? "form-label required" : "form-label"}>
-                  Name
-                </label>
+                <label className={!id ? "form-label required" : "form-label"}>Name</label>
                 <input
                   type="text"
                   name="title"
@@ -175,14 +159,10 @@ export default function AddTestimonial() {
                     }))
                   }
                 />
-                {errors.name && (
-                  <div className="invalid-feedback mt-2">{errors.name}</div>
-                )}
+                {errors.name && <div className="invalid-feedback mt-2">{errors.name}</div>}
               </div>
               <div className="mb-3">
-                <label className={!id ? "form-label required" : "form-label"}>
-                  Short Description
-                </label>
+                <label className={!id ? "form-label required" : "form-label"}>Short Description</label>
                 <textarea
                   className="form-control"
                   name="example-textarea-input"
@@ -219,9 +199,7 @@ export default function AddTestimonial() {
 
               {testimonialDetails.type === "text" && (
                 <div className="mb-3">
-                  <label className={id ? "form-label" : "form-label required"}>
-                    Text
-                  </label>
+                  <label className={id ? "form-label" : "form-label required"}>Text</label>
                   <textarea
                     className="form-control"
                     name="example-textarea-input"
@@ -240,13 +218,7 @@ export default function AddTestimonial() {
 
               {testimonialDetails.type === "image" && (
                 <div className="mb-3">
-                  <label
-                    className={
-                      id
-                        ? "form-label d-flex justify-content-between"
-                        : "form-label required"
-                    }
-                  >
+                  <label className={id ? "form-label d-flex justify-content-between" : "form-label required"}>
                     Upload Image
                     {id && testimonialDetails.imageFile && (
                       <a
@@ -262,7 +234,7 @@ export default function AddTestimonial() {
                     type="file"
                     name="image"
                     className="form-control"
-                    onChange={(e) => handleFileUpload(e, true, false, false)}
+                    onChange={(e) => handleFileUpload({ e, isImage: true })}
                     accept="image/*"
                   />
                 </div>
@@ -291,13 +263,7 @@ export default function AddTestimonial() {
                   </div>
                   {testimonialDetails.videoBolean === false ? (
                     <div className="mb-3">
-                      <label
-                        className={
-                          id
-                            ? "form-label d-flex justify-content-between"
-                            : "form-label required "
-                        }
-                      >
+                      <label className={id ? "form-label d-flex justify-content-between" : "form-label required "}>
                         Upload Video
                         {id && testimonialDetails.videoFile && (
                           <a
@@ -314,19 +280,13 @@ export default function AddTestimonial() {
                         type="file"
                         name="video"
                         className="form-control"
-                        onChange={(e) =>
-                          handleFileUpload(e, false, false, true)
-                        }
+                        onChange={(e) => handleFileUpload({ e, isVideo: true })}
                         accept="video/*"
                       />
                     </div>
                   ) : (
                     <div className="mb-3">
-                      <label
-                        className={id ? "form-label" : "form-label required"}
-                      >
-                        video URL
-                      </label>
+                      <label className={id ? "form-label" : "form-label required"}>video URL</label>
                       <input
                         type="url"
                         name="videoUrl"
@@ -347,15 +307,7 @@ export default function AddTestimonial() {
 
               <div className="mb-3">
                 <div className="d-flex justify-content-between mb-3">
-                  <label
-                    className={
-                      !id
-                        ? "form-label required mb-0 me-2"
-                        : "form-label mb-0 me-2"
-                    }
-                  >
-                    Select Sites
-                  </label>
+                  <label className={!id ? "form-label required mb-0 me-2" : "form-label mb-0 me-2"}>Select Sites</label>
                   <label className="form-check mb-0">
                     <input
                       type="checkbox"
@@ -366,31 +318,21 @@ export default function AddTestimonial() {
                     <span className="form-check-label">Select All</span>
                   </label>
                 </div>
-                <div
-                  className={`form-multi-check-box ${
-                    errors.sites ? "is-invalid" : ""
-                  }`}
-                >
+                <div className={`form-multi-check-box ${errors.sites ? "is-invalid" : ""}`}>
                   {availableSites.map((site) => (
                     <label key={site._id} className="form-check">
                       <input
-                        className={`form-check-input ${
-                          errors.sites ? "is-invalid" : ""
-                        }`}
+                        className={`form-check-input ${errors.sites ? "is-invalid" : ""}`}
                         type="checkbox"
                         value={site._id}
                         checked={testimonialDetails.sites.includes(site._id)}
                         onChange={() => {
                           setTestimonialDetails((prevDetail) => {
-                            const isSelected = prevDetail.sites.includes(
-                              site._id
-                            );
+                            const isSelected = prevDetail.sites.includes(site._id);
                             return {
                               ...prevDetail,
                               sites: isSelected
-                                ? prevDetail.sites.filter(
-                                    (id) => id !== site._id
-                                  )
+                                ? prevDetail.sites.filter((id) => id !== site._id)
                                 : [...prevDetail.sites, site._id],
                             };
                           });
@@ -400,21 +342,11 @@ export default function AddTestimonial() {
                     </label>
                   ))}
                 </div>
-                {errors.sites && (
-                  <div className="invalid-feedback mx-2 mb-2">
-                    {errors.sites}
-                  </div>
-                )}
+                {errors.sites && <div className="invalid-feedback mx-2 mb-2">{errors.sites}</div>}
               </div>
               <div className="mb-3">
                 <div className="d-flex justify-content-between mb-3">
-                  <label
-                    className={
-                      !id
-                        ? "form-label required mb-0 me-2"
-                        : "form-label mb-0 me-2"
-                    }
-                  >
+                  <label className={!id ? "form-label required mb-0 me-2" : "form-label mb-0 me-2"}>
                     Select Category
                   </label>
                   <label className="form-check mb-0">
@@ -427,33 +359,21 @@ export default function AddTestimonial() {
                     <span className="form-check-label">Select All</span>
                   </label>
                 </div>
-                <div
-                  className={`form-multi-check-box ${
-                    errors.categories ? "is-invalid" : ""
-                  }`}
-                >
+                <div className={`form-multi-check-box ${errors.categories ? "is-invalid" : ""}`}>
                   {availableCategories.map((category) => (
                     <label key={category._id} className="form-check">
                       <input
-                        className={`form-check-input ${
-                          errors.categories ? "is-invalid" : ""
-                        }`}
+                        className={`form-check-input ${errors.categories ? "is-invalid" : ""}`}
                         type="checkbox"
                         value={category._id}
-                        checked={testimonialDetails.categories.includes(
-                          category._id
-                        )}
+                        checked={testimonialDetails.categories.includes(category._id)}
                         onChange={() => {
                           setTestimonialDetails((prevDetail) => {
-                            const isSelected = prevDetail.categories.includes(
-                              category._id
-                            );
+                            const isSelected = prevDetail.categories.includes(category._id);
                             return {
                               ...prevDetail,
                               categories: isSelected
-                                ? prevDetail.categories.filter(
-                                    (id) => id !== category._id
-                                  )
+                                ? prevDetail.categories.filter((id) => id !== category._id)
                                 : [...prevDetail.categories, category._id],
                             };
                           });
@@ -463,11 +383,7 @@ export default function AddTestimonial() {
                     </label>
                   ))}
                 </div>
-                {errors.categories && (
-                  <div className="invalid-feedback mx-2 mb-2">
-                    {errors.categories}
-                  </div>
-                )}
+                {errors.categories && <div className="invalid-feedback mx-2 mb-2">{errors.categories}</div>}
               </div>
 
               <div className="mb-3">
@@ -519,11 +435,7 @@ export default function AddTestimonial() {
           </div>
         </div>
       </div>
-      {!id ? (
-        <Addnote des={addTestimonialNote} />
-      ) : (
-        <Addnote des={editTestimonialNote} />
-      )}
+      {!id ? <Addnote des={addTestimonialNote} /> : <Addnote des={editTestimonialNote} />}
     </div>
   );
 }

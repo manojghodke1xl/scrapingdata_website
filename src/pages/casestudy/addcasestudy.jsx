@@ -4,19 +4,19 @@ import { GlobalContext } from "../../GlobalContext";
 import { addCaseStudyApi, getCaseStudyById, updateCaseStudyApi } from "../../apis/caseStudy-apis";
 import useGetAllSites from "../../Hooks/useGetAllSites";
 import { uploadFile } from "../../utils/fileUpload";
-import Addnote from '../../comps/addnote';
-import { addCasestudyNote, editAdminNote } from '../notes/notes-message';
+import Addnote from "../../comps/addnote";
+import { addCasestudyNote, editAdminNote } from "../notes/notes-message";
 
 export default function AddCaseStudy() {
   const navigate = useNavigate();
-  const { id = '' } = useParams();
+  const { id = "" } = useParams();
   const { alert, setLoading } = useContext(GlobalContext);
   const availableSites = useGetAllSites();
 
   const [caseStudyDetails, setCaseStudyDetails] = useState({
-    title: '',
-    sdesc: '',
-    ldesc: '',
+    title: "",
+    sdesc: "",
+    ldesc: "",
     isActive: true,
     isGlobal: false,
     sites: [],
@@ -40,18 +40,18 @@ export default function AddCaseStudy() {
             imageFile: image,
           }));
         } else {
-          alert({ type: 'warning', text: data });
+          alert({ type: "warning", text: data });
         }
       })()
-        .catch((error) => alert({ type: 'danger', text: error.message }))
+        .catch((error) => alert({ type: "danger", text: error.message }))
         .finally(() => setLoading(false));
     }
   }, [id, alert, setLoading]);
 
   const validate = () => {
     const newErrors = {};
-    if (!caseStudyDetails.title) newErrors.title = 'Title is required';
-    if (!caseStudyDetails.sites.length) newErrors.sites = 'Minimum one site is required';
+    if (!caseStudyDetails.title) newErrors.title = "Title is required";
+    if (!caseStudyDetails.sites.length) newErrors.sites = "Minimum one site is required";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -65,19 +65,19 @@ export default function AddCaseStudy() {
         ? updateCaseStudyApi(id, caseStudyDetails)
         : addCaseStudyApi(caseStudyDetails));
       if (status) {
-        alert({ type: 'success', text: data.message });
-        navigate('/casestudy-list');
+        alert({ type: "success", text: data.message });
+        navigate("/casestudy-list");
       } else {
-        alert({ type: 'warning', text: data });
+        alert({ type: "warning", text: data });
       }
     } catch (error) {
-      alert({ type: 'danger', text: error.message });
+      alert({ type: "danger", text: error.message });
     } finally {
       setLoading(false);
     }
   };
 
-  const handleFileUpload = (e, isImage, isPdf) => {
+  const handleFileUpload = ({ e, isImage = false, isPdf = false }) => {
     const file = e.target.files[0];
     if (file) {
       uploadFile({
@@ -85,7 +85,7 @@ export default function AddCaseStudy() {
         isImage,
         isPdf,
         alert,
-        setCaseStudyDetails,
+        setDetails: setCaseStudyDetails,
         fieldName: isImage ? "image" : "pdf",
       });
     }
@@ -109,18 +109,14 @@ export default function AddCaseStudy() {
       <div className="container container-tight py-4">
         <div className="card card-md">
           <div className="card-body">
-            <h2 className="h2 text-center mb-4">
-              {id ? "Edit Casestudy" : "Add Casestudy"}
-            </h2>
+            <h2 className="h2 text-center mb-4">{id ? "Edit Casestudy" : "Add Casestudy"}</h2>
             <form onSubmit={handleSubmit}>
               <div className="mb-3">
-                <label className={!id ? "form-label required" : "form-label "}>
-                  Title
-                </label>
+                <label className={!id ? "form-label required" : "form-label "}>Title</label>
                 <input
                   type="text"
                   name="title"
-                  className={`form-control ${errors.title ? 'is-invalid' : ''}`}
+                  className={`form-control ${errors.title ? "is-invalid" : ""}`}
                   placeholder="Title"
                   value={caseStudyDetails.title}
                   onChange={(e) => {
@@ -128,13 +124,10 @@ export default function AddCaseStudy() {
                       ...d,
                       title: e.target.value,
                     }));
-                    if (errors.title)
-                      setErrors((prev) => ({ ...prev, title: "" }));
+                    if (errors.title) setErrors((prev) => ({ ...prev, title: "" }));
                   }}
                 />
-                {errors.title && (
-                  <div className="invalid-feedback">{errors.title}</div>
-                )}
+                {errors.title && <div className="invalid-feedback">{errors.title}</div>}
               </div>
               <div className="mb-3">
                 <label className="form-label">Short Description</label>
@@ -169,13 +162,7 @@ export default function AddCaseStudy() {
                 />
               </div>
               <div className="mb-3">
-                <label
-                  className={
-                    id
-                      ? "form-label d-flex justify-content-between"
-                      : "form-label required"
-                  }
-                >
+                <label className={id ? "form-label d-flex justify-content-between" : "form-label required"}>
                   Upload Image
                   {id && caseStudyDetails.imageFile && (
                     <a href={caseStudyDetails.imageFile.url} download={caseStudyDetails.imageFile.name} target="_blank">
@@ -187,25 +174,15 @@ export default function AddCaseStudy() {
                   type="file"
                   name="image"
                   className="form-control"
-                  onChange={(e) => handleFileUpload(e, true, false, false)}
+                  onChange={(e) => handleFileUpload({ e, isImage: false })}
                   accept="image/*"
                 />
               </div>
               <div className="mb-3">
-                <label
-                  className={
-                    id
-                      ? "form-label d-flex justify-content-between"
-                      : "form-label required"
-                  }
-                >
+                <label className={id ? "form-label d-flex justify-content-between" : "form-label required"}>
                   Upload Pdf
                   {id && caseStudyDetails.pdfFile && (
-                    <a
-                      href={caseStudyDetails.pdfFile.url}
-                      download={caseStudyDetails.pdfFile.name}
-                      target="_blank"
-                    >
+                    <a href={caseStudyDetails.pdfFile.url} download={caseStudyDetails.pdfFile.name} target="_blank">
                       Download Pdf
                     </a>
                   )}
@@ -214,21 +191,13 @@ export default function AddCaseStudy() {
                   type="file"
                   name="pdf"
                   className="form-control"
-                  onChange={(e) => handleFileUpload(e, false, true, false)}
+                  onChange={(e) => handleFileUpload({ e, isPdf: true })}
                   accept="application/pdf"
                 />
               </div>
               <div className="mb-3">
                 <div className="d-flex justify-content-between mb-3">
-                  <label
-                    className={
-                      !id
-                        ? "form-label required mb-0 me-2"
-                        : "form-label mb-0 me-2"
-                    }
-                  >
-                    Select Sites
-                  </label>
+                  <label className={!id ? "form-label required mb-0 me-2" : "form-label mb-0 me-2"}>Select Sites</label>
                   <label className="form-check mb-0">
                     <input
                       type="checkbox"
@@ -241,29 +210,20 @@ export default function AddCaseStudy() {
                 </div>
                 <div className={`form-multi-check-box ${errors.sites ? "is-invalid" : ""}`}>
                   {availableSites.map((site) => (
-                    <label
-                      key={site._id}
-                      className="form-check">
+                    <label key={site._id} className="form-check">
                       <input
-                        className={`form-check-input ${
-                          errors.sites ? "is-invalid" : ""
-                        }`}
+                        className={`form-check-input ${errors.sites ? "is-invalid" : ""}`}
                         type="checkbox"
                         value={site._id}
                         checked={caseStudyDetails.sites.includes(site._id)}
                         onChange={() => {
-                          if (caseStudyDetails.sites)
-                            setErrors((prev) => ({ ...prev, sites: "" }));
+                          if (caseStudyDetails.sites) setErrors((prev) => ({ ...prev, sites: "" }));
                           setCaseStudyDetails((prevDetail) => {
-                            const isSelected = prevDetail.sites.includes(
-                              site._id
-                            );
+                            const isSelected = prevDetail.sites.includes(site._id);
                             return {
                               ...prevDetail,
                               sites: isSelected
-                                ? prevDetail.sites.filter(
-                                    (id) => id !== site._id
-                                  )
+                                ? prevDetail.sites.filter((id) => id !== site._id)
                                 : [...prevDetail.sites, site._id],
                             };
                           });
@@ -273,9 +233,7 @@ export default function AddCaseStudy() {
                     </label>
                   ))}
                 </div>
-                {errors.sites && (
-                  <div className="invalid-feedback mt-2">{errors.sites}</div>
-                )}
+                {errors.sites && <div className="invalid-feedback mt-2">{errors.sites}</div>}
               </div>
               <div className="mb-3">
                 <label className="row">

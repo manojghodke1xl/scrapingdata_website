@@ -1,35 +1,35 @@
-import { useContext, useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { GlobalContext } from '../../GlobalContext';
-import { getAllGuidesApi } from '../../apis/guide-apis';
-import { getAllCaseStudyApi } from '../../apis/caseStudy-apis';
-import { getPopupById } from '../../apis/popup-apis';
-import { addPopupApi, updatePopupApi } from '../../apis/site-apis';
-import useGetAllSites from '../../Hooks/useGetAllSites';
-import { uploadFile } from '../../utils/fileUpload';
-import Addnote from '../../comps/addnote';
-import { addPopupNote, editPopupNote } from '../notes/notes-message';
+import { useContext, useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { GlobalContext } from "../../GlobalContext";
+import { getAllGuidesApi } from "../../apis/guide-apis";
+import { getAllCaseStudyApi } from "../../apis/caseStudy-apis";
+import { getPopupById } from "../../apis/popup-apis";
+import { addPopupApi, updatePopupApi } from "../../apis/site-apis";
+import useGetAllSites from "../../Hooks/useGetAllSites";
+import { uploadFile } from "../../utils/fileUpload";
+import Addnote from "../../comps/addnote";
+import { addPopupNote, editPopupNote } from "../notes/notes-message";
 
 export default function AddPopup() {
   const navigate = useNavigate();
-  const { id = '' } = useParams();
+  const { id = "" } = useParams();
   const { alert, setLoading } = useContext(GlobalContext);
   const availableSites = useGetAllSites();
   const [popupDetails, setPopupDetails] = useState({
-    name: '',
-    position: '',
+    name: "",
+    position: "",
     onPageLoad: false,
     onPageUnload: false,
     afterPageLoad: 1,
     atPageScroll: 0,
     offOnceSubmited: false,
     againWhenCanceled: 1,
-    showOnDeviceType: 'all',
+    showOnDeviceType: "all",
     publishDate: new Date().toISOString().slice(0, 16),
     archiveDate: new Date().toISOString().slice(0, 16),
-    contentType: 'basic',
-    title: '',
-    desc: '',
+    contentType: "basic",
+    title: "",
+    desc: "",
     allGlobalGuides: false,
     allSiteGuides: false,
     moreGuides: [],
@@ -37,41 +37,41 @@ export default function AddPopup() {
     allSiteCaseStudy: false,
     moreCaseStudies: [],
     isActive: true,
-    site: '',
+    site: "",
   });
 
   const [contentDetials, setContentDetials] = useState([]);
   const [errors, setErrors] = useState({});
 
-  const positions = ['Center-Popup', 'Topbar-Notifications'];
-  const deviceTypes = ['All', 'Desktop', 'Mobile'];
-  const contentTypes = ['Basic', 'Guide', 'Casestudy'];
+  const positions = ["Center-Popup", "Topbar-Notifications"];
+  const deviceTypes = ["All", "Desktop", "Mobile"];
+  const contentTypes = ["Basic", "Guide", "Casestudy"];
 
   useEffect(() => {
     (async () => {
-      const { status, data } = await (popupDetails.contentType === 'guide'
+      const { status, data } = await (popupDetails.contentType === "guide"
         ? getAllGuidesApi()
-        : popupDetails.contentType === 'casestudy'
+        : popupDetails.contentType === "casestudy"
         ? getAllCaseStudyApi()
         : Promise.resolve({ status: false }));
       if (status) {
-        popupDetails.contentType === 'guide'
+        popupDetails.contentType === "guide"
           ? setContentDetials(data.guides)
-          : popupDetails.contentType === 'casestudy'
+          : popupDetails.contentType === "casestudy"
           ? setContentDetials(data.casestudies)
-          : '';
+          : "";
       } else if (data) {
-        alert({ type: 'warning', text: data });
+        alert({ type: "warning", text: data });
       }
     })();
   }, [alert, popupDetails.contentType]);
 
   const validate = () => {
     const newErrors = {};
-    if (!popupDetails.name) newErrors.name = 'Name is required';
-    if (!popupDetails.position) newErrors.position = 'Position is required';
-    if (!popupDetails.site) newErrors.site = 'At least one site must be selected';
-    if (!popupDetails.position) newErrors.position = 'At least one position must be selected';
+    if (!popupDetails.name) newErrors.name = "Name is required";
+    if (!popupDetails.position) newErrors.position = "Position is required";
+    if (!popupDetails.site) newErrors.site = "At least one site must be selected";
+    if (!popupDetails.position) newErrors.position = "At least one position must be selected";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -93,21 +93,21 @@ export default function AddPopup() {
             archiveDate: formattedArchiveDate,
           }));
         } else {
-          alert({ type: 'warning', text: data });
+          alert({ type: "warning", text: data });
         }
       })()
-        .catch((error) => alert({ type: 'danger', text: error.message }))
+        .catch((error) => alert({ type: "danger", text: error.message }))
         .finally(() => setLoading(false));
     }
   }, [id, alert, setLoading]);
 
   const handleSelection = (checked, id) => {
     const refProp =
-      popupDetails.contentType === 'guide'
-        ? 'moreGuides'
-        : popupDetails.contentType === 'casestudy'
-        ? 'moreCaseStudies'
-        : '';
+      popupDetails.contentType === "guide"
+        ? "moreGuides"
+        : popupDetails.contentType === "casestudy"
+        ? "moreCaseStudies"
+        : "";
     setPopupDetails({
       ...popupDetails,
       [refProp]: checked ? popupDetails[refProp].concat(id) : popupDetails[refProp].filter((_id) => id !== _id),
@@ -121,19 +121,19 @@ export default function AddPopup() {
     try {
       const { status, data } = await (id ? updatePopupApi(id, popupDetails) : addPopupApi(popupDetails));
       if (status) {
-        alert({ type: 'success', text: data.message });
-        navigate('/popup-list');
+        alert({ type: "success", text: data.message });
+        navigate("/popup-list");
       } else {
-        alert({ type: 'warning', text: data });
+        alert({ type: "warning", text: data });
       }
     } catch (error) {
-      alert({ type: 'danger', text: error.message });
+      alert({ type: "danger", text: error.message });
     } finally {
       setLoading(false);
     }
   };
 
-  const handleFileUpload = (e, isImage, isPdf) => {
+  const handleFileUpload = ({ e, isImage = false, isPdf = false }) => {
     const file = e.target.files[0];
     if (file) {
       uploadFile({
@@ -141,7 +141,7 @@ export default function AddPopup() {
         isImage,
         isPdf,
         alert,
-        setPopupDetails,
+        setDetails: setPopupDetails,
         fieldName: "image",
       });
     }
@@ -152,7 +152,7 @@ export default function AddPopup() {
       <div className="container container py-4">
         <div className="card card-md">
           <div className="card-body">
-            <h2 className="h2 text-center mb-4">{id ? 'Edit Popup' : 'Add Popup'}</h2>
+            <h2 className="h2 text-center mb-4">{id ? "Edit Popup" : "Add Popup"}</h2>
             <form onSubmit={handleDetails}>
               <div className="row">
                 <div className="col-md-3 mb-3">
@@ -160,12 +160,12 @@ export default function AddPopup() {
                   <input
                     type="text"
                     name="name"
-                    className={`form-control ${errors.name ? 'is-invalid' : ''}`}
+                    className={`form-control ${errors.name ? "is-invalid" : ""}`}
                     placeholder="Name"
                     value={popupDetails.name}
                     onChange={(e) => {
                       setPopupDetails((d) => ({ ...d, name: e.target.value }));
-                      if (errors.name) setErrors((prev) => ({ ...prev, name: '' }));
+                      if (errors.name) setErrors((prev) => ({ ...prev, name: "" }));
                     }}
                   />
                   {errors.name && <div className="invalid-feedback mt-2">{errors.name}</div>}
@@ -173,20 +173,19 @@ export default function AddPopup() {
                 <div className="col-md-3">
                   <label className="form-label required">Position</label>
                   <select
-                    className={`form-select ${errors.position ? 'is-invalid' : ''}`}
+                    className={`form-select ${errors.position ? "is-invalid" : ""}`}
                     value={popupDetails.position}
                     onChange={(e) => {
                       setPopupDetails((d) => ({
                         ...d,
                         position: e.target.value,
                       }));
-                      if (errors.position) setErrors((prev) => ({ ...prev, position: '' }));
-                    }}>
-                    <option value={''}>Select</option>
+                      if (errors.position) setErrors((prev) => ({ ...prev, position: "" }));
+                    }}
+                  >
+                    <option value={""}>Select</option>
                     {positions.map((position, i) => (
-                      <option
-                        key={i}
-                        value={position.toLowerCase()}>
+                      <option key={i} value={position.toLowerCase()}>
                         {position}
                       </option>
                     ))}
@@ -253,11 +252,10 @@ export default function AddPopup() {
                         ...d,
                         showOnDeviceType: e.target.value,
                       }))
-                    }>
+                    }
+                  >
                     {deviceTypes.map((device, i) => (
-                      <option
-                        key={i}
-                        value={device.toLowerCase()}>
+                      <option key={i} value={device.toLowerCase()}>
                         {device}
                       </option>
                     ))}
@@ -297,17 +295,16 @@ export default function AddPopup() {
                         ...d,
                         contentType: e.target.value,
                       }))
-                    }>
+                    }
+                  >
                     {contentTypes.map((contentType, i) => (
-                      <option
-                        key={i}
-                        value={contentType.toLowerCase()}>
+                      <option key={i} value={contentType.toLowerCase()}>
                         {contentType}
                       </option>
                     ))}
                   </select>
                 </div>
-                {popupDetails.contentType === 'basic' ? (
+                {popupDetails.contentType === "basic" ? (
                   <>
                     <div className="col-md-3 mb-3">
                       <label className="form-label">Title</label>
@@ -331,7 +328,7 @@ export default function AddPopup() {
                         type="file"
                         name="image"
                         className="form-control"
-                        onChange={(e) => handleFileUpload(e, true, false, false)}
+                        onChange={(e) => handleFileUpload({ e, isImage: true })}
                         accept="image/*"
                       />
                     </div>
@@ -386,7 +383,7 @@ export default function AddPopup() {
                       />
                       <span className="form-check-label">Off Once Submited</span>
                     </label>
-                    {popupDetails.contentType === 'guide' && (
+                    {popupDetails.contentType === "guide" && (
                       <>
                         <label className="form-check">
                           <input
@@ -418,7 +415,7 @@ export default function AddPopup() {
                         </label>
                       </>
                     )}
-                    {popupDetails.contentType === 'casestudy' && (
+                    {popupDetails.contentType === "casestudy" && (
                       <>
                         <label className="form-check">
                           <input
@@ -453,21 +450,19 @@ export default function AddPopup() {
                   </div>
                 </div>
 
-                {(popupDetails.contentType === 'guide' || popupDetails.contentType === 'casestudy') && (
+                {(popupDetails.contentType === "guide" || popupDetails.contentType === "casestudy") && (
                   <div className="col-md-3">
                     <label className="form-label">
-                      {popupDetails.contentType === 'guide' ? 'Additional Guides' : 'Additional Case Study'}
+                      {popupDetails.contentType === "guide" ? "Additional Guides" : "Additional Case Study"}
                     </label>
                     <div className="popup-form-multi-check-box">
                       {contentDetials.map((data) => (
-                        <label
-                          key={data._id}
-                          className="form-check">
+                        <label key={data._id} className="form-check">
                           <input
                             className="form-check-input"
                             type="checkbox"
                             checked={
-                              popupDetails.contentType === 'guide'
+                              popupDetails.contentType === "guide"
                                 ? popupDetails.moreGuides.includes(data._id)
                                 : popupDetails.moreCaseStudies.includes(data._id)
                             }
@@ -483,20 +478,19 @@ export default function AddPopup() {
                 <div className="col-md-3">
                   <label className="form-label required">Select site</label>
                   <select
-                    className={`form-select ${errors.site ? 'is-invalid' : ''}`}
+                    className={`form-select ${errors.site ? "is-invalid" : ""}`}
                     value={popupDetails.site}
                     onChange={(e) => {
                       setPopupDetails((d) => ({
                         ...d,
                         site: e.target.value,
                       }));
-                      if (errors.site) setErrors((prev) => ({ ...prev, site: '' }));
-                    }}>
-                    <option value={''}>Select</option>
+                      if (errors.site) setErrors((prev) => ({ ...prev, site: "" }));
+                    }}
+                  >
+                    <option value={""}>Select</option>
                     {availableSites.map((site, i) => (
-                      <option
-                        key={i}
-                        value={site._id}>
+                      <option key={i} value={site._id}>
                         {site.name}
                       </option>
                     ))}
@@ -504,7 +498,7 @@ export default function AddPopup() {
                   {errors.site && <div className="invalid-feedback mt-2">{errors.site}</div>}
                 </div>
 
-                {popupDetails.contentType === 'basic' && (
+                {popupDetails.contentType === "basic" && (
                   <div className=" col-md-6 mb-3">
                     <label className="form-label">Description</label>
                     <textarea
