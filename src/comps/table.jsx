@@ -79,44 +79,48 @@ const Table = ({
                       </div>
                     </>
                   )}
-                  Search:
-                  <div className="ms-2 d-inline-block">
-                    <select className="form-select form-control-sm" onChange={handleSearchKeyChange}>
-                      <option value={""}>Select</option>
-                      {searchAbleKeys.map((key, i) => (
-                        <option key={i} value={key.toLowerCase()}>
-                          {key}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <div className="ms-2 d-inline-block input-icon">
-                    <span className="input-icon-addon">
-                      <svg
-                        width={24}
-                        height={24}
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth={2}
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        className="icon"
-                      >
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                        <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
-                        <path d="M21 21l-6 -6" />
-                      </svg>
-                    </span>
-                    <input
-                      type="text"
-                      className="form-control"
-                      placeholder="Search…"
-                      aria-label="Search"
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                      disabled={!isOptionSelected}
-                    />
-                  </div>
+                  {setSearchTerm && setSearchKey && searchAbleKeys && (
+                    <>
+                      Search:
+                      <div className="ms-2 d-inline-block">
+                        <select className="form-select form-control-sm" onChange={handleSearchKeyChange}>
+                          <option value={""}>Select</option>
+                          {searchAbleKeys.map((key, i) => (
+                            <option key={i} value={key.toLowerCase()}>
+                              {key}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      <div className="ms-2 d-inline-block input-icon">
+                        <span className="input-icon-addon">
+                          <svg
+                            width={24}
+                            height={24}
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth={2}
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            className="icon"
+                          >
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                            <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
+                            <path d="M21 21l-6 -6" />
+                          </svg>
+                        </span>
+                        <input
+                          type="text"
+                          className="form-control"
+                          placeholder="Search…"
+                          aria-label="Search"
+                          onChange={(e) => setSearchTerm(e.target.value)}
+                          disabled={!isOptionSelected}
+                        />
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
             </div>

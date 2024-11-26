@@ -1,10 +1,11 @@
-import { useContext, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import Table from '../../comps/table';
-import useSetTimeout from '../../Hooks/useDebounce';
-import { GlobalContext } from '../../GlobalContext';
-import Addnote from '../../comps/addnote';
-import { listCategoryNote } from '../notes/notes-message';
+import { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Table from "../../comps/table";
+import useSetTimeout from "../../Hooks/useDebounce";
+import { GlobalContext } from "../../GlobalContext";
+import Addnote from "../../comps/addnote";
+import { listCategoryNote } from "../notes/notes-message";
+import { formatDateTime } from "../../utils/function";
 
 export default function CategoryList() {
   const navigate = useNavigate();
@@ -14,34 +15,23 @@ export default function CategoryList() {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(8);
   const [totalCount, setTotalCount] = useState(0);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [searchKey, setSearchKey] = useState('');
-  const searchAbleKeys = ['Name'];
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchKey, setSearchKey] = useState("");
+  const searchAbleKeys = ["Name"];
 
-  const [err, data] = useSetTimeout('categories', page - 1, limit, searchTerm, searchKey);
+  const [err, data] = useSetTimeout("categories", page - 1, limit, searchTerm, searchKey);
 
-  const headers = [{ label: 'Name' }, { label: 'Created Date' }, { label: 'Updated Date' }, { label: 'Actions' }];
+  const headers = [{ label: "Name" }, { label: "Created Date" }, { label: "Updated Date" }, { label: "Actions" }];
 
   const rows = categories.map((category, index) => {
     const { _id, name, createdAt, updatedAt } = category;
     return {
       _id,
       name,
-      createdAt: new Date(createdAt).toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-      }),
-      updatedAt: new Date(updatedAt).toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-      }),
+      createdAt: formatDateTime(createdAt),
+      updatedAt: formatDateTime(updatedAt),
       actions: (
-        <button
-          key={index}
-          onClick={() => navigate(`/edit-category/${_id}`)}
-          className="btn btn-primary me-1">
+        <button key={index} onClick={() => navigate(`/edit-category/${_id}`)} className="btn btn-primary me-1">
           Edit
         </button>
       ),
@@ -53,7 +43,7 @@ export default function CategoryList() {
       setCategories(data.categorys);
       setTotalCount(data.count);
     } else if (err) {
-      alert({ type: 'warning', text: err.message });
+      alert({ type: "warning", text: err.message });
     }
   }, [data, err, alert]);
 
@@ -64,9 +54,7 @@ export default function CategoryList() {
           <div className="card-header">
             <h3 className="card-title">All Categories</h3>
             <div className="card-options">
-              <button
-                onClick={() => navigate('/add-category')}
-                className="btn btn-primary ">
+              <button onClick={() => navigate("/add-category")} className="btn btn-primary ">
                 Add Category
               </button>
             </div>

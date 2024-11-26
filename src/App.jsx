@@ -31,6 +31,8 @@ import PopupList from "./pages/popup/popuplist";
 import AddPopup from "./pages/popup/addpopup";
 import CategoryList from "./pages/category/categoryList";
 import AddCategory from "./pages/category/addCategory";
+import AddGallery from "./pages/gallery/addgallery";
+import GalleryList from "./pages/gallery/gallerylist";
 
 function App() {
   const [alerts, alert] = useAlert();
@@ -77,6 +79,9 @@ function App() {
               <Route path="/category-list" element={<CategoryList />} />
               <Route path="/add-category" element={<AddCategory />} />
               <Route path="/edit-category/:id" element={<AddCategory />} />
+              <Route path="/gallery-list" element={<GalleryList />} />
+              <Route path="/add-gallery" element={<AddGallery />} />
+              <Route path="/edit-gallery/:id" element={<AddGallery />} />
             </Route>
 
             <Route path="*" element={<Missing />} />

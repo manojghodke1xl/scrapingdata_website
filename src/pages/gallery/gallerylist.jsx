@@ -5,47 +5,47 @@ import Table from "../../comps/table";
 import useSetTimeout from "../../Hooks/useDebounce";
 import useGetAllSites from "../../Hooks/useGetAllSites";
 import DuplicateModal from "../../comps/duplicate";
-import { updateGuideSitesApi, updateGuideStatusApi } from "../../apis/guide-apis";
+import { updateGallerySitesApi, updateGalleryStatusApi, deleteGalleryApi } from "../../apis/gallery-apis";
 import Addnote from "../../comps/addnote";
+import ConfirmationModal from "../../comps/confirmation";
 import { formatDateTime } from "../../utils/function";
 
-export default function GuideList() {
+export default function GalleryList() {
   const navigate = useNavigate();
   const { alert, setLoading } = useContext(GlobalContext);
 
-  const [guides, setGuides] = useState([]);
+  const [galleries, setGalleries] = useState([]);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(8);
   const [totalCount, setTotalCount] = useState(0);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [searchKey, setSearchKey] = useState("");
-  const [selectedGuides, setSelectedGuides] = useState([]);
+  const [selectedGalleries, setSelectedGalleries] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
   const [statusFilter, setStatusFilter] = useState("");
   const [siteId, setSiteId] = useState("");
   const [statusSelect, setStatusSelect] = useState("");
-  const [modalOpen, setModalOpen] = useState(false);
+  const [duplicateModelOpen, setDuplicateModelOpen] = useState(false);
+  const [confirmationModelOpen, setConfirmationModelOpen] = useState(false);
+  const [modalImage, setModalImage] = useState("");
   const allsites = useGetAllSites();
 
-  const searchAbleKeys = ["Title"];
   const filter = ["Active", "Inactive"];
   const Status = ["Active", "Inactive"];
 
-  const [err, data, setRefresh] = useSetTimeout("guides", page - 1, limit, searchTerm, searchKey, statusFilter, siteId);
+  const [err, data, setRefresh] = useSetTimeout("gallery", page - 1, limit, "", "", statusFilter, siteId);
 
   useEffect(() => {
     if (data) {
-      setGuides(data.guides);
+      setGalleries(data.galleries);
       setTotalCount(data.count);
     } else if (err) {
       alert({ type: "warning", text: err.message });
     }
   }, [data, err, alert]);
 
-  const updateSelectedGuidesStatus = async (guideStatus) => {
+  const updateSelectedGalleriesStatus = async (galleryStatus) => {
     setLoading(true);
     try {
-      const { status, data } = await updateGuideStatusApi(selectedGuides, guideStatus);
+      const { status, data } = await updateGalleryStatusApi(selectedGalleries, galleryStatus);
 
       if (status) {
         alert({
@@ -53,14 +53,14 @@ export default function GuideList() {
           text: data.message,
         });
         setRefresh((r) => !r);
-        setSelectedGuides([]);
+        setSelectedGalleries([]);
         setSelectAll(false);
         setStatusSelect("");
       } else {
-        alert({ type: "danger", title: "Error!", text: data });
+        alert({ type: "danger", image: "Error!", text: data });
       }
     } catch (error) {
-      alert({ type: "danger", title: "Error!", text: error.message });
+      alert({ type: "danger", image: "Error!", text: error.message });
     } finally {
       setLoading(false);
     }
@@ -70,14 +70,14 @@ export default function GuideList() {
     setLoading(true);
     try {
       const action = selectedAction === "Add" ? true : false;
-      const { status, data } = await updateGuideSitesApi(selectedGuides, selectedSites, action);
+      const { status, data } = await updateGallerySitesApi(selectedGalleries, selectedSites, action);
       if (status) {
         alert({
           type: "success",
           text: data.message,
         });
         setRefresh((r) => !r);
-        setSelectedGuides([]);
+        setSelectedGalleries([]);
         setSelectAll(false);
       } else {
         alert({ type: "danger", text: data });
@@ -86,21 +86,48 @@ export default function GuideList() {
       alert({ type: "danger", text: error.message });
     } finally {
       setLoading(false);
-      setModalOpen(false);
-      setSelectedGuides([]);
+      setDuplicateModelOpen(false);
+      setSelectedGalleries([]);
     }
   };
 
-  const handleCheckboxChange = (guideId) => {
-    setSelectedGuides((prevSelected) => {
+  const deleteSelectedEnquiries = async () => {
+    if (!selectedGalleries.length)
+      return alert({
+        type: "warning",
+        text: "Please select at least one gallery to delete.",
+      });
+
+    setLoading(true);
+    try {
+      const { status, data } = await deleteGalleryApi(selectedGalleries);
+      if (status) {
+        alert({ type: "success", text: data.message });
+        setRefresh((r) => !r);
+        setSelectedGalleries([]);
+        setSelectAll(false);
+      } else {
+        alert({ type: "danger", text: data });
+      }
+    } catch (error) {
+      alert({ type: "danger", text: error.message });
+    } finally {
+      setLoading(false);
+      setConfirmationModelOpen(false);
+      setSelectedGalleries([]);
+    }
+  };
+
+  const handleCheckboxChange = (galleryId) => {
+    setSelectedGalleries((prevSelected) => {
       let updatedSelected;
-      if (prevSelected.includes(guideId)) {
-        updatedSelected = prevSelected.filter((id) => id !== guideId);
+      if (prevSelected.includes(galleryId)) {
+        updatedSelected = prevSelected.filter((id) => id !== galleryId);
         setStatusSelect("");
       } else {
-        updatedSelected = [...prevSelected, guideId];
+        updatedSelected = [...prevSelected, galleryId];
       }
-      if (updatedSelected.length === guides.length) {
+      if (updatedSelected.length === galleries.length) {
         setSelectAll(true);
       } else {
         setSelectAll(false);
@@ -111,9 +138,9 @@ export default function GuideList() {
 
   const handleSelectAll = () => {
     if (selectAll) {
-      setSelectedGuides([]);
+      setSelectedGalleries([]);
     } else {
-      setSelectedGuides(guides.map((guide) => guide._id));
+      setSelectedGalleries(galleries.map((gallery) => gallery._id));
     }
     setSelectAll(!selectAll);
   };
@@ -122,7 +149,7 @@ export default function GuideList() {
     {
       label: <input className="form-check-input " type="checkbox" checked={selectAll} onChange={handleSelectAll} />,
     },
-    { label: "Title" },
+    { label: "Image" },
     { label: "Created Date" },
     { label: "Updated Date" },
     { label: "Status" },
@@ -130,20 +157,27 @@ export default function GuideList() {
     { label: "Sites" },
   ];
 
-  const rows = guides.map((guide) => {
-    const { _id, title, isActive, sites, createdAt, updatedAt } = guide;
+  const rows = galleries.map((gallery) => {
+    const { _id, image, isActive, sites, createdAt, updatedAt } = gallery;
+    console.log("image", image);
     return {
       _id,
       checkedbox: (
         <input
-          key={guide._id}
+          key={gallery._id}
           className="form-check-input"
           type="checkbox"
-          checked={selectedGuides.includes(guide._id)}
-          onChange={() => handleCheckboxChange(guide._id)}
+          checked={selectedGalleries.includes(gallery._id)}
+          onChange={() => handleCheckboxChange(gallery._id)}
         />
       ),
-      title,
+      image: (
+        <span
+          style={{ backgroundImage: `url(${image.url})` }}
+          onClick={() => setModalImage(image.url)}
+          className="avatar cursor-pointer"
+        />
+      ),
       created: formatDateTime(createdAt),
       updated: formatDateTime(updatedAt),
       status:
@@ -153,8 +187,8 @@ export default function GuideList() {
           <span className="badge bg-danger">Inactive</span>
         ),
       action: (
-        <div key={guide._id}>
-          <button onClick={() => navigate(`/edit-guide/${guide._id}`)} className="btn btn-primary me-1">
+        <div key={gallery._id}>
+          <button onClick={() => navigate(`/edit-gallery/${gallery._id}`)} className="btn btn-primary me-1">
             Edit
           </button>
         </div>
@@ -168,7 +202,7 @@ export default function GuideList() {
       <div className="container-xl">
         <div className="card">
           <div className="card-header">
-            <h3 className="card-title">All Guides List</h3>
+            <h3 className="card-image">All Galleries List</h3>
             <div className="card-options d-flex gap-2">
               <div className="card-options">
                 <div className="text-secondary">
@@ -184,7 +218,7 @@ export default function GuideList() {
                     </select>
                   </div>
                 </div>
-                {selectedGuides.length ? (
+                {selectedGalleries.length ? (
                   <>
                     <div className="text-secondary">
                       Status
@@ -203,23 +237,26 @@ export default function GuideList() {
                       </div>
                     </div>
                     {statusSelect === "active" && (
-                      <button onClick={() => updateSelectedGuidesStatus(true)} className="btn btn-success mx-2">
+                      <button onClick={() => updateSelectedGalleriesStatus(true)} className="btn btn-success mx-2">
                         Apply
                       </button>
                     )}
                     {statusSelect === "inactive" && (
-                      <button onClick={() => updateSelectedGuidesStatus(false)} className="btn btn-danger mx-2">
+                      <button onClick={() => updateSelectedGalleriesStatus(false)} className="btn btn-danger mx-2">
                         Apply
                       </button>
                     )}
-                    <button onClick={() => setModalOpen(true)} className="btn btn-primary mx-2">
+                    <button onClick={() => setDuplicateModelOpen(true)} className="btn btn-primary mx-2">
                       Sites
+                    </button>
+                    <button onClick={() => setConfirmationModelOpen(true)} className="btn btn-danger mx-2">
+                      Delete
                     </button>
                   </>
                 ) : null}
 
-                <button onClick={() => navigate("/add-guide")} className="btn btn-primary">
-                  Add Guide
+                <button onClick={() => navigate("/add-gallery")} className="btn btn-primary">
+                  Add Gallery
                 </button>
               </div>
             </div>
@@ -232,11 +269,11 @@ export default function GuideList() {
               totalPages={Math.ceil(totalCount / limit)}
               onPageChange={(newPage) => setPage(newPage)}
               entriesPerPage={limit}
-              setSearchTerm={setSearchTerm}
-              setSearchKey={setSearchKey}
+              // setSearchTerm={setSearchTerm}
+              // setSearchKey={setSearchKey}
+              // searchAbleKeys={searchAbleKeys}
               allsites={allsites}
               setSiteId={setSiteId}
-              searchAbleKeys={searchAbleKeys}
               onEntriesChange={(newLimit) => setLimit(newLimit)}
               totalCount={totalCount}
             />
@@ -245,18 +282,46 @@ export default function GuideList() {
       </div>
 
       <Addnote
-        des={`This is the All Guides List page. There is an "Add Guide" button to add a guide. A filter dropdown is available to filter details by status, allowing you to view all guides. The table includes the name of the Guide Title, created date, updated date, status indicating whether the Guide is Active or Inactive, the site assigned to the Guide, and a Edit button to Editing specific Guide details. There is also a site dropdown that lists all website names; selecting a specific website will show only the details related to that website in the table. Additionally, the table has a checkbox for changing the status of a particular Guide or multiple Guide. The checkbox is not available for Admins, as their status cannot be changed. There is a search dropdown, and when you select an option, you can search the table based on the selected option.`}
+        des={`This is the All Galleries List page. There is an "Add Gallery" button to add a gallery. A filter dropdown is available to filter details by status, allowing you to view all galleries. The table includes the name of the Gallery Title, created date, updated date, status indicating whether the Gallery is Active or Inactive, the site assigned to the Gallery, and a Edit button to Editing specific Gallery details. There is also a site dropdown that lists all website names; selecting a specific website will show only the details related to that website in the table. Additionally, the table has a checkbox for changing the status of a particular Gallery or multiple Gallery. The checkbox is not available for Admins, as their status cannot be changed. There is a search dropdown, and when you select an option, you can search the table based on the selected option.`}
       />
 
       <DuplicateModal
         allsites={allsites}
-        isOpen={modalOpen}
-        onClose={setModalOpen}
+        isOpen={duplicateModelOpen}
+        onClose={setDuplicateModelOpen}
         onConfirm={updateSites}
-        title="Update Sites"
+        image="Update Sites"
         action={["Add", "Remove"]}
         confirmText="Update"
       />
+
+      <ConfirmationModal
+        isOpen={confirmationModelOpen}
+        onClose={() => setConfirmationModelOpen(false)}
+        onConfirm={deleteSelectedEnquiries}
+        message={`Are you sure you want to delete selected images? This action cannot be undone.`}
+      />
+
+      {modalImage && (
+        <div
+          className="modal d-block bg-opacity-50"
+          style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+          onClick={() => setModalImage("")}
+        >
+          <div className="modal-dialog modal-dialog-centered" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-content">
+              <div className="modal-body p-0">
+                <img
+                  src={modalImage}
+                  alt="Enlarged View"
+                  className="img-fluid rounded-lg shadow-lg"
+                  style={{ maxHeight: "80vh", width: "100%" }}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
