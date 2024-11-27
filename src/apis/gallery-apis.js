@@ -30,7 +30,3 @@ export const updateGallerySitesApi = async (gids, sids, action) => {
 export const deleteGalleryApi = async (ids) => {
   return await deleteMethodCall(`${import.meta.env.VITE_API_URL}/gallery`, ids);
 };
-
-export const getAllGallerysApi = async () => {
-  return await getMethodCall(`${import.meta.env.VITE_API_URL}/allgallerys`);
-};

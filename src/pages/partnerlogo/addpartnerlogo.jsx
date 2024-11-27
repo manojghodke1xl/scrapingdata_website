@@ -3,15 +3,15 @@ import { useNavigate, useParams } from "react-router-dom";
 import { GlobalContext } from "../../GlobalContext";
 import useGetAllSites from "../../Hooks/useGetAllSites";
 import { uploadMultipleFiles } from "../../utils/fileUpload";
-import { addGalleryApi, getGalleryById, updateGalleryApi } from "../../apis/gallery-apis";
+import { addPartnerLogoApi, getPartnerLogoById, updatePartnerLogoApi } from "../../apis/partner-logo-apis";
 
-export default function AddGallery() {
+export default function AddPartnerLogo() {
   const navigate = useNavigate();
   const { id = "" } = useParams();
   const { alert, setLoading } = useContext(GlobalContext);
   const availableSites = useGetAllSites();
 
-  const [galleryDetails, setGalleryDetails] = useState({
+  const [partnerlogoDetails, setPartnerLogoDetails] = useState({
     images: !id ? [] : undefined,
     isActive: true,
     isGlobal: false,
@@ -24,11 +24,11 @@ export default function AddGallery() {
     if (id) {
       setLoading(true);
       (async () => {
-        const { status, data } = await getGalleryById(id);
+        const { status, data } = await getPartnerLogoById(id);
         if (status) {
-          const { image, sites, ...rest } = data.gallery;
+          const { image, sites, ...rest } = data.partnerlogo;
 
-          setGalleryDetails((prev) => ({
+          setPartnerLogoDetails((prev) => ({
             ...prev,
             ...rest,
             sites: sites.map((s) => s._id),
@@ -45,10 +45,10 @@ export default function AddGallery() {
 
   const validate = () => {
     const newErrors = {};
-    if (!id && !galleryDetails.images?.length) {
+    if (!id && !partnerlogoDetails.images?.length) {
       newErrors.images = "At least one image is needed";
     }
-    if (galleryDetails.sites.length === 0) {
+    if (partnerlogoDetails.sites.length === 0) {
       newErrors.sites = "At least one site must be selected";
     }
     setErrors(newErrors);
@@ -60,10 +60,12 @@ export default function AddGallery() {
     if (!validate()) return;
     setLoading(true);
     try {
-      const { status, data } = await (id ? updateGalleryApi(id, galleryDetails) : addGalleryApi(galleryDetails));
+      const { status, data } = await (id
+        ? updatePartnerLogoApi(id, partnerlogoDetails)
+        : addPartnerLogoApi(partnerlogoDetails));
       if (status) {
         alert({ type: "success", text: data.message });
-        navigate("/gallery-list");
+        navigate("/partner-logo-list");
       } else {
         alert({ type: "warning", text: data });
       }
@@ -75,12 +77,12 @@ export default function AddGallery() {
   };
 
   const handleFileUpload = async (files) => {
-    if (galleryDetails.images) setErrors((prev) => ({ ...prev, images: "" }));
+    if (partnerlogoDetails.images) setErrors((prev) => ({ ...prev, images: "" }));
     setLoading(true);
     try {
       const fileIds = await uploadMultipleFiles(files);
-      if (!id) setGalleryDetails((prev) => ({ ...prev, images: fileIds }));
-      else setGalleryDetails((prev) => ({ ...prev, image: fileIds[0] }));
+      if (!id) setPartnerLogoDetails((prev) => ({ ...prev, images: fileIds }));
+      else setPartnerLogoDetails((prev) => ({ ...prev, image: fileIds[0] }));
     } catch (error) {
       alert({ type: "danger", text: error.message });
     } finally {
@@ -89,9 +91,9 @@ export default function AddGallery() {
   };
 
   const handleSelectAllChange = () => {
-    if (selectAll) setGalleryDetails((prev) => ({ ...prev, sites: [] }));
+    if (selectAll) setPartnerLogoDetails((prev) => ({ ...prev, sites: [] }));
     else
-      setGalleryDetails((prev) => ({
+      setPartnerLogoDetails((prev) => ({
         ...prev,
         sites: availableSites.map((site) => site._id),
       }));
@@ -99,20 +101,24 @@ export default function AddGallery() {
     setSelectAll(!selectAll);
   };
 
-  const isAllSelected = galleryDetails.sites.length === availableSites.length;
+  const isAllSelected = partnerlogoDetails.sites.length === availableSites.length;
 
   return (
     <div className="page-body">
       <div className="container container-tight py-4">
         <div className="card card-md">
           <div className="card-body">
-            <h2 className="h2 text-center mb-4">{id ? "Edit Gallery" : "Add Gallery"}</h2>
+            <h2 className="h2 text-center mb-4">{id ? "Edit Partner Logo" : "Add Partner Logo"}</h2>
             <form onSubmit={handleSubmit}>
               <div className="mb-3">
                 <label className={id ? "form-label d-flex justify-content-between" : "form-label required"}>
                   {id ? "Upload Image" : "Upload Multiple Images"}
-                  {id && galleryDetails.imageFile && (
-                    <a href={galleryDetails.imageFile.url} download={galleryDetails.imageFile.name} target="_blank">
+                  {id && partnerlogoDetails.imageFile && (
+                    <a
+                      href={partnerlogoDetails.imageFile.url}
+                      download={partnerlogoDetails.imageFile.name}
+                      target="_blank"
+                    >
                       Download Image
                     </a>
                   )}
@@ -148,11 +154,11 @@ export default function AddGallery() {
                         className={`form-check-input ${errors.sites ? "is-invalid" : ""}`}
                         type="checkbox"
                         value={site._id}
-                        checked={galleryDetails.sites.includes(site._id)}
+                        checked={partnerlogoDetails.sites.includes(site._id)}
                         onChange={() => {
-                          if (galleryDetails.sites) setErrors((prev) => ({ ...prev, sites: "" }));
+                          if (partnerlogoDetails.sites) setErrors((prev) => ({ ...prev, sites: "" }));
 
-                          setGalleryDetails((prevDetail) => {
+                          setPartnerLogoDetails((prevDetail) => {
                             const isSelected = prevDetail.sites.includes(site._id);
                             return {
                               ...prevDetail,
@@ -171,16 +177,16 @@ export default function AddGallery() {
               </div>
               <div className="mb-3">
                 <label className="row">
-                  <span className="col">Is Gallery Active?</span>
+                  <span className="col">Is Partner Logo Active?</span>
                   <span className="col-auto">
                     <label className="form-check form-check-singl  e form-switch">
                       <input
                         className="form-check-input"
                         type="checkbox"
                         name="status"
-                        checked={galleryDetails.isActive}
+                        checked={partnerlogoDetails.isActive}
                         onChange={() =>
-                          setGalleryDetails((prev) => ({
+                          setPartnerLogoDetails((prev) => ({
                             ...prev,
                             isActive: !prev.isActive,
                           }))
@@ -192,15 +198,15 @@ export default function AddGallery() {
               </div>
               <div className="mb-3">
                 <label className="row">
-                  <span className="col">Is Gallery Global?</span>
+                  <span className="col">Is Partner Logo Global?</span>
                   <span className="col-auto">
                     <label className="form-check form-check-single form-switch">
                       <input
                         className="form-check-input"
                         type="checkbox"
-                        checked={galleryDetails.isGlobal}
+                        checked={partnerlogoDetails.isGlobal}
                         onChange={() =>
-                          setGalleryDetails((prev) => ({
+                          setPartnerLogoDetails((prev) => ({
                             ...prev,
                             isGlobal: !prev.isGlobal,
                           }))
@@ -219,7 +225,7 @@ export default function AddGallery() {
           </div>
         </div>
       </div>
-      {/* {!id ? <Addnote des={addGalleryNote} /> : <Addnote des={editGalleryNote} />} */}
+      {/* {!id ? <Addnote des={addPartnerLogoNote} /> : <Addnote des={editPartnerLogoNote} />} */}
     </div>
   );
 }

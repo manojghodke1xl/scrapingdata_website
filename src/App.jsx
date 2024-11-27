@@ -33,6 +33,10 @@ import CategoryList from "./pages/category/categoryList";
 import AddCategory from "./pages/category/addCategory";
 import AddGallery from "./pages/gallery/addgallery";
 import GalleryList from "./pages/gallery/gallerylist";
+import AddClientLogo from "./pages/clientlogo/addclientlogo";
+import ClientLogoList from "./pages/clientlogo/clientlogolist";
+import PartnerLogoList from "./pages/partnerlogo/partnerlogolist";
+import AddPartnerLogo from "./pages/partnerlogo/addpartnerlogo";
 
 function App() {
   const [alerts, alert] = useAlert();
@@ -82,6 +86,12 @@ function App() {
               <Route path="/gallery-list" element={<GalleryList />} />
               <Route path="/add-gallery" element={<AddGallery />} />
               <Route path="/edit-gallery/:id" element={<AddGallery />} />
+              <Route path="/client-logo-list" element={<ClientLogoList />} />
+              <Route path="/add-client-logo" element={<AddClientLogo />} />
+              <Route path="/edit-client-logo/:id" element={<AddClientLogo />} />
+              <Route path="/partner-logo-list" element={<PartnerLogoList />} />
+              <Route path="/add-partner-logo" element={<AddPartnerLogo />} />
+              <Route path="/edit-partner-logo/:id" element={<AddPartnerLogo />} />
             </Route>
 
             <Route path="*" element={<Missing />} />
