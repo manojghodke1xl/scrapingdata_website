@@ -2,7 +2,11 @@ import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { GlobalContext } from "../../GlobalContext";
 import { getAllSmtpsApi } from "../../apis/smtp-apis";
-import { addSiteApi, getSiteByIdApi, updateSiteApi } from "../../apis/site-apis";
+import {
+  addSiteApi,
+  getSiteByIdApi,
+  updateSiteApi,
+} from "../../apis/site-apis";
 import Addnote from "../../comps/addnote";
 import { addWebsiteNote, editWebsiteNote } from "../notes/notes-message";
 import FormField from "../../comps/formField";
@@ -128,10 +132,14 @@ export default function AddSite() {
     if (!validate()) return;
     setLoading(true);
     try {
-      const { status, data } = await (id ? updateSiteApi(id, siteDetails) : addSiteApi(siteDetails));
+      const { status, data } = await (id
+        ? updateSiteApi(id, siteDetails)
+        : addSiteApi(siteDetails));
       if (status) {
         alert({ type: "success", text: data.message });
-        if (data.authURL) navigate(data.authURL);
+        if (data.data?.authURL)
+          return (window.location.href = data.data?.authURL);
+        // navigate(data.data?.authURL);
         else return navigate("/site-list");
       } else {
         alert({ type: "warning", text: data });
@@ -145,7 +153,14 @@ export default function AddSite() {
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-  const validateAndAddInput = (e, inputValue, setInputValue, setStateDetails, key, regexPattern) => {
+  const validateAndAddInput = (
+    e,
+    inputValue,
+    setInputValue,
+    setStateDetails,
+    key,
+    regexPattern
+  ) => {
     e.preventDefault();
 
     if (inputValue && regexPattern.test(inputValue)) {
@@ -171,7 +186,14 @@ export default function AddSite() {
   };
 
   const handleAddEmail = (e, key) => {
-    validateAndAddInput(e, emailInput, setEmailInput, setSiteDetails, key, emailRegex);
+    validateAndAddInput(
+      e,
+      emailInput,
+      setEmailInput,
+      setSiteDetails,
+      key,
+      emailRegex
+    );
   };
 
   const handleRemoveEmail = (index, key) => {
@@ -242,7 +264,9 @@ export default function AddSite() {
       <div className="container container-tight py-4">
         <div className="card card-md">
           <div className="card-body">
-            <h2 className="h2 text-center mb-4">{id ? "Edit Site" : "Add Site"}</h2>
+            <h2 className="h2 text-center mb-4">
+              {id ? "Edit Site" : "Add Site"}
+            </h2>
             <form onSubmit={handleSubmit}>
               <div className="mb-3">
                 <label className="form-label required">Site Name</label>
@@ -254,10 +278,13 @@ export default function AddSite() {
                   value={siteDetails.name}
                   onChange={(e) => {
                     setSiteDetails((d) => ({ ...d, name: e.target.value }));
-                    if (errors.name) setErrors((prev) => ({ ...prev, name: "" }));
+                    if (errors.name)
+                      setErrors((prev) => ({ ...prev, name: "" }));
                   }}
                 />
-                {errors.name && <div className="invalid-feedback mt-2">{errors.name}</div>}
+                {errors.name && (
+                  <div className="invalid-feedback mt-2">{errors.name}</div>
+                )}
               </div>
               <div className="mb-3">
                 <label className="form-label required">Site Host</label>
@@ -269,23 +296,33 @@ export default function AddSite() {
                   value={siteDetails.host}
                   onChange={(e) => {
                     setSiteDetails((d) => ({ ...d, host: e.target.value }));
-                    if (errors.host) setErrors((prev) => ({ ...prev, host: "" }));
+                    if (errors.host)
+                      setErrors((prev) => ({ ...prev, host: "" }));
                   }}
                 />
-                {errors.host && <div className="invalid-feedback mt-2">{errors.host}</div>}
+                {errors.host && (
+                  <div className="invalid-feedback mt-2">{errors.host}</div>
+                )}
               </div>
 
               <ToggleFormSection
                 label="Send User Enquiry Notification"
                 toggleState={siteDetails.sendUserEnquiry}
-                onToggle={(e) => handleToggle(e.target.checked, "sendUserEnquiry")}
+                onToggle={(e) =>
+                  handleToggle(e.target.checked, "sendUserEnquiry")
+                }
               >
                 <FormField
                   label="Subject"
                   value={siteDetails.userEnquiryMailData?.subject ?? ""}
                   onChange={(value) => {
-                    handleMailDataChange("userEnquiryMailData", "subject", value);
-                    if (errors.subject) setErrors((prev) => ({ ...prev, subject: "" }));
+                    handleMailDataChange(
+                      "userEnquiryMailData",
+                      "subject",
+                      value
+                    );
+                    if (errors.subject)
+                      setErrors((prev) => ({ ...prev, subject: "" }));
                   }}
                   isInvalid={!!errors.subject}
                   errorMessage={errors.subject}
@@ -296,7 +333,8 @@ export default function AddSite() {
                   value={siteDetails.userEnquiryMailData?.body ?? ""}
                   onChange={(value) => {
                     handleMailDataChange("userEnquiryMailData", "body", value);
-                    if (errors.body) setErrors((prev) => ({ ...prev, body: "" }));
+                    if (errors.body)
+                      setErrors((prev) => ({ ...prev, body: "" }));
                   }}
                   type="textarea"
                   isInvalid={!!errors.body}
@@ -308,14 +346,21 @@ export default function AddSite() {
               <ToggleFormSection
                 label="Send User Mailing Notification"
                 toggleState={siteDetails.sendUserMailingList}
-                onToggle={(e) => handleToggle(e.target.checked, "sendUserMailingList")}
+                onToggle={(e) =>
+                  handleToggle(e.target.checked, "sendUserMailingList")
+                }
               >
                 <FormField
                   label="Subject"
                   value={siteDetails.userMailingListMailData?.subject ?? ""}
                   onChange={(value) => {
-                    handleMailDataChange("userMailingListMailData", "subject", value);
-                    if (errors.subject) setErrors((prev) => ({ ...prev, subject: "" }));
+                    handleMailDataChange(
+                      "userMailingListMailData",
+                      "subject",
+                      value
+                    );
+                    if (errors.subject)
+                      setErrors((prev) => ({ ...prev, subject: "" }));
                   }}
                   isInvalid={!!errors.subject}
                   errorMessage={errors.subject}
@@ -325,8 +370,13 @@ export default function AddSite() {
                   label="Body"
                   value={siteDetails.userMailingListMailData?.body ?? ""}
                   onChange={(value) => {
-                    handleMailDataChange("userMailingListMailData", "body", value);
-                    if (errors.body) setErrors((prev) => ({ ...prev, body: "" }));
+                    handleMailDataChange(
+                      "userMailingListMailData",
+                      "body",
+                      value
+                    );
+                    if (errors.body)
+                      setErrors((prev) => ({ ...prev, body: "" }));
                   }}
                   type="textarea"
                   isInvalid={!!errors.body}
@@ -337,14 +387,21 @@ export default function AddSite() {
               <ToggleFormSection
                 label="Send Admin Enquiry"
                 toggleState={siteDetails.sendAdminEnquiry}
-                onToggle={(e) => handleToggle(e.target.checked, "sendAdminEnquiry")}
+                onToggle={(e) =>
+                  handleToggle(e.target.checked, "sendAdminEnquiry")
+                }
               >
                 <FormField
                   label="Subject"
                   value={siteDetails.adminEnquiryMailData?.subject ?? ""}
                   onChange={(value) => {
-                    handleMailDataChange("adminEnquiryMailData", "subject", value);
-                    if (errors.subject) setErrors((prev) => ({ ...prev, subject: "" }));
+                    handleMailDataChange(
+                      "adminEnquiryMailData",
+                      "subject",
+                      value
+                    );
+                    if (errors.subject)
+                      setErrors((prev) => ({ ...prev, subject: "" }));
                   }}
                   isInvalid={!!errors.subject}
                   errorMessage={errors.subject}
@@ -353,7 +410,9 @@ export default function AddSite() {
                 <FormField
                   label="Body"
                   value={siteDetails.adminEnquiryMailData?.body ?? ""}
-                  onChange={(value) => handleMailDataChange("adminEnquiryMailData", "body", value)}
+                  onChange={(value) =>
+                    handleMailDataChange("adminEnquiryMailData", "body", value)
+                  }
                   type="textarea"
                   isInvalid={!!errors.body}
                   errorMessage={errors.body}
@@ -375,8 +434,12 @@ export default function AddSite() {
                       }));
                     setEmailInput(value);
                   }}
-                  isInvalid={!!errors.forwardEmails || !!errors.adminEnquiryEmails}
-                  errorMessage={errors.forwardEmails || errors.adminEnquiryEmails}
+                  isInvalid={
+                    !!errors.forwardEmails || !!errors.adminEnquiryEmails
+                  }
+                  errorMessage={
+                    errors.forwardEmails || errors.adminEnquiryEmails
+                  }
                 />
                 <button
                   type="button"
@@ -394,7 +457,9 @@ export default function AddSite() {
                       <button
                         type="button"
                         className="btn btn-danger btn-sm float-end"
-                        onClick={() => handleRemoveEmail(index, "adminEnquiryEmails")}
+                        onClick={() =>
+                          handleRemoveEmail(index, "adminEnquiryEmails")
+                        }
                       >
                         Remove
                       </button>
@@ -406,12 +471,20 @@ export default function AddSite() {
               <ToggleFormSection
                 label="Send Admin Mailing List"
                 toggleState={siteDetails.sendAdminMailingList}
-                onToggle={(e) => handleToggle(e.target.checked, "sendAdminMailingList")}
+                onToggle={(e) =>
+                  handleToggle(e.target.checked, "sendAdminMailingList")
+                }
               >
                 <FormField
                   label="Subject"
                   value={siteDetails.adminMailingListMailData?.subject ?? ""}
-                  onChange={(value) => handleMailDataChange("adminMailingListMailData", "subject", value)}
+                  onChange={(value) =>
+                    handleMailDataChange(
+                      "adminMailingListMailData",
+                      "subject",
+                      value
+                    )
+                  }
                   isInvalid={!!errors.subject} // Show error if subject is invalid
                   errorMessage={errors.subject} // Display error message for subject
                 />
@@ -419,7 +492,13 @@ export default function AddSite() {
                 <FormField
                   label="Body"
                   value={siteDetails.adminMailingListMailData?.body ?? ""}
-                  onChange={(value) => handleMailDataChange("adminMailingListMailData", "body", value)}
+                  onChange={(value) =>
+                    handleMailDataChange(
+                      "adminMailingListMailData",
+                      "body",
+                      value
+                    )
+                  }
                   type="textarea"
                   isInvalid={!!errors.body} // Show error if body is invalid
                   errorMessage={errors.body} // Display error message for body
@@ -441,8 +520,12 @@ export default function AddSite() {
                       }));
                     setEmailInput(value);
                   }}
-                  isInvalid={!!errors.forwardEmails || !!errors.adminMailingListEmails}
-                  errorMessage={errors.forwardEmails || errors.adminMailingListEmails}
+                  isInvalid={
+                    !!errors.forwardEmails || !!errors.adminMailingListEmails
+                  }
+                  errorMessage={
+                    errors.forwardEmails || errors.adminMailingListEmails
+                  }
                 />
 
                 <button
@@ -461,7 +544,9 @@ export default function AddSite() {
                       <button
                         type="button"
                         className="btn btn-danger btn-sm float-end"
-                        onClick={() => handleRemoveEmail(index, "adminMailingListEmails")}
+                        onClick={() =>
+                          handleRemoveEmail(index, "adminMailingListEmails")
+                        }
                       >
                         Remove
                       </button>
@@ -480,7 +565,10 @@ export default function AddSite() {
                   placeholder="Client Id"
                   value={siteDetails.sendCRMData?.clientId ?? ""}
                   onChange={(value) =>
-                    setSiteDetails((prev) => ({ ...prev, sendCRMData: { ...prev.sendCRMData, clientId: value } }))
+                    setSiteDetails((prev) => ({
+                      ...prev,
+                      sendCRMData: { ...prev.sendCRMData, clientId: value },
+                    }))
                   }
                   isInvalid={!!errors.clientId}
                   errorMessage={errors.clientId}
@@ -491,7 +579,10 @@ export default function AddSite() {
                   placeholder="Client Secret"
                   value={siteDetails.sendCRMData?.clientSecret ?? ""}
                   onChange={(value) =>
-                    setSiteDetails((prev) => ({ ...prev, sendCRMData: { ...prev.sendCRMData, clientSecret: value } }))
+                    setSiteDetails((prev) => ({
+                      ...prev,
+                      sendCRMData: { ...prev.sendCRMData, clientSecret: value },
+                    }))
                   }
                   isInvalid={!!errors.clientSecret}
                   errorMessage={errors.clientSecret}
@@ -499,14 +590,17 @@ export default function AddSite() {
               </ToggleFormSection>
 
               <div className="mb-3">
-                <label className={id ? "form-label" : "form-label required"}>SMTP</label>
+                <label className={id ? "form-label" : "form-label required"}>
+                  SMTP
+                </label>
                 <select
                   name="smtp"
                   className={`form-select ${errors.smtp ? "is-invalid" : ""}`}
                   value={siteDetails.smtp}
                   onChange={(e) => {
                     setSiteDetails((d) => ({ ...d, smtp: e.target.value }));
-                    if (errors.smtp) setErrors((prev) => ({ ...prev, smtp: "" }));
+                    if (errors.smtp)
+                      setErrors((prev) => ({ ...prev, smtp: "" }));
                   }}
                 >
                   <option value={""}>Select</option>
@@ -516,7 +610,9 @@ export default function AddSite() {
                     </option>
                   ))}
                 </select>
-                {errors.smtp && <div className="invalid-feedback mt-2">{errors.smtp}</div>}
+                {errors.smtp && (
+                  <div className="invalid-feedback mt-2">{errors.smtp}</div>
+                )}
               </div>
 
               <div className="mb-3">
@@ -580,7 +676,11 @@ export default function AddSite() {
           </div>
         </div>
       </div>
-      {!id ? <Addnote des={addWebsiteNote} /> : <Addnote des={editWebsiteNote} />}
+      {!id ? (
+        <Addnote des={addWebsiteNote} />
+      ) : (
+        <Addnote des={editWebsiteNote} />
+      )}
     </div>
   );
 }
