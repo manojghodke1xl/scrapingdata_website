@@ -74,26 +74,26 @@ export default function AddSite() {
     if (!siteDetails.host) newErrors.host = "Host is required";
     if (!siteDetails.smtp) newErrors.smtp = "SMTP is required";
     if (siteDetails.sendUserEnquiry) {
-      if (!siteDetails.sendUserEnquiryData?.subject) {
+      if (!siteDetails.userEnquiryMailData?.subject) {
         newErrors.subject = "Subject is required";
       }
-      if (!siteDetails.sendUserEnquiryData?.body) {
+      if (!siteDetails.userEnquiryMailData?.body) {
         newErrors.body = "Body is required";
       }
     }
     if (siteDetails.sendUserMailingList) {
-      if (!siteDetails.sendUserMailingListData?.subject) {
+      if (!siteDetails.userMailingListMailData?.subject) {
         newErrors.subject = "Subject is required";
       }
-      if (!siteDetails.sendUserMailingListData?.body) {
+      if (!siteDetails.userMailingListMailData?.body) {
         newErrors.body = "Body is required";
       }
     }
     if (siteDetails.sendAdminEnquiry) {
-      if (!siteDetails.sendAdminEnquiryData?.subject) {
+      if (!siteDetails.adminEnquiryMailData?.subject) {
         newErrors.subject = "Subject is required";
       }
-      if (!siteDetails.sendAdminEnquiryData?.body) {
+      if (!siteDetails.adminEnquiryMailData?.body) {
         newErrors.body = "Body is required";
       }
       if (!siteDetails.adminEnquiryEmails.length) {
@@ -101,10 +101,10 @@ export default function AddSite() {
       }
     }
     if (siteDetails.sendAdminMailingList) {
-      if (!siteDetails.sendAdminMailingListData?.subject) {
+      if (!siteDetails.adminMailingListMailData?.subject) {
         newErrors.subject = "Subject is required";
       }
-      if (!siteDetails.sendAdminMailingListData?.body) {
+      if (!siteDetails.adminMailingListMailData?.body) {
         newErrors.body = "Body is required";
       }
       if (!siteDetails.adminMailingListEmails.length) {
@@ -126,20 +126,21 @@ export default function AddSite() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
-    setLoading(true);
-    try {
-      const { status, data } = await (id ? updateSiteApi(id, siteDetails) : addSiteApi(siteDetails));
-      if (status) {
-        alert({ type: "success", text: data.message });
-        navigate("/site-list");
-      } else {
-        alert({ type: "warning", text: data });
-      }
-    } catch (error) {
-      alert({ type: "danger", text: error.message });
-    } finally {
-      setLoading(false);
-    }
+    // setLoading(true);
+    console.log(siteDetails);
+    // try {
+    //   const { status, data } = await (id ? updateSiteApi(id, siteDetails) : addSiteApi(siteDetails));
+    //   if (status) {
+    //     alert({ type: "success", text: data.message });
+    //     navigate("/site-list");
+    //   } else {
+    //     alert({ type: "warning", text: data });
+    //   }
+    // } catch (error) {
+    //   alert({ type: "danger", text: error.message });
+    // } finally {
+    //   setLoading(false);
+    // }
   };
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -191,7 +192,7 @@ export default function AddSite() {
           setSiteDetails((prev) => ({
             ...prev,
             sendUserEnquiry: checked,
-            sendUserEnquiryData: undefined,
+            userEnquiryMailData: undefined,
           }));
         }
         break;
@@ -200,7 +201,7 @@ export default function AddSite() {
           setSiteDetails((prev) => ({
             ...prev,
             sendUserMailingList: checked,
-            sendUserMailingListData: undefined,
+            userMailingListMailData: undefined,
           }));
         }
         break;
@@ -210,7 +211,7 @@ export default function AddSite() {
             ...prev,
             sendAdminEnquiry: checked,
             adminEnquiryEmails: [],
-            sendAdminEnquiryData: undefined,
+            adminEnquiryMailData: undefined,
           }));
         }
         break;
@@ -220,7 +221,7 @@ export default function AddSite() {
             ...prev,
             sendAdminMailingList: checked,
             adminMailingListEmails: [],
-            sendUserEnquiryData: undefined,
+            adminMailingListMailData: undefined,
           }));
         }
         break;
@@ -281,9 +282,9 @@ export default function AddSite() {
               >
                 <FormField
                   label="Subject"
-                  value={siteDetails.sendUserEnquiryData?.subject ?? ""}
+                  value={siteDetails.userEnquiryMailData?.subject ?? ""}
                   onChange={(value) => {
-                    handleMailDataChange("sendUserEnquiryData", "subject", value);
+                    handleMailDataChange("userEnquiryMailData", "subject", value);
                     if (errors.subject) setErrors((prev) => ({ ...prev, subject: "" }));
                   }}
                   isInvalid={!!errors.subject}
@@ -292,9 +293,9 @@ export default function AddSite() {
 
                 <FormField
                   label="Body"
-                  value={siteDetails.sendUserEnquiryData?.body ?? ""}
+                  value={siteDetails.userEnquiryMailData?.body ?? ""}
                   onChange={(value) => {
-                    handleMailDataChange("sendUserEnquiryData", "body", value);
+                    handleMailDataChange("userEnquiryMailData", "body", value);
                     if (errors.body) setErrors((prev) => ({ ...prev, body: "" }));
                   }}
                   type="textarea"
@@ -312,7 +313,10 @@ export default function AddSite() {
                 <FormField
                   label="Subject"
                   value={siteDetails.userMailingListMailData?.subject ?? ""}
-                  onChange={(value) => handleMailDataChange("userMailingListMailData", "subject", value)}
+                  onChange={(value) => {
+                    handleMailDataChange("userMailingListMailData", "subject", value);
+                    if (errors.subject) setErrors((prev) => ({ ...prev, subject: "" }));
+                  }}
                   isInvalid={!!errors.subject}
                   errorMessage={errors.subject}
                 />
@@ -320,7 +324,10 @@ export default function AddSite() {
                 <FormField
                   label="Body"
                   value={siteDetails.userMailingListMailData?.body ?? ""}
-                  onChange={(value) => handleMailDataChange("userMailingListMailData", "body", value)}
+                  onChange={(value) => {
+                    handleMailDataChange("userMailingListMailData", "body", value);
+                    if (errors.body) setErrors((prev) => ({ ...prev, body: "" }));
+                  }}
                   type="textarea"
                   isInvalid={!!errors.body}
                   errorMessage={errors.body}
@@ -335,7 +342,10 @@ export default function AddSite() {
                 <FormField
                   label="Subject"
                   value={siteDetails.adminEnquiryMailData?.subject ?? ""}
-                  onChange={(value) => handleMailDataChange("adminEnquiryMailData", "subject", value)}
+                  onChange={(value) => {
+                    handleMailDataChange("adminEnquiryMailData", "subject", value);
+                    if (errors.subject) setErrors((prev) => ({ ...prev, subject: "" }));
+                  }}
                   isInvalid={!!errors.subject}
                   errorMessage={errors.subject}
                 />
