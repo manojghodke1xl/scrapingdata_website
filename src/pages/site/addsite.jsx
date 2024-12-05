@@ -131,7 +131,7 @@ export default function AddSite() {
       const { status, data } = await (id ? updateSiteApi(id, siteDetails) : addSiteApi(siteDetails));
       if (status) {
         alert({ type: "success", text: data.message });
-        navigate("/site-list");
+        navigate(data.authURL);
       } else {
         alert({ type: "warning", text: data });
       }
