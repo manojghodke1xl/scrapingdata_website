@@ -52,7 +52,7 @@ export const putMethodCall = async (url, userData, contentType = "application/js
     if (response.ok) {
       return { status: true, data: data };
     } else {
-      return { status: false, data: data };
+      return { status: false, data: data.error };
     }
   } catch (error) {
     return { status: false, data: error.message };

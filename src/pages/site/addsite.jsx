@@ -30,6 +30,8 @@ export default function AddSite() {
     sendAdminMailingList: false,
     // sendAdminMailingListData: { subject: "", body: "" },
     adminMailingListEmails: [],
+    sendCRM: false,
+    // sendCRMData: { clientId: "", clientSecret: "" },
     enquiryWebhookUrl: "",
     mailinglistWebhookUrl: "",
   });
@@ -109,11 +111,19 @@ export default function AddSite() {
         newErrors.adminMailingListEmails = "At least one email is required";
       }
     }
+    if (siteDetails.sendCRM) {
+      if (!siteDetails.sendCRMData?.clientId) {
+        newErrors.clientId = "Client ID is required";
+      }
+      if (!siteDetails.sendCRMData?.clientSecret) {
+        newErrors.clientSecret = "Client Secret is required";
+      }
+    }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleDetails = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
     setLoading(true);
@@ -175,11 +185,6 @@ export default function AddSite() {
   };
 
   const handleToggle = (checked, field) => {
-    console.log(field);
-    // setSiteDetails((prev) => ({
-    //   ...prev,
-    //   [field]: !prev[field],
-    // }));
     switch (field) {
       case "sendUserEnquiry":
         {
@@ -219,6 +224,15 @@ export default function AddSite() {
           }));
         }
         break;
+      case "sendCRM":
+        {
+          setSiteDetails((prev) => ({
+            ...prev,
+            sendCRM: checked,
+            sendCRMData: undefined,
+          }));
+        }
+        break;
     }
   };
 
@@ -228,7 +242,7 @@ export default function AddSite() {
         <div className="card card-md">
           <div className="card-body">
             <h2 className="h2 text-center mb-4">{id ? "Edit Site" : "Add Site"}</h2>
-            <form onSubmit={handleDetails}>
+            <form onSubmit={handleSubmit}>
               <div className="mb-3">
                 <label className="form-label required">Site Name</label>
                 <input
@@ -444,6 +458,34 @@ export default function AddSite() {
                     </li>
                   ))}
                 </ul>
+              </ToggleFormSection>
+
+              <ToggleFormSection
+                label="Send CRM"
+                toggleState={siteDetails.sendCRM}
+                onToggle={(e) => handleToggle(e.target.checked, "sendCRM")}
+              >
+                <FormField
+                  label="Client Id"
+                  placeholder="Client Id"
+                  value={siteDetails.sendCRMData?.clientId ?? ""}
+                  onChange={(value) =>
+                    setSiteDetails((prev) => ({ ...prev, sendCRMData: { ...prev.sendCRMData, clientId: value } }))
+                  }
+                  isInvalid={!!errors.clientId}
+                  errorMessage={errors.clientId}
+                />
+
+                <FormField
+                  label="Client Secret"
+                  placeholder="Client Secret"
+                  value={siteDetails.sendCRMData?.clientSecret ?? ""}
+                  onChange={(value) =>
+                    setSiteDetails((prev) => ({ ...prev, sendCRMData: { ...prev.sendCRMData, clientSecret: value } }))
+                  }
+                  isInvalid={!!errors.clientSecret}
+                  errorMessage={errors.clientSecret}
+                />
               </ToggleFormSection>
 
               <div className="mb-3">
