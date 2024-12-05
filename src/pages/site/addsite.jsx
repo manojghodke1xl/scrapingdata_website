@@ -126,21 +126,20 @@ export default function AddSite() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
-    // setLoading(true);
-    console.log(siteDetails);
-    // try {
-    //   const { status, data } = await (id ? updateSiteApi(id, siteDetails) : addSiteApi(siteDetails));
-    //   if (status) {
-    //     alert({ type: "success", text: data.message });
-    //     navigate("/site-list");
-    //   } else {
-    //     alert({ type: "warning", text: data });
-    //   }
-    // } catch (error) {
-    //   alert({ type: "danger", text: error.message });
-    // } finally {
-    //   setLoading(false);
-    // }
+    setLoading(true);
+    try {
+      const { status, data } = await (id ? updateSiteApi(id, siteDetails) : addSiteApi(siteDetails));
+      if (status) {
+        alert({ type: "success", text: data.message });
+        navigate("/site-list");
+      } else {
+        alert({ type: "warning", text: data });
+      }
+    } catch (error) {
+      alert({ type: "danger", text: error.message });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
