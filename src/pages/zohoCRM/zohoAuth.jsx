@@ -130,11 +130,7 @@ export default function ZohoAuth() {
                   className={`form-control ${errors.name ? "is-invalid" : ""}`}
                   placeholder="Site Name"
                   value={siteDetails.name}
-                  onChange={(e) => {
-                    setSiteDetails((d) => ({ ...d, name: e.target.value }));
-                    if (errors.name)
-                      setErrors((prev) => ({ ...prev, name: "" }));
-                  }}
+                  disabled
                 />
                 {errors.name && (
                   <div className="invalid-feedback mt-2">{errors.name}</div>
