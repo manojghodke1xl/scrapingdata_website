@@ -17,6 +17,10 @@ export default function AddCaseStudy() {
     title: "",
     sdesc: "",
     ldesc: "",
+    image: "",
+    pdf: "",
+    mailSubject: "",
+    mailBody: "",
     isActive: true,
     isGlobal: false,
     sites: [],
@@ -50,8 +54,12 @@ export default function AddCaseStudy() {
 
   const validate = () => {
     const newErrors = {};
-    if (!caseStudyDetails.title) newErrors.title = "Title is required";
+    if (!caseStudyDetails.title.trim()) newErrors.title = "Title is required";
     if (!caseStudyDetails.sites.length) newErrors.sites = "Minimum one site is required";
+    if (!caseStudyDetails.mailSubject.trim()) newErrors.mailSubject = "Subject is required";
+    if (!caseStudyDetails.mailBody.trim()) newErrors.mailBody = "Body is required";
+    if (!caseStudyDetails.image) newErrors.image = "Image is required";
+    if (!caseStudyDetails.pdf) newErrors.pdf = "PDF is required";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -173,10 +181,11 @@ export default function AddCaseStudy() {
                 <input
                   type="file"
                   name="image"
-                  className="form-control"
-                  onChange={(e) => handleFileUpload({ e, isImage: false })}
+                  className={`form-control ${errors.image ? "is-invalid" : ""}`}
+                  onChange={(e) => handleFileUpload({ e, isImage: true })}
                   accept="image/*"
                 />
+                {errors.image && <div className="invalid-feedback mt-2">{errors.image}</div>}
               </div>
               <div className="mb-3">
                 <label className={id ? "form-label d-flex justify-content-between" : "form-label required"}>
@@ -190,11 +199,46 @@ export default function AddCaseStudy() {
                 <input
                   type="file"
                   name="pdf"
-                  className="form-control"
+                  className={`form-control ${errors.pdf ? "is-invalid" : ""}`}
                   onChange={(e) => handleFileUpload({ e, isPdf: true })}
                   accept="application/pdf"
                 />
+                {errors.pdf && <div className="invalid-feedback mt-2">{errors.pdf}</div>}
               </div>
+
+              <div className="mb-3">
+                <label className={!id ? "form-label required" : "form-label"}>Email Subject</label>
+                <input
+                  type="text"
+                  name="mailSubject"
+                  className={`form-control ${errors.mailSubject ? "is-invalid" : ""}`}
+                  placeholder="Email Subject"
+                  value={caseStudyDetails.mailSubject}
+                  onChange={(e) => {
+                    setCaseStudyDetails((d) => ({ ...d, mailSubject: e.target.value }));
+                    if (errors.mailSubject) setErrors((prev) => ({ ...prev, mailSubject: "" }));
+                  }}
+                />
+                {errors.mailSubject && <div className="invalid-feedback mt-2">{errors.mailSubject}</div>}
+              </div>
+
+              <div className="mb-3">
+                <label className={!id ? "form-label required" : "form-label"}>Email Body</label>
+
+                <textarea
+                  className={`form-control ${errors.mailBody ? "is-invalid" : ""}`}
+                  rows={3}
+                  name="mailBody"
+                  placeholder="Email Body"
+                  value={caseStudyDetails.mailBody}
+                  onChange={(e) => {
+                    setCaseStudyDetails((d) => ({ ...d, mailBody: e.target.value }));
+                    if (errors.mailBody) setErrors((prev) => ({ ...prev, mailBody: "" }));
+                  }}
+                />
+                {errors.mailBody && <div className="invalid-feedback mt-2">{errors.mailBody}</div>}
+              </div>
+
               <div className="mb-3">
                 <div className="d-flex justify-content-between mb-3">
                   <label className={!id ? "form-label required mb-0 me-2" : "form-label mb-0 me-2"}>Select Sites</label>

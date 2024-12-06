@@ -27,8 +27,8 @@ export default function AddTestimonial() {
     videoBolean: false,
     sites: [],
     categories: [],
-    image: null,
-    video: null,
+    image: "",
+    video: "",
     videoUrl: "",
   });
   const [availableCategories, setAvailableCategories] = useState([]);
