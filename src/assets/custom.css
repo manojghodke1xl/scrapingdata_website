@@ -79,6 +79,6 @@
 .crm-clientid-container .info-icon:hover ~ .info-container {
   display: block !important;
 }
-.crm-clientid-container .info-container > small {
+.info-container {
   color: blue;
 }

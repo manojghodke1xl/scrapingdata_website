@@ -37,6 +37,8 @@ import AddClientLogo from "./pages/clientlogo/addclientlogo";
 import ClientLogoList from "./pages/clientlogo/clientlogolist";
 import PartnerLogoList from "./pages/partnerlogo/partnerlogolist";
 import AddPartnerLogo from "./pages/partnerlogo/addpartnerlogo";
+import ZohoAuth from "./pages/zohoCRM/zohoAuth";
+import ZohoStatus from "./pages/zohoCRM/status";
 
 function App() {
   const [alerts, alert] = useAlert();
@@ -73,7 +75,10 @@ function App() {
               <Route path="/edit-casestudy/:id" element={<AddCaseStudy />} />
               <Route path="/testimonial-list" element={<TestimonialList />} />
               <Route path="/add-testimonial" element={<AddTestimonial />} />
-              <Route path="/edit-testimonial/:id" element={<AddTestimonial />} />
+              <Route
+                path="/edit-testimonial/:id"
+                element={<AddTestimonial />}
+              />
               <Route path="/smtp-list" element={<SmtpList />} />
               <Route path="/add-smtp" element={<AddSmtp />} />
               <Route path="/edit-smtp/:id" element={<AddSmtp />} />
@@ -91,11 +96,16 @@ function App() {
               <Route path="/edit-client-logo/:id" element={<AddClientLogo />} />
               <Route path="/partner-logo-list" element={<PartnerLogoList />} />
               <Route path="/add-partner-logo" element={<AddPartnerLogo />} />
-              <Route path="/edit-partner-logo/:id" element={<AddPartnerLogo />} />
+              <Route
+                path="/edit-partner-logo/:id"
+                element={<AddPartnerLogo />}
+              />
+              <Route path="/zoho-auth/:id" element={<ZohoAuth />} />
             </Route>
 
             <Route path="*" element={<Missing />} />
           </Route>
+          <Route path="/auth-status/:id" element={<ZohoStatus />} />
         </Routes>
         <AlertContainer alerts={alerts} />
         {isLoading && <Loading />}
