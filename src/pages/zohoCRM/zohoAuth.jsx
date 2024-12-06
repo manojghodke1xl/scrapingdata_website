@@ -205,7 +205,7 @@ export default function ZohoAuth() {
                         <FormField
                           label="Authorized Redirect URIs"
                           placeholder="Authorized Redirect URIs"
-                          value={import.meta.env.VITE_API_URL}
+                          value={`${import.meta.env.VITE_API_URL}/zohocallback`}
                           isDisabled={true}
                         />
                         <div className="form-footer d-flex justify-content-between gap-2">
