@@ -25,9 +25,8 @@
   z-index: 0;
 }
 
-.container-xl{
-  max-width:1450px
-
+.container-xl {
+  max-width: 1450px;
 }
 
 .form-multi-check-box {
@@ -38,7 +37,7 @@
   border-radius: 4px;
 }
 
-.duplicate-box{
+.duplicate-box {
   max-height: 200px;
   overflow-y: auto;
   border: 1px solid #ced4da;
@@ -46,8 +45,40 @@
   border-radius: 4px;
 }
 
-.popup-form-multi-check-box{
+.popup-form-multi-check-box {
   max-height: 100px;
   overflow-y: auto;
   padding: 10px;
+}
+.crm-clientid-container {
+  position: relative;
+}
+.crm-clientid-container .info-icon {
+  position: absolute;
+  top: 0;
+  right: 0;
+  cursor: pointer;
+}
+.crm-clientid-container .info-container {
+  position: absolute;
+  width: 100%;
+  top: 70%;
+  left: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+  background-color: #fff;
+  padding: 10px;
+  border-radius: 3px;
+  display: none;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+.crm-clientid-container .info-container:hover {
+  display: block !important;
+}
+.crm-clientid-container .info-icon:hover ~ .info-container {
+  display: block !important;
+}
+.crm-clientid-container .info-container > small {
+  color: blue;
 }
