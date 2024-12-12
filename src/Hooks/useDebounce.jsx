@@ -13,7 +13,11 @@ const useSetTimeout = (apiUrl, page, limit, val, key, a, site, delay = 500) => {
       setLoading(true);
       try {
         const res = await fetch(
-          `${import.meta.env.VITE_API_URL}/${apiUrl}?p=${page}&n=${limit}&s=${val}&k=${key}&a=${a}&ws=${site}`,
+          `${import.meta.env.VITE_API_URL}/${apiUrl}?p=${page}&n=${limit}
+          ${val ? `&s=${val}` : ""}
+          ${key ? `&k=${key}` : ""}
+          ${a ? `&a=${a}` : ""}
+          ${site ? `&site=${site}` : ""}`,
           {
             method: "GET",
             headers: {

@@ -24,7 +24,7 @@ export default function Header() {
           <span className="navbar-toggler-icon" />
         </button>
         <h1 className="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
-          <Link to="/">Vista Group</Link>
+          <Link to="/">MarsCMS</Link>
         </h1>
         {!!auth.id && (
           <>
@@ -54,249 +54,286 @@ export default function Header() {
                       <span className="nav-link-title">Dashboard</span>
                     </Link>
                   </li>
-                  <li className={`nav-item ${isActive("/enquiry-list", "/enquiry") ? "active" : ""}`}>
-                    <Link className="nav-link" to="/enquiry-list">
+                  <li
+                    className={`nav-item dropdown ${
+                      isActive("/enquiry-list", "/enquiry", "/mailing-list", "/mailing") ? "active" : ""
+                    }`}
+                  >
+                    <a
+                      className="nav-link dropdown-toggle show"
+                      href="#navbar-layout"
+                      data-bs-toggle="dropdown"
+                      data-bs-auto-close="outside"
+                      role="button"
+                      aria-expanded="true"
+                    >
                       <span className="nav-link-icon d-md-none d-lg-inline-block">
+                        {/* Download SVG icon from http://tabler-icons.io/i/layout-2 */}
                         <svg
-                          className="icon"
+                          xmlns="http://www.w3.org/2000/svg"
                           width={24}
                           height={24}
                           viewBox="0 0 24 24"
-                          strokeWidth={2}
-                          stroke="currentColor"
                           fill="none"
+                          stroke="currentColor"
+                          strokeWidth={2}
                           strokeLinecap="round"
                           strokeLinejoin="round"
+                          className="icon"
                         >
                           <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                          <path d="M5 12l-2 0l9 -9l9 9l-2 0" />
-                          <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
-                          <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+                          <path d="M4 4m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v1a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" />
+                          <path d="M4 13m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v3a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" />
+                          <path d="M14 4m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v3a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" />
+                          <path d="M14 15m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v1a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" />
                         </svg>
                       </span>
                       <span className="nav-link-title">Enquiries</span>
-                    </Link>
-                  </li>
-                  <li className={`nav-item ${isActive("/mailing-list", "/mailing") ? "active" : ""}`}>
-                    <Link className="nav-link" to="/mailing-list">
-                      <span className="nav-link-icon d-md-none d-lg-inline-block">
-                        <svg
-                          className="icon"
-                          width={24}
-                          height={24}
-                          viewBox="0 0 24 24"
-                          strokeWidth={2}
-                          stroke="currentColor"
-                          fill="none"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                          <path d="M5 12l-2 0l9 -9l9 9l-2 0" />
-                          <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
-                          <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
-                        </svg>
-                      </span>
-                      <span className="nav-link-title">Mailing Lists</span>
-                    </Link>
-                  </li>
-                  {auth.isSuperAdmin && (
-                    <li className={`nav-item ${isActive("/admin-list", "/add-admin", "/edit-admin") ? "active" : ""}`}>
-                      <Link className="nav-link" to="/admin-list">
-                        <span className="nav-link-icon d-md-none d-lg-inline-block">
-                          <svg
-                            className="icon"
-                            width={24}
-                            height={24}
-                            viewBox="0 0 24 24"
-                            strokeWidth={2}
-                            stroke="currentColor"
-                            fill="none"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          >
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                            <path d="M5 12l-2 0l9 -9l9 9l-2 0" />
-                            <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
-                            <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
-                          </svg>
-                        </span>
-                        <span className="nav-link-title">Admins</span>
-                      </Link>
-                    </li>
-                  )}
-                  <li className={`nav-item ${isActive("/guide-list", "/add-guide", "/edit-guide") ? "active" : ""}`}>
-                    <Link className="nav-link" to="/guide-list">
-                      <span className="nav-link-icon d-md-none d-lg-inline-block">
-                        <svg
-                          className="icon"
-                          width={24}
-                          height={24}
-                          viewBox="0 0 24 24"
-                          strokeWidth={2}
-                          stroke="currentColor"
-                          fill="none"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                          <path d="M5 12l-2 0l9 -9l9 9l-2 0" />
-                          <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
-                          <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
-                        </svg>
-                      </span>
-                      <span className="nav-link-title">Guides</span>
-                    </Link>
+                    </a>
+                    <div className="dropdown-menu">
+                      <div className="dropdown-menu-columns">
+                        <div className="dropdown-menu-column">
+                          <Link className="dropdown-item" to="/enquiry-list">
+                            <span className="nav-link-title">Enquiries</span>
+                          </Link>
+                          <Link className="dropdown-item" to="/mailing-list">
+                            <span className="nav-link-title">Mailing Lists</span>
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
                   </li>
                   <li
-                    className={`nav-item ${
-                      isActive("/casestudy-list", "/add-casestudy", "/edit-casestudy") ? "active" : ""
+                    className={`nav-item dropdown ${
+                      isActive(
+                        "/guide-list",
+                        "/add-guide",
+                        "/edit-guide",
+                        "/casestudy-list",
+                        "/add-casestudy",
+                        "/edit-casestudy",
+                        "/Testimonial-list",
+                        "/add-testimonial",
+                        "/edit-testimonial",
+                        "/category-list",
+                        "/add-category",
+                        "/edit-category"
+                      )
+                        ? "active"
+                        : ""
                     }`}
                   >
-                    <Link className="nav-link" to="/casestudy-list">
+                    <a
+                      className="nav-link dropdown-toggle show"
+                      href="#navbar-layout"
+                      data-bs-toggle="dropdown"
+                      data-bs-auto-close="outside"
+                      role="button"
+                      aria-expanded="true"
+                    >
                       <span className="nav-link-icon d-md-none d-lg-inline-block">
+                        {/* Download SVG icon from http://tabler-icons.io/i/layout-2 */}
                         <svg
-                          className="icon"
+                          xmlns="http://www.w3.org/2000/svg"
                           width={24}
                           height={24}
                           viewBox="0 0 24 24"
-                          strokeWidth={2}
-                          stroke="currentColor"
                           fill="none"
+                          stroke="currentColor"
+                          strokeWidth={2}
                           strokeLinecap="round"
                           strokeLinejoin="round"
+                          className="icon"
                         >
                           <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                          <path d="M5 12l-2 0l9 -9l9 9l-2 0" />
-                          <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
-                          <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+                          <path d="M4 4m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v1a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" />
+                          <path d="M4 13m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v3a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" />
+                          <path d="M14 4m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v3a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" />
+                          <path d="M14 15m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v1a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" />
                         </svg>
                       </span>
-                      <span className="nav-link-title">Case Study</span>
-                    </Link>
+                      <span className="nav-link-title">Features</span>
+                    </a>
+                    <div className="dropdown-menu">
+                      <div className="dropdown-menu-columns">
+                        <div className="dropdown-menu-column">
+                          <Link className="dropdown-item" to="/guide-list">
+                            <span className="nav-link-title">Guides</span>
+                          </Link>
+                          <Link className="dropdown-item" to="/casestudy-list">
+                            <span className="nav-link-title">Case Study</span>
+                          </Link>
+                          <Link className="dropdown-item" to="/Testimonial-list">
+                            <span className="nav-link-title">Testimonials</span>
+                          </Link>
+                          <Link className="dropdown-item" to="/category-list">
+                            <span className="nav-link-title">Testimonial Categories</span>
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
                   </li>
                   <li
-                    className={`nav-item ${
-                      isActive("/Testimonial-list", "/add-testimonial", "/edit-testimonial") ? "active" : ""
+                    className={`nav-item dropdown ${
+                      isActive("/popup-list", "/add-popup", "/edit-popup", "/site-list", "/add-site", "/edit-site")
+                        ? "active"
+                        : ""
                     }`}
                   >
-                    <Link className="nav-link" to="/Testimonial-list">
+                    <a
+                      className="nav-link dropdown-toggle show"
+                      href="#navbar-layout"
+                      data-bs-toggle="dropdown"
+                      data-bs-auto-close="outside"
+                      role="button"
+                      aria-expanded="true"
+                    >
                       <span className="nav-link-icon d-md-none d-lg-inline-block">
+                        {/* Download SVG icon from http://tabler-icons.io/i/layout-2 */}
                         <svg
-                          className="icon"
+                          xmlns="http://www.w3.org/2000/svg"
                           width={24}
                           height={24}
                           viewBox="0 0 24 24"
-                          strokeWidth={2}
-                          stroke="currentColor"
                           fill="none"
+                          stroke="currentColor"
+                          strokeWidth={2}
                           strokeLinecap="round"
                           strokeLinejoin="round"
-                        >
-                          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                          <path d="M5 12l-2 0l9 -9l9 9l-2 0" />
-                          <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
-                          <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
-                        </svg>
-                      </span>
-                      <span className="nav-link-title">Testimonials</span>
-                    </Link>
-                  </li>
-                  <li className={`nav-item ${isActive("/smtp-list", "/add-smtp", "/edit-smtp") ? "active" : ""}`}>
-                    <Link className="nav-link" to="/smtp-list">
-                      <span className="nav-link-icon d-md-none d-lg-inline-block">
-                        <svg
                           className="icon"
-                          width={24}
-                          height={24}
-                          viewBox="0 0 24 24"
-                          strokeWidth={2}
-                          stroke="currentColor"
-                          fill="none"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
                         >
                           <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                          <path d="M5 12l-2 0l9 -9l9 9l-2 0" />
-                          <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
-                          <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+                          <path d="M4 4m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v1a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" />
+                          <path d="M4 13m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v3a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" />
+                          <path d="M14 4m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v3a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" />
+                          <path d="M14 15m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v1a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" />
                         </svg>
                       </span>
-                      <span className="nav-link-title">SMTPs</span>
-                    </Link>
-                  </li>
-                  <li className={`nav-item ${isActive("/popup-list", "/add-popup", "/edit-popup") ? "active" : ""}`}>
-                    <Link className="nav-link" to="/popup-list">
-                      <span className="nav-link-icon d-md-none d-lg-inline-block">
-                        <svg
-                          className="icon"
-                          width={24}
-                          height={24}
-                          viewBox="0 0 24 24"
-                          strokeWidth={2}
-                          stroke="currentColor"
-                          fill="none"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                          <path d="M5 12l-2 0l9 -9l9 9l-2 0" />
-                          <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
-                          <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
-                        </svg>
-                      </span>
-                      <span className="nav-link-title">Popups</span>
-                    </Link>
+                      <span className="nav-link-title">Essentials</span>
+                    </a>
+                    <div className="dropdown-menu">
+                      <div className="dropdown-menu-columns">
+                        <div className="dropdown-menu-column">
+                          <Link className="dropdown-item" to="/popup-list">
+                            <span className="nav-link-title">Popups</span>
+                          </Link>
+                          <Link className="dropdown-item" to="/site-list">
+                            <span className="nav-link-title">Websites</span>
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
                   </li>
                   <li
-                    className={`nav-item ${
-                      isActive("/category-list", "/add-category", "/edit-category") ? "active" : ""
+                    className={`nav-item dropdown ${
+                      isActive("/admin-list", "/add-admin", "/edit-admin", "/smtp-list", "/add-smtp", "/edit-smtp")
+                        ? "active"
+                        : ""
                     }`}
                   >
-                    <Link className="nav-link" to="/category-list">
+                    <a
+                      className="nav-link dropdown-toggle show"
+                      href="#navbar-layout"
+                      data-bs-toggle="dropdown"
+                      data-bs-auto-close="outside"
+                      role="button"
+                      aria-expanded="true"
+                    >
                       <span className="nav-link-icon d-md-none d-lg-inline-block">
+                        {/* Download SVG icon from http://tabler-icons.io/i/layout-2 */}
                         <svg
-                          className="icon"
+                          xmlns="http://www.w3.org/2000/svg"
                           width={24}
                           height={24}
                           viewBox="0 0 24 24"
-                          strokeWidth={2}
-                          stroke="currentColor"
                           fill="none"
+                          stroke="currentColor"
+                          strokeWidth={2}
                           strokeLinecap="round"
                           strokeLinejoin="round"
+                          className="icon"
                         >
                           <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                          <path d="M5 12l-2 0l9 -9l9 9l-2 0" />
-                          <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
-                          <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+                          <path d="M4 4m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v1a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" />
+                          <path d="M4 13m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v3a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" />
+                          <path d="M14 4m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v3a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" />
+                          <path d="M14 15m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v1a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" />
                         </svg>
                       </span>
-                      <span className="nav-link-title">Categories</span>
-                    </Link>
+                      <span className="nav-link-title">Admin</span>
+                    </a>
+                    <div className="dropdown-menu">
+                      <div className="dropdown-menu-columns">
+                        <div className="dropdown-menu-column">
+                          {auth.isSuperAdmin && (
+                            <Link className="dropdown-item" to="/admin-list">
+                              <span className="nav-link-title">Admins</span>
+                            </Link>
+                          )}
+                          <Link className="dropdown-item" to="/smtp-list">
+                            <span className="nav-link-title">SMTPs</span>
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
                   </li>
-                  <li className={`nav-item ${isActive("/site-list", "/add-site", "/edit-site") ? "active" : ""}`}>
-                    <Link className="nav-link" to="/site-list">
+                  <li
+                    className={`nav-item dropdown ${
+                      isActive(
+                        "/faq-category-list",
+                        "/add-faq-category",
+                        "/edit-faq-category",
+                        "/faq-list",
+                        "/add-faq",
+                        "/edit-faq"
+                      )
+                        ? "active"
+                        : ""
+                    }`}
+                  >
+                    <a
+                      className="nav-link dropdown-toggle show"
+                      href="#navbar-layout"
+                      data-bs-toggle="dropdown"
+                      data-bs-auto-close="outside"
+                      role="button"
+                      aria-expanded="true"
+                    >
                       <span className="nav-link-icon d-md-none d-lg-inline-block">
+                        {/* Download SVG icon from http://tabler-icons.io/i/layout-2 */}
                         <svg
-                          className="icon"
+                          xmlns="http://www.w3.org/2000/svg"
                           width={24}
                           height={24}
                           viewBox="0 0 24 24"
-                          strokeWidth={2}
-                          stroke="currentColor"
                           fill="none"
+                          stroke="currentColor"
+                          strokeWidth={2}
                           strokeLinecap="round"
                           strokeLinejoin="round"
+                          className="icon"
                         >
                           <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                          <path d="M5 12l-2 0l9 -9l9 9l-2 0" />
-                          <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
-                          <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+                          <path d="M4 4m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v1a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" />
+                          <path d="M4 13m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v3a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" />
+                          <path d="M14 4m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v3a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" />
+                          <path d="M14 15m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v1a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" />
                         </svg>
                       </span>
-                      <span className="nav-link-title">Websites</span>
-                    </Link>
+                      <span className="nav-link-title">Support</span>
+                    </a>
+                    <div className="dropdown-menu">
+                      <div className="dropdown-menu-columns">
+                        <div className="dropdown-menu-column">
+                          <Link className="dropdown-item" to="/faq-category-list">
+                            <span className="nav-link-title">Faq Categories</span>
+                          </Link>
+                          <Link className="dropdown-item" to="/faq-list">
+                            <span className="nav-link-title">Faq</span>
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
                   </li>
                 </ul>
               </div>

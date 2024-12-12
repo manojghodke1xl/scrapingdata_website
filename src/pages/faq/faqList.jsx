@@ -1,24 +1,19 @@
 import { useContext, useEffect, useState } from "react";
-import { GlobalContext } from "../../GlobalContext";
 import { useNavigate } from "react-router-dom";
+import { GlobalContext } from "../../GlobalContext";
 import Table from "../../comps/table";
-import ConfirmationModal from "../../comps/confirmation";
 import useSetTimeout from "../../Hooks/useDebounce";
 import useGetAllSites from "../../Hooks/useGetAllSites";
+import { deleteFaqApi, updateFaqSitesApi, updateFaqStatusApi } from "../../apis/faq-apis";
+import ConfirmationModal from "../../comps/confirmation";
 import DuplicateModal from "../../comps/duplicate";
-import {
-  deleteTestimonialApi,
-  updateTestimonialSitesApi,
-  updateTestimonialStatusApi,
-} from "../../apis/testimonial-apis";
-import Addnote from "../../comps/addnote";
-import { listTestimonialNote } from "../notes/notes-message";
 
-export default function TestimonialList() {
+const FaqList = () => {
   const navigate = useNavigate();
   const { alert, setLoading } = useContext(GlobalContext);
+  const allsites = useGetAllSites();
 
-  const [testimonials, setTestimonials] = useState([]);
+  const [faqs, setFaqs] = useState([]);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(8);
   const [modalOpen, setModalOpen] = useState(false);
@@ -26,50 +21,37 @@ export default function TestimonialList() {
   const [totalCount, setTotalCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchKey, setSearchKey] = useState("");
-  const [selectedTestimonials, setSelectedTestimonials] = useState([]);
+  const [selectedFaqs, setSelectedFaqs] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
   const [statusFilter, setStatusFilter] = useState("");
   const [siteId, setSiteId] = useState("");
   const [statusSelect, setStatusSelect] = useState("");
 
-  const allsites = useGetAllSites();
-
-  const searchAbleKeys = ["Name"];
-
+  const searchAbleKeys = ["Question"];
   const filter = ["Active", "Inactive"];
   const Status = ["Active", "Inactive"];
 
-  const [err, data, setRefresh] = useSetTimeout(
-    "testimonials",
-    page - 1,
-    limit,
-    searchTerm,
-    searchKey,
-    statusFilter,
-    siteId
-  );
+  const [err, data, setRefresh] = useSetTimeout("faq", page - 1, limit, searchTerm, searchKey, statusFilter, siteId);
 
   useEffect(() => {
     if (data) {
-      setTestimonials(data.testimonials);
+      setFaqs(data.faqs);
       setTotalCount(data.count);
     } else if (err) alert({ type: "warning", text: err.message });
-  }, [data, err, alert]);
+  }, [alert, data, err]);
 
-  const updateTestimonialStatus = async (testimonialStatus) => {
+  const updateFaqStatus = async (faqStatus) => {
     setLoading(true);
     try {
-      const { status, data } = await updateTestimonialStatusApi(selectedTestimonials, testimonialStatus);
+      const { status, data } = await updateFaqStatusApi(selectedFaqs, faqStatus);
 
       if (status) {
         alert({ type: "success", text: data.message });
         setRefresh((r) => !r);
-        setSelectedTestimonials([]);
+        setSelectedFaqs([]);
         setStatusSelect("");
         setSelectAll(false);
-      } else {
-        alert({ type: "danger", title: "Error!", text: data });
-      }
+      } else alert({ type: "danger", title: "Error!", text: data });
     } catch (error) {
       alert({ type: "danger", title: "Error!", text: error.message });
     } finally {
@@ -77,76 +59,68 @@ export default function TestimonialList() {
     }
   };
 
-  const updateTestimonialSites = async (selectedSites, selectedAction) => {
+  const updateFaqSites = async (selectedSites, selectedAction) => {
     setLoading(true);
     try {
       const action = selectedAction === "Add" ? true : false;
-      const { status, data } = await updateTestimonialSitesApi(selectedTestimonials, selectedSites, action);
+      const { status, data } = await updateFaqSitesApi(selectedFaqs, selectedSites, action);
       if (status) {
         alert({ type: "success", text: data.message });
         setRefresh((r) => !r);
-        setSelectedTestimonials([]);
+        setSelectedFaqs([]);
         setSelectAll(false);
-      } else {
-        alert({ type: "danger", text: data });
       }
     } catch (error) {
       alert({ type: "danger", text: error.message });
     } finally {
       setLoading(false);
       setModalOpen(false);
-      setSelectedTestimonials([]);
+      setSelectedFaqs([]);
     }
   };
 
-  const deleteSelectedTestimonial = async () => {
-    if (!selectedTestimonials.length) {
+  const deleteSelectedFaq = async () => {
+    if (!selectedFaqs.length) {
       alert({ type: "warning", text: "Please select at least one testimonial to delete." });
       return;
     }
     setLoading(true);
     try {
-      const { status, data } = await deleteTestimonialApi(selectedTestimonials);
-
+      const { status, data } = await deleteFaqApi(selectedFaqs);
       if (status) {
         alert({ type: "success", text: data.message });
         setRefresh((r) => !r);
-      } else {
-        alert({ type: "danger", title: "Error!", text: data });
-      }
+      } else alert({ type: "danger", title: "Error!", text: data });
     } catch (error) {
       alert({ type: "danger", title: "Error!", text: error.message });
     } finally {
       setLoading(false);
       setModalOpen(false);
-      setSelectedTestimonials([]);
+      setSelectedFaqs([]);
       setStatusSelect("");
     }
   };
 
   const handleCheckboxChange = (testimonialId) => {
-    setSelectedTestimonials((prevSelected) => {
+    setSelectedFaqs((prevSelected) => {
       let updatedSelected;
       if (prevSelected.includes(testimonialId)) {
         updatedSelected = prevSelected.filter((id) => id !== testimonialId);
         setStatusSelect("");
-      } else {
-        updatedSelected = [...prevSelected, testimonialId];
-      }
-      if (updatedSelected.length === testimonials.length) {
-        setSelectAll(true);
-      } else {
-        setSelectAll(false);
-      }
+      } else updatedSelected = [...prevSelected, testimonialId];
+
+      if (updatedSelected.length === faqs.length) setSelectAll(true);
+      else setSelectAll(false);
+
       return updatedSelected;
     });
   };
 
   const handleSelectAll = () => {
     if (selectAll) {
-      setSelectedTestimonials([]);
+      setSelectedFaqs([]);
     } else {
-      setSelectedTestimonials(testimonials.map((testimonial) => testimonial._id));
+      setSelectedFaqs(faqs.map((faq) => faq._id));
     }
     setSelectAll(!selectAll);
   };
@@ -155,14 +129,14 @@ export default function TestimonialList() {
     {
       label: <input className="form-check-input " type="checkbox" checked={selectAll} onChange={handleSelectAll} />,
     },
-    { label: "Name" },
-    { label: "Status" },
+    { label: "Question" },
+    { label: "Answer" },
     { label: "Actions" },
     { label: "Sites" },
   ];
 
-  const rows = testimonials.map((testimonial) => {
-    const { _id, name, isActive, sites } = testimonial;
+  const rows = faqs.map((faq) => {
+    const { _id, question, answer, isActive, sites } = faq;
     return {
       _id,
       checkedbox: (
@@ -170,18 +144,19 @@ export default function TestimonialList() {
           key={_id}
           className="form-check-input"
           type="checkbox"
-          checked={selectedTestimonials.includes(_id)}
+          checked={selectedFaqs.includes(_id)}
           onChange={() => handleCheckboxChange(_id)}
         />
       ),
-      name,
+      question,
+      answer,
       status: isActive ? (
         <span className="badge bg-success">Active</span>
       ) : (
         <span className="badge bg-danger">Inactive</span>
       ),
-      actions: (
-        <button key={_id} onClick={() => navigate(`/edit-testimonial/${_id}`)} className="btn btn-primary me-1">
+      action: (
+        <button key={_id} onClick={() => navigate(`/edit-faq/${_id}`)} className="btn btn-primary me-1">
           Edit
         </button>
       ),
@@ -194,7 +169,7 @@ export default function TestimonialList() {
       <div className="container-xl">
         <div className="card">
           <div className="card-header">
-            <h3 className="card-title">All Testimonials List</h3>
+            <h3 className="card-title">All Faq List</h3>
             <div className="card-options d-flex gap-2">
               <div className="card-options">
                 <div className="text-secondary">
@@ -210,7 +185,7 @@ export default function TestimonialList() {
                     </select>
                   </div>
                 </div>
-                {selectedTestimonials.length ? (
+                {selectedFaqs.length ? (
                   <>
                     <div className="text-secondary">
                       Status
@@ -229,12 +204,12 @@ export default function TestimonialList() {
                       </div>
                     </div>
                     {statusSelect === "active" && (
-                      <button onClick={() => updateTestimonialStatus(true)} className="btn btn-success mx-2">
+                      <button onClick={() => updateFaqStatus(true)} className="btn btn-success mx-2">
                         Apply
                       </button>
                     )}
                     {statusSelect === "inactive" && (
-                      <button onClick={() => updateTestimonialStatus(false)} className="btn btn-danger mx-2">
+                      <button onClick={() => updateFaqStatus(false)} className="btn btn-danger mx-2">
                         Apply
                       </button>
                     )}
@@ -243,8 +218,8 @@ export default function TestimonialList() {
                     </button>
                   </>
                 ) : null}
-                <button onClick={() => navigate("/add-testimonial")} className="btn btn-primary">
-                  Add Testimonial
+                <button onClick={() => navigate("/add-faq")} className="btn btn-primary">
+                  Add Faq
                 </button>
               </div>
             </div>
@@ -275,20 +250,19 @@ export default function TestimonialList() {
       <ConfirmationModal
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
-        onConfirm={deleteSelectedTestimonial}
+        onConfirm={deleteSelectedFaq}
         message="Are you sure you want to delete this Testimonial?"
       />
       <DuplicateModal
         allsites={allsites}
         isOpen={siteModal}
         onClose={setSiteModal}
-        onConfirm={updateTestimonialSites}
+        onConfirm={updateFaqSites}
         title="Update Sites"
         action={["Add", "Remove"]}
         confirmText="Update"
       />
-
-      <Addnote des={listTestimonialNote} />
     </div>
   );
-}
+};
+export default FaqList;

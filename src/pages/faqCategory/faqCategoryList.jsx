@@ -1,17 +1,14 @@
 import { useContext, useEffect, useState } from "react";
+import { GlobalContext } from "../../GlobalContext";
 import { useNavigate } from "react-router-dom";
 import Table from "../../comps/table";
 import useSetTimeout from "../../Hooks/useDebounce";
-import { GlobalContext } from "../../GlobalContext";
-import Addnote from "../../comps/addnote";
-import { listCategoryNote } from "../notes/notes-message";
 import { formatDateTime } from "../../utils/function";
 
-export default function CategoryList() {
+const FaqCategoryList = () => {
   const navigate = useNavigate();
   const { alert } = useContext(GlobalContext);
-
-  const [categories, setCategories] = useState([]);
+  const [faqCategories, setFaqCategories] = useState([]);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(8);
   const [totalCount, setTotalCount] = useState(0);
@@ -19,11 +16,11 @@ export default function CategoryList() {
   const [searchKey, setSearchKey] = useState("");
   const searchAbleKeys = ["Name"];
 
-  const [err, data] = useSetTimeout("categories", page - 1, limit, searchTerm, searchKey);
+  const [err, data] = useSetTimeout("faq-category", page - 1, limit, searchTerm, searchKey);
 
   const headers = [{ label: "Name" }, { label: "Created Date" }, { label: "Updated Date" }, { label: "Actions" }];
 
-  const rows = categories.map((category, index) => {
+  const rows = faqCategories.map((category, index) => {
     const { _id, name, createdAt, updatedAt } = category;
     return {
       _id,
@@ -31,7 +28,7 @@ export default function CategoryList() {
       createdAt: formatDateTime(createdAt),
       updatedAt: formatDateTime(updatedAt),
       actions: (
-        <button key={index} onClick={() => navigate(`/edit-category/${_id}`)} className="btn btn-primary me-1">
+        <button key={index} onClick={() => navigate(`/edit-faq-category/${_id}`)} className="btn btn-primary me-1">
           Edit
         </button>
       ),
@@ -40,22 +37,22 @@ export default function CategoryList() {
 
   useEffect(() => {
     if (data) {
-      setCategories(data.categorys);
+      setFaqCategories(data.faqCategories);
       setTotalCount(data.count);
     } else if (err) {
       alert({ type: "warning", text: err.message });
     }
-  }, [data, err, alert]);
+  }, [alert, data, err]);
 
   return (
     <div className="page-body">
       <div className="container-xl">
         <div className="card">
           <div className="card-header">
-            <h3 className="card-title">All Testimonial Categories</h3>
+            <h3 className="card-title">All Faq Categories</h3>
             <div className="card-options">
-              <button onClick={() => navigate("/add-category")} className="btn btn-primary ">
-                Add Testimonial Category
+              <button onClick={() => navigate("/add-faq-category")} className="btn btn-primary ">
+                Add Faq Category
               </button>
             </div>
           </div>
@@ -79,7 +76,7 @@ export default function CategoryList() {
           </div>
         </div>
       </div>
-      <Addnote des={listCategoryNote} />
     </div>
   );
-}
+};
+export default FaqCategoryList;

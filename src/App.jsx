@@ -39,6 +39,10 @@ import PartnerLogoList from "./pages/partnerlogo/partnerlogolist";
 import AddPartnerLogo from "./pages/partnerlogo/addpartnerlogo";
 import ZohoAuth from "./pages/zohoCRM/zohoAuth";
 import ZohoStatus from "./pages/zohoCRM/status";
+import FaqCategoryList from "./pages/faqCategory/faqCategoryList";
+import AddFaqCategory from "./pages/faqCategory/addFaqCategory";
+import FaqList from "./pages/faq/faqList";
+import AddFaq from "./pages/faq/addFaq";
 
 function App() {
   const [alerts, alert] = useAlert();
@@ -75,10 +79,7 @@ function App() {
               <Route path="/edit-casestudy/:id" element={<AddCaseStudy />} />
               <Route path="/testimonial-list" element={<TestimonialList />} />
               <Route path="/add-testimonial" element={<AddTestimonial />} />
-              <Route
-                path="/edit-testimonial/:id"
-                element={<AddTestimonial />}
-              />
+              <Route path="/edit-testimonial/:id" element={<AddTestimonial />} />
               <Route path="/smtp-list" element={<SmtpList />} />
               <Route path="/add-smtp" element={<AddSmtp />} />
               <Route path="/edit-smtp/:id" element={<AddSmtp />} />
@@ -96,11 +97,14 @@ function App() {
               <Route path="/edit-client-logo/:id" element={<AddClientLogo />} />
               <Route path="/partner-logo-list" element={<PartnerLogoList />} />
               <Route path="/add-partner-logo" element={<AddPartnerLogo />} />
-              <Route
-                path="/edit-partner-logo/:id"
-                element={<AddPartnerLogo />}
-              />
+              <Route path="/edit-partner-logo/:id" element={<AddPartnerLogo />} />
               <Route path="/zoho-auth/:id" element={<ZohoAuth />} />
+              <Route path="/faq-category-list" element={<FaqCategoryList />} />
+              <Route path="/add-faq-category" element={<AddFaqCategory />} />
+              <Route path="/edit-faq-category/:id" element={<AddFaqCategory />} />
+              <Route path="/faq-list" element={<FaqList />} />
+              <Route path="/add-faq" element={<AddFaq />} />
+              <Route path="/edit-faq/:id" element={<AddFaq />} />
             </Route>
 
             <Route path="*" element={<Missing />} />

@@ -1,20 +1,18 @@
-import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { GlobalContext } from "../../GlobalContext";
-import { addCategoryApi, getCategoryByIdApi, updateCategoryApi } from "../../apis/category-apis";
-import Addnote from "../../comps/addnote";
-import { addCategoryNote, editCategoryNote } from "../notes/notes-message";
+import { useContext, useEffect, useState } from "react";
+import { addFaqCategoryApi, getFaqCategoryByIdApi, updateFaqCategoryApi } from "../../apis/faqCategory-apis";
 
-export default function AddCategory() {
+const AddFaqCategory = () => {
   const navigate = useNavigate();
   const { id = "" } = useParams();
   const { alert, setLoading } = useContext(GlobalContext);
-  const [categoryName, setCategoryName] = useState("");
+  const [fqaCategoryName, setFqaCategoryName] = useState("");
   const [errors, setErrors] = useState({});
 
   const validate = () => {
     const newErrors = {};
-    if (!categoryName) newErrors.name = "Name is required";
+    if (!fqaCategoryName) newErrors.name = "Name is required";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -24,13 +22,13 @@ export default function AddCategory() {
       setLoading(true);
       (async () => {
         try {
-          const { status, data } = await getCategoryByIdApi(id);
+          const { status, data } = await getFaqCategoryByIdApi(id);
 
           if (status) {
-            const { name } = data.category;
-            setCategoryName(name);
+            const { name } = data.faqCategory;
+            setFqaCategoryName(name);
           } else {
-            alert({ type: "warning", text: "Category not found" });
+            alert({ type: "warning", text: "Faq Category not found" });
           }
         } catch (error) {
           alert({ type: "danger", text: error.message });
@@ -39,18 +37,18 @@ export default function AddCategory() {
         }
       })();
     }
-  }, [id, alert, setLoading]);
+  }, [alert, id, setLoading]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
     setLoading(true);
     try {
-      const name = { name: categoryName };
-      const { status, data } = await (id ? updateCategoryApi(id, name) : addCategoryApi(name));
+      const name = { name: fqaCategoryName };
+      const { status, data } = await (id ? updateFaqCategoryApi(id, name) : addFaqCategoryApi(name));
       if (status) {
         alert({ type: "success", text: data.message });
-        navigate("/category-list");
+        navigate("/faq-category-list");
       } else {
         alert({ type: "warning", text: data });
       }
@@ -60,13 +58,12 @@ export default function AddCategory() {
       setLoading(false);
     }
   };
-
   return (
     <div className="page-body">
       <div className="container container-tight py-4">
         <div className="card card-md">
           <div className="card-body">
-            <h2 className="h2 text-center mb-4">{id ? "Edit Testimonial Category" : "Add Testimonial Category"}</h2>
+            <h2 className="h2 text-center mb-4">{id ? "Edit Faq Category" : "Add Faq Category"}</h2>
             <form onSubmit={handleSubmit}>
               <div className="mb-3">
                 <label className={!id ? "form-label required" : "form-label "}>Category Name</label>
@@ -75,9 +72,9 @@ export default function AddCategory() {
                   name="name"
                   className={`form-control ${errors.name ? "is-invalid" : ""}`}
                   placeholder="Category Name"
-                  value={categoryName}
+                  value={fqaCategoryName}
                   onChange={(e) => {
-                    setCategoryName(e.target.value);
+                    setFqaCategoryName(e.target.value);
                     if (errors.name) setErrors((prev) => ({ ...prev, name: "" }));
                   }}
                 />
@@ -92,7 +89,8 @@ export default function AddCategory() {
           </div>
         </div>
       </div>
-      {!id ? <Addnote des={addCategoryNote} /> : <Addnote des={editCategoryNote} />}
     </div>
   );
-}
+};
+
+export default AddFaqCategory;
