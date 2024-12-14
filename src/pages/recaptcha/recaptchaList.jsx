@@ -3,10 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { GlobalContext } from "../../GlobalContext";
 import useGetAllSites from "../../Hooks/useGetAllSites";
 import useSetTimeout from "../../Hooks/useDebounce";
-import { updateRecaptchaSitesApi, updateRecaptchaStatusApi } from "../../apis/recaptcha-apis";
+import { deleteRecaptchaApi, updateRecaptchaSitesApi, updateRecaptchaStatusApi } from "../../apis/recaptcha-apis";
 import TruncatableField from "../../comps/modals/truncatableField";
 import Table from "../../comps/table";
 import DuplicateModal from "../../comps/modals/duplicate";
+import ConfirmationModal from "../../comps/modals/confirmation";
 
 const RecaptchaList = () => {
   const navigate = useNavigate();
@@ -25,6 +26,7 @@ const RecaptchaList = () => {
   const [selectedRecaptchas, setSelectedRecaptchas] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
+  const [deleteModel, setDeleteModel] = useState(false);
 
   const searchAbleKeys = ["Version", "sitekey", "secretkey"];
   const filter = ["Active", "Inactive"];
@@ -48,6 +50,25 @@ const RecaptchaList = () => {
       alert({ type: "warning", text: err.message });
     }
   }, [data, err, alert]);
+
+  const deleteSelectedRecaptchas = async () => {
+    setLoading(true);
+    try {
+      console.log(selectedRecaptchas);
+      const { status, data } = await deleteRecaptchaApi(selectedRecaptchas);
+      if (status) {
+        alert({ type: "success", text: data.message });
+        setRefresh((r) => !r);
+        setSelectedRecaptchas([]);
+        setSelectAll(false);
+      } else alert({ type: "danger", text: data });
+    } catch (error) {
+      alert({ type: "danger", text: error.message });
+    } finally {
+      setLoading(false);
+      setDeleteModel(false);
+    }
+  };
 
   const updateRecaptchaStatus = async (recaptchaStatus) => {
     setLoading(true);
@@ -132,9 +153,9 @@ const RecaptchaList = () => {
           onChange={() => handleCheckboxChange(_id)}
         />
       ),
-      version,
-      sitekey,
-      secretkey,
+      version: "v" + version,
+      sitekey: <TruncatableField title={"Site Key"} content={sitekey} maxLength={50} />,
+      secretkey: <TruncatableField title={"Secret Key"} content={secretkey} maxLength={50} />,
       status:
         isActive === true ? (
           <span className="badge bg-success">Active</span>
@@ -211,6 +232,9 @@ const RecaptchaList = () => {
                     <button onClick={() => setModalOpen(true)} className="btn btn-primary mx-2">
                       Sites
                     </button>
+                    <button onClick={() => setDeleteModel(true)} className="btn btn-danger mx-2">
+                      Delete
+                    </button>
                   </>
                 ) : null}
 
@@ -240,6 +264,13 @@ const RecaptchaList = () => {
           </div>
         </div>
       </div>
+
+      <ConfirmationModal
+        isOpen={deleteModel}
+        onClose={() => setDeleteModel(false)}
+        onConfirm={deleteSelectedRecaptchas}
+        message={`Are you sure you want to delete selected reCAPTCHA? This action cannot be undone.`}
+      />
       <DuplicateModal
         allsites={allsites}
         isOpen={modalOpen}
