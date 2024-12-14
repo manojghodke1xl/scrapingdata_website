@@ -6,6 +6,7 @@ import { GlobalContext } from "../../GlobalContext";
 import Addnote from "../../comps/addnote";
 import { listCategoryNote } from "../notes/notes-message";
 import { formatDateTime } from "../../utils/function";
+import TruncatableField from "../../comps/modals/truncatableField";
 
 export default function CategoryList() {
   const navigate = useNavigate();
@@ -27,7 +28,7 @@ export default function CategoryList() {
     const { _id, name, createdAt, updatedAt } = category;
     return {
       _id,
-      name,
+      name: <TruncatableField title={"Name"} content={name} maxLength={50} />,
       createdAt: formatDateTime(createdAt),
       updatedAt: formatDateTime(updatedAt),
       actions: (

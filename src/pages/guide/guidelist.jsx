@@ -4,10 +4,13 @@ import { useNavigate } from "react-router-dom";
 import Table from "../../comps/table";
 import useSetTimeout from "../../Hooks/useDebounce";
 import useGetAllSites from "../../Hooks/useGetAllSites";
-import DuplicateModal from "../../comps/duplicate";
+import DuplicateModal from "../../comps/modals/duplicate";
 import { updateGuideSitesApi, updateGuideStatusApi } from "../../apis/guide-apis";
 import Addnote from "../../comps/addnote";
 import { formatDateTime } from "../../utils/function";
+import TruncatableField from "../../comps/modals/truncatableField";
+import IntegrationModal from "../../comps/modals/integrationModal";
+import { guidePdfIntegrationData } from "../../utils/integrationData";
 
 export default function GuideList() {
   const navigate = useNavigate();
@@ -25,6 +28,7 @@ export default function GuideList() {
   const [siteId, setSiteId] = useState("");
   const [statusSelect, setStatusSelect] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
+  const [integrationModalOpen, setIntegrationModalOpen] = useState(false);
   const allsites = useGetAllSites();
 
   const searchAbleKeys = ["Title"];
@@ -143,7 +147,7 @@ export default function GuideList() {
           onChange={() => handleCheckboxChange(guide._id)}
         />
       ),
-      title,
+      title: <TruncatableField title={title} content={title} maxLength={50} />,
       created: formatDateTime(createdAt),
       updated: formatDateTime(updatedAt),
       status:
@@ -159,7 +163,13 @@ export default function GuideList() {
           </button>
         </div>
       ),
-      siteName: sites.map((s) => `${s.name} (${s.host})`).join(", "),
+      siteName: (
+        <TruncatableField
+          title={"Sties"}
+          content={sites.map((s) => `${s.name} (${s.host})`).join(", ")}
+          maxLength={50}
+        />
+      ),
     };
   });
 
@@ -221,6 +231,9 @@ export default function GuideList() {
                 <button onClick={() => navigate("/add-guide")} className="btn btn-primary">
                   Add Guide
                 </button>
+                <button className="btn btn-primary mx-2" onClick={() => setIntegrationModalOpen(true)}>
+                  Guides Pdf Integration guide
+                </button>
               </div>
             </div>
           </div>
@@ -256,6 +269,17 @@ export default function GuideList() {
         title="Update Sites"
         action={["Add", "Remove"]}
         confirmText="Update"
+      />
+      <IntegrationModal
+        isOpen={integrationModalOpen}
+        onClose={() => setIntegrationModalOpen(false)}
+        title={guidePdfIntegrationData.title}
+        url={guidePdfIntegrationData.url}
+        method={guidePdfIntegrationData.method}
+        bodyParams={guidePdfIntegrationData.bodyParams}
+        manditoryParams={guidePdfIntegrationData.manditoryParams}
+        headers={guidePdfIntegrationData.headers}
+        responseDetails={guidePdfIntegrationData.responseDetails}
       />
     </div>
   );

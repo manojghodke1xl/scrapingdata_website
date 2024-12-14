@@ -56,7 +56,9 @@ export default function Header() {
                   </li>
                   <li
                     className={`nav-item dropdown ${
-                      isActive("/enquiry-list", "/enquiry", "/mailing-list", "/mailing") ? "active" : ""
+                      isActive("/enquiry-list", "/enquiry", "/mailing-list", "/mailing", "/feedback-list", "/feedback")
+                        ? "active"
+                        : ""
                     }`}
                   >
                     <a
@@ -98,6 +100,9 @@ export default function Header() {
                           </Link>
                           <Link className="dropdown-item" to="/mailing-list">
                             <span className="nav-link-title">Mailing Lists</span>
+                          </Link>
+                          <Link className="dropdown-item" to="/feedback-list">
+                            <span className="nav-link-title">Feedback</span>
                           </Link>
                         </div>
                       </div>
@@ -226,7 +231,17 @@ export default function Header() {
                   </li>
                   <li
                     className={`nav-item dropdown ${
-                      isActive("/admin-list", "/add-admin", "/edit-admin", "/smtp-list", "/add-smtp", "/edit-smtp")
+                      isActive(
+                        "/admin-list",
+                        "/add-admin",
+                        "/edit-admin",
+                        "/smtp-list",
+                        "/add-smtp",
+                        "/edit-smtp",
+                        "/recaptcha-list",
+                        "/add-recaptcha",
+                        "/edit-recaptcha"
+                      )
                         ? "active"
                         : ""
                     }`}
@@ -272,6 +287,9 @@ export default function Header() {
                           )}
                           <Link className="dropdown-item" to="/smtp-list">
                             <span className="nav-link-title">SMTPs</span>
+                          </Link>
+                          <Link className="dropdown-item" to="/recaptcha-list">
+                            <span className="nav-link-title">reCAPTCHA</span>
                           </Link>
                         </div>
                       </div>

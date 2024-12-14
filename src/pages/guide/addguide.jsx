@@ -27,8 +27,6 @@ export default function AddGuide() {
   const [selectAll, setSelectAll] = useState(false);
   const [errors, setErrors] = useState({});
 
-  console.log({ guideDetails });
-
   useEffect(() => {
     if (id) {
       setLoading(true);

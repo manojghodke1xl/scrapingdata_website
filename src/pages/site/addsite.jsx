@@ -7,6 +7,8 @@ import Addnote from "../../comps/addnote";
 import { addWebsiteNote, editWebsiteNote } from "../notes/notes-message";
 import FormField from "../../comps/formField";
 import ToggleFormSection from "../../comps/toggleFormSection";
+import IntegrationModal from "../../comps/modals/integrationModal";
+import { enquiryIntegrationData, mailingListIntegrationData } from "../../utils/integrationData";
 
 export default function AddSite() {
   const navigate = useNavigate();
@@ -15,6 +17,7 @@ export default function AddSite() {
   const [emailInput, setEmailInput] = useState("");
   const [errors, setErrors] = useState({ forwardEmails: "" });
   const [smtpOptions, setSmtpOptions] = useState([]);
+  const [modalOpen, setModalOpen] = useState({ enquiryWebhookUrl: false, mailinglistWebhookUrl: false });
   const [siteDetails, setSiteDetails] = useState({
     name: "",
     host: "",
@@ -496,7 +499,21 @@ export default function AddSite() {
               </div>
 
               <div className="mb-3">
-                <label className="form-label">Enquiry Webhook URL</label>
+                <label className="form-label d-flex justify-content-between align-items-center">
+                  Enquiry Webhook URL
+                  <button
+                    type="button"
+                    className="btn btn-primary btn-sm"
+                    onClick={() =>
+                      setModalOpen((p) => ({
+                        ...p,
+                        enquiryWebhookUrl: true,
+                      }))
+                    }
+                  >
+                    View Sample Data
+                  </button>
+                </label>
                 <input
                   type="text"
                   className="form-control"
@@ -511,7 +528,21 @@ export default function AddSite() {
               </div>
 
               <div className="mb-3">
-                <label className="form-label">Mailing List Webhook URL</label>
+                <label className="form-label d-flex justify-content-between align-items-center">
+                  Mailing List Webhook URL
+                  <button
+                    type="button"
+                    className="btn btn-primary btn-sm"
+                    onClick={() =>
+                      setModalOpen((p) => ({
+                        ...p,
+                        mailinglistWebhookUrl: true,
+                      }))
+                    }
+                  >
+                    View Sample Data
+                  </button>
+                </label>
                 <input
                   type="text"
                   className="form-control"
@@ -551,14 +582,26 @@ export default function AddSite() {
                 <button type="submit" className="btn btn-primary w-100">
                   {id ? "Update" : "Add"}
                 </button>
-                <button type="submit" className="btn btn-primary w-100">
-                  {id ? "Update" : "Add"} & Configure Zoho
-                </button>
+                {siteDetails.sendCRM && (
+                  <button type="submit" className="btn btn-primary w-100">
+                    {id ? "Update" : "Add"} & Configure Zoho
+                  </button>
+                )}
               </div>
             </form>
           </div>
         </div>
       </div>
+
+      <IntegrationModal
+        isOpen={modalOpen.enquiryWebhookUrl || modalOpen.mailinglistWebhookUrl}
+        onClose={() => setModalOpen({})}
+        title={modalOpen.enquiryWebhookUrl ? "Enquiry Webhook URL" : "Mailing List Webhook URL"}
+        method={"POST"}
+        responseDetails={
+          modalOpen.enquiryWebhookUrl ? enquiryIntegrationData.bodyParams : mailingListIntegrationData.bodyParams
+        }
+      />
       {!id ? <Addnote des={addWebsiteNote} /> : <Addnote des={editWebsiteNote} />}
     </div>
   );

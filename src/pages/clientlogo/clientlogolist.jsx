@@ -4,11 +4,12 @@ import { useNavigate } from "react-router-dom";
 import Table from "../../comps/table";
 import useSetTimeout from "../../Hooks/useDebounce";
 import useGetAllSites from "../../Hooks/useGetAllSites";
-import DuplicateModal from "../../comps/duplicate";
+import DuplicateModal from "../../comps/modals/duplicate";
 import { updateClientLogoSitesApi, updateClientLogoStatusApi, deleteClientLogoApi } from "../../apis/client-logo-apis";
 import Addnote from "../../comps/addnote";
-import ConfirmationModal from "../../comps/confirmation";
+import ConfirmationModal from "../../comps/modals/confirmation";
 import { formatDateTime } from "../../utils/function";
+import TruncatableField from "../../comps/modals/truncatableField";
 
 export default function ClientLogoList() {
   const navigate = useNavigate();
@@ -193,7 +194,14 @@ export default function ClientLogoList() {
           </button>
         </div>
       ),
-      siteName: sites.map((s) => `${s.name} (${s.host})`).join(", "),
+
+      siteName: (
+        <TruncatableField
+          title={"Sties"}
+          content={sites.map((s) => `${s.name} (${s.host})`).join(", ")}
+          maxLength={50}
+        />
+      ),
     };
   });
 

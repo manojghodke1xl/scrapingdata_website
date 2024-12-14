@@ -5,19 +5,17 @@ import Table from "../../comps/table";
 import ConfirmationModal from "../../comps/modals/confirmation";
 import useSetTimeout from "../../Hooks/useDebounce";
 import useGetAllSites from "../../Hooks/useGetAllSites";
-import { deleteMailingListApi } from "../../apis/mailing-apis";
-import Addnote from "../../comps/addnote";
-import { listMailingNote } from "../notes/notes-message";
 import { formatDateTime } from "../../utils/function";
 import TruncatableField from "../../comps/modals/truncatableField";
+import { deleteFeedbackApi } from "../../apis/feedback-apis";
 import IntegrationModal from "../../comps/modals/integrationModal";
-import { mailingListIntegrationData } from "../../utils/integrationData";
+import { feedbackIntegrationData } from "../../utils/integrationData";
 
-export default function MailingList() {
-  const navigate = useNavigate();
+const FeedbackList = () => {
   const { alert, setLoading } = useContext(GlobalContext);
+  const navigate = useNavigate();
 
-  const [lists, setLists] = useState([]);
+  const [feedbacks, setFeedbacks] = useState([]);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(8);
   const [modalOpen, setModalOpen] = useState(false);
@@ -25,39 +23,38 @@ export default function MailingList() {
   const [totalCount, setTotalCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchKey, setSearchKey] = useState("");
-  const [selectedLists, setSelectedLists] = useState([]);
+  const [selectedfeedbacks, setSelectedfeedbacks] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
   const [siteId, setSiteId] = useState("");
   const allsites = useGetAllSites();
 
-  const searchAbleKeys = ["Email"];
+  const searchAbleKeys = ["Name", "Email", "Mobile", "Service", "Subject", "Site"];
 
-  const [err, data, setRefresh] = useSetTimeout("lists", page - 1, limit, searchTerm, searchKey, "", siteId);
+  const [err, data, setRefresh] = useSetTimeout("feedback", page - 1, limit, searchTerm, searchKey, "", siteId);
 
   useEffect(() => {
     if (data) {
-      setLists(data.lists);
+      setFeedbacks(data.feedbacks);
       setTotalCount(data.count);
     } else if (err) {
       alert({ type: "warning", text: err.message });
     }
   }, [data, err, alert]);
 
-  const deleteMailingList = async () => {
-    if (!selectedLists.length)
+  const deleteSelectedFeedbacks = async () => {
+    if (!selectedfeedbacks.length)
       return alert({
         type: "warning",
-        text: "Please select at least one List to delete.",
+        text: "Please select at least one feedback to delete.",
       });
 
     setLoading(true);
     try {
-      const { status, data } = await deleteMailingListApi(selectedLists);
+      const { status, data } = await deleteFeedbackApi(selectedfeedbacks);
       if (status) {
-        setLists((prevList) => prevList.filter((enq) => !selectedLists.includes(enq._id)));
         alert({ type: "success", text: data.message });
         setRefresh((r) => !r);
-        setSelectedLists([]);
+        setSelectedfeedbacks([]);
         setSelectAll(false);
       } else {
         alert({ type: "danger", text: data });
@@ -67,20 +64,20 @@ export default function MailingList() {
     } finally {
       setLoading(false);
       setModalOpen(false);
-      setSelectedLists([]);
+      setSelectedfeedbacks([]);
     }
   };
 
-  const handleCheckboxChange = (listId) => {
-    setSelectedLists((prevSelected) => {
+  const handleCheckboxChange = (fdbId) => {
+    setSelectedfeedbacks((prevSelected) => {
       let updatedSelected;
-      if (prevSelected.includes(listId)) {
-        updatedSelected = prevSelected.filter((id) => id !== listId);
+      if (prevSelected.includes(fdbId)) {
+        updatedSelected = prevSelected.filter((id) => id !== fdbId);
       } else {
-        updatedSelected = [...prevSelected, listId];
+        updatedSelected = [...prevSelected, fdbId];
       }
 
-      if (updatedSelected.length === lists.length) {
+      if (updatedSelected.length === feedbacks.length) {
         setSelectAll(true);
       } else {
         setSelectAll(false);
@@ -92,9 +89,9 @@ export default function MailingList() {
 
   const handleSelectAll = () => {
     if (selectAll) {
-      setSelectedLists([]);
+      setSelectedfeedbacks([]);
     } else {
-      setSelectedLists(lists.map((lst) => lst._id));
+      setSelectedfeedbacks(feedbacks.map((fdb) => fdb._id));
     }
     setSelectAll(!selectAll);
   };
@@ -103,34 +100,43 @@ export default function MailingList() {
     {
       label: <input className="form-check-input" type="checkbox" checked={selectAll} onChange={handleSelectAll} />,
     },
+    { label: "Customer Name" },
     { label: "Customer Email" },
+    { label: "Customer Mobile" },
+    { label: "Feedback Service" },
+    { label: "Feedback Subject" },
+    { label: "Feedback Message" },
     { label: "Site" },
     { label: "Created Date" },
     { label: "Updated Date" },
     { label: "Actions" },
   ];
 
-  const rows = lists.map((lst) => {
-    const { _id, email, site, createdAt, updatedAt } = lst;
+  const rows = feedbacks.map((enq) => {
+    const { _id, name, email, ccode, mobile, service, subject, feedbackMessage, createdAt, updatedAt, site } = enq;
     return {
       _id,
-      checkedbox: (
+      checkbox: (
         <input
-          key={lst._id}
+          key={_id}
           className="form-check-input"
           type="checkbox"
-          checked={selectedLists.includes(lst._id)}
-          onChange={() => handleCheckboxChange(lst._id)}
+          checked={selectedfeedbacks.includes(_id)}
+          onChange={() => handleCheckboxChange(_id)}
         />
       ),
-      email: <TruncatableField title="Email" content={email} maxLength={20} />,
-      siteName: <TruncatableField title="Site" content={`${site?.name} (${site?.host})`} maxLength={20} />,
-
+      name: <TruncatableField title={"Name"} content={name} maxLength={20} />,
+      email: <TruncatableField title={"Email"} content={email} maxLength={20} />,
+      mobile: <TruncatableField title={"Mobile"} content={`${ccode ?? ""} ${mobile ?? ""}`} maxLength={15} />,
+      service: <TruncatableField title={"Service"} content={service} maxLength={20} />,
+      subject: <TruncatableField title={"Subject"} content={subject} maxLength={20} />,
+      feedbackMessage: <TruncatableField title={"Feedback Message"} content={feedbackMessage} maxLength={50} />,
+      siteName: <TruncatableField title={"Site"} content={`${site?.name} (${site?.host}) `} maxLength={20} />,
       created: formatDateTime(createdAt),
-      udpated: formatDateTime(updatedAt),
+      updated: formatDateTime(updatedAt),
       action: (
-        <div key={lst._id}>
-          <button onClick={() => navigate(`/mailing/${lst._id}`)} className="btn btn-primary me-1">
+        <div key={_id}>
+          <button onClick={() => navigate(`/feedback/${_id}`)} className="btn btn-primary me-1">
             View
           </button>
         </div>
@@ -143,12 +149,12 @@ export default function MailingList() {
       <div className="container-xl">
         <div className="card">
           <div className="card-header">
-            <h3 className="card-title">All Mailing Lists</h3>
+            <h3 className="card-title">All Feedbacks</h3>
             <div className="card-options">
               <button className="btn btn-primary mx-2" onClick={() => setIntegrationModalOpen(true)}>
                 Integration guide
               </button>
-              {selectedLists.length ? (
+              {selectedfeedbacks.length ? (
                 <button onClick={() => setModalOpen(true)} className="btn btn-danger">
                   Delete Selected
                 </button>
@@ -171,31 +177,34 @@ export default function MailingList() {
               allsites={allsites}
               setSiteId={setSiteId}
               searchAbleKeys={searchAbleKeys}
-              onEntriesChange={setLimit}
+              onEntriesChange={(newLimit) => {
+                setLimit(newLimit);
+              }}
               totalCount={totalCount}
             />
           </div>
         </div>
       </div>
-      <Addnote des={listMailingNote} />
 
       <ConfirmationModal
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
-        onConfirm={deleteMailingList}
-        message="Are you sure you want to delete this mailing list? "
+        onConfirm={deleteSelectedFeedbacks}
+        message={`Are you sure you want to delete selected feedbacks? This action cannot be undone.`}
       />
       <IntegrationModal
         isOpen={integrationModalOpen}
         onClose={() => setIntegrationModalOpen(false)}
-        title={mailingListIntegrationData.title}
-        url={mailingListIntegrationData.url}
-        method={mailingListIntegrationData.method}
-        bodyParams={mailingListIntegrationData.bodyParams}
-        manditoryParams={mailingListIntegrationData.manditoryParams}
-        headers={mailingListIntegrationData.headers}
-        responseDetails={mailingListIntegrationData.responseDetails}
+        title={feedbackIntegrationData.title}
+        url={feedbackIntegrationData.url}
+        method={feedbackIntegrationData.method}
+        bodyParams={feedbackIntegrationData.bodyParams}
+        manditoryParams={feedbackIntegrationData.manditoryParams}
+        headers={feedbackIntegrationData.headers}
+        responseDetails={feedbackIntegrationData.responseDetails}
       />
     </div>
   );
-}
+};
+
+export default FeedbackList;

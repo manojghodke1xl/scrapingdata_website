@@ -9,7 +9,7 @@ export const updateFaqApi = async (id, userData) => {
 };
 
 export const getFaqByIdApi = async (id) => {
-  return await getMethodCall(`${import.meta.env.VITE_API_URL}/faq/${id}`);
+  return await getMethodCall(`${import.meta.env.VITE_API_URL}/faq/${id}?p=1`);
 };
 export const updateFaqStatusApi = async (ids, isActive) => {
   return await putMethodCall(`${import.meta.env.VITE_API_URL}/faq-status`, { ids, isActive });

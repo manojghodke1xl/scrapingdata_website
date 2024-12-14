@@ -8,6 +8,7 @@ import { updateAdminStatusApi } from "../../apis/admin-apis";
 import Addnote from "../../comps/addnote";
 import { listAdminNote } from "../notes/notes-message";
 import { formatDateTime } from "../../utils/function";
+import TruncatableField from "../../comps/modals/truncatableField";
 
 export default function AdminList() {
   const navigate = useNavigate();
@@ -118,8 +119,8 @@ export default function AdminList() {
           onChange={() => handleCheckboxChange(_id)}
         />
       ) : null,
-      name,
-      email,
+      name: <TruncatableField title="Name" content={name} maxLength={20} />,
+      email: <TruncatableField title="Email" content={email} maxLength={20} />,
       created: formatDateTime(createdAt),
       updated: formatDateTime(updatedAt),
       status:
@@ -133,9 +134,17 @@ export default function AdminList() {
           Edit
         </button>
       ),
-      sites: isSuperAdmin
-        ? allsites.map((s) => `${s.name} (${s.host})`).join(", ")
-        : admin.sites.map((s) => `${s.name} (${s.host})`).join(", "),
+      sites: (
+        <TruncatableField
+          title={"Sites"}
+          content={
+            isSuperAdmin
+              ? allsites.map((s) => `${s.name} (${s.host})`).join(", ")
+              : admin.sites.map((s) => `${s.name} (${s.host})`).join(", ")
+          }
+          maxLength={20}
+        />
+      ),
     };
   });
 

@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Table from "../../comps/table";
 import useSetTimeout from "../../Hooks/useDebounce";
 import { formatDateTime } from "../../utils/function";
+import TruncatableField from "../../comps/modals/truncatableField";
 
 const FaqCategoryList = () => {
   const navigate = useNavigate();
@@ -24,7 +25,7 @@ const FaqCategoryList = () => {
     const { _id, name, createdAt, updatedAt } = category;
     return {
       _id,
-      name,
+      name: <TruncatableField title={"Name"} content={name} maxLength={50} />,
       createdAt: formatDateTime(createdAt),
       updatedAt: formatDateTime(updatedAt),
       actions: (

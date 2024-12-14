@@ -4,11 +4,14 @@ import { useNavigate } from "react-router-dom";
 import Table from "../../comps/table";
 import useSetTimeout from "../../Hooks/useDebounce";
 import useGetAllSites from "../../Hooks/useGetAllSites";
-import DuplicateModal from "../../comps/duplicate";
+import DuplicateModal from "../../comps/modals/duplicate";
 import { updateCaseStudySitesApi, updateCaseStudyStatusApi } from "../../apis/caseStudy-apis";
 import Addnote from "../../comps/addnote";
 import { listAdminNote } from "../notes/notes-message";
 import { formatDateTime } from "../../utils/function";
+import TruncatableField from "../../comps/modals/truncatableField";
+import IntegrationModal from "../../comps/modals/integrationModal";
+import { caseStudyPdfIntegrationData } from "../../utils/integrationData";
 
 export default function CaseStudyList() {
   const navigate = useNavigate();
@@ -26,6 +29,7 @@ export default function CaseStudyList() {
   const [siteId, setSiteId] = useState("");
   const [statusSelect, setStatusSelect] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
+  const [integrationModalOpen, setIntegrationModalOpen] = useState(false);
   const allsites = useGetAllSites();
 
   const searchAbleKeys = ["Title"];
@@ -147,7 +151,7 @@ export default function CaseStudyList() {
           onChange={() => handleCheckboxChange(_id)}
         />
       ),
-      title,
+      title: <TruncatableField title={title} content={title} maxLength={50} />,
       created: formatDateTime(createdAt),
       updated: formatDateTime(updatedAt),
       status:
@@ -164,7 +168,13 @@ export default function CaseStudyList() {
           </button>
         </div>
       ),
-      sites: sites.map((s) => `${s.name} (${s.host})`).join(", "),
+      sites: (
+        <TruncatableField
+          title={"Sties"}
+          content={sites.map((s) => `${s.name} (${s.host})`).join(", ")}
+          maxLength={50}
+        />
+      ),
     };
   });
 
@@ -226,6 +236,9 @@ export default function CaseStudyList() {
                 <button onClick={() => navigate("/add-casestudy")} className="btn btn-primary">
                   Add CaseStudy
                 </button>
+                <button className="btn btn-primary mx-2" onClick={() => setIntegrationModalOpen(true)}>
+                  Case Study PDF Integration guide
+                </button>
               </div>
             </div>
           </div>
@@ -257,6 +270,17 @@ export default function CaseStudyList() {
         title="Update Sites"
         action={["Add", "Remove"]}
         confirmText="Update"
+      />
+      <IntegrationModal
+        isOpen={integrationModalOpen}
+        onClose={() => setIntegrationModalOpen(false)}
+        title={caseStudyPdfIntegrationData.title}
+        url={caseStudyPdfIntegrationData.url}
+        method={caseStudyPdfIntegrationData.method}
+        bodyParams={caseStudyPdfIntegrationData.bodyParams}
+        manditoryParams={caseStudyPdfIntegrationData.manditoryParams}
+        headers={caseStudyPdfIntegrationData.headers}
+        responseDetails={caseStudyPdfIntegrationData.responseDetails}
       />
 
       <Addnote des={listAdminNote} />

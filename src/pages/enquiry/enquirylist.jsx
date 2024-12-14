@@ -2,13 +2,16 @@ import { useContext, useEffect, useState } from "react";
 import { GlobalContext } from "../../GlobalContext";
 import { useNavigate } from "react-router-dom";
 import Table from "../../comps/table";
-import ConfirmationModal from "../../comps/confirmation";
+import ConfirmationModal from "../../comps/modals/confirmation";
 import useSetTimeout from "../../Hooks/useDebounce";
 import useGetAllSites from "../../Hooks/useGetAllSites";
 import { deleteEnquiryApi } from "../../apis/enquiry-apis";
 import Addnote from "../../comps/addnote";
 import { listEnquiryNote } from "../notes/notes-message";
 import { formatDateTime } from "../../utils/function";
+import TruncatableField from "../../comps/modals/truncatableField";
+import IntegrationModal from "../../comps/modals/integrationModal";
+import { enquiryIntegrationData } from "../../utils/integrationData";
 
 export default function EnquiryList() {
   const { alert, setLoading } = useContext(GlobalContext);
@@ -18,6 +21,7 @@ export default function EnquiryList() {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(8);
   const [modalOpen, setModalOpen] = useState(false);
+  const [integrationModalOpen, setIntegrationModalOpen] = useState(false);
   const [totalCount, setTotalCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchKey, setSearchKey] = useState("");
@@ -123,13 +127,13 @@ export default function EnquiryList() {
           onChange={() => handleCheckboxChange(_id)}
         />
       ),
-      name,
-      email,
-      code: (ccode ?? "") + " " + (mobile ?? ""),
-      service,
-      subject,
-      message,
-      siteName: `${site.name} (${site.host}) `,
+      name: <TruncatableField title={"Customer Name"} content={name ?? ""} maxLength={20} />,
+      email: <TruncatableField title={"Customer Email"} content={email ?? ""} maxLength={20} />,
+      mobile: <TruncatableField title={"Mobile"} content={`${ccode ?? ""} ${mobile ?? ""}`} maxLength={15} />,
+      service: <TruncatableField title={"Enquiry Service"} content={service ?? ""} maxLength={20} />,
+      subject: <TruncatableField title={"Enquiry Subject"} content={subject ?? ""} maxLength={20} />,
+      message: <TruncatableField title={"Enquiry Message"} content={message ?? ""} maxLength={50} />,
+      siteName: <TruncatableField title={"Site"} content={`${site?.name} (${site?.host}) `} maxLength={20} />,
       created: formatDateTime(createdAt),
       updated: formatDateTime(updatedAt),
       action: (
@@ -149,6 +153,9 @@ export default function EnquiryList() {
           <div className="card-header">
             <h3 className="card-title">All Enquiries</h3>
             <div className="card-options">
+              <button className="btn btn-primary mx-2" onClick={() => setIntegrationModalOpen(true)}>
+                Integration guide
+              </button>
               {selectedEnquiries.length ? (
                 <button onClick={() => setModalOpen(true)} className="btn btn-danger">
                   Delete Selected
@@ -186,6 +193,17 @@ export default function EnquiryList() {
         onClose={() => setModalOpen(false)}
         onConfirm={deleteSelectedEnquiries}
         message={`Are you sure you want to delete selected enquiry? This action cannot be undone.`}
+      />
+      <IntegrationModal
+        isOpen={integrationModalOpen}
+        onClose={() => setIntegrationModalOpen(false)}
+        title={enquiryIntegrationData.title}
+        url={enquiryIntegrationData.url}
+        method={enquiryIntegrationData.method}
+        bodyParams={enquiryIntegrationData.bodyParams}
+        manditoryParams={enquiryIntegrationData.manditoryParams}
+        headers={enquiryIntegrationData.headers}
+        responseDetails={enquiryIntegrationData.responseDetails}
       />
       <Addnote des={listEnquiryNote} />
     </div>

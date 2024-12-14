@@ -347,7 +347,7 @@ export default function AddTestimonial() {
               <div className="mb-3">
                 <div className="d-flex justify-content-between mb-3">
                   <label className={!id ? "form-label required mb-0 me-2" : "form-label mb-0 me-2"}>
-                    Select Category
+                    Select Testimonial Category
                   </label>
                   <label className="form-check mb-0">
                     <input

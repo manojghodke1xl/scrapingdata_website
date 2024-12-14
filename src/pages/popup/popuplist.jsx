@@ -2,14 +2,17 @@ import { useContext, useEffect, useState } from "react";
 import { GlobalContext } from "../../GlobalContext";
 import { useNavigate } from "react-router-dom";
 import Table from "../../comps/table";
-import ConfirmationModal from "../../comps/confirmation";
+import ConfirmationModal from "../../comps/modals/confirmation";
 import useSetTimeout from "../../Hooks/useDebounce";
 import useGetAllSites from "../../Hooks/useGetAllSites";
-import DuplicateModal from "../../comps/duplicate";
+import DuplicateModal from "../../comps/modals/duplicate";
 import { deletePopupApi, duplicatePopupApi, updatePopupStatusApi } from "../../apis/popup-apis";
 import Addnote from "../../comps/addnote";
 import { listPopupNote } from "../notes/notes-message";
 import { formatDateTime } from "../../utils/function";
+import TruncatableField from "../../comps/modals/truncatableField";
+import IntegrationModal from "../../comps/modals/integrationModal";
+import { popupIntegrationData } from "../../utils/integrationData";
 
 export default function PopupList() {
   const navigate = useNavigate();
@@ -19,6 +22,7 @@ export default function PopupList() {
   const [limit, setLimit] = useState(8);
   const [dupModalOpen, setDupModalOpen] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
+  const [integrationModalOpen, setIntegrationModalOpen] = useState(false);
   const [totalCount, setTotalCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchKey, setSearchKey] = useState("");
@@ -170,7 +174,7 @@ export default function PopupList() {
           onChange={() => handleCheckboxChange(_id)}
         />
       ),
-      name,
+      name: <TruncatableField title={"Name"} content={name} maxLength={50} />,
       deviceType: showOnDeviceType === "mobile" ? "Mobile" : showOnDeviceType === "desktop" ? "Desktop" : "All",
       type: contentType === "guide" ? "Guide" : contentType === "casestudy" ? "Case Study" : "Basic",
       Created: formatDateTime(createdAt),
@@ -188,7 +192,7 @@ export default function PopupList() {
           </button>
         </div>
       ),
-      sites: `${site.name} (${site.host})`,
+      sites: <TruncatableField title={"Site"} content={`${site?.name} (${site?.host}) `} maxLength={20} />,
     };
   });
 
@@ -252,6 +256,9 @@ export default function PopupList() {
                 <button onClick={() => navigate("/add-popup")} className="btn btn-primary">
                   Add Popup
                 </button>
+                <button className="btn btn-primary mx-2" onClick={() => setIntegrationModalOpen(true)}>
+                  Get Site Popups Integration guide
+                </button>
               </div>
             </div>
           </div>
@@ -289,6 +296,17 @@ export default function PopupList() {
         onConfirm={duplicateSelectedPopup}
         title="Duplicate Popups"
         confirmText="Duplicate"
+      />
+      <IntegrationModal
+        isOpen={integrationModalOpen}
+        onClose={() => setIntegrationModalOpen(false)}
+        title={popupIntegrationData.title}
+        url={popupIntegrationData.url}
+        method={popupIntegrationData.method}
+        bodyParams={popupIntegrationData.bodyParams}
+        manditoryParams={popupIntegrationData.manditoryParams}
+        headers={popupIntegrationData.headers}
+        responseDetails={popupIntegrationData.responseDetails}
       />
       <Addnote des={listPopupNote} />
     </div>

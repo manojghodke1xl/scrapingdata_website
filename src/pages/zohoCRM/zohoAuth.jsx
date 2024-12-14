@@ -83,12 +83,13 @@ export default function ZohoAuth() {
         <div className="card card-md">
           <div className="card-body">
             <h2 className="h2 text-center mb-4">Add Zoho CRM Credentials</h2>
-            {siteDetails.sendCRMData?.isVerfied === true ? (
-              <h4 className="h4 text-center mb-4 text-success">Zoho already configured</h4>
-            ) : (
-              ""
-            )}
-            <div className="d-flex align-items-end gap-2  justify-content-end">
+
+            <div className="d-flex align-items-start gap-2 justify-content-between items-center">
+              {siteDetails.sendCRMData?.isVerfied === true ? (
+                <h4 className="h4 text-center mb-4 text-success">Zoho already configured</h4>
+              ) : (
+                ""
+              )}
               <button className="btn btn-primary" onClick={() => setEditMode((prev) => !prev)}>
                 {editMode ? "Cancel" : "Edit"}
               </button>

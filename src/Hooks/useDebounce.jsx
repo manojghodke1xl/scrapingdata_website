@@ -17,7 +17,7 @@ const useSetTimeout = (apiUrl, page, limit, val, key, a, site, delay = 500) => {
           ${val ? `&s=${val}` : ""}
           ${key ? `&k=${key}` : ""}
           ${a ? `&a=${a}` : ""}
-          ${site ? `&site=${site}` : ""}`,
+          ${site ? `&ws=${site}` : ""}`,
           {
             method: "GET",
             headers: {

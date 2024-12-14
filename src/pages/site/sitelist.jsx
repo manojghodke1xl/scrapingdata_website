@@ -6,6 +6,7 @@ import useSetTimeout from "../../Hooks/useDebounce";
 import Addnote from "../../comps/addnote";
 import { listWebsiteNote } from "../notes/notes-message";
 import { formatDateTime } from "../../utils/function";
+import TruncatableField from "../../comps/modals/truncatableField";
 
 export default function SiteList() {
   const navigate = useNavigate();
@@ -128,8 +129,8 @@ export default function SiteList() {
         />
       ),
       keys: _id,
-      name,
-      host,
+      name: <TruncatableField title={"Name"} content={name} maxLength={50} />,
+      host: <TruncatableField title={"Host"} content={host} maxLength={50} />,
       status:
         isActive === true ? (
           <span className="badge bg-success">Active</span>

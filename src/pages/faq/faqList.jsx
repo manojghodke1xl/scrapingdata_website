@@ -5,8 +5,9 @@ import Table from "../../comps/table";
 import useSetTimeout from "../../Hooks/useDebounce";
 import useGetAllSites from "../../Hooks/useGetAllSites";
 import { deleteFaqApi, updateFaqSitesApi, updateFaqStatusApi } from "../../apis/faq-apis";
-import ConfirmationModal from "../../comps/confirmation";
-import DuplicateModal from "../../comps/duplicate";
+import ConfirmationModal from "../../comps/modals/confirmation";
+import DuplicateModal from "../../comps/modals/duplicate";
+import TruncatableField from "../../comps/modals/truncatableField";
 
 const FaqList = () => {
   const navigate = useNavigate();
@@ -131,6 +132,7 @@ const FaqList = () => {
     },
     { label: "Question" },
     { label: "Answer" },
+    { label: "Status" },
     { label: "Actions" },
     { label: "Sites" },
   ];
@@ -148,8 +150,8 @@ const FaqList = () => {
           onChange={() => handleCheckboxChange(_id)}
         />
       ),
-      question,
-      answer,
+      question: <TruncatableField title={"Question"} content={question} maxLength={50} />,
+      answer: <TruncatableField title={"Answer"} content={answer} maxLength={50} />,
       status: isActive ? (
         <span className="badge bg-success">Active</span>
       ) : (
@@ -160,7 +162,13 @@ const FaqList = () => {
           Edit
         </button>
       ),
-      sites: sites.map((s) => `${s.name} (${s.host})`).join(", "),
+      sites: (
+        <TruncatableField
+          title={"Sties"}
+          content={sites.map((s) => `${s.name} (${s.host})`).join(", ")}
+          maxLength={50}
+        />
+      ),
     };
   });
 
@@ -216,6 +224,9 @@ const FaqList = () => {
                     <button onClick={() => setSiteModal(true)} className="btn btn-primary mx-2">
                       Sites
                     </button>
+                    <button onClick={() => setModalOpen(true)} className="btn btn-danger mx-2">
+                      Delete
+                    </button>
                   </>
                 ) : null}
                 <button onClick={() => navigate("/add-faq")} className="btn btn-primary">
@@ -251,7 +262,7 @@ const FaqList = () => {
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
         onConfirm={deleteSelectedFaq}
-        message="Are you sure you want to delete this Testimonial?"
+        message="Are you sure you want to delete this Faq?"
       />
       <DuplicateModal
         allsites={allsites}

@@ -43,6 +43,10 @@ import FaqCategoryList from "./pages/faqCategory/faqCategoryList";
 import AddFaqCategory from "./pages/faqCategory/addFaqCategory";
 import FaqList from "./pages/faq/faqList";
 import AddFaq from "./pages/faq/addFaq";
+import FeedbackList from "./pages/feedback/feedbackList";
+import FeedbackSingle from "./pages/feedback/feedbacksingle";
+import RecaptchaList from "./pages/recaptcha/recaptchaList";
+import AddRecaptcha from "./pages/recaptcha/addRecaptcha";
 
 function App() {
   const [alerts, alert] = useAlert();
@@ -105,6 +109,11 @@ function App() {
               <Route path="/faq-list" element={<FaqList />} />
               <Route path="/add-faq" element={<AddFaq />} />
               <Route path="/edit-faq/:id" element={<AddFaq />} />
+              <Route path="/feedback-list" element={<FeedbackList />} />
+              <Route path="/feedback/:id" element={<FeedbackSingle />} />
+              <Route path="/recaptcha-list" element={<RecaptchaList />} />
+              <Route path="/add-recaptcha" element={<AddRecaptcha />} />
+              <Route path="/edit-recaptcha/:id" element={<AddRecaptcha />} />
             </Route>
 
             <Route path="*" element={<Missing />} />

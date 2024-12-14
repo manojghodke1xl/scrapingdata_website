@@ -2,8 +2,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { GlobalContext } from "../../GlobalContext";
 import { useContext, useEffect, useState } from "react";
 import useGetAllSites from "../../Hooks/useGetAllSites";
-import { getAllFaqCategoriesApi } from "../../apis/faqCategory-apis";
 import { addFaqApi, getFaqByIdApi, updateFaqApi } from "../../apis/faq-apis";
+import { getAllFaqCategoriesApi } from "../../apis/faqCategory-apis";
 
 const AddFaq = () => {
   const navigate = useNavigate();
@@ -21,7 +21,7 @@ const AddFaq = () => {
     isActive: true,
     isGlobal: false,
     sites: [],
-    faqCategories: [],
+    faqCategory: [],
   });
 
   useEffect(() => {
@@ -38,8 +38,13 @@ const AddFaq = () => {
       (async () => {
         const { status, data } = await getFaqByIdApi(id);
         if (status) {
-          const { sites, ...rest } = data.faq;
-          setFaqDetails((prev) => ({ ...prev, ...rest, sites: sites.map((s) => s._id) }));
+          const { sites, faqCategory, ...rest } = data.faq;
+          setFaqDetails((prev) => ({
+            ...prev,
+            ...rest,
+            sites: sites.map((s) => s._id),
+            faqCategory: faqCategory?.map((c) => c._id),
+          }));
         } else alert({ type: "warning", text: data });
       })()
         .catch((error) => alert({ type: "danger", text: error.message }))
@@ -52,7 +57,7 @@ const AddFaq = () => {
     if (!faqDetails.question) errors.question = "Please enter question.";
     if (!faqDetails.answer) errors.answer = "Please enter answer.";
     if (!faqDetails.sites.length) errors.sites = "Please select at least one site.";
-    if (!faqDetails.faqCategories.length) errors.faqCategories = "Please select at least one faq category.";
+    if (!faqDetails.faqCategory.length) errors.faqCategory = "Please select at least one faq category.";
     setErrors(errors);
     return Object.keys(errors).length === 0;
   };
@@ -60,6 +65,7 @@ const AddFaq = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
+    setLoading(true);
     try {
       const { status, data } = await (id ? updateFaqApi(id, faqDetails) : addFaqApi(faqDetails));
       if (status) {
@@ -85,17 +91,17 @@ const AddFaq = () => {
   };
 
   const handleSelectAllFaqCategoriesChange = () => {
-    if (selectAllFaqCategories) setFaqDetails((prev) => ({ ...prev, faqCategories: [] }));
+    if (selectAllFaqCategories) setFaqDetails((prev) => ({ ...prev, faqCategory: [] }));
     else
       setFaqDetails((prev) => ({
         ...prev,
-        faqCategories: availableFaqCategories.map((faqCategory) => faqCategory._id),
+        faqCategory: availableFaqCategories.map((faqCategory) => faqCategory._id),
       }));
     setSelectAllFaqCategories(!selectAllFaqCategories);
   };
 
   const isAllSelected = faqDetails.sites.length === availableSites.length;
-  const isAllSelectedFaqCategories = faqDetails.faqCategories.length === availableFaqCategories.length;
+  const isAllSelectedFaqCategories = faqDetails.faqCategory.length === availableFaqCategories.length;
 
   return (
     <div className="page-body">
@@ -197,35 +203,35 @@ const AddFaq = () => {
                     <span className="form-check-label">Select All</span>
                   </label>
                 </div>
-                <div className={`form-multi-check-box ${errors.faqCategories ? "is-invalid" : ""}`}>
+                <div className={`form-multi-check-box ${errors.faqCategory ? "is-invalid" : ""}`}>
                   {availableFaqCategories.map((category) => (
                     <label key={category._id} className="form-check">
                       <input
-                        className={`form-check-input ${errors.faqCategories ? "is-invalid" : ""}`}
+                        className={`form-check-input ${errors.faqCategory ? "is-invalid" : ""}`}
                         type="checkbox"
                         value={category._id}
-                        checked={faqDetails.faqCategories.includes(category._id)}
+                        checked={faqDetails.faqCategory.includes(category._id)}
                         onChange={() => {
                           setFaqDetails((prevDetail) => {
-                            const isSelected = prevDetail.faqCategories.includes(category._id);
+                            const isSelected = prevDetail.faqCategory.includes(category._id);
                             return {
                               ...prevDetail,
-                              faqCategories: isSelected
-                                ? prevDetail.faqCategories.filter((id) => id !== category._id)
-                                : [...prevDetail.faqCategories, category._id],
+                              faqCategory: isSelected
+                                ? prevDetail.faqCategory.filter((id) => id !== category._id)
+                                : [...prevDetail.faqCategory, category._id],
                             };
                           });
-                          if (errors.faqCategories) setErrors((prev) => ({ ...prev, faqCategories: "" }));
+                          if (errors.faqCategory) setErrors((prev) => ({ ...prev, faqCategory: "" }));
                         }}
                       />
                       <span className="form-check-label">{category.name}</span>
                     </label>
                   ))}
                 </div>
-                {errors.faqCategories && <div className="invalid-feedback mx-2 mb-2">{errors.faqCategories}</div>}
+                {errors.faqCategory && <div className="invalid-feedback mx-2 mb-2">{errors.faqCategory}</div>}
               </div>
 
-              {/* <div className="mb-3">
+              <div className="mb-3">
                 <label className="row">
                   <span className="col">Is Faq Active?</span>
                   <span className="col-auto">
@@ -265,7 +271,7 @@ const AddFaq = () => {
                     </label>
                   </span>
                 </label>
-              </div> */}
+              </div>
               <div className="form-footer">
                 <button type="submit" className="btn btn-primary w-100">
                   {!id ? "Add" : "Update"}

@@ -1,47 +1,37 @@
 import { useContext, useEffect, useState } from "react";
-import { GlobalContext } from "../../GlobalContext";
 import { useNavigate } from "react-router-dom";
-import Table from "../../comps/table";
-import ConfirmationModal from "../../comps/modals/confirmation";
-import useSetTimeout from "../../Hooks/useDebounce";
+import { GlobalContext } from "../../GlobalContext";
 import useGetAllSites from "../../Hooks/useGetAllSites";
-import DuplicateModal from "../../comps/modals/duplicate";
-import {
-  deleteTestimonialApi,
-  updateTestimonialSitesApi,
-  updateTestimonialStatusApi,
-} from "../../apis/testimonial-apis";
-import Addnote from "../../comps/addnote";
-import { listTestimonialNote } from "../notes/notes-message";
+import useSetTimeout from "../../Hooks/useDebounce";
+import { updateRecaptchaSitesApi, updateRecaptchaStatusApi } from "../../apis/recaptcha-apis";
 import TruncatableField from "../../comps/modals/truncatableField";
+import Table from "../../comps/table";
+import DuplicateModal from "../../comps/modals/duplicate";
 
-export default function TestimonialList() {
+const RecaptchaList = () => {
   const navigate = useNavigate();
   const { alert, setLoading } = useContext(GlobalContext);
+  const allsites = useGetAllSites();
 
-  const [testimonials, setTestimonials] = useState([]);
+  const [recaptchas, setRecaptchas] = useState([]);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(8);
-  const [modalOpen, setModalOpen] = useState(false);
-  const [siteModal, setSiteModal] = useState(false);
   const [totalCount, setTotalCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchKey, setSearchKey] = useState("");
-  const [selectedTestimonials, setSelectedTestimonials] = useState([]);
-  const [selectAll, setSelectAll] = useState(false);
   const [statusFilter, setStatusFilter] = useState("");
-  const [siteId, setSiteId] = useState("");
   const [statusSelect, setStatusSelect] = useState("");
+  const [siteId, setSiteId] = useState("");
+  const [selectedRecaptchas, setSelectedRecaptchas] = useState([]);
+  const [selectAll, setSelectAll] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
 
-  const allsites = useGetAllSites();
-
-  const searchAbleKeys = ["Name"];
-
+  const searchAbleKeys = ["Version", "sitekey", "secretkey"];
   const filter = ["Active", "Inactive"];
   const Status = ["Active", "Inactive"];
 
   const [err, data, setRefresh] = useSetTimeout(
-    "testimonials",
+    "recaptcha",
     page - 1,
     limit,
     searchTerm,
@@ -52,103 +42,69 @@ export default function TestimonialList() {
 
   useEffect(() => {
     if (data) {
-      setTestimonials(data.testimonials);
+      setRecaptchas(data.recaptchas);
       setTotalCount(data.count);
-    } else if (err) alert({ type: "warning", text: err.message });
+    } else if (err) {
+      alert({ type: "warning", text: err.message });
+    }
   }, [data, err, alert]);
 
-  const updateTestimonialStatus = async (testimonialStatus) => {
+  const updateRecaptchaStatus = async (recaptchaStatus) => {
     setLoading(true);
     try {
-      const { status, data } = await updateTestimonialStatusApi(selectedTestimonials, testimonialStatus);
+      const { status, data } = await updateRecaptchaStatusApi(selectedRecaptchas, recaptchaStatus);
 
       if (status) {
         alert({ type: "success", text: data.message });
         setRefresh((r) => !r);
-        setSelectedTestimonials([]);
-        setStatusSelect("");
+        setSelectedRecaptchas([]);
         setSelectAll(false);
-      } else {
-        alert({ type: "danger", title: "Error!", text: data });
-      }
+        setStatusSelect("");
+      } else alert({ type: "danger", text: data });
     } catch (error) {
-      alert({ type: "danger", title: "Error!", text: error.message });
+      alert({ type: "danger", text: error.message });
     } finally {
       setLoading(false);
     }
   };
 
-  const updateTestimonialSites = async (selectedSites, selectedAction) => {
+  const updateRecaptchaSites = async (selectedSites, selectedAction) => {
     setLoading(true);
     try {
       const action = selectedAction === "Add" ? true : false;
-      const { status, data } = await updateTestimonialSitesApi(selectedTestimonials, selectedSites, action);
+      const { status, data } = await updateRecaptchaSitesApi(selectedRecaptchas, selectedSites, action);
       if (status) {
         alert({ type: "success", text: data.message });
         setRefresh((r) => !r);
-        setSelectedTestimonials([]);
+        setSelectedRecaptchas([]);
         setSelectAll(false);
-      } else {
-        alert({ type: "danger", text: data });
       }
     } catch (error) {
       alert({ type: "danger", text: error.message });
     } finally {
       setLoading(false);
       setModalOpen(false);
-      setSelectedTestimonials([]);
+      setSelectedRecaptchas([]);
     }
   };
 
-  const deleteSelectedTestimonial = async () => {
-    if (!selectedTestimonials.length) {
-      alert({ type: "warning", text: "Please select at least one testimonial to delete." });
-      return;
-    }
-    setLoading(true);
-    try {
-      const { status, data } = await deleteTestimonialApi(selectedTestimonials);
-
-      if (status) {
-        alert({ type: "success", text: data.message });
-        setRefresh((r) => !r);
-      } else {
-        alert({ type: "danger", title: "Error!", text: data });
-      }
-    } catch (error) {
-      alert({ type: "danger", title: "Error!", text: error.message });
-    } finally {
-      setLoading(false);
-      setModalOpen(false);
-      setSelectedTestimonials([]);
-      setStatusSelect("");
-    }
-  };
-
-  const handleCheckboxChange = (testimonialId) => {
-    setSelectedTestimonials((prevSelected) => {
+  const handleCheckboxChange = (recaptchaId) => {
+    setSelectedRecaptchas((prevSelected) => {
       let updatedSelected;
-      if (prevSelected.includes(testimonialId)) {
-        updatedSelected = prevSelected.filter((id) => id !== testimonialId);
+      if (prevSelected.includes(recaptchaId)) {
+        updatedSelected = prevSelected.filter((id) => id !== recaptchaId);
         setStatusSelect("");
-      } else {
-        updatedSelected = [...prevSelected, testimonialId];
-      }
-      if (updatedSelected.length === testimonials.length) {
-        setSelectAll(true);
-      } else {
-        setSelectAll(false);
-      }
+      } else updatedSelected = [...prevSelected, recaptchaId];
+
+      if (updatedSelected.length === recaptchas.length) setSelectAll(true);
+      else setSelectAll(false);
       return updatedSelected;
     });
   };
 
   const handleSelectAll = () => {
-    if (selectAll) {
-      setSelectedTestimonials([]);
-    } else {
-      setSelectedTestimonials(testimonials.map((testimonial) => testimonial._id));
-    }
+    if (selectAll) setSelectedRecaptchas([]);
+    else setSelectedRecaptchas(recaptchas.map((recaptcha) => recaptcha._id));
     setSelectAll(!selectAll);
   };
 
@@ -156,35 +112,42 @@ export default function TestimonialList() {
     {
       label: <input className="form-check-input " type="checkbox" checked={selectAll} onChange={handleSelectAll} />,
     },
-    { label: "Name" },
+    { label: "Version" },
+    { label: "site Key" },
+    { label: "Secret Key" },
     { label: "Status" },
     { label: "Actions" },
     { label: "Sites" },
   ];
 
-  const rows = testimonials.map((testimonial) => {
-    const { _id, name, isActive, sites } = testimonial;
+  const rows = recaptchas.map((recaptcha) => {
+    const { _id, version, sitekey, secretkey, isActive, sites } = recaptcha;
     return {
       _id,
-      checkedbox: (
+      checkBox: (
         <input
-          key={_id}
-          className="form-check-input"
+          className="form-check-input "
           type="checkbox"
-          checked={selectedTestimonials.includes(_id)}
+          checked={selectedRecaptchas.includes(_id)}
           onChange={() => handleCheckboxChange(_id)}
         />
       ),
-      name: <TruncatableField title={"Name"} content={name} maxLength={50} />,
-      status: isActive ? (
-        <span className="badge bg-success">Active</span>
-      ) : (
-        <span className="badge bg-danger">Inactive</span>
-      ),
-      actions: (
-        <button key={_id} onClick={() => navigate(`/edit-testimonial/${_id}`)} className="btn btn-primary me-1">
-          Edit
-        </button>
+      version,
+      sitekey,
+      secretkey,
+      status:
+        isActive === true ? (
+          <span className="badge bg-success">Active</span>
+        ) : (
+          <span className="badge bg-danger">Inactive</span>
+        ),
+
+      action: (
+        <div key={_id}>
+          <button onClick={() => navigate(`/edit-recaptcha/${_id}`)} className="btn btn-primary me-1">
+            Edit
+          </button>
+        </div>
       ),
       sites: (
         <TruncatableField
@@ -201,7 +164,7 @@ export default function TestimonialList() {
       <div className="container-xl">
         <div className="card">
           <div className="card-header">
-            <h3 className="card-title">All Testimonials List</h3>
+            <h3 className="card-title">All reCAPTCHA</h3>
             <div className="card-options d-flex gap-2">
               <div className="card-options">
                 <div className="text-secondary">
@@ -217,7 +180,7 @@ export default function TestimonialList() {
                     </select>
                   </div>
                 </div>
-                {selectedTestimonials.length ? (
+                {selectedRecaptchas.length ? (
                   <>
                     <div className="text-secondary">
                       Status
@@ -236,28 +199,29 @@ export default function TestimonialList() {
                       </div>
                     </div>
                     {statusSelect === "active" && (
-                      <button onClick={() => updateTestimonialStatus(true)} className="btn btn-success mx-2">
+                      <button onClick={() => updateRecaptchaStatus(true)} className="btn btn-success mx-2">
                         Apply
                       </button>
                     )}
                     {statusSelect === "inactive" && (
-                      <button onClick={() => updateTestimonialStatus(false)} className="btn btn-danger mx-2">
+                      <button onClick={() => updateRecaptchaStatus(false)} className="btn btn-danger mx-2">
                         Apply
                       </button>
                     )}
-                    <button onClick={() => setSiteModal(true)} className="btn btn-primary mx-2">
+                    <button onClick={() => setModalOpen(true)} className="btn btn-primary mx-2">
                       Sites
                     </button>
                   </>
                 ) : null}
-                <button onClick={() => navigate("/add-testimonial")} className="btn btn-primary">
-                  Add Testimonial
+
+                <button onClick={() => navigate("/add-recaptcha")} className="btn btn-primary">
+                  Add reCAPTCHA
                 </button>
               </div>
             </div>
           </div>
 
-          <div className="table-responsive">
+          <div className="table-responsive  ">
             <Table
               headers={headers}
               rows={rows}
@@ -270,32 +234,23 @@ export default function TestimonialList() {
               allsites={allsites}
               setSiteId={setSiteId}
               searchAbleKeys={searchAbleKeys}
-              onEntriesChange={(newLimit) => {
-                setLimit(newLimit);
-              }}
+              onEntriesChange={(newLimit) => setLimit(newLimit)}
               totalCount={totalCount}
             />
           </div>
         </div>
       </div>
-
-      <ConfirmationModal
-        isOpen={modalOpen}
-        onClose={() => setModalOpen(false)}
-        onConfirm={deleteSelectedTestimonial}
-        message="Are you sure you want to delete this Testimonial?"
-      />
       <DuplicateModal
         allsites={allsites}
-        isOpen={siteModal}
-        onClose={setSiteModal}
-        onConfirm={updateTestimonialSites}
+        isOpen={modalOpen}
+        onClose={setModalOpen}
+        onConfirm={updateRecaptchaSites}
         title="Update Sites"
         action={["Add", "Remove"]}
         confirmText="Update"
       />
-
-      <Addnote des={listTestimonialNote} />
     </div>
   );
-}
+};
+
+export default RecaptchaList;
