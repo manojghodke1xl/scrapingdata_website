@@ -353,6 +353,71 @@ export default function Header() {
                       </div>
                     </div>
                   </li>
+
+                  <li
+                    className={`nav-item dropdown ${
+                      isActive(
+                        "/client-logo-list",
+                        "/add-client-logo",
+                        "/edit-client-logo",
+                        "/gallery-list",
+                        "/add-gallery",
+                        "/edit-gallery",
+                        "/partner-logo-list",
+                        "/add-partner-logo",
+                        "/edit-partner-logo"
+                      )
+                        ? "active"
+                        : ""
+                    }`}
+                  >
+                    <a
+                      className="nav-link dropdown-toggle show"
+                      href="#navbar-layout"
+                      data-bs-toggle="dropdown"
+                      data-bs-auto-close="outside"
+                      role="button"
+                      aria-expanded="true"
+                    >
+                      <span className="nav-link-icon d-md-none d-lg-inline-block">
+                        {/* Download SVG icon from http://tabler-icons.io/i/layout-2 */}
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width={24}
+                          height={24}
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth={2}
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className="icon"
+                        >
+                          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                          <path d="M4 4m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v1a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" />
+                          <path d="M4 13m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v3a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" />
+                          <path d="M14 4m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v3a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" />
+                          <path d="M14 15m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v1a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" />
+                        </svg>
+                      </span>
+                      <span className="nav-link-title">Extra</span>
+                    </a>
+                    <div className="dropdown-menu">
+                      <div className="dropdown-menu-columns">
+                        <div className="dropdown-menu-column">
+                          <Link className="dropdown-item" to="/client-logo-list">
+                            <span className="nav-link-title">Client Logo</span>
+                          </Link>
+                          <Link className="dropdown-item" to="/gallery-list">
+                            <span className="nav-link-title">Gallery</span>
+                          </Link>
+                          <Link className="dropdown-item" to="/partner-logo-list">
+                            <span className="nav-link-title">Partner Logo</span>
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
                 </ul>
               </div>
             </div>

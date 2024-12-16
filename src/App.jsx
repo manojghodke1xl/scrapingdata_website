@@ -93,6 +93,7 @@ function App() {
               <Route path="/category-list" element={<CategoryList />} />
               <Route path="/add-category" element={<AddCategory />} />
               <Route path="/edit-category/:id" element={<AddCategory />} />
+             
               <Route path="/gallery-list" element={<GalleryList />} />
               <Route path="/add-gallery" element={<AddGallery />} />
               <Route path="/edit-gallery/:id" element={<AddGallery />} />
