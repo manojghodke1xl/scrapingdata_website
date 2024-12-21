@@ -27,8 +27,8 @@ export default function AddTestimonial() {
     videoBolean: false,
     sites: [],
     categories: [],
-    image: "",
-    video: "",
+    // image: "",
+    // video: ""
     videoUrl: "",
   });
   const [availableCategories, setAvailableCategories] = useState([]);
@@ -81,6 +81,7 @@ export default function AddTestimonial() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
+    console.log(testimonialDetails);
     setLoading(true);
     try {
       const { status, data } = id
@@ -327,15 +328,16 @@ export default function AddTestimonial() {
                         value={site._id}
                         checked={testimonialDetails.sites.includes(site._id)}
                         onChange={() => {
-                          setTestimonialDetails((prevDetail) => {
-                            const isSelected = prevDetail.sites.includes(site._id);
+                          setTestimonialDetails((prev) => {
+                            const isSelected = prev.sites.includes(site._id);
                             return {
-                              ...prevDetail,
+                              ...prev,
                               sites: isSelected
-                                ? prevDetail.sites.filter((id) => id !== site._id)
-                                : [...prevDetail.sites, site._id],
+                                ? prev.sites.filter((id) => id !== site._id)
+                                : [...prev.sites, site._id],
                             };
                           });
+                          if (errors.sites) setErrors((prev) => ({ ...prev, sites: "" }));
                         }}
                       />
                       <span className="form-check-label">{site.name}</span>
@@ -377,6 +379,7 @@ export default function AddTestimonial() {
                                 : [...prevDetail.categories, category._id],
                             };
                           });
+                          if (errors.categories) setErrors((prev) => ({ ...prev, categories: "" }));
                         }}
                       />
                       <span className="form-check-label">{category.name}</span>

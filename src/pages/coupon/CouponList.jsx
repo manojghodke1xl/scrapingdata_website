@@ -128,7 +128,7 @@ const CouponList = () => {
       <div className="container-xl">
         <div className="card">
           <div className="card-header">
-            <h3 className="card-title">All Testimonial Categories</h3>
+            <h3 className="card-title">All Coupon List</h3>
             <div className="card-options d-flex gap-2">
               <div className="card-options">
                 <div className="text-secondary">
