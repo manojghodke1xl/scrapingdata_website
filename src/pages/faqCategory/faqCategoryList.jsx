@@ -21,7 +21,7 @@ const FaqCategoryList = () => {
 
   const headers = [{ label: "Name" }, { label: "Created Date" }, { label: "Updated Date" }, { label: "Actions" }];
 
-  const rows = faqCategories.map((category, index) => {
+  const rows = faqCategories.map((category) => {
     const { _id, name, createdAt, updatedAt } = category;
     return {
       _id,
@@ -29,7 +29,7 @@ const FaqCategoryList = () => {
       createdAt: formatDateTime(createdAt),
       updatedAt: formatDateTime(updatedAt),
       actions: (
-        <button key={index} onClick={() => navigate(`/edit-faq-category/${_id}`)} className="btn btn-primary me-1">
+        <button key={_id} onClick={() => navigate(`/edit-faq-category/${_id}`)} className="btn btn-primary me-1">
           Edit
         </button>
       ),

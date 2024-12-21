@@ -24,7 +24,7 @@ export default function CategoryList() {
 
   const headers = [{ label: "Name" }, { label: "Created Date" }, { label: "Updated Date" }, { label: "Actions" }];
 
-  const rows = categories.map((category, index) => {
+  const rows = categories.map((category) => {
     const { _id, name, createdAt, updatedAt } = category;
     return {
       _id,
@@ -32,7 +32,7 @@ export default function CategoryList() {
       createdAt: formatDateTime(createdAt),
       updatedAt: formatDateTime(updatedAt),
       actions: (
-        <button key={index} onClick={() => navigate(`/edit-category/${_id}`)} className="btn btn-primary me-1">
+        <button key={_id} onClick={() => navigate(`/edit-category/${_id}`)} className="btn btn-primary me-1">
           Edit
         </button>
       ),
@@ -41,7 +41,7 @@ export default function CategoryList() {
 
   useEffect(() => {
     if (data) {
-      setCategories(data.categorys);
+      setCategories(data.categories);
       setTotalCount(data.count);
     } else if (err) {
       alert({ type: "warning", text: err.message });

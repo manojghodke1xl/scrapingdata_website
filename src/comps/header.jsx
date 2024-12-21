@@ -240,7 +240,10 @@ export default function Header() {
                         "/edit-smtp",
                         "/recaptcha-list",
                         "/add-recaptcha",
-                        "/edit-recaptcha"
+                        "/edit-recaptcha",
+                        "/coupon-list",
+                        "/add-coupon",
+                        "/edit-coupon"
                       )
                         ? "active"
                         : ""
@@ -290,6 +293,9 @@ export default function Header() {
                           </Link>
                           <Link className="dropdown-item" to="/recaptcha-list">
                             <span className="nav-link-title">reCAPTCHA</span>
+                          </Link>
+                          <Link className="dropdown-item" to="/coupon-list">
+                            <span className="nav-link-title">Coupons</span>
                           </Link>
                         </div>
                       </div>

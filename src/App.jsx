@@ -47,6 +47,8 @@ import FeedbackList from "./pages/feedback/feedbackList";
 import FeedbackSingle from "./pages/feedback/feedbacksingle";
 import RecaptchaList from "./pages/recaptcha/recaptchaList";
 import AddRecaptcha from "./pages/recaptcha/addRecaptcha";
+import CouponList from "./pages/coupon/CouponList";
+import AddCoupon from "./pages/coupon/AddCoupon";
 
 function App() {
   const [alerts, alert] = useAlert();
@@ -93,7 +95,7 @@ function App() {
               <Route path="/category-list" element={<CategoryList />} />
               <Route path="/add-category" element={<AddCategory />} />
               <Route path="/edit-category/:id" element={<AddCategory />} />
-             
+
               <Route path="/gallery-list" element={<GalleryList />} />
               <Route path="/add-gallery" element={<AddGallery />} />
               <Route path="/edit-gallery/:id" element={<AddGallery />} />
@@ -115,6 +117,9 @@ function App() {
               <Route path="/recaptcha-list" element={<RecaptchaList />} />
               <Route path="/add-recaptcha" element={<AddRecaptcha />} />
               <Route path="/edit-recaptcha/:id" element={<AddRecaptcha />} />
+              <Route path="/coupon-list" element={<CouponList />} />
+              <Route path="/add-coupon" element={<AddCoupon />} />
+              <Route path="/edit-coupon/:id" element={<AddCoupon />} />
             </Route>
 
             <Route path="*" element={<Missing />} />

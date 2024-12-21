@@ -275,9 +275,7 @@ export default function PopupList() {
               allsites={allsites}
               setSiteId={setSiteId}
               searchAbleKeys={searchAbleKeys}
-              onEntriesChange={(newLimit) => {
-                setLimit(newLimit);
-              }}
+              onEntriesChange={(newLimit) => setLimit(newLimit)}
               totalCount={totalCount}
             />
           </div>
