@@ -5,6 +5,8 @@ import { formatDateTime } from '../../utils/dateFormats';
 import TableComponent from '../../atoms/table/Table';
 import { Link } from 'react-router-dom';
 import { deleteMailingListApi } from '../../apis/mailing-apis';
+import { viewMailingNote } from './MailingNotes';
+import NoteComponent from '../../atoms/common/NoteComponent';
 
 const MailingList = () => {
   const allsites = useGetAllSites();
@@ -31,7 +33,8 @@ const MailingList = () => {
 
           <div className="w-full flex justify-end sm:w-fit">
             <Link to="/mailing/mailing-integration" className="flex gap-2 h-fit items-center px-2.5 md:px-2 sm:px-4 rounded-xl py-2.5 bg-primary hover:bg-hover text-white">
-              <span className="hidden md:block">Api Integration</span>
+              {/* <span className="hidden md:block">API Integration</span> */}
+              <span>API Integration</span>
             </Link>
           </div>
         </div>
@@ -59,10 +62,7 @@ const MailingList = () => {
                 filter={true}
                 filterCategory={[{ id: 0, name: 'Sites' }]}
                 allsites={allsites}
-                searchCategory={[
-                  { id: 1, name: 'Email' },
-                  { id: 2, name: 'Site' }
-                ]}
+                searchCategory={[{ id: 1, name: 'Email' }]}
                 deleteBtn={true}
                 deleteLabel={'Delete Mailing List'}
                 deleteMessage={'Are you sure you want to delete this mailing list?'}
@@ -72,6 +72,7 @@ const MailingList = () => {
           </div>
         </div>
       </div>
+      <NoteComponent note={viewMailingNote} />
     </div>
   );
 };

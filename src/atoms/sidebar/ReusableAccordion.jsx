@@ -1,19 +1,17 @@
-import { useState } from 'react';
 import { Accordion, AccordionHeader, AccordionBody } from '@material-tailwind/react';
 import { Link, useLocation } from 'react-router-dom';
 import { IoIosArrowDown } from 'react-icons/io';
 
-const ReusableAccordion = ({ title, links, icon }) => {
-  const [open, setOpen] = useState(false);
+const ReusableAccordion = ({ title, links, icon, isOpen, onToggle }) => {
   const { pathname } = useLocation();
   const isActive = (menuPaths) => menuPaths.some((path) => pathname.startsWith(path));
 
   return (
-    <Accordion open={open} icon={<IoIosArrowDown className={`${open ? 'rotate-180' : ''} h-4 w-4 transition-transform`} />} className="bg-transparent text-base">
+    <Accordion open={isOpen} icon={<IoIosArrowDown className={`${isOpen ? 'rotate-180' : ''} h-4 w-4 transition-transform`} />} className="bg-transparent text-base">
       <AccordionHeader
-        onClick={() => setOpen((p) => !p)}
+        onClick={onToggle}
         className={`py-2.5 px-3 text-left text-base rounded-xl flex gap-2 items-center border-0 shadow-none focus:outline-none ${
-          open ? 'bg-fadedblue text-blue' : 'hover:bg-gray-100 bg-white text-primary'
+          isOpen ? 'bg-fadedblue text-blue' : 'hover:bg-gray-100 bg-white text-primary'
         }`}
       >
         <div className="flex gap-4 items-center">

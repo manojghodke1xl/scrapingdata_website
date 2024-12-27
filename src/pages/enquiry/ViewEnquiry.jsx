@@ -5,6 +5,8 @@ import { getEnquiryById } from '../../apis/enquiry-apis';
 import { showNotification } from '../../utils/showNotification';
 import { CiCircleInfo } from 'react-icons/ci';
 import { formatDateTime } from '../../utils/dateFormats';
+import { viewEnquiryNote } from './EnquiryNotes';
+import NoteComponent from '../../atoms/common/NoteComponent';
 
 const ViewEnquiry = () => {
   const { id } = useParams();
@@ -144,9 +146,9 @@ const ViewEnquiry = () => {
         </div>
       </div>
 
-      {/* <div className="w-full justify-center items-center border-b  border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end ">
-<NoteComponent note={id ? editAdminNote : addAdminNote} />
-</div> */}
+      <div className="w-full justify-center items-center border-b  border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end ">
+        <NoteComponent note={viewEnquiryNote} />
+      </div>
       {!isScrollable && (
         <div className="w-full flex justify-end items-center gap-4 pt-8  border- border-primary">
           <Link to={'/enquiry/enquiry-list'} className="px-4 py-2 text-primary font-medium bg-white hover:bg-gray-50 rounded-xl border border-primary whitespace-nowrap">

@@ -5,6 +5,8 @@ import { showNotification } from '../../utils/showNotification';
 import { getMailingListById } from '../../apis/mailing-apis';
 import { formatDateTime } from '../../utils/dateFormats';
 import { CiCircleInfo } from 'react-icons/ci';
+import NoteComponent from '../../atoms/common/NoteComponent';
+import { listMailingNote } from './MailingNotes';
 
 const ViewMailing = () => {
   const { id } = useParams();
@@ -106,9 +108,9 @@ const ViewMailing = () => {
         </div>
       </div>
 
-      {/* <div className="w-full justify-center items-center border-b  border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end ">
-<NoteComponent note={id ? editAdminNote : addAdminNote} />
-</div> */}
+      <div className="w-full justify-center items-center border-b  border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end ">
+        <NoteComponent note={listMailingNote} />
+      </div>
       {!isScrollable && (
         <div className="w-full flex justify-end items-center gap-4 pt-8  border- border-primary">
           <Link to={'/mailing/mailing-list'} className="px-4 py-2 text-primary font-medium bg-white hover:bg-gray-50 rounded-xl border border-primary whitespace-nowrap">
