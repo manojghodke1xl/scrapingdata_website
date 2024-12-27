@@ -11,7 +11,7 @@ import { RiDeleteBinLine } from 'react-icons/ri';
 import DeleteModal from '../modal/DeleteModal';
 import StatusFilter from '../filter/StatusFilter';
 import SearchFilter from '../filter/SearchFilter';
-import FilterDropDowm from '../filter/FilterDropdowm';
+import FilterDropDowm from '../filter/FilterDropDown';
 import { GlobalContext } from '../../contexts/GlobalContext';
 import SiteModal from '../modal/SiteModal';
 
