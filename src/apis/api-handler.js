@@ -1,8 +1,8 @@
 export const getMethodCall = async (url) => {
   try {
     const response = await fetch(url, {
-      method: "GET",
-      headers: { Authorization: localStorage.getItem("auth") },
+      method: 'GET',
+      headers: { Authorization: localStorage.getItem('auth') }
     });
     const data = await response.json();
     if (response.ok) {
@@ -15,15 +15,15 @@ export const getMethodCall = async (url) => {
   }
 };
 
-export const postMethodCall = async (url, userData, contentType = "application/json") => {
+export const postMethodCall = async (url, userData, contentType = 'application/json') => {
   try {
     const response = await fetch(url, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        Authorization: localStorage.getItem("auth"),
-        "Content-Type": contentType,
+        Authorization: localStorage.getItem('auth'),
+        'Content-Type': contentType
       },
-      body: JSON.stringify(userData),
+      body: JSON.stringify(userData)
     });
 
     const data = await response.json();
@@ -37,15 +37,15 @@ export const postMethodCall = async (url, userData, contentType = "application/j
   }
 };
 
-export const putMethodCall = async (url, userData, contentType = "application/json") => {
+export const putMethodCall = async (url, userData, contentType = 'application/json') => {
   try {
     const response = await fetch(url, {
-      method: "PUT",
+      method: 'PUT',
       headers: {
-        Authorization: localStorage.getItem("auth"),
-        "Content-Type": contentType,
+        Authorization: localStorage.getItem('auth'),
+        'Content-Type': contentType
       },
-      body: JSON.stringify(userData),
+      body: JSON.stringify(userData)
     });
 
     const data = await response.json();
@@ -59,15 +59,15 @@ export const putMethodCall = async (url, userData, contentType = "application/js
   }
 };
 
-export const deleteMethodCall = async (url, ids, contentType = "application/json") => {
+export const deleteMethodCall = async (url, ids, contentType = 'application/json') => {
   try {
     const response = await fetch(url, {
-      method: "DELETE",
+      method: 'DELETE',
       headers: {
-        Authorization: localStorage.getItem("auth"),
-        "Content-Type": contentType,
+        Authorization: localStorage.getItem('auth'),
+        'Content-Type': contentType
       },
-      body: JSON.stringify({ ids }),
+      body: JSON.stringify({ ids })
     });
 
     const data = await response.json();

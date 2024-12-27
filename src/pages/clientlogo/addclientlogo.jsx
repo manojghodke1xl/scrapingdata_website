@@ -1,24 +1,36 @@
-import { useContext, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { GlobalContext } from "../../GlobalContext";
-import useGetAllSites from "../../Hooks/useGetAllSites";
-import { uploadMultipleFiles } from "../../utils/fileUpload";
-import { addClientLogoApi, getClientLogoById, updateClientLogoApi } from "../../apis/client-logo-apis";
+import { useContext, useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { GlobalContext } from '../../contexts/GlobalContext';
+import useGetAllSites from '../../hooks/useGetAllSites';
+import { addClientLogoApi, getClientLogoById, updateClientLogoApi } from '../../apis/client-logo-apis';
+import { showNotification } from '../../utils/showNotification';
+import FormButtons from '../../atoms/formFields/FormButtons';
+import MultiSelectCheckbox from '../../atoms/formFields/MultiSelectCheckBox';
+import ToggleComponent from '../../atoms/formFields/ToggleComponent';
+import MultipleFileUpload from '../../atoms/formFields/MultiFileUpload';
 
-export default function AddClientLogo() {
+const AddClientLogo = () => {
   const navigate = useNavigate();
-  const { id = "" } = useParams();
-  const { alert, setLoading } = useContext(GlobalContext);
+  const { id = '' } = useParams();
+  const { setLoading } = useContext(GlobalContext);
   const availableSites = useGetAllSites();
 
+  const [isScrollable, setIsScrollable] = useState(false);
+  const [errors, setErrors] = useState({});
   const [clientlogoDetails, setClientLogoDetails] = useState({
     images: !id ? [] : undefined,
     isActive: true,
     isGlobal: false,
-    sites: [],
+    sites: []
   });
-  const [selectAll, setSelectAll] = useState(false);
-  const [errors, setErrors] = useState({});
+
+  const validate = () => {
+    const newErrors = {};
+    if (!id && !clientlogoDetails.images?.length) newErrors.images = 'At least one image is needed';
+    if (clientlogoDetails.sites.length === 0) newErrors.sites = 'At least one site must be selected';
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   useEffect(() => {
     if (id) {
@@ -27,205 +39,128 @@ export default function AddClientLogo() {
         const { status, data } = await getClientLogoById(id);
         if (status) {
           const { image, sites, ...rest } = data.clientlogo;
-
           setClientLogoDetails((prev) => ({
             ...prev,
             ...rest,
             sites: sites.map((s) => s._id),
-            imageFile: image,
+            images: image._id ? [...image._id] : [],
+            imageFile: image
           }));
         } else {
-          alert({ type: "warning", text: data });
+          showNotification('warn', data);
         }
       })()
-        .catch((error) => alert({ type: "danger", text: error.message }))
+        .catch((error) => showNotification('error', error.message))
         .finally(() => setLoading(false));
     }
-  }, [id, alert, setLoading]);
-
-  const validate = () => {
-    const newErrors = {};
-    if (!id && !clientlogoDetails.images?.length) {
-      newErrors.images = "At least one image is needed";
-    }
-    if (clientlogoDetails.sites.length === 0) {
-      newErrors.sites = "At least one site must be selected";
-    }
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
+  }, [id, setLoading]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
     setLoading(true);
     try {
-      const { status, data } = await (id
-        ? updateClientLogoApi(id, clientlogoDetails)
-        : addClientLogoApi(clientlogoDetails));
+      const { status, data } = await (id ? updateClientLogoApi(id, clientlogoDetails) : addClientLogoApi(clientlogoDetails));
       if (status) {
-        alert({ type: "success", text: data.message });
-        navigate("/client-logo-list");
-      } else {
-        alert({ type: "warning", text: data });
-      }
+        showNotification('success', data.message);
+        navigate('/client-logo/client-logo-list');
+      } else showNotification('warn', data);
     } catch (error) {
-      alert({ type: "danger", text: error.message });
+      showNotification('error', error.message);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleFileUpload = async (files) => {
-    if (clientlogoDetails.images) setErrors((prev) => ({ ...prev, images: "" }));
-    setLoading(true);
-    try {
-      const fileIds = await uploadMultipleFiles(files);
-      if (!id) setClientLogoDetails((prev) => ({ ...prev, images: fileIds }));
-      else setClientLogoDetails((prev) => ({ ...prev, image: fileIds[0] }));
-    } catch (error) {
-      alert({ type: "danger", text: error.message });
-    } finally {
-      setLoading(false);
-    }
+  const checkScrollability = () => {
+    const contentHeight = document.documentElement.scrollHeight;
+    const windowHeight = window.innerHeight;
+    setIsScrollable(contentHeight > windowHeight);
   };
 
-  const handleSelectAllChange = () => {
-    if (selectAll) setClientLogoDetails((prev) => ({ ...prev, sites: [] }));
-    else
-      setClientLogoDetails((prev) => ({
-        ...prev,
-        sites: availableSites.map((site) => site._id),
-      }));
-
-    setSelectAll(!selectAll);
-  };
-
-  const isAllSelected = clientlogoDetails.sites.length === availableSites.length;
+  useEffect(() => {
+    checkScrollability();
+    window.addEventListener('resize', checkScrollability);
+    return () => window.removeEventListener('resize', checkScrollability);
+  }, []);
 
   return (
-    <div className="page-body">
-      <div className="container container-tight py-4">
-        <div className="card card-md">
-          <div className="card-body">
-            <h2 className="h2 text-center mb-4">{id ? "Edit Client Logo" : "Add Client Logo"}</h2>
-            <form onSubmit={handleSubmit}>
-              <div className="mb-3">
-                <label className={id ? "form-label d-flex justify-content-between" : "form-label required"}>
-                  {id ? "Upload Image" : "Upload Multiple Images"}
-                  {id && clientlogoDetails.imageFile && (
-                    <a
-                      href={clientlogoDetails.imageFile.url}
-                      download={clientlogoDetails.imageFile.name}
-                      target="_blank"
-                    >
-                      Download Image
-                    </a>
-                  )}
-                </label>
-                <input
-                  type="file"
-                  name="image"
-                  className={`form-control ${errors.images ? "is-invalid" : ""}`}
-                  onChange={(e) => handleFileUpload(e.target.files)}
-                  accept="image/*"
-                  multiple={!id}
-                />
-                {errors.images && <div className="invalid-feedback mx-2 mb-2">{errors.images}</div>}
-              </div>
-              <div className="mb-3">
-                <div className="d-flex justify-content-between mb-3">
-                  <label className={!id ? "form-label required mb-0 me-2" : "form-label mb-0 me-2"}>Select Sites</label>
-                  <label className="form-check mb-0">
-                    <input
-                      type="checkbox"
-                      className="form-check-input me-2"
-                      checked={isAllSelected}
-                      onChange={handleSelectAllChange}
-                    />
-                    <span className="form-check-label">Select All</span>
-                  </label>
-                </div>
+    <div className="py-8 p-4 sm:p-8 overflow-x-hidden mb-20">
+      <div className="w-full pb-8 border-b border-primary gap-y-4 gap-2 flex flex-col items-start md:flex-row lg:flex-col xl:flex-row justify-between lg:items-start md:items-end xl:items-end">
+        <div>
+          <span className="text-3xl font-semibold text-dark">{id ? 'Edit' : 'Add'} Client Logo</span>
+        </div>
+        <FormButtons to="/client-logo/client-logo-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} />
+      </div>
 
-                <div className={`form-multi-check-box ${errors.sites ? "is-invalid" : ""}`}>
-                  {availableSites.map((site) => (
-                    <label key={site._id} className="form-check">
-                      <input
-                        className={`form-check-input ${errors.sites ? "is-invalid" : ""}`}
-                        type="checkbox"
-                        value={site._id}
-                        checked={clientlogoDetails.sites.includes(site._id)}
-                        onChange={() => {
-                          if (clientlogoDetails.sites) setErrors((prev) => ({ ...prev, sites: "" }));
-
-                          setClientLogoDetails((prevDetail) => {
-                            const isSelected = prevDetail.sites.includes(site._id);
-                            return {
-                              ...prevDetail,
-                              sites: isSelected
-                                ? prevDetail.sites.filter((id) => id !== site._id)
-                                : [...prevDetail.sites, site._id],
-                            };
-                          });
-                        }}
-                      />
-                      <span className="form-check-label">{site.name}</span>
-                    </label>
-                  ))}
-                </div>
-                {errors.sites && <div className="invalid-feedback mx-2 mb-2">{errors.sites}</div>}
-              </div>
-              <div className="mb-3">
-                <label className="row">
-                  <span className="col">Is Client Logo Active?</span>
-                  <span className="col-auto">
-                    <label className="form-check form-check-singl  e form-switch">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        name="status"
-                        checked={clientlogoDetails.isActive}
-                        onChange={() =>
-                          setClientLogoDetails((prev) => ({
-                            ...prev,
-                            isActive: !prev.isActive,
-                          }))
-                        }
-                      />
-                    </label>
-                  </span>
-                </label>
-              </div>
-              <div className="mb-3">
-                <label className="row">
-                  <span className="col">Is Client Logo Global?</span>
-                  <span className="col-auto">
-                    <label className="form-check form-check-single form-switch">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        checked={clientlogoDetails.isGlobal}
-                        onChange={() =>
-                          setClientLogoDetails((prev) => ({
-                            ...prev,
-                            isGlobal: !prev.isGlobal,
-                          }))
-                        }
-                      />
-                    </label>
-                  </span>
-                </label>
-              </div>
-              <div className="form-footer">
-                <button type="submit" className="btn btn-primary w-100">
-                  {id ? "Update" : "Add"}
-                </button>
-              </div>
-            </form>
+      <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
+        <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
+          <div className="sm:w-7/12 w-full flex flex-col">
+            <span className=" text-primary ">Logo Upload Details</span>
+          </div>
+          <div className="w-full">
+            <div>
+              <MultipleFileUpload
+                onUploadSuccess={(files) => {
+                  setClientLogoDetails((prev) => ({ ...prev, images: files }));
+                  if (errors.images) setErrors((prev) => ({ ...prev, images: '' }));
+                }}
+                id={id}
+                isMultiple={!id}
+                imagePreviewUrl={clientlogoDetails.imageFile?.url}
+                setLoading={setLoading}
+                error={errors.images}
+              />
+            </div>
           </div>
         </div>
       </div>
-      {/* {!id ? <Addnote des={addClientLogoNote} /> : <Addnote des={editClientLogoNote} />} */}
+
+      <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end ">
+        <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
+          <div className="sm:w-7/12 w-full flex flex-col">
+            <span className="block text-primary">Site and Visibility Settings</span>
+          </div>
+          <div className="w-full">
+            <div className="w-full">
+              <MultiSelectCheckbox
+                options={availableSites}
+                label="Select Sites"
+                onChange={(selected) => {
+                  setClientLogoDetails((prev) => ({ ...prev, sites: selected }));
+                  if (errors.sites) setErrors((prev) => ({ ...prev, sites: '' }));
+                }}
+                selected={clientlogoDetails.sites}
+                error={errors.sites}
+              />
+              <ToggleComponent
+                label={'Is Client Logo Active?'}
+                isEnableState={clientlogoDetails.isActive}
+                setIsEnableState={(value) => setClientLogoDetails((prev) => ({ ...prev, isActive: value }))}
+              />
+              <ToggleComponent
+                label={'Is Client Logo Global?'}
+                isEnableState={clientlogoDetails.isGlobal}
+                setIsEnableState={(value) => setClientLogoDetails((prev) => ({ ...prev, isGlobal: value }))}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <br />
+      <br />
+
+      {/* <div className="w-full justify-center items-center border-b  border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end ">
+    <NoteComponent note={id ? editAdminNote : addAdminNote} />
+  </div> */}
+      {!isScrollable && (
+        <div className="w-full flex justify-end items-center gap-4 pt-8  border- border-primary">
+          <FormButtons to="/client-logo/client-logo-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} />
+        </div>
+      )}
     </div>
   );
-}
+};
+
+export default AddClientLogo;

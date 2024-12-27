@@ -1,231 +1,93 @@
-import { useContext, useEffect, useState } from "react";
-import { GlobalContext } from "../../GlobalContext";
-import { useNavigate } from "react-router-dom";
-import Table from "../../comps/table";
-import useSetTimeout from "../../Hooks/useDebounce";
-import Addnote from "../../comps/addnote";
-import { listWebsiteNote } from "../notes/notes-message";
-import { formatDateTime } from "../../utils/function";
-import TruncatableField from "../../comps/modals/truncatableField";
+import { useContext, useState } from 'react';
+import TruncatableFieldModal from '../../atoms/modal/TruncatableFeildModel';
+import { formatDateTime } from '../../utils/dateFormats';
+import { IoMdAdd } from 'react-icons/io';
+import { Link } from 'react-router-dom';
+import TableComponent from '../../atoms/table/Table';
+import { GlobalContext } from '../../contexts/GlobalContext';
+import { updateSiteStatusApi } from '../../apis/site-apis';
 
-export default function SiteList() {
-  const navigate = useNavigate();
-  const { alert, auth, setLoading } = useContext(GlobalContext);
-
+const SiteList = () => {
   const [sites, setSites] = useState([]);
-  const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(8);
-  const [totalCount, setTotalCount] = useState(0);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [searchKey, setSearchKey] = useState("");
-  const [selectedSites, setSelectedSites] = useState([]);
-  const [selectAll, setSelectAll] = useState(false);
-  const [statusFilter, setStatusFilter] = useState("");
-  const [statusSelect, setStatusSelect] = useState("");
-
-  const searchAbleKeys = ["Name", "Host"];
-  const filter = ["Active", "Inactive"];
-  const Status = ["Active", "Inactive"];
-
-  const [err, data, setRefresh] = useSetTimeout("sites", page - 1, limit, searchTerm, searchKey, statusFilter, "");
-
-  useEffect(() => {
-    if (data) {
-      setSites(data.sites);
-      setTotalCount(data.count);
-    } else if (err) {
-      alert({ type: "warning", title: "Warning!", text: err.message });
-    }
-  }, [data, err, alert]);
-
-  const updateSiteStatus = async (status) => {
-    setLoading(true);
-    try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/site-status`, {
-        method: "PUT",
-        headers: {
-          Authorization: localStorage.getItem("auth"),
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ ids: selectedSites, isActive: status }),
-      });
-
-      const { error } = await res.json();
-
-      if (res.ok) {
-        setRefresh((r) => !r);
-        alert({
-          type: "success",
-          title: "Updated!",
-          text: `Selected site(s) have been marked as ${status ? "Active" : "Inactive"}.`,
-        });
-
-        setSelectedSites([]);
-        setSelectAll(false);
-        setStatusSelect("");
-      } else {
-        alert({ type: "danger", title: "Error!", text: error });
-      }
-    } catch (error) {
-      alert({ type: "danger", title: "Error!", text: error.message });
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleCheckboxChange = (siteId) => {
-    setSelectedSites((prevSelected) => {
-      let updatedSelected;
-      if (prevSelected.includes(siteId)) {
-        updatedSelected = prevSelected.filter((id) => id !== siteId);
-        setStatusSelect("");
-      } else {
-        updatedSelected = [...prevSelected, siteId];
-      }
-      if (updatedSelected.length === sites.length) {
-        setSelectAll(true);
-      } else {
-        setSelectAll(false);
-      }
-
-      return updatedSelected;
-    });
-  };
-
-  const handleSelectAll = () => {
-    if (selectAll) {
-      setSelectedSites([]);
-    } else {
-      setSelectedSites(sites.map((site) => site._id));
-    }
-    setSelectAll(!selectAll);
-  };
-
-  const headers = [
-    {
-      label: <input className="form-check-input " type="checkbox" checked={selectAll} onChange={handleSelectAll} />,
-    },
-    { label: "Keys" },
-    { label: "Website Name" },
-    { label: "Web Address" },
-    { label: "Status" },
-    { label: "Created Date" },
-    { label: "Updated Date" },
-    { label: "Actions" },
-  ];
+  const { auth } = useContext(GlobalContext);
 
   const rows = sites.map((site) => {
     const { _id, name, host, isActive, createdAt, updatedAt } = site;
-
     return {
-      _id,
-      checkedbox: (
-        <input
-          key={site._id}
-          className="form-check-input"
-          type="checkbox"
-          checked={selectedSites.includes(site._id)}
-          onChange={() => handleCheckboxChange(site._id)}
-        />
-      ),
+      siteName: name,
+      id: _id,
       keys: _id,
-      name: <TruncatableField title={"Name"} content={name} maxLength={50} />,
-      host: <TruncatableField title={"Host"} content={host} maxLength={50} />,
-      status:
-        isActive === true ? (
-          <span className="badge bg-success">Active</span>
-        ) : (
-          <span className="badge bg-danger">Inactive</span>
-        ),
-      Created: formatDateTime(createdAt),
-      updated: formatDateTime(updatedAt),
-
-      action: (
-        <button key={site._id} onClick={() => navigate(`/edit-site/${site._id}`)} className="btn btn-primary">
-          Edit
-        </button>
+      name: <TruncatableFieldModal title={'Website Name'} content={name} />,
+      host: <TruncatableFieldModal title={'Web Address'} content={host} />,
+      status: (
+        <div className={`rounded-xl ${isActive ? 'bg-[#ECFDF3] text-[#027948]' : 'bg-[#F2F4F7] text-[#344054]'} px-2 py-1 w-fit flex gap-2 items-center`}>
+          <span className={`min-w-[12px] min-h-[12px] rounded-full ${isActive ? 'bg-[#12B76A]' : 'bg-[#667085]'}`}></span>
+          <span>{isActive ? 'Active' : 'Inactive'}</span>
+        </div>
       ),
+      created: formatDateTime(createdAt),
+      updated: formatDateTime(updatedAt)
     };
   });
 
   return (
-    <div className="page-body">
-      <div className="container-xl">
-        <div className="card">
-          <div className="card-header">
-            <h3 className="card-title">All Websites</h3>
-            <div className="card-options">
-              {auth.isSuperAdmin && (
-                <>
-                  <div className="text-secondary">
-                    Filter
-                    <div className="mx-2 d-inline-block">
-                      <select className="form-select form-control-sm" onChange={(e) => setStatusFilter(e.target.value)}>
-                        <option value="">All</option>
-                        {filter.map((key, i) => (
-                          <option key={i} value={key.toLowerCase()}>
-                            {key}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                  </div>
-                  {selectedSites.length ? (
-                    <>
-                      <div className="text-secondary">
-                        Status
-                        <div className="mx-2 d-inline-block">
-                          <select
-                            className="form-select form-control-sm"
-                            onChange={(e) => setStatusSelect(e.target.value)}
-                          >
-                            <option value="">Select</option>
-                            {Status.map((key, i) => (
-                              <option key={i} value={key.toLowerCase()}>
-                                {key}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
-                      </div>
-                      {statusSelect === "active" && (
-                        <button onClick={() => updateSiteStatus(true)} className="btn btn-success mx-2">
-                          Apply
-                        </button>
-                      )}
-                      {statusSelect === "inactive" && (
-                        <button onClick={() => updateSiteStatus(false)} className="btn btn-danger mx-2">
-                          Apply
-                        </button>
-                      )}
-                    </>
-                  ) : null}
-
-                  <button onClick={() => navigate("/add-site")} className="btn btn-primary ">
-                    Add Site
-                  </button>
-                </>
-              )}
-            </div>
+    <div className="min-h-screen py-8 p-4 sm:p-8 overflow-x-hidden mb-20">
+      <div className=" w-full">
+        <div className="w-full flex md:flex-wrap gap-y-3 sm:flex-nowrap justify-between pb-5 border-b border-primary">
+          <div className="">
+            <h4 className="text-3xl text-dark">All Site List</h4>
           </div>
-          <div className="table-responsive">
-            <Table
-              headers={headers}
-              rows={rows}
-              currentPage={page}
-              totalPages={Math.ceil(totalCount / limit)}
-              onPageChange={setPage}
-              entriesPerPage={limit}
-              setSearchTerm={setSearchTerm}
-              setSearchKey={setSearchKey}
-              searchAbleKeys={searchAbleKeys}
-              onEntriesChange={(newLimit) => setLimit(newLimit)}
-              totalCount={totalCount}
-            />
+          {auth.isSuperAdmin && (
+            <div className="w-full flex justify-end sm:w-fit">
+              <Link to="/website/add-website" className="flex gap-2 h-fit items-center px-2.5 md:px-2 sm:px-4 rounded-xl py-2.5 bg-primary hover:bg-hover text-white">
+                <IoMdAdd size={22} />
+                <span className="hidden md:block">Add Site</span>
+              </Link>
+            </div>
+          )}
+        </div>
+        <div className="flex flex-col">
+          <div className="-m-1.5 overflow-x-auto">
+            <div className="p-1.5 min-w-full align-middle">
+              <TableComponent
+                selectable={true}
+                headers={[
+                  { label: 'Sr No.', key: 'srno' },
+                  { label: 'Key', key: 'keys' },
+                  { label: 'Website Name', key: 'siteName' },
+                  { label: 'Web Address', key: 'host' },
+                  { label: 'Status', key: 'status' },
+                  { label: 'Created Date', key: 'created' },
+                  { label: 'Updated Date', key: 'updated' }
+                ]}
+                tableData={(data) => setSites(data.sites)}
+                rows={rows}
+                apiUrl={'sites'}
+                tableCountLabel={true}
+                pagination={true}
+                actions={true}
+                edit={true}
+                editPath={'/website/edit-website'}
+                apps={true}
+                appsPath={'/apps/integration'}
+                search={true}
+                filter={true}
+                deleteBtn={true}
+                filterCategory={[{ id: 2, name: 'Status' }]}
+                statuses={[
+                  { id: 0, name: 'Active', bgColor: '#ECFDF3', color: '#027948', dotColor: '#12B76A' },
+                  { id: 2, name: 'Inactive', bgColor: '#F2F4F7', color: '#344054', dotColor: '#667085' }
+                ]}
+                searchCategory={[{ id: 1, name: 'Title' }]}
+                modifyStatus={true}
+                modifyStatusApi={updateSiteStatusApi}
+              />
+            </div>
           </div>
         </div>
       </div>
-      <Addnote des={listWebsiteNote} />
     </div>
   );
-}
+};
+
+export default SiteList;

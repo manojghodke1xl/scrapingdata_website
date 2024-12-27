@@ -1,289 +1,94 @@
-import { useContext, useEffect, useState } from "react";
-import { GlobalContext } from "../../GlobalContext";
-import { useNavigate } from "react-router-dom";
-import Table from "../../comps/table";
-import useSetTimeout from "../../Hooks/useDebounce";
-import useGetAllSites from "../../Hooks/useGetAllSites";
-import DuplicateModal from "../../comps/modals/duplicate";
-import { updateCaseStudySitesApi, updateCaseStudyStatusApi } from "../../apis/caseStudy-apis";
-import Addnote from "../../comps/addnote";
-import { listAdminNote } from "../notes/notes-message";
-import { formatDateTime } from "../../utils/function";
-import TruncatableField from "../../comps/modals/truncatableField";
-import IntegrationModal from "../../comps/modals/integrationModal";
-import { caseStudyPdfIntegrationData } from "../../utils/integrationData";
+import { useState } from 'react';
+import useGetAllSites from '../../hooks/useGetAllSites';
+import TruncatableFieldModal from '../../atoms/modal/TruncatableFeildModel';
+import { formatDateTime } from '../../utils/dateFormats';
+import { Link } from 'react-router-dom';
+import { IoMdAdd } from 'react-icons/io';
+import TableComponent from '../../atoms/table/Table';
+import { updateCaseStudySitesApi, updateCaseStudyStatusApi } from '../../apis/caseStudy-apis';
 
-export default function CaseStudyList() {
-  const navigate = useNavigate();
-  const { alert, setLoading } = useContext(GlobalContext);
-
-  const [caseStudies, setCaseStudies] = useState([]);
-  const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(8);
-  const [totalCount, setTotalCount] = useState(0);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [searchKey, setSearchKey] = useState("");
-  const [selectedCaseStudies, setSelectedCaseStudies] = useState([]);
-  const [selectAll, setSelectAll] = useState(false);
-  const [statusFilter, setStatusFilter] = useState("");
-  const [siteId, setSiteId] = useState("");
-  const [statusSelect, setStatusSelect] = useState("");
-  const [modalOpen, setModalOpen] = useState(false);
-  const [integrationModalOpen, setIntegrationModalOpen] = useState(false);
+const CaseStudyList = () => {
   const allsites = useGetAllSites();
+  const [caseStudies, setCaseStudies] = useState([]);
 
-  const searchAbleKeys = ["Title"];
-  const filter = ["Active", "Inactive"];
-  const Status = ["Active", "Inactive"];
-
-  const [err, data, setRefresh] = useSetTimeout(
-    "casestudies",
-    page - 1,
-    limit,
-    searchTerm,
-    searchKey,
-    statusFilter,
-    siteId
-  );
-
-  useEffect(() => {
-    if (data) {
-      setCaseStudies(data.casestudies);
-      setTotalCount(data.count);
-    } else if (err) {
-      alert({ type: "warning", text: err.message });
-    }
-  }, [data, err, alert]);
-
-  const updateCaseStudiesStatus = async (caseStudyStatus) => {
-    setLoading(true);
-    try {
-      const { status, data } = await updateCaseStudyStatusApi(selectedCaseStudies, caseStudyStatus);
-
-      if (status) {
-        alert({ type: "success", text: data.message });
-        setRefresh((r) => !r);
-        setSelectedCaseStudies([]);
-        setSelectAll(false);
-        setStatusSelect("");
-      } else {
-        alert({ type: "danger", text: data });
-      }
-    } catch (error) {
-      alert({ type: "danger", text: error.message });
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const updateCaseStudySites = async (selectedSites, selectedAction) => {
-    setLoading(true);
-    try {
-      const action = selectedAction === "Add" ? true : false;
-      const { status, data } = await updateCaseStudySitesApi(selectedCaseStudies, selectedSites, action);
-      if (status) {
-        alert({ type: "success", text: data.message });
-        setRefresh((r) => !r);
-        setSelectedCaseStudies([]);
-        setSelectAll(false);
-      } else {
-        alert({ type: "danger", text: data });
-      }
-    } catch (error) {
-      alert({ type: "danger", text: error.message });
-    } finally {
-      setLoading(false);
-      setModalOpen(false);
-      setSelectedCaseStudies([]);
-    }
-  };
-
-  const handleCheckboxChange = (casestudyId) => {
-    setSelectedCaseStudies((prevSelected) => {
-      let updatedSelected;
-      if (prevSelected.includes(casestudyId)) {
-        updatedSelected = prevSelected.filter((id) => id !== casestudyId);
-        setStatusSelect("");
-      } else {
-        updatedSelected = [...prevSelected, casestudyId];
-      }
-      if (updatedSelected.length === caseStudies.length) {
-        setSelectAll(true);
-      } else {
-        setSelectAll(false);
-      }
-
-      return updatedSelected;
-    });
-  };
-
-  const handleSelectAll = () => {
-    if (selectAll) {
-      setSelectedCaseStudies([]);
-    } else {
-      setSelectedCaseStudies(caseStudies.map((casestudy) => casestudy._id));
-    }
-    setSelectAll(!selectAll);
-  };
-
-  const headers = [
-    {
-      label: <input className="form-check-input " type="checkbox" checked={selectAll} onChange={handleSelectAll} />,
-    },
-    { label: "Title" },
-    { label: "Created Date" },
-    { label: "Updated Date" },
-    { label: "Status" },
-    { label: "Actions" },
-    { label: "Sites" },
-  ];
-
-  const rows = caseStudies.map((casestudy) => {
-    const { _id, title, isActive, sites, createdAt, updatedAt } = casestudy;
+  const rows = caseStudies.map((caseStudy) => {
+    const { _id, title, isActive, sites, createdAt, updatedAt } = caseStudy;
     return {
-      _id,
-      checkedBox: (
-        <input
-          key={_id}
-          className="form-check-input"
-          type="checkbox"
-          checked={selectedCaseStudies.includes(_id)}
-          onChange={() => handleCheckboxChange(_id)}
-        />
-      ),
-      title: <TruncatableField title={title} content={title} maxLength={50} />,
-      created: formatDateTime(createdAt),
-      updated: formatDateTime(updatedAt),
-      status:
-        isActive === true ? (
-          <span className="badge bg-success">Active</span>
-        ) : (
-          <span className="badge bg-danger">Inactive</span>
-        ),
-
-      action: (
-        <div key={_id}>
-          <button onClick={() => navigate(`/edit-casestudy/${_id}`)} className="btn btn-primary me-1">
-            Edit
-          </button>
+      id: _id,
+      title: <TruncatableFieldModal title={'Title'} content={title} />,
+      sites: <TruncatableFieldModal title={'Sites'} content={sites.map((s) => `${s.name} (${s.host})`).join(', ')} />,
+      status: (
+        <div className={`rounded-xl ${isActive ? 'bg-[#ECFDF3] text-[#027948]' : 'bg-[#F2F4F7] text-[#344054]'} px-2 py-1 w-fit flex gap-2 items-center`}>
+          <span className={`min-w-[12px] min-h-[12px] rounded-full ${isActive ? 'bg-[#12B76A]' : 'bg-[#667085]'}`}></span>
+          <span>{isActive ? 'Active' : 'Inactive'}</span>
         </div>
       ),
-      sites: (
-        <TruncatableField
-          title={"Sties"}
-          content={sites.map((s) => `${s.name} (${s.host})`).join(", ")}
-          maxLength={50}
-        />
-      ),
+      created: formatDateTime(createdAt),
+      updated: formatDateTime(updatedAt)
     };
   });
 
   return (
-    <div className="page-body">
-      <div className="container-xl">
-        <div className="card">
-          <div className="card-header">
-            <h3 className="card-title">All Case Study List</h3>
-            <div className="card-options d-flex gap-2">
-              <div className="card-options">
-                <div className="text-secondary">
-                  Filter
-                  <div className="mx-2 d-inline-block">
-                    <select className="form-select form-control-sm" onChange={(e) => setStatusFilter(e.target.value)}>
-                      <option value="">All</option>
-                      {filter.map((key, i) => (
-                        <option key={i} value={key.toLowerCase()}>
-                          {key}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-                {selectedCaseStudies.length ? (
-                  <>
-                    <div className="text-secondary">
-                      Status
-                      <div className="mx-2 d-inline-block">
-                        <select
-                          className="form-select form-control-sm"
-                          onChange={(e) => setStatusSelect(e.target.value)}
-                        >
-                          <option value="">Select</option>
-                          {Status.map((key, i) => (
-                            <option key={i} value={key.toLowerCase()}>
-                              {key}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                    </div>
-                    {statusSelect === "active" && (
-                      <button onClick={() => updateCaseStudiesStatus(true)} className="btn btn-success mx-2">
-                        Apply
-                      </button>
-                    )}
-                    {statusSelect === "inactive" && (
-                      <button onClick={() => updateCaseStudiesStatus(false)} className="btn btn-danger mx-2">
-                        Apply
-                      </button>
-                    )}
-                    <button onClick={() => setModalOpen(true)} className="btn btn-primary mx-2">
-                      Sites
-                    </button>
-                  </>
-                ) : null}
-
-                <button onClick={() => navigate("/add-casestudy")} className="btn btn-primary">
-                  Add CaseStudy
-                </button>
-                <button className="btn btn-primary mx-2" onClick={() => setIntegrationModalOpen(true)}>
-                  Case Study PDF Integration guide
-                </button>
-              </div>
-            </div>
+    <div className="min-h-screen py-8 p-4 sm:p-8 overflow-x-hidden mb-20">
+      <div className=" w-full">
+        <div className="w-full flex md:flex-wrap gap-y-3 sm:flex-nowrap justify-between pb-5 border-b border-primary">
+          <div className="">
+            <h4 className="text-3xl text-dark">All Case Study List</h4>
           </div>
-
-          <div className="table-responsive  ">
-            <Table
-              headers={headers}
-              rows={rows}
-              currentPage={page}
-              totalPages={Math.ceil(totalCount / limit)}
-              onPageChange={setPage}
-              entriesPerPage={limit}
-              setSearchTerm={setSearchTerm}
-              setSearchKey={setSearchKey}
-              allsites={allsites}
-              setSiteId={setSiteId}
-              searchAbleKeys={searchAbleKeys}
-              onEntriesChange={(newLimit) => setLimit(newLimit)}
-              totalCount={totalCount}
-            />
+          <div className="w-full flex justify-end sm:w-fit gap-2">
+            <Link to="/case-study/add-case-study" className="flex gap-2 h-fit items-center px-2.5 md:px-2 sm:px-4 rounded-xl py-2.5 border border-primary text-primary">
+              <IoMdAdd size={22} />
+              <span className="hidden md:block">Add Case Study</span>
+            </Link>
+            <Link to="/case-study/case-study-integration" className="flex gap-2 h-fit items-center px-2.5 md:px-2 sm:px-4 rounded-xl py-2.5 bg-primary hover:bg-hover text-white">
+              <span className="hidden md:block">Integration Guide PDF</span>
+            </Link>
+          </div>
+        </div>
+        <div className="flex flex-col">
+          <div className="-m-1.5 overflow-x-auto">
+            <div className="p-1.5 min-w-full align-middle">
+              <TableComponent
+                selectable={true}
+                headers={[
+                  { label: 'Sr No.', key: 'srno' },
+                  { label: 'Title', key: 'title' },
+                  { label: 'Sites', key: 'sites' },
+                  { label: 'Status', key: 'status' },
+                  { label: 'Created Date', key: 'created' },
+                  { label: 'Updated Date', key: 'updated' }
+                ]}
+                tableData={(data) => setCaseStudies(data.casestudies)}
+                rows={rows}
+                apiUrl={'casestudies'}
+                tableCountLabel={true}
+                pagination={true}
+                actions={true}
+                edit={true}
+                editPath={'/case-study/edit-case-study'}
+                search={true}
+                filter={true}
+                filterCategory={[
+                  { id: 1, name: 'Sites' },
+                  { id: 2, name: 'Status' }
+                ]}
+                statuses={[
+                  { id: 0, name: 'Active', bgColor: '#ECFDF3', color: '#027948', dotColor: '#12B76A' },
+                  { id: 2, name: 'Inactive', bgColor: '#F2F4F7', color: '#344054', dotColor: '#667085' }
+                ]}
+                allsites={allsites}
+                searchCategory={[{ id: 1, name: 'Title' }]}
+                modifyStatus={true}
+                modifyStatusApi={updateCaseStudyStatusApi}
+                modifySite={true}
+                modifySiteApi={updateCaseStudySitesApi}
+              />
+            </div>
           </div>
         </div>
       </div>
-      <DuplicateModal
-        allsites={allsites}
-        isOpen={modalOpen}
-        onClose={setModalOpen}
-        onConfirm={updateCaseStudySites}
-        title="Update Sites"
-        action={["Add", "Remove"]}
-        confirmText="Update"
-      />
-      <IntegrationModal
-        isOpen={integrationModalOpen}
-        onClose={() => setIntegrationModalOpen(false)}
-        title={caseStudyPdfIntegrationData.title}
-        url={caseStudyPdfIntegrationData.url}
-        method={caseStudyPdfIntegrationData.method}
-        bodyParams={caseStudyPdfIntegrationData.bodyParams}
-        manditoryParams={caseStudyPdfIntegrationData.manditoryParams}
-        headers={caseStudyPdfIntegrationData.headers}
-        responseDetails={caseStudyPdfIntegrationData.responseDetails}
-      />
-
-      <Addnote des={listAdminNote} />
     </div>
   );
-}
+};
+
+export default CaseStudyList;

@@ -1,0 +1,62 @@
+const TextareaComponent = ({
+  divClassName = '',
+  label,
+  id,
+  name,
+  value,
+  placeholder = '',
+  maxLength = 500,
+  minLength = 10,
+  rows = 3,
+  cols = 50,
+  required = false,
+  disabled = false,
+  readOnly = false,
+  autoFocus = false,
+  wrap = 'soft',
+  spellCheck = true,
+  onChange,
+  errorMessage = '',
+  charCount,
+  hint = ''
+}) => {
+  return (
+    <div className={`${divClassName} w-full mt-5`}>
+      <label htmlFor={id} className="block text-sm font-medium text-primary">
+        {label}
+      </label>
+      <div className="relative">
+        <textarea
+          id={id}
+          name={name}
+          value={value}
+          rows={rows}
+          cols={cols}
+          placeholder={placeholder}
+          maxLength={maxLength}
+          minLength={minLength}
+          required={required}
+          disabled={disabled}
+          readOnly={readOnly}
+          autoFocus={autoFocus}
+          wrap={wrap}
+          spellCheck={spellCheck}
+          onChange={onChange}
+          className={`w-full mt-2 rounded-xl border ${
+            errorMessage ? 'border-fadered focus:border-fadered' : 'border-primary focus:border-blue'
+          } font-normal focus:outline-none focus:ring-0 px-4 py-2.5 placeholder:text-gray-400 text-dark bg-transparent`}
+          style={{ resize: 'none' }}
+        />
+      </div>
+      <div className="w-full flex flex-col-reverse md:flex-row gap-4 justify-between">
+        <p className="mt-1 text-primary text-sm">{hint}</p>
+        <span className="font-normal text-primary">
+          {charCount}/{maxLength}
+        </span>
+      </div>
+      {errorMessage && <p className="text-red-500 mt-1 text-sm">{errorMessage}</p>}
+    </div>
+  );
+};
+
+export default TextareaComponent;

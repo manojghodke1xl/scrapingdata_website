@@ -1,312 +1,100 @@
-import { useContext, useEffect, useState } from "react";
-import { GlobalContext } from "../../GlobalContext";
-import { useNavigate } from "react-router-dom";
-import Table from "../../comps/table";
-import ConfirmationModal from "../../comps/modals/confirmation";
-import useSetTimeout from "../../Hooks/useDebounce";
-import useGetAllSites from "../../Hooks/useGetAllSites";
-import DuplicateModal from "../../comps/modals/duplicate";
-import { deletePopupApi, duplicatePopupApi, updatePopupStatusApi } from "../../apis/popup-apis";
-import Addnote from "../../comps/addnote";
-import { listPopupNote } from "../notes/notes-message";
-import { formatDateTime } from "../../utils/function";
-import TruncatableField from "../../comps/modals/truncatableField";
-import IntegrationModal from "../../comps/modals/integrationModal";
-import { popupIntegrationData } from "../../utils/integrationData";
+import TruncatableFieldModal from '../../atoms/modal/TruncatableFeildModel';
+import { formatDateTime } from '../../utils/dateFormats';
+import { Link } from 'react-router-dom';
+import { IoMdAdd } from 'react-icons/io';
+import TableComponent from '../../atoms/table/Table';
+import { useState } from 'react';
+import useGetAllSites from '../../hooks/useGetAllSites';
+import { deletePopupApi, updatePopupStatusApi } from '../../apis/popup-apis';
 
-export default function PopupList() {
-  const navigate = useNavigate();
-  const { alert, setLoading } = useContext(GlobalContext);
-  const [popups, setPopups] = useState([]);
-  const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(8);
-  const [dupModalOpen, setDupModalOpen] = useState(false);
-  const [modalOpen, setModalOpen] = useState(false);
-  const [integrationModalOpen, setIntegrationModalOpen] = useState(false);
-  const [totalCount, setTotalCount] = useState(0);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [searchKey, setSearchKey] = useState("");
-  const [selectedPopups, setSelectedPopups] = useState([]);
-  const [selectAll, setSelectAll] = useState(false);
-  const [statusFilter, setStatusFilter] = useState("");
-  const [siteId, setSiteId] = useState("");
-  const [statusSelect, setStatusSelect] = useState("");
+const PopupList = () => {
   const allsites = useGetAllSites();
-
-  const searchAbleKeys = ["Name", "Host"];
-  const filter = ["Active", "Inactive"];
-  const Status = ["Active", "Inactive"];
-
-  const [err, data, setRefresh] = useSetTimeout("popups", page - 1, limit, searchTerm, searchKey, statusFilter, siteId);
-
-  useEffect(() => {
-    if (data) {
-      setPopups(data.popups);
-      setTotalCount(data.count);
-    } else if (err) {
-      alert({ type: "warning", text: err.message });
-    }
-  }, [data, err, alert]);
-
-  const updatePopupStatus = async (popupStatus) => {
-    setLoading(true);
-    try {
-      const { status, data } = await updatePopupStatusApi(selectedPopups, popupStatus);
-      if (status) {
-        alert({
-          type: "success",
-          text: data.message,
-        });
-        setRefresh((r) => !r);
-        setSelectedPopups([]);
-        setSelectAll(false);
-        setStatusSelect("");
-      } else {
-        alert({ type: "danger", text: data });
-      }
-    } catch (error) {
-      alert({ type: "danger", text: error.message });
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const duplicateSelectedPopup = async (selectedSites) => {
-    if (!selectedPopups.length) {
-      alert({ type: "warning", text: "Please select at least one popup to delete." });
-      return;
-    }
-    setLoading(true);
-    try {
-      const { status, data } = await duplicatePopupApi(selectedPopups, selectedSites);
-      if (status) {
-        alert({ type: "success", text: data.message });
-        setRefresh((r) => !r);
-        setSelectedPopups([]);
-        setSelectAll(false);
-      } else {
-        alert({ type: "danger", text: data });
-      }
-    } catch (error) {
-      alert({ type: "danger", text: error.message });
-    } finally {
-      setLoading(false);
-      setModalOpen(false);
-      setSelectedPopups([]);
-    }
-  };
-
-  const deleteSelectedPopup = async () => {
-    if (!selectedPopups.length) {
-      alert({ type: "warning", text: "Please select at least one popup to delete." });
-      return;
-    }
-    setLoading(true);
-    try {
-      const { status, data } = await deletePopupApi(selectedPopups);
-      if (status) {
-        alert({ type: "success", text: data.message });
-        setRefresh((r) => !r);
-        setSelectedPopups([]);
-        setSelectAll(false);
-        setStatusSelect("");
-      } else {
-        alert({ type: "danger", text: data });
-      }
-    } catch (error) {
-      alert({ type: "danger", text: error.message });
-    } finally {
-      setLoading(false);
-      setModalOpen(false);
-      setSelectedPopups([]);
-    }
-  };
-
-  const handleCheckboxChange = (popupId) => {
-    setSelectedPopups((prevSelected) => {
-      let updatedSelected;
-      if (prevSelected.includes(popupId)) {
-        updatedSelected = prevSelected.filter((id) => id !== popupId);
-        setStatusSelect("");
-      } else {
-        updatedSelected = [...prevSelected, popupId];
-      }
-      if (updatedSelected.length !== popups.length) {
-        setSelectAll(false);
-      }
-      return updatedSelected;
-    });
-  };
-
-  const handleSelectAll = () => {
-    if (selectAll) {
-      setSelectedPopups([]);
-    } else {
-      setSelectedPopups(popups.map((popup) => popup._id));
-    }
-    setSelectAll(!selectAll);
-  };
-
-  const headers = [
-    {
-      label: <input className="form-check-input " type="checkbox" checked={selectAll} onChange={handleSelectAll} />,
-    },
-    { label: "Name" },
-    { label: "Device Type" },
-    { label: "Type" },
-    { label: "Created Date" },
-    { label: "Updated Date" },
-    { label: "status" },
-    { label: "Actions" },
-    { label: "Sites" },
-  ];
+  const [popups, setPopups] = useState([]);
 
   const rows = popups.map((popup) => {
     const { _id, name, showOnDeviceType, contentType, isActive, site, createdAt, updatedAt } = popup;
     return {
-      _id,
-      checkedbox: (
-        <input
-          key={_id}
-          className="form-check-input"
-          type="checkbox"
-          checked={selectedPopups.includes(_id)}
-          onChange={() => handleCheckboxChange(_id)}
-        />
-      ),
-      name: <TruncatableField title={"Name"} content={name} maxLength={50} />,
-      deviceType: showOnDeviceType === "mobile" ? "Mobile" : showOnDeviceType === "desktop" ? "Desktop" : "All",
-      type: contentType === "guide" ? "Guide" : contentType === "casestudy" ? "Case Study" : "Basic",
-      Created: formatDateTime(createdAt),
-      updated: formatDateTime(updatedAt),
-      status:
-        isActive === true ? (
-          <span className="badge bg-success">Active</span>
-        ) : (
-          <span className="badge bg-danger">Inactive</span>
-        ),
-      action: (
-        <div key={_id}>
-          <button onClick={() => navigate(`/edit-popup/${_id}`)} className="btn btn-primary  me-1">
-            Edit
-          </button>
+      id: _id,
+      name: <TruncatableFieldModal title={'Name'} content={name} />,
+      sites: <TruncatableFieldModal title={'Sites'} content={`${site?.name} (${site?.host}) `} maxLength={20} />,
+      deviceType: showOnDeviceType === 'mobile' ? 'Mobile' : showOnDeviceType === 'desktop' ? 'Desktop' : 'All',
+      type: contentType === 'guide' ? 'Guide' : contentType === 'casestudy' ? 'Case Study' : 'Basic',
+      status: (
+        <div className={`rounded-xl ${isActive ? 'bg-[#ECFDF3] text-[#027948]' : 'bg-[#F2F4F7] text-[#344054]'} px-2 py-1 w-fit flex gap-2 items-center`}>
+          <span className={`min-w-[12px] min-h-[12px] rounded-full ${isActive ? 'bg-[#12B76A]' : 'bg-[#667085]'}`}></span>
+          <span>{isActive ? 'Active' : 'Inactive'}</span>
         </div>
       ),
-      sites: <TruncatableField title={"Site"} content={`${site?.name} (${site?.host}) `} maxLength={20} />,
+      created: formatDateTime(createdAt),
+      updated: formatDateTime(updatedAt)
     };
   });
 
   return (
-    <div className="page-body">
-      <div className="container-xl">
-        <div className="card">
-          <div className="card-header">
-            <h3 className="card-title">All Popups List</h3>
-            <div className="card-options d-flex gap-2">
-              <div className="card-options">
-                <div className="text-secondary">
-                  Filter
-                  <div className="mx-2 d-inline-block">
-                    <select className="form-select form-control-sm" onChange={(e) => setStatusFilter(e.target.value)}>
-                      <option value="">All</option>
-                      {filter.map((key, i) => (
-                        <option key={i} value={key.toLowerCase()}>
-                          {key}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-                {selectedPopups.length > 0 && (
-                  <>
-                    <div className="text-secondary">
-                      Status
-                      <div className="mx-2 d-inline-block">
-                        <select
-                          className="form-select form-control-sm"
-                          onChange={(e) => setStatusSelect(e.target.value)}
-                        >
-                          <option value="">Select</option>
-                          {Status.map((key, i) => (
-                            <option key={i} value={key.toLowerCase()}>
-                              {key}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                    </div>
-                    {statusSelect === "active" && (
-                      <button onClick={() => updatePopupStatus(true)} className="btn btn-success mx-2">
-                        Apply
-                      </button>
-                    )}
-                    {statusSelect === "inactive" && (
-                      <button onClick={() => updatePopupStatus(false)} className="btn btn-danger mx-2">
-                        Apply
-                      </button>
-                    )}
-                    <button onClick={() => setDupModalOpen(true)} className="btn btn-primary mx-2">
-                      Duplicate Selected
-                    </button>
-                    <button onClick={() => setModalOpen(true)} className="btn btn-danger mx-2">
-                      Delete Selected
-                    </button>
-                  </>
-                )}
-                <button onClick={() => navigate("/add-popup")} className="btn btn-primary">
-                  Add Popup
-                </button>
-                <button className="btn btn-primary mx-2" onClick={() => setIntegrationModalOpen(true)}>
-                  Get Site Popups Integration guide
-                </button>
-              </div>
-            </div>
+    <div className="min-h-screen py-8 p-4 sm:p-8 overflow-x-hidden mb-20">
+      <div className=" w-full">
+        <div className="w-full flex md:flex-wrap gap-y-3 sm:flex-nowrap justify-between pb-5 border-b border-primary">
+          <div className="">
+            <h4 className="text-3xl text-dark">All Pop-up List</h4>
           </div>
-          <div className="table-responsive">
-            <Table
-              headers={headers}
-              rows={rows}
-              currentPage={page}
-              totalPages={Math.ceil(totalCount / limit)}
-              onPageChange={setPage}
-              entriesPerPage={limit}
-              setSearchTerm={setSearchTerm}
-              setSearchKey={setSearchKey}
-              allsites={allsites}
-              setSiteId={setSiteId}
-              searchAbleKeys={searchAbleKeys}
-              onEntriesChange={(newLimit) => setLimit(newLimit)}
-              totalCount={totalCount}
-            />
+          <div className="w-full flex justify-end sm:w-fit gap-2">
+            <Link to="/pop-up/add-pop-up" className="flex gap-2 h-fit items-center px-2.5 md:px-2 sm:px-4 rounded-xl py-2.5 border border-primary text-primary">
+              <IoMdAdd size={22} />
+              <span className="hidden md:block">Add Pop-up</span>
+            </Link>
+            <Link to="/pop-up/pop-up-integration" className="flex gap-2 h-fit items-center px-2.5 md:px-2 sm:px-4 rounded-xl py-2.5 bg-primary hover:bg-hover text-white">
+              <span className="hidden md:block">Api Integration</span>
+            </Link>
+          </div>
+        </div>
+        <div className="flex flex-col">
+          <div className="-m-1.5 overflow-x-auto">
+            <div className="p-1.5 min-w-full align-middle">
+              <TableComponent
+                selectable={true}
+                headers={[
+                  { label: 'Sr No.', key: 'srno' },
+                  { label: 'Name', key: 'name' },
+                  { label: 'Sites', key: 'sites' },
+                  { label: 'Device Type', key: 'deviceType' },
+                  { label: 'Type', key: 'type' },
+                  { label: 'Status', key: 'status' },
+                  { label: 'Created Date', key: 'created' },
+                  { label: 'Updated Date', key: 'updated' }
+                ]}
+                tableData={(data) => setPopups(data.popups)}
+                rows={rows}
+                apiUrl={'popups'}
+                tableCountLabel={true}
+                pagination={true}
+                actions={true}
+                edit={true}
+                editPath={'/pop-up/edit-pop-up'}
+                search={true}
+                filter={true}
+                filterCategory={[
+                  { id: 1, name: 'Sites' },
+                  { id: 2, name: 'Status' }
+                ]}
+                statuses={[
+                  { id: 0, name: 'Active', bgColor: '#ECFDF3', color: '#027948', dotColor: '#12B76A' },
+                  { id: 2, name: 'Inactive', bgColor: '#F2F4F7', color: '#344054', dotColor: '#667085' }
+                ]}
+                allsites={allsites}
+                searchCategory={[{ id: 1, name: 'Name' }]}
+                deleteBtn={true}
+                deleteApi={deletePopupApi}
+                deleteLabel={'Delete Pop-up'}
+                deleteMessage={'Are you sure you want to delete this pop-up?'}
+                modifyStatus={true}
+                modifyStatusApi={updatePopupStatusApi}
+              />
+            </div>
           </div>
         </div>
       </div>
-      <ConfirmationModal
-        isOpen={modalOpen}
-        onClose={() => setModalOpen(false)}
-        onConfirm={deleteSelectedPopup}
-        message="Are you sure you want to delete this Popup?"
-      />
-      <DuplicateModal
-        allsites={allsites}
-        isOpen={dupModalOpen}
-        onClose={setDupModalOpen}
-        onConfirm={duplicateSelectedPopup}
-        title="Duplicate Popups"
-        confirmText="Duplicate"
-      />
-      <IntegrationModal
-        isOpen={integrationModalOpen}
-        onClose={() => setIntegrationModalOpen(false)}
-        title={popupIntegrationData.title}
-        url={popupIntegrationData.url}
-        method={popupIntegrationData.method}
-        bodyParams={popupIntegrationData.bodyParams}
-        manditoryParams={popupIntegrationData.manditoryParams}
-        headers={popupIntegrationData.headers}
-        responseDetails={popupIntegrationData.responseDetails}
-      />
-      <Addnote des={listPopupNote} />
     </div>
   );
-}
+};
+
+export default PopupList;

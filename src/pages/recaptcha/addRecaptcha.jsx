@@ -1,31 +1,30 @@
-import { useNavigate, useParams } from "react-router-dom";
-import { GlobalContext } from "../../GlobalContext";
-import { useContext, useEffect, useState } from "react";
-import useGetAllSites from "../../Hooks/useGetAllSites";
-import { addRecaptchaApi, getRecaptchaByIdApi, updateRecaptchaApi } from "../../apis/recaptcha-apis";
+import { useContext, useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { GlobalContext } from '../../contexts/GlobalContext';
+import useGetAllSites from '../../hooks/useGetAllSites';
+import { showNotification } from '../../utils/showNotification';
+import { addRecaptchaApi, getRecaptchaByIdApi, updateRecaptchaApi } from '../../apis/recaptcha-apis';
+import FormButtons from '../../atoms/formFields/FormButtons';
+import FormField from '../../atoms/formFields/InputField';
+import MultiSelectCheckbox from '../../atoms/formFields/MultiSelectCheckBox';
+import ToggleComponent from '../../atoms/formFields/ToggleComponent';
+import DropDown from '../../atoms/formFields/DropDown';
 
 const AddRecaptcha = () => {
   const navigate = useNavigate();
-  const { id = "" } = useParams();
-  const { alert, setLoading } = useContext(GlobalContext);
-  const availableSites = useGetAllSites();
-
+  const { id = '' } = useParams();
+  const { setLoading } = useContext(GlobalContext);
   const [recaptcha, setRecaptcha] = useState({
-    version: 2,
-    sitekey: "",
-    secretkey: "",
+    version: 'v2',
+    sitekey: '',
+    secretkey: '',
     sites: [],
     isActive: true,
-    isGlobal: false,
+    isGlobal: false
   });
-
-  const [selectAll, setSelectAll] = useState(false);
   const [errors, setErrors] = useState({});
-
-  const versions = [
-    { key: "v2", value: 2 },
-    { key: "v3", value: 3 },
-  ];
+  const [isScrollable, setIsScrollable] = useState(false);
+  const availableSites = useGetAllSites();
 
   useEffect(() => {
     if (id) {
@@ -37,20 +36,20 @@ const AddRecaptcha = () => {
           setRecaptcha((prev) => ({
             ...prev,
             ...rest,
-            sites: sites.map((site) => site._id),
+            sites: sites.map((site) => site._id)
           }));
-        } else alert({ type: "warning", text: "Recaptcha not found" });
+        } else showNotification('warn', data);
       })()
-        .catch((error) => alert({ type: "danger", text: error.message }))
+        .catch((error) => showNotification('error', error.message))
         .finally(() => setLoading(false));
     }
-  }, [alert, id, setLoading]);
+  }, [id, setLoading]);
 
   const validate = () => {
     const newErrors = {};
-    if (!recaptcha.sitekey.trim()) newErrors.sitekey = "Site key is required";
-    if (!recaptcha.secretkey.trim()) newErrors.secretkey = "Secret key is required";
-    if (!recaptcha.sites.length) newErrors.sites = "At least one site is required";
+    if (!recaptcha.sitekey.trim()) newErrors.sitekey = 'Site key is required';
+    if (!recaptcha.secretkey.trim()) newErrors.secretkey = 'Secret key is required';
+    if (!recaptcha.sites.length) newErrors.sites = 'At least one site is required';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -62,183 +61,136 @@ const AddRecaptcha = () => {
     try {
       const { status, data } = await (id ? updateRecaptchaApi(id, recaptcha) : addRecaptchaApi(recaptcha));
       if (status) {
-        alert({ type: "success", text: data.message });
-        navigate("/recaptcha-list");
-      } else alert({ type: "warning", text: data });
+        showNotification('success', data.message);
+        navigate('/recaptcha/recaptcha-list');
+      } else showNotification('warn', data);
     } catch (error) {
-      alert({ type: "danger", text: error.message });
+      showNotification('error', error.message);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleSelectAllChange = () => {
-    if (selectAll) setRecaptcha((prev) => ({ ...prev, sites: [] }));
-    else
-      setRecaptcha((prev) => ({
-        ...prev,
-        sites: availableSites.map((site) => site._id),
-      }));
-
-    setSelectAll(!selectAll);
+  const checkScrollability = () => {
+    const contentHeight = document.documentElement.scrollHeight;
+    const windowHeight = window.innerHeight;
+    setIsScrollable(contentHeight > windowHeight);
   };
 
-  const isAllSelected = recaptcha.sites.length === availableSites.length;
+  useEffect(() => {
+    checkScrollability();
+    window.addEventListener('resize', checkScrollability);
+    return () => window.removeEventListener('resize', checkScrollability);
+  }, []);
 
   return (
-    <div className="page-body">
-      <div className="container container-tight py-4">
-        <div className="card card-md">
-          <div className="card-body">
-            <h2 className="h2 text-center mb-4">{id ? "Edit reCAPTCHA" : "Add reCAPTCHA"}</h2>
-            <form onSubmit={handleSubmit}>
-              <div className="mb-3">
-                <label className="form-label required">Version</label>
-                {versions.map((version) => (
-                  <div className="form-check form-check-inline" key={version.key}>
-                    <input
-                      className="form-check-input"
-                      type="radio"
-                      name="version"
-                      checked={recaptcha.version === version.value}
-                      onChange={() => {
-                        setRecaptcha((d) => ({
-                          ...d,
-                          version: version.value,
-                        }));
-                      }}
-                    />
-                    <label className="form-check-label">{version.key}</label>
-                  </div>
-                ))}
-              </div>
+    <div className="py-8 p-4 sm:p-8 overflow-x-hidden mb-20 h-screen">
+      <div className="w-full pb-8 border-b border-primary gap-y-4 gap-2 flex flex-col items-start md:flex-row lg:flex-col xl:flex-row justify-between lg:items-start md:items-end xl:items-end">
+        <div>
+          <span className="text-3xl font-semibold text-dark">{id ? 'Edit' : 'Add'} reCAPTCHA</span>
+        </div>
+        <FormButtons to="/recaptcha/recaptcha-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} />
+      </div>
 
-              <div className="mb-3">
-                <label className={!id ? "form-label required" : "form-label "}>Site Key</label>
-                <input
-                  type="text"
-                  name="sitekey"
-                  className={`form-control ${errors.sitekey ? "is-invalid" : ""}`}
-                  placeholder="Site Key"
-                  value={recaptcha.sitekey}
-                  onChange={(e) => {
-                    setRecaptcha((d) => ({
-                      ...d,
-                      sitekey: e.target.value,
-                    }));
-                    if (errors.sitekey) setErrors((prev) => ({ ...prev, sitekey: "" }));
-                  }}
-                />
-                {errors.sitekey && <div className="invalid-feedback">{errors.sitekey}</div>}
-              </div>
-              <div className="mb-3">
-                <label className={!id ? "form-label required" : "form-label "}>Secret Key</label>
-                <input
-                  type="text"
-                  name="secretkey"
-                  className={`form-control ${errors.secretkey ? "is-invalid" : ""}`}
-                  placeholder="Secret Key"
-                  value={recaptcha.secretkey}
-                  onChange={(e) => {
-                    setRecaptcha((d) => ({
-                      ...d,
-                      secretkey: e.target.value,
-                    }));
-                    if (errors.secretkey) setErrors((prev) => ({ ...prev, secretkey: "" }));
-                  }}
-                />
-                {errors.secretkey && <div className="invalid-feedback">{errors.secretkey}</div>}
-              </div>
-
-              <div className="mb-3">
-                <div className="d-flex justify-content-between mb-3">
-                  <label className={!id ? "form-label required mb-0 me-2" : "form-label mb-0 me-2"}>Select Sites</label>
-                  <label className="form-check mb-0">
-                    <input
-                      type="checkbox"
-                      className="form-check-input me-2"
-                      checked={isAllSelected}
-                      onChange={handleSelectAllChange}
-                    />
-                    <span className="form-check-label">Select All</span>
-                  </label>
-                </div>
-                <div className={`form-multi-check-box ${errors.sites ? "is-invalid" : ""}`}>
-                  {availableSites.map((site) => (
-                    <label key={site._id} className="form-check">
-                      <input
-                        className={`form-check-input ${errors.sites ? "is-invalid" : ""}`}
-                        type="checkbox"
-                        value={site._id}
-                        checked={recaptcha.sites.includes(site._id)}
-                        onChange={() => {
-                          if (recaptcha.sites) setErrors((prev) => ({ ...prev, sites: "" }));
-                          setRecaptcha((prevDetail) => {
-                            const isSelected = prevDetail.sites.includes(site._id);
-                            return {
-                              ...prevDetail,
-                              sites: isSelected
-                                ? prevDetail.sites.filter((id) => id !== site._id)
-                                : [...prevDetail.sites, site._id],
-                            };
-                          });
-                        }}
-                      />
-                      <span className="form-check-label">{site.name}</span>
-                    </label>
-                  ))}
-                </div>
-                {errors.sites && <div className="invalid-feedback mt-2">{errors.sites}</div>}
-              </div>
-              <div className="mb-3">
-                <label className="row">
-                  <span className="col">Is reCAPTCHA Active?</span>
-                  <span className="col-auto">
-                    <label className="form-check form-check-single form-switch">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        checked={recaptcha.isActive}
-                        onChange={() =>
-                          setRecaptcha((prev) => ({
-                            ...prev,
-                            isActive: !prev.isActive,
-                          }))
-                        }
-                      />
-                    </label>
-                  </span>
-                </label>
-              </div>
-              <div className="mb-3">
-                <label className="row">
-                  <span className="col">Is reCAPTCHA Global?</span>
-                  <span className="col-auto">
-                    <label className="form-check form-check-single form-switch">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        checked={recaptcha.isGlobal}
-                        onChange={() =>
-                          setRecaptcha((prev) => ({
-                            ...prev,
-                            isGlobal: !prev.isGlobal,
-                          }))
-                        }
-                      />
-                    </label>
-                  </span>
-                </label>
-              </div>
-              <div className="form-footer">
-                <button type="submit" className="btn btn-primary w-100">
-                  {id ? "Update" : "Add"}
-                </button>
-              </div>
-            </form>
+      <div className="w-full justify-center items-center border-b  border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end ">
+        <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
+          <div className="sm:w-7/12 w-full flex flex-col">
+            <span className="block text-primary">General Configuration</span>
+          </div>
+          <div className="dropdown-container relative w-full mt-2 ">
+            <DropDown
+              name="Version"
+              SummaryChild={<h5 className="p-0 m-0 text-primary">{recaptcha.versionObj?.showName || 'v2'}</h5>}
+              dropdownList={[
+                { id: 0, showName: 'v2', name: 'v2' },
+                { id: 1, showName: 'v3', name: 'v3' }
+              ]}
+              selected={recaptcha.version}
+              search={true}
+              commonFunction={(e) => setRecaptcha((prev) => ({ ...prev, version: e.name, versionObj: e }))}
+            />
+            <ToggleComponent
+              label={'Is reCAPTCHA Active?'}
+              isEnableState={recaptcha.isActive}
+              setIsEnableState={(value) => setRecaptcha((prev) => ({ ...prev, isActive: value }))}
+            />
+            <ToggleComponent
+              label={'Is reCAPTCHA Global?'}
+              isEnableState={recaptcha.isGlobal}
+              setIsEnableState={(value) => setRecaptcha((prev) => ({ ...prev, isGlobal: value }))}
+            />
           </div>
         </div>
       </div>
+
+      <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end ">
+        <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
+          <div className="sm:w-7/12 w-full flex flex-col">
+            <span className="block text-primary">Site-Specific Settings</span>
+          </div>
+          <div className="w-full">
+            <div className="w-full">
+              <MultiSelectCheckbox
+                options={availableSites}
+                label="Select Sites"
+                onChange={(selected) => {
+                  setRecaptcha((prev) => ({ ...prev, sites: selected }));
+                  if (errors.sites) setErrors((prev) => ({ ...prev, sites: '' }));
+                }}
+                selected={recaptcha.sites}
+                error={errors.sites}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
+        <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
+          <div className="sm:w-7/12 w-full flex flex-col">
+            <span className=" text-primary ">Keys Configuration</span>
+          </div>
+          <div className="w-full">
+            <div>
+              <FormField
+                label="Site key"
+                type="text"
+                id="name"
+                name="name"
+                placeholder="Site key"
+                onChange={(e) => {
+                  setRecaptcha((prev) => ({ ...prev, sitekey: e.target.value }));
+                  if (errors.sitekey) setErrors((prev) => ({ ...prev, sitekey: '' }));
+                }}
+                value={recaptcha.sitekey}
+                errorMessage={errors.sitekey}
+              />
+              <FormField
+                label="Secret key"
+                type="text"
+                id="secretkey"
+                name="secretkey"
+                placeholder="Secret key"
+                onChange={(e) => {
+                  setRecaptcha((prev) => ({ ...prev, secretkey: e.target.value }));
+                  if (errors.secretkey) setErrors((prev) => ({ ...prev, secretkey: '' }));
+                }}
+                value={recaptcha.secretkey}
+                errorMessage={errors.secretkey}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* <div className="w-full justify-center items-center border-b  border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end ">
+        <NoteComponent note={id ? editAdminNote : addAdminNote} />
+      </div> */}
+      {!isScrollable && (
+        <div className="w-full flex justify-end items-center gap-4 pt-8  border- border-primary">
+          <FormButtons to="/recaptcha/recaptcha-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} />
+        </div>
+      )}
     </div>
   );
 };

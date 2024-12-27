@@ -1,4 +1,4 @@
-import { deleteMethodCall, getMethodCall, postMethodCall } from "./api-handler";
+import { deleteMethodCall, getMethodCall, postMethodCall, putMethodCall } from './api-handler';
 
 export const getCouponByIdApi = async (id) => {
   return await getMethodCall(`${import.meta.env.VITE_API_URL}/coupon/${id}`);
@@ -9,7 +9,7 @@ export const addCouponApi = async (data) => {
 };
 
 export const updateCouponApi = async (id, data) => {
-  return await postMethodCall(`${import.meta.env.VITE_API_URL}/coupon/${id}`, data);
+  return await putMethodCall(`${import.meta.env.VITE_API_URL}/coupon/${id}`, data);
 };
 
 export const deleteCouponApi = async (ids) => {

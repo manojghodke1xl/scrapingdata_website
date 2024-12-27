@@ -1,227 +1,101 @@
-import { useContext, useEffect, useLayoutEffect, useState } from "react";
-import { GlobalContext } from "../../GlobalContext";
-import { useNavigate } from "react-router-dom";
-import Table from "../../comps/table";
-import useSetTimeout from "../../Hooks/useDebounce";
-import useGetAllSites from "../../Hooks/useGetAllSites";
-import { updateAdminStatusApi } from "../../apis/admin-apis";
-import Addnote from "../../comps/addnote";
-import { listAdminNote } from "../notes/notes-message";
-import { formatDateTime } from "../../utils/function";
-import TruncatableField from "../../comps/modals/truncatableField";
+import { IoMdAdd } from 'react-icons/io';
+import { Link } from 'react-router-dom';
+import TableComponent from '../../atoms/table/Table';
+import { useState } from 'react';
+import TruncatableFieldModal from '../../atoms/modal/TruncatableFeildModel';
+import { formatDateTime } from '../../utils/dateFormats';
+import useGetAllSites from '../../hooks/useGetAllSites';
+import { updateAdminStatusApi } from '../../apis/admin-apis';
 
-export default function AdminList() {
-  const navigate = useNavigate();
-  const { auth, alert, setLoading } = useContext(GlobalContext);
-
-  const [admins, setAdmins] = useState([]);
-  const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(8);
-  const [totalCount, setTotalCount] = useState(0);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [searchKey, setSearchKey] = useState("");
-  const [statusFilter, setStatusFilter] = useState("");
-  const [statusSelect, setStatusSelect] = useState("");
-  const [siteId, setSiteId] = useState("");
-  const [selectedAdmins, setSelectedAdmins] = useState([]);
-  const [selectAll, setSelectAll] = useState(false);
+const AdminList = () => {
   const allsites = useGetAllSites();
-
-  const searchAbleKeys = ["Name", "Email"];
-  const filter = ["Active", "Inactive"];
-  const Status = ["Active", "Block"];
-
-  const [err, data, setRefresh] = useSetTimeout("admins", page - 1, limit, searchTerm, searchKey, statusFilter, siteId);
-
-  useEffect(() => {
-    if (data) {
-      setAdmins(data.admins);
-      setTotalCount(data.count);
-    } else if (err) {
-      alert({ type: "warning", text: err.message });
-    }
-  }, [data, err, alert]);
-
-  const updateSelectedAdminsStatus = async (userStatus) => {
-    setLoading(true);
-    try {
-      const { status, data } = await updateAdminStatusApi(selectedAdmins, userStatus);
-
-      if (status) {
-        alert({ type: "success", text: data.message });
-        setRefresh((r) => !r);
-        setSelectedAdmins([]);
-        setSelectAll(false);
-        setStatusSelect("");
-      } else {
-        alert({ type: "danger", text: data });
-      }
-    } catch (error) {
-      alert({ type: "danger", text: error.message });
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useLayoutEffect(() => {
-    if (!auth.isSuperAdmin) navigate("/dashboard");
-  }, [auth, navigate]);
-
-  const handleCheckboxChange = (adminId) => {
-    setSelectedAdmins((prevSelected) => {
-      let updatedSelected;
-      if (prevSelected.includes(adminId)) {
-        updatedSelected = prevSelected.filter((id) => id !== adminId);
-        setStatusSelect("");
-      } else {
-        updatedSelected = [...prevSelected, adminId];
-      }
-      const nonSuperAdminIds = admins.filter((admin) => !admin.isSuperAdmin).map((admin) => admin._id);
-      const allSelected = nonSuperAdminIds.every((id) => updatedSelected.includes(id));
-      setSelectAll(allSelected);
-      return updatedSelected;
-    });
-  };
-
-  const handleSelectAll = () => {
-    if (selectAll) {
-      setSelectedAdmins([]);
-    } else {
-      const nonSuperAdminIds = admins.filter((admin) => !admin.isSuperAdmin).map((admin) => admin._id);
-      setSelectedAdmins(nonSuperAdminIds);
-    }
-    setSelectAll(!selectAll);
-  };
-
-  const headers = [
-    {
-      label: <input className="form-check-input " type="checkbox" checked={selectAll} onChange={handleSelectAll} />,
-    },
-    { label: "Admin Name" },
-    { label: "Admin Email" },
-    { label: "Created Date" },
-    { label: "Updated Date" },
-    { label: "Status" },
-    { label: "Actions" },
-    { label: "Sites" },
-  ];
+  const [admins, setAdmins] = useState([]);
 
   const rows = admins.map((admin) => {
-    const { _id, name, email, isBlocked, isSuperAdmin, createdAt, updatedAt } = admin;
+    const { _id, name, email, isBlocked, isSuperAdmin, sites, createdAt, updatedAt } = admin;
     return {
-      _id,
-      checkedBox: !isSuperAdmin ? (
-        <input
-          key={_id}
-          className="form-check-input"
-          type="checkbox"
-          checked={selectedAdmins.includes(_id)}
-          onChange={() => handleCheckboxChange(_id)}
-        />
-      ) : null,
-      name: <TruncatableField title="Name" content={name} maxLength={20} />,
-      email: <TruncatableField title="Email" content={email} maxLength={20} />,
-      created: formatDateTime(createdAt),
-      updated: formatDateTime(updatedAt),
-      status:
-        isBlocked === true ? (
-          <span className="badge bg-danger">Blocked</span>
-        ) : (
-          <span className="badge bg-success">Active</span>
-        ),
-      actions: (
-        <button key={_id} onClick={() => navigate(`/edit-admin/${_id}`)} className="btn btn-primary ">
-          Edit
-        </button>
-      ),
+      id: _id,
+      isSuperAdmin,
+      name: <TruncatableFieldModal title={'Name'} content={name} />,
+      email: <TruncatableFieldModal title={'Email'} content={email} />,
       sites: (
-        <TruncatableField
-          title={"Sites"}
-          content={
-            isSuperAdmin
-              ? allsites.map((s) => `${s.name} (${s.host})`).join(", ")
-              : admin.sites.map((s) => `${s.name} (${s.host})`).join(", ")
-          }
-          maxLength={20}
+        <TruncatableFieldModal
+          title={'Sites'}
+          content={isSuperAdmin ? allsites.map((s) => `${s.name} (${s.host})`).join(', ') : sites.map((s) => `${s.name} (${s.host})`).join(', ')}
         />
       ),
+      status: (
+        <div className={`rounded-xl ${isBlocked ? 'bg-[#FEF3F2] text-[#B32318]' : 'bg-[#ECFDF3] text-[#027948]'} px-2 py-1 w-fit flex gap-2 items-center`}>
+          <span className={`min-w-[12px] min-h-[12px] rounded-full ${isBlocked ? 'bg-[#F04438]' : 'bg-[#12B76A]'}`}></span>
+          <span>{isBlocked ? 'Blocked' : 'Active'}</span>
+        </div>
+      ),
+      created: formatDateTime(createdAt),
+      updated: formatDateTime(updatedAt)
     };
   });
 
   return (
-    <div className="page-body">
-      <div className="container-xl">
-        <div className="card">
-          <div className="card-header">
-            <h3 className="card-title">All Admins List</h3>
-            <div className="card-options">
-              <div className="text-secondary">
-                Filter
-                <div className="mx-2 d-inline-block">
-                  <select className="form-select form-control-sm" onChange={(e) => setStatusFilter(e.target.value)}>
-                    <option value={""}>All</option>
-                    {filter.map((key, i) => (
-                      <option key={i} value={key.toLowerCase()}>
-                        {key}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-              {selectedAdmins.length ? (
-                <>
-                  <div className="text-secondary">
-                    Status
-                    <div className="mx-2 d-inline-block">
-                      <select className="form-select form-control-sm" onChange={(e) => setStatusSelect(e.target.value)}>
-                        <option value="">Select</option>
-                        {Status.map((key, i) => (
-                          <option key={i} value={key.toLowerCase()}>
-                            {key}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                  </div>
-                  {statusSelect === "active" && (
-                    <button onClick={() => updateSelectedAdminsStatus(false)} className="btn btn-success mx-2">
-                      Apply
-                    </button>
-                  )}
-                  {statusSelect === "block" && (
-                    <button onClick={() => updateSelectedAdminsStatus(true)} className="btn btn-danger mx-2">
-                      Apply
-                    </button>
-                  )}
-                </>
-              ) : null}
-
-              <button onClick={() => navigate("/add-admin")} className="btn btn-primary ">
-                Add Admin
-              </button>
-            </div>
+    <div className="min-h-screen py-8 p-4 sm:p-8 overflow-x-hidden mb-20">
+      <div className=" w-full">
+        <div className="w-full flex md:flex-wrap gap-y-3 sm:flex-nowrap justify-between pb-5 border-b border-primary">
+          <div className="">
+            <h4 className="text-3xl text-dark">All Admin List</h4>
           </div>
-
-          <div className="table-responsive">
-            <Table
-              rows={rows}
-              headers={headers}
-              currentPage={page}
-              totalPages={Math.ceil(totalCount / limit)}
-              onPageChange={setPage}
-              entriesPerPage={limit}
-              setSearchTerm={setSearchTerm}
-              allsites={allsites}
-              setSiteId={setSiteId}
-              setSearchKey={setSearchKey}
-              searchAbleKeys={searchAbleKeys}
-              onEntriesChange={setLimit}
-              totalCount={totalCount}
-            />
+          <div className="w-full flex justify-end sm:w-fit">
+            <Link to="/admin/add-admin" className="flex gap-2 h-fit items-center px-2.5 md:px-2 sm:px-4 rounded-xl py-2.5 bg-primary hover:bg-hover text-white">
+              <IoMdAdd size={22} />
+              <span className="hidden md:block">Add Admin</span>
+            </Link>
+          </div>
+        </div>
+        <div className="flex flex-col">
+          <div className="-m-1.5 overflow-x-auto">
+            <div className="p-1.5 min-w-full align-middle">
+              <TableComponent
+                selectable={true}
+                headers={[
+                  { label: 'Sr No.', key: 'srno' },
+                  { label: 'Admin Name', key: 'name' },
+                  { label: 'Admin Email', key: 'email' },
+                  { label: 'Sites', key: 'sites' },
+                  { label: 'Status', key: 'status' },
+                  { label: 'Created Date', key: 'created' },
+                  { label: 'Updated Date', key: 'updated' }
+                ]}
+                tableData={(data) => setAdmins(data.admins)}
+                rows={rows}
+                apiUrl={'admins'}
+                tableCountLabel={true}
+                pagination={true}
+                actions={true}
+                edit={true}
+                editPath={'/admin/edit-admin'}
+                search={true}
+                filter={true}
+                filterCategory={[
+                  { id: 1, name: 'Sites' },
+                  { id: 2, name: 'Status' }
+                ]}
+                statuses={[
+                  { id: 0, name: 'Active', bgColor: '#ECFDF3', color: '#027948', dotColor: '#12B76A' },
+                  { id: 1, name: 'Inactive', bgColor: '#F2F4F7', color: '#344054', dotColor: '#667085' }
+                ]}
+                allsites={allsites}
+                searchCategory={[
+                  { id: 1, name: 'Name' },
+                  { id: 2, name: 'Email' }
+                ]}
+                adminStatus={true}
+                modifyStatus={true}
+                modifyStatusApi={updateAdminStatusApi}
+              />
+            </div>
           </div>
         </div>
       </div>
-      <Addnote des={listAdminNote} />
     </div>
   );
-}
+};
+
+export default AdminList;

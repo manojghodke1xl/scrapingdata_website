@@ -1,36 +1,40 @@
-import { useNavigate, useParams } from "react-router-dom";
-import { GlobalContext } from "../../GlobalContext";
-import { useContext, useEffect, useState } from "react";
-import useGetAllSites from "../../Hooks/useGetAllSites";
-import { addFaqApi, getFaqByIdApi, updateFaqApi } from "../../apis/faq-apis";
-import { getAllFaqCategoriesApi } from "../../apis/faqCategory-apis";
+import { useContext, useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { GlobalContext } from '../../contexts/GlobalContext';
+import useGetAllSites from '../../hooks/useGetAllSites';
+import { getAllFaqCategoriesApi } from '../../apis/faqCategory-apis';
+import { showNotification } from '../../utils/showNotification';
+import { addFaqApi, getFaqByIdApi, updateFaqApi } from '../../apis/faq-apis';
+import FormButtons from '../../atoms/formFields/FormButtons';
+import FormField from '../../atoms/formFields/InputField';
+import MultiSelectCheckbox from '../../atoms/formFields/MultiSelectCheckBox';
+import ToggleComponent from '../../atoms/formFields/ToggleComponent';
+import TextareaComponent from '../../atoms/formFields/TextareaComponent';
 
 const AddFaq = () => {
   const navigate = useNavigate();
-  const { id = "" } = useParams();
-  const { alert, setLoading } = useContext(GlobalContext);
-  const availableSites = useGetAllSites();
-
-  const [errors, setErrors] = useState({});
-  const [selectAll, setSelectAll] = useState(false);
-  const [selectAllFaqCategories, setSelectAllFaqCategories] = useState(false);
-  const [availableFaqCategories, setAvailableFaqCategories] = useState([]);
+  const { id = '' } = useParams();
+  const { setLoading } = useContext(GlobalContext);
   const [faqDetails, setFaqDetails] = useState({
-    question: "",
-    answer: "",
-    isActive: true,
-    isGlobal: false,
+    email: '',
+    name: '',
+    password: '',
     sites: [],
-    faqCategory: [],
+    isActive: true,
+    isGlobal: false
   });
+  const [errors, setErrors] = useState({});
+  const [isScrollable, setIsScrollable] = useState(false);
+  const availableSites = useGetAllSites();
+  const [availableFaqCategories, setAvailableFaqCategories] = useState([]);
 
   useEffect(() => {
     (async () => {
       const { status, data } = await getAllFaqCategoriesApi();
       if (status) setAvailableFaqCategories(data.faqCategories);
-      else alert({ type: "warning", text: data });
-    })().catch((error) => alert({ type: "danger", text: error.message }));
-  }, [alert]);
+      else showNotification('warn', data);
+    })().catch((error) => showNotification('error', error.message));
+  }, []);
 
   useEffect(() => {
     if (id) {
@@ -43,21 +47,21 @@ const AddFaq = () => {
             ...prev,
             ...rest,
             sites: sites.map((s) => s._id),
-            faqCategory: faqCategory?.map((c) => c._id),
+            faqCategory: faqCategory?.map((c) => c._id)
           }));
-        } else alert({ type: "warning", text: data });
+        } else showNotification('warn', data);
       })()
-        .catch((error) => alert({ type: "danger", text: error.message }))
+        .catch((error) => showNotification('error', error.message))
         .finally(() => setLoading(false));
     }
-  }, [alert, id, setLoading]);
+  }, [id, setLoading]);
 
   const validate = () => {
     const errors = {};
-    if (!faqDetails.question) errors.question = "Please enter question.";
-    if (!faqDetails.answer) errors.answer = "Please enter answer.";
-    if (!faqDetails.sites.length) errors.sites = "Please select at least one site.";
-    if (!faqDetails.faqCategory.length) errors.faqCategory = "Please select at least one faq category.";
+    if (!faqDetails.question) errors.question = 'Please enter question.';
+    if (!faqDetails.answer) errors.answer = 'Please enter answer.';
+    if (!faqDetails.sites.length) errors.sites = 'Please select at least one site.';
+    if (!faqDetails.faqCategory.length) errors.faqCategory = 'Please select at least one faq category.';
     setErrors(errors);
     return Object.keys(errors).length === 0;
   };
@@ -69,219 +73,127 @@ const AddFaq = () => {
     try {
       const { status, data } = await (id ? updateFaqApi(id, faqDetails) : addFaqApi(faqDetails));
       if (status) {
-        alert({ type: "success", text: data.message });
-        navigate("/faq-list");
-      } else alert({ type: "warning", text: data });
+        showNotification('success', data.message);
+        navigate('/faq/faq-list');
+      } else showNotification('warn', data);
     } catch (error) {
-      alert({ type: "danger", text: error.message });
+      showNotification('error', error.message);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleSelectAllChange = () => {
-    if (selectAll) setFaqDetails((prev) => ({ ...prev, sites: [] }));
-    else
-      setFaqDetails((prev) => ({
-        ...prev,
-        sites: availableSites.map((site) => site._id),
-      }));
-
-    setSelectAll(!selectAll);
+  const checkScrollability = () => {
+    const contentHeight = document.documentElement.scrollHeight;
+    const windowHeight = window.innerHeight;
+    setIsScrollable(contentHeight > windowHeight);
   };
 
-  const handleSelectAllFaqCategoriesChange = () => {
-    if (selectAllFaqCategories) setFaqDetails((prev) => ({ ...prev, faqCategory: [] }));
-    else
-      setFaqDetails((prev) => ({
-        ...prev,
-        faqCategory: availableFaqCategories.map((faqCategory) => faqCategory._id),
-      }));
-    setSelectAllFaqCategories(!selectAllFaqCategories);
-  };
-
-  const isAllSelected = faqDetails.sites.length === availableSites.length;
-  const isAllSelectedFaqCategories = faqDetails.faqCategory.length === availableFaqCategories.length;
+  useEffect(() => {
+    checkScrollability();
+    window.addEventListener('resize', checkScrollability);
+    return () => window.removeEventListener('resize', checkScrollability);
+  }, []);
 
   return (
-    <div className="page-body">
-      <div className="container container-tight py-4">
-        <div className="card card-md">
-          <div className="card-body">
-            <h2 className="h2 text-center mb-4">{!id ? "Add Faq" : "Edit Faq"}</h2>
-            <form onSubmit={handleSubmit}>
-              <div className="mb-3">
-                <label className={!id ? "form-label required" : "form-label"}>Question</label>
-                <textarea
-                  className={`form-control ${errors.question ? "is-invalid" : ""}`}
-                  name="question"
-                  rows={3}
-                  placeholder="Question.."
-                  value={faqDetails.question}
-                  onChange={(e) => {
-                    setFaqDetails((prev) => ({
-                      ...prev,
-                      question: e.target.value,
-                    }));
-                    if (errors.question) setErrors((prev) => ({ ...prev, question: "" }));
-                  }}
-                />
-                {errors.question && <div className="invalid-feedback mt-2">{errors.question}</div>}
-              </div>
-              <div className="mb-3">
-                <label className={!id ? "form-label required" : "form-label"}>Answer</label>
-                <textarea
-                  className={`form-control ${errors.answer ? "is-invalid" : ""}`}
-                  name="answer"
-                  rows={6}
-                  placeholder="Answer.."
-                  value={faqDetails.answer}
-                  onChange={(e) => {
-                    setFaqDetails((prev) => ({
-                      ...prev,
-                      answer: e.target.value,
-                    }));
-                    if (errors.answer) setErrors((prev) => ({ ...prev, answer: "" }));
-                  }}
-                />
-                {errors.answer && <div className="invalid-feedback mt-2">{errors.answer}</div>}
-              </div>
+    <div className="py-8 p-4 sm:p-8 overflow-x-hidden mb-20">
+      <div className="w-full pb-8 border-b border-primary gap-y-4 gap-2 flex flex-col items-start md:flex-row lg:flex-col xl:flex-row justify-between lg:items-start md:items-end xl:items-end">
+        <div>
+          <span className="text-3xl font-semibold text-dark">{id ? 'Edit' : 'Add'} FAQ</span>
+        </div>
+        <FormButtons to="/faq/faq-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} />
+      </div>
 
-              <div className="mb-3">
-                <div className="d-flex justify-content-between mb-3">
-                  <label className={!id ? "form-label required mb-0 me-2" : "form-label mb-0 me-2"}>Select Sites</label>
-                  <label className="form-check mb-0">
-                    <input
-                      type="checkbox"
-                      className="form-check-input me-2"
-                      checked={isAllSelected}
-                      onChange={handleSelectAllChange}
-                    />
-                    <span className="form-check-label">Select All</span>
-                  </label>
-                </div>
-                <div className={`form-multi-check-box ${errors.sites ? "is-invalid" : ""}`}>
-                  {availableSites.map((site) => (
-                    <label key={site._id} className="form-check">
-                      <input
-                        className={`form-check-input ${errors.sites ? "is-invalid" : ""}`}
-                        type="checkbox"
-                        value={site._id}
-                        checked={faqDetails.sites.includes(site._id)}
-                        onChange={() => {
-                          setFaqDetails((prevDetail) => {
-                            const isSelected = prevDetail.sites.includes(site._id);
-                            return {
-                              ...prevDetail,
-                              sites: isSelected
-                                ? prevDetail.sites.filter((id) => id !== site._id)
-                                : [...prevDetail.sites, site._id],
-                            };
-                          });
-                          if (errors.sites) setErrors((prev) => ({ ...prev, sites: "" }));
-                        }}
-                      />
-                      <span className="form-check-label">{site.name}</span>
-                    </label>
-                  ))}
-                </div>
-                {errors.sites && <div className="invalid-feedback mx-2 mb-2">{errors.sites}</div>}
-              </div>
+      <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
+        <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
+          <div className="sm:w-7/12 w-full flex flex-col">
+            <span className=" text-primary ">FAQ Details</span>
+          </div>
+          <div className="w-full">
+            <div>
+              <FormField
+                label="Question"
+                type="text"
+                id="question"
+                name="question"
+                placeholder="Question"
+                onChange={(e) => {
+                  setFaqDetails((prev) => ({ ...prev, question: e.target.value }));
+                  if (errors.question) setErrors((prev) => ({ ...prev, question: '' }));
+                }}
+                value={faqDetails.question}
+                errorMessage={errors.question}
+              />
 
-              <div className="mb-3">
-                <div className="d-flex justify-content-between mb-3">
-                  <label className={!id ? "form-label required mb-0 me-2" : "form-label mb-0 me-2"}>
-                    Select Faq Categories
-                  </label>
-                  <label className="form-check mb-0">
-                    <input
-                      type="checkbox"
-                      className="form-check-input me-2"
-                      checked={isAllSelectedFaqCategories}
-                      onChange={handleSelectAllFaqCategoriesChange}
-                    />
-                    <span className="form-check-label">Select All</span>
-                  </label>
-                </div>
-                <div className={`form-multi-check-box ${errors.faqCategory ? "is-invalid" : ""}`}>
-                  {availableFaqCategories.map((category) => (
-                    <label key={category._id} className="form-check">
-                      <input
-                        className={`form-check-input ${errors.faqCategory ? "is-invalid" : ""}`}
-                        type="checkbox"
-                        value={category._id}
-                        checked={faqDetails.faqCategory.includes(category._id)}
-                        onChange={() => {
-                          setFaqDetails((prevDetail) => {
-                            const isSelected = prevDetail.faqCategory.includes(category._id);
-                            return {
-                              ...prevDetail,
-                              faqCategory: isSelected
-                                ? prevDetail.faqCategory.filter((id) => id !== category._id)
-                                : [...prevDetail.faqCategory, category._id],
-                            };
-                          });
-                          if (errors.faqCategory) setErrors((prev) => ({ ...prev, faqCategory: "" }));
-                        }}
-                      />
-                      <span className="form-check-label">{category.name}</span>
-                    </label>
-                  ))}
-                </div>
-                {errors.faqCategory && <div className="invalid-feedback mx-2 mb-2">{errors.faqCategory}</div>}
-              </div>
-
-              <div className="mb-3">
-                <label className="row">
-                  <span className="col">Is Faq Active?</span>
-                  <span className="col-auto">
-                    <label className="form-check form-check-single form-switch">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        checked={faqDetails.isActive}
-                        onChange={() =>
-                          setFaqDetails((prev) => ({
-                            ...prev,
-                            isActive: !prev.isActive,
-                          }))
-                        }
-                      />
-                    </label>
-                  </span>
-                </label>
-              </div>
-
-              <div className="mb-3">
-                <label className="row">
-                  <span className="col">Is Faq Global?</span>
-                  <span className="col-auto">
-                    <label className="form-check form-check-single form-switch">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        checked={faqDetails.isGlobal}
-                        onChange={() =>
-                          setFaqDetails((prev) => ({
-                            ...prev,
-                            isGlobal: !prev.isGlobal,
-                          }))
-                        }
-                      />
-                    </label>
-                  </span>
-                </label>
-              </div>
-              <div className="form-footer">
-                <button type="submit" className="btn btn-primary w-100">
-                  {!id ? "Add" : "Update"}
-                </button>
-              </div>
-            </form>
+              <TextareaComponent
+                label="Answer"
+                placeholder="Answer"
+                id="answer"
+                name="answer"
+                value={faqDetails.answer}
+                onChange={(e) => setFaqDetails((prev) => ({ ...prev, answer: e.target.value }))}
+                errorMessage={errors.answer}
+                charCount={false}
+              />
+            </div>
           </div>
         </div>
       </div>
+
+      <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end ">
+        <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
+          <div className="sm:w-7/12 w-full flex flex-col">
+            <span className="block text-primary">Category and Site Settings</span>
+          </div>
+          <div className="w-full">
+            <div className="w-full">
+              <MultiSelectCheckbox
+                options={availableSites}
+                label="Select Sites"
+                onChange={(selected) => {
+                  setFaqDetails((prev) => ({ ...prev, sites: selected }));
+                  if (errors.sites) setErrors((prev) => ({ ...prev, sites: '' }));
+                }}
+                selected={faqDetails.sites}
+                error={errors.sites}
+              />
+              <MultiSelectCheckbox
+                options={availableFaqCategories}
+                label="Select Faq Categories"
+                onChange={(selected) => {
+                  setFaqDetails((prev) => ({ ...prev, faqCategory: selected }));
+                  if (errors.faqCategory) setErrors((prev) => ({ ...prev, faqCategory: '' }));
+                }}
+                selected={faqDetails.faqCategory}
+                error={errors.faqCategory}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="w-full justify-center items-center border-b  border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end ">
+        <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
+          <div className="sm:w-7/12 w-full flex flex-col">
+            <span className="block text-primary">FAQ Status and Visibility</span>
+          </div>
+          <div className="dropdown-container relative w-full mt-2">
+            <ToggleComponent label={'Is FAQ Active?'} isEnableState={faqDetails.isActive} setIsEnableState={(value) => setFaqDetails((prev) => ({ ...prev, isActive: value }))} />
+            <ToggleComponent label={'Is FAQ Global?'} isEnableState={faqDetails.isGlobal} setIsEnableState={(value) => setFaqDetails((prev) => ({ ...prev, isGlobal: value }))} />
+          </div>
+        </div>
+      </div>
+
+      {/* <div className="w-full justify-center items-center border-b  border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end ">
+        <NoteComponent note={id ? editAdminNote : addAdminNote} />
+      </div> */}
+      {!isScrollable && (
+        <div className="w-full flex justify-end items-center gap-4 pt-8  border- border-primary">
+          <FormButtons to="/faq/faq-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} />
+        </div>
+      )}
     </div>
   );
 };
+
 export default AddFaq;

@@ -1,9 +1,10 @@
-import { useState, useEffect, useContext } from "react";
-import { GlobalContext } from "../GlobalContext";
-import { getAllSitesApi } from "../apis/site-apis";
+import { useState, useEffect, useContext } from 'react';
+import { getAllSitesApi } from '../apis/site-apis';
+import { GlobalContext } from '../contexts/GlobalContext';
+import { showNotification } from '../utils/showNotification';
 
 export default function useGetAllSites() {
-  const { alert, setLoading } = useContext(GlobalContext);
+  const { setLoading, dispatch } = useContext(GlobalContext);
   const [allsites, setAllsites] = useState([]);
 
   useEffect(() => {
@@ -11,9 +12,10 @@ export default function useGetAllSites() {
     (async () => {
       const { status, data } = await getAllSitesApi();
       if (status) setAllsites(data.sites);
-      else alert({ type: "warning", title: "Warning!", text: "Sites not found" });
+      else if (data === 'jwt expired') dispatch({ type: 'SIGNOUT' });
+      else showNotification('warn', data);
     })().finally(() => setLoading(false));
-  }, [alert, setLoading]);
+  }, [dispatch, setLoading]);
 
   return allsites;
 }

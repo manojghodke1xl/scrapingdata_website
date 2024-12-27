@@ -1,27 +1,29 @@
-import { useContext, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { GlobalContext } from "../../GlobalContext";
-import { addSmtpApi, getSmtpByIdApi, updateSmtpApi } from "../../apis/smtp-apis";
-import Addnote from "../../comps/addnote";
-import { addSMTPNote, editSMTPNote } from "../notes/notes-message";
+import { useContext, useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { GlobalContext } from '../../contexts/GlobalContext';
+import { addSmtpApi, getSmtpByIdApi, updateSmtpApi } from '../../apis/smtp-apis';
+import { showNotification } from '../../utils/showNotification';
+import FormButtons from '../../atoms/formFields/FormButtons';
+import FormField from '../../atoms/formFields/InputField';
+import NoteComponent from '../../atoms/common/NoteComponent';
+import { addSMTPNote, editSMTPNote } from './smtpNotes';
+import DropDown from '../../atoms/formFields/DropDown';
 
-export default function AddSmtp() {
+const AddSmtp = () => {
   const navigate = useNavigate();
-  const { id = "" } = useParams();
-  const { alert, setLoading } = useContext(GlobalContext);
+  const { id = '' } = useParams();
+  const { setLoading } = useContext(GlobalContext);
 
   const [errors, setErrors] = useState({});
-
+  const [isScrollable, setIsScrollable] = useState(false);
   const [smtpDetails, setSmtpDetails] = useState({
-    name: "",
-    host: "",
-    port: "",
-    secure: "None",
-    user: "",
-    password: "",
+    name: '',
+    host: '',
+    port: '',
+    secure: 'None',
+    user: '',
+    password: ''
   });
-
-  const smtpSecure = ["SSL", "TLS", "STARTTLS"];
 
   useEffect(() => {
     if (id) {
@@ -30,176 +32,203 @@ export default function AddSmtp() {
         const { status, data } = await getSmtpByIdApi(id);
         if (status) {
           const { ...rest } = data.smtp;
-          setSmtpDetails({ ...rest, password: "" });
-        } else {
-          alert({ type: "warning", text: data });
-        }
+          setSmtpDetails({ ...rest, password: '' });
+        } else showNotification('warn', data);
       })()
-        .catch((error) => alert({ type: "danger", text: error.message }))
+        .catch((error) => showNotification('error', error.message))
         .finally(() => setLoading(false));
     }
-  }, [id, alert, setLoading]);
+  }, [id, setLoading]);
 
   const validate = () => {
     const newErrors = {};
-    if (!smtpDetails.name) newErrors.name = "Name is required";
-    if (!smtpDetails.host) newErrors.host = "Host is required";
-    if (smtpDetails.secure === "") newErrors.secure = "Security protocol is required.";
-    if (!smtpDetails.port) newErrors.port = "Port is required";
-    if (!smtpDetails.user) newErrors.user = "User is required";
-    if (!smtpDetails.password && !id) newErrors.password = "Password is required";
+    if (!smtpDetails.name) newErrors.name = 'Name is required';
+    if (!smtpDetails.host) newErrors.host = 'Host is required';
+    if (smtpDetails.secure === '') newErrors.secure = 'Security protocol is required.';
+    if (!smtpDetails.port) newErrors.port = 'Port is required';
+    if (!smtpDetails.user) newErrors.user = 'User is required';
+    if (!smtpDetails.password && !id) newErrors.password = 'Password is required';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleDetails = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!validate()) return;
+    if (!validate) return;
     setLoading(true);
     try {
       const { status, data } = await (id ? updateSmtpApi(id, smtpDetails) : addSmtpApi(smtpDetails));
 
       if (status) {
-        alert({ type: "success", text: data.message });
-        navigate("/smtp-list");
-      } else {
-        alert({ type: "warning", text: data.error });
-      }
+        showNotification('success', data.message);
+        navigate('/smtp/smtp-list');
+      } else showNotification('warn', data);
     } catch (error) {
-      alert({ type: "danger", text: error.message });
+      showNotification('error', error.message);
     } finally {
       setLoading(false);
     }
   };
 
+  const checkScrollability = () => {
+    const contentHeight = document.documentElement.scrollHeight;
+    const windowHeight = window.innerHeight;
+    setIsScrollable(contentHeight > windowHeight);
+  };
+
+  useEffect(() => {
+    checkScrollability();
+    window.addEventListener('resize', checkScrollability);
+    return () => window.removeEventListener('resize', checkScrollability);
+  }, []);
+
   return (
-    <div className="page-body">
-      <div className="container container-tight py-4">
-        <div className="card card-md">
-          <div className="card-body">
-            <h2 className="h2 text-center mb-4">{!id ? "Add SMTP" : "Edit SMTP"}</h2>
-            <form onSubmit={handleDetails}>
-              <div className="mb-3">
-                <label className={!id ? "form-label required" : "form-label"}>Name</label>
-                <input
-                  type="text"
-                  name="title"
-                  className={`form-control ${errors.name ? "is-invalid" : ""}`}
-                  placeholder="Title"
-                  value={smtpDetails.name}
-                  onChange={(e) => {
-                    setSmtpDetails((d) => ({ ...d, name: e.target.value }));
-                    if (errors.name) setErrors((prev) => ({ ...prev, name: "" }));
-                  }}
-                />
-                {errors.name && <div className="invalid-feedback">{errors.name}</div>}
-              </div>
-              <div className="mb-3">
-                <label className={!id ? "form-label required" : "form-label"}>Sender Email</label>
-                <input
-                  type="email"
-                  name="senderEmail"
-                  className={`form-control ${errors.senderEmail ? "is-invalid" : ""}`}
-                  placeholder="Sender Email"
-                  value={smtpDetails.senderEmail}
-                  onChange={(e) => {
-                    setSmtpDetails((d) => ({ ...d, senderEmail: e.target.value }));
-                    if (errors.senderEmail) setErrors((prev) => ({ ...prev, senderEmail: "" }));
-                  }}
-                />
-                {errors.senderEmail && <div className="invalid-feedback">{errors.senderEmail}</div>}
-              </div>
-              <div className="mb-3">
-                <label className={!id ? "form-label required" : "form-label"}>Host</label>
-                <input
-                  type="text"
-                  name="title"
-                  className={`form-control ${errors.host ? "is-invalid" : ""}`}
-                  placeholder="Title"
-                  value={smtpDetails.host}
-                  onChange={(e) => {
-                    setSmtpDetails((d) => ({ ...d, host: e.target.value }));
-                    if (errors.host) setErrors((prev) => ({ ...prev, host: "" }));
-                  }}
-                />
-                {errors.host && <div className="invalid-feedback">{errors.host}</div>}
-              </div>
-              <div className="mb-3">
-                <label className={!id ? "form-label required" : "form-label"}>Port</label>
-                <input
-                  type="text"
-                  name="name"
-                  className={`form-control ${errors.port ? "is-invalid" : ""}`}
-                  placeholder="Port"
-                  value={smtpDetails.port}
-                  onChange={(e) => {
-                    setSmtpDetails((d) => ({ ...d, port: e.target.value }));
-                    if (errors.port) setErrors((prev) => ({ ...prev, port: "" }));
-                  }}
-                />
-                {errors.port && <div className="invalid-feedback">{errors.port}</div>}
-              </div>
-              <div className="mb-3">
-                <label className={!id ? "form-label required" : "form-label"}>Security Protocol</label>
-                <select
-                  name="secure"
-                  className={`form-select ${errors.secure ? "is-invalid" : ""}`}
-                  value={smtpDetails.secure}
-                  onChange={(e) => {
-                    if (errors.secure) setErrors((prev) => ({ ...prev, secure: "" }));
-                    setSmtpDetails((d) => ({ ...d, secure: e.target.value }));
-                  }}
-                >
-                  <option value="">Select</option>
-                  {smtpSecure.map((s, i) => (
-                    <option key={i} value={s}>
-                      {s}
-                    </option>
-                  ))}
-                </select>
-              </div>
+    <div className="py-8 p-4 sm:p-8 overflow-x-hidden mb-20">
+      <div className="w-full pb-8 border-b border-primary gap-y-4 gap-2 flex flex-col items-start md:flex-row lg:flex-col xl:flex-row justify-between lg:items-start md:items-end xl:items-end">
+        <div>
+          <span className="text-3xl font-semibold text-dark">{id ? 'Edit' : 'Add'} SMTP</span>
+        </div>
+        <FormButtons to="/smtp/smtp-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} />
+      </div>
 
-              <div className="mb-3">
-                <label className={!id ? "form-label required" : "form-label"}>User</label>
-                <input
-                  type="text"
-                  name="user"
-                  className={`form-control ${errors.user ? "is-invalid" : ""}`}
-                  placeholder="User"
-                  value={smtpDetails.user}
-                  onChange={(e) => {
-                    setSmtpDetails((d) => ({ ...d, user: e.target.value }));
-                    if (errors.user) setErrors((prev) => ({ ...prev, user: "" }));
-                  }}
-                />
-                {errors.user && <div className="invalid-feedback">{errors.user}</div>}
-              </div>
-              <div className="mb-3">
-                <label className={!id ? "form-label required" : "form-label"}>Password</label>
-                <input
-                  type="text"
-                  name="password"
-                  className={`form-control ${errors.password ? "is-invalid" : ""}`}
-                  placeholder="Password"
-                  value={smtpDetails.password}
-                  onChange={(e) => {
-                    setSmtpDetails((d) => ({ ...d, password: e.target.value }));
-                    if (errors.password) setErrors((prev) => ({ ...prev, password: "" }));
-                  }}
-                />
-                {errors.password && <div className="invalid-feedback">{errors.password}</div>}
-              </div>
-
-              <div className="form-footer">
-                <button type="submit" className="btn btn-primary w-100">
-                  {id ? "Update" : "Add"}
-                </button>
-              </div>
-            </form>
+      <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
+        <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
+          <div className="sm:w-7/12 w-full flex flex-col">
+            <span className=" text-primary ">SMTP Server Details</span>
+          </div>
+          <div className="w-full">
+            <div>
+              <FormField
+                label="Name"
+                type="text"
+                id="name"
+                name="name"
+                placeholder="Name"
+                onChange={(e) => {
+                  setSmtpDetails((prev) => ({ ...prev, name: e.target.value }));
+                  if (errors.name) setErrors((prev) => ({ ...prev, name: '' }));
+                }}
+                value={smtpDetails.name}
+                errorMessage={errors.name}
+              />
+              <FormField
+                label="Host"
+                type="text"
+                id="host"
+                name="host"
+                placeholder="Host"
+                onChange={(e) => {
+                  setSmtpDetails((prev) => ({ ...prev, host: e.target.value }));
+                  if (errors.host) setErrors((prev) => ({ ...prev, host: '' }));
+                }}
+                value={smtpDetails.host}
+                errorMessage={errors.host}
+              />
+              <FormField
+                label="Port"
+                type="number"
+                id="port"
+                name="port"
+                placeholder="Port"
+                onChange={(e) => {
+                  setSmtpDetails((prev) => ({ ...prev, port: e.target.value }));
+                  if (errors.port) setErrors((prev) => ({ ...prev, port: '' }));
+                }}
+                value={smtpDetails.port}
+                errorMessage={errors.port}
+              />
+            </div>
           </div>
         </div>
       </div>
-      {!id ? <Addnote des={addSMTPNote} /> : <Addnote des={editSMTPNote} />}
+
+      <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
+        <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
+          <div className="sm:w-7/12 w-full flex flex-col">
+            <span className=" text-primary ">Authentication Details</span>
+          </div>
+          <div className="w-full">
+            <div>
+              <FormField
+                label="Sender Email"
+                type="email"
+                id="senderEmail"
+                name="senderEmail"
+                placeholder="Sender Email"
+                onChange={(e) => {
+                  setSmtpDetails((prev) => ({ ...prev, senderEmail: e.target.value }));
+                  // if (errors.senderEmail) setErrors((prev) => ({ ...prev, senderEmail: '' }));
+                }}
+                value={smtpDetails.senderEmail}
+                // errorMessage={errors.senderEmail}
+              />
+              <FormField
+                label="User"
+                type="text"
+                id="user"
+                name="user"
+                placeholder="User"
+                onChange={(e) => {
+                  setSmtpDetails((prev) => ({ ...prev, user: e.target.value }));
+                  if (errors.user) setErrors((prev) => ({ ...prev, user: '' }));
+                }}
+                value={smtpDetails.user}
+                errorMessage={errors.user}
+              />
+              <FormField
+                label="Password"
+                type="password"
+                id="password"
+                name="password"
+                placeholder="Password"
+                showPasswordToggle={true}
+                onChange={(e) => {
+                  setSmtpDetails((prev) => ({ ...prev, password: e.target.value }));
+                  if (errors.password) setErrors((prev) => ({ ...prev, password: '' }));
+                }}
+                value={smtpDetails.password}
+                errorMessage={errors.password}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
+        <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
+          <div className="sm:w-7/12 w-full flex flex-col">
+            <span className=" text-primary ">Security Settings</span>
+          </div>
+          <div className="w-full">
+            <div>
+              <DropDown
+                name="Security Protocol"
+                SummaryChild={<h5 className="p-0 m-0 text-primary">{smtpDetails.secureObj?.showName ? smtpDetails.secureObj?.showName : 'None'}</h5>}
+                dropdownList={[
+                  { id: 0, showName: 'None', name: 'None' },
+                  { id: 1, showName: 'TLS', name: 'TLS' },
+                  { id: 2, showName: 'SSL', name: 'SSL' },
+                  { id: 3, showName: 'STARTTLS', name: 'STARTTLS' }
+                ]}
+                selected={smtpDetails.secure}
+                search={true}
+                commonFunction={(e) => setSmtpDetails((prev) => ({ ...prev, secure: e.name, secureObj: e }))}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="w-full justify-center items-center border-b  border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end ">
+        <NoteComponent note={id ? editSMTPNote : addSMTPNote} />
+      </div>
+      {!isScrollable && (
+        <div className="w-full flex justify-end items-center gap-4 pt-8  border- border-primary">
+          <FormButtons to="/smtp/smtp-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} />
+        </div>
+      )}
     </div>
   );
-}
+};
+
+export default AddSmtp;

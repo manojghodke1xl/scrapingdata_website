@@ -1,89 +1,69 @@
-import { useContext, useEffect, useState } from 'react';
-import { GlobalContext } from '../../GlobalContext';
-import { useNavigate } from 'react-router-dom';
-import Table from '../../comps/table';
-import useSetTimeout from '../../Hooks/useDebounce';
-import Addnote from '../../comps/addnote';
-import { listSMTPNote } from '../notes/notes-message';
+import { IoMdAdd } from 'react-icons/io';
+import { Link } from 'react-router-dom';
+import TableComponent from '../../atoms/table/Table';
+import { useState } from 'react';
+import TruncatableFieldModal from '../../atoms/modal/TruncatableFeildModel';
+import { formatDateTime } from '../../utils/dateFormats';
 
-export default function SmtpList() {
-  const navigate = useNavigate();
-  const { alert } = useContext(GlobalContext);
-
+const SmtpList = () => {
   const [smtps, setSmtps] = useState([]);
-  const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(8);
-  const [totalCount, setTotalCount] = useState(0);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [searchKey, setSearchKey] = useState('');
-
-  const searchAbleKeys = ['Name', 'Host'];
-
-  const [err, data] = useSetTimeout('smtps', page - 1, limit, searchTerm, searchKey);
-
-  useEffect(() => {
-    if (data) {
-      setSmtps(data.smtps);
-      setTotalCount(data.count);
-    } else if (err) {
-      alert({ type: 'warning', text: err.message });
-    }
-  }, [data, err, alert]);
-
-  const headers = [{ label: 'Name' }, { label: 'Host' }, { label: 'Actions' }];
 
   const rows = smtps.map((smtp) => {
-    const { _id, name, host } = smtp;
+    const { _id, name, host, createdAt, updatedAt } = smtp;
     return {
-      _id,
-      name,
-      host,
-      actions: (
-        <button
-          key={_id}
-          onClick={() => navigate(`/edit-smtp/${_id}`)}
-          className="btn btn-primary ">
-          Edit
-        </button>
-      ),
+      id: _id,
+      name: <TruncatableFieldModal title={'Name'} content={name} />,
+      host: <TruncatableFieldModal title={'Host'} content={host} />,
+      created: formatDateTime(createdAt),
+      updated: formatDateTime(updatedAt)
     };
   });
-
   return (
-    <div className="page-body">
-      <div className="container-xl">
-        <div className="card">
-          <div className="card-header">
-            <h3 className="card-title">All SMTPs List</h3>
-            <div className="card-options">
-              <button
-                onClick={() => navigate('/add-smtp')}
-                className="btn btn-primary">
-                Add SMTP
-              </button>
-            </div>
+    <div className="min-h-screen py-8 p-4 sm:p-8 overflow-x-hidden mb-20">
+      <div className=" w-full">
+        <div className="w-full flex md:flex-wrap gap-y-3 sm:flex-nowrap justify-between pb-5 border-b border-primary">
+          <div className="">
+            <h4 className="text-3xl text-dark">All SMTPs List</h4>
           </div>
-
-          <div className="table-responsive">
-            <Table
-              headers={headers}
-              rows={rows}
-              currentPage={page}
-              totalPages={Math.ceil(totalCount / limit)}
-              onPageChange={setPage}
-              entriesPerPage={limit}
-              setSearchTerm={setSearchTerm}
-              setSearchKey={setSearchKey}
-              searchAbleKeys={searchAbleKeys}
-              onEntriesChange={(newLimit) => {
-                setLimit(newLimit);
-              }}
-              totalCount={totalCount}
-            />
+          <div className="w-full flex justify-end sm:w-fit">
+            <Link to="/smtp/add-smtp" className="flex gap-2 h-fit items-center px-2.5 md:px-2 sm:px-4 rounded-xl py-2.5 bg-primary hover:bg-hover text-white">
+              <IoMdAdd size={22} />
+              <span className="hidden md:block">Add SMTP</span>
+            </Link>
+          </div>
+        </div>
+        <div className="flex flex-col">
+          <div className="-m-1.5 overflow-x-auto">
+            <div className="p-1.5 min-w-full align-middle">
+              <TableComponent
+                // selectable={true}
+                headers={[
+                  { label: 'Sr No.', key: 'srno' },
+                  { label: 'Name', key: 'name' },
+                  { label: 'Host', key: 'host' },
+                  { label: 'Created Date', key: 'created' },
+                  { label: 'Updated Date', key: 'updated' }
+                ]}
+                tableData={(data) => setSmtps(data.smtps)}
+                rows={rows}
+                apiUrl={'smtps'}
+                tableCountLabel={true}
+                pagination={true}
+                actions={true}
+                edit={true}
+                editPath={'/smtp/edit-smtp'}
+                search={true}
+                searchCategory={[
+                  { id: 1, name: 'Name' },
+                  { id: 1, name: 'Host' }
+                ]}
+              />
+            </div>
           </div>
         </div>
       </div>
-      <Addnote des={listSMTPNote} />
     </div>
   );
-}
+};
+
+export default SmtpList;

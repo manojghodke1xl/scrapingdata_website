@@ -1,4 +1,4 @@
-import { deleteMethodCall, getMethodCall, postMethodCall, putMethodCall } from "./api-handler";
+import { deleteMethodCall, getMethodCall, postMethodCall, putMethodCall } from './api-handler';
 
 export const getGalleryById = async (id) => {
   return await getMethodCall(`${import.meta.env.VITE_API_URL}/gallery/${id}?p=1`);
@@ -15,16 +15,12 @@ export const updateGalleryApi = async (id, userData) => {
 export const updateGalleryStatusApi = async (ids, isActive) => {
   return await putMethodCall(`${import.meta.env.VITE_API_URL}/gallery-status`, {
     ids,
-    isActive,
+    isActive
   });
 };
 
 export const updateGallerySitesApi = async (gids, sids, action) => {
-  return await putMethodCall(`${import.meta.env.VITE_API_URL}/gallery-sites`, {
-    gids,
-    sids,
-    action,
-  });
+  return await putMethodCall(`${import.meta.env.VITE_API_URL}/gallery-sites`, { gids, sids, action });
 };
 
 export const deleteGalleryApi = async (ids) => {

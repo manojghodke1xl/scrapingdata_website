@@ -1,0 +1,84 @@
+import { useState } from 'react';
+// import useGetAllSites from '../../hooks/useGetAllSites';
+import TruncatableFieldModal from '../../atoms/modal/TruncatableFeildModel';
+import { formatDateTime } from '../../utils/dateFormats';
+import TableComponent from '../../atoms/table/Table';
+
+const PaymentList = () => {
+  //   const allsites = useGetAllSites();
+  const [payments, setPayments] = useState([]);
+
+  const rows = payments.map((payment) => {
+    const { _id, site, event, participant, amount, currency, channel, createdAt, updatedAt } = payment;
+    return {
+      id: _id,
+      participant: <TruncatableFieldModal title={'Participant'} content={participant.name} />,
+      sites: <TruncatableFieldModal title={'Sites'} content={`${site?.name} (${site?.host})`} />,
+      event: <TruncatableFieldModal title={'Event'} content={event.name} />,
+      amount: <TruncatableFieldModal title={'Amount'} content={amount} />,
+      currency: <TruncatableFieldModal title={'Currency'} content={currency} />,
+      channel: channel === 'razorpay' ? 'Razorpay' : channel === 'stripe' ? 'Stripe' : 'PayPal',
+      //   status: (
+      //     <div className={`rounded-xl ${isActive ? 'bg-[#ECFDF3] text-[#027948]' : 'bg-[#F2F4F7] text-[#344054]'} px-2 py-1 w-fit flex gap-2 items-center`}>
+      //       <span className={`min-w-[12px] min-h-[12px] rounded-full ${isActive ? 'bg-[#12B76A]' : 'bg-[#667085]'}`}></span>
+      //       <span>{isActive ? 'Active' : 'Inactive'}</span>
+      //     </div>
+      //   ),
+      created: formatDateTime(createdAt),
+      updated: formatDateTime(updatedAt)
+    };
+  });
+
+  return (
+    <div className="min-h-screen py-8 p-4 sm:p-8 overflow-x-hidden mb-20">
+      <div className=" w-full">
+        <div className="w-full flex md:flex-wrap gap-y-3 sm:flex-nowrap justify-between pb-5 border-b border-primary">
+          <div className="">
+            <h4 className="text-3xl text-dark">All Payments List</h4>
+          </div>
+        </div>
+        <div className="flex flex-col">
+          <div className="-m-1.5 overflow-x-auto">
+            <div className="p-1.5 min-w-full align-middle">
+              <TableComponent
+                selectable={true}
+                headers={[
+                  { label: 'Sr No.', key: 'srno' },
+                  { label: 'Participant', key: 'participant' },
+                  { label: 'Sites', key: 'sites' },
+                  { label: 'Event', key: 'event' },
+                  { label: 'Amount', key: 'amount' },
+                  { label: 'Currency', key: 'currency' },
+                  { label: 'Channel', key: 'channel' },
+                  { label: 'Created Date', key: 'created' },
+                  { label: 'Updated Date', key: 'updated' }
+                ]}
+                tableData={(data) => setPayments(data.payments)}
+                rows={rows}
+                apiUrl={'payments'}
+                tableCountLabel={true}
+                pagination={true}
+                // actions={true}
+                search={true}
+                // filter={true}
+                // deleteBtn={true}
+                // filterCategory={[
+                //   { id: 1, name: 'Sites' },
+                //     { id: 2, name: 'Status' }
+                // ]}
+                // statuses={[
+                //   { id: 0, name: 'Active', bgColor: '#ECFDF3', color: '#027948', dotColor: '#12B76A' },
+                //   { id: 2, name: 'Inactive', bgColor: '#F2F4F7', color: '#344054', dotColor: '#667085' }
+                // ]}
+                // allsites={allsites}
+                searchCategory={[{ id: 1, name: 'Channel' }]}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default PaymentList;

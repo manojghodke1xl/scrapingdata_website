@@ -1,32 +1,50 @@
-import { useContext, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { GlobalContext } from "../../GlobalContext";
-import { addCaseStudyApi, getCaseStudyById, updateCaseStudyApi } from "../../apis/caseStudy-apis";
-import useGetAllSites from "../../Hooks/useGetAllSites";
-import { uploadFile } from "../../utils/fileUpload";
-import Addnote from "../../comps/addnote";
-import { addCasestudyNote, editAdminNote } from "../notes/notes-message";
+import { useContext, useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { GlobalContext } from '../../contexts/GlobalContext';
+import useGetAllSites from '../../hooks/useGetAllSites';
+import { addCaseStudyApi, getCaseStudyById, updateCaseStudyApi } from '../../apis/caseStudy-apis';
+import { showNotification } from '../../utils/showNotification';
+import FormButtons from '../../atoms/formFields/FormButtons';
+import FormField from '../../atoms/formFields/InputField';
+import TextareaComponent from '../../atoms/formFields/TextareaComponent';
+import MultiSelectCheckbox from '../../atoms/formFields/MultiSelectCheckBox';
+import ToggleComponent from '../../atoms/formFields/ToggleComponent';
+import FileUpload from '../../atoms/formFields/FileUpload';
+import { CiImageOn } from 'react-icons/ci';
+import { BsFilePdf } from 'react-icons/bs';
 
-export default function AddCaseStudy() {
+const AddCaseStudy = () => {
   const navigate = useNavigate();
-  const { id = "" } = useParams();
-  const { alert, setLoading } = useContext(GlobalContext);
+  const { id = '' } = useParams();
+  const { setLoading } = useContext(GlobalContext);
   const availableSites = useGetAllSites();
 
+  const [isScrollable, setIsScrollable] = useState(false);
   const [caseStudyDetails, setCaseStudyDetails] = useState({
-    title: "",
-    sdesc: "",
-    ldesc: "",
-    image: "",
-    pdf: "",
-    mailSubject: "",
-    mailBody: "",
+    title: '',
+    sdesc: '',
+    ldesc: '',
+    image: '',
+    pdf: '',
+    mailSubject: '',
+    mailBody: '',
     isActive: true,
     isGlobal: false,
-    sites: [],
+    sites: []
   });
-  const [selectAll, setSelectAll] = useState(false);
   const [errors, setErrors] = useState({});
+
+  const checkScrollability = () => {
+    const contentHeight = document.documentElement.scrollHeight;
+    const windowHeight = window.innerHeight;
+    setIsScrollable(contentHeight > windowHeight);
+  };
+
+  useEffect(() => {
+    checkScrollability();
+    window.addEventListener('resize', checkScrollability);
+    return () => window.removeEventListener('resize', checkScrollability);
+  }, []);
 
   useEffect(() => {
     if (id) {
@@ -35,31 +53,32 @@ export default function AddCaseStudy() {
         const { status, data } = await getCaseStudyById(id);
         if (status) {
           const { image, pdf, sites, ...rest } = data.casestudy;
-
           setCaseStudyDetails((prev) => ({
             ...prev,
             ...rest,
             sites: sites.map((s) => s._id),
+            pdf: pdf ? pdf?._id : '',
+            image: pdf ? image?._id : '',
             pdfFile: pdf,
-            imageFile: image,
+            imageFile: image
           }));
         } else {
-          alert({ type: "warning", text: data });
+          showNotification('warn', data);
         }
       })()
-        .catch((error) => alert({ type: "danger", text: error.message }))
+        .catch((error) => showNotification('error', error.message))
         .finally(() => setLoading(false));
     }
-  }, [id, alert, setLoading]);
+  }, [id, setLoading]);
 
   const validate = () => {
     const newErrors = {};
-    if (!caseStudyDetails.title.trim()) newErrors.title = "Title is required";
-    if (!caseStudyDetails.sites.length) newErrors.sites = "Minimum one site is required";
-    if (!caseStudyDetails.mailSubject.trim()) newErrors.mailSubject = "Subject is required";
-    if (!caseStudyDetails.mailBody.trim()) newErrors.mailBody = "Body is required";
-    if (!caseStudyDetails.image) newErrors.image = "Image is required";
-    if (!caseStudyDetails.pdf) newErrors.pdf = "PDF is required";
+    if (!caseStudyDetails.title.trim()) newErrors.title = 'Title is required';
+    if (!caseStudyDetails.sites.length) newErrors.sites = 'Minimum one site is required';
+    if (!caseStudyDetails.mailSubject.trim()) newErrors.mailSubject = 'Subject is required';
+    if (!caseStudyDetails.mailBody.trim()) newErrors.mailBody = 'Body is required';
+    if (!caseStudyDetails.image) newErrors.image = 'Image is required';
+    if (!caseStudyDetails.pdf) newErrors.pdf = 'PDF is required';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -69,266 +88,179 @@ export default function AddCaseStudy() {
     if (!validate()) return;
     setLoading(true);
     try {
-      const { status, data } = await (id
-        ? updateCaseStudyApi(id, caseStudyDetails)
-        : addCaseStudyApi(caseStudyDetails));
+      const { status, data } = await (id ? updateCaseStudyApi(id, caseStudyDetails) : addCaseStudyApi(caseStudyDetails));
       if (status) {
-        alert({ type: "success", text: data.message });
-        navigate("/casestudy-list");
+        showNotification('success', data.message);
+        navigate('/case-study/case-study-list');
       } else {
-        alert({ type: "warning", text: data });
+        showNotification('warn', data);
       }
     } catch (error) {
-      alert({ type: "danger", text: error.message });
+      showNotification('error', error.message);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleFileUpload = ({ e, isImage = false, isPdf = false }) => {
-    const file = e.target.files[0];
-    if (file) {
-      uploadFile({
-        file,
-        isImage,
-        isPdf,
-        alert,
-        setDetails: setCaseStudyDetails,
-        fieldName: isImage ? "image" : "pdf",
-      });
-    }
-  };
-
-  const handleSelectAllChange = () => {
-    if (selectAll) setCaseStudyDetails((prev) => ({ ...prev, sites: [] }));
-    else
-      setCaseStudyDetails((prev) => ({
-        ...prev,
-        sites: availableSites.map((site) => site._id),
-      }));
-
-    setSelectAll(!selectAll);
-  };
-
-  const isAllSelected = caseStudyDetails.sites.length === availableSites.length;
-
   return (
-    <div className="page-body">
-      <div className="container container-tight py-4">
-        <div className="card card-md">
-          <div className="card-body">
-            <h2 className="h2 text-center mb-4">{id ? "Edit Casestudy" : "Add Casestudy"}</h2>
-            <form onSubmit={handleSubmit}>
-              <div className="mb-3">
-                <label className={!id ? "form-label required" : "form-label "}>Title</label>
-                <input
-                  type="text"
-                  name="title"
-                  className={`form-control ${errors.title ? "is-invalid" : ""}`}
-                  placeholder="Title"
-                  value={caseStudyDetails.title}
-                  onChange={(e) => {
-                    setCaseStudyDetails((d) => ({
-                      ...d,
-                      title: e.target.value,
-                    }));
-                    if (errors.title) setErrors((prev) => ({ ...prev, title: "" }));
-                  }}
-                />
-                {errors.title && <div className="invalid-feedback">{errors.title}</div>}
-              </div>
-              <div className="mb-3">
-                <label className="form-label">Short Description</label>
-                <textarea
-                  className="form-control"
-                  name="example-textarea-input"
-                  rows={3}
-                  placeholder="Description.."
-                  value={caseStudyDetails.sdesc}
-                  onChange={(e) =>
-                    setCaseStudyDetails((d) => ({
-                      ...d,
-                      sdesc: e.target.value,
-                    }))
-                  }
-                />
-              </div>
-              <div className="mb-3">
-                <label className="form-label">Long Description</label>
-                <textarea
-                  className="form-control"
-                  name="example-textarea-input"
-                  rows={6}
-                  placeholder="Description.."
-                  value={caseStudyDetails.ldesc}
-                  onChange={(e) =>
-                    setCaseStudyDetails((d) => ({
-                      ...d,
-                      ldesc: e.target.value,
-                    }))
-                  }
-                />
-              </div>
-              <div className="mb-3">
-                <label className={id ? "form-label d-flex justify-content-between" : "form-label required"}>
-                  Upload Image
-                  {id && caseStudyDetails.imageFile && (
-                    <a href={caseStudyDetails.imageFile.url} download={caseStudyDetails.imageFile.name} target="_blank">
-                      Download Image
-                    </a>
-                  )}
-                </label>
-                <input
-                  type="file"
-                  name="image"
-                  className={`form-control ${errors.image ? "is-invalid" : ""}`}
-                  onChange={(e) => handleFileUpload({ e, isImage: true })}
-                  accept="image/*"
-                />
-                {errors.image && <div className="invalid-feedback mt-2">{errors.image}</div>}
-              </div>
-              <div className="mb-3">
-                <label className={id ? "form-label d-flex justify-content-between" : "form-label required"}>
-                  Upload Pdf
-                  {id && caseStudyDetails.pdfFile && (
-                    <a href={caseStudyDetails.pdfFile.url} download={caseStudyDetails.pdfFile.name} target="_blank">
-                      Download Pdf
-                    </a>
-                  )}
-                </label>
-                <input
-                  type="file"
-                  name="pdf"
-                  className={`form-control ${errors.pdf ? "is-invalid" : ""}`}
-                  onChange={(e) => handleFileUpload({ e, isPdf: true })}
-                  accept="application/pdf"
-                />
-                {errors.pdf && <div className="invalid-feedback mt-2">{errors.pdf}</div>}
-              </div>
+    <div className="py-8 p-4 sm:p-8 overflow-x-hidden mb-20">
+      <div className="w-full pb-8 border-b border-primary gap-y-4 gap-2 flex flex-col items-start md:flex-row lg:flex-col xl:flex-row justify-between lg:items-start md:items-end xl:items-end">
+        <div>
+          <span className="text-3xl font-semibold text-dark">{id ? 'Edit' : 'Add'} Case Study</span>
+        </div>
+        <FormButtons to="/case-study/case-study-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} />
+      </div>
 
-              <div className="mb-3">
-                <label className={!id ? "form-label required" : "form-label"}>Email Subject</label>
-                <input
-                  type="text"
-                  name="mailSubject"
-                  className={`form-control ${errors.mailSubject ? "is-invalid" : ""}`}
-                  placeholder="Email Subject"
-                  value={caseStudyDetails.mailSubject}
-                  onChange={(e) => {
-                    setCaseStudyDetails((d) => ({ ...d, mailSubject: e.target.value }));
-                    if (errors.mailSubject) setErrors((prev) => ({ ...prev, mailSubject: "" }));
-                  }}
-                />
-                {errors.mailSubject && <div className="invalid-feedback mt-2">{errors.mailSubject}</div>}
-              </div>
-
-              <div className="mb-3">
-                <label className={!id ? "form-label required" : "form-label"}>Email Body</label>
-
-                <textarea
-                  className={`form-control ${errors.mailBody ? "is-invalid" : ""}`}
-                  rows={3}
-                  name="mailBody"
-                  placeholder="Email Body"
-                  value={caseStudyDetails.mailBody}
-                  onChange={(e) => {
-                    setCaseStudyDetails((d) => ({ ...d, mailBody: e.target.value }));
-                    if (errors.mailBody) setErrors((prev) => ({ ...prev, mailBody: "" }));
-                  }}
-                />
-                {errors.mailBody && <div className="invalid-feedback mt-2">{errors.mailBody}</div>}
-              </div>
-
-              <div className="mb-3">
-                <div className="d-flex justify-content-between mb-3">
-                  <label className={!id ? "form-label required mb-0 me-2" : "form-label mb-0 me-2"}>Select Sites</label>
-                  <label className="form-check mb-0">
-                    <input
-                      type="checkbox"
-                      className="form-check-input me-2"
-                      checked={isAllSelected}
-                      onChange={handleSelectAllChange}
-                    />
-                    <span className="form-check-label">Select All</span>
-                  </label>
-                </div>
-                <div className={`form-multi-check-box ${errors.sites ? "is-invalid" : ""}`}>
-                  {availableSites.map((site) => (
-                    <label key={site._id} className="form-check">
-                      <input
-                        className={`form-check-input ${errors.sites ? "is-invalid" : ""}`}
-                        type="checkbox"
-                        value={site._id}
-                        checked={caseStudyDetails.sites.includes(site._id)}
-                        onChange={() => {
-                          if (caseStudyDetails.sites) setErrors((prev) => ({ ...prev, sites: "" }));
-                          setCaseStudyDetails((prevDetail) => {
-                            const isSelected = prevDetail.sites.includes(site._id);
-                            return {
-                              ...prevDetail,
-                              sites: isSelected
-                                ? prevDetail.sites.filter((id) => id !== site._id)
-                                : [...prevDetail.sites, site._id],
-                            };
-                          });
-                        }}
-                      />
-                      <span className="form-check-label">{site.name}</span>
-                    </label>
-                  ))}
-                </div>
-                {errors.sites && <div className="invalid-feedback mt-2">{errors.sites}</div>}
-              </div>
-              <div className="mb-3">
-                <label className="row">
-                  <span className="col">Is Casestudy Active?</span>
-                  <span className="col-auto">
-                    <label className="form-check form-check-single form-switch">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        checked={caseStudyDetails.isActive}
-                        onChange={() =>
-                          setCaseStudyDetails((prev) => ({
-                            ...prev,
-                            isActive: !prev.isActive,
-                          }))
-                        }
-                      />
-                    </label>
-                  </span>
-                </label>
-              </div>
-              <div className="mb-3">
-                <label className="row">
-                  <span className="col">Is Casestudy Global?</span>
-                  <span className="col-auto">
-                    <label className="form-check form-check-single form-switch">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        checked={caseStudyDetails.isGlobal}
-                        onChange={() =>
-                          setCaseStudyDetails((prev) => ({
-                            ...prev,
-                            isGlobal: !prev.isGlobal,
-                          }))
-                        }
-                      />
-                    </label>
-                  </span>
-                </label>
-              </div>
-              <div className="form-footer">
-                <button type="submit" className="btn btn-primary w-100">
-                  {id ? "Update" : "Add"}
-                </button>
-              </div>
-            </form>
+      <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
+        <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
+          <div className="sm:w-7/12 w-full flex flex-col">
+            <span className=" text-primary">Case Study Information</span>
+          </div>
+          <div className="w-full">
+            <div>
+              <FormField
+                label="Title"
+                type="text"
+                id="title"
+                name="title"
+                placeholder="Title"
+                onChange={(e) => {
+                  setCaseStudyDetails((prev) => ({ ...prev, title: e.target.value }));
+                  if (errors.title) setErrors((prev) => ({ ...prev, title: '' }));
+                }}
+                value={caseStudyDetails.title}
+                errorMessage={errors.title}
+              />
+              <TextareaComponent
+                label="Short Description"
+                placeholder="Enter a description..."
+                id="sdesc"
+                name="sdesc"
+                value={caseStudyDetails.sdesc}
+                onChange={(e) => setCaseStudyDetails((prev) => ({ ...prev, sdesc: e.target.value }))}
+                charCount={false}
+              />
+              <TextareaComponent
+                label="Long Description"
+                placeholder="Enter a description..."
+                id="ldesc"
+                name="ldesc"
+                value={caseStudyDetails.ldesc}
+                onChange={(e) => setCaseStudyDetails((prev) => ({ ...prev, ldesc: e.target.value }))}
+                charCount={false}
+                maxLength={1000}
+              />
+            </div>
           </div>
         </div>
       </div>
-      {!id ? <Addnote des={addCasestudyNote} /> : <Addnote des={editAdminNote} />}
+
+      <div className="w-full justify-center items-center border-b  border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end ">
+        <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
+          <div className="sm:w-7/12 w-full flex flex-col">
+            <span className="block text-primary">Media Upload</span>
+          </div>
+          <div className="dropdown-container relative w-full mt-2">
+            <FileUpload
+              logo={<CiImageOn className="text-primary text-2xl" />}
+              error={errors.image}
+              setErrors={setErrors}
+              acceptedTypes={['.jpeg', '.png']}
+              fieldName="image"
+              isImage
+              setDetails={setCaseStudyDetails}
+              imagePreviewUrl={caseStudyDetails.imageFile?.url}
+            />
+            <FileUpload
+              logo={<BsFilePdf className="text-primary text-2xl" />}
+              error={errors.image}
+              setErrors={setErrors}
+              acceptedTypes={['.pdf']}
+              fieldName="pdf"
+              isPdf
+              setDetails={setCaseStudyDetails}
+              imagePreviewUrl={caseStudyDetails.pdfFile?.name}
+            />
+          </div>
+        </div>
+      </div>
+
+      <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end ">
+        <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
+          <div className="sm:w-7/12 w-full flex flex-col">
+            <span className="block text-primary">Site & Global Settings</span>
+          </div>
+          <div className="w-full">
+            <div className="w-full">
+              <MultiSelectCheckbox
+                options={availableSites}
+                label="Select Sites"
+                onChange={(selected) => {
+                  setCaseStudyDetails((prev) => ({ ...prev, sites: selected }));
+                  if (errors.sites) setErrors((prev) => ({ ...prev, sites: '' }));
+                }}
+                selected={caseStudyDetails.sites}
+                error={errors.sites}
+              />
+              <ToggleComponent
+                label={'Is Case Study Active?'}
+                isEnableState={caseStudyDetails.isActive}
+                setIsEnableState={(value) => setCaseStudyDetails((prev) => ({ ...prev, isActive: value }))}
+              />
+              <ToggleComponent
+                label={'Is Case Study Global?'}
+                isEnableState={caseStudyDetails.isGlobal}
+                setIsEnableState={(value) => setCaseStudyDetails((prev) => ({ ...prev, isGlobal: value }))}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
+        <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
+          <div className="sm:w-7/12 w-full flex flex-col">
+            <span className=" text-primary">Email Notification Settings</span>
+          </div>
+          <div className="w-full">
+            <div>
+              <FormField
+                label="Subject"
+                type="text"
+                id="mailSubject"
+                name="mailSubject"
+                placeholder="Subject"
+                value={caseStudyDetails.mailSubject}
+                onChange={(e) => {
+                  setCaseStudyDetails((prev) => ({ ...prev, mailSubject: e.target.value }));
+                  if (errors.mailSubject) setErrors((prev) => ({ ...prev, mailSubject: '' }));
+                }}
+                errorMessage={errors.mailSubject}
+              />
+              <TextareaComponent
+                label="Body"
+                placeholder="Body"
+                id="mailBody"
+                name="mailBody"
+                value={caseStudyDetails.mailBody}
+                onChange={(e) => setCaseStudyDetails((prev) => ({ ...prev, mailBody: e.target.value }))}
+                errorMessage={errors.mailBody}
+                charCount={false}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* <div className="w-full justify-center items-center border-b  border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end ">
+    <NoteComponent note={id ? editAdminNote : addAdminNote} />
+  </div> */}
+      {!isScrollable && (
+        <div className="w-full flex justify-end items-center gap-4 pt-8  border- border-primary">
+          <FormButtons to="/case-study/case-study-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} />
+        </div>
+      )}
     </div>
   );
-}
+};
+export default AddCaseStudy;

@@ -1,285 +1,98 @@
-import { useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { GlobalContext } from "../../GlobalContext";
-import useGetAllSites from "../../Hooks/useGetAllSites";
-import useSetTimeout from "../../Hooks/useDebounce";
-import { deleteRecaptchaApi, updateRecaptchaSitesApi, updateRecaptchaStatusApi } from "../../apis/recaptcha-apis";
-import TruncatableField from "../../comps/modals/truncatableField";
-import Table from "../../comps/table";
-import DuplicateModal from "../../comps/modals/duplicate";
-import ConfirmationModal from "../../comps/modals/confirmation";
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { IoMdAdd } from 'react-icons/io';
+import useGetAllSites from '../../hooks/useGetAllSites';
+import TruncatableFieldModal from '../../atoms/modal/TruncatableFeildModel';
+import { formatDateTime } from '../../utils/dateFormats';
+import TableComponent from '../../atoms/table/Table';
+import { deleteRecaptchaApi, updateRecaptchaSitesApi, updateRecaptchaStatusApi } from '../../apis/recaptcha-apis';
 
 const RecaptchaList = () => {
-  const navigate = useNavigate();
-  const { alert, setLoading } = useContext(GlobalContext);
   const allsites = useGetAllSites();
-
   const [recaptchas, setRecaptchas] = useState([]);
-  const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(8);
-  const [totalCount, setTotalCount] = useState(0);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [searchKey, setSearchKey] = useState("");
-  const [statusFilter, setStatusFilter] = useState("");
-  const [statusSelect, setStatusSelect] = useState("");
-  const [siteId, setSiteId] = useState("");
-  const [selectedRecaptchas, setSelectedRecaptchas] = useState([]);
-  const [selectAll, setSelectAll] = useState(false);
-  const [modalOpen, setModalOpen] = useState(false);
-  const [deleteModel, setDeleteModel] = useState(false);
-
-  const searchAbleKeys = ["Version", "sitekey", "secretkey"];
-  const filter = ["Active", "Inactive"];
-  const Status = ["Active", "Inactive"];
-
-  const [err, data, setRefresh] = useSetTimeout(
-    "recaptcha",
-    page - 1,
-    limit,
-    searchTerm,
-    searchKey,
-    statusFilter,
-    siteId
-  );
-
-  useEffect(() => {
-    if (data) {
-      setRecaptchas(data.recaptchas);
-      setTotalCount(data.count);
-    } else if (err) {
-      alert({ type: "warning", text: err.message });
-    }
-  }, [data, err, alert]);
-
-  const deleteSelectedRecaptchas = async () => {
-    setLoading(true);
-    try {
-      console.log(selectedRecaptchas);
-      const { status, data } = await deleteRecaptchaApi(selectedRecaptchas);
-      if (status) {
-        alert({ type: "success", text: data.message });
-        setRefresh((r) => !r);
-        setSelectedRecaptchas([]);
-        setSelectAll(false);
-      } else alert({ type: "danger", text: data });
-    } catch (error) {
-      alert({ type: "danger", text: error.message });
-    } finally {
-      setLoading(false);
-      setDeleteModel(false);
-    }
-  };
-
-  const updateRecaptchaStatus = async (recaptchaStatus) => {
-    setLoading(true);
-    try {
-      const { status, data } = await updateRecaptchaStatusApi(selectedRecaptchas, recaptchaStatus);
-
-      if (status) {
-        alert({ type: "success", text: data.message });
-        setRefresh((r) => !r);
-        setSelectedRecaptchas([]);
-        setSelectAll(false);
-        setStatusSelect("");
-      } else alert({ type: "danger", text: data });
-    } catch (error) {
-      alert({ type: "danger", text: error.message });
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const updateRecaptchaSites = async (selectedSites, selectedAction) => {
-    setLoading(true);
-    try {
-      const action = selectedAction === "Add" ? true : false;
-      const { status, data } = await updateRecaptchaSitesApi(selectedRecaptchas, selectedSites, action);
-      if (status) {
-        alert({ type: "success", text: data.message });
-        setRefresh((r) => !r);
-        setSelectedRecaptchas([]);
-        setSelectAll(false);
-      }
-    } catch (error) {
-      alert({ type: "danger", text: error.message });
-    } finally {
-      setLoading(false);
-      setModalOpen(false);
-      setSelectedRecaptchas([]);
-    }
-  };
-
-  const handleCheckboxChange = (recaptchaId) => {
-    setSelectedRecaptchas((prevSelected) => {
-      let updatedSelected;
-      if (prevSelected.includes(recaptchaId)) {
-        updatedSelected = prevSelected.filter((id) => id !== recaptchaId);
-        setStatusSelect("");
-      } else updatedSelected = [...prevSelected, recaptchaId];
-
-      if (updatedSelected.length === recaptchas.length) setSelectAll(true);
-      else setSelectAll(false);
-      return updatedSelected;
-    });
-  };
-
-  const handleSelectAll = () => {
-    if (selectAll) setSelectedRecaptchas([]);
-    else setSelectedRecaptchas(recaptchas.map((recaptcha) => recaptcha._id));
-    setSelectAll(!selectAll);
-  };
-
-  const headers = [
-    {
-      label: <input className="form-check-input " type="checkbox" checked={selectAll} onChange={handleSelectAll} />,
-    },
-    { label: "Version" },
-    { label: "site Key" },
-    { label: "Secret Key" },
-    { label: "Status" },
-    { label: "Actions" },
-    { label: "Sites" },
-  ];
 
   const rows = recaptchas.map((recaptcha) => {
-    const { _id, version, sitekey, secretkey, isActive, sites } = recaptcha;
+    const { _id, version, sitekey, secretkey, isActive, sites, createdAt, updatedAt } = recaptcha;
     return {
-      _id,
-      checkBox: (
-        <input
-          className="form-check-input "
-          type="checkbox"
-          checked={selectedRecaptchas.includes(_id)}
-          onChange={() => handleCheckboxChange(_id)}
-        />
-      ),
-      version: "v" + version,
-      sitekey: <TruncatableField title={"Site Key"} content={sitekey} maxLength={50} />,
-      secretkey: <TruncatableField title={"Secret Key"} content={secretkey} maxLength={50} />,
-      status:
-        isActive === true ? (
-          <span className="badge bg-success">Active</span>
-        ) : (
-          <span className="badge bg-danger">Inactive</span>
-        ),
-
-      action: (
-        <div key={_id}>
-          <button onClick={() => navigate(`/edit-recaptcha/${_id}`)} className="btn btn-primary me-1">
-            Edit
-          </button>
+      id: _id,
+      sites: <TruncatableFieldModal title={'Sites'} content={sites.map((s) => `${s.name} (${s.host})`).join(', ')} />,
+      version: version,
+      sitekey: <TruncatableFieldModal title={'Title'} content={sitekey} />,
+      secretkey: <TruncatableFieldModal title={'Title'} content={secretkey} />,
+      status: (
+        <div className={`rounded-xl ${isActive ? 'bg-[#ECFDF3] text-[#027948]' : 'bg-[#F2F4F7] text-[#344054]'} px-2 py-1 w-fit flex gap-2 items-center`}>
+          <span className={`min-w-[12px] min-h-[12px] rounded-full ${isActive ? 'bg-[#12B76A]' : 'bg-[#667085]'}`}></span>
+          <span>{isActive ? 'Active' : 'Inactive'}</span>
         </div>
       ),
-      sites: (
-        <TruncatableField
-          title={"Sties"}
-          content={sites.map((s) => `${s.name} (${s.host})`).join(", ")}
-          maxLength={50}
-        />
-      ),
+      created: formatDateTime(createdAt),
+      updated: formatDateTime(updatedAt)
     };
   });
 
   return (
-    <div className="page-body">
-      <div className="container-xl">
-        <div className="card">
-          <div className="card-header">
-            <h3 className="card-title">All reCAPTCHA</h3>
-            <div className="card-options d-flex gap-2">
-              <div className="card-options">
-                <div className="text-secondary">
-                  Filter
-                  <div className="mx-2 d-inline-block">
-                    <select className="form-select form-control-sm" onChange={(e) => setStatusFilter(e.target.value)}>
-                      <option value="">All</option>
-                      {filter.map((key, i) => (
-                        <option key={i} value={key.toLowerCase()}>
-                          {key}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-                {selectedRecaptchas.length ? (
-                  <>
-                    <div className="text-secondary">
-                      Status
-                      <div className="mx-2 d-inline-block">
-                        <select
-                          className="form-select form-control-sm"
-                          onChange={(e) => setStatusSelect(e.target.value)}
-                        >
-                          <option value="">Select</option>
-                          {Status.map((key, i) => (
-                            <option key={i} value={key.toLowerCase()}>
-                              {key}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                    </div>
-                    {statusSelect === "active" && (
-                      <button onClick={() => updateRecaptchaStatus(true)} className="btn btn-success mx-2">
-                        Apply
-                      </button>
-                    )}
-                    {statusSelect === "inactive" && (
-                      <button onClick={() => updateRecaptchaStatus(false)} className="btn btn-danger mx-2">
-                        Apply
-                      </button>
-                    )}
-                    <button onClick={() => setModalOpen(true)} className="btn btn-primary mx-2">
-                      Sites
-                    </button>
-                    <button onClick={() => setDeleteModel(true)} className="btn btn-danger mx-2">
-                      Delete
-                    </button>
-                  </>
-                ) : null}
-
-                <button onClick={() => navigate("/add-recaptcha")} className="btn btn-primary">
-                  Add reCAPTCHA
-                </button>
-              </div>
-            </div>
+    <div className="min-h-screen py-8 p-4 sm:p-8 overflow-x-hidden mb-20">
+      <div className=" w-full">
+        <div className="w-full flex md:flex-wrap gap-y-3 sm:flex-nowrap justify-between pb-5 border-b border-primary">
+          <div className="">
+            <h4 className="text-3xl text-dark">All reCAPTCHA List</h4>
           </div>
-
-          <div className="table-responsive  ">
-            <Table
-              headers={headers}
-              rows={rows}
-              currentPage={page}
-              totalPages={Math.ceil(totalCount / limit)}
-              onPageChange={setPage}
-              entriesPerPage={limit}
-              setSearchTerm={setSearchTerm}
-              setSearchKey={setSearchKey}
-              allsites={allsites}
-              setSiteId={setSiteId}
-              searchAbleKeys={searchAbleKeys}
-              onEntriesChange={(newLimit) => setLimit(newLimit)}
-              totalCount={totalCount}
-            />
+          <div className="w-full flex justify-end sm:w-fit">
+            <Link to="/recaptcha/add-recaptcha" className="flex gap-2 h-fit items-center px-2.5 md:px-2 sm:px-4 rounded-xl py-2.5 bg-primary hover:bg-hover text-white">
+              <IoMdAdd size={22} />
+              <span className="hidden md:block">Add reCAPTCHA</span>
+            </Link>
+          </div>
+        </div>
+        <div className="flex flex-col">
+          <div className="-m-1.5 overflow-x-auto">
+            <div className="p-1.5 min-w-full align-middle">
+              <TableComponent
+                selectable={true}
+                headers={[
+                  { label: 'Sr No.', key: 'srno' },
+                  { label: 'Sites', key: 'sites' },
+                  { label: 'Version', key: 'version' },
+                  { label: 'site Key', key: 'sitekey' },
+                  { label: 'Secret Key', key: 'secretkey' },
+                  { label: 'Status', key: 'status' },
+                  { label: 'Created Date', key: 'created' },
+                  { label: 'Updated Date', key: 'updated' }
+                ]}
+                tableData={(data) => setRecaptchas(data.recaptchas)}
+                rows={rows}
+                apiUrl={'recaptcha'}
+                tableCountLabel={true}
+                pagination={true}
+                actions={true}
+                edit={true}
+                editPath={'/recaptcha/edit-recaptcha'}
+                search={true}
+                filter={true}
+                filterCategory={[{ id: 1, name: 'Status' }]}
+                statuses={[
+                  { id: 0, name: 'Active', bgColor: '#ECFDF3', color: '#027948', dotColor: '#12B76A' },
+                  { id: 1, name: 'Inactive', bgColor: '#F2F4F7', color: '#344054', dotColor: '#667085' }
+                ]}
+                allsites={allsites}
+                searchCategory={[
+                  { id: 0, name: 'Version' },
+                  { id: 1, name: 'SiteKey' },
+                  { id: 2, name: 'SecretKey' }
+                ]}
+                modifyStatus={true}
+                modifyStatusApi={updateRecaptchaStatusApi}
+                modifySite={true}
+                modifySiteApi={updateRecaptchaSitesApi}
+                deleteBtn={true}
+                deleteApi={deleteRecaptchaApi}
+                deleteLabel={'Delete reCAPTCHA'}
+                deleteMessage={'Are you sure you want to delete this reCAPTCHA?'}
+              />
+            </div>
           </div>
         </div>
       </div>
-
-      <ConfirmationModal
-        isOpen={deleteModel}
-        onClose={() => setDeleteModel(false)}
-        onConfirm={deleteSelectedRecaptchas}
-        message={`Are you sure you want to delete selected reCAPTCHA? This action cannot be undone.`}
-      />
-      <DuplicateModal
-        allsites={allsites}
-        isOpen={modalOpen}
-        onClose={setModalOpen}
-        onConfirm={updateRecaptchaSites}
-        title="Update Sites"
-        action={["Add", "Remove"]}
-        confirmText="Update"
-      />
     </div>
   );
 };

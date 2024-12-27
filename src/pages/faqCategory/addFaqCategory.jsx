@@ -1,18 +1,22 @@
-import { useNavigate, useParams } from "react-router-dom";
-import { GlobalContext } from "../../GlobalContext";
-import { useContext, useEffect, useState } from "react";
-import { addFaqCategoryApi, getFaqCategoryByIdApi, updateFaqCategoryApi } from "../../apis/faqCategory-apis";
+import { useContext, useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { GlobalContext } from '../../contexts/GlobalContext';
+import { addFaqCategoryApi, getFaqCategoryByIdApi, updateFaqCategoryApi } from '../../apis/faqCategory-apis';
+import { showNotification } from '../../utils/showNotification';
+import FormButtons from '../../atoms/formFields/FormButtons';
+import FormField from '../../atoms/formFields/InputField';
 
 const AddFaqCategory = () => {
   const navigate = useNavigate();
-  const { id = "" } = useParams();
-  const { alert, setLoading } = useContext(GlobalContext);
-  const [fqaCategoryName, setFqaCategoryName] = useState("");
+  const { id = '' } = useParams();
+  const { setLoading } = useContext(GlobalContext);
+  const [isScrollable, setIsScrollable] = useState(false);
+  const [fqaCategoryName, setFqaCategoryName] = useState('');
   const [errors, setErrors] = useState({});
 
   const validate = () => {
     const newErrors = {};
-    if (!fqaCategoryName) newErrors.name = "Name is required";
+    if (!fqaCategoryName) newErrors.name = 'Name is required';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -27,17 +31,15 @@ const AddFaqCategory = () => {
           if (status) {
             const { name } = data.faqCategory;
             setFqaCategoryName(name);
-          } else {
-            alert({ type: "warning", text: "Faq Category not found" });
-          }
+          } else showNotification('warn', data);
         } catch (error) {
-          alert({ type: "danger", text: error.message });
+          showNotification('error', error.message);
         } finally {
           setLoading(false);
         }
       })();
     }
-  }, [alert, id, setLoading]);
+  }, [id, setLoading]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -47,48 +49,70 @@ const AddFaqCategory = () => {
       const name = { name: fqaCategoryName };
       const { status, data } = await (id ? updateFaqCategoryApi(id, name) : addFaqCategoryApi(name));
       if (status) {
-        alert({ type: "success", text: data.message });
-        navigate("/faq-category-list");
-      } else {
-        alert({ type: "warning", text: data });
-      }
+        showNotification('success', data.message);
+        navigate('/faq/faq-category-list');
+      } else showNotification('warn', data.message);
     } catch (error) {
-      alert({ type: "danger", text: error.message });
+      showNotification('error', error.message);
     } finally {
       setLoading(false);
     }
   };
+
+  const checkScrollability = () => {
+    const contentHeight = document.documentElement.scrollHeight;
+    const windowHeight = window.innerHeight;
+    setIsScrollable(contentHeight > windowHeight);
+  };
+
+  useEffect(() => {
+    checkScrollability();
+    window.addEventListener('resize', checkScrollability);
+    return () => window.removeEventListener('resize', checkScrollability);
+  }, []);
+
   return (
-    <div className="page-body">
-      <div className="container container-tight py-4">
-        <div className="card card-md">
-          <div className="card-body">
-            <h2 className="h2 text-center mb-4">{id ? "Edit Faq Category" : "Add Faq Category"}</h2>
-            <form onSubmit={handleSubmit}>
-              <div className="mb-3">
-                <label className={!id ? "form-label required" : "form-label "}>Category Name</label>
-                <input
-                  type="text"
-                  name="name"
-                  className={`form-control ${errors.name ? "is-invalid" : ""}`}
-                  placeholder="Category Name"
-                  value={fqaCategoryName}
-                  onChange={(e) => {
-                    setFqaCategoryName(e.target.value);
-                    if (errors.name) setErrors((prev) => ({ ...prev, name: "" }));
-                  }}
-                />
-                {errors.name && <div className="invalid-feedback mt-2">{errors.name}</div>}
-              </div>
-              <div className="form-footer">
-                <button type="submit" className="btn btn-primary w-100">
-                  {id ? "Update" : "Add"}
-                </button>
-              </div>
-            </form>
+    <div className="py-8 p-4 sm:p-8 overflow-x-hidden mb-20">
+      <div className="w-full pb-8 border-b border-primary gap-y-4 gap-2 flex flex-col items-start md:flex-row lg:flex-col xl:flex-row justify-between lg:items-start md:items-end xl:items-end">
+        <div>
+          <span className="text-3xl font-semibold text-dark">{id ? 'Edit' : 'Add'} FAQ Category</span>
+        </div>
+        <FormButtons to="/faq/faq-category-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} />
+      </div>
+
+      <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
+        <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
+          <div className="sm:w-7/12 w-full flex flex-col">
+            <span className=" text-primary ">Category Details</span>
+          </div>
+          <div className="w-full">
+            <div>
+              <FormField
+                label="Faq Category Name"
+                type="text"
+                id="fqaCategoryName"
+                name="fqaCategoryName"
+                placeholder="Faq Category Name"
+                onChange={(e) => {
+                  setFqaCategoryName(e.target.value);
+                  if (errors.name) setErrors((prev) => ({ ...prev, name: '' }));
+                }}
+                value={fqaCategoryName}
+                errorMessage={errors.name}
+              />
+            </div>
           </div>
         </div>
       </div>
+
+      {/* <div className="w-full justify-center items-center border-b  border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end ">
+        <NoteComponent note={id ? editCategoryNote : addCategoryNote} />
+      </div> */}
+      {!isScrollable && (
+        <div className="w-full flex justify-end items-center gap-4 pt-8  border- border-primary">
+          <FormButtons to="/faq/faq-category-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} />
+        </div>
+      )}
     </div>
   );
 };

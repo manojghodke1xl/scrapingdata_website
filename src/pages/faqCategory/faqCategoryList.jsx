@@ -1,83 +1,66 @@
-import { useContext, useEffect, useState } from "react";
-import { GlobalContext } from "../../GlobalContext";
-import { useNavigate } from "react-router-dom";
-import Table from "../../comps/table";
-import useSetTimeout from "../../Hooks/useDebounce";
-import { formatDateTime } from "../../utils/function";
-import TruncatableField from "../../comps/modals/truncatableField";
+import { useState } from 'react';
+import TruncatableFieldModal from '../../atoms/modal/TruncatableFeildModel';
+import { formatDateTime } from '../../utils/dateFormats';
+import { Link } from 'react-router-dom';
+import { IoMdAdd } from 'react-icons/io';
+import TableComponent from '../../atoms/table/Table';
 
 const FaqCategoryList = () => {
-  const navigate = useNavigate();
-  const { alert } = useContext(GlobalContext);
   const [faqCategories, setFaqCategories] = useState([]);
-  const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(8);
-  const [totalCount, setTotalCount] = useState(0);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [searchKey, setSearchKey] = useState("");
-  const searchAbleKeys = ["Name"];
 
-  const [err, data] = useSetTimeout("faq-category", page - 1, limit, searchTerm, searchKey);
-
-  const headers = [{ label: "Name" }, { label: "Created Date" }, { label: "Updated Date" }, { label: "Actions" }];
-
-  const rows = faqCategories.map((category) => {
-    const { _id, name, createdAt, updatedAt } = category;
+  const rows = faqCategories.map((faqCategory) => {
+    const { _id, name, createdAt, updatedAt } = faqCategory;
     return {
-      _id,
-      name: <TruncatableField title={"Name"} content={name} maxLength={50} />,
-      createdAt: formatDateTime(createdAt),
-      updatedAt: formatDateTime(updatedAt),
-      actions: (
-        <button key={_id} onClick={() => navigate(`/edit-faq-category/${_id}`)} className="btn btn-primary me-1">
-          Edit
-        </button>
-      ),
+      id: _id,
+      name: <TruncatableFieldModal title={'Name'} content={name} />,
+      created: formatDateTime(createdAt),
+      updated: formatDateTime(updatedAt)
     };
   });
 
-  useEffect(() => {
-    if (data) {
-      setFaqCategories(data.faqCategories);
-      setTotalCount(data.count);
-    } else if (err) {
-      alert({ type: "warning", text: err.message });
-    }
-  }, [alert, data, err]);
-
   return (
-    <div className="page-body">
-      <div className="container-xl">
-        <div className="card">
-          <div className="card-header">
-            <h3 className="card-title">All Faq Categories</h3>
-            <div className="card-options">
-              <button onClick={() => navigate("/add-faq-category")} className="btn btn-primary ">
-                Add Faq Category
-              </button>
-            </div>
+    <div className="min-h-screen py-8 p-4 sm:p-8 overflow-x-hidden mb-20">
+      <div className=" w-full">
+        <div className="w-full flex md:flex-wrap gap-y-3 sm:flex-nowrap justify-between pb-5 border-b border-primary">
+          <div className="">
+            <h4 className="text-3xl text-dark">All FAQ Category List</h4>
           </div>
-
-          <div className="table-responsive">
-            <Table
-              headers={headers}
-              rows={rows}
-              currentPage={page}
-              totalPages={Math.ceil(totalCount / limit)}
-              onPageChange={setPage}
-              entriesPerPage={limit}
-              setSearchTerm={setSearchTerm}
-              setSearchKey={setSearchKey}
-              searchAbleKeys={searchAbleKeys}
-              onEntriesChange={(newLimit) => {
-                setLimit(newLimit);
-              }}
-              totalCount={totalCount}
-            />
+          <div className="w-full flex justify-end sm:w-fit">
+            <Link to="/faq/add-faq-category" className="flex gap-2 h-fit items-center px-2.5 md:px-2 sm:px-4 rounded-xl py-2.5 bg-primary hover:bg-hover text-white">
+              <IoMdAdd size={22} />
+              <span className="hidden md:block">Add FAQ Category</span>
+            </Link>
+          </div>
+        </div>
+        <div className="flex flex-col">
+          <div className="-m-1.5 overflow-x-auto">
+            <div className="p-1.5 min-w-full align-middle">
+              <TableComponent
+                // selectable={true}
+                headers={[
+                  { label: 'Sr No.', key: 'srno' },
+                  { label: 'Name', key: 'name' },
+                  { label: 'Created Date', key: 'created' },
+                  { label: 'Updated Date', key: 'updated' }
+                ]}
+                tableData={(data) => setFaqCategories(data.faqCategories)}
+                rows={rows}
+                apiUrl={'faq-category'}
+                tableCountLabel={true}
+                pagination={true}
+                actions={true}
+                edit={true}
+                editPath={'/faq/edit-faq-category'}
+                search={true}
+                searchCategory={[{ id: 1, name: 'Name' }]}
+              />
+            </div>
           </div>
         </div>
       </div>
+      {/* <NoteComponent note={} /> */}
     </div>
   );
 };
+
 export default FaqCategoryList;

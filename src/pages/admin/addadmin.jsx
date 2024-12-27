@@ -1,26 +1,30 @@
-import { useContext, useEffect, useLayoutEffect, useState } from 'react';
+import { useState, useEffect, useContext, useLayoutEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { GlobalContext } from '../../GlobalContext';
-import { getAdminById, addAdminApi, updateAdminApi } from '../../apis/admin-apis';
-import useGetAllSites from '../../Hooks/useGetAllSites';
-import Addnote from '../../comps/addnote';
-import { addAdminNote, editAdminNote } from '../notes/notes-message';
+import MultiSelectCheckbox from '../../atoms/formFields/MultiSelectCheckBox';
+import ToggleComponent from '../../atoms/formFields/ToggleComponent';
+import { GlobalContext } from '../../contexts/GlobalContext';
+import useGetAllSites from '../../hooks/useGetAllSites';
+import { addAdminApi, getAdminByIdApi, updateAdminApi } from '../../apis/admin-apis';
+import FormField from '../../atoms/formFields/InputField';
+import { showNotification } from '../../utils/showNotification';
+import FormButtons from '../../atoms/formFields/FormButtons';
+import NoteComponent from '../../atoms/common/NoteComponent';
+import { addAdminNote, editAdminNote } from './AdminNotes';
 
-export default function AddAdmin() {
+const AddAdmin = () => {
   const navigate = useNavigate();
   const { id = '' } = useParams();
-  const { auth, alert, setLoading } = useContext(GlobalContext);
-
+  const { auth, setLoading } = useContext(GlobalContext);
   const [adminDetails, setAdminDetails] = useState({
     email: '',
     name: '',
     password: '',
     sites: [],
     isBlocked: false,
-    isSuperAdmin: false,
+    isSuperAdmin: false
   });
-  const [selectAll, setSelectAll] = useState(false);
   const [errors, setErrors] = useState({});
+  const [isScrollable, setIsScrollable] = useState(false);
   const availableSites = useGetAllSites();
 
   useLayoutEffect(() => {
@@ -31,30 +35,28 @@ export default function AddAdmin() {
     if (id) {
       setLoading(true);
       (async () => {
-        const { status, data } = await getAdminById(id);
+        const { status, data } = await getAdminByIdApi(id);
         const { sites, ...rest } = data.admin;
-        if (status) {
+        if (status)
           setAdminDetails((prev) => ({
             ...prev,
             ...rest,
             password: '',
-            sites,
+            sites
           }));
-        } else {
-          alert({ type: 'warning', text: data });
-        }
+        else showNotification('warn', data);
       })()
-        .catch((error) => alert({ type: 'danger', text: error.message }))
+        .catch((error) => showNotification('error', error.message))
         .finally(() => setLoading(false));
     }
-  }, [id, alert, setLoading]);
+  }, [id, setLoading]);
 
   const validate = () => {
     const newErrors = {};
     if (!adminDetails.email) newErrors.email = 'Email is required';
     if (!adminDetails.name) newErrors.name = 'Name is required';
     if (!adminDetails.password && !id) newErrors.password = 'Password is required';
-    if (!adminDetails.sites.length) newErrors.sites = 'At least one site must be selected';
+    if (adminDetails.sites.length === 0) newErrors.sites = 'At least one site must be selected';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -68,166 +70,136 @@ export default function AddAdmin() {
     try {
       const { status, data } = await (id ? updateAdminApi(id, rest) : addAdminApi(rest));
       if (status) {
-        alert({ type: 'success', text: data.message });
-        navigate('/admin-list');
-      } else {
-        alert({ type: 'warning', text: data });
-      }
+        showNotification('success', data.message);
+        navigate('/admin/admin-list');
+      } else showNotification('warn', data);
     } catch (error) {
-      alert({ type: 'danger', text: error.message });
+      showNotification('error', error.message);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleSiteSelection = (siteId) => {
-    setAdminDetails((prev) => {
-      const isSelected = prev.sites.includes(siteId);
-      return {
-        ...prev,
-        sites: isSelected ? prev.sites.filter((id) => id !== siteId) : [...prev.sites, siteId],
-      };
-    });
+  const checkScrollability = () => {
+    const contentHeight = document.documentElement.scrollHeight;
+    const windowHeight = window.innerHeight;
+    setIsScrollable(contentHeight > windowHeight);
   };
 
-  const handleSelectAllChange = () => {
-    if (selectAll) setAdminDetails((prev) => ({ ...prev, sites: [] }));
-    else
-      setAdminDetails((prev) => ({
-        ...prev,
-        sites: availableSites.map((site) => site._id),
-      }));
-
-    setSelectAll(!selectAll);
-  };
-
-  const isAllSelected = adminDetails.sites.length === availableSites.length;
+  useEffect(() => {
+    checkScrollability();
+    window.addEventListener('resize', checkScrollability);
+    return () => window.removeEventListener('resize', checkScrollability);
+  }, []);
 
   return (
-    <div className="page-body">
-      <div className="container container-tight py-4">
-        <div className="card card-md">
-          <div className="card-body">
-            <h2 className="h2 text-center mb-4">{id ? 'Edit Admin' : 'Add Admin'}</h2>
-            <form onSubmit={handleSubmit}>
-              <div className="mb-3">
-                <label className={!id ? 'form-label required' : 'form-label '}>Admin Name</label>
-                <input
-                  type="text"
-                  name="name"
-                  className={`form-control ${errors.name ? 'is-invalid' : ''}`}
-                  placeholder="Admin Name"
-                  value={adminDetails.name}
-                  onChange={(e) => {
-                    setAdminDetails((prev) => ({ ...prev, name: e.target.value }));
-                    if (errors.name) setErrors((prev) => ({ ...prev, name: '' }));
-                  }}
-                />
-                {errors.name && <div className="invalid-feedback">{errors.name}</div>}
-              </div>
-              <div className="mb-3">
-                <label className={!id ? 'form-label required' : 'form-label '}>Admin Email</label>
-                <input
-                  type="email"
-                  name="email"
-                  className={`form-control ${errors.email ? 'is-invalid' : ''}`}
-                  placeholder="Admin Email"
-                  value={adminDetails.email}
-                  onChange={(e) => {
-                    setAdminDetails((prev) => ({ ...prev, email: e.target.value }));
-                    if (errors.email) setErrors((prev) => ({ ...prev, email: '' }));
-                  }}
-                />
-                {errors.email && <div className="invalid-feedback">{errors.email}</div>}
-              </div>
-              <div className="mb-3">
-                <label className={!id ? 'form-label required' : 'form-label'}>Admin Password</label>
-                <input
-                  type="password"
-                  name="password"
-                  className={`form-control ${errors.password ? 'is-invalid' : ''}`}
-                  placeholder="Admin Password"
-                  value={adminDetails.password}
-                  onChange={(e) => {
-                    setAdminDetails((prev) => ({
-                      ...prev,
-                      password: e.target.value,
-                    }));
-                    if (errors.password) setErrors((prev) => ({ ...prev, password: '' }));
-                  }}
-                />
-                {errors.password && <div className="invalid-feedback">{errors.password}</div>}
-              </div>
-              <div className="mb-3">
-                <div className="d-flex justify-content-between mb-2">
-                  {adminDetails.isSuperAdmin ? (
-                    <label className="form-label">All Sites</label>
-                  ) : (
-                    <label className={!id ? 'form-label required' : 'form-label'}>Select Sites</label>
-                  )}
-                  <label className="form-check mb-0">
-                    <input
-                      type="checkbox"
-                      className="form-check-input me-2"
-                      checked={isAllSelected}
-                      onChange={handleSelectAllChange}
-                    />
-                    <span className="form-check-label">Select All</span>
-                  </label>
-                </div>
-                <div className={`form-multi-check-box ${errors.sites ? 'is-invalid' : ''}`}>
-                  {availableSites.map((site) => (
-                    <label
-                      key={site._id}
-                      className="form-check">
-                      <input
-                        className={`form-check-input ${errors.sites ? 'is-invalid' : ''}`}
-                        type="checkbox"
-                        checked={adminDetails.isSuperAdmin || adminDetails.sites.includes(site._id)}
-                        onChange={() => {
-                          handleSiteSelection(site._id);
-                          if (errors.sites) setErrors((prev) => ({ ...prev, sites: '' }));
-                        }}
-                        disabled={adminDetails.isSuperAdmin}
-                      />
-                      <span className="form-check-label">{site.name}</span>
-                    </label>
-                  ))}
-                </div>
-                {errors.sites && <div className="invalid-feedback mx-2 mb-2">{errors.sites}</div>}
-              </div>
-              {!adminDetails.isSuperAdmin && (
-                <div className="mb-3">
-                  <label className="row">
-                    <span className="col">Is admin blocked?</span>
-                    <span className="col-auto">
-                      <label className="form-check form-check-single form-switch">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          checked={adminDetails.isBlocked}
-                          onChange={() =>
-                            setAdminDetails((prev) => ({
-                              ...prev,
-                              isBlocked: !prev.isBlocked,
-                            }))
-                          }
-                        />
-                      </label>
-                    </span>
-                  </label>
-                </div>
-              )}
-              <div className="form-footer">
-                <button type="submit" className="btn btn-primary w-100">
-                  {id ? "Update" : "Add"}
-                </button>
-              </div>
-            </form>
+    <div className="py-8 p-4 sm:p-8 overflow-x-hidden mb-20">
+      <div className="w-full pb-8 border-b border-primary gap-y-4 gap-2 flex flex-col items-start md:flex-row lg:flex-col xl:flex-row justify-between lg:items-start md:items-end xl:items-end">
+        <div>
+          <span className="text-3xl font-semibold text-dark">{id ? 'Edit' : 'Add'} Admin</span>
+        </div>
+        <FormButtons to="/admin/admin-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} />
+      </div>
+
+      <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
+        <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
+          <div className="sm:w-7/12 w-full flex flex-col">
+            <span className=" text-primary ">Admin Details</span>
+          </div>
+          <div className="w-full">
+            <div>
+              <FormField
+                label="Admin Name"
+                type="text"
+                id="name"
+                name="name"
+                placeholder="Admin Name"
+                onChange={(e) => {
+                  setAdminDetails((prev) => ({ ...prev, name: e.target.value }));
+                  if (errors.name) setErrors((prev) => ({ ...prev, name: '' }));
+                }}
+                value={adminDetails.name}
+                errorMessage={errors.name}
+              />
+              <FormField
+                label="Admin Email"
+                type="email"
+                id="email"
+                name="email"
+                placeholder="Admin Email"
+                onChange={(e) => {
+                  setAdminDetails((prev) => ({ ...prev, email: e.target.value }));
+                  if (errors.email) setErrors((prev) => ({ ...prev, email: '' }));
+                }}
+                value={adminDetails.email}
+                errorMessage={errors.email}
+              />
+              <FormField
+                label="Admin Password"
+                type="password"
+                id="password"
+                name="password"
+                placeholder="Admin Password"
+                showPasswordToggle={true}
+                onChange={(e) => {
+                  setAdminDetails((prev) => ({ ...prev, password: e.target.value }));
+                  if (errors.password) setErrors((prev) => ({ ...prev, password: '' }));
+                }}
+                value={adminDetails.password}
+                errorMessage={errors.password}
+              />
+            </div>
           </div>
         </div>
       </div>
-      {!id ? <Addnote des={addAdminNote} /> : <Addnote des={editAdminNote} />}
+
+      <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end ">
+        <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
+          <div className="sm:w-7/12 w-full flex flex-col">
+            <span className="block text-primary">Access Settings</span>
+          </div>
+          <div className="w-full">
+            <div className="w-full">
+              <MultiSelectCheckbox
+                options={availableSites}
+                label="Select Sites"
+                onChange={(selected) => {
+                  setAdminDetails((prev) => ({ ...prev, sites: selected }));
+                  if (errors.sites) setErrors((prev) => ({ ...prev, sites: '' }));
+                }}
+                isSuperAdmin={adminDetails.isSuperAdmin}
+                selected={adminDetails.sites}
+                error={errors.sites}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="w-full justify-center items-center border-b  border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end ">
+        <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
+          <div className="sm:w-7/12 w-full flex flex-col">
+            <span className="block text-primary">Account Status</span>
+          </div>
+          <div className="dropdown-container relative w-full mt-2">
+            <ToggleComponent
+              label={'Is Admin Blocked?'}
+              isEnableState={adminDetails.isBlocked}
+              setIsEnableState={(value) => setAdminDetails((prev) => ({ ...prev, isBlocked: value }))}
+            />
+          </div>
+        </div>
+      </div>
+
+      <div className="w-full justify-center items-center border-b  border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end ">
+        <NoteComponent note={id ? editAdminNote : addAdminNote} />
+      </div>
+      {!isScrollable && (
+        <div className="w-full flex justify-end items-center gap-4 pt-8  border- border-primary">
+          <FormButtons to="/admin/admin-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} />
+        </div>
+      )}
     </div>
   );
-}
+};
+
+export default AddAdmin;

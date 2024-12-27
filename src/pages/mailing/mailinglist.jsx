@@ -1,201 +1,79 @@
-import { useContext, useEffect, useState } from "react";
-import { GlobalContext } from "../../GlobalContext";
-import { useNavigate } from "react-router-dom";
-import Table from "../../comps/table";
-import ConfirmationModal from "../../comps/modals/confirmation";
-import useSetTimeout from "../../Hooks/useDebounce";
-import useGetAllSites from "../../Hooks/useGetAllSites";
-import { deleteMailingListApi } from "../../apis/mailing-apis";
-import Addnote from "../../comps/addnote";
-import { listMailingNote } from "../notes/notes-message";
-import { formatDateTime } from "../../utils/function";
-import TruncatableField from "../../comps/modals/truncatableField";
-import IntegrationModal from "../../comps/modals/integrationModal";
-import { mailingListIntegrationData } from "../../utils/integrationData";
+import { useState } from 'react';
+import useGetAllSites from '../../hooks/useGetAllSites';
+import TruncatableFieldModal from '../../atoms/modal/TruncatableFeildModel';
+import { formatDateTime } from '../../utils/dateFormats';
+import TableComponent from '../../atoms/table/Table';
+import { Link } from 'react-router-dom';
+import { deleteMailingListApi } from '../../apis/mailing-apis';
 
-export default function MailingList() {
-  const navigate = useNavigate();
-  const { alert, setLoading } = useContext(GlobalContext);
-
-  const [lists, setLists] = useState([]);
-  const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(8);
-  const [modalOpen, setModalOpen] = useState(false);
-  const [integrationModalOpen, setIntegrationModalOpen] = useState(false);
-  const [totalCount, setTotalCount] = useState(0);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [searchKey, setSearchKey] = useState("");
-  const [selectedLists, setSelectedLists] = useState([]);
-  const [selectAll, setSelectAll] = useState(false);
-  const [siteId, setSiteId] = useState("");
+const MailingList = () => {
   const allsites = useGetAllSites();
+  const [lists, setLists] = useState([]);
 
-  const searchAbleKeys = ["Email"];
-
-  const [err, data, setRefresh] = useSetTimeout("lists", page - 1, limit, searchTerm, searchKey, "", siteId);
-
-  useEffect(() => {
-    if (data) {
-      setLists(data.lists);
-      setTotalCount(data.count);
-    } else if (err) {
-      alert({ type: "warning", text: err.message });
-    }
-  }, [data, err, alert]);
-
-  const deleteMailingList = async () => {
-    if (!selectedLists.length)
-      return alert({
-        type: "warning",
-        text: "Please select at least one List to delete.",
-      });
-
-    setLoading(true);
-    try {
-      const { status, data } = await deleteMailingListApi(selectedLists);
-      if (status) {
-        setLists((prevList) => prevList.filter((enq) => !selectedLists.includes(enq._id)));
-        alert({ type: "success", text: data.message });
-        setRefresh((r) => !r);
-        setSelectedLists([]);
-        setSelectAll(false);
-      } else {
-        alert({ type: "danger", text: data });
-      }
-    } catch (error) {
-      alert({ type: "danger", text: error.message });
-    } finally {
-      setLoading(false);
-      setModalOpen(false);
-      setSelectedLists([]);
-    }
-  };
-
-  const handleCheckboxChange = (listId) => {
-    setSelectedLists((prevSelected) => {
-      let updatedSelected;
-      if (prevSelected.includes(listId)) {
-        updatedSelected = prevSelected.filter((id) => id !== listId);
-      } else {
-        updatedSelected = [...prevSelected, listId];
-      }
-
-      if (updatedSelected.length === lists.length) {
-        setSelectAll(true);
-      } else {
-        setSelectAll(false);
-      }
-
-      return updatedSelected;
-    });
-  };
-
-  const handleSelectAll = () => {
-    if (selectAll) {
-      setSelectedLists([]);
-    } else {
-      setSelectedLists(lists.map((lst) => lst._id));
-    }
-    setSelectAll(!selectAll);
-  };
-
-  const headers = [
-    {
-      label: <input className="form-check-input" type="checkbox" checked={selectAll} onChange={handleSelectAll} />,
-    },
-    { label: "Customer Email" },
-    { label: "Site" },
-    { label: "Created Date" },
-    { label: "Updated Date" },
-    { label: "Actions" },
-  ];
-
-  const rows = lists.map((lst) => {
-    const { _id, email, site, createdAt, updatedAt } = lst;
+  const rows = lists.map((list) => {
+    const { _id, email, createdAt, updatedAt, site } = list;
     return {
-      _id,
-      checkedbox: (
-        <input
-          key={lst._id}
-          className="form-check-input"
-          type="checkbox"
-          checked={selectedLists.includes(lst._id)}
-          onChange={() => handleCheckboxChange(lst._id)}
-        />
-      ),
-      email: <TruncatableField title="Email" content={email} maxLength={20} />,
-      siteName: <TruncatableField title="Site" content={`${site?.name} (${site?.host})`} maxLength={20} />,
-
+      id: _id,
+      email: <TruncatableFieldModal title={'Email'} content={email} />,
+      sites: <TruncatableFieldModal title={'Sites'} content={`${site?.name} (${site?.host})`} />,
       created: formatDateTime(createdAt),
-      udpated: formatDateTime(updatedAt),
-      action: (
-        <div key={lst._id}>
-          <button onClick={() => navigate(`/mailing/${lst._id}`)} className="btn btn-primary me-1">
-            View
-          </button>
-        </div>
-      ),
+      updated: formatDateTime(updatedAt)
     };
   });
 
   return (
-    <div className="page-body">
-      <div className="container-xl">
-        <div className="card">
-          <div className="card-header">
-            <h3 className="card-title">All Mailing Lists</h3>
-            <div className="card-options">
-              <button className="btn btn-primary mx-2" onClick={() => setIntegrationModalOpen(true)}>
-                Integration guide
-              </button>
-              {selectedLists.length ? (
-                <button onClick={() => setModalOpen(true)} className="btn btn-danger">
-                  Delete Selected
-                </button>
-              ) : (
-                ""
-              )}
-            </div>
+    <div className="min-h-screen py-8 p-4 sm:p-8 overflow-x-hidden mb-20">
+      <div className=" w-full">
+        <div className="w-full flex md:flex-wrap gap-y-3 sm:flex-nowrap justify-between pb-5 border-b border-primary">
+          <div className="">
+            <h4 className="text-3xl text-dark">All Mailing List</h4>
           </div>
 
-          <div className="table-responsive">
-            <Table
-              headers={headers}
-              rows={rows}
-              currentPage={page}
-              totalPages={Math.ceil(totalCount / limit)}
-              onPageChange={setPage}
-              entriesPerPage={limit}
-              setSearchTerm={setSearchTerm}
-              setSearchKey={setSearchKey}
-              allsites={allsites}
-              setSiteId={setSiteId}
-              searchAbleKeys={searchAbleKeys}
-              onEntriesChange={setLimit}
-              totalCount={totalCount}
-            />
+          <div className="w-full flex justify-end sm:w-fit">
+            <Link to="/mailing/mailing-integration" className="flex gap-2 h-fit items-center px-2.5 md:px-2 sm:px-4 rounded-xl py-2.5 bg-primary hover:bg-hover text-white">
+              <span className="hidden md:block">Api Integration</span>
+            </Link>
+          </div>
+        </div>
+        <div className="flex flex-col">
+          <div className="-m-1.5 overflow-x-auto">
+            <div className="p-1.5 min-w-full align-middle">
+              <TableComponent
+                selectable={true}
+                headers={[
+                  { label: 'Sr No.', key: 'srno' },
+                  { label: 'Email', key: 'email' },
+                  { label: 'Sites', key: 'sites' },
+                  { label: 'Created Date', key: 'created' },
+                  { label: 'Updated Date', key: 'updated' }
+                ]}
+                tableData={(data) => setLists(data.lists)}
+                rows={rows}
+                apiUrl={'lists'}
+                tableCountLabel={true}
+                pagination={true}
+                actions={true}
+                view={true}
+                viewPath={'/mailing/view-mailing'}
+                search={true}
+                filter={true}
+                filterCategory={[{ id: 0, name: 'Sites' }]}
+                allsites={allsites}
+                searchCategory={[
+                  { id: 1, name: 'Email' },
+                  { id: 2, name: 'Site' }
+                ]}
+                deleteBtn={true}
+                deleteLabel={'Delete Mailing List'}
+                deleteMessage={'Are you sure you want to delete this mailing list?'}
+                deleteApiUrl={deleteMailingListApi}
+              />
+            </div>
           </div>
         </div>
       </div>
-      <Addnote des={listMailingNote} />
-
-      <ConfirmationModal
-        isOpen={modalOpen}
-        onClose={() => setModalOpen(false)}
-        onConfirm={deleteMailingList}
-        message="Are you sure you want to delete this mailing list? "
-      />
-      <IntegrationModal
-        isOpen={integrationModalOpen}
-        onClose={() => setIntegrationModalOpen(false)}
-        title={mailingListIntegrationData.title}
-        url={mailingListIntegrationData.url}
-        method={mailingListIntegrationData.method}
-        bodyParams={mailingListIntegrationData.bodyParams}
-        manditoryParams={mailingListIntegrationData.manditoryParams}
-        headers={mailingListIntegrationData.headers}
-        responseDetails={mailingListIntegrationData.responseDetails}
-      />
     </div>
   );
-}
+};
+
+export default MailingList;

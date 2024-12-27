@@ -1,35 +1,45 @@
-import { useContext, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { GlobalContext } from "../../GlobalContext";
-import { getAllGuidesApi } from "../../apis/guide-apis";
-import { getAllCaseStudyApi } from "../../apis/caseStudy-apis";
-import { getPopupById } from "../../apis/popup-apis";
-import { addPopupApi, updatePopupApi } from "../../apis/site-apis";
-import useGetAllSites from "../../Hooks/useGetAllSites";
-import { uploadFile } from "../../utils/fileUpload";
-import Addnote from "../../comps/addnote";
-import { addPopupNote, editPopupNote } from "../notes/notes-message";
+import { useNavigate, useParams } from 'react-router-dom';
+import FormButtons from '../../atoms/formFields/FormButtons';
+import { useContext, useEffect, useState } from 'react';
+import { GlobalContext } from '../../contexts/GlobalContext';
+import useGetAllSites from '../../hooks/useGetAllSites';
+import FormField from '../../atoms/formFields/InputField';
+import DropDown from '../../atoms/formFields/DropDown';
+import ToggleComponent from '../../atoms/formFields/ToggleComponent';
+import { showNotification } from '../../utils/showNotification';
+import { addPopupApi, getPopupById, updatePopupApi } from '../../apis/popup-apis';
+import FileUpload from '../../atoms/formFields/FileUpload';
+import { CiImageOn } from 'react-icons/ci';
+import TextareaComponent from '../../atoms/formFields/TextareaComponent';
+import DateTimePicker from '../../atoms/formFields/DateTimePicker';
+import { formatDateTime } from '../../utils/dateFormats';
+import { getAllGuidesApi } from '../../apis/guide-apis';
+import { getAllCaseStudyApi } from '../../apis/caseStudy-apis';
+import MultiSelectCheckbox from '../../atoms/formFields/MultiSelectCheckBox';
 
-export default function AddPopup() {
+const AddPopup = () => {
   const navigate = useNavigate();
-  const { id = "" } = useParams();
-  const { alert, setLoading } = useContext(GlobalContext);
+  const { id = '' } = useParams();
+  const { setLoading } = useContext(GlobalContext);
   const availableSites = useGetAllSites();
+
+  const [isScrollable, setIsScrollable] = useState(false);
+  const [errors, setErrors] = useState({});
   const [popupDetails, setPopupDetails] = useState({
-    name: "",
-    position: "",
+    name: '',
+    position: '',
     onPageLoad: false,
     onPageUnload: false,
     afterPageLoad: 1,
     atPageScroll: 0,
     offOnceSubmited: false,
     againWhenCanceled: 1,
-    showOnDeviceType: "all",
-    publishDate: new Date().toISOString().slice(0, 16),
-    archiveDate: new Date().toISOString().slice(0, 16),
-    contentType: "basic",
-    title: "",
-    desc: "",
+    showOnDeviceType: 'all',
+    publishDate: '',
+    archiveDate: '',
+    contentType: 'basic',
+    title: '',
+    desc: '',
     allGlobalGuides: false,
     allSiteGuides: false,
     moreGuides: [],
@@ -37,44 +47,9 @@ export default function AddPopup() {
     allSiteCaseStudy: false,
     moreCaseStudies: [],
     isActive: true,
-    site: "",
+    site: ''
   });
-
   const [contentDetials, setContentDetials] = useState([]);
-  const [errors, setErrors] = useState({});
-
-  const positions = ["Center-Popup", "Topbar-Notifications"];
-  const deviceTypes = ["All", "Desktop", "Mobile"];
-  const contentTypes = ["Basic", "Guide", "Casestudy"];
-
-  useEffect(() => {
-    (async () => {
-      const { status, data } = await (popupDetails.contentType === "guide"
-        ? getAllGuidesApi()
-        : popupDetails.contentType === "casestudy"
-        ? getAllCaseStudyApi()
-        : Promise.resolve({ status: false }));
-      if (status) {
-        popupDetails.contentType === "guide"
-          ? setContentDetials(data.guides)
-          : popupDetails.contentType === "casestudy"
-          ? setContentDetials(data.casestudies)
-          : "";
-      } else if (data) {
-        alert({ type: "warning", text: data });
-      }
-    })();
-  }, [alert, popupDetails.contentType]);
-
-  const validate = () => {
-    const newErrors = {};
-    if (!popupDetails.name) newErrors.name = "Name is required";
-    if (!popupDetails.position) newErrors.position = "Position is required";
-    if (!popupDetails.site) newErrors.site = "At least one site must be selected";
-    if (!popupDetails.position) newErrors.position = "At least one position must be selected";
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
 
   useEffect(() => {
     if (id) {
@@ -83,467 +58,382 @@ export default function AddPopup() {
         const { status, data } = await getPopupById(id);
         if (status) {
           const { publishDate, archiveDate, ...rest } = data.popup;
-          const [formattedPublishDate, formattedArchiveDate] = [new Date(publishDate), new Date(archiveDate)].map(
-            (date) => date.toISOString().slice(0, 16)
-          );
+          const [formattedPublishDate, formattedArchiveDate] = [new Date(publishDate), new Date(archiveDate)].map((date) => date.toISOString().slice(0, 24));
           setPopupDetails((prev) => ({
             ...prev,
             ...rest,
             publishDate: formattedPublishDate,
-            archiveDate: formattedArchiveDate,
+            archiveDate: formattedArchiveDate
           }));
-        } else {
-          alert({ type: "warning", text: data });
-        }
+        } else showNotification('warn', data);
       })()
-        .catch((error) => alert({ type: "danger", text: error.message }))
+        .catch((error) => showNotification('error', error.message))
         .finally(() => setLoading(false));
     }
-  }, [id, alert, setLoading]);
+  }, [id, setLoading]);
 
-  const handleSelection = (checked, id) => {
-    const refProp =
-      popupDetails.contentType === "guide"
-        ? "moreGuides"
-        : popupDetails.contentType === "casestudy"
-        ? "moreCaseStudies"
-        : "";
-    setPopupDetails({
-      ...popupDetails,
-      [refProp]: checked ? popupDetails[refProp].concat(id) : popupDetails[refProp].filter((_id) => id !== _id),
-    });
+  useEffect(() => {
+    (async () => {
+      const { status, data } = await (popupDetails.contentType === 'guide'
+        ? getAllGuidesApi()
+        : popupDetails.contentType === 'casestudy'
+        ? getAllCaseStudyApi()
+        : Promise.resolve({ status: false }));
+      if (status) {
+        popupDetails.contentType === 'guide' ? setContentDetials(data.guides) : popupDetails.contentType === 'casestudy' ? setContentDetials(data.casestudies) : '';
+      } else if (data) showNotification('warn', data);
+    })();
+  }, [popupDetails.contentType]);
+  const validate = () => {
+    const newErrors = {};
+    if (!popupDetails.name) newErrors.name = 'Name is required';
+    if (!popupDetails.position) newErrors.position = 'Position is required';
+    if (!popupDetails.site) newErrors.site = 'At least one site must be selected';
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
-  const handleDetails = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
     setLoading(true);
     try {
       const { status, data } = await (id ? updatePopupApi(id, popupDetails) : addPopupApi(popupDetails));
       if (status) {
-        alert({ type: "success", text: data.message });
-        navigate("/popup-list");
+        showNotification('success', data.message);
+        navigate('/pop-up/pop-up-list');
       } else {
-        alert({ type: "warning", text: data });
+        showNotification('warn', data);
       }
     } catch (error) {
-      alert({ type: "danger", text: error.message });
+      showNotification('error', error.message);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleFileUpload = ({ e, isImage = false, isPdf = false }) => {
-    const file = e.target.files[0];
-    if (file) {
-      uploadFile({
-        file,
-        isImage,
-        isPdf,
-        alert,
-        setDetails: setPopupDetails,
-        fieldName: "image",
-      });
-    }
+  const checkScrollability = () => {
+    const contentHeight = document.documentElement.scrollHeight;
+    const windowHeight = window.innerHeight;
+    setIsScrollable(contentHeight > windowHeight);
+  };
+
+  useEffect(() => {
+    checkScrollability();
+    window.addEventListener('resize', checkScrollability);
+    return () => window.removeEventListener('resize', checkScrollability);
+  }, []);
+
+  const handleSettingsChange = (selected) => {
+    const newPopupDetails = { ...popupDetails };
+    // First, set all possible options to false
+    getOptions().forEach((option) => (newPopupDetails[option._id] = false));
+    // Then set selected options to true
+    selected.forEach((optionId) => (newPopupDetails[optionId] = true));
+    setPopupDetails(newPopupDetails);
+  };
+
+  // Generate all the possible options based on contentType
+  const getOptions = () => {
+    const options = [
+      { _id: 'onPageLoad', name: 'On Page Load' },
+      { _id: 'onPageUnload', name: 'On Page Unload' },
+      { _id: 'offOnceSubmited', name: 'Off Once Submited' }
+    ];
+
+    if (popupDetails.contentType === 'guide') options.push({ _id: 'allGlobalGuides', name: 'All Global Guides' }, { _id: 'allSiteGuides', name: 'All Site Guides' });
+
+    if (popupDetails.contentType === 'casestudy')
+      options.push({ _id: 'allGlobalCaseStudy', name: 'All Global Case Studies' }, { _id: 'allSiteCaseStudy', name: 'All Site Case Studies' });
+
+    return options;
+  };
+
+  // Modify how we determine selected items
+  const getSelectedSettings = () => {
+    return Object.keys(popupDetails).filter(
+      (key) =>
+        popupDetails[key] === true && ['onPageLoad', 'onPageUnload', 'offOnceSubmited', 'allGlobalGuides', 'allSiteGuides', 'allGlobalCaseStudy', 'allSiteCaseStudy'].includes(key)
+    );
   };
 
   return (
-    <div className="page-body">
-      <div className="container container py-4">
-        <div className="card card-md">
-          <div className="card-body">
-            <h2 className="h2 text-center mb-4">{id ? "Edit Popup" : "Add Popup"}</h2>
-            <form onSubmit={handleDetails}>
-              <div className="row">
-                <div className="col-md-3 mb-3">
-                  <label className="form-label required">Name</label>
-                  <input
+    <div className="py-8 p-4 sm:p-8 overflow-x-hidden mb-20">
+      <div className="w-full pb-8 border-b border-primary gap-y-4 gap-2 flex flex-col items-start md:flex-row lg:flex-col xl:flex-row justify-between lg:items-start md:items-end xl:items-end">
+        <div>
+          <span className="text-3xl font-semibold text-dark">{id ? 'Edit' : 'Add'} Popup</span>
+        </div>
+        <FormButtons to="/pop-up/pop-up-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} />
+      </div>
+
+      <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
+        <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
+          <div className="sm:w-7/12 w-full flex flex-col">
+            <span className=" text-primary">Popup Details</span>
+          </div>
+          <div className="w-full">
+            <div>
+              <FormField
+                label="Name"
+                type="text"
+                id="title"
+                name="title"
+                placeholder="Name"
+                onChange={(e) => {
+                  setPopupDetails((prev) => ({ ...prev, name: e.target.value }));
+                  if (errors.name) setErrors((prev) => ({ ...prev, name: '' }));
+                }}
+                value={popupDetails.name}
+                errorMessage={errors.name}
+              />
+              <DropDown
+                name="position"
+                SummaryChild={<h5 className="p-0 m-0 text-primary">{popupDetails.positionObj ? popupDetails.positionObj.showName : 'Position'}</h5>}
+                dropdownList={[
+                  { id: 0, showName: 'Center-popup', name: 'center-popup' },
+                  { id: 1, showName: 'Topbar-Notifications', name: 'topbar-notifications' }
+                ]}
+                selected={popupDetails.position}
+                search={true}
+                commonFunction={(e) => {
+                  setPopupDetails((prev) => ({ ...prev, position: e.name, positionObj: e }));
+                  if (errors.position) setErrors((prev) => ({ ...prev, position: '' }));
+                }}
+                error={errors.position}
+              />
+
+              <DropDown
+                name="contentType"
+                SummaryChild={<h5 className="p-0 m-0 text-primary">{popupDetails.contentObj ? popupDetails.contentObj.showName : 'Basic'}</h5>}
+                dropdownList={[
+                  { id: 0, showName: 'Basic', name: 'basic' },
+                  { id: 1, showName: 'Guide', name: 'guide' },
+                  { id: 2, showName: 'Case Study', name: 'casestudy' }
+                ]}
+                selected={popupDetails.contentType}
+                search={true}
+                commonFunction={(e) =>
+                  setPopupDetails((prev) => ({
+                    ...prev,
+                    contentType: e.name,
+                    contentObj: e,
+                    ...(e.name === 'casestudy'
+                      ? { allGlobalGuides: false, allSiteGuides: false, moreGuides: [] }
+                      : e.name === 'guide'
+                      ? { allGlobalCaseStudy: false, allSiteCaseStudy: false, moreCaseStudies: [] }
+                      : {
+                          allGlobalGuides: false,
+                          allSiteGuides: false,
+                          moreGuides: [],
+                          allGlobalCaseStudy: false,
+                          allSiteCaseStudy: false,
+                          moreCaseStudies: []
+                        })
+                  }))
+                }
+              />
+
+              {popupDetails.contentType === 'basic' && (
+                <div>
+                  <FormField
+                    label="Title"
                     type="text"
-                    name="name"
-                    className={`form-control ${errors.name ? "is-invalid" : ""}`}
-                    placeholder="Name"
-                    value={popupDetails.name}
-                    onChange={(e) => {
-                      setPopupDetails((d) => ({ ...d, name: e.target.value }));
-                      if (errors.name) setErrors((prev) => ({ ...prev, name: "" }));
-                    }}
-                  />
-                  {errors.name && <div className="invalid-feedback mt-2">{errors.name}</div>}
-                </div>
-                <div className="col-md-3">
-                  <label className="form-label required">Position</label>
-                  <select
-                    className={`form-select ${errors.position ? "is-invalid" : ""}`}
-                    value={popupDetails.position}
-                    onChange={(e) => {
-                      setPopupDetails((d) => ({
-                        ...d,
-                        position: e.target.value,
-                      }));
-                      if (errors.position) setErrors((prev) => ({ ...prev, position: "" }));
-                    }}
-                  >
-                    <option value={""}>Select</option>
-                    {positions.map((position, i) => (
-                      <option key={i} value={position.toLowerCase()}>
-                        {position}
-                      </option>
-                    ))}
-                  </select>
-                  {errors.position && <div className="invalid-feedback mt-2">{errors.position}</div>}
-                </div>
-                <div className="col-md-3">
-                  <label className="form-label">After Page Load</label>
-                  <input
-                    type="number"
-                    name="afterPageLoad"
-                    className="form-control"
-                    placeholder="After Page Load"
-                    value={popupDetails.afterPageLoad}
-                    onChange={(e) =>
-                      setPopupDetails((d) => ({
-                        ...d,
-                        afterPageLoad: e.target.value,
-                      }))
-                    }
-                  />
-                </div>
-                <div className="col-md-3">
-                  <label className="form-label">At Page Scroll</label>
-                  <input
-                    type="number"
-                    name="atPageScroll"
-                    className="form-control"
-                    placeholder="At Page Scroll"
-                    value={popupDetails.atPageScroll}
-                    onChange={(e) =>
-                      setPopupDetails((d) => ({
-                        ...d,
-                        atPageScroll: e.target.value,
-                      }))
-                    }
-                  />
-                </div>
-              </div>
-              <div className="row">
-                <div className="col-md-3 mb-3">
-                  <label className="form-label">Again When Canceled</label>
-                  <input
-                    type="number"
-                    name="againWhenCanceled"
-                    className="form-control"
-                    placeholder="Again When Canceled"
-                    value={popupDetails.againWhenCanceled}
-                    onChange={(e) =>
-                      setPopupDetails((d) => ({
-                        ...d,
-                        againWhenCanceled: e.target.value,
-                      }))
-                    }
-                  />
-                </div>
-                <div className="col-md-3">
-                  <label className="form-label required">Device Type</label>
-                  <select
-                    className="form-select"
-                    value={popupDetails.showOnDeviceType}
-                    onChange={(e) =>
-                      setPopupDetails((d) => ({
-                        ...d,
-                        showOnDeviceType: e.target.value,
-                      }))
-                    }
-                  >
-                    {deviceTypes.map((device, i) => (
-                      <option key={i} value={device.toLowerCase()}>
-                        {device}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div className="col-md-3">
-                  <label className="form-label">Publish Date</label>
-                  <input
-                    type="datetime-local"
-                    name="publishDate"
-                    className="form-control"
+                    id="title"
+                    name="title"
                     placeholder="Title"
-                    value={popupDetails.publishDate}
-                    onChange={(e) => setPopupDetails((d) => ({ ...d, publishDate: e.target.value }))}
-                  />
-                </div>
-                <div className="col-md-3">
-                  <label className="form-label">Archive Date</label>
-                  <input
-                    type="datetime-local"
-                    name="archiveDate"
-                    className="form-control"
-                    placeholder="Title"
-                    value={popupDetails.archiveDate}
-                    onChange={(e) => setPopupDetails((d) => ({ ...d, archiveDate: e.target.value }))}
-                  />
-                </div>
-              </div>
-              <div className="row">
-                <div className="col-md-3 mb-3">
-                  <label className="form-label required">Content Type</label>
-                  <select
-                    className="form-select"
-                    value={popupDetails.contentType}
-                    onChange={(e) =>
-                      setPopupDetails((d) => ({
-                        ...d,
-                        contentType: e.target.value,
-                      }))
-                    }
-                  >
-                    {contentTypes.map((contentType, i) => (
-                      <option key={i} value={contentType.toLowerCase()}>
-                        {contentType}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                {popupDetails.contentType === "basic" ? (
-                  <>
-                    <div className="col-md-3 mb-3">
-                      <label className="form-label">Title</label>
-                      <input
-                        type="text"
-                        name="title"
-                        className="form-control"
-                        placeholder="Title"
-                        value={popupDetails.title}
-                        onChange={(e) =>
-                          setPopupDetails((d) => ({
-                            ...d,
-                            title: e.target.value,
-                          }))
-                        }
-                      />
-                    </div>
-                    <div className="col-md-3">
-                      <label className="form-label">Upload Image</label>
-                      <input
-                        type="file"
-                        name="image"
-                        className="form-control"
-                        onChange={(e) => handleFileUpload({ e, isImage: true })}
-                        accept="image/*"
-                      />
-                    </div>
-                  </>
-                ) : (
-                  <> </>
-                )}
-                <div className="col-md-3 mb-3">
-                  <label className="form-label">Settings</label>
-                  <div className="popup-form-multi-check-box">
-                    <label className="form-check">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        checked={popupDetails.onPageLoad}
-                        onChange={() =>
-                          setPopupDetails((prev) => ({
-                            ...prev,
-                            onPageLoad: !prev.onPageLoad,
-                          }))
-                        }
-                      />
-                      <span className="form-check-label">On Page Load</span>
-                    </label>
-
-                    <label className="form-check">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        checked={popupDetails.onPageUnload}
-                        onChange={() =>
-                          setPopupDetails((prev) => ({
-                            ...prev,
-                            onPageUnload: !prev.onPageUnload,
-                          }))
-                        }
-                      />
-                      <span className="form-check-label">On Page Unload</span>
-                    </label>
-
-                    <label className="form-check">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        checked={popupDetails.offOnceSubmited}
-                        onChange={() =>
-                          setPopupDetails((prev) => ({
-                            ...prev,
-                            offOnceSubmited: !prev.offOnceSubmited,
-                          }))
-                        }
-                      />
-                      <span className="form-check-label">Off Once Submited</span>
-                    </label>
-                    {popupDetails.contentType === "guide" && (
-                      <>
-                        <label className="form-check">
-                          <input
-                            className="form-check-input"
-                            type="checkbox"
-                            checked={popupDetails.allGlobalGuides}
-                            onChange={() =>
-                              setPopupDetails((prev) => ({
-                                ...prev,
-                                allGlobalGuides: !prev.allGlobalGuides,
-                              }))
-                            }
-                          />
-                          <span className="form-check-label">All Global Guides</span>
-                        </label>
-                        <label className="form-check">
-                          <input
-                            className="form-check-input"
-                            type="checkbox"
-                            checked={popupDetails.allSiteGuides}
-                            onChange={() =>
-                              setPopupDetails((prev) => ({
-                                ...prev,
-                                allSiteGuides: !prev.allSiteGuides,
-                              }))
-                            }
-                          />
-                          <span className="form-check-label">All Site Guides</span>
-                        </label>
-                      </>
-                    )}
-                    {popupDetails.contentType === "casestudy" && (
-                      <>
-                        <label className="form-check">
-                          <input
-                            className="form-check-input"
-                            type="checkbox"
-                            checked={popupDetails.allGlobalCaseStudies}
-                            onChange={() =>
-                              setPopupDetails((prev) => ({
-                                ...prev,
-                                allGlobalCaseStudies: !prev.allGlobalCaseStudies,
-                              }))
-                            }
-                          />
-                          <span className="form-check-label">All Global CaseStudies</span>
-                        </label>
-                        <label className="form-check">
-                          <input
-                            className="form-check-input"
-                            type="checkbox"
-                            checked={popupDetails.allSiteCaseStudies}
-                            onChange={() =>
-                              setPopupDetails((prev) => ({
-                                ...prev,
-                                allSiteCaseStudies: !prev.allSiteCaseStudies,
-                              }))
-                            }
-                          />
-                          <span className="form-check-label">All Site CaseStudies</span>
-                        </label>
-                      </>
-                    )}
-                  </div>
-                </div>
-
-                {(popupDetails.contentType === "guide" || popupDetails.contentType === "casestudy") && (
-                  <div className="col-md-3">
-                    <label className="form-label">
-                      {popupDetails.contentType === "guide" ? "Additional Guides" : "Additional Case Study"}
-                    </label>
-                    <div className="popup-form-multi-check-box">
-                      {contentDetials.map((data) => (
-                        <label key={data._id} className="form-check">
-                          <input
-                            className="form-check-input"
-                            type="checkbox"
-                            checked={
-                              popupDetails.contentType === "guide"
-                                ? popupDetails.moreGuides.includes(data._id)
-                                : popupDetails.moreCaseStudies.includes(data._id)
-                            }
-                            onChange={(e) => handleSelection(e.target.checked, data._id)}
-                          />
-                          <span className="form-check-label">{data.title}</span>
-                        </label>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                <div className="col-md-3">
-                  <label className="form-label required">Select site</label>
-                  <select
-                    className={`form-select ${errors.site ? "is-invalid" : ""}`}
-                    value={popupDetails.site}
                     onChange={(e) => {
-                      setPopupDetails((d) => ({
-                        ...d,
-                        site: e.target.value,
-                      }));
-                      if (errors.site) setErrors((prev) => ({ ...prev, site: "" }));
+                      setPopupDetails((prev) => ({ ...prev, title: e.target.value }));
+                      if (errors.title) setErrors((prev) => ({ ...prev, title: '' }));
                     }}
-                  >
-                    <option value={""}>Select</option>
-                    {availableSites.map((site, i) => (
-                      <option key={i} value={site._id}>
-                        {site.name}
-                      </option>
-                    ))}
-                  </select>
-                  {errors.site && <div className="invalid-feedback mt-2">{errors.site}</div>}
+                    value={popupDetails.title}
+                    errorMessage={errors.title}
+                  />
+                  <FileUpload
+                    logo={<CiImageOn className="text-primary text-2xl" />}
+                    error={errors.image}
+                    setErrors={setErrors}
+                    acceptedTypes={['.jpeg', '.png']}
+                    fieldName="image"
+                    isImage
+                    setDetails={setPopupDetails}
+                    imagePreviewUrl={popupDetails.imageFile?.url}
+                  />
                 </div>
-
-                {popupDetails.contentType === "basic" && (
-                  <div className=" col-md-6 mb-3">
-                    <label className="form-label">Description</label>
-                    <textarea
-                      className="form-control"
-                      name="example-textarea-input"
-                      rows={4}
-                      placeholder="Description.."
-                      value={popupDetails.desc}
-                      onChange={(e) => setPopupDetails((d) => ({ ...d, desc: e.target.value }))}
-                    />
-                  </div>
-                )}
-
-                <div className="col-md-3 mb-3">
-                  <label className="form-label">Popup Status</label>
-                  <label className="row">
-                    <span className="col">Is Popup active ?</span>
-                    <span className="col-auto">
-                      <label className="form-check form-check-single form-switch">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          checked={popupDetails.isActive}
-                          onChange={() =>
-                            setPopupDetails((prev) => ({
-                              ...prev,
-                              isActive: !prev.isActive,
-                            }))
-                          }
-                        />
-                      </label>
-                    </span>
-                  </label>
-                </div>
-              </div>
-              <div className="form-footer ">
-                <button type="submit" className="btn btn-primary d-block mx-auto">
-                  {id ? "Update" : "Add"}
-                </button>
-              </div>
-            </form>
+              )}
+            </div>
           </div>
         </div>
       </div>
-      {!id ? <Addnote des={addPopupNote} /> : <Addnote des={editPopupNote} />}
+
+      <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end ">
+        <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
+          <div className="sm:w-7/12 w-full flex flex-col">
+            <span className="block text-primary">Trigger Conditions</span>
+          </div>
+          <div className="w-full">
+            <div className="w-full">
+              <FormField
+                label="After Page Load"
+                type="number"
+                id="afterPageLoad "
+                name="afterPageLoad "
+                placeholder="After Page Load"
+                onChange={(e) => setPopupDetails((prev) => ({ ...prev, afterPageLoad: e.target.value }))}
+                value={popupDetails.afterPageLoad}
+              />
+              <FormField
+                label="At Page Scroll"
+                type="number"
+                id="atPageScroll"
+                name="atPageScroll"
+                placeholder="At Page Scroll"
+                onChange={(e) => setPopupDetails((prev) => ({ ...prev, atPageScroll: e.target.value }))}
+                value={popupDetails.atPageScroll}
+              />
+
+              <FormField
+                label="Again when canceled"
+                type="number"
+                id="againWhenCanceled"
+                name="againWhenCanceled"
+                placeholder="Again when canceled"
+                onChange={(e) => setPopupDetails((prev) => ({ ...prev, againWhenCanceled: e.target.value }))}
+                value={popupDetails.againWhenCanceled}
+              />
+
+              <DropDown
+                name="type"
+                SummaryChild={<h5 className="p-0 m-0 text-primary">{popupDetails.deviceObj ? popupDetails.deviceObj.showName : 'All'}</h5>}
+                dropdownList={[
+                  { id: 0, showName: 'All', name: 'all' },
+                  { id: 1, showName: 'Desktop', name: 'desktop' },
+                  { id: 2, showName: 'Mobile', name: 'mobile' }
+                ]}
+                selected={popupDetails.showOnDeviceType}
+                search={true}
+                commonFunction={(e) => setPopupDetails((prev) => ({ ...prev, showOnDeviceType: e.name, deviceObj: e }))}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end ">
+        <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
+          <div className="sm:w-7/12 w-full flex flex-col">
+            <span className="block text-primary">Content Settings</span>
+          </div>
+          <div className="w-full">
+            <div className="w-full">
+              <>
+                <label className="block text-sm font-medium text-primary">Settings</label>
+                <MultiSelectCheckbox marginTop="mt-2" options={getOptions()} label="Select Settings" onChange={handleSettingsChange} selected={getSelectedSettings()} />
+              </>
+
+              {popupDetails.contentType === 'guide' || popupDetails.contentType === 'casestudy' ? (
+                <>
+                  <label className="block text-sm font-medium text-primary mt-5">Additional {popupDetails.contentType === 'guide' ? 'Guides' : 'Case Studies'}</label>
+                  <MultiSelectCheckbox
+                    marginTop="mt-2"
+                    options={contentDetials.map((content) => ({
+                      _id: content._id,
+                      name: content.title
+                    }))}
+                    label={`Select ${popupDetails.contentType === 'guide' ? 'Guides' : 'Case Studies'}`}
+                    onChange={(selected) => {
+                      setPopupDetails((prev) => ({
+                        ...prev,
+                        [popupDetails.contentType === 'guide' ? 'moreGuides' : 'moreCaseStudies']: selected
+                      }));
+                    }}
+                    selected={popupDetails.contentType === 'guide' ? popupDetails.moreGuides : popupDetails.moreCaseStudies}
+                  />
+                </>
+              ) : null}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end ">
+        <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
+          <div className="sm:w-7/12 w-full flex flex-col">
+            <span className="block text-primary">Date & Time Settings</span>
+          </div>
+          <div className="w-full">
+            <div className="w-full">
+              <DateTimePicker
+                id={'publishDate'}
+                label={'Publish Date'}
+                placeholder={formatDateTime(new Date())}
+                selectedDateTime={popupDetails.publishDate}
+                setSelectedDateTime={(e) => setPopupDetails((prev) => ({ ...prev, publishDate: e }))}
+              />
+              <DateTimePicker
+                id={'archiveDate'}
+                label={'Archive Date'}
+                placeholder={formatDateTime(new Date())}
+                selectedDateTime={popupDetails.archiveDate}
+                setSelectedDateTime={(e) => setPopupDetails((prev) => ({ ...prev, archiveDate: e }))}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end ">
+        <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
+          <div className="sm:w-7/12 w-full flex flex-col">
+            <span className="block text-primary">Site & Status</span>
+          </div>
+          <div className="w-full">
+            <div className="w-full">
+              <DropDown
+                name="Sites"
+                dropdownList={availableSites.map((site) => ({ id: site._id, showName: site.name, name: site._id }))}
+                SummaryChild={<h5 className="p-0 m-0 text-primary">{popupDetails.siteObj ? popupDetails.siteObj.showName : 'Sites'}</h5>}
+                search={true}
+                selected={popupDetails.site}
+                commonFunction={(e) => {
+                  setPopupDetails((prev) => ({ ...prev, site: e.name, siteObj: e }));
+                  if (errors.site) setErrors((prev) => ({ ...prev, site: '' }));
+                }}
+                error={errors.site}
+              />
+
+              {popupDetails.contentType === 'basic' && (
+                <TextareaComponent
+                  label="Description"
+                  id="description"
+                  name="description"
+                  placeholder="Enter a description..."
+                  onChange={(e) => {
+                    setPopupDetails((prev) => ({ ...prev, desc: e.target.value }));
+                  }}
+                  value={popupDetails.desc}
+                />
+              )}
+
+              <ToggleComponent
+                label={'Is Popup Active?'}
+                isEnableState={popupDetails.isActive}
+                setIsEnableState={(value) => setPopupDetails((prev) => ({ ...prev, isActive: value }))}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* <div className="w-full justify-center items-center border-b  border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end ">
+<NoteComponent note={id ? editAdminNote : addAdminNote} />
+</div> */}
+      {!isScrollable && (
+        <div className="w-full flex justify-end items-center gap-4 pt-8  border- border-primary">
+          <FormButtons to="/pop-up/pop-up-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} />
+        </div>
+      )}
     </div>
   );
-}
+};
+
+export default AddPopup;
