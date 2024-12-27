@@ -46,9 +46,7 @@ const AddClientLogo = () => {
             images: image._id ? [...image._id] : [],
             imageFile: image
           }));
-        } else {
-          showNotification('warn', data);
-        }
+        } else showNotification('warn', data);
       })()
         .catch((error) => showNotification('error', error.message))
         .finally(() => setLoading(false));

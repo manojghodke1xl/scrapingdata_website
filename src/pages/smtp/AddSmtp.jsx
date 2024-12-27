@@ -6,7 +6,7 @@ import { showNotification } from '../../utils/showNotification';
 import FormButtons from '../../atoms/formFields/FormButtons';
 import FormField from '../../atoms/formFields/InputField';
 import NoteComponent from '../../atoms/common/NoteComponent';
-import { addSMTPNote, editSMTPNote } from './smtpNotes';
+import { addSMTPNote, editSMTPNote } from './SmtpNotes';
 import DropDown from '../../atoms/formFields/DropDown';
 
 const AddSmtp = () => {

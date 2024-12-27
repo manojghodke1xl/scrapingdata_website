@@ -1,7 +1,7 @@
 import { lazy } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
-const TestimonialList = lazy(() => import('../../pages/testimonials/TestimonialsList'));
+const TestimonialList = lazy(() => import('../../pages/testimonials/TestimonialList'));
 const AddTestimonial = lazy(() => import('../../pages/testimonials/AddTestimonial'));
 const AddTestimonialCategory = lazy(() => import('../../pages/testimonialCategory/AddTestimonialCategory'));
 const TestimonialCategoryList = lazy(() => import('../../pages/testimonialCategory/TestimonialCategoryList'));

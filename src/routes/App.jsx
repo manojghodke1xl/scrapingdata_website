@@ -3,7 +3,7 @@ import { authReducer, authState, GlobalContext } from '../contexts/GlobalContext
 import { useReducer, useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 import FullScreenLoader from '../atoms/common/FullScreenLoader';
-import DeAuthComponent from '../components/authentication/DeauthComponent';
+import DeAuthComponent from '../components/authentication/DeAuthComponent';
 import Login from '../pages/authentication/Login';
 import AuthComponent from '../components/authentication/AuthComponent';
 import StructuredLayout from '../layouts/StructuredLayout';
