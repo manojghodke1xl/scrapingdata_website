@@ -25,7 +25,7 @@ import GalleryRoutes from './private-routes/GalleryRoutes';
 import PartnerLoogoRoutes from './private-routes/PartnerLogoRoutes';
 import PageNotFound from '../pages/common/PageNotFound';
 import 'react-toastify/dist/ReactToastify.css';
-import CouponRoutes from './private-routes/Couponroutes';
+import CouponRoutes from './private-routes/CouponRoutes';
 import ParticipantRoutes from './private-routes/ParticipantRoutes';
 import EventRoutes from './private-routes/EventRoutes';
 import PaymentRoutes from './private-routes/PaymentRoutes';
