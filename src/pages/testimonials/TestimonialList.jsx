@@ -6,6 +6,8 @@ import { Link } from 'react-router-dom';
 import { IoMdAdd } from 'react-icons/io';
 import TableComponent from '../../atoms/table/Table';
 import { updateTestimonialSitesApi, updateTestimonialStatusApi } from '../../apis/testimonial-apis';
+import NoteComponent from '../../atoms/common/NoteComponent';
+import { listTestimonialNote } from './TestimonialNotes';
 
 const TestimonialList = () => {
   const allsites = useGetAllSites();
@@ -84,6 +86,7 @@ const TestimonialList = () => {
           </div>
         </div>
       </div>
+      <NoteComponent note={listTestimonialNote} />
     </div>
   );
 };

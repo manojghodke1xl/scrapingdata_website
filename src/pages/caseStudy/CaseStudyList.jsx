@@ -6,6 +6,8 @@ import { Link } from 'react-router-dom';
 import { IoMdAdd } from 'react-icons/io';
 import TableComponent from '../../atoms/table/Table';
 import { updateCaseStudySitesApi, updateCaseStudyStatusApi } from '../../apis/caseStudy-apis';
+import NoteComponent from '../../atoms/common/NoteComponent';
+import { listCasestudyNote } from './CaseStudyNotes';
 
 const CaseStudyList = () => {
   const allsites = useGetAllSites();
@@ -87,6 +89,7 @@ const CaseStudyList = () => {
           </div>
         </div>
       </div>
+      <NoteComponent note={listCasestudyNote} />
     </div>
   );
 };

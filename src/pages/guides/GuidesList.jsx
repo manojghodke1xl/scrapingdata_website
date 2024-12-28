@@ -6,6 +6,8 @@ import { formatDateTime } from '../../utils/dateFormats';
 import { Link } from 'react-router-dom';
 import { IoMdAdd } from 'react-icons/io';
 import { updateGuideSitesApi, updateGuideStatusApi } from '../../apis/guide-apis';
+import NoteComponent from '../../atoms/common/NoteComponent';
+import { listGuideNote } from './GuideNotes';
 
 const GuidesList = () => {
   const allsites = useGetAllSites();
@@ -87,6 +89,7 @@ const GuidesList = () => {
           </div>
         </div>
       </div>
+      <NoteComponent note={listGuideNote} />
     </div>
   );
 };

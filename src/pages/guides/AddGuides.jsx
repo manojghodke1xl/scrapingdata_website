@@ -12,6 +12,8 @@ import ToggleComponent from '../../atoms/formFields/ToggleComponent';
 import FileUpload from '../../atoms/formFields/FileUpload';
 import { CiImageOn } from 'react-icons/ci';
 import { BsFilePdf } from 'react-icons/bs';
+import NoteComponent from '../../atoms/common/NoteComponent';
+import { addGuideNote, editGuideNote } from './GuideNotes';
 
 const AddGuides = () => {
   const navigate = useNavigate();
@@ -237,9 +239,9 @@ const AddGuides = () => {
         </div>
       </div>
 
-      {/* <div className="w-full justify-center items-center border-b  border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end ">
-        <NoteComponent note={id ? editAdminNote : addAdminNote} />
-      </div> */}
+      <div className="w-full justify-center items-center border-b  border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end ">
+        <NoteComponent note={id ? editGuideNote : addGuideNote} />
+      </div>
       {!isScrollable && (
         <div className="w-full flex justify-end items-center gap-4 pt-8  border- border-primary">
           <FormButtons to="/guides/guides-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} />

@@ -14,6 +14,8 @@ import ToggleComponent from '../../atoms/formFields/ToggleComponent';
 import FileUpload from '../../atoms/formFields/FileUpload';
 import { CiImageOn } from 'react-icons/ci';
 import { RiVideoUploadLine } from 'react-icons/ri';
+import NoteComponent from '../../atoms/common/NoteComponent';
+import { addTestimonialNote, editTestimonialNote } from './TestimonialNotes';
 
 const AddTestimonial = () => {
   const navigate = useNavigate();
@@ -302,9 +304,9 @@ const AddTestimonial = () => {
         </div>
       </div>
 
-      {/* <div className="w-full justify-center items-center border-b  border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end ">
-        <NoteComponent note={id ? editAdminNote : addAdminNote} />
-      </div> */}
+      <div className="w-full justify-center items-center border-b  border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end ">
+        <NoteComponent note={id ? editTestimonialNote : addTestimonialNote} />
+      </div>
       {!isScrollable && (
         <div className="w-full flex justify-end items-center gap-4 pt-8  border- border-primary">
           <FormButtons to="/testimonials/testimonial-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} />
