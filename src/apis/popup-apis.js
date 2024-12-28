@@ -1,7 +1,7 @@
 import { deleteMethodCall, getMethodCall, postMethodCall, putMethodCall } from './api-handler';
 
 export const getPopupById = async (id) => {
-  return await getMethodCall(`${import.meta.env.VITE_API_URL}/popup/${id}`);
+  return await getMethodCall(`${import.meta.env.VITE_API_URL}/popup/${id}?p=1`);
 };
 
 export const duplicatePopupApi = async (pids, sids) => {

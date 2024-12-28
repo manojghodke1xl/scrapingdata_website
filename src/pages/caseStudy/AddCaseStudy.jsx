@@ -64,9 +64,7 @@ const AddCaseStudy = () => {
             pdfFile: pdf,
             imageFile: image
           }));
-        } else {
-          showNotification('warn', data);
-        }
+        } else showNotification('warn', data);
       })()
         .catch((error) => showNotification('error', error.message))
         .finally(() => setLoading(false));
@@ -94,9 +92,7 @@ const AddCaseStudy = () => {
       if (status) {
         showNotification('success', data.message);
         navigate('/case-study/case-study-list');
-      } else {
-        showNotification('warn', data);
-      }
+      } else showNotification('warn', data);
     } catch (error) {
       showNotification('error', error.message);
     } finally {

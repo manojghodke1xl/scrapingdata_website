@@ -59,11 +59,13 @@ const AddPopup = () => {
       (async () => {
         const { status, data } = await getPopupById(id);
         if (status) {
-          const { publishDate, archiveDate, ...rest } = data.popup;
+          const { publishDate, archiveDate, image, ...rest } = data.popup;
           const [formattedPublishDate, formattedArchiveDate] = [new Date(publishDate), new Date(archiveDate)].map((date) => date.toISOString().slice(0, 24));
           setPopupDetails((prev) => ({
             ...prev,
             ...rest,
+            image: image ? image?._id : '',
+            imageFile: image,
             publishDate: formattedPublishDate,
             archiveDate: formattedArchiveDate
           }));
@@ -79,8 +81,8 @@ const AddPopup = () => {
       const { status, data } = await (popupDetails.contentType === 'guide'
         ? getAllGuidesApi()
         : popupDetails.contentType === 'casestudy'
-          ? getAllCaseStudyApi()
-          : Promise.resolve({ status: false }));
+        ? getAllCaseStudyApi()
+        : Promise.resolve({ status: false }));
       if (status) {
         popupDetails.contentType === 'guide' ? setContentDetials(data.guides) : popupDetails.contentType === 'casestudy' ? setContentDetials(data.casestudies) : '';
       } else if (data) showNotification('warn', data);
@@ -222,15 +224,15 @@ const AddPopup = () => {
                     ...(e.name === 'casestudy'
                       ? { allGlobalGuides: false, allSiteGuides: false, moreGuides: [] }
                       : e.name === 'guide'
-                        ? { allGlobalCaseStudy: false, allSiteCaseStudy: false, moreCaseStudies: [] }
-                        : {
-                            allGlobalGuides: false,
-                            allSiteGuides: false,
-                            moreGuides: [],
-                            allGlobalCaseStudy: false,
-                            allSiteCaseStudy: false,
-                            moreCaseStudies: []
-                          })
+                      ? { allGlobalCaseStudy: false, allSiteCaseStudy: false, moreCaseStudies: [] }
+                      : {
+                          allGlobalGuides: false,
+                          allSiteGuides: false,
+                          moreGuides: [],
+                          allGlobalCaseStudy: false,
+                          allSiteCaseStudy: false,
+                          moreCaseStudies: []
+                        })
                   }))
                 }
               />
