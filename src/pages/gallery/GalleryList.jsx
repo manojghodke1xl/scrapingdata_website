@@ -50,6 +50,7 @@ const GalleryList = () => {
             <div className="p-1.5 min-w-full align-middle">
               <TableComponent
                 selectable={true}
+                search={true}
                 headers={[
                   { label: 'Sr No.', key: 'srno' },
                   { label: 'Image', key: 'image' },

@@ -42,7 +42,7 @@ const TableComponent = ({
   statuses,
   allsites,
   events,
-  searchCategory,
+  searchCategory = [],
   modifyStatus,
   adminStatus,
   modifyStatusApi,
@@ -238,12 +238,14 @@ const TableComponent = ({
                     placeholder={`Search by ${filterState.searchKey || '...'}`}
                   />
                 </div>
-                <SearchFilter
-                  searchCategory={searchCategory}
-                  setSearchKey={(key) => setFilterState((prev) => ({ ...prev, searchKey: key }))}
-                  selectedCategory={selectedCategory}
-                  setSelectedCategory={setSelectedCategory}
-                />
+                {searchCategory.length > 0 && (
+                  <SearchFilter
+                    searchCategory={searchCategory}
+                    setSearchKey={(key) => setFilterState((prev) => ({ ...prev, searchKey: key }))}
+                    selectedCategory={selectedCategory}
+                    setSelectedCategory={setSelectedCategory}
+                  />
+                )}
               </>
             )}
             {filter && (
