@@ -309,7 +309,7 @@ const TableComponent = ({
           </div>
         </div>
 
-        {tableCountLabel && (
+        {tableCountLabel && selectionState.selectedItems.length > 0 && (
           <div className="w-full ptpb-4 text-center bg-grey border-b border-primary">
             <p className="text-secondary">
               {selectionState.selectedItems.length === tableState.totalCount && 'All'} {selectionState.selectedItems.length} record from this page is selected
