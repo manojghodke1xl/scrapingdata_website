@@ -5,6 +5,7 @@ const TestimonialList = lazy(() => import('../../pages/testimonials/TestimonialL
 const AddTestimonial = lazy(() => import('../../pages/testimonials/AddTestimonial'));
 const AddTestimonialCategory = lazy(() => import('../../pages/testimonialCategory/AddTestimonialCategory'));
 const TestimonialCategoryList = lazy(() => import('../../pages/testimonialCategory/TestimonialCategoryList'));
+const PageNotFound = lazy(() => import('../../pages/common/PageNotFound'));
 
 const TestimonialRoutes = () => {
   return (
@@ -15,6 +16,7 @@ const TestimonialRoutes = () => {
       <Route path="/testimonial-category-list" element={<TestimonialCategoryList />} />
       <Route path="/add-testimonial-category" element={<AddTestimonialCategory />} />
       <Route path="/edit-testimonial-category/:id" element={<AddTestimonialCategory />} />
+      <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
 };

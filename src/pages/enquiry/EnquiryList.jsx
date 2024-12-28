@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import { deleteEnquiryApi } from '../../apis/enquiry-apis';
 import NoteComponent from '../../atoms/common/NoteComponent';
 import { listEnquiryNote } from './EnquiryNotes';
+import { AiOutlineApi } from 'react-icons/ai';
 
 const EnquiryList = () => {
   const allsites = useGetAllSites();
@@ -33,8 +34,8 @@ const EnquiryList = () => {
           </div>
           <div className="w-full flex justify-end sm:w-fit">
             <Link to="/enquiry/enquiry-integration" className="flex gap-2 h-fit items-center px-2.5 md:px-2 sm:px-4 rounded-xl py-2.5 bg-primary hover:bg-hover text-white">
-              {/* <span className="hidden md:block">API Integration</span> */}
-              <span>API Integration</span>
+              <AiOutlineApi size={22} />
+              <span className="hidden md:block">API Integration</span>
             </Link>
           </div>
         </div>

@@ -8,6 +8,8 @@ import FormButtons from '../../atoms/formFields/FormButtons';
 import MultipleFileUpload from '../../atoms/formFields/MultiFileUpload';
 import MultiSelectCheckbox from '../../atoms/formFields/MultiSelectCheckBox';
 import ToggleComponent from '../../atoms/formFields/ToggleComponent';
+import NoteComponent from '../../atoms/common/NoteComponent';
+import { addPartnerLogoNote, editPartnerLogoNote } from './PartnerLogoNotes';
 
 const AddPartnerLogo = () => {
   const navigate = useNavigate();
@@ -151,12 +153,9 @@ const AddPartnerLogo = () => {
         </div>
       </div>
 
-      <br />
-      <br />
-
-      {/* <div className="w-full justify-center items-center border-b  border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end ">
-    <NoteComponent note={id ? editAdminNote : addAdminNote} />
-  </div> */}
+      <div className="w-full justify-center items-center border-b  border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end ">
+        <NoteComponent note={id ? editPartnerLogoNote : addPartnerLogoNote} />
+      </div>
       {!isScrollable && (
         <div className="w-full flex justify-end items-center gap-4 pt-8  border- border-primary">
           <FormButtons to="/partner-logo/partner-logo-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} />

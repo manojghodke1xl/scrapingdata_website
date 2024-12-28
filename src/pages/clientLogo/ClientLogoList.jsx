@@ -6,6 +6,8 @@ import { Link } from 'react-router-dom';
 import { IoMdAdd } from 'react-icons/io';
 import TableComponent from '../../atoms/table/Table';
 import { deleteClientLogoApi, updateClientLogoSitesApi, updateClientLogoStatusApi } from '../../apis/client-logo-apis';
+import NoteComponent from '../../atoms/common/NoteComponent';
+import { clientLogoListNote } from './ClientLogoNotes';
 
 const ClientLogoList = () => {
   const allsites = useGetAllSites();
@@ -87,6 +89,7 @@ const ClientLogoList = () => {
           </div>
         </div>
       </div>
+      <NoteComponent note={clientLogoListNote} />
     </div>
   );
 };

@@ -35,12 +35,14 @@ const TableComponent = ({
   deleteBtn,
   deleteLabel,
   deleteMessage,
+  deleteApi,
+  duplicateBtn,
+  duplicateApi,
   filterCategory,
   statuses,
   allsites,
   events,
   searchCategory,
-  deleteApi,
   modifyStatus,
   adminStatus,
   modifyStatusApi,
@@ -49,148 +51,172 @@ const TableComponent = ({
 }) => {
   const navigate = useNavigate();
   const { setLoading } = useContext(GlobalContext);
-  const [selectedItems, setSelectedItems] = useState([]);
-  const [isAllSelected, setIsAllSelected] = useState(false);
-  const [itemsPerPage, setItemsPerPage] = useState(10);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalCount, setTotalCount] = useState(0);
-  const [isDeleteModelOpen, setDeleteModelOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
-  const [siteId, setSiteId] = useState('');
-  const [eventId, setEventId] = useState('');
-  const [statusFilter, setStatusFilter] = useState('');
-  const [searchTerm, setSearchTearm] = useState('');
-  const [searchKey, setSearchKey] = useState('');
-  const [updateStatus, setUpdatestatus] = useState('');
-  const [isSitesModelOpen, setSitesModelOpen] = useState(false);
-  const [selectedSites, setSelectedSites] = useState([]);
-  const [siteToggle, setSiteToggle] = useState(false);
 
-  const totalPages = Math.ceil(totalCount / itemsPerPage);
+  const [modalState, setModalState] = useState({
+    isDuplicateModelOpen: false,
+    isDeleteModelOpen: false,
+    isSitesModelOpen: false
+  });
+  const [tableState, setTableState] = useState({
+    currentPage: 1,
+    itemsPerPage: 10,
+    totalCount: 0
+  });
+  const [selectionState, setSelectionState] = useState({
+    selectedItems: [],
+    isAllSelected: false,
+    selectedSites: [],
+    siteToggle: false,
+    status: ''
+  });
+  const [filterState, setFilterState] = useState({
+    searchTerm: '',
+    searchKey: '',
+    statusFilter: '',
+    siteId: '',
+    eventId: ''
+  });
 
-  const [err, data, setRefresh] = useSetTimeout(apiUrl, currentPage - 1, itemsPerPage, searchTerm, searchKey, statusFilter, siteId, eventId);
+  const [showFilter, setShowFilter] = useState({
+    status: false,
+    site: false,
+    event: false
+  });
+
+  const totalPages = Math.ceil(tableState.totalCount / tableState.itemsPerPage);
+
+  const [err, data, setRefresh] = useSetTimeout(
+    apiUrl,
+    tableState.currentPage - 1,
+    tableState.itemsPerPage,
+    filterState.searchTerm,
+    filterState.searchKey,
+    filterState.statusFilter,
+    filterState.siteId,
+    filterState.eventId
+  );
+
   useEffect(() => {
     if (data) {
       tableData(data);
-      setTotalCount(data.count);
+      setTableState((prev) => ({ ...prev, totalCount: data.count }));
     } else if (err) showNotification('warn', err.message);
   }, [data, err, tableData]);
 
   const handleMasterCheckboxChange = () => {
     const nonSuperAdminIds = rows.filter((row) => !row.isSuperAdmin).map((row) => row.id);
-    const newChecked = !isAllSelected;
-    setIsAllSelected(newChecked);
-    if (newChecked) setSelectedItems(nonSuperAdminIds);
-    else setSelectedItems([]);
+    const newChecked = !selectionState.isAllSelected;
+    setSelectionState((prev) => ({ ...prev, isAllSelected: newChecked }));
+    if (newChecked) setSelectionState((prev) => ({ ...prev, selectedItems: nonSuperAdminIds }));
+    else setSelectionState((prev) => ({ ...prev, selectedItems: [] }));
   };
   const handleRowCheckboxChange = (id) => {
     let updatedSelected;
-    if (selectedItems.includes(id)) updatedSelected = selectedItems.filter((itemId) => itemId !== id);
-    else updatedSelected = [...selectedItems, id];
-    setSelectedItems(updatedSelected);
-    setIsAllSelected(updatedSelected.length === rows.length);
+    if (selectionState.selectedItems.includes(id)) updatedSelected = selectionState.selectedItems.filter((itemId) => itemId !== id);
+    else updatedSelected = [...selectionState.selectedItems, id];
+    setSelectionState((prev) => ({ ...prev, selectedItems: updatedSelected }));
+    setSelectionState((prev) => ({ ...prev, isAllSelected: updatedSelected.length === rows.length }));
   };
 
   const handleDeleteConfirm = async () => {
-    if (!selectedItems.length) return showNotification('warn', 'Please select at least one item.');
+    if (!selectionState.selectedItems.length) return showNotification('warn', 'Please select at least one item.');
     setLoading(true);
     try {
-      const { status, data } = await deleteApi(selectedItems);
+      const { status, data } = await deleteApi(selectionState.selectedItems);
       if (status) {
         showNotification('success', data.message);
-        setSelectedItems([]);
-        setIsAllSelected(false);
+        setSelectionState((prev) => ({ ...prev, selectedItems: [], isAllSelected: false }));
         setRefresh((r) => !r);
       } else showNotification('warn', data);
     } catch (error) {
       showNotification('error', error.message);
     } finally {
       setLoading(false);
-      setDeleteModelOpen(false);
-      setCurrentPage(1);
+      setModalState((prev) => ({ ...prev, isDeleteModelOpen: false }));
+      setTableState((prev) => ({ ...prev, currentPage: 1 }));
     }
   };
 
   const handleStatusUpdate = async (statusUpdate) => {
-    if (!selectedItems.length) return showNotification('warn', 'Please select at least one item.');
+    if (!selectionState.selectedItems.length) return showNotification('warn', 'Please select at least one item.');
     setLoading(true);
     try {
       let isActive;
       if (adminStatus) isActive = statusUpdate === 'active' ? false : true;
       else isActive = statusUpdate === 'active' ? true : false;
-      const { status, data } = await modifyStatusApi(selectedItems, isActive);
+      const { status, data } = await modifyStatusApi(selectionState.selectedItems, isActive);
       if (status) {
         showNotification('success', data.message);
-        setSelectedItems([]);
-        setIsAllSelected(false);
-        setSiteToggle(false);
-        setStatusFilter('');
+        setSelectionState((prev) => ({ ...prev, selectedItems: [], isAllSelected: false, selectedSites: [], siteToggle: false }));
+        setFilterState((prev) => ({ ...prev, statusFilter: '' }));
         setRefresh((r) => !r);
       } else showNotification('warn', data);
     } catch (error) {
       showNotification('error', error.message);
     } finally {
-      setUpdatestatus('');
       setLoading(false);
-      setDeleteModelOpen(false);
-      setCurrentPage(1);
+      setSelectionState((prev) => ({ ...prev, status: '' }));
+      setModalState((prev) => ({ ...prev, isDeleteModelOpen: false }));
+      setTableState((prev) => ({ ...prev, currentPage: 1 }));
     }
   };
 
   const handleSitesUpdate = async (action) => {
-    if (!selectedItems.length && !selectedSites.length && !action.length) return showNotification('warn', 'Please select at least one item.');
+    if (!selectionState.selectedItems.length && !selectionState.selectedSites.length && !action.length) return showNotification('warn', 'Please select at least one item.');
     setLoading(true);
     try {
-      const { status, data } = await modifySiteApi(selectedItems, selectedSites, action);
+      const { status, data } = await modifySiteApi(selectionState.selectedItems, selectionState.selectedSites, action);
       if (status) {
         showNotification('success', data.message);
-        setSelectedItems([]);
-        setSelectedSites([]);
-        setIsAllSelected(false);
+        setSelectionState((prev) => ({ ...prev, selectedItems: [], isAllSelected: false, siteToggle: false, selectedSites: [] }));
         setRefresh((r) => !r);
       } else showNotification('warn', data);
     } catch (error) {
       showNotification('error', error.message);
     } finally {
       setLoading(false);
-      setSitesModelOpen(false);
-      setCurrentPage(1);
+      setSelectionState((prev) => ({ ...prev, selectedSites: [], siteToggle: false }));
+      setModalState((prev) => ({ ...prev, isSitesModelOpen: false }));
+      setTableState((prev) => ({ ...prev, currentPage: 1 }));
     }
   };
 
-  const [showStatusFilter, setShowStatusFilter] = useState(false);
-  const [showSitesFilter, setShowSitesFilter] = useState(false);
-  const [showEventFilter, setShowEventFilter] = useState(false);
+  const handleDuplicateConfirm = async () => {
+    if (!selectionState.selectedItems.length && !selectionState.selectedSites.length) return showNotification('warn', 'Please select at least one item.');
+    setLoading(true);
+    try {
+      const { status, data } = await duplicateApi(selectionState.selectedItems, selectionState.selectedSites);
+      if (status) {
+        showNotification('success', data.message);
+        setSelectionState({ selectedItems: [], isAllSelected: false, selectedSites: [] });
+        setRefresh((r) => !r);
+      } else showNotification('warn', data);
+    } catch (error) {
+      showNotification('error', error.message);
+    } finally {
+      setLoading(false);
+      setModalState((prev) => ({ ...prev, isDuplicateModelOpen: false }));
+      setTableState((prev) => ({ ...prev, currentPage: 1 }));
+    }
+  };
 
   const handleCategorySelect = (category) => {
-    if (category.name === 'Status') setShowStatusFilter(true);
-    if (category.name === 'Sites') setShowSitesFilter(true);
-    if (category.name === 'Event') setShowEventFilter(true);
+    if (category.name === 'Status') setShowFilter((prev) => ({ ...prev, status: !prev.status }));
+    if (category.name === 'Sites') setShowFilter((prev) => ({ ...prev, sites: !prev.site }));
+    if (category.name === 'Event') setShowFilter((prev) => ({ ...prev, event: !prev.event }));
     if (category.name === 'Search') {
-      setSearchKey('');
-      setSearchTearm('');
+      setFilterState({ searchTerm: '', searchKey: '' });
       setSelectedCategory({ ...category, type: 'search' });
     }
   };
 
   const handleClearFilter = () => {
-    setShowStatusFilter(false);
-    setShowSitesFilter(false);
-    setShowEventFilter(false);
+    setModalState({ isDeleteModelOpen: false, isSitesModelOpen: false, isDuplicateModelOpen: false });
+    setSelectionState({ selectedItems: [], isAllSelected: false, selectedSites: [], siteToggle: false, status: '' });
+    setFilterState({ searchTerm: '', searchKey: '', siteId: '', eventId: '', statusFilter: '' });
+    setShowFilter({ status: false, sites: false, event: false });
     setSelectedCategory(null);
-    setDeleteModelOpen(false);
-    setSitesModelOpen(false);
-    setSelectedSites([]);
-    setSelectedItems([]);
-    setIsAllSelected(false);
-    setUpdatestatus('');
-    setSiteId('');
-    setEventId('');
-    setSelectedCategory(null);
-    setStatusFilter('');
-    setSearchKey('');
-    setSearchTearm('');
-    setSiteToggle(false);
   };
 
   return (
@@ -200,10 +226,24 @@ const TableComponent = ({
           <div className="flex gap-4 flex-wrap sm:flex-nowrap justify-start items-center">
             {search && (
               <>
-                <div className={`px-2 rounded-xl border border-primary flex gap-2 items-center w-full md:w-[210px] h-fit ${!searchKey ? 'bg-grey cursor-not-allowed' : ''}`}>
-                  <SearchComponent value={searchTerm} onChange={(e) => setSearchTearm(e.target.value)} disabled={!searchKey} placeholder={`Search by ${searchKey || '...'}`} />
+                <div
+                  className={`px-2 rounded-xl border border-primary flex gap-2 items-center w-full md:w-[210px] h-fit ${
+                    !filterState.searchKey ? 'bg-grey cursor-not-allowed' : ''
+                  }`}
+                >
+                  <SearchComponent
+                    value={filterState.searchTerm}
+                    onChange={(e) => setFilterState((prev) => ({ ...prev, searchTerm: e.target.value }))}
+                    disabled={!filterState.searchKey}
+                    placeholder={`Search by ${filterState.searchKey || '...'}`}
+                  />
                 </div>
-                <SearchFilter searchCategory={searchCategory} setSearchKey={setSearchKey} selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} />
+                <SearchFilter
+                  searchCategory={searchCategory}
+                  setSearchKey={(key) => setFilterState((prev) => ({ ...prev, searchKey: key }))}
+                  selectedCategory={selectedCategory}
+                  setSelectedCategory={setSelectedCategory}
+                />
               </>
             )}
             {filter && (
@@ -211,28 +251,28 @@ const TableComponent = ({
                 <div className="hidden sm:block gap-2">
                   <Filters categories={filterCategory} onCategorySelect={handleCategorySelect} setSelectedCategory={setSelectedCategory} selectedCategory={selectedCategory} />
                 </div>
-                {showStatusFilter && <StatusFilter statuses={statuses} setStatusFilter={setStatusFilter} />}
-                {showSitesFilter && <FilterDropDowm name={'Sites'} data={allsites} setDataId={setSiteId} />}
-                {showEventFilter && <FilterDropDowm name={'Event'} data={events} setDataId={setEventId} />}
+                {showFilter.status && <StatusFilter statuses={statuses} setStatusFilter={(status) => setFilterState((prev) => ({ ...prev, statusFilter: status }))} />}
+                {showFilter.site && <FilterDropDowm name={'Sites'} data={allsites} setDataId={(id) => setFilterState((prev) => ({ ...prev, siteId: id }))} />}
+                {showFilter.event && <FilterDropDowm name={'Event'} data={events} setDataId={(id) => setFilterState((prev) => ({ ...prev, eventId: id }))} />}
               </>
             )}
           </div>
           <div className={`w-full xl:w-fit flex ${deleteBtn + search + filter >= 4 ? 'flex-wrap' : 'flex-nowrap'} sm:justify-end justify-center gap-2 items-center`}>
-            {deleteBtn && selectedItems.length > 0 && (
+            {deleteBtn && selectionState.selectedItems.length > 0 && (
               <button
-                onClick={() => setDeleteModelOpen(true)}
+                onClick={() => setModalState((prev) => ({ ...prev, isDeleteModelOpen: true }))}
                 className="sm:w-fit text-primary font-normal hover:bg-gray-50 rounded-xl border border-primary py-2 px-3 sm:px-2 sm:py-2 md:px-3 whitespace-nowrap flex gap-1 sm:gap-2"
               >
                 <RiDeleteBinLine size={20} />
                 <span className="hidden sm:block">Delete</span>
               </button>
             )}
-            {modifyStatus && selectedItems.length > 0 && (
+            {modifyStatus && selectionState.selectedItems.length > 0 && (
               <>
-                <StatusFilter statuses={statuses} setStatusFilter={setUpdatestatus} />
-                {updateStatus !== '' && selectedItems.length > 0 && (
+                <StatusFilter statuses={statuses} setStatusFilter={(e) => setSelectionState((prev) => ({ ...prev, status: e }))} />
+                {selectionState.status !== '' && selectionState.selectedItems.length > 0 && (
                   <button
-                    onClick={() => handleStatusUpdate(updateStatus)}
+                    onClick={() => handleStatusUpdate(selectionState.status)}
                     className="sm:w-fit text-primary font-normal hover:bg-gray-50 rounded-xl border border-primary py-2 px-3 sm:px-2 sm:py-2 md:px-3 whitespace-nowrap flex gap-1 sm:gap-2"
                   >
                     <span className="hidden sm:block">Apply Status</span>
@@ -240,12 +280,20 @@ const TableComponent = ({
                 )}
               </>
             )}
-            {modifySite && selectedItems.length > 0 && (
+            {modifySite && selectionState.selectedItems.length > 0 && (
               <button
-                onClick={() => setSitesModelOpen(true)}
+                onClick={() => setModalState((prev) => ({ ...prev, isSitesModelOpen: true }))}
                 className="sm:w-fit text-primary font-normal hover:bg-gray-50 rounded-xl border border-primary py-2 px-3 sm:px-2 sm:py-2 md:px-3 whitespace-nowrap flex gap-1 sm:gap-2"
               >
                 Sites
+              </button>
+            )}
+            {duplicateBtn && selectionState.selectedItems.length > 0 && (
+              <button
+                onClick={() => setModalState((prev) => ({ ...prev, isDuplicateModelOpen: true }))}
+                className="sm:w-fit text-primary font-normal hover:bg-gray-50 rounded-xl border border-primary py-2 px-3 sm:px-2 sm:py-2 md:px-3 whitespace-nowrap flex gap-1 sm:gap-2"
+              >
+                Duplicate Popups
               </button>
             )}
             {selectedCategory && (
@@ -262,9 +310,9 @@ const TableComponent = ({
         {tableCountLabel && (
           <div className="w-full ptpb-4 text-center bg-grey border-b border-primary">
             <p className="text-secondary">
-              {selectedItems.length === totalCount && 'All'} {selectedItems.length} record from this page is selected
+              {selectionState.selectedItems.length === tableState.totalCount && 'All'} {selectionState.selectedItems.length} record from this page is selected
               <a href="#" className="text-blue pl-2">
-                Select all {totalCount} records from this table
+                Select all {tableState.totalCount} records from this table
               </a>
             </p>
           </div>
@@ -277,7 +325,12 @@ const TableComponent = ({
                 {selectable && (
                   <th scope="col" className="px-4 py-2.5 text-left">
                     <label className="inline-flex items-center cursor-pointer">
-                      <input type="checkbox" checked={isAllSelected} onChange={handleMasterCheckboxChange} className="form-checkbox h-4 w-4 text-blue-600 focus:outline-none" />
+                      <input
+                        type="checkbox"
+                        checked={selectionState.isAllSelected}
+                        onChange={handleMasterCheckboxChange}
+                        className="form-checkbox h-4 w-4 text-blue-600 focus:outline-none"
+                      />
                     </label>
                   </th>
                 )}
@@ -298,14 +351,14 @@ const TableComponent = ({
             </thead>
             <tbody>
               {rows?.map((row, index) => (
-                <tr key={row.id} className={` border-b border-primary ${selectedItems.includes(row.id) ? 'bg-blue-50' : 'hover:bg-gray-50'}`}>
+                <tr key={row.id} className={` border-b border-primary ${selectionState.selectedItems.includes(row.id) ? 'bg-blue-50' : 'hover:bg-gray-50'}`}>
                   {selectable && (
                     <td className="px-4 py-2">
                       {!row.isSuperAdmin && (
                         <label className="inline-flex items-center cursor-pointer">
                           <input
                             type="checkbox"
-                            checked={selectedItems.includes(row.id)}
+                            checked={selectionState.selectedItems.includes(row.id)}
                             onChange={() => handleRowCheckboxChange(row.id)}
                             className="form-checkbox h-4 w-4 text-blue-600"
                           />
@@ -322,9 +375,9 @@ const TableComponent = ({
                   ))}
                   {actions && (
                     <td className="w-full flex gap-2 items-center px-6 py-2 whitespace-nowrap font-medium text-secondary hover:text-gray-900">
-                      {edit && <MdEdit className="text-2xl" onClick={() => navigate(editPath + '/' + row.id)} />}
-                      {view && <MdRemoveRedEye className="text-2xl" onClick={() => navigate(viewPath + '/' + row.id)} />}
-                      {apps && (
+                      {edit && !row.isSuperAdmin && <MdEdit className="text-2xl" onClick={() => navigate(editPath + '/' + row.id)} />}
+                      {view && !row.isSuperAdmin && <MdRemoveRedEye className="text-2xl" onClick={() => navigate(viewPath + '/' + row.id)} />}
+                      {apps && !row.isSuperAdmin && (
                         <MdOutlineApps className="text-2xl" onClick={() => navigate(appsPath, { state: { siteData: { id: row.id, name: row.id, showName: row.siteName } } })} />
                       )}
                     </td>
@@ -338,28 +391,42 @@ const TableComponent = ({
           <div className="w-full py-3">
             {pagination && (
               <Pagination
-                currentPage={currentPage}
+                currentPage={tableState.currentPage}
                 totalPages={totalPages}
-                itemsPerPage={itemsPerPage}
-                setItemsPerPage={setItemsPerPage}
+                itemsPerPage={tableState.itemsPerPage}
+                setItemsPerPage={setTableState}
                 handlePageChange={(pageNumber) => {
-                  if (pageNumber > 0 && pageNumber <= totalPages) setCurrentPage(pageNumber);
+                  if (pageNumber > 0 && pageNumber <= totalPages) setTableState((prev) => ({ ...prev, currentPage: pageNumber }));
                 }}
-                totalRecords={totalCount}
+                totalRecords={tableState.totalCount}
               />
             )}
           </div>
         </div>
         <SiteModal
-          isOpen={isSitesModelOpen}
-          setSitesModelOpen={setSitesModelOpen}
-          selectedSites={selectedSites}
-          setSelectedSites={setSelectedSites}
+          isOpen={modalState.isSitesModelOpen}
+          setSitesModelOpen={setModalState}
+          selectedSites={selectionState.selectedSites}
+          setSelectedSites={setSelectionState}
           onConfirm={handleSitesUpdate}
-          siteToggle={siteToggle}
-          setSiteToggle={setSiteToggle}
+          siteToggle={selectionState.siteToggle}
         />
-        <DeleteModal isDeleteModalOpen={isDeleteModelOpen} onConfirm={handleDeleteConfirm} setDeleteModalOpen={setDeleteModelOpen} label={deleteLabel} message={deleteMessage} />
+        <DeleteModal
+          isDeleteModalOpen={modalState.isDeleteModelOpen}
+          onConfirm={handleDeleteConfirm}
+          setDeleteModalOpen={setModalState}
+          label={deleteLabel}
+          message={deleteMessage}
+        />
+        <SiteModal
+          label={'Duplicate Popups'}
+          isOpen={modalState.isDuplicateModelOpen}
+          duplicateBtn={duplicateBtn}
+          setSitesModelOpen={setModalState}
+          selectedSites={selectionState.selectedSites}
+          setSelectedSites={setSelectionState}
+          onConfirm={handleDuplicateConfirm}
+        />
       </div>
     </div>
   );

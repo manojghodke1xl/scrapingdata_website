@@ -1,4 +1,4 @@
-import { deleteMethodCall, getMethodCall, postMethodCall, putMethodCall } from "./api-handler";
+import { deleteMethodCall, getMethodCall, postMethodCall, putMethodCall } from './api-handler';
 
 export const getRecaptchaByIdApi = async (id) => {
   return await getMethodCall(`${import.meta.env.VITE_API_URL}/recaptcha/${id}?p=1`);

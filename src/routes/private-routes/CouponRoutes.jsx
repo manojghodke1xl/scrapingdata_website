@@ -3,6 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 
 const CouponList = lazy(() => import('../../pages/coupon/CouponList'));
 const AddCoupon = lazy(() => import('../../pages/coupon/AddCoupon'));
+const PageNotFound = lazy(() => import('../../pages/common/PageNotFound'));
 
 const CouponRoutes = () => {
   return (
@@ -10,6 +11,7 @@ const CouponRoutes = () => {
       <Route path="/coupon-list" element={<CouponList />} />
       <Route path="/add-coupon" element={<AddCoupon />} />
       <Route path="/edit-coupon/:id" element={<AddCoupon />} />
+      <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
 };

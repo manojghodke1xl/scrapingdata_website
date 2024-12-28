@@ -6,6 +6,8 @@ const IntegrationHub = lazy(() => import('../../pages/integration/IntegrationHub
 const RazorpayIntegration = lazy(() => import('../../pages/integration/RazorpayIntegration'));
 const StripeIntegration = lazy(() => import('../../pages/integration/StripeIntegration'));
 const PaypalIntegration = lazy(() => import('../../pages/integration/PaypalIntegration'));
+const ZohocrmIntegration = lazy(() => import('../../pages/integration/ZohocrmIntegration'));
+const PageNotFound = lazy(() => import('../../pages/common/PageNotFound'));
 
 const IntegrationRoutes = () => {
   return (
@@ -15,6 +17,8 @@ const IntegrationRoutes = () => {
       <Route path="/integration/razorpay" element={<RazorpayIntegration />} />
       <Route path="/integration/stripe" element={<StripeIntegration />} />
       <Route path="/integration/paypal" element={<PaypalIntegration />} />
+      <Route path="/integration/zohocrm" element={<ZohocrmIntegration />} />
+      <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
 };

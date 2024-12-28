@@ -9,7 +9,7 @@ const Apps = () => {
   const allSites = useGetAllSites();
   const [siteData, setSiteData] = useState({});
   const navigate = useNavigate();
-  console.log(siteData);
+
   const handleProceed = () => {
     if (siteData.name) navigate(`/apps/integration`, { state: { siteData } });
     else showNotification('error', 'Please select a site before proceeding');

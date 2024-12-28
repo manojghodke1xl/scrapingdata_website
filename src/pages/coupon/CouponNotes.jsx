@@ -1,0 +1,5 @@
+export const couponListNote = `This is the Coupon List page. There is an Add Coupon button to create a new coupon entry. The table includes details such as Coupon Code, Discount Type, Discount Value, and Status. Additionally, there are options to Edit and Manage specific coupon details. A Search Dropdown is available to filter and locate entries based on selected criteria.`;
+
+export const addCouponNote = `This is the Add Coupon page. You can create a new coupon by providing details such as Coupon Code, Coupon Description, Start Date, End Date, and Coupon Type. Additionally, you can configure coupon settings using toggles.`;
+
+export const editCouponNote = `This is the Edit Coupon page. You can update an existing coupon by modifying details such as Coupon Code, Coupon Description, Start Date, End Date, and Coupon Type. Additionally, there are toggles for Is Coupon Active?, New User Only?, User Once Only?, and Is Coupon Global? to refine coupon behavior. Once changes are made, you can Save Changes or Cancel the updates.`;

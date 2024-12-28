@@ -6,6 +6,8 @@ import { Link } from 'react-router-dom';
 import TableComponent from '../../atoms/table/Table';
 import { GlobalContext } from '../../contexts/GlobalContext';
 import { updateSiteStatusApi } from '../../apis/site-apis';
+import NoteComponent from '../../atoms/common/NoteComponent';
+import { websiteListNote } from './SiteNotes';
 
 const SiteList = () => {
   const [sites, setSites] = useState([]);
@@ -86,6 +88,7 @@ const SiteList = () => {
           </div>
         </div>
       </div>
+      <NoteComponent note={websiteListNote} />
     </div>
   );
 };

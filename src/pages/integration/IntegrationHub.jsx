@@ -33,7 +33,8 @@ const IntegrationHub = () => {
     {
       img: ZohoCRM,
       name: 'Zoho CRM',
-      description: 'Streamline customer interactions, sales tracking, and data management with an all-in-one CRM integration platform.'
+      description: 'Streamline customer interactions, sales tracking, and data management with an all-in-one CRM integration platform.',
+      id: 'zohocrm'
     }
   ];
 

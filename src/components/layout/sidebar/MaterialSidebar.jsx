@@ -69,7 +69,7 @@ const MaterialSidebar = () => {
             isOpen={openAccordion === 'Support'}
             onToggle={() => setOpenAccordion(openAccordion === 'Support' ? null : 'Support')}
           />
-          <ReusableAccordion  
+          <ReusableAccordion
             title="Add-ons"
             links={addOns}
             icon={<IoExtensionPuzzleOutline />}

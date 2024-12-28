@@ -1,4 +1,4 @@
-import { deleteMethodCall, getMethodCall, postMethodCall, putMethodCall } from "./api-handler";
+import { deleteMethodCall, getMethodCall, postMethodCall, putMethodCall } from './api-handler';
 
 export const addFaqApi = async (userData) => {
   return await postMethodCall(`${import.meta.env.VITE_API_URL}/faq`, userData);

@@ -8,6 +8,7 @@ import { IoMdAdd } from 'react-icons/io';
 import { updateGuideSitesApi, updateGuideStatusApi } from '../../apis/guide-apis';
 import NoteComponent from '../../atoms/common/NoteComponent';
 import { listGuideNote } from './GuideNotes';
+import { AiOutlineApi } from 'react-icons/ai';
 
 const GuidesList = () => {
   const allsites = useGetAllSites();
@@ -43,6 +44,7 @@ const GuidesList = () => {
               <span className="hidden md:block">Add Guides</span>
             </Link>
             <Link to="/guides/guides-integration" className="flex gap-2 h-fit items-center px-2.5 md:px-2 sm:px-4 rounded-xl py-2.5 bg-primary hover:bg-hover text-white">
+              <AiOutlineApi size={22} />
               <span className="hidden md:block">Integration Guide PDF</span>
             </Link>
           </div>

@@ -5,11 +5,11 @@ const DeleteModal = ({ isDeleteModalOpen, onConfirm, setDeleteModalOpen, label, 
 
   return (
     <div className="fixed inset-0 z-10 overflow-y-auto">
-      <div className="fixed inset-0 bg-gray-300 bg-opacity-75 transition-opacity" onClick={() => setDeleteModalOpen(false)}></div>
+      <div className="fixed inset-0 bg-gray-300 bg-opacity-75 transition-opacity" onClick={() => setDeleteModalOpen((prev) => ({ ...prev, isDeleteModelOpen: false }))}></div>
       <div className="flex items-start justify-center w-full min-h-screen px-2 text-center lg:absolute lg:top-[12%]">
         <div className="bg-[#FFFFFF] rounded-2xl text-left overflow-hidden shadow-xl transform transition-all w-[95%] sm:w-[80%] md:w-[580px] px-6 2xl:px-8 py-6">
           <div className="w-full flex justify-end items-center">
-            <div onClick={() => setDeleteModalOpen(false)} className=" flex justify-between w-full border-b border-primary mb-4 pb-4">
+            <div onClick={() => setDeleteModalOpen((prev) => ({ ...prev, isDeleteModelOpen: false }))} className=" flex justify-between w-full border-b border-primary mb-4 pb-4">
               <h4 className="w-full sm:text-xl text-dark text-left ">{label}</h4>
               <IoCloseSharp className="cursor-pointer" />
             </div>
@@ -21,7 +21,7 @@ const DeleteModal = ({ isDeleteModalOpen, onConfirm, setDeleteModalOpen, label, 
             </div>
 
             <div className="flex justify-end gap-5 w-full mt-6 ">
-              <button onClick={() => setDeleteModalOpen(false)} className=" w-1/4 rounded-xl border border-primary text-primary py-2 ">
+              <button onClick={() => setDeleteModalOpen((prev) => ({ ...prev, isDeleteModelOpen: false }))} className=" w-1/4 rounded-xl border border-primary text-primary py-2 ">
                 Cancel
               </button>
               <button onClick={onConfirm} className="w-1/4 rounded-xl bg-red-500 text-white py-2 ">

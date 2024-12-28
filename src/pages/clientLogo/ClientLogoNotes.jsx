@@ -1,0 +1,5 @@
+export const clientLogoListNote = `This is the All Client Logo List page. There is an Add Client Logo button to upload a new client logo. The table includes details such as Client Logo, Sites, and Status. Additionally, there are options to Edit and Manage specific client logo entries. A Search Dropdown is available to filter and locate entries based on selected criteria.`;
+
+export const addClientLogoNote = `This is the Add Client Logo page. You can add a new client logo by uploading an image and selecting the relevant Site. Additionally, you can specify whether the logo is Active and whether it should be set as a Global logo. Once all fields are filled, you can Add or Cancel the action as needed.`;
+
+export const editClientLogoNote = `This is the Edit Client Logo page. You can update an existing client logo by modifying the uploaded image and selecting the relevant Site. Additionally, you can specify whether the logo is Active and whether it should be set as a Global logo. Once all fields are updated, you can Save or Cancel the action as needed.`;

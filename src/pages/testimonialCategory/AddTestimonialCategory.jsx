@@ -6,7 +6,7 @@ import { addCategoryApi, getCategoryByIdApi, updateCategoryApi } from '../../api
 import { showNotification } from '../../utils/showNotification';
 import FormField from '../../atoms/formFields/InputField';
 import NoteComponent from '../../atoms/common/NoteComponent';
-import { addCategoryNote, editCategoryNote } from './TestimonialCategoryNotes';
+import { addTestimonialCategoryNote, editTestimonialCategoryNote } from './TestimonialCategoryNotes';
 
 const AddTestimonialCategory = () => {
   const navigate = useNavigate();
@@ -106,7 +106,7 @@ const AddTestimonialCategory = () => {
       </div>
 
       <div className="w-full justify-center items-center border-b  border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end ">
-        <NoteComponent note={id ? editCategoryNote : addCategoryNote} />
+        <NoteComponent note={id ? editTestimonialCategoryNote : addTestimonialCategoryNote} />
       </div>
       {!isScrollable && (
         <div className="w-full flex justify-end items-center gap-4 pt-8  border- border-primary">

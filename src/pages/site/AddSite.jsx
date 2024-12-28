@@ -10,6 +10,8 @@ import ToggleComponent from '../../atoms/formFields/ToggleComponent';
 import DropDown from '../../atoms/formFields/DropDown';
 import TextareaComponent from '../../atoms/formFields/TextareaComponent';
 import ApiIntegrationModal from '../../atoms/modal/ApiIntegrationModal';
+import NoteComponent from '../../atoms/common/NoteComponent';
+import { addWebsiteNote, editWebsiteNote } from './SiteNotes';
 
 const AddSite = () => {
   const navigate = useNavigate();
@@ -438,11 +440,11 @@ const AddSite = () => {
           </div>
           <div className="w-full">
             <div>
-              <ToggleComponent
+              {/* <ToggleComponent
                 label={'Send CRM'}
                 isEnableState={siteDetails.sendCRM}
                 setIsEnableState={(value) => setSiteDetails((prev) => ({ ...prev, sendCRM: value, sendCRMData: undefined }))}
-              />
+              /> */}
               <DropDown
                 name="SMTP"
                 SummaryChild={<h5 className="p-0 m-0 text-primary">{siteDetails.smtpObj ? siteDetails.smtpObj.showName : 'SMTP'}</h5>}
@@ -492,9 +494,9 @@ const AddSite = () => {
         </div>
       </div>
 
-      {/* <div className="w-full justify-center items-center border-b  border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end ">
-        <NoteComponent note={id ? editAdminNote : addAdminNote} />
-        </div> */}
+      <div className="w-full justify-center items-center border-b  border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end ">
+        <NoteComponent note={id ? editWebsiteNote : addWebsiteNote} />
+      </div>
       {!isScrollable && (
         <div className="w-full flex justify-end items-center gap-4 pt-8  border- border-primary">
           <FormButtons to="/website/website-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} />

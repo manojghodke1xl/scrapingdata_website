@@ -85,7 +85,7 @@ const Pagination = ({ currentPage, totalPages, totalRecords, itemsPerPage, setIt
   }, []);
 
   const handleSelectItems = (items) => {
-    setItemsPerPage(items);
+    setItemsPerPage((prev) => ({ ...prev, itemsPerPage: items }));
     setIsOpen2(false);
   };
 

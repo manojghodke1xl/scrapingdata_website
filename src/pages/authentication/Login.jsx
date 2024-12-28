@@ -1,4 +1,3 @@
-import TaskManager from '../../assets/images/app-logo.png';
 import { useNavigate } from 'react-router-dom';
 import FormField from '../../atoms/formFields/InputField';
 import { useContext, useState } from 'react';
@@ -36,7 +35,7 @@ const Login = () => {
     <div className="w-full h-full py-8 px-3 sm:p-8">
       <div className="w-full flex gap-2 items-center">
         <span>
-          <img src={TaskManager} alt="TaskManager" />
+          <h1 className="text-3xl">MarsCMS</h1>
         </span>
       </div>
 

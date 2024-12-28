@@ -5,6 +5,8 @@ import { addFaqCategoryApi, getFaqCategoryByIdApi, updateFaqCategoryApi } from '
 import { showNotification } from '../../utils/showNotification';
 import FormButtons from '../../atoms/formFields/FormButtons';
 import FormField from '../../atoms/formFields/InputField';
+import NoteComponent from '../../atoms/common/NoteComponent';
+import { addFaqCategoryNote, editFaqCategoryNote } from './FaqCategoryNotes';
 
 const AddFaqCategory = () => {
   const navigate = useNavigate();
@@ -27,7 +29,6 @@ const AddFaqCategory = () => {
       (async () => {
         try {
           const { status, data } = await getFaqCategoryByIdApi(id);
-
           if (status) {
             const { name } = data.faqCategory;
             setFqaCategoryName(name);
@@ -50,7 +51,7 @@ const AddFaqCategory = () => {
       const { status, data } = await (id ? updateFaqCategoryApi(id, name) : addFaqCategoryApi(name));
       if (status) {
         showNotification('success', data.message);
-        navigate('/faq/faq-category-list');
+        navigate('/faq-category/faq-category-list');
       } else showNotification('warn', data.message);
     } catch (error) {
       showNotification('error', error.message);
@@ -77,7 +78,7 @@ const AddFaqCategory = () => {
         <div>
           <span className="text-3xl font-semibold text-dark">{id ? 'Edit' : 'Add'} FAQ Category</span>
         </div>
-        <FormButtons to="/faq/faq-category-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} />
+        <FormButtons to="/faq-category/faq-category-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} />
       </div>
 
       <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
@@ -105,12 +106,12 @@ const AddFaqCategory = () => {
         </div>
       </div>
 
-      {/* <div className="w-full justify-center items-center border-b  border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end ">
-        <NoteComponent note={id ? editCategoryNote : addCategoryNote} />
-      </div> */}
+      <div className="w-full justify-center items-center border-b  border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end ">
+        <NoteComponent note={id ? editFaqCategoryNote : addFaqCategoryNote} />
+      </div>
       {!isScrollable && (
         <div className="w-full flex justify-end items-center gap-4 pt-8  border- border-primary">
-          <FormButtons to="/faq/faq-category-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} />
+          <FormButtons to="/faq-category/faq-category-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} />
         </div>
       )}
     </div>

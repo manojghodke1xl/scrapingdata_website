@@ -10,6 +10,8 @@ import DropDown from '../../atoms/formFields/DropDown';
 import ToggleComponent from '../../atoms/formFields/ToggleComponent';
 import DateTimePicker from '../../atoms/formFields/DateTimePicker';
 import { formatDateTime } from '../../utils/dateFormats';
+import NoteComponent from '../../atoms/common/NoteComponent';
+import { addCouponNote, editCouponNote } from './CouponNotes';
 
 const AddCoupon = () => {
   const navigate = useNavigate();
@@ -62,7 +64,7 @@ const AddCoupon = () => {
       })();
     }
   }, [id, setLoading]);
-  console.log(id);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
@@ -262,9 +264,9 @@ const AddCoupon = () => {
         </div>
       </div>
 
-      {/* <div className="w-full justify-center items-center border-b  border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end ">
-<NoteComponent note={id ? editAdminNote : addAdminNote} />
-</div> */}
+      <div className="w-full justify-center items-center border-b  border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end ">
+        <NoteComponent note={id ? editCouponNote : addCouponNote} />
+      </div>
       {!isScrollable && (
         <div className="w-full flex justify-end items-center gap-4 pt-8  border- border-primary">
           <FormButtons to="/coupon/coupon-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} />

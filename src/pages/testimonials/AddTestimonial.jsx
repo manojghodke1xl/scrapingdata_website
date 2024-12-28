@@ -177,8 +177,8 @@ const AddTestimonial = () => {
                   ...(e.name === 'image'
                     ? { videoBolean: false, video: undefined, text: '', videoUrl: '', videoFile: null }
                     : e.name === 'video'
-                    ? { text: '', image: undefined, imageFile: null }
-                    : { image: undefined, video: undefined, videoBolean: false, videoUrl: '', imageFile: null, videoFile: null })
+                      ? { text: '', image: undefined, imageFile: null }
+                      : { image: undefined, video: undefined, videoBolean: false, videoUrl: '', imageFile: null, videoFile: null })
                 }))
               }
             />

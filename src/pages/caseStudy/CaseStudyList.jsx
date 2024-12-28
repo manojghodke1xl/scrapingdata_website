@@ -8,6 +8,7 @@ import TableComponent from '../../atoms/table/Table';
 import { updateCaseStudySitesApi, updateCaseStudyStatusApi } from '../../apis/caseStudy-apis';
 import NoteComponent from '../../atoms/common/NoteComponent';
 import { listCasestudyNote } from './CaseStudyNotes';
+import { AiOutlineApi } from 'react-icons/ai';
 
 const CaseStudyList = () => {
   const allsites = useGetAllSites();
@@ -43,6 +44,7 @@ const CaseStudyList = () => {
               <span className="hidden md:block">Add Case Study</span>
             </Link>
             <Link to="/case-study/case-study-integration" className="flex gap-2 h-fit items-center px-2.5 md:px-2 sm:px-4 rounded-xl py-2.5 bg-primary hover:bg-hover text-white">
+              <AiOutlineApi size={22} />
               <span className="hidden md:block">Integration Guide PDF</span>
             </Link>
           </div>

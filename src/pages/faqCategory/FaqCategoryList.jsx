@@ -4,6 +4,8 @@ import { formatDateTime } from '../../utils/dateFormats';
 import { Link } from 'react-router-dom';
 import { IoMdAdd } from 'react-icons/io';
 import TableComponent from '../../atoms/table/Table';
+import { faqCategoryListNotes } from './FaqCategoryNotes';
+import NoteComponent from '../../atoms/common/NoteComponent';
 
 const FaqCategoryList = () => {
   const [faqCategories, setFaqCategories] = useState([]);
@@ -26,7 +28,7 @@ const FaqCategoryList = () => {
             <h4 className="text-3xl text-dark">All FAQ Category List</h4>
           </div>
           <div className="w-full flex justify-end sm:w-fit">
-            <Link to="/faq/add-faq-category" className="flex gap-2 h-fit items-center px-2.5 md:px-2 sm:px-4 rounded-xl py-2.5 bg-primary hover:bg-hover text-white">
+            <Link to="/faq-category/add-faq-category" className="flex gap-2 h-fit items-center px-2.5 md:px-2 sm:px-4 rounded-xl py-2.5 bg-primary hover:bg-hover text-white">
               <IoMdAdd size={22} />
               <span className="hidden md:block">Add FAQ Category</span>
             </Link>
@@ -50,7 +52,7 @@ const FaqCategoryList = () => {
                 pagination={true}
                 actions={true}
                 edit={true}
-                editPath={'/faq/edit-faq-category'}
+                editPath={'/faq-category/edit-faq-category'}
                 search={true}
                 searchCategory={[{ id: 1, name: 'Name' }]}
               />
@@ -58,7 +60,7 @@ const FaqCategoryList = () => {
           </div>
         </div>
       </div>
-      {/* <NoteComponent note={} /> */}
+      <NoteComponent note={faqCategoryListNotes} />
     </div>
   );
 };

@@ -30,6 +30,7 @@ import ParticipantRoutes from './private-routes/ParticipantRoutes';
 import EventRoutes from './private-routes/EventRoutes';
 import PaymentRoutes from './private-routes/PaymentRoutes';
 import IntegrationRoutes from './private-routes/IntegrationRoutes';
+import FaqCategoryRoutes from './private-routes/FaqCategoryRoutes';
 
 function App() {
   const [isLoading, setLoading] = useState(false);
@@ -58,6 +59,7 @@ function App() {
                   <Route path="/testimonials/*" element={<TestimonialRoutes />} />
                   <Route path="/recaptcha/*" element={<RecaptchaRoutes />} />
                   <Route path="/faq/*" element={<FaqRoutes />} />
+                  <Route path="/faq-category/*" element={<FaqCategoryRoutes />} />
                   <Route path="/enquiry/*" element={<EnquiryRoutes />} />
                   <Route path="/mailing/*" element={<MailingListRoutes />} />
                   <Route path="/feedback/*" element={<FeedbackRoutes />} />

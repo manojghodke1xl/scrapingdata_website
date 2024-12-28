@@ -1,4 +1,4 @@
-import { getMethodCall, postMethodCall, putMethodCall } from "./api-handler";
+import { getMethodCall, postMethodCall, putMethodCall } from './api-handler';
 
 export const getCategoryByIdApi = async (id) => {
   return await getMethodCall(`${import.meta.env.VITE_API_URL}/category/${id}`);

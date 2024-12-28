@@ -6,6 +6,8 @@ import TruncatableFieldModal from '../../atoms/modal/TruncatableFeildModel';
 import { formatDateTime } from '../../utils/dateFormats';
 import useGetAllSites from '../../hooks/useGetAllSites';
 import { updateAdminStatusApi } from '../../apis/admin-apis';
+import NoteComponent from '../../atoms/common/NoteComponent';
+import { adminListNote } from './AdminNotes';
 
 const AdminList = () => {
   const allsites = useGetAllSites();
@@ -94,6 +96,7 @@ const AdminList = () => {
           </div>
         </div>
       </div>
+      <NoteComponent note={adminListNote} />
     </div>
   );
 };

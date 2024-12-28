@@ -5,7 +5,10 @@ import { IoMdAdd } from 'react-icons/io';
 import TableComponent from '../../atoms/table/Table';
 import { useState } from 'react';
 import useGetAllSites from '../../hooks/useGetAllSites';
-import { deletePopupApi, updatePopupStatusApi } from '../../apis/popup-apis';
+import { deletePopupApi, duplicatePopupApi, updatePopupStatusApi } from '../../apis/popup-apis';
+import NoteComponent from '../../atoms/common/NoteComponent';
+import { listPopupNote } from './PopupNotes';
+import { AiOutlineApi } from 'react-icons/ai';
 
 const PopupList = () => {
   const allsites = useGetAllSites();
@@ -43,6 +46,7 @@ const PopupList = () => {
               <span className="hidden md:block">Add Pop-up</span>
             </Link>
             <Link to="/pop-up/pop-up-integration" className="flex gap-2 h-fit items-center px-2.5 md:px-2 sm:px-4 rounded-xl py-2.5 bg-primary hover:bg-hover text-white">
+              <AiOutlineApi size={22} />
               <span className="hidden md:block">Api Integration</span>
             </Link>
           </div>
@@ -88,11 +92,14 @@ const PopupList = () => {
                 deleteMessage={'Are you sure you want to delete this pop-up?'}
                 modifyStatus={true}
                 modifyStatusApi={updatePopupStatusApi}
+                duplicateBtn={true}
+                duplicateApi={duplicatePopupApi}
               />
             </div>
           </div>
         </div>
       </div>
+      <NoteComponent note={listPopupNote} />
     </div>
   );
 };

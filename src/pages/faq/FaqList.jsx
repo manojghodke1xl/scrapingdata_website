@@ -6,6 +6,8 @@ import { Link } from 'react-router-dom';
 import { IoMdAdd } from 'react-icons/io';
 import TableComponent from '../../atoms/table/Table';
 import { deleteFaqApi, updateFaqSitesApi, updateFaqStatusApi } from '../../apis/faq-apis';
+import NoteComponent from '../../atoms/common/NoteComponent';
+import { faqListNote } from './faqNotes';
 
 const FaqList = () => {
   const allsites = useGetAllSites();
@@ -90,6 +92,7 @@ const FaqList = () => {
           </div>
         </div>
       </div>
+      <NoteComponent note={faqListNote} />
     </div>
   );
 };

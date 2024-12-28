@@ -8,6 +8,8 @@ import MultipleFileUpload from '../../atoms/formFields/MultiFileUpload';
 import MultiSelectCheckbox from '../../atoms/formFields/MultiSelectCheckBox';
 import ToggleComponent from '../../atoms/formFields/ToggleComponent';
 import { addGalleryApi, getGalleryById, updateGalleryApi } from '../../apis/gallery-apis';
+import NoteComponent from '../../atoms/common/NoteComponent';
+import { addGalleryNote, editGalleryNote } from './GalleryNotes';
 
 const AddGallery = () => {
   const navigate = useNavigate();
@@ -148,12 +150,9 @@ const AddGallery = () => {
         </div>
       </div>
 
-      <br />
-      <br />
-
-      {/* <div className="w-full justify-center items-center border-b  border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end ">
-    <NoteComponent note={id ? editAdminNote : addAdminNote} />
-  </div> */}
+      <div className="w-full justify-center items-center border-b  border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end ">
+        <NoteComponent note={id ? editGalleryNote : addGalleryNote} />
+      </div>
       {!isScrollable && (
         <div className="w-full flex justify-end items-center gap-4 pt-8  border- border-primary">
           <FormButtons to="/gallery/gallery-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} />

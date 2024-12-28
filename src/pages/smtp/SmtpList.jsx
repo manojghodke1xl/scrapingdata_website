@@ -4,6 +4,8 @@ import TableComponent from '../../atoms/table/Table';
 import { useState } from 'react';
 import TruncatableFieldModal from '../../atoms/modal/TruncatableFeildModel';
 import { formatDateTime } from '../../utils/dateFormats';
+import NoteComponent from '../../atoms/common/NoteComponent';
+import { listSMTPNote } from './SmtpNotes';
 
 const SmtpList = () => {
   const [smtps, setSmtps] = useState([]);
@@ -62,6 +64,7 @@ const SmtpList = () => {
           </div>
         </div>
       </div>
+      <NoteComponent note={listSMTPNote} />
     </div>
   );
 };

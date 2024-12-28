@@ -6,6 +6,8 @@ import TableComponent from '../../atoms/table/Table';
 import { IoMdAdd } from 'react-icons/io';
 import { Link } from 'react-router-dom';
 import { deleteCouponApi } from '../../apis/coupon';
+import NoteComponent from '../../atoms/common/NoteComponent';
+import { couponListNote } from './CouponNotes';
 
 const CouponList = () => {
   const allsites = useGetAllSites();
@@ -85,6 +87,7 @@ const CouponList = () => {
           </div>
         </div>
       </div>
+      <NoteComponent note={couponListNote} />
     </div>
   );
 };

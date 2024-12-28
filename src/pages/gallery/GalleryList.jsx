@@ -6,6 +6,8 @@ import { Link } from 'react-router-dom';
 import { IoMdAdd } from 'react-icons/io';
 import TableComponent from '../../atoms/table/Table';
 import { deleteGalleryApi, updateGallerySitesApi, updateGalleryStatusApi } from '../../apis/gallery-apis';
+import NoteComponent from '../../atoms/common/NoteComponent';
+import { galleryListNote } from './GalleryNotes';
 
 const GalleryList = () => {
   const allsites = useGetAllSites();
@@ -87,6 +89,7 @@ const GalleryList = () => {
           </div>
         </div>
       </div>
+      <NoteComponent note={galleryListNote} />
     </div>
   );
 };

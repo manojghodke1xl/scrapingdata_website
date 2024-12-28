@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { IoMdAdd } from 'react-icons/io';
 import TableComponent from '../../atoms/table/Table';
 import NoteComponent from '../../atoms/common/NoteComponent';
-import { categoryListNote } from './TestimonialCategoryNotes';
+import { testimonialCategoryListNote } from './TestimonialCategoryNotes';
 
 const TestimonialCategoryList = () => {
   const [testimonialCategories, setTestimonialCategories] = useState([]);
@@ -63,7 +63,7 @@ const TestimonialCategoryList = () => {
           </div>
         </div>
       </div>
-      <NoteComponent note={categoryListNote} />
+      <NoteComponent note={testimonialCategoryListNote} />
     </div>
   );
 };

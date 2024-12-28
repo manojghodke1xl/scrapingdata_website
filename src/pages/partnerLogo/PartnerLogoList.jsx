@@ -6,6 +6,8 @@ import TableComponent from '../../atoms/table/Table';
 import { Link } from 'react-router-dom';
 import { IoMdAdd } from 'react-icons/io';
 import { deletePartnerLogoApi, updatePartnerLogoSitesApi, updatePartnerLogoStatusApi } from '../../apis/partner-logo-apis';
+import NoteComponent from '../../atoms/common/NoteComponent';
+import { partnerLogoListNote } from './PartnerLogoNotes';
 
 const PartnerLogoList = () => {
   const allsites = useGetAllSites();
@@ -87,6 +89,7 @@ const PartnerLogoList = () => {
           </div>
         </div>
       </div>
+      <NoteComponent note={partnerLogoListNote} />
     </div>
   );
 };

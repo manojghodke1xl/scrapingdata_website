@@ -6,7 +6,7 @@ import { getMailingListById } from '../../apis/mailing-apis';
 import { formatDateTime } from '../../utils/dateFormats';
 import { CiCircleInfo } from 'react-icons/ci';
 import NoteComponent from '../../atoms/common/NoteComponent';
-import { listMailingNote } from './MailingNotes';
+import { viewMailingNote } from './MailingNotes';
 
 const ViewMailing = () => {
   const { id } = useParams();
@@ -109,7 +109,7 @@ const ViewMailing = () => {
       </div>
 
       <div className="w-full justify-center items-center border-b  border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end ">
-        <NoteComponent note={listMailingNote} />
+        <NoteComponent note={viewMailingNote} />
       </div>
       {!isScrollable && (
         <div className="w-full flex justify-end items-center gap-4 pt-8  border- border-primary">

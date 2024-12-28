@@ -24,12 +24,12 @@ export const essentials = [
 export const admin = [
   { title: 'Admin', to: ['/admin/admin-list', '/admin/add-admin', '/admin/edit-admin'] },
   { title: "SMTP's", to: ['/smtp/smtp-list', '/smtp/add-smtp', '/smtp/edit-smtp'] },
-  { title: 'reCAPTCHA', to: ['/recaptcha/recaptcha-list', '/recaptcha/add-recaptcha', '/recaptcha//edit-recaptcha'] },
+  { title: 'reCAPTCHA', to: ['/recaptcha/recaptcha-list', '/recaptcha/add-recaptcha', '/recaptcha/edit-recaptcha'] },
   { title: 'Coupon', to: ['/coupon/coupon-list', '/coupon/add-coupon', '/coupon/edit-coupon'] }
 ];
 
 export const support = [
-  { title: 'FAQ Categories', to: ['/faq/faq-category-list', '/faq/add-faq-category', '/faq/edit-faq-category'] },
+  { title: 'FAQ Categories', to: ['/faq-category/faq-category-list', '/faq-category/add-faq-category', '/faq-category/edit-faq-category'] },
   { title: 'FAQ', to: ['/faq/faq-list', '/faq/add-faq', '/faq/edit-faq'] }
 ];
 

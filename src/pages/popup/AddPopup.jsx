@@ -16,6 +16,8 @@ import { formatDateTime } from '../../utils/dateFormats';
 import { getAllGuidesApi } from '../../apis/guide-apis';
 import { getAllCaseStudyApi } from '../../apis/caseStudy-apis';
 import MultiSelectCheckbox from '../../atoms/formFields/MultiSelectCheckBox';
+import NoteComponent from '../../atoms/common/NoteComponent';
+import { addPopupNote, editPopupNote } from './PopupNotes';
 
 const AddPopup = () => {
   const navigate = useNavigate();
@@ -77,8 +79,8 @@ const AddPopup = () => {
       const { status, data } = await (popupDetails.contentType === 'guide'
         ? getAllGuidesApi()
         : popupDetails.contentType === 'casestudy'
-        ? getAllCaseStudyApi()
-        : Promise.resolve({ status: false }));
+          ? getAllCaseStudyApi()
+          : Promise.resolve({ status: false }));
       if (status) {
         popupDetails.contentType === 'guide' ? setContentDetials(data.guides) : popupDetails.contentType === 'casestudy' ? setContentDetials(data.casestudies) : '';
       } else if (data) showNotification('warn', data);
@@ -220,15 +222,15 @@ const AddPopup = () => {
                     ...(e.name === 'casestudy'
                       ? { allGlobalGuides: false, allSiteGuides: false, moreGuides: [] }
                       : e.name === 'guide'
-                      ? { allGlobalCaseStudy: false, allSiteCaseStudy: false, moreCaseStudies: [] }
-                      : {
-                          allGlobalGuides: false,
-                          allSiteGuides: false,
-                          moreGuides: [],
-                          allGlobalCaseStudy: false,
-                          allSiteCaseStudy: false,
-                          moreCaseStudies: []
-                        })
+                        ? { allGlobalCaseStudy: false, allSiteCaseStudy: false, moreCaseStudies: [] }
+                        : {
+                            allGlobalGuides: false,
+                            allSiteGuides: false,
+                            moreGuides: [],
+                            allGlobalCaseStudy: false,
+                            allSiteCaseStudy: false,
+                            moreCaseStudies: []
+                          })
                   }))
                 }
               />
@@ -424,9 +426,9 @@ const AddPopup = () => {
         </div>
       </div>
 
-      {/* <div className="w-full justify-center items-center border-b  border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end ">
-<NoteComponent note={id ? editAdminNote : addAdminNote} />
-</div> */}
+      <div className="w-full justify-center items-center border-b  border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end ">
+        <NoteComponent note={id ? editPopupNote : addPopupNote} />
+      </div>
       {!isScrollable && (
         <div className="w-full flex justify-end items-center gap-4 pt-8  border- border-primary">
           <FormButtons to="/pop-up/pop-up-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} />

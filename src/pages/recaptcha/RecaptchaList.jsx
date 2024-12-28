@@ -6,6 +6,8 @@ import TruncatableFieldModal from '../../atoms/modal/TruncatableFeildModel';
 import { formatDateTime } from '../../utils/dateFormats';
 import TableComponent from '../../atoms/table/Table';
 import { deleteRecaptchaApi, updateRecaptchaSitesApi, updateRecaptchaStatusApi } from '../../apis/recaptcha-apis';
+import NoteComponent from '../../atoms/common/NoteComponent';
+import { recaptchaListNote } from './RecaptchaNotes';
 
 const RecaptchaList = () => {
   const allsites = useGetAllSites();
@@ -93,6 +95,7 @@ const RecaptchaList = () => {
           </div>
         </div>
       </div>
+      <NoteComponent note={recaptchaListNote} />
     </div>
   );
 };
