@@ -222,9 +222,9 @@ const AddPopup = () => {
                     contentType: e.name,
                     contentObj: e,
                     ...(e.name === 'casestudy'
-                      ? { allGlobalGuides: false, allSiteGuides: false, moreGuides: [] }
+                      ? { allGlobalGuides: false, allSiteGuides: false, moreGuides: [], image: undefined, imageFile: null }
                       : e.name === 'guide'
-                      ? { allGlobalCaseStudy: false, allSiteCaseStudy: false, moreCaseStudies: [] }
+                      ? { allGlobalCaseStudy: false, allSiteCaseStudy: false, moreCaseStudies: [], image: undefined, imageFile: null }
                       : {
                           allGlobalGuides: false,
                           allSiteGuides: false,
