@@ -324,81 +324,66 @@ const TableComponent = ({
         )}
 
         <div className="overflow-x-auto custom-scrollbar ">
-          {isLoading ? (
-            <div
-              role="status"
-              className=" p-4 space-y-4 border border-gray-200 divide-y divide-gray-200 rounded shadow animate-pulse dark:divide-gray-700 md:p-6 dark:border-gray-700"
-            >
-              <div className="flex items-center justify-between">
-                <div>
-                  <div className="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-24 mb-2.5"></div>
-                  <div className="w-32 h-2 bg-gray-200 rounded-full dark:bg-gray-700"></div>
-                </div>
-                <div className="h-2.5 bg-gray-300 rounded-full dark:bg-gray-700 w-12"></div>
-              </div>
-              <div className="flex items-center justify-between pt-4">
-                <div>
-                  <div className="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-24 mb-2.5"></div>
-                  <div className="w-32 h-2 bg-gray-200 rounded-full dark:bg-gray-700"></div>
-                </div>
-                <div className="h-2.5 bg-gray-300 rounded-full dark:bg-gray-700 w-12"></div>
-              </div>
-              <div className="flex items-center justify-between pt-4">
-                <div>
-                  <div className="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-24 mb-2.5"></div>
-                  <div className="w-32 h-2 bg-gray-200 rounded-full dark:bg-gray-700"></div>
-                </div>
-                <div className="h-2.5 bg-gray-300 rounded-full dark:bg-gray-700 w-12"></div>
-              </div>
-              <div className="flex items-center justify-between pt-4">
-                <div>
-                  <div className="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-24 mb-2.5"></div>
-                  <div className="w-32 h-2 bg-gray-200 rounded-full dark:bg-gray-700"></div>
-                </div>
-                <div className="h-2.5 bg-gray-300 rounded-full dark:bg-gray-700 w-12"></div>
-              </div>
-              <div className="flex items-center justify-between pt-4">
-                <div>
-                  <div className="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-24 mb-2.5"></div>
-                  <div className="w-32 h-2 bg-gray-200 rounded-full dark:bg-gray-700"></div>
-                </div>
-                <div className="h-2.5 bg-gray-300 rounded-full dark:bg-gray-700 w-12"></div>
-              </div>
-            </div>
-          ) : (
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead>
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead>
+              <tr>
+                {selectable && (
+                  <th scope="col" className="px-4 py-2.5 text-left">
+                    <label className="inline-flex items-center cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={selectionState.isAllSelected}
+                        onChange={handleMasterCheckboxChange}
+                        className="form-checkbox h-4 w-4 text-blue-600 focus:outline-none"
+                      />
+                    </label>
+                  </th>
+                )}
+                {headers?.map((header, index) => (
+                  <th key={index} scope="col" className="px-6 py-2.5 text-left font-semibold text-primary">
+                    <div className="flex items-center gap-2">
+                      <span className="whitespace-nowrap">{header.label}</span>
+                      {header.sortable !== false && <RxCaretSort size={20} strokeWidth="0.5" fill="none" />}
+                    </div>
+                  </th>
+                ))}
+                {actions && (
+                  <th scope="col" className="px-6 py-2 text-left font-semibold text-primary">
+                    Actions
+                  </th>
+                )}
+              </tr>
+            </thead>
+            <tbody>
+              {isLoading ? (
                 <tr>
-                  {selectable && (
-                    <th scope="col" className="px-4 py-2.5 text-left">
-                      <label className="inline-flex items-center cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={selectionState.isAllSelected}
-                          onChange={handleMasterCheckboxChange}
-                          className="form-checkbox h-4 w-4 text-blue-600 focus:outline-none"
-                        />
-                      </label>
-                    </th>
-                  )}
-                  {headers?.map((header, index) => (
-                    <th key={index} scope="col" className="px-6 py-2.5 text-left font-semibold text-primary">
-                      <div className="flex items-center gap-2">
-                        <span className="whitespace-nowrap">{header.label}</span>
-                        {header.sortable !== false && <RxCaretSort size={20} strokeWidth="0.5" fill="none" />}
+                  <td colSpan={headers.length + (selectable ? 1 : 0) + (actions ? 1 : 0)}>
+                    <div
+                      role="status"
+                      className="w-full p-4 space-y-4 border border-gray-200 divide-y divide-gray-200 rounded shadow animate-pulse dark:divide-gray-200 md:p-6 dark:border-gray-200"
+                    >
+                      {/* Header Skeleton */}
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="h-2.5 bg-gray-300 rounded-full dark:bg-gray-300 w-24 mb-2.5"></div>
+                        <div className="h-2.5 bg-gray-300 rounded-full dark:bg-gray-200 w-12"></div>
                       </div>
-                    </th>
-                  ))}
-                  {actions && (
-                    <th scope="col" className="px-6 py-2 text-left font-semibold text-primary">
-                      Actions
-                    </th>
-                  )}
+
+                      {/* Row Skeleton */}
+                      {[...Array(5)].map((_, idx) => (
+                        <div key={idx} className="flex items-center justify-between pt-4">
+                          <div>
+                            <div className="h-2.5 bg-gray-300 rounded-full dark:bg-gray-300 w-24 mb-2.5"></div>
+                            <div className="w-32 h-2 bg-gray-200 rounded-full dark:bg-gray-200"></div>
+                          </div>
+                          <div className="h-2.5 bg-gray-300 rounded-full dark:bg-gray-200 w-12"></div>
+                        </div>
+                      ))}
+                    </div>
+                  </td>
                 </tr>
-              </thead>
-              <tbody>
-                {rows?.map((row, index) => (
-                  <tr key={row.id} className={` border-b border-primary ${selectionState.selectedItems.includes(row.id) ? 'bg-blue-50' : 'hover:bg-gray-50'}`}>
+              ) : (
+                rows?.map((row, index) => (
+                  <tr key={row.id} className={`border-b border-primary ${selectionState.selectedItems.includes(row.id) ? 'bg-blue-50' : 'hover:bg-gray-50'}`}>
                     {selectable && (
                       <td className="px-4 py-2">
                         {!row.isSuperAdmin && (
@@ -430,10 +415,10 @@ const TableComponent = ({
                       </td>
                     )}
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
+                ))
+              )}
+            </tbody>
+          </table>
         </div>
         <div className="w-full mt-2">
           <div className="w-full py-3">
