@@ -44,6 +44,7 @@ const MailingList = () => {
                 selectable={true}
                 headers={[
                   { label: 'Sr No.', key: 'srno' },
+                  { label: 'Name', key: 'name' },
                   { label: 'Email', key: 'email' },
                   { label: 'Sites', key: 'sites' },
                   { label: 'Created Date', key: 'created' },
