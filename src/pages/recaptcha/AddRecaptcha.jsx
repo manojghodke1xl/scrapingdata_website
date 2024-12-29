@@ -1,7 +1,6 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { GlobalContext } from '../../contexts/GlobalContext';
-import useGetAllSites from '../../hooks/useGetAllSites';
+import useGlobalContext from '../../hooks/useGlobalContext';
 import { showNotification } from '../../utils/showNotification';
 import { addRecaptchaApi, getRecaptchaByIdApi, updateRecaptchaApi } from '../../apis/recaptcha-apis';
 import FormButtons from '../../atoms/formFields/FormButtons';
@@ -15,7 +14,11 @@ import { addRecaptchaNote, editRecaptchaNote } from './RecaptchaNotes';
 const AddRecaptcha = () => {
   const navigate = useNavigate();
   const { id = '' } = useParams();
-  const { setLoading } = useContext(GlobalContext);
+  const {
+    auth: { allSites: availableSites },
+    setLoading
+  } = useGlobalContext();
+
   const [recaptcha, setRecaptcha] = useState({
     version: 'v2',
     sitekey: '',
@@ -26,7 +29,6 @@ const AddRecaptcha = () => {
   });
   const [errors, setErrors] = useState({});
   const [isScrollable, setIsScrollable] = useState(false);
-  const availableSites = useGetAllSites();
 
   useEffect(() => {
     if (id) {

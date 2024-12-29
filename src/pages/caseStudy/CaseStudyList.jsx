@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import useGetAllSites from '../../hooks/useGetAllSites';
 import TruncatableFieldModal from '../../atoms/modal/TruncatableFeildModel';
 import { formatDateTime } from '../../utils/dateFormats';
 import { Link } from 'react-router-dom';
@@ -7,11 +6,10 @@ import { IoMdAdd } from 'react-icons/io';
 import TableComponent from '../../atoms/table/Table';
 import { updateCaseStudySitesApi, updateCaseStudyStatusApi } from '../../apis/caseStudy-apis';
 import NoteComponent from '../../atoms/common/NoteComponent';
-import { listCasestudyNote } from './CaseStudyNotes';
+import { casestudyListNote } from './CaseStudyNotes';
 import { AiOutlineApi } from 'react-icons/ai';
 
 const CaseStudyList = () => {
-  const allsites = useGetAllSites();
   const [caseStudies, setCaseStudies] = useState([]);
 
   const rows = caseStudies.map((caseStudy) => {
@@ -80,7 +78,6 @@ const CaseStudyList = () => {
                   { id: 0, name: 'Active', bgColor: '#ECFDF3', color: '#027948', dotColor: '#12B76A' },
                   { id: 2, name: 'Inactive', bgColor: '#F2F4F7', color: '#344054', dotColor: '#667085' }
                 ]}
-                allsites={allsites}
                 searchCategory={[{ id: 1, name: 'Title' }]}
                 modifyStatus={true}
                 modifyStatusApi={updateCaseStudyStatusApi}
@@ -91,7 +88,7 @@ const CaseStudyList = () => {
           </div>
         </div>
       </div>
-      <NoteComponent note={listCasestudyNote} />
+      <NoteComponent note={casestudyListNote} />
     </div>
   );
 };

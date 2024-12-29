@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import useGetAllSites from '../../hooks/useGetAllSites';
 import TruncatableFieldModal from '../../atoms/modal/TruncatableFeildModel';
 import { formatDateTime } from '../../utils/dateFormats';
 import { Link } from 'react-router-dom';
@@ -10,7 +9,6 @@ import NoteComponent from '../../atoms/common/NoteComponent';
 import { galleryListNote } from './GalleryNotes';
 
 const GalleryList = () => {
-  const allsites = useGetAllSites();
   const [galleries, setGalleries] = useState([]);
 
   const rows = galleries.map((gallery) => {
@@ -76,7 +74,6 @@ const GalleryList = () => {
                   { id: 0, name: 'Active', bgColor: '#ECFDF3', color: '#027948', dotColor: '#12B76A' },
                   { id: 2, name: 'Inactive', bgColor: '#F2F4F7', color: '#344054', dotColor: '#667085' }
                 ]}
-                allsites={allsites}
                 modifyStatus={true}
                 modifyStatusApi={updateGalleryStatusApi}
                 modifySite={true}

@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import useGetAllSites from '../../hooks/useGetAllSites';
 import TruncatableFieldModal from '../../atoms/modal/TruncatableFeildModel';
 import { formatDateTime } from '../../utils/dateFormats';
 import { Link } from 'react-router-dom';
@@ -8,7 +7,6 @@ import TableComponent from '../../atoms/table/Table';
 import { deleteEventApi } from '../../apis/event-apis';
 
 const EventList = () => {
-  const allsites = useGetAllSites();
   const [events, setEvents] = useState([]);
 
   const rows = events.map((event) => {
@@ -67,7 +65,6 @@ const EventList = () => {
                   { id: 0, name: 'Active', bgColor: '#ECFDF3', color: '#027948', dotColor: '#12B76A' },
                   { id: 2, name: 'Inactive', bgColor: '#F2F4F7', color: '#344054', dotColor: '#667085' }
                 ]}
-                allsites={allsites}
                 searchCategory={[{ id: 1, name: 'Name' }]}
                 deleteBtn={true}
                 deleteApi={deleteEventApi}

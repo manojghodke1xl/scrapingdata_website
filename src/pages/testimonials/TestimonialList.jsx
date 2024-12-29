@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import useGetAllSites from '../../hooks/useGetAllSites';
 import TruncatableFieldModal from '../../atoms/modal/TruncatableFeildModel';
 import { formatDateTime } from '../../utils/dateFormats';
 import { Link } from 'react-router-dom';
@@ -7,10 +6,9 @@ import { IoMdAdd } from 'react-icons/io';
 import TableComponent from '../../atoms/table/Table';
 import { updateTestimonialSitesApi, updateTestimonialStatusApi } from '../../apis/testimonial-apis';
 import NoteComponent from '../../atoms/common/NoteComponent';
-import { listTestimonialNote } from './TestimonialNotes';
+import { testimonialListNote } from './TestimonialNotes';
 
 const TestimonialList = () => {
-  const allsites = useGetAllSites();
   const [testimonials, setTestimonials] = useState([]);
 
   const rows = testimonials.map((testimonial) => {
@@ -75,7 +73,6 @@ const TestimonialList = () => {
                   { id: 0, name: 'Active', bgColor: '#ECFDF3', color: '#027948', dotColor: '#12B76A' },
                   { id: 2, name: 'Inactive', bgColor: '#F2F4F7', color: '#344054', dotColor: '#667085' }
                 ]}
-                allsites={allsites}
                 searchCategory={[{ id: 1, name: 'Title' }]}
                 modifyStatus={true}
                 modifyStatusApi={updateTestimonialStatusApi}
@@ -86,7 +83,7 @@ const TestimonialList = () => {
           </div>
         </div>
       </div>
-      <NoteComponent note={listTestimonialNote} />
+      <NoteComponent note={testimonialListNote} />
     </div>
   );
 };

@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import useGetAllSites from '../../hooks/useGetAllSites';
 import TruncatableFieldModal from '../../atoms/modal/TruncatableFeildModel';
 import { formatDateTime } from '../../utils/dateFormats';
 import { Link } from 'react-router-dom';
@@ -10,7 +9,6 @@ import NoteComponent from '../../atoms/common/NoteComponent';
 import { clientLogoListNote } from './ClientLogoNotes';
 
 const ClientLogoList = () => {
-  const allsites = useGetAllSites();
   const [clientlogos, setClientLogos] = useState([]);
 
   const rows = clientlogos.map((clientlogo) => {
@@ -76,7 +74,6 @@ const ClientLogoList = () => {
                   { id: 0, name: 'Active', bgColor: '#ECFDF3', color: '#027948', dotColor: '#12B76A' },
                   { id: 2, name: 'Inactive', bgColor: '#F2F4F7', color: '#344054', dotColor: '#667085' }
                 ]}
-                allsites={allsites}
                 modifyStatus={true}
                 modifyStatusApi={updateClientLogoStatusApi}
                 modifySite={true}

@@ -3,13 +3,14 @@ import { useLocation } from 'react-router-dom';
 import FormButtons from '../../atoms/formFields/FormButtons';
 import FormField from '../../atoms/formFields/InputField';
 import DropDown from '../../atoms/formFields/DropDown';
-import useGetAllSites from '../../hooks/useGetAllSites';
+import useGlobalContext from '../../hooks/useGlobalContext';
 
 const ZohocrmIntegration = () => {
-  const allSites = useGetAllSites();
-
+  const {
+    auth: { allSites }
+    // setLoading
+  } = useGlobalContext();
   //   const navigate = useNavigate();
-  //   const { setLoading } = useContext(GlobalContext);
   const {
     state: { siteData: site }
   } = useLocation();

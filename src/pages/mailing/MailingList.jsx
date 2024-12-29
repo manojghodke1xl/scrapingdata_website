@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import useGetAllSites from '../../hooks/useGetAllSites';
 import TruncatableFieldModal from '../../atoms/modal/TruncatableFeildModel';
 import { formatDateTime } from '../../utils/dateFormats';
 import TableComponent from '../../atoms/table/Table';
@@ -10,7 +9,6 @@ import NoteComponent from '../../atoms/common/NoteComponent';
 import { AiOutlineApi } from 'react-icons/ai';
 
 const MailingList = () => {
-  const allsites = useGetAllSites();
   const [lists, setLists] = useState([]);
 
   const rows = lists.map((list) => {
@@ -62,7 +60,6 @@ const MailingList = () => {
                 search={true}
                 filter={true}
                 filterCategory={[{ id: 0, name: 'Sites' }]}
-                allsites={allsites}
                 searchCategory={[{ id: 1, name: 'Email' }]}
                 deleteBtn={true}
                 deleteLabel={'Delete Mailing List'}

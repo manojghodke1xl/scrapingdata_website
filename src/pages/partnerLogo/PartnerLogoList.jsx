@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import useGetAllSites from '../../hooks/useGetAllSites';
 import TruncatableFieldModal from '../../atoms/modal/TruncatableFeildModel';
 import { formatDateTime } from '../../utils/dateFormats';
 import TableComponent from '../../atoms/table/Table';
@@ -10,7 +9,6 @@ import NoteComponent from '../../atoms/common/NoteComponent';
 import { partnerLogoListNote } from './PartnerLogoNotes';
 
 const PartnerLogoList = () => {
-  const allsites = useGetAllSites();
   const [partnerlogos, setPartnerLogos] = useState([]);
 
   const rows = partnerlogos.map((partnerLogo) => {
@@ -76,7 +74,6 @@ const PartnerLogoList = () => {
                   { id: 0, name: 'Active', bgColor: '#ECFDF3', color: '#027948', dotColor: '#12B76A' },
                   { id: 2, name: 'Inactive', bgColor: '#F2F4F7', color: '#344054', dotColor: '#667085' }
                 ]}
-                allsites={allsites}
                 modifyStatus={true}
                 modifyStatusApi={updatePartnerLogoStatusApi}
                 modifySite={true}

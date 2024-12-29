@@ -1,7 +1,6 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { GlobalContext } from '../../contexts/GlobalContext';
-import useGetAllSites from '../../hooks/useGetAllSites';
+import useGlobalContext from '../../hooks/useGlobalContext';
 import { getAllFaqCategoriesApi } from '../../apis/faqCategory-apis';
 import { showNotification } from '../../utils/showNotification';
 import { addFaqApi, getFaqByIdApi, updateFaqApi } from '../../apis/faq-apis';
@@ -16,7 +15,10 @@ import { addFaqNote, editFaqNote } from './faqNotes';
 const AddFaq = () => {
   const navigate = useNavigate();
   const { id = '' } = useParams();
-  const { setLoading } = useContext(GlobalContext);
+  const {
+    auth: { allSites: availableSites },
+    setLoading
+  } = useGlobalContext();
   const [faqDetails, setFaqDetails] = useState({
     email: '',
     name: '',
@@ -27,7 +29,6 @@ const AddFaq = () => {
   });
   const [errors, setErrors] = useState({});
   const [isScrollable, setIsScrollable] = useState(false);
-  const availableSites = useGetAllSites();
   const [availableFaqCategories, setAvailableFaqCategories] = useState([]);
 
   useEffect(() => {

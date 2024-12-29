@@ -30,7 +30,7 @@ const MaterialSidebar = () => {
               to={to[0]}
               className={`py-2.5 px-3 rounded-xl flex gap-3 items-center ${isActive(to) ? 'bg-fadedblue text-blue' : 'text-primary hover:bg-gray-100 bg-white'}`}
             >
-              <span className="text-3xl ">{icon}</span>
+              <span className="text-3xl">{icon}</span>
               <span>{title}</span>
             </Link>
           ))}

@@ -1,6 +1,6 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { GlobalContext } from '../../contexts/GlobalContext';
+import useGlobalContext from '../../hooks/useGlobalContext';
 import { getFeedbackByIdApi } from '../../apis/feedback-apis';
 import { showNotification } from '../../utils/showNotification';
 import { CiCircleInfo } from 'react-icons/ci';
@@ -10,7 +10,7 @@ import { viewFeedbackNote } from './FeedbackNote';
 
 const ViewFeedback = () => {
   const { id } = useParams();
-  const { setLoading } = useContext(GlobalContext);
+  const { setLoading } = useGlobalContext();
   const [isScrollable, setIsScrollable] = useState(false);
   const [feedback, setFeedback] = useState(null);
 

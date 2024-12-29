@@ -1,6 +1,6 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { GlobalContext } from '../../contexts/GlobalContext';
+import useGlobalContext from '../../hooks/useGlobalContext';
 import { getEnquiryById } from '../../apis/enquiry-apis';
 import { showNotification } from '../../utils/showNotification';
 import { CiCircleInfo } from 'react-icons/ci';
@@ -10,7 +10,7 @@ import NoteComponent from '../../atoms/common/NoteComponent';
 
 const ViewEnquiry = () => {
   const { id } = useParams();
-  const { setLoading } = useContext(GlobalContext);
+  const { setLoading } = useGlobalContext();
   const [enquiry, setEnquiry] = useState({});
   const [isScrollable, setIsScrollable] = useState(false);
 

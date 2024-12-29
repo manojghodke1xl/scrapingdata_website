@@ -1,6 +1,6 @@
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { GlobalContext } from '../../contexts/GlobalContext';
+import useGlobalContext from '../../hooks/useGlobalContext';
 import FormField from '../../atoms/formFields/InputField';
 import ToggleComponent from '../../atoms/formFields/ToggleComponent';
 import { addPaymentIntegrationApi } from '../../apis/payment-integration-apis';
@@ -10,7 +10,7 @@ import DropDown from '../../atoms/formFields/DropDown';
 
 const StripeIntegration = () => {
   const navigate = useNavigate();
-  const { setLoading } = useContext(GlobalContext);
+  const { setLoading } = useGlobalContext();
   const {
     state: { siteData }
   } = useLocation();

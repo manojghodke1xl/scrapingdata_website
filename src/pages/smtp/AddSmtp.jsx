@@ -1,6 +1,6 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { GlobalContext } from '../../contexts/GlobalContext';
+import useGlobalContext from '../../hooks/useGlobalContext';
 import { addSmtpApi, getSmtpByIdApi, updateSmtpApi } from '../../apis/smtp-apis';
 import { showNotification } from '../../utils/showNotification';
 import FormButtons from '../../atoms/formFields/FormButtons';
@@ -12,7 +12,7 @@ import DropDown from '../../atoms/formFields/DropDown';
 const AddSmtp = () => {
   const navigate = useNavigate();
   const { id = '' } = useParams();
-  const { setLoading } = useContext(GlobalContext);
+  const { setLoading } = useGlobalContext();
 
   const [errors, setErrors] = useState({});
   const [isScrollable, setIsScrollable] = useState(false);

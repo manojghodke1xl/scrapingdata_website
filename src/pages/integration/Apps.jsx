@@ -2,11 +2,13 @@ import { useState } from 'react';
 import DropDown from '../../atoms/formFields/DropDown';
 import BGImg from '../../assets/images/site-apps.png';
 import { useNavigate } from 'react-router-dom';
-import useGetAllSites from '../../hooks/useGetAllSites';
+import useGlobalContext from '../../hooks/useGlobalContext';
 import { showNotification } from '../../utils/showNotification';
 
 const Apps = () => {
-  const allSites = useGetAllSites();
+  const {
+    auth: { allSites }
+  } = useGlobalContext();
   const [siteData, setSiteData] = useState({});
   const navigate = useNavigate();
 
@@ -44,7 +46,6 @@ const Apps = () => {
             />
           </div>
           <div className="flex justify-center gap-4 mt-5">
-            {/* <button className="flex gap-2 h-fit items-center px-2.5 md:px-2 sm:px-4 rounded-xl py-2.5 hover:bg-gray-100 text-secondary border border-primary">Cancel</button> */}
             <button onClick={handleProceed} className="flex gap-2 h-fit items-center px-2.5 md:px-2 sm:px-4 rounded-xl py-2.5 bg-primary hover:bg-hover text-white">
               Proceed
             </button>

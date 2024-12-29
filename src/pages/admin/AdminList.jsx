@@ -4,13 +4,15 @@ import TableComponent from '../../atoms/table/Table';
 import { useState } from 'react';
 import TruncatableFieldModal from '../../atoms/modal/TruncatableFeildModel';
 import { formatDateTime } from '../../utils/dateFormats';
-import useGetAllSites from '../../hooks/useGetAllSites';
+import useGlobalContext from '../../hooks/useGlobalContext';
 import { updateAdminStatusApi } from '../../apis/admin-apis';
 import NoteComponent from '../../atoms/common/NoteComponent';
 import { adminListNote } from './AdminNotes';
 
 const AdminList = () => {
-  const allsites = useGetAllSites();
+  const {
+    auth: { allSites }
+  } = useGlobalContext();
   const [admins, setAdmins] = useState([]);
 
   const rows = admins.map((admin) => {
@@ -23,7 +25,7 @@ const AdminList = () => {
       sites: (
         <TruncatableFieldModal
           title={'Sites'}
-          content={isSuperAdmin ? allsites.map((s) => `${s.name} (${s.host})`).join(', ') : sites.map((s) => `${s.name} (${s.host})`).join(', ')}
+          content={isSuperAdmin ? allSites.map((s) => `${s.name} (${s.host})`).join(', ') : sites.map((s) => `${s.name} (${s.host})`).join(', ')}
         />
       ),
       status: (
@@ -83,7 +85,6 @@ const AdminList = () => {
                   { id: 0, name: 'Active', bgColor: '#ECFDF3', color: '#027948', dotColor: '#12B76A' },
                   { id: 1, name: 'Inactive', bgColor: '#F2F4F7', color: '#344054', dotColor: '#667085' }
                 ]}
-                allsites={allsites}
                 searchCategory={[
                   { id: 1, name: 'Name' },
                   { id: 2, name: 'Email' }

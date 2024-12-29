@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { IoMdAdd } from 'react-icons/io';
-import useGetAllSites from '../../hooks/useGetAllSites';
 import TruncatableFieldModal from '../../atoms/modal/TruncatableFeildModel';
 import { formatDateTime } from '../../utils/dateFormats';
 import TableComponent from '../../atoms/table/Table';
@@ -10,7 +9,6 @@ import NoteComponent from '../../atoms/common/NoteComponent';
 import { recaptchaListNote } from './RecaptchaNotes';
 
 const RecaptchaList = () => {
-  const allsites = useGetAllSites();
   const [recaptchas, setRecaptchas] = useState([]);
 
   const rows = recaptchas.map((recaptcha) => {
@@ -71,12 +69,14 @@ const RecaptchaList = () => {
                 editPath={'/recaptcha/edit-recaptcha'}
                 search={true}
                 filter={true}
-                filterCategory={[{ id: 1, name: 'Status' }]}
+                filterCategory={[
+                  { id: 1, name: 'Status' },
+                  { id: 2, name: 'Sites' }
+                ]}
                 statuses={[
                   { id: 0, name: 'Active', bgColor: '#ECFDF3', color: '#027948', dotColor: '#12B76A' },
                   { id: 1, name: 'Inactive', bgColor: '#F2F4F7', color: '#344054', dotColor: '#667085' }
                 ]}
-                allsites={allsites}
                 searchCategory={[
                   { id: 0, name: 'Version' },
                   { id: 1, name: 'SiteKey' },

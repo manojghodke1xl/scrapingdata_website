@@ -1,7 +1,6 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { GlobalContext } from '../../contexts/GlobalContext';
-import useGetAllSites from '../../hooks/useGetAllSites';
+import useGlobalContext from '../../hooks/useGlobalContext';
 import FormButtons from '../../atoms/formFields/FormButtons';
 import FormField from '../../atoms/formFields/InputField';
 import TextareaComponent from '../../atoms/formFields/TextareaComponent';
@@ -14,8 +13,10 @@ import { addEventApi, getEventByIdApi, updateEventApi } from '../../apis/event-a
 const AddEvent = () => {
   const navigate = useNavigate();
   const { id = '' } = useParams();
-  const { setLoading } = useContext(GlobalContext);
-  const availableSites = useGetAllSites();
+  const {
+    auth: { allSites: availableSites },
+    setLoading
+  } = useGlobalContext();
   const [isScrollable, setIsScrollable] = useState(false);
   const [errors, setErrors] = useState({});
   const [eventDetails, setEventDetails] = useState({
@@ -27,9 +28,9 @@ const AddEvent = () => {
 
   const validate = () => {
     const newErrors = {};
-    if (!eventDetails.name) newErrors.name = 'Name is required';
+    if (!eventDetails.name.trim()) newErrors.name = 'Name is required';
     if (!eventDetails.date) newErrors.date = 'Date is required';
-    if (!eventDetails.venue) newErrors.venue = 'Venue is required';
+    if (!eventDetails.venue.trim()) newErrors.venue = 'Venue is required';
     if (!eventDetails.site) newErrors.site = 'Site is required';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;

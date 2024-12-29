@@ -15,7 +15,7 @@ const ReusableAccordion = ({ title, links, icon, isOpen, onToggle }) => {
         }`}
       >
         <div className="flex gap-4 items-center">
-          <span className="text-2xl">{icon}</span>
+          <span className="text-3xl">{icon}</span>
           <span>{title}</span>
         </div>
       </AccordionHeader>

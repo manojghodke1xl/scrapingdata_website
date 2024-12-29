@@ -1,8 +1,6 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { authReducer, authState, GlobalContext } from '../contexts/GlobalContext';
-import { useReducer, useState } from 'react';
 import { ToastContainer } from 'react-toastify';
-import FullScreenLoader from '../atoms/common/FullScreenLoader';
+import { GlobalProvider } from '../contexts/providers/GlobalProvider';
 import DeAuthComponent from '../components/authentication/DeAuthComponent';
 import Login from '../pages/authentication/Login';
 import AuthComponent from '../components/authentication/AuthComponent';
@@ -24,65 +22,60 @@ import ClientLogoRoutes from './private-routes/ClientLogoRoutes';
 import GalleryRoutes from './private-routes/GalleryRoutes';
 import PartnerLoogoRoutes from './private-routes/PartnerLogoRoutes';
 import PageNotFound from '../pages/common/PageNotFound';
-import 'react-toastify/dist/ReactToastify.css';
 import CouponRoutes from './private-routes/CouponRoutes';
 import ParticipantRoutes from './private-routes/ParticipantRoutes';
 import EventRoutes from './private-routes/EventRoutes';
 import PaymentRoutes from './private-routes/PaymentRoutes';
 import IntegrationRoutes from './private-routes/IntegrationRoutes';
 import FaqCategoryRoutes from './private-routes/FaqCategoryRoutes';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
-  const [isLoading, setLoading] = useState(false);
-  const [auth, dispatch] = useReducer(authReducer, authState);
   return (
-    <>
+    <GlobalProvider>
       <div className="w-screen inter-unique overflow-x-hidden">
-        <GlobalContext.Provider value={{ auth, dispatch, setLoading }}>
-          <BrowserRouter>
-            <Routes>
-              {/* Public Routes */}
-              <Route element={<DeAuthComponent />}>
-                <Route path="/" element={<Login />} />
-              </Route>
+        <BrowserRouter>
+          <Routes>
+            {/* Public Routes */}
+            <Route element={<DeAuthComponent />}>
+              <Route path="/" element={<Login />} />
+            </Route>
 
-              {/* Protected Routes */}
-              <Route element={<AuthComponent />}>
-                <Route element={<StructuredLayout />}>
-                  <Route path="/dashboard" element={<Dashboard />} />
+            {/* Protected Routes */}
+            <Route element={<AuthComponent />}>
+              <Route element={<StructuredLayout />}>
+                <Route path="/dashboard" element={<Dashboard />} />
 
-                  {/* Nested Private Routes */}
-                  <Route path="/admin/*" element={<AdminRoutes />} />
-                  <Route path="/smtp/*" element={<SmtpRoutes />} />
-                  <Route path="/case-study/*" element={<CaseStudyRoutes />} />
-                  <Route path="/guides/*" element={<GuidesRoutes />} />
-                  <Route path="/testimonials/*" element={<TestimonialRoutes />} />
-                  <Route path="/recaptcha/*" element={<RecaptchaRoutes />} />
-                  <Route path="/faq/*" element={<FaqRoutes />} />
-                  <Route path="/faq-category/*" element={<FaqCategoryRoutes />} />
-                  <Route path="/enquiry/*" element={<EnquiryRoutes />} />
-                  <Route path="/mailing/*" element={<MailingListRoutes />} />
-                  <Route path="/feedback/*" element={<FeedbackRoutes />} />
-                  <Route path="/website/*" element={<SiteRoutes />} />
-                  <Route path="/pop-up/*" element={<PopupRoutes />} />
-                  <Route path="/client-logo/*" element={<ClientLogoRoutes />} />
-                  <Route path="/gallery/*" element={<GalleryRoutes />} />
-                  <Route path="/partner-logo/*" element={<PartnerLoogoRoutes />} />
-                  <Route path="/coupon/*" element={<CouponRoutes />} />
-                  <Route path="/participants/*" element={<ParticipantRoutes />} />
-                  <Route path="/events/*" element={<EventRoutes />} />
-                  <Route path="/payments/*" element={<PaymentRoutes />} />
-                  <Route path="/apps/*" element={<IntegrationRoutes />} />
-                </Route>
+                {/* Nested Private Routes */}
+                <Route path="/admin/*" element={<AdminRoutes />} />
+                <Route path="/smtp/*" element={<SmtpRoutes />} />
+                <Route path="/case-study/*" element={<CaseStudyRoutes />} />
+                <Route path="/guides/*" element={<GuidesRoutes />} />
+                <Route path="/testimonials/*" element={<TestimonialRoutes />} />
+                <Route path="/recaptcha/*" element={<RecaptchaRoutes />} />
+                <Route path="/faq/*" element={<FaqRoutes />} />
+                <Route path="/faq-category/*" element={<FaqCategoryRoutes />} />
+                <Route path="/enquiry/*" element={<EnquiryRoutes />} />
+                <Route path="/mailing/*" element={<MailingListRoutes />} />
+                <Route path="/feedback/*" element={<FeedbackRoutes />} />
+                <Route path="/website/*" element={<SiteRoutes />} />
+                <Route path="/pop-up/*" element={<PopupRoutes />} />
+                <Route path="/client-logo/*" element={<ClientLogoRoutes />} />
+                <Route path="/gallery/*" element={<GalleryRoutes />} />
+                <Route path="/partner-logo/*" element={<PartnerLoogoRoutes />} />
+                <Route path="/coupon/*" element={<CouponRoutes />} />
+                <Route path="/participants/*" element={<ParticipantRoutes />} />
+                <Route path="/events/*" element={<EventRoutes />} />
+                <Route path="/payments/*" element={<PaymentRoutes />} />
+                <Route path="/apps/*" element={<IntegrationRoutes />} />
               </Route>
-              <Route path="*" element={<PageNotFound />} />
-            </Routes>
-          </BrowserRouter>
-          <ToastContainer />
-          {isLoading && <FullScreenLoader />}
-        </GlobalContext.Provider>
+            </Route>
+            <Route path="*" element={<PageNotFound />} />
+          </Routes>
+        </BrowserRouter>
+        <ToastContainer />
       </div>
-    </>
+    </GlobalProvider>
   );
 }
 

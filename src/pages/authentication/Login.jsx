@@ -1,14 +1,14 @@
 import { useNavigate } from 'react-router-dom';
 import FormField from '../../atoms/formFields/InputField';
-import { useContext, useState } from 'react';
 import { showNotification } from '../../utils/showNotification';
-import { GlobalContext } from '../../contexts/GlobalContext';
+import { useState } from 'react';
+import useGlobalContext from '../../hooks/useGlobalContext';
 
 const Login = () => {
   const navigate = useNavigate();
-  const { dispatch, setLoading } = useContext(GlobalContext);
-  const [email, setEmail] = useState('envato@1xl.com');
-  const [password, setPassword] = useState('Hitesh@1536');
+  const { dispatch, setLoading } = useGlobalContext();
+  const [email, setEmail] = useState(import.meta.env.DEV ? 'envato@1xl.com' : '');
+  const [password, setPassword] = useState(import.meta.env.DEV ? 'Hitesh@1536' : '');
 
   const loginAccount = async (e) => {
     e.preventDefault();

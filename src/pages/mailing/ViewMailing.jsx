@@ -1,6 +1,6 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { GlobalContext } from '../../contexts/GlobalContext';
+import useGlobalContext from '../../hooks/useGlobalContext';
 import { showNotification } from '../../utils/showNotification';
 import { getMailingListById } from '../../apis/mailing-apis';
 import { formatDateTime } from '../../utils/dateFormats';
@@ -10,7 +10,7 @@ import { viewMailingNote } from './MailingNotes';
 
 const ViewMailing = () => {
   const { id } = useParams();
-  const { setLoading } = useContext(GlobalContext);
+  const { setLoading } = useGlobalContext();
   const [mailingList, setMailingList] = useState({});
   const [isScrollable, setIsScrollable] = useState(false);
 

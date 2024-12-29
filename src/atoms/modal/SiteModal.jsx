@@ -1,11 +1,8 @@
 import { IoCloseSharp } from 'react-icons/io5';
 import MultiSelectCheckbox from '../formFields/MultiSelectCheckBox';
-import useGetAllSites from '../../hooks/useGetAllSites';
 import ToggleComponent from '../formFields/ToggleComponent';
 
-const SiteModal = ({ isOpen, label, duplicateBtn, setSitesModelOpen, selectedSites, setSelectedSites, onConfirm, siteToggle }) => {
-  const availableSites = useGetAllSites();
-
+const SiteModal = ({ isOpen, label, duplicateBtn, setSitesModelOpen, selectedSites, setSelectedSites, availableSites, onConfirm, siteToggle }) => {
   if (!isOpen) return null;
   const onCancel = () => {
     if (duplicateBtn) {

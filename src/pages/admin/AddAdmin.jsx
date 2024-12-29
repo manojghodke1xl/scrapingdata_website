@@ -1,20 +1,23 @@
-import { useState, useEffect, useContext, useLayoutEffect } from 'react';
+import { useState, useEffect, useLayoutEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import MultiSelectCheckbox from '../../atoms/formFields/MultiSelectCheckBox';
 import ToggleComponent from '../../atoms/formFields/ToggleComponent';
-import { GlobalContext } from '../../contexts/GlobalContext';
-import useGetAllSites from '../../hooks/useGetAllSites';
 import { addAdminApi, getAdminByIdApi, updateAdminApi } from '../../apis/admin-apis';
 import FormField from '../../atoms/formFields/InputField';
 import { showNotification } from '../../utils/showNotification';
 import FormButtons from '../../atoms/formFields/FormButtons';
 import NoteComponent from '../../atoms/common/NoteComponent';
 import { addAdminNote, editAdminNote } from './AdminNotes';
+import useGlobalContext from '../../hooks/useGlobalContext';
 
 const AddAdmin = () => {
+  const {
+    auth: { allSites: availableSites, isSuperAdmin },
+    setLoading,
+    isLoading
+  } = useGlobalContext();
   const navigate = useNavigate();
   const { id = '' } = useParams();
-  const { auth, setLoading } = useContext(GlobalContext);
   const [adminDetails, setAdminDetails] = useState({
     email: '',
     name: '',
@@ -25,11 +28,10 @@ const AddAdmin = () => {
   });
   const [errors, setErrors] = useState({});
   const [isScrollable, setIsScrollable] = useState(false);
-  const availableSites = useGetAllSites();
 
   useLayoutEffect(() => {
-    if (!auth.isSuperAdmin) navigate('/dashboard');
-  }, [auth, navigate]);
+    if (!isSuperAdmin) navigate('/dashboard');
+  }, [isSuperAdmin, navigate]);
 
   useEffect(() => {
     if (id) {
@@ -53,9 +55,9 @@ const AddAdmin = () => {
 
   const validate = () => {
     const newErrors = {};
-    if (!adminDetails.email) newErrors.email = 'Email is required';
-    if (!adminDetails.name) newErrors.name = 'Name is required';
-    if (!adminDetails.password && !id) newErrors.password = 'Password is required';
+    if (!adminDetails.email.trim()) newErrors.email = 'Email is required';
+    if (!adminDetails.name.trim()) newErrors.name = 'Name is required';
+    if (!adminDetails.password.trim() && !id) newErrors.password = 'Password is required';
     if (adminDetails.sites.length === 0) newErrors.sites = 'At least one site must be selected';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -64,7 +66,7 @@ const AddAdmin = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
-    setLoading(true);
+    // setLoading(true);
     const { password, ...rest } = adminDetails;
     if (password) rest.password = password;
     try {
@@ -75,9 +77,8 @@ const AddAdmin = () => {
       } else showNotification('warn', data);
     } catch (error) {
       showNotification('error', error.message);
-    } finally {
-      setLoading(false);
     }
+    // .finally(() => setLoading(false));
   };
 
   const checkScrollability = () => {
@@ -98,7 +99,7 @@ const AddAdmin = () => {
         <div>
           <span className="text-3xl font-semibold text-dark">{id ? 'Edit' : 'Add'} Admin</span>
         </div>
-        <FormButtons to="/admin/admin-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} />
+        <FormButtons to="/admin/admin-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} disabled={isLoading} />
       </div>
 
       <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
@@ -195,7 +196,7 @@ const AddAdmin = () => {
       </div>
       {!isScrollable && (
         <div className="w-full flex justify-end items-center gap-4 pt-8  border- border-primary">
-          <FormButtons to="/admin/admin-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} />
+          <FormButtons to="/admin/admin-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} disabled={isLoading} />
         </div>
       )}
     </div>

@@ -4,14 +4,12 @@ import { Link } from 'react-router-dom';
 import { IoMdAdd } from 'react-icons/io';
 import TableComponent from '../../atoms/table/Table';
 import { useState } from 'react';
-import useGetAllSites from '../../hooks/useGetAllSites';
 import { deletePopupApi, duplicatePopupApi, updatePopupStatusApi } from '../../apis/popup-apis';
 import NoteComponent from '../../atoms/common/NoteComponent';
 import { listPopupNote } from './PopupNotes';
 import { AiOutlineApi } from 'react-icons/ai';
 
 const PopupList = () => {
-  const allsites = useGetAllSites();
   const [popups, setPopups] = useState([]);
 
   const rows = popups.map((popup) => {
@@ -84,7 +82,6 @@ const PopupList = () => {
                   { id: 0, name: 'Active', bgColor: '#ECFDF3', color: '#027948', dotColor: '#12B76A' },
                   { id: 2, name: 'Inactive', bgColor: '#F2F4F7', color: '#344054', dotColor: '#667085' }
                 ]}
-                allsites={allsites}
                 searchCategory={[{ id: 1, name: 'Name' }]}
                 deleteBtn={true}
                 deleteApi={deletePopupApi}

@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import useGetAllSites from '../../hooks/useGetAllSites';
 import TruncatableFieldModal from '../../atoms/modal/TruncatableFeildModel';
 import { formatDateTime } from '../../utils/dateFormats';
 import { Link } from 'react-router-dom';
@@ -10,7 +9,6 @@ import NoteComponent from '../../atoms/common/NoteComponent';
 import { faqListNote } from './faqNotes';
 
 const FaqList = () => {
-  const allsites = useGetAllSites();
   const [faqs, setFaqs] = useState([]);
 
   const rows = faqs.map((faq) => {
@@ -77,7 +75,6 @@ const FaqList = () => {
                   { id: 0, name: 'Active', bgColor: '#ECFDF3', color: '#027948', dotColor: '#12B76A' },
                   { id: 1, name: 'Inactive', bgColor: '#F2F4F7', color: '#344054', dotColor: '#667085' }
                 ]}
-                allsites={allsites}
                 searchCategory={[{ id: 0, name: 'Question' }]}
                 modifyStatus={true}
                 modifyStatusApi={updateFaqStatusApi}

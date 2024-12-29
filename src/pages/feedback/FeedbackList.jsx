@@ -1,16 +1,14 @@
 import { useState } from 'react';
-import useGetAllSites from '../../hooks/useGetAllSites';
 import TruncatableFieldModal from '../../atoms/modal/TruncatableFeildModel';
 import { formatDateTime } from '../../utils/dateFormats';
 import TableComponent from '../../atoms/table/Table';
 import { Link } from 'react-router-dom';
 import { deleteFeedbackApi } from '../../apis/feedback-apis';
 import NoteComponent from '../../atoms/common/NoteComponent';
-import { listFeedbackNote } from './FeedbackNote';
+import { feedbackListNote } from './FeedbackNote';
 import { AiOutlineApi } from 'react-icons/ai';
 
 const FeedbackList = () => {
-  const allsites = useGetAllSites();
   const [feedbacks, setFeedbacks] = useState([]);
 
   const rows = feedbacks.map((feedback) => {
@@ -72,7 +70,6 @@ const FeedbackList = () => {
                 search={true}
                 filter={true}
                 filterCategory={[{ id: 0, name: 'Sites' }]}
-                allsites={allsites}
                 searchCategory={[
                   { id: 0, name: 'Name' },
                   { id: 1, name: 'Email' },
@@ -90,7 +87,7 @@ const FeedbackList = () => {
           </div>
         </div>
       </div>
-      <NoteComponent note={listFeedbackNote} />
+      <NoteComponent note={feedbackListNote} />
     </div>
   );
 };

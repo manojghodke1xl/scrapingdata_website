@@ -1,6 +1,6 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { GlobalContext } from '../../contexts/GlobalContext';
+import useGlobalContext from '../../hooks/useGlobalContext';
 import { addCouponApi, getCouponByIdApi, updateCouponApi } from '../../apis/coupon';
 import { showNotification } from '../../utils/showNotification';
 import FormField from '../../atoms/formFields/InputField';
@@ -16,7 +16,7 @@ import { addCouponNote, editCouponNote } from './CouponNotes';
 const AddCoupon = () => {
   const navigate = useNavigate();
   const { id = '' } = useParams();
-  const { setLoading } = useContext(GlobalContext);
+  const { setLoading } = useGlobalContext();
 
   const [isScrollable, setIsScrollable] = useState(false);
   const [errors, setErrors] = useState({});
@@ -38,7 +38,7 @@ const AddCoupon = () => {
   const validate = () => {
     const newErrors = {};
     if (!couponDetails.code.trim()) newErrors.code = 'Coupon Code is required';
-    if (!couponDetails.info.trim) newErrors.info = 'Description is required';
+    if (!couponDetails.info.trim()) newErrors.info = 'Description is required';
     if (!couponDetails.startDate) newErrors.startDate = 'Start Date is required';
     if (!couponDetails.endDate) newErrors.endDate = 'End Date is required';
     if (!couponDetails.type) newErrors.type = 'Coupon Type is required';

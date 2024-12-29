@@ -1,6 +1,14 @@
 import { RxDashboard } from 'react-icons/rx';
+import { TbApps } from 'react-icons/tb';
 
-export const navLinks = [{ title: 'Dashboard', to: ['/dashboard'], icon: <RxDashboard /> }];
+export const navLinks = [
+  { title: 'Dashboard', to: ['/dashboard'], icon: <RxDashboard /> },
+  {
+    title: 'Apps',
+    to: ['/apps/app', '/apps/integration/razorpay', '/apps/integration/stripe', '/apps/integration/paypal'],
+    icon: <TbApps />
+  }
+];
 
 export const enquiresPaths = [
   { title: 'Enquiry', to: ['/enquiry/enquiry-list', '/enquiry/view-enquiry', '/enquiry/enquiry-integration'] },
@@ -17,8 +25,7 @@ export const features = [
 
 export const essentials = [
   { title: 'Pop-up', to: ['/pop-up/pop-up-list', '/pop-up/add-pop-up', '/pop-up/edit-pop-up'] },
-  { title: 'Website', to: ['/website/website-list', '/website/add-website', '/website/edit-website'] },
-  { title: 'Apps', to: ['/apps/app', '/apps/integration/razorpay', '/apps/integration/stripe', '/apps/integration/paypal'] }
+  { title: 'Website', to: ['/website/website-list', '/website/add-website', '/website/edit-website'] }
 ];
 
 export const admin = [

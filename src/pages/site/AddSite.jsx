@@ -1,6 +1,6 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { GlobalContext } from '../../contexts/GlobalContext';
+import useGlobalContext from '../../hooks/useGlobalContext';
 import { getAllSmtpsApi } from '../../apis/smtp-apis';
 import { showNotification } from '../../utils/showNotification';
 import { addSiteApi, getSiteByIdApi, updateSiteApi } from '../../apis/site-apis';
@@ -16,7 +16,7 @@ import { addWebsiteNote, editWebsiteNote } from './SiteNotes';
 const AddSite = () => {
   const navigate = useNavigate();
   const { id = '' } = useParams();
-  const { setLoading } = useContext(GlobalContext);
+  const { setLoading } = useGlobalContext();
 
   const [isScrollable, setIsScrollable] = useState(false);
   const [errors, setErrors] = useState({ forwardEmails: '' });

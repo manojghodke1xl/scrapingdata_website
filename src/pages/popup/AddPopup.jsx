@@ -1,8 +1,7 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import FormButtons from '../../atoms/formFields/FormButtons';
-import { useContext, useEffect, useState } from 'react';
-import { GlobalContext } from '../../contexts/GlobalContext';
-import useGetAllSites from '../../hooks/useGetAllSites';
+import { useEffect, useState } from 'react';
+import useGlobalContext from '../../hooks/useGlobalContext';
 import FormField from '../../atoms/formFields/InputField';
 import DropDown from '../../atoms/formFields/DropDown';
 import ToggleComponent from '../../atoms/formFields/ToggleComponent';
@@ -22,8 +21,10 @@ import { addPopupNote, editPopupNote } from './PopupNotes';
 const AddPopup = () => {
   const navigate = useNavigate();
   const { id = '' } = useParams();
-  const { setLoading } = useContext(GlobalContext);
-  const availableSites = useGetAllSites();
+  const {
+    auth: { allSites: availableSites },
+    setLoading
+  } = useGlobalContext();
 
   const [isScrollable, setIsScrollable] = useState(false);
   const [errors, setErrors] = useState({});
@@ -296,11 +297,11 @@ const AddPopup = () => {
               />
 
               <FormField
-                label="Again when canceled"
+                label="Again when Cancelled"
                 type="number"
                 id="againWhenCanceled"
                 name="againWhenCanceled"
-                placeholder="Again when canceled"
+                placeholder="Again when Cancelled"
                 onChange={(e) => setPopupDetails((prev) => ({ ...prev, againWhenCanceled: e.target.value }))}
                 value={popupDetails.againWhenCanceled}
               />

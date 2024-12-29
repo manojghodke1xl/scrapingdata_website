@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { RxCaretSort } from 'react-icons/rx';
 import Pagination from './Pagination';
 import { MdEdit, MdOutlineApps, MdRemoveRedEye } from 'react-icons/md';
@@ -12,8 +12,8 @@ import DeleteModal from '../modal/DeleteModal';
 import StatusFilter from '../filter/StatusFilter';
 import SearchFilter from '../filter/SearchFilter';
 import FilterDropDowm from '../filter/FilterDropDown';
-import { GlobalContext } from '../../contexts/GlobalContext';
 import SiteModal from '../modal/SiteModal';
+import useGlobalContext from '../../hooks/useGlobalContext';
 
 const TableComponent = ({
   selectable,
@@ -40,7 +40,6 @@ const TableComponent = ({
   duplicateApi,
   filterCategory,
   statuses,
-  allsites,
   events,
   searchCategory = [],
   modifyStatus,
@@ -50,8 +49,12 @@ const TableComponent = ({
   modifySiteApi
 }) => {
   const navigate = useNavigate();
-  const { setLoading } = useContext(GlobalContext);
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const {
+    auth: { allSites },
+    setLoading,
+    isLoading
+  } = useGlobalContext();
 
   const [modalState, setModalState] = useState({
     isDuplicateModelOpen: false,
@@ -254,7 +257,7 @@ const TableComponent = ({
                   <Filters categories={filterCategory} onCategorySelect={handleCategorySelect} setSelectedCategory={setSelectedCategory} selectedCategory={selectedCategory} />
                 </div>
                 {showFilter.status && <StatusFilter statuses={statuses} setStatusFilter={(status) => setFilterState((prev) => ({ ...prev, statusFilter: status }))} />}
-                {showFilter.sites && <FilterDropDowm name={'Sites'} data={allsites} setDataId={(id) => setFilterState((prev) => ({ ...prev, siteId: id }))} />}
+                {showFilter.sites && <FilterDropDowm name={'Sites'} data={allSites} setDataId={(id) => setFilterState((prev) => ({ ...prev, siteId: id }))} />}
                 {showFilter.event && <FilterDropDowm name={'Event'} data={events} setDataId={(id) => setFilterState((prev) => ({ ...prev, eventId: id }))} />}
               </>
             )}
@@ -320,74 +323,117 @@ const TableComponent = ({
           </div>
         )}
 
-        <div className="overflow-x-auto custom-scrollbar">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead>
-              <tr>
-                {selectable && (
-                  <th scope="col" className="px-4 py-2.5 text-left">
-                    <label className="inline-flex items-center cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={selectionState.isAllSelected}
-                        onChange={handleMasterCheckboxChange}
-                        className="form-checkbox h-4 w-4 text-blue-600 focus:outline-none"
-                      />
-                    </label>
-                  </th>
-                )}
-                {headers?.map((header, index) => (
-                  <th key={index} scope="col" className="px-6 py-2.5 text-left font-semibold text-primary">
-                    <div className="flex items-center gap-2">
-                      <span className="whitespace-nowrap">{header.label}</span>
-                      {header.sortable !== false && <RxCaretSort size={20} strokeWidth="0.5" fill="none" />}
-                    </div>
-                  </th>
-                ))}
-                {actions && (
-                  <th scope="col" className="px-6 py-2 text-left font-semibold text-primary">
-                    Actions
-                  </th>
-                )}
-              </tr>
-            </thead>
-            <tbody>
-              {rows?.map((row, index) => (
-                <tr key={row.id} className={` border-b border-primary ${selectionState.selectedItems.includes(row.id) ? 'bg-blue-50' : 'hover:bg-gray-50'}`}>
+        <div className="overflow-x-auto custom-scrollbar ">
+          {isLoading ? (
+            <div
+              role="status"
+              className=" p-4 space-y-4 border border-gray-200 divide-y divide-gray-200 rounded shadow animate-pulse dark:divide-gray-700 md:p-6 dark:border-gray-700"
+            >
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-24 mb-2.5"></div>
+                  <div className="w-32 h-2 bg-gray-200 rounded-full dark:bg-gray-700"></div>
+                </div>
+                <div className="h-2.5 bg-gray-300 rounded-full dark:bg-gray-700 w-12"></div>
+              </div>
+              <div className="flex items-center justify-between pt-4">
+                <div>
+                  <div className="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-24 mb-2.5"></div>
+                  <div className="w-32 h-2 bg-gray-200 rounded-full dark:bg-gray-700"></div>
+                </div>
+                <div className="h-2.5 bg-gray-300 rounded-full dark:bg-gray-700 w-12"></div>
+              </div>
+              <div className="flex items-center justify-between pt-4">
+                <div>
+                  <div className="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-24 mb-2.5"></div>
+                  <div className="w-32 h-2 bg-gray-200 rounded-full dark:bg-gray-700"></div>
+                </div>
+                <div className="h-2.5 bg-gray-300 rounded-full dark:bg-gray-700 w-12"></div>
+              </div>
+              <div className="flex items-center justify-between pt-4">
+                <div>
+                  <div className="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-24 mb-2.5"></div>
+                  <div className="w-32 h-2 bg-gray-200 rounded-full dark:bg-gray-700"></div>
+                </div>
+                <div className="h-2.5 bg-gray-300 rounded-full dark:bg-gray-700 w-12"></div>
+              </div>
+              <div className="flex items-center justify-between pt-4">
+                <div>
+                  <div className="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-24 mb-2.5"></div>
+                  <div className="w-32 h-2 bg-gray-200 rounded-full dark:bg-gray-700"></div>
+                </div>
+                <div className="h-2.5 bg-gray-300 rounded-full dark:bg-gray-700 w-12"></div>
+              </div>
+            </div>
+          ) : (
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead>
+                <tr>
                   {selectable && (
-                    <td className="px-4 py-2">
-                      {!row.isSuperAdmin && (
-                        <label className="inline-flex items-center cursor-pointer">
-                          <input
-                            type="checkbox"
-                            checked={selectionState.selectedItems.includes(row.id)}
-                            onChange={() => handleRowCheckboxChange(row.id)}
-                            className="form-checkbox h-4 w-4 text-blue-600"
-                          />
-                        </label>
-                      )}
-                    </td>
+                    <th scope="col" className="px-4 py-2.5 text-left">
+                      <label className="inline-flex items-center cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={selectionState.isAllSelected}
+                          onChange={handleMasterCheckboxChange}
+                          className="form-checkbox h-4 w-4 text-blue-600 focus:outline-none"
+                        />
+                      </label>
+                    </th>
                   )}
-                  {headers.map((header, headerIndex) => (
-                    <td key={`${row.id}-${headerIndex}`} className="px-6 py-2 text-secondary whitespace-nowrap font-medium">
-                      {header.key === 'srno'
-                        ? (index + 1).toString().padStart(3, '0') // Handle Sr No.
-                        : row[header.key]}
-                    </td>
+                  {headers?.map((header, index) => (
+                    <th key={index} scope="col" className="px-6 py-2.5 text-left font-semibold text-primary">
+                      <div className="flex items-center gap-2">
+                        <span className="whitespace-nowrap">{header.label}</span>
+                        {header.sortable !== false && <RxCaretSort size={20} strokeWidth="0.5" fill="none" />}
+                      </div>
+                    </th>
                   ))}
                   {actions && (
-                    <td className="w-full flex gap-2 items-center px-6 py-2 whitespace-nowrap font-medium text-secondary hover:text-gray-900">
-                      {edit && !row.isSuperAdmin && <MdEdit className="text-2xl" onClick={() => navigate(editPath + '/' + row.id)} />}
-                      {view && !row.isSuperAdmin && <MdRemoveRedEye className="text-2xl" onClick={() => navigate(viewPath + '/' + row.id)} />}
-                      {apps && !row.isSuperAdmin && (
-                        <MdOutlineApps className="text-2xl" onClick={() => navigate(appsPath, { state: { siteData: { id: row.id, name: row.id, showName: row.siteName } } })} />
-                      )}
-                    </td>
+                    <th scope="col" className="px-6 py-2 text-left font-semibold text-primary">
+                      Actions
+                    </th>
                   )}
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {rows?.map((row, index) => (
+                  <tr key={row.id} className={` border-b border-primary ${selectionState.selectedItems.includes(row.id) ? 'bg-blue-50' : 'hover:bg-gray-50'}`}>
+                    {selectable && (
+                      <td className="px-4 py-2">
+                        {!row.isSuperAdmin && (
+                          <label className="inline-flex items-center cursor-pointer">
+                            <input
+                              type="checkbox"
+                              checked={selectionState.selectedItems.includes(row.id)}
+                              onChange={() => handleRowCheckboxChange(row.id)}
+                              className="form-checkbox h-4 w-4 text-blue-600"
+                            />
+                          </label>
+                        )}
+                      </td>
+                    )}
+                    {headers.map((header, headerIndex) => (
+                      <td key={`${row.id}-${headerIndex}`} className="px-6 py-2 text-secondary whitespace-nowrap font-medium">
+                        {header.key === 'srno'
+                          ? (index + 1).toString().padStart(3, '0') // Handle Sr No.
+                          : row[header.key]}
+                      </td>
+                    ))}
+                    {actions && (
+                      <td className="w-full flex gap-2 items-center px-6 py-2 whitespace-nowrap font-medium text-secondary hover:text-gray-900">
+                        {edit && !row.isSuperAdmin && <MdEdit className="text-2xl" onClick={() => navigate(editPath + '/' + row.id)} />}
+                        {view && !row.isSuperAdmin && <MdRemoveRedEye className="text-2xl" onClick={() => navigate(viewPath + '/' + row.id)} />}
+                        {apps && !row.isSuperAdmin && (
+                          <MdOutlineApps className="text-2xl" onClick={() => navigate(appsPath, { state: { siteData: { id: row.id, name: row.id, showName: row.siteName } } })} />
+                        )}
+                      </td>
+                    )}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
         </div>
         <div className="w-full mt-2">
           <div className="w-full py-3">
@@ -410,6 +456,7 @@ const TableComponent = ({
           setSitesModelOpen={setModalState}
           selectedSites={selectionState.selectedSites}
           setSelectedSites={setSelectionState}
+          availableSites={allSites}
           onConfirm={handleSitesUpdate}
           siteToggle={selectionState.siteToggle}
         />
@@ -426,6 +473,7 @@ const TableComponent = ({
           duplicateBtn={duplicateBtn}
           setSitesModelOpen={setModalState}
           selectedSites={selectionState.selectedSites}
+          availableSites={allSites}
           setSelectedSites={setSelectionState}
           onConfirm={handleDuplicateConfirm}
         />

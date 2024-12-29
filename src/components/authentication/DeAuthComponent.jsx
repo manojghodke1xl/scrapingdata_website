@@ -1,9 +1,8 @@
-import { useContext } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
-import { GlobalContext } from '../../contexts/GlobalContext';
+import useGlobalContext from '../../hooks/useGlobalContext';
 
 const DeAuthComponent = () => {
-  const { auth } = useContext(GlobalContext);
+  const { auth } = useGlobalContext();
   if (!auth.id) return <Outlet />;
   else return <Navigate to="/dashboard" replace />;
 };

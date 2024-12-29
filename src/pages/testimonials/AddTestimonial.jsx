@@ -1,12 +1,11 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { GlobalContext } from '../../contexts/GlobalContext';
+import useGlobalContext from '../../hooks/useGlobalContext';
 import { getAllCategoriesApi } from '../../apis/category-apis';
 import { showNotification } from '../../utils/showNotification';
 import { addTestimonialApi, getTestimonialById, updateTestimonialApi } from '../../apis/testimonial-apis';
 import FormButtons from '../../atoms/formFields/FormButtons';
 import FormField from '../../atoms/formFields/InputField';
-import useGetAllSites from '../../hooks/useGetAllSites';
 import TextareaComponent from '../../atoms/formFields/TextareaComponent';
 import DropDown from '../../atoms/formFields/DropDown';
 import MultiSelectCheckbox from '../../atoms/formFields/MultiSelectCheckBox';
@@ -20,8 +19,10 @@ import { addTestimonialNote, editTestimonialNote } from './TestimonialNotes';
 const AddTestimonial = () => {
   const navigate = useNavigate();
   const { id = '' } = useParams();
-  const { setLoading } = useContext(GlobalContext);
-  const availableSites = useGetAllSites();
+  const {
+    auth: { allSites: availableSites },
+    setLoading
+  } = useGlobalContext();
 
   const [isScrollable, setIsScrollable] = useState(false);
   const [testimonialDetails, setTestimonialDetails] = useState({
@@ -177,8 +178,8 @@ const AddTestimonial = () => {
                   ...(e.name === 'image'
                     ? { videoBolean: false, video: undefined, text: '', videoUrl: '', videoFile: null }
                     : e.name === 'video'
-                      ? { text: '', image: undefined, imageFile: null }
-                      : { image: undefined, video: undefined, videoBolean: false, videoUrl: '', imageFile: null, videoFile: null })
+                    ? { text: '', image: undefined, imageFile: null }
+                    : { image: undefined, video: undefined, videoBolean: false, videoUrl: '', imageFile: null, videoFile: null })
                 }))
               }
             />

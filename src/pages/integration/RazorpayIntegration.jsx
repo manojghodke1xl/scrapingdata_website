@@ -1,16 +1,16 @@
+import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import FormButtons from '../../atoms/formFields/FormButtons';
 import FormField from '../../atoms/formFields/InputField';
-import { useContext, useState } from 'react';
 import ToggleComponent from '../../atoms/formFields/ToggleComponent';
 import DropDown from '../../atoms/formFields/DropDown';
-import { GlobalContext } from '../../contexts/GlobalContext';
+import useGlobalContext from '../../hooks/useGlobalContext';
 import { showNotification } from '../../utils/showNotification';
 import { addPaymentIntegrationApi } from '../../apis/payment-integration-apis';
 
 const RazorpayIntegration = () => {
   const navigate = useNavigate();
-  const { setLoading } = useContext(GlobalContext);
+  const { setLoading } = useGlobalContext();
   const {
     state: { siteData }
   } = useLocation();

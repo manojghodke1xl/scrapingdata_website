@@ -1,7 +1,6 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { GlobalContext } from '../../contexts/GlobalContext';
-import useGetAllSites from '../../hooks/useGetAllSites';
+import useGlobalContext from '../../hooks/useGlobalContext';
 import { addPartnerLogoApi, getPartnerLogoById, updatePartnerLogoApi } from '../../apis/partner-logo-apis';
 import { showNotification } from '../../utils/showNotification';
 import FormButtons from '../../atoms/formFields/FormButtons';
@@ -14,8 +13,10 @@ import { addPartnerLogoNote, editPartnerLogoNote } from './PartnerLogoNotes';
 const AddPartnerLogo = () => {
   const navigate = useNavigate();
   const { id = '' } = useParams();
-  const { setLoading } = useContext(GlobalContext);
-  const availableSites = useGetAllSites();
+  const {
+    auth: { allSites: availableSites },
+    setLoading
+  } = useGlobalContext();
 
   const [isScrollable, setIsScrollable] = useState(false);
   const [errors, setErrors] = useState({});

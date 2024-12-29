@@ -1,17 +1,19 @@
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import TruncatableFieldModal from '../../atoms/modal/TruncatableFeildModel';
 import { formatDateTime } from '../../utils/dateFormats';
 import { IoMdAdd } from 'react-icons/io';
 import { Link } from 'react-router-dom';
 import TableComponent from '../../atoms/table/Table';
-import { GlobalContext } from '../../contexts/GlobalContext';
+import useGlobalContext from '../../hooks/useGlobalContext';
 import { updateSiteStatusApi } from '../../apis/site-apis';
 import NoteComponent from '../../atoms/common/NoteComponent';
 import { websiteListNote } from './SiteNotes';
 
 const SiteList = () => {
   const [sites, setSites] = useState([]);
-  const { auth } = useContext(GlobalContext);
+  const {
+    auth: { isSuperAdmin }
+  } = useGlobalContext();
 
   const rows = sites.map((site) => {
     const { _id, name, host, isActive, createdAt, updatedAt } = site;
@@ -39,7 +41,7 @@ const SiteList = () => {
           <div className="">
             <h4 className="text-3xl text-dark">All Site List</h4>
           </div>
-          {auth.isSuperAdmin && (
+          {isSuperAdmin && (
             <div className="w-full flex justify-end sm:w-fit">
               <Link to="/website/add-website" className="flex gap-2 h-fit items-center px-2.5 md:px-2 sm:px-4 rounded-xl py-2.5 bg-primary hover:bg-hover text-white">
                 <IoMdAdd size={22} />

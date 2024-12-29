@@ -1,11 +1,9 @@
 import { useState } from 'react';
-// import useGetAllSites from '../../hooks/useGetAllSites';
 import TruncatableFieldModal from '../../atoms/modal/TruncatableFeildModel';
 import { formatDateTime } from '../../utils/dateFormats';
 import TableComponent from '../../atoms/table/Table';
 
 const PaymentList = () => {
-  //   const allsites = useGetAllSites();
   const [payments, setPayments] = useState([]);
 
   const rows = payments.map((payment) => {
@@ -70,7 +68,6 @@ const PaymentList = () => {
                 //   { id: 0, name: 'Active', bgColor: '#ECFDF3', color: '#027948', dotColor: '#12B76A' },
                 //   { id: 2, name: 'Inactive', bgColor: '#F2F4F7', color: '#344054', dotColor: '#667085' }
                 // ]}
-                // allsites={allsites}
                 searchCategory={[{ id: 1, name: 'Channel' }]}
               />
             </div>

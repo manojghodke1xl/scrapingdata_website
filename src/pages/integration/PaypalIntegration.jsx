@@ -1,6 +1,6 @@
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { GlobalContext } from '../../contexts/GlobalContext';
+import useGlobalContext from '../../hooks/useGlobalContext';
 import FormButtons from '../../atoms/formFields/FormButtons';
 import DropDown from '../../atoms/formFields/DropDown';
 import FormField from '../../atoms/formFields/InputField';
@@ -10,7 +10,7 @@ import { addPaymentIntegrationApi } from '../../apis/payment-integration-apis';
 
 const PaypalIntegration = () => {
   const navigate = useNavigate();
-  const { setLoading } = useContext(GlobalContext);
+  const { setLoading } = useGlobalContext();
   const {
     state: { siteData }
   } = useLocation();

@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import FormButtons from '../../atoms/formFields/FormButtons';
-import { useContext, useEffect, useState } from 'react';
-import { GlobalContext } from '../../contexts/GlobalContext';
+import { useEffect, useState } from 'react';
+import useGlobalContext from '../../hooks/useGlobalContext';
 import { addCategoryApi, getCategoryByIdApi, updateCategoryApi } from '../../apis/category-apis';
 import { showNotification } from '../../utils/showNotification';
 import FormField from '../../atoms/formFields/InputField';
@@ -11,7 +11,7 @@ import { addTestimonialCategoryNote, editTestimonialCategoryNote } from './Testi
 const AddTestimonialCategory = () => {
   const navigate = useNavigate();
   const { id = '' } = useParams();
-  const { setLoading } = useContext(GlobalContext);
+  const { setLoading } = useGlobalContext();
   const [isScrollable, setIsScrollable] = useState(false);
   const [categoryName, setCategoryName] = useState('');
   const [errors, setErrors] = useState({});

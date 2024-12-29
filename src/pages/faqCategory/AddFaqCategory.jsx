@@ -1,6 +1,6 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { GlobalContext } from '../../contexts/GlobalContext';
+import useGlobalContext from '../../hooks/useGlobalContext';
 import { addFaqCategoryApi, getFaqCategoryByIdApi, updateFaqCategoryApi } from '../../apis/faqCategory-apis';
 import { showNotification } from '../../utils/showNotification';
 import FormButtons from '../../atoms/formFields/FormButtons';
@@ -11,7 +11,7 @@ import { addFaqCategoryNote, editFaqCategoryNote } from './FaqCategoryNotes';
 const AddFaqCategory = () => {
   const navigate = useNavigate();
   const { id = '' } = useParams();
-  const { setLoading } = useContext(GlobalContext);
+  const { setLoading } = useGlobalContext();
   const [isScrollable, setIsScrollable] = useState(false);
   const [fqaCategoryName, setFqaCategoryName] = useState('');
   const [errors, setErrors] = useState({});

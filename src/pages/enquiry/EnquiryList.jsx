@@ -1,16 +1,14 @@
 import { useState } from 'react';
-import useGetAllSites from '../../hooks/useGetAllSites';
 import TruncatableFieldModal from '../../atoms/modal/TruncatableFeildModel';
 import { formatDateTime } from '../../utils/dateFormats';
 import TableComponent from '../../atoms/table/Table';
 import { Link } from 'react-router-dom';
 import { deleteEnquiryApi } from '../../apis/enquiry-apis';
 import NoteComponent from '../../atoms/common/NoteComponent';
-import { listEnquiryNote } from './EnquiryNotes';
+import { enquiryListNote } from './EnquiryNotes';
 import { AiOutlineApi } from 'react-icons/ai';
 
 const EnquiryList = () => {
-  const allsites = useGetAllSites();
   const [enquiries, setEnquiries] = useState([]);
 
   const rows = enquiries.map((enquiry) => {
@@ -63,7 +61,6 @@ const EnquiryList = () => {
                 search={true}
                 filter={true}
                 filterCategory={[{ id: 0, name: 'Sites' }]}
-                allsites={allsites}
                 searchCategory={[
                   { id: 0, name: 'Name' },
                   { id: 1, name: 'Email' }
@@ -77,7 +74,7 @@ const EnquiryList = () => {
           </div>
         </div>
       </div>
-      <NoteComponent note={listEnquiryNote} />
+      <NoteComponent note={enquiryListNote} />
     </div>
   );
 };
