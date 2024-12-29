@@ -80,7 +80,7 @@ const TableComponent = ({
 
   const [showFilter, setShowFilter] = useState({
     status: false,
-    site: false,
+    sites: false,
     event: false
   });
 
@@ -203,7 +203,7 @@ const TableComponent = ({
 
   const handleCategorySelect = (category) => {
     if (category.name === 'Status') setShowFilter((prev) => ({ ...prev, status: !prev.status }));
-    if (category.name === 'Sites') setShowFilter((prev) => ({ ...prev, sites: !prev.site }));
+    if (category.name === 'Sites') setShowFilter((prev) => ({ ...prev, sites: !prev.sites }));
     if (category.name === 'Event') setShowFilter((prev) => ({ ...prev, event: !prev.event }));
     if (category.name === 'Search') {
       setFilterState({ searchTerm: '', searchKey: '' });
@@ -250,11 +250,11 @@ const TableComponent = ({
             )}
             {filter && (
               <>
-                <div className="hidden sm:block gap-2">
+                <div className="gap-2">
                   <Filters categories={filterCategory} onCategorySelect={handleCategorySelect} setSelectedCategory={setSelectedCategory} selectedCategory={selectedCategory} />
                 </div>
                 {showFilter.status && <StatusFilter statuses={statuses} setStatusFilter={(status) => setFilterState((prev) => ({ ...prev, statusFilter: status }))} />}
-                {showFilter.site && <FilterDropDowm name={'Sites'} data={allsites} setDataId={(id) => setFilterState((prev) => ({ ...prev, siteId: id }))} />}
+                {showFilter.sites && <FilterDropDowm name={'Sites'} data={allsites} setDataId={(id) => setFilterState((prev) => ({ ...prev, siteId: id }))} />}
                 {showFilter.event && <FilterDropDowm name={'Event'} data={events} setDataId={(id) => setFilterState((prev) => ({ ...prev, eventId: id }))} />}
               </>
             )}

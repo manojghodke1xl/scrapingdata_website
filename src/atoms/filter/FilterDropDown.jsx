@@ -12,7 +12,7 @@ const FilterDropDowm = ({ name, data, setDataId }) => {
   };
 
   return (
-    <div className="dropdown-container relative w-full">
+    <div className="dropdown-container relative">
       <details
         name="tone"
         open={isOpenSucceses}
