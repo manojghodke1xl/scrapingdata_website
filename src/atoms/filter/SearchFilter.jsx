@@ -2,22 +2,22 @@ import { useState } from 'react';
 import { IoIosArrowDown } from 'react-icons/io';
 
 const SearchFilter = ({ searchCategory, setSearchKey, selectedCategory, setSelectedCategory }) => {
-  const [isOpenSucceses, setIsOpenSucceses] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   const handleCheckboxClick = (category) => {
     if (category.name === 'Phone Number') setSearchKey('mobile');
     else setSearchKey(category.name.toLowerCase());
     setSelectedCategory({ ...category, type: 'search' });
-    setIsOpenSucceses(false);
+    setIsOpen(false);
   };
 
   return (
     <div className="dropdown-container relative w-full">
       <details
         name="tone"
-        open={isOpenSucceses}
+        open={isOpen}
         className="relative w-fit cursor-default rounded-xl bg-white px-4 text-left text-primary shadow-sm border border-fadedblue focus:outline-none focus:ring-0 sm:text-lg sm:leading-6"
-        onToggle={(e) => setIsOpenSucceses(e.target.open)}
+        onToggle={(e) => setIsOpen(e.target.open)}
       >
         <summary className="cursor-pointer py-2.5 text-left w-full pr-0 text-primary list-none focus:outline-none focus:ring-0 focus:border-0">
           <span className="flex items-center w-fit">

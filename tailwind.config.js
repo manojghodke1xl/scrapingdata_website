@@ -11,6 +11,7 @@ export default {
         darkblue: '#0856cd',
         placeholder: '#667085',
         success: '#12B76A',
+        danger: '#B32318',
         white: '#FFFFFF'
       },
       borderColor: {
@@ -28,7 +29,7 @@ export default {
         error: '#FDA29B',
         darkblue: '#175CD3',
         lightblue: '#095fe3',
-        danger: ' #F04438',
+        danger: ' #FEF3F2',
         fadedblue: '#EFF8FF',
         darkgray: '#D0D5DD',
         lightcyan: '#E0EAFF',
