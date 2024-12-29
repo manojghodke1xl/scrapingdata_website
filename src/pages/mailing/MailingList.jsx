@@ -12,9 +12,10 @@ const MailingList = () => {
   const [lists, setLists] = useState([]);
 
   const rows = lists.map((list) => {
-    const { _id, email, createdAt, updatedAt, site } = list;
+    const { _id, email, createdAt, updatedAt, site, name } = list;
     return {
       id: _id,
+      name: <TruncatableFieldModal title={'Name'} content={name} />,
       email: <TruncatableFieldModal title={'Email'} content={email} />,
       sites: <TruncatableFieldModal title={'Sites'} content={`${site?.name} (${site?.host})`} />,
       created: formatDateTime(createdAt),
