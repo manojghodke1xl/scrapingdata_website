@@ -7,7 +7,7 @@ import { BiSupport } from 'react-icons/bi';
 import { LiaUserLockSolid } from 'react-icons/lia';
 import { IoExtensionPuzzleOutline } from 'react-icons/io5';
 import { addOns, admin, enquiresPaths, essentials, features, navLinks, support } from './sidebarTabData';
-import SearchComponent from '../../../atoms/common/SearchComponent';
+// import SearchComponent from '../../../atoms/common/SearchComponent';
 import ReusableAccordion from '../../../atoms/sidebar/ReusableAccordion';
 
 const MaterialSidebar = () => {
@@ -20,9 +20,9 @@ const MaterialSidebar = () => {
     <div className="w-[320px] h-full px-3 ptpb-4 sm:py-6 relative">
       <div className="w-full">
         <div className="flex flex-col space-y-2 h-screen lg:h-screen-minus-240 overflow-x-hidden overflow-y-auto scrollbar-hide">
-          <div className="w-full flex items-center rounded-xl border border-primary px-3 focus:border-hover mb-4">
+          {/* <div className="w-full flex items-center rounded-xl border border-primary px-3 focus:border-hover mb-4">
             <SearchComponent />
-          </div>
+          </div> */}
           {/* Map through navLinks to render NavLinks */}
           {navLinks.map(({ to, title, icon }) => (
             <Link

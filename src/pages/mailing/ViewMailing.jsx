@@ -50,14 +50,22 @@ const ViewMailing = () => {
         </div>
       </div>
 
-      <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
+      <div className="w-full justify-center items-center border-b  border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end ">
         <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
           <div className="sm:w-7/12 w-full flex flex-col">
-            <span className=" text-primary">Customer Information</span>
+            <span className="block text-primary">
+              <div className="flex items-center gap-2">Customer Information</div>
+            </span>
           </div>
-          <div className="w-full mt-5">
-            <h1 className="font-semibold text-primary">Email ID</h1>
-            <p className="text-secondary"> {mailingList?.email}</p>
+          <div className="w-full grid grid-cols-2 gap-5">
+            <div className="mt-5">
+              <h1 className="font-semibold text-primary">Name</h1>
+              <p className="text-secondary"> {mailingList?.name || 'No name available'}</p>
+            </div>
+            <div className="w-full mt-5">
+              <h1 className="font-semibold text-primary">Email ID</h1>
+              <p className="text-secondary"> {mailingList?.email}</p>
+            </div>
           </div>
         </div>
       </div>
