@@ -18,6 +18,7 @@ const MailingListIntegration = () => {
     {
       title: 'Request Body Parameters',
       content: `{
+  "name": "John Doe",
   "email": "john.doe@example.com",
   "list": "Updates",
   "header": "Content-Type: application/json",
