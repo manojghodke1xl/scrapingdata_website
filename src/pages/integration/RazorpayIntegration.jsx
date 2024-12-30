@@ -10,16 +10,11 @@ import { addPaymentIntegrationApi } from '../../apis/payment-integration-apis';
 
 const RazorpayIntegration = () => {
   const navigate = useNavigate();
-  const { setLoading } = useGlobalContext();
+  const { setLoading, isLoading } = useGlobalContext();
   const {
-    state: { siteData }
+    state: { paymentData, siteId }
   } = useLocation();
-  const [razorpayDetails, setRazorpayDetails] = useState({
-    keyId: '',
-    keySecret: '',
-    isVerified: true,
-    environment: 'development'
-  });
+  const [razorpayDetails, setRazorpayDetails] = useState(paymentData);
   const [errors, setErrors] = useState({});
 
   const validate = () => {
@@ -36,7 +31,7 @@ const RazorpayIntegration = () => {
     if (!validate()) return;
     setLoading(true);
     try {
-      const { status, data } = await addPaymentIntegrationApi(siteData.id, { razorpay: razorpayDetails });
+      const { status, data } = await addPaymentIntegrationApi(siteId, { razorpay: razorpayDetails });
       if (status) {
         showNotification('success', data.message);
         navigate('/apps/app');
@@ -52,10 +47,10 @@ const RazorpayIntegration = () => {
     <div className="py-8 p-4 sm:p-8 overflow-x-hidden mb-20">
       <div className="w-full pb-8 border-b border-primary gap-y-4 gap-2 flex flex-col items-start md:flex-row lg:flex-col xl:flex-row justify-between lg:items-start md:items-end xl:items-end">
         <div>
-          <span className="text-3xl font-semibold text-dark">Razorpay Configure</span>
+          <span className="text-3xl font-semibold text-dark">Razorpay Configuration</span>
         </div>
         <div className=" w-full flex gap-4 justify-end items-end md:w-fit lg:w-full xl:w-fit">
-          <FormButtons to="/apps/app" onClick={handleSubmit} />
+          <FormButtons to={`/apps/integration/${siteId}`} onClick={handleSubmit} disabled={isLoading} />
         </div>
       </div>
 
@@ -67,12 +62,12 @@ const RazorpayIntegration = () => {
           <div className="w-full">
             <DropDown
               name="environment"
-              SummaryChild={<h5 className="p-0 m-0 text-primary">{razorpayDetails.envObject?.showName || 'Development'}</h5>}
+              SummaryChild={<h5 className="p-0 m-0 text-primary">{razorpayDetails?.envObject?.showName || 'Development'}</h5>}
               dropdownList={[
                 { id: 0, showName: 'Development', name: 'development' },
                 { id: 1, showName: 'Production', name: 'production' }
               ]}
-              selected={razorpayDetails.environment || 'development'}
+              selected={razorpayDetails?.environment || 'development'}
               search={true}
               commonFunction={(e) => setRazorpayDetails((prev) => ({ ...prev, environment: e.id, envObject: e }))}
               error={errors.environment}
@@ -87,7 +82,7 @@ const RazorpayIntegration = () => {
                 setRazorpayDetails((prev) => ({ ...prev, keyId: e.target.value }));
                 if (errors.keyId) setErrors((prev) => ({ ...prev, keyId: '' }));
               }}
-              value={razorpayDetails.keyId}
+              value={razorpayDetails?.keyId}
               errorMessage={errors.keyId}
             />
             <FormField
@@ -100,13 +95,13 @@ const RazorpayIntegration = () => {
                 setRazorpayDetails((prev) => ({ ...prev, keySecret: e.target.value }));
                 if (errors.keySecret) setErrors((prev) => ({ ...prev, keySecret: '' }));
               }}
-              value={razorpayDetails.keySecret}
+              value={razorpayDetails?.keySecret}
               errorMessage={errors.keySecret}
             />
 
             <ToggleComponent
               label={'Turn On/Off Integration'}
-              isEnableState={razorpayDetails.isVerified}
+              isEnableState={razorpayDetails?.isVerified}
               setIsEnableState={(value) => setRazorpayDetails((prev) => ({ ...prev, isVerified: value }))}
             />
           </div>

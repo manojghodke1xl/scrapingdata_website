@@ -2,8 +2,10 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import Person from '../../assets/images/person.png';
 import MaterialSidebar from './sidebar/MaterialSidebar';
 import { IoIosMenu } from 'react-icons/io';
+import useGlobalContext from '../../hooks/useGlobalContext';
 
 const Navbar = () => {
+  const { dispatch } = useGlobalContext();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const sidebarRef = useRef(null);
 
@@ -34,7 +36,7 @@ const Navbar = () => {
 
         <div className="flex gap-1 sm:gap-2 items-center pr-6">
           <span className="hidden sm:block">
-            <img src={Person} width={34} alt="Person" />
+            <img src={Person} width={34} alt="Person" onClick={() => dispatch({ type: 'SIGNOUT' })} />
           </span>
           <div className="flex lg:hidden ml-3">
             <button onClick={handleToggleSidebar}>

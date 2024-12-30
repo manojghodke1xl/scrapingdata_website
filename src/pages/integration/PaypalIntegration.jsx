@@ -10,17 +10,12 @@ import { addPaymentIntegrationApi } from '../../apis/payment-integration-apis';
 
 const PaypalIntegration = () => {
   const navigate = useNavigate();
-  const { setLoading } = useGlobalContext();
+  const { setLoading, isLoading } = useGlobalContext();
   const {
-    state: { siteData }
+    state: { paymentData, siteId }
   } = useLocation();
 
-  const [paypalDetails, setPaypalDetails] = useState({
-    clientId: '',
-    clientSecret: '',
-    isVerified: true,
-    environment: 'development'
-  });
+  const [paypalDetails, setPaypalDetails] = useState(paymentData);
   const [errors, setErrors] = useState({});
 
   const validate = () => {
@@ -37,7 +32,7 @@ const PaypalIntegration = () => {
     if (!validate()) return;
     setLoading(true);
     try {
-      const { status, data } = await addPaymentIntegrationApi(siteData.id, { paypal: paypalDetails });
+      const { status, data } = await addPaymentIntegrationApi(siteId, { paypal: paypalDetails });
       if (status) {
         showNotification('success', data.message);
         navigate('/apps/app');
@@ -53,10 +48,10 @@ const PaypalIntegration = () => {
     <div className="py-8 p-4 sm:p-8 overflow-x-hidden mb-20">
       <div className="w-full pb-8 border-b border-primary gap-y-4 gap-2 flex flex-col items-start md:flex-row lg:flex-col xl:flex-row justify-between lg:items-start md:items-end xl:items-end">
         <div>
-          <span className="text-3xl font-semibold text-dark">PayPal Configure</span>
+          <span className="text-3xl font-semibold text-dark">PayPal Configuration</span>
         </div>
         <div className=" w-full flex gap-4 justify-end items-end md:w-fit lg:w-full xl:w-fit">
-          <FormButtons to="/apps/app" onClick={handleSubmit} />
+          <FormButtons to={`/apps/integration/${siteId}`} onClick={handleSubmit} disabled={isLoading} />
         </div>
       </div>
 
@@ -68,12 +63,12 @@ const PaypalIntegration = () => {
           <div className="w-full">
             <DropDown
               name="environment"
-              SummaryChild={<h5 className="p-0 m-0 text-primary">{paypalDetails.envObject?.showName || 'Development'}</h5>}
+              SummaryChild={<h5 className="p-0 m-0 text-primary">{paypalDetails?.envObject?.showName || 'Development'}</h5>}
               dropdownList={[
                 { id: 0, showName: 'Development', name: 'development' },
                 { id: 1, showName: 'Production', name: 'production' }
               ]}
-              selected={paypalDetails.environment || 'development'}
+              selected={paypalDetails?.environment || 'development'}
               search={true}
               commonFunction={(e) => setPaypalDetails((prev) => ({ ...prev, environment: e.id, envObject: e }))}
               error={errors.environment}
@@ -88,7 +83,7 @@ const PaypalIntegration = () => {
                 setPaypalDetails((prev) => ({ ...prev, clientId: e.target.value }));
                 if (errors.clientId) setErrors((prev) => ({ ...prev, clientId: '' }));
               }}
-              value={paypalDetails.clientId}
+              value={paypalDetails?.clientId}
               errorMessage={errors.clientId}
             />
             <FormField
@@ -101,13 +96,13 @@ const PaypalIntegration = () => {
                 setPaypalDetails((prev) => ({ ...prev, clientSecret: e.target.value }));
                 if (errors.clientSecret) setErrors((prev) => ({ ...prev, clientSecret: '' }));
               }}
-              value={paypalDetails.clientSecret}
+              value={paypalDetails?.clientSecret}
               errorMessage={errors.clientSecret}
             />
 
             <ToggleComponent
               label={'Turn On/Off Integration'}
-              isEnableState={paypalDetails.isVerified}
+              isEnableState={paypalDetails?.isVerified}
               setIsEnableState={(value) => setPaypalDetails((prev) => ({ ...prev, isVerified: value }))}
             />
           </div>

@@ -13,7 +13,7 @@ const IntegrationRoutes = () => {
   return (
     <Routes>
       <Route path="/app" element={<Apps />} />
-      <Route path="/integration" element={<IntegrationHub />} />
+      <Route path="/integration/:id" element={<IntegrationHub />} />
       <Route path="/integration/razorpay" element={<RazorpayIntegration />} />
       <Route path="/integration/stripe" element={<StripeIntegration />} />
       <Route path="/integration/paypal" element={<PaypalIntegration />} />

@@ -1,5 +1,7 @@
-import { useReducer, useState } from 'react';
+import { useCallback, useEffect, useReducer, useState } from 'react';
 import { GlobalContext } from '../contexts/GlobalContext';
+import { getAllSitesApi } from '../../apis/site-apis';
+import { showNotification } from '../../utils/showNotification';
 
 // Default state with `allSites` as an empty array
 const defaultState = {
@@ -63,6 +65,27 @@ const authReducer = (state, action) => {
 export const GlobalProvider = ({ children }) => {
   const [auth, dispatch] = useReducer(authReducer, authState);
   const [isLoading, setLoading] = useState(false);
+
+  const fetchSites = useCallback(async () => {
+    if (auth.id && auth.allSites.length === 0) {
+      setLoading(true);
+
+      try {
+        const { status, data } = await getAllSitesApi();
+        if (status) dispatch({ type: 'SET_ALL_SITES', payload: data.sites });
+        else if (data === 'jwt expired') dispatch({ type: 'SIGNOUT' });
+        else showNotification('warn', data);
+      } catch (error) {
+        showNotification('error', error.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+  }, [auth.allSites.length, dispatch, setLoading, auth.id]);
+
+  useEffect(() => {
+    if (auth.id) fetchSites();
+  }, [auth.id, fetchSites]);
 
   return <GlobalContext.Provider value={{ auth, dispatch, setLoading, isLoading }}>{children}</GlobalContext.Provider>;
 };

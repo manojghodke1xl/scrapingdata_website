@@ -2,14 +2,32 @@ import RazorPay from '../../assets/images/razorpay.png';
 import PayPal from '../../assets/images/paypal.png';
 import Stripe from '../../assets/images/stripe.png';
 import ZohoCRM from '../../assets/images/zohocrm.png';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { IoMdCheckmark } from 'react-icons/io';
+import { useEffect, useState } from 'react';
+import { getIntegrationBySite } from '../../apis/payment-integration-apis';
+import { showNotification } from '../../utils/showNotification';
+import useGlobalContext from '../../hooks/useGlobalContext';
 
 const IntegrationHub = () => {
+  const { setLoading, isLoading } = useGlobalContext();
   const navigate = useNavigate();
-  const {
-    state: { siteData }
-  } = useLocation();
+  const { id = '' } = useParams();
+  const [integrationData, setIntegrationData] = useState({});
+
+  useEffect(() => {
+    if (id) {
+      setLoading(true);
+      (async () => {
+        const { status, data } = await getIntegrationBySite(id);
+        if (status) {
+          setIntegrationData(data);
+        } else showNotification('warn', data);
+      })()
+        .catch((error) => showNotification('error', error.message))
+        .finally(() => setLoading(false));
+    }
+  }, [id, setLoading]);
 
   const integrationList = [
     {
@@ -44,7 +62,7 @@ const IntegrationHub = () => {
         <div>
           <span className="text-3xl font-semibold text-dark">Integration Hub</span>
         </div>
-        <div className=" w-full flex gap-4 justify-end items-end md:w-fit lg:w-full xl:w-fit">
+        <div className="w-full flex gap-4 justify-end items-end md:w-fit lg:w-full xl:w-fit">
           <Link to={'/apps/app'} className="px-4 py-2 text-primary font-medium bg-white hover:bg-gray-50 rounded-xl border border-primary whitespace-nowrap">
             Back
           </Link>
@@ -53,22 +71,42 @@ const IntegrationHub = () => {
 
       <div className="flex flex-col gap-4 p-4 border border-primary rounded-xl mt-7">
         <h1 className="text-xl flex items-center gap-2 font-bold ">
-          <IoMdCheckmark className="text-2xl text-success bg-success rounded-full p-0.5" /> You have selected the site: {siteData?.showName}
+          <IoMdCheckmark className="text-2xl text-success bg-success rounded-full p-0.5" /> You have selected the site: {integrationData?.site?.name}
         </h1>
       </div>
+
       <div className="grid grid-cols-1 sm:grid-cols-2 2xl:grid-cols-4 gap-4 mt-5">
-        {integrationList.map((item) => (
-          <div key={item.name} className="rounded-xl border border-primary p-4 flex flex-col gap-4">
-            <div>
-              <img src={item.img} className="w-12" alt={item.name} />
+        {integrationList.map((item) => {
+          const isVerified = integrationData?.payment?.[item.id]?.isVerified;
+          const paymentData = integrationData?.payment?.[item.id] || null;
+          return (
+            <div key={item.name} className="rounded-xl border border-primary p-4 flex flex-col gap-4">
+              <div>
+                <img src={item.img} className="w-12" alt={item.name} />
+              </div>
+              <h1>{item.name}</h1>
+              <div className="text-sm text-primary font-normal">{item.description}</div>
+              <div className="flex gap-4 items-center ">
+                <button
+                  className="w-fit border border-primary p-2 rounded-xl font-normal text-primary disabled:bg-grey disabled:text-secondary "
+                  onClick={() => navigate(`/apps/integration/${item.id}`, { state: { paymentData, siteId: id } })}
+                  disabled={isVerified || isLoading}
+                >
+                  {isVerified ? 'Configured' : 'Configure'}
+                </button>
+                {isVerified && (
+                  <button
+                    className="w-fit border border-primary p-2 rounded-xl font-normal"
+                    onClick={() => navigate(`/apps/integration/${item.id}`, { state: { paymentData, siteId: id } })}
+                    disabled={isLoading}
+                  >
+                    Re-configure
+                  </button>
+                )}
+              </div>
             </div>
-            <h1>{item.name}</h1>
-            <div className="text-sm text-primary font-normal">{item.description}</div>
-            <button className="w-fit border border-primary p-2 rounded-xl font-normal" onClick={() => navigate(`/apps/integration/${item.id}`, { state: { siteData } })}>
-              configure
-            </button>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

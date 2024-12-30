@@ -13,7 +13,7 @@ const Apps = () => {
   const navigate = useNavigate();
 
   const handleProceed = () => {
-    if (siteData.name) navigate(`/apps/integration`, { state: { siteData } });
+    if (siteData.name) navigate(`/apps/integration/${siteData.name}`);
     else showNotification('error', 'Please select a site before proceeding');
   };
 
