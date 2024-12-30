@@ -14,6 +14,9 @@ import SearchFilter from '../filter/SearchFilter';
 import FilterDropDowm from '../filter/FilterDropDown';
 import SiteModal from '../modal/SiteModal';
 import useGlobalContext from '../../hooks/useGlobalContext';
+import { CiExport } from 'react-icons/ci';
+import { getMethodCall } from '../../apis/api-handler';
+import DropDown from '../formFields/DropDown';
 
 const TableComponent = ({
   selectable,
@@ -32,6 +35,7 @@ const TableComponent = ({
   appsPath,
   search,
   filter,
+  exportBtn = true,
   deleteBtn,
   deleteLabel,
   deleteMessage,
@@ -86,6 +90,8 @@ const TableComponent = ({
     sites: false,
     event: false
   });
+
+  const [exportDropdownOpen, setExportDropdownOpen] = useState(false);
 
   const totalPages = Math.ceil(tableState.totalCount / tableState.itemsPerPage);
 
@@ -222,6 +228,83 @@ const TableComponent = ({
     setSelectedCategory(null);
   };
 
+  const handleExport = (type) => {
+    if (type === 'all') {
+      (async () => {
+        const { status, data } = await getMethodCall(`${import.meta.env.VITE_API_URL}/${apiUrl}`);
+        console.log(status, data);
+        if (status) {
+          const apiUrlMap = {
+            feedback: 'feedbacks',
+            recaptcha: 'recaptchas',
+            'faq-category': 'faqCategories',
+            faq: 'faqs',
+            'client-logo': 'clientlogos',
+            gallery: 'galleries',
+            'partner-logo': 'partnerlogos'
+          };
+
+          const exportData = data[apiUrlMap[apiUrl] || apiUrl];
+
+          // Flattening objects using reduce
+          const flattenObject = (obj, parentKey = '') =>
+            Object.keys(obj).reduce((acc, key) => {
+              const newKey = parentKey ? `${parentKey}.${key}` : key;
+
+              if (key === 'isActive') {
+                // Custom handling for isActive field
+                acc[newKey] = obj[key] === true ? 'true' : '"false"';
+              } else if (key === 'site' || key === 'sites') {
+                // Handle specific keys like 'site' and 'sites'
+                if (Array.isArray(obj[key])) {
+                  acc[newKey] = `"${
+                    obj[key]
+                      .reduce((str, site) => {
+                        if (site.name && site.host) return `${str}${str ? ', ' : ''}${site.name} (${site.host})`;
+                        return str;
+                      }, '')
+                      .replace(/"/g, '""') || 'N/A'
+                  }"`;
+                } else if (typeof obj[key] === 'object' && obj[key] !== null) acc[newKey] = obj[key].name && obj[key].host ? `"${obj[key].name} (${obj[key].host})"` : '"N/A"';
+                else acc[newKey] = '"N/A"';
+              } else if (typeof obj[key] === 'object' && obj[key] !== null) {
+                // Recursive flattening for nested objects
+                Object.assign(acc, flattenObject(obj[key], newKey));
+              } else {
+                // Escape double quotes and enclose in quotes
+                acc[newKey] = typeof obj[key] === 'string' ? `"${obj[key].replace(/"/g, '""')}"` : obj[key];
+              }
+              return acc;
+            }, {});
+
+          // Generate CSV headers using the keys of the first flattened object
+          const headers = Object.keys(flattenObject(exportData[0]));
+          const csvContent = exportData.reduce((csv, row, index) => {
+            // Flatten each row
+            const flattenedRow = flattenObject(row);
+            // Map headers to corresponding values
+            const values = headers.map((header) => flattenedRow[header] || '""');
+            // Add headers only once (for the first row)
+            if (index === 0) csv += headers.join(',') + '\n';
+            csv += values.join(',') + '\n';
+            return csv;
+          }, '');
+
+          // Create a Blob containing the CSV file
+          const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          link.href = url;
+          link.setAttribute('download', `view_all_${apiUrl}_details.csv`);
+          document.body.appendChild(link);
+          link.click();
+          URL.revokeObjectURL(url);
+          document.body.removeChild(link);
+        } else showNotification('warn', data);
+      })();
+    }
+  };
+
   return (
     <div className="overflow-hidden">
       <div className="my-8 rounded-xl border border-primary overflow-hidden">
@@ -262,7 +345,11 @@ const TableComponent = ({
               </>
             )}
           </div>
-          <div className={`w-full xl:w-fit flex ${deleteBtn + search + filter >= 4 ? 'flex-wrap' : 'flex-nowrap'} sm:justify-end justify-center gap-2 items-center`}>
+          <div
+            className={`w-full xl:w-fit flex ${
+              (deleteBtn + search + filter + exportBtn + modifyStatus, modifySite + duplicateBtn >= 4 ? 'flex-wrap' : 'flex-nowrap')
+            } sm:justify-end justify-center gap-2 items-center`}
+          >
             {deleteBtn && selectionState.selectedItems.length > 0 && (
               <button
                 onClick={() => setModalState((prev) => ({ ...prev, isDeleteModelOpen: true }))}
@@ -300,6 +387,31 @@ const TableComponent = ({
               >
                 Duplicate Popups
               </button>
+            )}
+            {exportBtn && (
+              <>
+                <button
+                  onClick={() => setExportDropdownOpen((prev) => !prev)}
+                  className="sm:w-fit text-primary font-normal hover:bg-gray-50 rounded-xl border border-primary py-2 px-3 sm:px-2 sm:py-2 md:px-3 whitespace-nowrap flex gap-1 sm:gap-2"
+                >
+                  <CiExport size={20} strokeWidth="1.2" fill="none" />
+                  <span className="hidden sm:block">Export</span>
+                </button>
+
+                {exportDropdownOpen && (
+                  <DropDown
+                    mt="0"
+                    name={'Export'}
+                    SummaryChild={<h5 className="p-0 m-0 text-primary">Select Export</h5>}
+                    dropdownList={[
+                      { id: 0, name: 'visible', showName: 'Visible Rows' },
+                      { id: 1, name: 'selected', showName: 'Selected Rows' },
+                      { id: 2, name: 'all', showName: 'All Rows' }
+                    ]}
+                    commonFunction={(e) => handleExport(e.name)}
+                  />
+                )}
+              </>
             )}
             {selectedCategory && (
               <button

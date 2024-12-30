@@ -15,11 +15,12 @@ const EnquiryList = () => {
     const { _id, name, email, createdAt, updatedAt, site } = enquiry;
     return {
       id: _id,
+      exportData: enquiry,
       name: <TruncatableFieldModal title={'Customer Name'} content={name} />,
       email: <TruncatableFieldModal title={'Customer Email'} content={email} />,
       sites: <TruncatableFieldModal title={'Sites'} content={`${site?.name} (${site?.host})`} />,
-      created: formatDateTime(createdAt),
-      updated: formatDateTime(updatedAt)
+      createdAt: formatDateTime(createdAt),
+      updatedAt: formatDateTime(updatedAt)
     };
   });
 
@@ -47,10 +48,11 @@ const EnquiryList = () => {
                   { label: 'Customer Name', key: 'name' },
                   { label: 'Email', key: 'email' },
                   { label: 'Sites', key: 'sites' },
-                  { label: 'Created Date', key: 'created' },
-                  { label: 'Updated Date', key: 'updated' }
+                  { label: 'Created Date', key: 'createdAt' },
+                  { label: 'Updated Date', key: 'updatedAt' }
                 ]}
                 tableData={(data) => setEnquiries(data.enquiries)}
+                exportData={enquiries}
                 rows={rows}
                 apiUrl={'enquiries'}
                 tableCountLabel={true}

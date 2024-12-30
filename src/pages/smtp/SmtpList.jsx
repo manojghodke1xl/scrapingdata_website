@@ -56,7 +56,7 @@ const SmtpList = () => {
                 editPath={'/smtp/edit-smtp'}
                 search={true}
                 searchCategory={[
-                  { id: 1, name: 'Name' },
+                  { id: 0, name: 'Name' },
                   { id: 1, name: 'Host' }
                 ]}
               />

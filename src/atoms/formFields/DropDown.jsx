@@ -3,7 +3,7 @@ import { IoAdd } from 'react-icons/io5';
 import SearchComponent from '../common/SearchComponent';
 import { IoIosArrowDown } from 'react-icons/io';
 
-function DropDown({ name, SummaryChild, dropdownList = [], commonFunction, search, selected, add = false, setIsNewSegment, error }) {
+function DropDown({mt='mt-5', name, SummaryChild, dropdownList = [], commonFunction, search, selected, add = false, setIsNewSegment, error }) {
   const dropdownRef = useRef(null);
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -25,7 +25,7 @@ function DropDown({ name, SummaryChild, dropdownList = [], commonFunction, searc
       <details
         ref={dropdownRef}
         name={name}
-        className={`relative w-full cursor-default rounded-xl bg-white pl-3 pr-10 text-left text-primary shadow-sm border border-primary focus:outline-none focus:ring-0 sm:text-lg sm:leading-6 mt-5`}
+        className={`relative w-full cursor-default rounded-xl bg-white pl-3 pr-10 text-left text-primary shadow-sm border border-primary focus:outline-none focus:ring-0 sm:text-lg sm:leading-6 ${mt}`}
       >
         <summary className="cursor-pointer py-2.5 pr-8 text-left text-primary list-none focus:outline-none focus:ring-0 focus:border-0">
           <span className="flex items-center">
