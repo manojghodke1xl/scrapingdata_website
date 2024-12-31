@@ -64,7 +64,13 @@ const ViewMailing = () => {
             </div>
             <div className="w-full mt-5">
               <h1 className="font-semibold text-primary">Email ID</h1>
-              <p className="text-secondary"> {mailingList?.email}</p>
+              {mailingList?.email ? (
+                <a className="text-secondary" href={`mailto:${mailingList.email}`}>
+                  {mailingList.email}
+                </a>
+              ) : (
+                <p className="text-secondary">No email available</p>
+              )}
             </div>
           </div>
         </div>

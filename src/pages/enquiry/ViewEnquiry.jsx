@@ -61,10 +61,10 @@ const ViewEnquiry = () => {
               <p className="text-secondary"> {enquiry?.name || 'No name available'}</p>
             </div>
             <div className="mt-5">
-              <h1 className="font-semibold text-primary">Email</h1>
+              <h1 className="font-semibold text-primary">Email ID</h1>
               {enquiry?.email ? (
-                <a className="text-secondary" href={`mailto:${enquiry?.email}`}>
-                  {enquiry?.email}
+                <a className="text-secondary" href={`mailto:${enquiry.email}`}>
+                  {enquiry.email}
                 </a>
               ) : (
                 <p className="text-secondary">No email available</p>
@@ -76,7 +76,13 @@ const ViewEnquiry = () => {
             </div>
             <div className="mt-5">
               <h1 className="font-semibold text-primary">Phone Number</h1>
-              <p className="text-secondary">{'+' + enquiry?.ccode + ' ' + enquiry?.mobile || 'No phone number available'}</p>
+              {enquiry?.mobile || enquiry?.ccode ? (
+                <a className="text-secondary" href={`tel:${(enquiry.ccode ? '+' + enquiry.ccode : '') + enquiry.mobile.replace(/\s+/g, '')}`}>
+                  {(enquiry.ccode ? '+' + enquiry.ccode : '') + ' ' + enquiry.mobile.replace(/\s+/g, '')}
+                </a>
+              ) : (
+                <p className="text-secondary">No phone number available</p>
+              )}
             </div>
             <div className="mt-5">
               <h1 className="font-semibold text-primary">Service</h1>

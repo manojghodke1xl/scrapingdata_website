@@ -61,8 +61,14 @@ const ViewFeedback = () => {
               <p className="text-secondary"> {feedback?.name || 'No name available'}</p>
             </div>
             <div className="mt-5">
-              <h1 className="font-semibold text-primary">Email</h1>
-              <p className="text-secondary"> {feedback?.email || 'No email available'}</p>
+              <h1 className="font-semibold text-primary">Email ID</h1>
+              {feedback?.email ? (
+                <a className="text-secondary" href={`mailto:${feedback.email}`}>
+                  {feedback.email}
+                </a>
+              ) : (
+                <p className="text-secondary">No email available</p>
+              )}
             </div>
             <div className="mt-5">
               <h1 className="font-semibold text-primary">Country</h1>
@@ -70,7 +76,13 @@ const ViewFeedback = () => {
             </div>
             <div className="mt-5">
               <h1 className="font-semibold text-primary">Phone Number</h1>
-              <p className="text-secondary">{'+' + feedback?.ccode + ' ' + feedback?.mobile || 'No phone number available'}</p>
+              {feedback?.mobile || feedback?.ccode ? (
+                <a className="text-secondary" href={`tel:${(feedback.ccode ? '+' + feedback.ccode : '') + feedback.mobile.replace(/\s+/g, '')}`}>
+                  {(feedback.ccode ? '+' + feedback.ccode : '') + ' ' + feedback.mobile.replace(/\s+/g, '')}
+                </a>
+              ) : (
+                <p className="text-secondary">No phone number available</p>
+              )}
             </div>
             <div className="mt-5">
               <h1 className="font-semibold text-primary">Service</h1>
