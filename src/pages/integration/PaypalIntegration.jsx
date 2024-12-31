@@ -6,7 +6,7 @@ import DropDown from '../../atoms/formFields/DropDown';
 import FormField from '../../atoms/formFields/InputField';
 import ToggleComponent from '../../atoms/formFields/ToggleComponent';
 import { showNotification } from '../../utils/showNotification';
-import { addPaymentIntegrationApi } from '../../apis/payment-integration-apis';
+import { updatePaymentIntegrationApi } from '../../apis/payment-integration-apis';
 
 const PaypalIntegration = () => {
   const navigate = useNavigate();
@@ -32,7 +32,7 @@ const PaypalIntegration = () => {
     if (!validate()) return;
     setLoading(true);
     try {
-      const { status, data } = await addPaymentIntegrationApi(siteId, { paypal: paypalDetails });
+      const { status, data } = await updatePaymentIntegrationApi(siteId, { paypal: paypalDetails });
       if (status) {
         showNotification('success', data.message);
         navigate('/apps/app');
@@ -63,16 +63,13 @@ const PaypalIntegration = () => {
           <div className="w-full">
             <DropDown
               name="environment"
-              SummaryChild={
-                <h5 className="p-0 m-0 text-primary">{paypalDetails?.envObject?.showName || paypalDetails?.environment === 'development' ? 'Development' : 'Production'}</h5>
-              }
               dropdownList={[
                 { id: 0, showName: 'Development', name: 'development' },
                 { id: 1, showName: 'Production', name: 'production' }
               ]}
               selected={paypalDetails?.environment || 'development'}
               search={true}
-              commonFunction={(e) => setPaypalDetails((prev) => ({ ...prev, environment: e.id, envObject: e }))}
+              commonFunction={(e) => setPaypalDetails((prev) => ({ ...prev, environment: e.name }))}
               error={errors.environment}
             />
             <FormField

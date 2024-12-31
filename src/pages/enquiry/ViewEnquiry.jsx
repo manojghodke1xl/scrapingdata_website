@@ -62,7 +62,13 @@ const ViewEnquiry = () => {
             </div>
             <div className="mt-5">
               <h1 className="font-semibold text-primary">Email</h1>
-              <p className="text-secondary"> {enquiry?.email || 'No email available'}</p>
+              {enquiry?.email ? (
+                <a className="text-secondary" href={`mailto:${enquiry?.email}`}>
+                  {enquiry?.email}
+                </a>
+              ) : (
+                <p className="text-secondary">No email available</p>
+              )}
             </div>
             <div className="mt-5">
               <h1 className="font-semibold text-primary">Country</h1>

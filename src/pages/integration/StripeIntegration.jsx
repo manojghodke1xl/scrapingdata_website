@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import useGlobalContext from '../../hooks/useGlobalContext';
 import FormField from '../../atoms/formFields/InputField';
 import ToggleComponent from '../../atoms/formFields/ToggleComponent';
-import { addPaymentIntegrationApi } from '../../apis/payment-integration-apis';
+import { updatePaymentIntegrationApi } from '../../apis/payment-integration-apis';
 import { showNotification } from '../../utils/showNotification';
 import FormButtons from '../../atoms/formFields/FormButtons';
 import DropDown from '../../atoms/formFields/DropDown';
@@ -31,7 +31,7 @@ const StripeIntegration = () => {
     if (!validate()) return;
     setLoading(true);
     try {
-      const { status, data } = await addPaymentIntegrationApi(siteId, { stripe: stripeDetails });
+      const { status, data } = await updatePaymentIntegrationApi(siteId, { stripe: stripeDetails });
       if (status) {
         showNotification('success', data.message);
         navigate('/apps/app');
@@ -62,16 +62,13 @@ const StripeIntegration = () => {
           <div className="w-full">
             <DropDown
               name="environment"
-              SummaryChild={
-                <h5 className="p-0 m-0 text-primary">{stripeDetails?.envObject?.showName || stripeDetails?.environment === 'development' ? 'Development' : 'Production'}</h5>
-              }
               dropdownList={[
                 { id: 0, showName: 'Development', name: 'development' },
                 { id: 1, showName: 'Production', name: 'production' }
               ]}
-              selected={stripeDetails?.environment || 'development'}
+              selected={stripeDetails?.environment}
               search={true}
-              commonFunction={(e) => setStripeDetails((prev) => ({ ...prev, environment: e.id, envObject: e }))}
+              commonFunction={(e) => setStripeDetails((prev) => ({ ...prev, environment: e.name }))}
               error={errors.environment}
             />
             <FormField

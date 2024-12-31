@@ -6,7 +6,7 @@ import ToggleComponent from '../../atoms/formFields/ToggleComponent';
 import DropDown from '../../atoms/formFields/DropDown';
 import useGlobalContext from '../../hooks/useGlobalContext';
 import { showNotification } from '../../utils/showNotification';
-import { addPaymentIntegrationApi } from '../../apis/payment-integration-apis';
+import { updatePaymentIntegrationApi } from '../../apis/payment-integration-apis';
 
 const RazorpayIntegration = () => {
   const navigate = useNavigate();
@@ -31,7 +31,7 @@ const RazorpayIntegration = () => {
     if (!validate()) return;
     setLoading(true);
     try {
-      const { status, data } = await addPaymentIntegrationApi(siteId, { razorpay: razorpayDetails });
+      const { status, data } = await updatePaymentIntegrationApi(siteId, { razorpay: razorpayDetails });
       if (status) {
         showNotification('success', data.message);
         navigate('/apps/app');
@@ -62,16 +62,13 @@ const RazorpayIntegration = () => {
           <div className="w-full">
             <DropDown
               name="environment"
-              SummaryChild={
-                <h5 className="p-0 m-0 text-primary">{razorpayDetails?.envObject?.showName || razorpayDetails?.environment === 'development' ? 'Development' : 'Production'}</h5>
-              }
               dropdownList={[
                 { id: 0, showName: 'Development', name: 'development' },
                 { id: 1, showName: 'Production', name: 'production' }
               ]}
-              selected={razorpayDetails?.environment || 'development'}
+              selected={razorpayDetails?.environment}
               search={true}
-              commonFunction={(e) => setRazorpayDetails((prev) => ({ ...prev, environment: e.id, envObject: e }))}
+              commonFunction={(e) => setRazorpayDetails((prev) => ({ ...prev, environment: e.name }))}
               error={errors.environment}
             />
             <FormField
