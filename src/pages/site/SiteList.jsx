@@ -18,19 +18,19 @@ const SiteList = () => {
   const rows = sites.map((site) => {
     const { _id, name, host, isActive, createdAt, updatedAt } = site;
     return {
-      siteName: name,
       id: _id,
+      exportData: site,
       keys: _id,
       name: <TruncatableFieldModal title={'Website Name'} content={name} />,
       host: <TruncatableFieldModal title={'Web Address'} content={host} />,
-      status: (
+      isActive: (
         <div className={`rounded-xl ${isActive ? 'bg-[#ECFDF3] text-[#027948]' : 'bg-[#F2F4F7] text-[#344054]'} px-2 py-1 w-fit flex gap-2 items-center`}>
           <span className={`min-w-[12px] min-h-[12px] rounded-full ${isActive ? 'bg-[#12B76A]' : 'bg-[#667085]'}`}></span>
           <span>{isActive ? 'Active' : 'Inactive'}</span>
         </div>
       ),
-      created: formatDateTime(createdAt),
-      updated: formatDateTime(updatedAt)
+      createdAt: formatDateTime(createdAt),
+      updatedAt: formatDateTime(updatedAt)
     };
   });
 
@@ -58,11 +58,11 @@ const SiteList = () => {
                 headers={[
                   { label: 'Sr No.', key: 'srno' },
                   { label: 'Key', key: 'keys' },
-                  { label: 'Website Name', key: 'siteName' },
+                  { label: 'Website Name', key: 'name' },
                   { label: 'Web Address', key: 'host' },
-                  { label: 'Status', key: 'status' },
-                  { label: 'Created Date', key: 'created' },
-                  { label: 'Updated Date', key: 'updated' }
+                  { label: 'Status', key: 'isActive' },
+                  { label: 'Created Date', key: 'createdAt' },
+                  { label: 'Updated Date', key: 'updatedAt' }
                 ]}
                 tableData={(data) => setSites(data.sites)}
                 rows={rows}

@@ -10,8 +10,9 @@ const PaymentList = () => {
     const { _id, site, event, participant, amount, currency, channel, createdAt, updatedAt } = payment;
     return {
       id: _id,
+      exportData: payment,
       participant: <TruncatableFieldModal title={'Participant'} content={participant.name} />,
-      sites: <TruncatableFieldModal title={'Sites'} content={`${site?.name} (${site?.host})`} />,
+      site: <TruncatableFieldModal title={'Sites'} content={`${site?.name} (${site?.host})`} />,
       event: <TruncatableFieldModal title={'Event'} content={event.name} />,
       amount: <TruncatableFieldModal title={'Amount'} content={amount} />,
       currency: <TruncatableFieldModal title={'Currency'} content={currency} />,
@@ -22,8 +23,8 @@ const PaymentList = () => {
       //       <span>{isActive ? 'Active' : 'Inactive'}</span>
       //     </div>
       //   ),
-      created: formatDateTime(createdAt),
-      updated: formatDateTime(updatedAt)
+      createdAt: formatDateTime(createdAt),
+      updatedAt: formatDateTime(updatedAt)
     };
   });
 
@@ -43,13 +44,13 @@ const PaymentList = () => {
                 headers={[
                   { label: 'Sr No.', key: 'srno' },
                   { label: 'Participant', key: 'participant' },
-                  { label: 'Sites', key: 'sites' },
+                  { label: 'Sites', key: 'site' },
                   { label: 'Event', key: 'event' },
                   { label: 'Amount', key: 'amount' },
                   { label: 'Currency', key: 'currency' },
                   { label: 'Channel', key: 'channel' },
-                  { label: 'Created Date', key: 'created' },
-                  { label: 'Updated Date', key: 'updated' }
+                  { label: 'Created Date', key: 'createdAt' },
+                  { label: 'Updated Date', key: 'updatedAt' }
                 ]}
                 tableData={(data) => setPayments(data.payments)}
                 rows={rows}

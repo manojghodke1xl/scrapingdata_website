@@ -1,22 +1,23 @@
-import { useEffect, useState } from 'react';
-import { RxCaretSort } from 'react-icons/rx';
-import Pagination from './Pagination';
-import { MdEdit, MdOutlineApps, MdRemoveRedEye } from 'react-icons/md';
+import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { RxCaretSort } from 'react-icons/rx';
+import { MdEdit, MdOutlineApps, MdRemoveRedEye } from 'react-icons/md';
+import { CiExport } from 'react-icons/ci';
+import { RiDeleteBinLine } from 'react-icons/ri';
+import Pagination from './Pagination';
 import SearchComponent from '../common/SearchComponent';
 import Filters from '../filter/Filters';
 import { showNotification } from '../../utils/showNotification';
 import useSetTimeout from '../../hooks/useDebounce';
-import { RiDeleteBinLine } from 'react-icons/ri';
 import DeleteModal from '../modal/DeleteModal';
 import StatusFilter from '../filter/StatusFilter';
 import SearchFilter from '../filter/SearchFilter';
 import FilterDropDowm from '../filter/FilterDropDown';
 import SiteModal from '../modal/SiteModal';
 import useGlobalContext from '../../hooks/useGlobalContext';
-import { CiExport } from 'react-icons/ci';
-import { getMethodCall } from '../../apis/api-handler';
 import DropDown from '../formFields/DropDown';
+import { handleExport } from '../../helpers/exportHandler';
+import { handleDeleteConfirm, handleDuplicateConfirm, handleSitesUpdate, handleStatusUpdate } from '../../helpers/tableApiHandler';
 
 const TableComponent = ({
   selectable,
@@ -53,13 +54,13 @@ const TableComponent = ({
   modifySiteApi
 }) => {
   const navigate = useNavigate();
-  const [selectedCategory, setSelectedCategory] = useState(null);
   const {
     auth: { allSites },
     setLoading,
     isLoading
   } = useGlobalContext();
 
+  const [selectedCategory, setSelectedCategory] = useState(null);
   const [modalState, setModalState] = useState({
     isDuplicateModelOpen: false,
     isDeleteModelOpen: false,
@@ -84,16 +85,14 @@ const TableComponent = ({
     siteId: '',
     eventId: ''
   });
-
   const [showFilter, setShowFilter] = useState({
     status: false,
     sites: false,
     event: false
   });
-
   const [exportDropdownOpen, setExportDropdownOpen] = useState(false);
 
-  const totalPages = Math.ceil(tableState.totalCount / tableState.itemsPerPage);
+  const totalPages = useMemo(() => Math.ceil(tableState.totalCount / tableState.itemsPerPage), [tableState.totalCount, tableState.itemsPerPage]);
 
   const [err, data, setRefresh] = useSetTimeout(
     apiUrl,
@@ -116,99 +115,42 @@ const TableComponent = ({
   const handleMasterCheckboxChange = () => {
     const nonSuperAdminIds = rows.filter((row) => !row.isSuperAdmin).map((row) => row.id);
     const newChecked = !selectionState.isAllSelected;
-    setSelectionState((prev) => ({ ...prev, isAllSelected: newChecked }));
-    if (newChecked) setSelectionState((prev) => ({ ...prev, selectedItems: nonSuperAdminIds }));
-    else setSelectionState((prev) => ({ ...prev, selectedItems: [] }));
+    setSelectionState((prev) => ({
+      ...prev,
+      isAllSelected: newChecked,
+      selectedItems: newChecked ? nonSuperAdminIds : []
+    }));
   };
+
   const handleRowCheckboxChange = (id) => {
-    let updatedSelected;
-    if (selectionState.selectedItems.includes(id)) updatedSelected = selectionState.selectedItems.filter((itemId) => itemId !== id);
-    else updatedSelected = [...selectionState.selectedItems, id];
-    setSelectionState((prev) => ({ ...prev, selectedItems: updatedSelected }));
-    setSelectionState((prev) => ({ ...prev, isAllSelected: updatedSelected.length === rows.length }));
+    setSelectionState((prev) => {
+      const updatedSelected = prev.selectedItems.includes(id) ? prev.selectedItems.filter((itemId) => itemId !== id) : [...prev.selectedItems, id];
+      return {
+        ...prev,
+        selectedItems: updatedSelected,
+        isAllSelected: updatedSelected.length === rows.length
+      };
+    });
   };
 
-  const handleDeleteConfirm = async () => {
-    if (!selectionState.selectedItems.length) return showNotification('warn', 'Please select at least one item.');
-    setLoading(true);
-    try {
-      const { status, data } = await deleteApi(selectionState.selectedItems);
-      if (status) {
-        showNotification('success', data.message);
-        setSelectionState((prev) => ({ ...prev, selectedItems: [], isAllSelected: false }));
-        setRefresh((r) => !r);
-      } else showNotification('warn', data);
-    } catch (error) {
-      showNotification('error', error.message);
-    } finally {
-      setLoading(false);
-      setModalState((prev) => ({ ...prev, isDeleteModelOpen: false }));
-      setTableState((prev) => ({ ...prev, currentPage: 1 }));
-    }
-  };
-
-  const handleStatusUpdate = async (statusUpdate) => {
-    if (!selectionState.selectedItems.length) return showNotification('warn', 'Please select at least one item.');
-    setLoading(true);
-    try {
-      let isActive;
-      if (adminStatus) isActive = statusUpdate === 'active' ? false : true;
-      else isActive = statusUpdate === 'active' ? true : false;
-      const { status, data } = await modifyStatusApi(selectionState.selectedItems, isActive);
-      if (status) {
-        showNotification('success', data.message);
-        setSelectionState((prev) => ({ ...prev, selectedItems: [], isAllSelected: false, selectedSites: [], siteToggle: false }));
-        setFilterState((prev) => ({ ...prev, statusFilter: '' }));
-        setRefresh((r) => !r);
-      } else showNotification('warn', data);
-    } catch (error) {
-      showNotification('error', error.message);
-    } finally {
-      setLoading(false);
-      setSelectionState((prev) => ({ ...prev, status: '' }));
-      setModalState((prev) => ({ ...prev, isDeleteModelOpen: false }));
-      setTableState((prev) => ({ ...prev, currentPage: 1 }));
-    }
-  };
-
-  const handleSitesUpdate = async (action) => {
-    if (!selectionState.selectedItems.length && !selectionState.selectedSites.length && !action.length) return showNotification('warn', 'Please select at least one item.');
-    setLoading(true);
-    try {
-      const { status, data } = await modifySiteApi(selectionState.selectedItems, selectionState.selectedSites, action);
-      if (status) {
-        showNotification('success', data.message);
-        setSelectionState((prev) => ({ ...prev, selectedItems: [], isAllSelected: false, siteToggle: false, selectedSites: [] }));
-        setRefresh((r) => !r);
-      } else showNotification('warn', data);
-    } catch (error) {
-      showNotification('error', error.message);
-    } finally {
-      setLoading(false);
-      setSelectionState((prev) => ({ ...prev, selectedSites: [], siteToggle: false }));
-      setModalState((prev) => ({ ...prev, isSitesModelOpen: false }));
-      setTableState((prev) => ({ ...prev, currentPage: 1 }));
-    }
-  };
-
-  const handleDuplicateConfirm = async () => {
-    if (!selectionState.selectedItems.length && !selectionState.selectedSites.length) return showNotification('warn', 'Please select at least one item.');
-    setLoading(true);
-    try {
-      const { status, data } = await duplicateApi(selectionState.selectedItems, selectionState.selectedSites);
-      if (status) {
-        showNotification('success', data.message);
-        setSelectionState({ selectedItems: [], isAllSelected: false, selectedSites: [] });
-        setRefresh((r) => !r);
-      } else showNotification('warn', data);
-    } catch (error) {
-      showNotification('error', error.message);
-    } finally {
-      setLoading(false);
-      setModalState((prev) => ({ ...prev, isDuplicateModelOpen: false }));
-      setTableState((prev) => ({ ...prev, currentPage: 1 }));
-    }
-  };
+  const handleDelete = () => handleDeleteConfirm(selectionState.selectedItems, deleteApi, setLoading, setSelectionState, setRefresh, setModalState, setTableState);
+  const handleStatusChange = (statusUpdate) =>
+    handleStatusUpdate(
+      selectionState.selectedItems,
+      statusUpdate,
+      modifyStatusApi,
+      setLoading,
+      setSelectionState,
+      setFilterState,
+      setRefresh,
+      adminStatus,
+      setModalState,
+      setTableState
+    );
+  const handleSitesChange = (action) =>
+    handleSitesUpdate(selectionState.selectedItems, selectionState.selectedSites, action, modifySiteApi, setLoading, setSelectionState, setRefresh, setModalState, setTableState);
+  const handleDuplicate = () =>
+    handleDuplicateConfirm(selectionState.selectedItems, selectionState.selectedSites, duplicateApi, setLoading, setSelectionState, setRefresh, setModalState, setTableState);
 
   const handleCategorySelect = (category) => {
     if (category.name === 'Status') setShowFilter((prev) => ({ ...prev, status: !prev.status }));
@@ -226,83 +168,6 @@ const TableComponent = ({
     setFilterState({ searchTerm: '', searchKey: '', siteId: '', eventId: '', statusFilter: '' });
     setShowFilter({ status: false, sites: false, event: false });
     setSelectedCategory(null);
-  };
-
-  const handleExport = (type) => {
-    if (type === 'all') {
-      (async () => {
-        const { status, data } = await getMethodCall(`${import.meta.env.VITE_API_URL}/${apiUrl}`);
-        console.log(status, data);
-        if (status) {
-          const apiUrlMap = {
-            feedback: 'feedbacks',
-            recaptcha: 'recaptchas',
-            'faq-category': 'faqCategories',
-            faq: 'faqs',
-            'client-logo': 'clientlogos',
-            gallery: 'galleries',
-            'partner-logo': 'partnerlogos'
-          };
-
-          const exportData = data[apiUrlMap[apiUrl] || apiUrl];
-
-          // Flattening objects using reduce
-          const flattenObject = (obj, parentKey = '') =>
-            Object.keys(obj).reduce((acc, key) => {
-              const newKey = parentKey ? `${parentKey}.${key}` : key;
-
-              if (key === 'isActive') {
-                // Custom handling for isActive field
-                acc[newKey] = obj[key] === true ? 'true' : '"false"';
-              } else if (key === 'site' || key === 'sites') {
-                // Handle specific keys like 'site' and 'sites'
-                if (Array.isArray(obj[key])) {
-                  acc[newKey] = `"${
-                    obj[key]
-                      .reduce((str, site) => {
-                        if (site.name && site.host) return `${str}${str ? ', ' : ''}${site.name} (${site.host})`;
-                        return str;
-                      }, '')
-                      .replace(/"/g, '""') || 'N/A'
-                  }"`;
-                } else if (typeof obj[key] === 'object' && obj[key] !== null) acc[newKey] = obj[key].name && obj[key].host ? `"${obj[key].name} (${obj[key].host})"` : '"N/A"';
-                else acc[newKey] = '"N/A"';
-              } else if (typeof obj[key] === 'object' && obj[key] !== null) {
-                // Recursive flattening for nested objects
-                Object.assign(acc, flattenObject(obj[key], newKey));
-              } else {
-                // Escape double quotes and enclose in quotes
-                acc[newKey] = typeof obj[key] === 'string' ? `"${obj[key].replace(/"/g, '""')}"` : obj[key];
-              }
-              return acc;
-            }, {});
-
-          // Generate CSV headers using the keys of the first flattened object
-          const headers = Object.keys(flattenObject(exportData[0]));
-          const csvContent = exportData.reduce((csv, row, index) => {
-            // Flatten each row
-            const flattenedRow = flattenObject(row);
-            // Map headers to corresponding values
-            const values = headers.map((header) => flattenedRow[header] || '""');
-            // Add headers only once (for the first row)
-            if (index === 0) csv += headers.join(',') + '\n';
-            csv += values.join(',') + '\n';
-            return csv;
-          }, '');
-
-          // Create a Blob containing the CSV file
-          const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-          const url = URL.createObjectURL(blob);
-          const link = document.createElement('a');
-          link.href = url;
-          link.setAttribute('download', `view_all_${apiUrl}_details.csv`);
-          document.body.appendChild(link);
-          link.click();
-          URL.revokeObjectURL(url);
-          document.body.removeChild(link);
-        } else showNotification('warn', data);
-      })();
-    }
   };
 
   return (
@@ -364,7 +229,7 @@ const TableComponent = ({
                 <StatusFilter statuses={statuses} setStatusFilter={(e) => setSelectionState((prev) => ({ ...prev, status: e }))} />
                 {selectionState.status !== '' && selectionState.selectedItems.length > 0 && (
                   <button
-                    onClick={() => handleStatusUpdate(selectionState.status)}
+                    onClick={() => handleStatusChange(selectionState.status)}
                     className="sm:w-fit text-primary font-normal hover:bg-gray-50 rounded-xl border border-primary py-2 px-3 sm:px-2 sm:py-2 md:px-3 whitespace-nowrap flex gap-1 sm:gap-2"
                   >
                     <span className="hidden sm:block">Apply Status</span>
@@ -408,7 +273,7 @@ const TableComponent = ({
                       { id: 1, name: 'selected', showName: 'Selected Rows' },
                       { id: 2, name: 'all', showName: 'All Rows' }
                     ]}
-                    commonFunction={(e) => handleExport(e.name)}
+                    commonFunction={(e) => handleExport(e.name, apiUrl)}
                   />
                 )}
               </>
@@ -521,9 +386,7 @@ const TableComponent = ({
                       <td className="w-full flex gap-2 items-center px-6 py-2 whitespace-nowrap font-medium text-secondary hover:text-gray-900">
                         {edit && !row.isSuperAdmin && <MdEdit className="text-2xl" onClick={() => navigate(editPath + '/' + row.id)} />}
                         {view && !row.isSuperAdmin && <MdRemoveRedEye className="text-2xl" onClick={() => navigate(viewPath + '/' + row.id)} />}
-                        {apps && !row.isSuperAdmin && (
-                          <MdOutlineApps className="text-2xl" onClick={() => navigate(appsPath, { state: { siteData: { id: row.id, name: row.id, showName: row.siteName } } })} />
-                        )}
+                        {apps && !row.isSuperAdmin && <MdOutlineApps className="text-2xl" onClick={() => navigate(appsPath + '/' + row.id)} />}
                       </td>
                     )}
                   </tr>
@@ -554,16 +417,10 @@ const TableComponent = ({
           selectedSites={selectionState.selectedSites}
           setSelectedSites={setSelectionState}
           availableSites={allSites}
-          onConfirm={handleSitesUpdate}
+          onConfirm={handleSitesChange}
           siteToggle={selectionState.siteToggle}
         />
-        <DeleteModal
-          isDeleteModalOpen={modalState.isDeleteModelOpen}
-          onConfirm={handleDeleteConfirm}
-          setDeleteModalOpen={setModalState}
-          label={deleteLabel}
-          message={deleteMessage}
-        />
+        <DeleteModal isDeleteModalOpen={modalState.isDeleteModelOpen} onConfirm={handleDelete} setDeleteModalOpen={setModalState} label={deleteLabel} message={deleteMessage} />
         <SiteModal
           label={'Duplicate Popups'}
           isOpen={modalState.isDuplicateModelOpen}
@@ -572,7 +429,7 @@ const TableComponent = ({
           selectedSites={selectionState.selectedSites}
           availableSites={allSites}
           setSelectedSites={setSelectionState}
-          onConfirm={handleDuplicateConfirm}
+          onConfirm={handleDuplicate}
         />
       </div>
     </div>

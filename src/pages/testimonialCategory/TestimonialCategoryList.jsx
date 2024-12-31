@@ -15,8 +15,8 @@ const TestimonialCategoryList = () => {
     return {
       id: _id,
       name: <TruncatableFieldModal title={'Name'} content={name} />,
-      created: formatDateTime(createdAt),
-      updated: formatDateTime(updatedAt)
+      createdAt: formatDateTime(createdAt),
+      updatedAt: formatDateTime(updatedAt)
     };
   });
 
@@ -45,8 +45,8 @@ const TestimonialCategoryList = () => {
                 headers={[
                   { label: 'Sr No.', key: 'srno' },
                   { label: 'Name', key: 'name' },
-                  { label: 'Created Date', key: 'created' },
-                  { label: 'Updated Date', key: 'updated' }
+                  { label: 'Created Date', key: 'createdAt' },
+                  { label: 'Updated Date', key: 'updatedAt' }
                 ]}
                 tableData={(data) => setTestimonialCategories(data.categories)}
                 rows={rows}

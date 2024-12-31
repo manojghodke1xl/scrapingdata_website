@@ -14,9 +14,10 @@ const FaqCategoryList = () => {
     const { _id, name, createdAt, updatedAt } = faqCategory;
     return {
       id: _id,
+      exportData: faqCategory,
       name: <TruncatableFieldModal title={'Name'} content={name} />,
-      created: formatDateTime(createdAt),
-      updated: formatDateTime(updatedAt)
+      createdAt: formatDateTime(createdAt),
+      updatedAt: formatDateTime(updatedAt)
     };
   });
 
@@ -42,8 +43,8 @@ const FaqCategoryList = () => {
                 headers={[
                   { label: 'Sr No.', key: 'srno' },
                   { label: 'Name', key: 'name' },
-                  { label: 'Created Date', key: 'created' },
-                  { label: 'Updated Date', key: 'updated' }
+                  { label: 'Created Date', key: 'createdAt' },
+                  { label: 'Updated Date', key: 'updatedAt' }
                 ]}
                 tableData={(data) => setFaqCategories(data.faqCategories)}
                 rows={rows}

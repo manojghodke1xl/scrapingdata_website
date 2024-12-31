@@ -13,12 +13,13 @@ const EventList = () => {
     const { _id, name, date, venue, site, createdAt, updatedAt } = event;
     return {
       id: _id,
+      exportData: event,
       name: <TruncatableFieldModal title={'Event Name'} content={name} />,
       date: formatDateTime(date),
-      sites: <TruncatableFieldModal title={'Sites'} content={`${site?.name} (${site?.host})`} />,
+      site: <TruncatableFieldModal title={'Sites'} content={`${site?.name} (${site?.host})`} />,
       venue: <TruncatableFieldModal title={'Venue'} content={venue} />,
-      created: formatDateTime(createdAt),
-      updated: formatDateTime(updatedAt)
+      createdAt: formatDateTime(createdAt),
+      updatedAt: formatDateTime(updatedAt)
     };
   });
 
@@ -45,10 +46,10 @@ const EventList = () => {
                   { label: 'Sr No.', key: 'srno' },
                   { label: 'Event', key: 'name' },
                   { label: 'Scheduled Date', key: 'date' },
-                  { label: 'Sites', key: 'sites' },
+                  { label: 'Sites', key: 'site' },
                   { label: 'Venue', key: 'venue' },
-                  { label: 'Created Date', key: 'created' },
-                  { label: 'Updated Date', key: 'updated' }
+                  { label: 'Created Date', key: 'createdAt' },
+                  { label: 'Updated Date', key: 'updatedAt' }
                 ]}
                 tableData={(data) => setEvents(data.events)}
                 rows={rows}

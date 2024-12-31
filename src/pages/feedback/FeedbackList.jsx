@@ -16,15 +16,16 @@ const FeedbackList = () => {
 
     return {
       id: _id,
+      exportData: feedback,
       name: <TruncatableFieldModal title={'Customer Name'} content={name} />,
       email: <TruncatableFieldModal title={'Email'} content={email} />,
       mobile: <TruncatableFieldModal title={'Phone Number'} content={`${ccode ?? ''} ${mobile ?? ''}`} maxLength={15} />,
       service: <TruncatableFieldModal title={'Feedback Service'} content={service} />,
       subject: <TruncatableFieldModal title={'Subject'} content={subject} maxLength={20} />,
       feedbackMessage: <TruncatableFieldModal title={'Message'} content={feedbackMessage} maxLength={50} />,
-      sites: <TruncatableFieldModal title={'Sites'} content={`${site?.name} (${site?.host})`} />,
-      created: formatDateTime(createdAt),
-      updated: formatDateTime(updatedAt)
+      site: <TruncatableFieldModal title={'Sites'} content={`${site?.name} (${site?.host})`} />,
+      createdAt: formatDateTime(createdAt),
+      updatedAt: formatDateTime(updatedAt)
     };
   });
 
@@ -55,9 +56,9 @@ const FeedbackList = () => {
                   { label: 'Feedback Service', key: 'service' },
                   { label: 'Subject', key: 'subject' },
                   { label: 'Message', key: 'feedbackMessage' },
-                  { label: 'Sites', key: 'sites' },
-                  { label: 'Created Date', key: 'created' },
-                  { label: 'Updated Date', key: 'updated' }
+                  { label: 'Sites', key: 'site' },
+                  { label: 'Created Date', key: 'createdAt' },
+                  { label: 'Updated Date', key: 'updatedAt' }
                 ]}
                 tableData={(data) => setFeedbacks(data.feedbacks)}
                 rows={rows}

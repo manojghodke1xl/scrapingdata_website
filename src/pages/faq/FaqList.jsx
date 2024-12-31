@@ -15,17 +15,18 @@ const FaqList = () => {
     const { _id, question, answer, isActive, sites, createdAt, updatedAt } = faq;
     return {
       id: _id,
+      exportData: faq,
       sites: <TruncatableFieldModal title={'Sites'} content={sites.map((s) => `${s.name} (${s.host})`).join(', ')} />,
       question: <TruncatableFieldModal title={'Question'} content={question} />,
       answer: <TruncatableFieldModal title={'Answer'} content={answer} />,
-      status: (
+      isActive: (
         <div className={`rounded-xl ${isActive ? 'bg-[#ECFDF3] text-[#027948]' : 'bg-[#F2F4F7] text-[#344054]'} px-2 py-1 w-fit flex gap-2 items-center`}>
           <span className={`min-w-[12px] min-h-[12px] rounded-full ${isActive ? 'bg-[#12B76A]' : 'bg-[#667085]'}`}></span>
           <span>{isActive ? 'Active' : 'Inactive'}</span>
         </div>
       ),
-      created: formatDateTime(createdAt),
-      updated: formatDateTime(updatedAt)
+      createdAt: formatDateTime(createdAt),
+      updatedAt: formatDateTime(updatedAt)
     };
   });
 
@@ -53,9 +54,9 @@ const FaqList = () => {
                   { label: 'Sites', key: 'sites' },
                   { label: 'Question', key: 'question' },
                   { label: 'Answer', key: 'answer' },
-                  { label: 'Status', key: 'status' },
-                  { label: 'Created Date', key: 'created' },
-                  { label: 'Updated Date', key: 'updated' }
+                  { label: 'Status', key: 'isActive' },
+                  { label: 'Created Date', key: 'createdAt' },
+                  { label: 'Updated Date', key: 'updatedAt' }
                 ]}
                 tableData={(data) => setFaqs(data.faqs)}
                 rows={rows}

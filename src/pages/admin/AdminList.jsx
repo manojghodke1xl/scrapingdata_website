@@ -20,6 +20,7 @@ const AdminList = () => {
     return {
       id: _id,
       isSuperAdmin,
+      exportData: admin,
       name: <TruncatableFieldModal title={'Name'} content={name} />,
       email: <TruncatableFieldModal title={'Email'} content={email} />,
       sites: (
@@ -28,14 +29,14 @@ const AdminList = () => {
           content={isSuperAdmin ? allSites.map((s) => `${s.name} (${s.host})`).join(', ') : sites.map((s) => `${s.name} (${s.host})`).join(', ')}
         />
       ),
-      status: (
+      isBlocked: (
         <div className={`rounded-xl ${isBlocked ? 'bg-[#FEF3F2] text-[#B32318]' : 'bg-[#ECFDF3] text-[#027948]'} px-2 py-1 w-fit flex gap-2 items-center`}>
           <span className={`min-w-[12px] min-h-[12px] rounded-full ${isBlocked ? 'bg-[#F04438]' : 'bg-[#12B76A]'}`}></span>
           <span>{isBlocked ? 'Blocked' : 'Active'}</span>
         </div>
       ),
-      created: formatDateTime(createdAt),
-      updated: formatDateTime(updatedAt)
+      createdAt: formatDateTime(createdAt),
+      updatedAt: formatDateTime(updatedAt)
     };
   });
 
@@ -63,9 +64,9 @@ const AdminList = () => {
                   { label: 'Admin Name', key: 'name' },
                   { label: 'Admin Email', key: 'email' },
                   { label: 'Sites', key: 'sites' },
-                  { label: 'Status', key: 'status' },
-                  { label: 'Created Date', key: 'created' },
-                  { label: 'Updated Date', key: 'updated' }
+                  { label: 'Status', key: 'isBlocked' },
+                  { label: 'Created Date', key: 'createdAt' },
+                  { label: 'Updated Date', key: 'updatedAt' }
                 ]}
                 tableData={(data) => setAdmins(data.admins)}
                 rows={rows}

@@ -13,10 +13,11 @@ const ParticipantList = () => {
     const { _id, site, event, name, email, attendees, createdAt, updatedAt } = participant;
     return {
       id: _id,
+      exportData: participant,
       name: <TruncatableFieldModal title={'Name'} content={name} />,
       email: <TruncatableFieldModal title={'Email'} content={email} />,
       attendees: attendees,
-      sites: <TruncatableFieldModal title={'Sites'} content={`${site?.name} (${site?.host})`} />,
+      site: <TruncatableFieldModal title={'Sites'} content={`${site?.name} (${site?.host})`} />,
       event: <TruncatableFieldModal title={'Event'} content={event.name} />,
       //   status: (
       //     <div className={`rounded-xl ${isActive ? 'bg-[#ECFDF3] text-[#027948]' : 'bg-[#F2F4F7] text-[#344054]'} px-2 py-1 w-fit flex gap-2 items-center`}>
@@ -24,8 +25,8 @@ const ParticipantList = () => {
       //       <span>{isActive ? 'Active' : 'Inactive'}</span>
       //     </div>
       //   ),
-      created: formatDateTime(createdAt),
-      updated: formatDateTime(updatedAt)
+      createdAt: formatDateTime(createdAt),
+      updatedAt: formatDateTime(updatedAt)
     };
   });
 
@@ -55,10 +56,10 @@ const ParticipantList = () => {
                   { label: 'Name', key: 'name' },
                   { label: 'Email', key: 'email' },
                   { label: 'Attendees', key: 'attendees' },
-                  { label: 'Sites', key: 'sites' },
+                  { label: 'Sites', key: 'site' },
                   { label: 'Event', key: 'event' },
-                  { label: 'Created Date', key: 'created' },
-                  { label: 'Updated Date', key: 'updated' }
+                  { label: 'Created Date', key: 'createdAt' },
+                  { label: 'Updated Date', key: 'updatedAt' }
                 ]}
                 tableData={(data) => setParticipants(data.participants)}
                 rows={rows}

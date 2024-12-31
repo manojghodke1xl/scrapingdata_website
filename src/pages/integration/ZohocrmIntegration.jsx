@@ -63,12 +63,13 @@ const ZohocrmIntegration = () => {
           </div>
           <div className="w-full">
             <div className="-mb-4 text-primary">Select Site</div>
+            {console.log(siteData)}
             <DropDown
               name="Sites"
               dropdownList={allSites.map((site) => ({ id: site._id, showName: site.name, name: site._id }))}
-              SummaryChild={<h5 className="p-0 m-0 text-primary">{siteData.showName || 'Sites'}</h5>}
+              SummaryChild={<h5 className="p-0 m-0 text-primary">{siteData?.showName || 'Sites'}</h5>}
               search={true}
-              selected={siteData.name}
+              selected={siteData?.name}
               commonFunction={(e) => setSiteData(e)}
             />
             <FormField
@@ -81,7 +82,7 @@ const ZohocrmIntegration = () => {
                 setZohocrmDetails((prev) => ({ ...prev, clientId: e.target.value }));
                 if (errors.clientId) setErrors((prev) => ({ ...prev, clientId: '' }));
               }}
-              value={zohocrmDetails.clientId}
+              value={zohocrmDetails?.clientId}
               errorMessage={errors.clientId}
             />
             <FormField
@@ -94,7 +95,7 @@ const ZohocrmIntegration = () => {
                 setZohocrmDetails((prev) => ({ ...prev, clientSecret: e.target.value }));
                 if (errors.clientSecret) setErrors((prev) => ({ ...prev, clientSecret: '' }));
               }}
-              value={zohocrmDetails.clientSecret}
+              value={zohocrmDetails?.clientSecret}
               errorMessage={errors.clientSecret}
             />
             <FormField label="Frontend URI" type="text" placeholder="Frontend URI" disabled={true} value={import.meta.env.VITE_URL} />

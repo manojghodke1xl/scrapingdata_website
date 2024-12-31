@@ -16,18 +16,19 @@ const PopupList = () => {
     const { _id, name, showOnDeviceType, contentType, isActive, site, createdAt, updatedAt } = popup;
     return {
       id: _id,
+      exportData: popup,
       name: <TruncatableFieldModal title={'Name'} content={name} />,
-      sites: <TruncatableFieldModal title={'Sites'} content={`${site?.name} (${site?.host}) `} maxLength={20} />,
-      deviceType: showOnDeviceType === 'mobile' ? 'Mobile' : showOnDeviceType === 'desktop' ? 'Desktop' : 'All',
-      type: contentType === 'guide' ? 'Guide' : contentType === 'casestudy' ? 'Case Study' : 'Basic',
-      status: (
+      site: <TruncatableFieldModal title={'Sites'} content={`${site?.name} (${site?.host}) `} maxLength={20} />,
+      showOnDeviceType: showOnDeviceType === 'mobile' ? 'Mobile' : showOnDeviceType === 'desktop' ? 'Desktop' : 'All',
+      contentType: contentType === 'guide' ? 'Guide' : contentType === 'casestudy' ? 'Case Study' : 'Basic',
+      isActive: (
         <div className={`rounded-xl ${isActive ? 'bg-[#ECFDF3] text-[#027948]' : 'bg-[#F2F4F7] text-[#344054]'} px-2 py-1 w-fit flex gap-2 items-center`}>
           <span className={`min-w-[12px] min-h-[12px] rounded-full ${isActive ? 'bg-[#12B76A]' : 'bg-[#667085]'}`}></span>
           <span>{isActive ? 'Active' : 'Inactive'}</span>
         </div>
       ),
-      created: formatDateTime(createdAt),
-      updated: formatDateTime(updatedAt)
+      createdAt: formatDateTime(createdAt),
+      updatedAt: formatDateTime(updatedAt)
     };
   });
 
@@ -57,12 +58,12 @@ const PopupList = () => {
                 headers={[
                   { label: 'Sr No.', key: 'srno' },
                   { label: 'Name', key: 'name' },
-                  { label: 'Sites', key: 'sites' },
-                  { label: 'Device Type', key: 'deviceType' },
-                  { label: 'Type', key: 'type' },
-                  { label: 'Status', key: 'status' },
-                  { label: 'Created Date', key: 'created' },
-                  { label: 'Updated Date', key: 'updated' }
+                  { label: 'Sites', key: 'site' },
+                  { label: 'Device Type', key: 'showOnDeviceType' },
+                  { label: 'Type', key: 'contentType' },
+                  { label: 'Status', key: 'isActive' },
+                  { label: 'Created Date', key: 'createdAt' },
+                  { label: 'Updated Date', key: 'updatedAt' }
                 ]}
                 tableData={(data) => setPopups(data.popups)}
                 rows={rows}

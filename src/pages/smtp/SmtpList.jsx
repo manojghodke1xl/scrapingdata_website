@@ -16,8 +16,8 @@ const SmtpList = () => {
       id: _id,
       name: <TruncatableFieldModal title={'Name'} content={name} />,
       host: <TruncatableFieldModal title={'Host'} content={host} />,
-      created: formatDateTime(createdAt),
-      updated: formatDateTime(updatedAt)
+      createdAt: formatDateTime(createdAt),
+      updatedAt: formatDateTime(updatedAt)
     };
   });
   return (
@@ -43,8 +43,8 @@ const SmtpList = () => {
                   { label: 'Sr No.', key: 'srno' },
                   { label: 'Name', key: 'name' },
                   { label: 'Host', key: 'host' },
-                  { label: 'Created Date', key: 'created' },
-                  { label: 'Updated Date', key: 'updated' }
+                  { label: 'Created Date', key: 'createdAt' },
+                  { label: 'Updated Date', key: 'updatedAt' }
                 ]}
                 tableData={(data) => setSmtps(data.smtps)}
                 rows={rows}

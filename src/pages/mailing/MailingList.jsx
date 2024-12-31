@@ -15,11 +15,12 @@ const MailingList = () => {
     const { _id, email, createdAt, updatedAt, site, name } = list;
     return {
       id: _id,
+      exportData: list,
       name: <TruncatableFieldModal title={'Name'} content={name} />,
       email: <TruncatableFieldModal title={'Email'} content={email} />,
-      sites: <TruncatableFieldModal title={'Sites'} content={`${site?.name} (${site?.host})`} />,
-      created: formatDateTime(createdAt),
-      updated: formatDateTime(updatedAt)
+      site: <TruncatableFieldModal title={'Sites'} content={`${site?.name} (${site?.host})`} />,
+      createdAt: formatDateTime(createdAt),
+      updatedAt: formatDateTime(updatedAt)
     };
   });
 
@@ -47,9 +48,9 @@ const MailingList = () => {
                   { label: 'Sr No.', key: 'srno' },
                   { label: 'Name', key: 'name' },
                   { label: 'Email', key: 'email' },
-                  { label: 'Sites', key: 'sites' },
-                  { label: 'Created Date', key: 'created' },
-                  { label: 'Updated Date', key: 'updated' }
+                  { label: 'Sites', key: 'site' },
+                  { label: 'Created Date', key: 'createdAt' },
+                  { label: 'Updated Date', key: 'updatedAt' }
                 ]}
                 tableData={(data) => setLists(data.lists)}
                 rows={rows}

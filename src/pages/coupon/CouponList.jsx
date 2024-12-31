@@ -15,18 +15,19 @@ const CouponList = () => {
     const { _id, code, type, value, minAmount, isActive, createdAt, updatedAt } = coupon;
     return {
       id: _id,
+      exportData: coupon,
       code: <TruncatableFieldModal title={'Coupon Code'} content={code} />,
       type: <TruncatableFieldModal title={'Discount Type'} content={type} />,
       value: <TruncatableFieldModal title={'Discount Value'} content={value} />,
       minAmount: <TruncatableFieldModal title={'Minimum purchase Amount'} content={minAmount} />,
-      status: (
+      isActive: (
         <div className={`rounded-xl ${isActive ? 'bg-[#ECFDF3] text-[#027948]' : 'bg-[#F2F4F7] text-[#344054]'} px-2 py-1 w-fit flex gap-2 items-center`}>
           <span className={`min-w-[12px] min-h-[12px] rounded-full ${isActive ? 'bg-[#12B76A]' : 'bg-[#667085]'}`}></span>
           <span>{isActive ? 'Active' : 'Inactive'}</span>
         </div>
       ),
-      created: formatDateTime(createdAt),
-      updated: formatDateTime(updatedAt)
+      createdAt: formatDateTime(createdAt),
+      updatedAt: formatDateTime(updatedAt)
     };
   });
 
@@ -55,9 +56,9 @@ const CouponList = () => {
                   { label: 'Discount Type', key: 'type' },
                   { label: 'Discount Value', key: 'value' },
                   { label: 'Minimum purchase Amount', key: 'minAmount' },
-                  { label: 'Status', key: 'status' },
-                  { label: 'Created Date', key: 'created' },
-                  { label: 'Updated Date', key: 'updated' }
+                  { label: 'Status', key: 'isActive' },
+                  { label: 'Created Date', key: 'createdAt' },
+                  { label: 'Updated Date', key: 'updatedAt' }
                 ]}
                 tableData={(data) => setCoupons(data.coupons)}
                 rows={rows}
