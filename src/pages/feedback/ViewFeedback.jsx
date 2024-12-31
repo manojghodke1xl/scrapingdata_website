@@ -77,8 +77,11 @@ const ViewFeedback = () => {
             <div className="mt-5">
               <h1 className="font-semibold text-primary">Phone Number</h1>
               {feedback?.mobile || feedback?.ccode ? (
-                <a className="text-secondary" href={`tel:${(feedback.ccode ? '+' + feedback.ccode : '') + feedback.mobile.replace(/\s+/g, '')}`}>
-                  {(feedback.ccode ? '+' + feedback.ccode : '') + ' ' + feedback.mobile.replace(/\s+/g, '')}
+                <a
+                  className="text-secondary"
+                  href={`tel:${(feedback.ccode ? (feedback.ccode.startsWith('+') ? feedback.ccode : '+' + feedback.ccode) : '') + feedback.mobile.replace(/\s+/g, '')}`}
+                >
+                  {(feedback.ccode ? (feedback.ccode.startsWith('+') ? feedback.ccode : '+' + feedback.ccode) : '') + ' ' + feedback.mobile.replace(/\s+/g, '')}
                 </a>
               ) : (
                 <p className="text-secondary">No phone number available</p>

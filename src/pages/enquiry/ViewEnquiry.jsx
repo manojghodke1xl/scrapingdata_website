@@ -77,8 +77,11 @@ const ViewEnquiry = () => {
             <div className="mt-5">
               <h1 className="font-semibold text-primary">Phone Number</h1>
               {enquiry?.mobile || enquiry?.ccode ? (
-                <a className="text-secondary" href={`tel:${(enquiry.ccode ? '+' + enquiry.ccode : '') + enquiry.mobile.replace(/\s+/g, '')}`}>
-                  {(enquiry.ccode ? '+' + enquiry.ccode : '') + ' ' + enquiry.mobile.replace(/\s+/g, '')}
+                <a
+                  className="text-secondary"
+                  href={`tel:${(enquiry.ccode ? (enquiry.ccode.startsWith('+') ? enquiry.ccode : '+' + enquiry.ccode) : '') + enquiry.mobile.replace(/\s+/g, '')}`}
+                >
+                  {(enquiry.ccode ? (enquiry.ccode.startsWith('+') ? enquiry.ccode : '+' + enquiry.ccode) : '') + ' ' + enquiry.mobile.replace(/\s+/g, '')}
                 </a>
               ) : (
                 <p className="text-secondary">No phone number available</p>
