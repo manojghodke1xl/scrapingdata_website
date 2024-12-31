@@ -76,7 +76,7 @@ const FaqList = () => {
                   { id: 0, name: 'Active', bgColor: '#ECFDF3', color: '#027948', dotColor: '#12B76A' },
                   { id: 1, name: 'Inactive', bgColor: '#F2F4F7', color: '#344054', dotColor: '#667085' }
                 ]}
-                searchCategory={[{ id: 0, name: 'Question' }]}
+                searchCategory={[{ id: 0, name: 'Question' },{ id: 1, name: 'Answer' }]}
                 modifyStatus={true}
                 modifyStatusApi={updateFaqStatusApi}
                 modifySite={true}

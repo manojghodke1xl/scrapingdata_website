@@ -1,23 +1,14 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { RxCaretSort } from 'react-icons/rx';
-import { MdEdit, MdOutlineApps, MdRemoveRedEye } from 'react-icons/md';
-import { CiExport } from 'react-icons/ci';
-import { RiDeleteBinLine } from 'react-icons/ri';
 import Pagination from './Pagination';
-import SearchComponent from '../common/SearchComponent';
-import Filters from '../filter/Filters';
 import { showNotification } from '../../utils/showNotification';
 import useSetTimeout from '../../hooks/useDebounce';
 import DeleteModal from '../modal/DeleteModal';
-import StatusFilter from '../filter/StatusFilter';
-import SearchFilter from '../filter/SearchFilter';
-import FilterDropDowm from '../filter/FilterDropDown';
 import SiteModal from '../modal/SiteModal';
 import useGlobalContext from '../../hooks/useGlobalContext';
-import DropDown from '../formFields/DropDown';
-import { handleExport } from '../../helpers/exportHandler';
 import { handleDeleteConfirm, handleDuplicateConfirm, handleSitesUpdate, handleStatusUpdate } from '../../helpers/tableApiHandler';
+import TableView from './TableView';
+import TableFilter from './TableFilter';
+import TableFilterActions from './TableFilterActions';
 
 const TableComponent = ({
   selectable,
@@ -53,14 +44,12 @@ const TableComponent = ({
   modifySite,
   modifySiteApi
 }) => {
-  const navigate = useNavigate();
   const {
     auth: { allSites },
     setLoading,
     isLoading
   } = useGlobalContext();
 
-  const [selectedCategory, setSelectedCategory] = useState(null);
   const [modalState, setModalState] = useState({
     isDuplicateModelOpen: false,
     isDeleteModelOpen: false,
@@ -76,7 +65,8 @@ const TableComponent = ({
     isAllSelected: false,
     selectedSites: [],
     siteToggle: false,
-    status: ''
+    status: '',
+    selectedCategory: {}
   });
   const [filterState, setFilterState] = useState({
     searchTerm: '',
@@ -158,137 +148,62 @@ const TableComponent = ({
     if (category.name === 'Event') setShowFilter((prev) => ({ ...prev, event: !prev.event }));
     if (category.name === 'Search') {
       setFilterState({ searchTerm: '', searchKey: '' });
-      setSelectedCategory({ ...category, type: 'search' });
+      setSelectionState((prev) => ({ ...prev, selectedCategory: { ...category, type: 'search' } }));
+      // setSelectedCategory({ ...category, type: 'search' });
     }
   };
 
   const handleClearFilter = () => {
     setModalState({ isDeleteModelOpen: false, isSitesModelOpen: false, isDuplicateModelOpen: false });
-    setSelectionState({ selectedItems: [], isAllSelected: false, selectedSites: [], siteToggle: false, status: '' });
+    setSelectionState({ selectedItems: [], isAllSelected: false, selectedSites: [], siteToggle: false, status: '', selectedCategory: {} });
     setFilterState({ searchTerm: '', searchKey: '', siteId: '', eventId: '', statusFilter: '' });
     setShowFilter({ status: false, sites: false, event: false });
-    setSelectedCategory(null);
+    // setSelectedCategory(null);
   };
 
   return (
     <div className="overflow-hidden">
       <div className="my-8 rounded-xl border border-primary overflow-hidden">
         <div className="w-full flex flex-col sm:flex-row flex-wrap gap-y-4 justify-between items-center px-3 sm:px-6 ptpb-4 border-b border-primary">
-          <div className="flex gap-4 flex-wrap sm:flex-nowrap justify-start items-center">
-            {search && (
-              <>
-                <div
-                  className={`px-2 rounded-xl border border-primary flex gap-2 items-center w-full md:w-[210px] h-fit ${
-                    !filterState.searchKey ? 'bg-grey cursor-not-allowed' : ''
-                  }`}
-                >
-                  <SearchComponent
-                    value={filterState.searchTerm}
-                    onChange={(e) => setFilterState((prev) => ({ ...prev, searchTerm: e.target.value }))}
-                    disabled={!filterState.searchKey}
-                    placeholder={`Search by ${filterState.searchKey || '...'}`}
-                  />
-                </div>
-                {searchCategory.length > 0 && (
-                  <SearchFilter
-                    searchCategory={searchCategory}
-                    setSearchKey={(key) => setFilterState((prev) => ({ ...prev, searchKey: key }))}
-                    selectedCategory={selectedCategory}
-                    setSelectedCategory={setSelectedCategory}
-                  />
-                )}
-              </>
-            )}
-            {filter && (
-              <>
-                <div className="gap-2">
-                  <Filters categories={filterCategory} onCategorySelect={handleCategorySelect} setSelectedCategory={setSelectedCategory} selectedCategory={selectedCategory} />
-                </div>
-                {showFilter.status && <StatusFilter statuses={statuses} setStatusFilter={(status) => setFilterState((prev) => ({ ...prev, statusFilter: status }))} />}
-                {showFilter.sites && <FilterDropDowm name={'Sites'} data={allSites} setDataId={(id) => setFilterState((prev) => ({ ...prev, siteId: id }))} />}
-                {showFilter.event && <FilterDropDowm name={'Event'} data={events} setDataId={(id) => setFilterState((prev) => ({ ...prev, eventId: id }))} />}
-              </>
-            )}
-          </div>
+          <TableFilter
+            search={search}
+            filterState={filterState}
+            setFilterState={setFilterState}
+            searchCategory={searchCategory}
+            selectedCategory={selectionState.selectedCategory}
+            setSelectedCategory={(category) => setSelectionState((prev) => ({ ...prev, selectedCategory: category }))}
+            filter={filter}
+            filterCategory={filterCategory}
+            handleCategorySelect={handleCategorySelect}
+            showFilter={showFilter}
+            statuses={statuses}
+            allSites={allSites}
+            events={events}
+          />
           <div
             className={`w-full xl:w-fit flex ${
               (deleteBtn + search + filter + exportBtn + modifyStatus, modifySite + duplicateBtn >= 4 ? 'flex-wrap' : 'flex-nowrap')
             } sm:justify-end justify-center gap-2 items-center`}
           >
-            {deleteBtn && selectionState.selectedItems.length > 0 && (
-              <button
-                onClick={() => setModalState((prev) => ({ ...prev, isDeleteModelOpen: true }))}
-                className="sm:w-fit text-primary font-normal hover:bg-gray-50 rounded-xl border border-primary py-2 px-3 sm:px-2 sm:py-2 md:px-3 whitespace-nowrap flex gap-1 sm:gap-2"
-              >
-                <RiDeleteBinLine size={20} />
-                <span className="hidden sm:block">Delete</span>
-              </button>
-            )}
-            {modifyStatus && selectionState.selectedItems.length > 0 && (
-              <>
-                <StatusFilter statuses={statuses} setStatusFilter={(e) => setSelectionState((prev) => ({ ...prev, status: e }))} />
-                {selectionState.status !== '' && selectionState.selectedItems.length > 0 && (
-                  <button
-                    onClick={() => handleStatusChange(selectionState.status)}
-                    className="sm:w-fit text-primary font-normal hover:bg-gray-50 rounded-xl border border-primary py-2 px-3 sm:px-2 sm:py-2 md:px-3 whitespace-nowrap flex gap-1 sm:gap-2"
-                  >
-                    <span className="hidden sm:block">Apply Status</span>
-                  </button>
-                )}
-              </>
-            )}
-            {modifySite && selectionState.selectedItems.length > 0 && (
-              <button
-                onClick={() => setModalState((prev) => ({ ...prev, isSitesModelOpen: true }))}
-                className="sm:w-fit text-primary font-normal hover:bg-gray-50 rounded-xl border border-primary py-2 px-3 sm:px-2 sm:py-2 md:px-3 whitespace-nowrap flex gap-1 sm:gap-2"
-              >
-                Sites
-              </button>
-            )}
-            {duplicateBtn && selectionState.selectedItems.length > 0 && (
-              <button
-                onClick={() => setModalState((prev) => ({ ...prev, isDuplicateModelOpen: true }))}
-                className="sm:w-fit text-primary font-normal hover:bg-gray-50 rounded-xl border border-primary py-2 px-3 sm:px-2 sm:py-2 md:px-3 whitespace-nowrap flex gap-1 sm:gap-2"
-              >
-                Duplicate Popups
-              </button>
-            )}
-            {exportBtn && (
-              <>
-                <button
-                  onClick={() => setExportDropdownOpen((prev) => !prev)}
-                  className="sm:w-fit text-primary font-normal hover:bg-gray-50 rounded-xl border border-primary py-2 px-3 sm:px-2 sm:py-2 md:px-3 whitespace-nowrap flex gap-1 sm:gap-2"
-                >
-                  <CiExport size={20} strokeWidth="1.2" fill="none" />
-                  <span className="hidden sm:block">Export</span>
-                </button>
-
-                {exportDropdownOpen && (
-                  <DropDown
-                    mt="0"
-                    name={'Export'}
-                    SummaryChild={<h5 className="p-0 m-0 text-primary">Select Export</h5>}
-                    dropdownList={[
-                      { id: 0, name: 'visible', showName: 'Visible Rows' },
-                      { id: 1, name: 'selected', showName: 'Selected Rows' },
-                      { id: 2, name: 'all', showName: 'All Rows' }
-                    ]}
-                    commonFunction={(e) => handleExport(e.name, apiUrl)}
-                  />
-                )}
-              </>
-            )}
-            {selectedCategory && (
-              <button
-                className="sm:w-fit text-primary font-normal hover:bg-gray-50 rounded-xl border border-primary py-2 px-3 sm:px-2 sm:py-2 md:px-3 whitespace-nowrap flex gap-1 sm:gap-2"
-                onClick={handleClearFilter}
-              >
-                Clear All
-              </button>
-            )}
+            <TableFilterActions
+              deleteBtn={deleteBtn}
+              exportBtn={exportBtn}
+              modifySite={modifySite}
+              modifyStatus={modifyStatus}
+              duplicateBtn={duplicateBtn}
+              selectionState={selectionState}
+              setSelectionState={setSelectionState}
+              setModalState={setModalState}
+              statuses={statuses}
+              handleStatusChange={handleStatusChange}
+              setExportDropdownOpen={setExportDropdownOpen}
+              exportDropdownOpen={exportDropdownOpen}
+              apiUrl={apiUrl}
+              selectedCategory={selectionState.selectedCategory}
+              handleClearFilter={handleClearFilter}
+            />
           </div>
         </div>
-
         {tableCountLabel && selectionState.selectedItems.length > 0 && (
           <div className="w-full ptpb-4 text-center bg-grey border-b border-primary">
             <p className="text-secondary">
@@ -301,99 +216,22 @@ const TableComponent = ({
         )}
 
         <div className="overflow-x-auto custom-scrollbar ">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead>
-              <tr>
-                {selectable && (
-                  <th scope="col" className="px-4 py-2.5 text-left">
-                    <label className="inline-flex items-center cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={selectionState.isAllSelected}
-                        onChange={handleMasterCheckboxChange}
-                        className="form-checkbox h-4 w-4 text-blue-600 focus:outline-none"
-                      />
-                    </label>
-                  </th>
-                )}
-                {headers?.map((header, index) => (
-                  <th key={index} scope="col" className="px-6 py-2.5 text-left font-semibold text-primary">
-                    <div className="flex items-center gap-2">
-                      <span className="whitespace-nowrap">{header.label}</span>
-                      {header.sortable !== false && <RxCaretSort size={20} strokeWidth="0.5" fill="none" />}
-                    </div>
-                  </th>
-                ))}
-                {actions && (
-                  <th scope="col" className="px-6 py-2 text-left font-semibold text-primary">
-                    Actions
-                  </th>
-                )}
-              </tr>
-            </thead>
-            <tbody>
-              {isLoading ? (
-                <tr>
-                  <td colSpan={headers.length + (selectable ? 1 : 0) + (actions ? 1 : 0)}>
-                    <div
-                      role="status"
-                      className="w-full p-4 space-y-4 border border-gray-200 divide-y divide-gray-200 rounded shadow animate-pulse dark:divide-gray-200 md:p-6 dark:border-gray-200"
-                    >
-                      {/* Header Skeleton */}
-                      <div className="flex items-center justify-between mb-4">
-                        <div className="h-2.5 bg-gray-300 rounded-full dark:bg-gray-300 w-24 mb-2.5"></div>
-                        <div className="h-2.5 bg-gray-300 rounded-full dark:bg-gray-200 w-12"></div>
-                      </div>
-
-                      {/* Row Skeleton */}
-                      {[...Array(5)].map((_, idx) => (
-                        <div key={idx} className="flex items-center justify-between pt-4">
-                          <div>
-                            <div className="h-2.5 bg-gray-300 rounded-full dark:bg-gray-300 w-24 mb-2.5"></div>
-                            <div className="w-32 h-2 bg-gray-200 rounded-full dark:bg-gray-200"></div>
-                          </div>
-                          <div className="h-2.5 bg-gray-300 rounded-full dark:bg-gray-200 w-12"></div>
-                        </div>
-                      ))}
-                    </div>
-                  </td>
-                </tr>
-              ) : (
-                rows?.map((row, index) => (
-                  <tr key={row.id} className={`border-b border-primary ${selectionState.selectedItems.includes(row.id) ? 'bg-blue-50' : 'hover:bg-gray-50'}`}>
-                    {selectable && (
-                      <td className="px-4 py-2">
-                        {!row.isSuperAdmin && (
-                          <label className="inline-flex items-center cursor-pointer">
-                            <input
-                              type="checkbox"
-                              checked={selectionState.selectedItems.includes(row.id)}
-                              onChange={() => handleRowCheckboxChange(row.id)}
-                              className="form-checkbox h-4 w-4 text-blue-600"
-                            />
-                          </label>
-                        )}
-                      </td>
-                    )}
-                    {headers.map((header, headerIndex) => (
-                      <td key={`${row.id}-${headerIndex}`} className="px-6 py-2 text-secondary whitespace-nowrap font-medium">
-                        {header.key === 'srno'
-                          ? (index + 1).toString().padStart(3, '0') // Handle Sr No.
-                          : row[header.key]}
-                      </td>
-                    ))}
-                    {actions && (
-                      <td className="w-full flex gap-2 items-center px-6 py-2 whitespace-nowrap font-medium text-secondary hover:text-gray-900">
-                        {edit && !row.isSuperAdmin && <MdEdit className="text-2xl" onClick={() => navigate(editPath + '/' + row.id)} />}
-                        {view && !row.isSuperAdmin && <MdRemoveRedEye className="text-2xl" onClick={() => navigate(viewPath + '/' + row.id)} />}
-                        {apps && !row.isSuperAdmin && <MdOutlineApps className="text-2xl" onClick={() => navigate(appsPath + '/' + row.id)} />}
-                      </td>
-                    )}
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
+          <TableView
+            selectable={selectable}
+            selectionState={selectionState}
+            handleMasterCheckboxChange={handleMasterCheckboxChange}
+            handleRowCheckboxChange={handleRowCheckboxChange}
+            headers={headers}
+            rows={rows}
+            actions={actions}
+            isLoading={isLoading}
+            edit={edit}
+            editPath={editPath}
+            view={view}
+            viewPath={viewPath}
+            apps={apps}
+            appsPath={appsPath}
+          />
         </div>
         <div className="w-full mt-2">
           <div className="w-full py-3">

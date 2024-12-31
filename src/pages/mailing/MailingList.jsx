@@ -63,7 +63,10 @@ const MailingList = () => {
                 search={true}
                 filter={true}
                 filterCategory={[{ id: 0, name: 'Sites' }]}
-                searchCategory={[{ id: 1, name: 'Email' }]}
+                searchCategory={[
+                  { id: 0, name: 'Name' },
+                  { id: 1, name: 'Email' }
+                ]}
                 deleteBtn={true}
                 deleteLabel={'Delete Mailing List'}
                 deleteMessage={'Are you sure you want to delete this mailing list?'}

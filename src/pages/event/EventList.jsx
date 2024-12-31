@@ -44,7 +44,7 @@ const EventList = () => {
                 selectable={true}
                 headers={[
                   { label: 'Sr No.', key: 'srno' },
-                  { label: 'Event', key: 'name' },
+                  { label: 'Event Name', key: 'name' },
                   { label: 'Scheduled Date', key: 'date' },
                   { label: 'Sites', key: 'site' },
                   { label: 'Venue', key: 'venue' },
