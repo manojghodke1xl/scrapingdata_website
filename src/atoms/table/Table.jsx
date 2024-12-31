@@ -149,7 +149,6 @@ const TableComponent = ({
     if (category.name === 'Search') {
       setFilterState({ searchTerm: '', searchKey: '' });
       setSelectionState((prev) => ({ ...prev, selectedCategory: { ...category, type: 'search' } }));
-      // setSelectedCategory({ ...category, type: 'search' });
     }
   };
 
@@ -158,7 +157,6 @@ const TableComponent = ({
     setSelectionState({ selectedItems: [], isAllSelected: false, selectedSites: [], siteToggle: false, status: '', selectedCategory: {} });
     setFilterState({ searchTerm: '', searchKey: '', siteId: '', eventId: '', statusFilter: '' });
     setShowFilter({ status: false, sites: false, event: false });
-    // setSelectedCategory(null);
   };
 
   return (
