@@ -4,8 +4,8 @@ import Stripe from '../../assets/images/stripe.png';
 import ZohoCRM from '../../assets/images/zohocrm.png';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { IoMdCheckmark } from 'react-icons/io';
-import { useEffect, useState } from 'react';
-import { getIntegrationBySite } from '../../apis/payment-integration-apis';
+import { useCallback, useEffect, useState } from 'react';
+import { getIntegrationBySite, updatePaymentIntegrationApi } from '../../apis/payment-integration-apis';
 import { showNotification } from '../../utils/showNotification';
 import useGlobalContext from '../../hooks/useGlobalContext';
 
@@ -15,19 +15,42 @@ const IntegrationHub = () => {
   const { id = '' } = useParams();
   const [integrationData, setIntegrationData] = useState({});
 
+  const getIntegration = useCallback(async () => {
+    try {
+      setLoading(true);
+
+      const { status, data } = await getIntegrationBySite(id);
+      if (status) {
+        setIntegrationData(data);
+      } else showNotification('warn', data);
+    } catch (error) {
+      showNotification('error', error.message);
+    } finally {
+      setLoading(false);
+    }
+  }, [id, setLoading]);
+
   useEffect(() => {
     if (id) {
       setLoading(true);
-      (async () => {
-        const { status, data } = await getIntegrationBySite(id);
-        if (status) {
-          setIntegrationData(data);
-        } else showNotification('warn', data);
-      })()
-        .catch((error) => showNotification('error', error.message))
-        .finally(() => setLoading(false));
+      getIntegration();
     }
-  }, [id, setLoading]);
+  }, [getIntegration, id, setLoading]);
+
+  const handleDefault = async (name) => {
+    setLoading(true);
+    try {
+      const { status, data } = await updatePaymentIntegrationApi(id, { default: name });
+      if (status) {
+        showNotification('success', data.message);
+        await getIntegration();
+      } else showNotification('warn', data);
+    } catch (error) {
+      showNotification('error', error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const integrationList = [
     {
@@ -81,8 +104,11 @@ const IntegrationHub = () => {
           const paymentData = integrationData?.payment?.[item.id] || null;
           return (
             <div key={item.name} className="rounded-xl border border-primary p-4 flex flex-col gap-4">
-              <div>
+              <div className="flex justify-between items-center">
                 <img src={item.img} className="w-12" alt={item.name} />
+                {item.id !== 'zohocrm' && (
+                  <input type="radio" name="default" checked={integrationData?.payment?.default === item.id} onClick={() => handleDefault(item.id)} disabled={isLoading} />
+                )}
               </div>
               <h1>{item.name}</h1>
               <div className="text-sm text-primary font-normal">{item.description}</div>

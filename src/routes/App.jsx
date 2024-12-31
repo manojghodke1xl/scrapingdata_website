@@ -30,7 +30,7 @@ import IntegrationRoutes from './private-routes/IntegrationRoutes';
 import FaqCategoryRoutes from './private-routes/FaqCategoryRoutes';
 import 'react-toastify/dist/ReactToastify.css';
 
-function App() {
+const App = () => {
   return (
     <GlobalProvider>
       <div className="w-screen inter-unique overflow-x-hidden">
@@ -77,6 +77,6 @@ function App() {
       </div>
     </GlobalProvider>
   );
-}
+};
 
 export default App;

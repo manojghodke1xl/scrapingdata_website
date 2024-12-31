@@ -62,7 +62,9 @@ const StripeIntegration = () => {
           <div className="w-full">
             <DropDown
               name="environment"
-              SummaryChild={<h5 className="p-0 m-0 text-primary">{stripeDetails?.envObject?.showName || 'Development'}</h5>}
+              SummaryChild={
+                <h5 className="p-0 m-0 text-primary">{stripeDetails?.envObject?.showName || stripeDetails?.environment === 'development' ? 'Development' : 'Production'}</h5>
+              }
               dropdownList={[
                 { id: 0, showName: 'Development', name: 'development' },
                 { id: 1, showName: 'Production', name: 'production' }

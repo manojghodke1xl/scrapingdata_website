@@ -1,6 +1,5 @@
 import { RiDeleteBinLine } from 'react-icons/ri';
 import StatusFilter from '../filter/StatusFilter';
-import { handleExport } from '../../helpers/exportHandler';
 import DropDown from '../formFields/DropDown';
 import { CiExport } from 'react-icons/ci';
 
@@ -17,7 +16,7 @@ const TableFilterActions = ({
   handleStatusChange,
   setExportDropdownOpen,
   exportDropdownOpen,
-  apiUrl,
+  exportData,
   selectedCategory,
   handleClearFilter
 }) => {
@@ -74,6 +73,7 @@ const TableFilterActions = ({
           {exportDropdownOpen && (
             <DropDown
               mt="0"
+              width="w-fit"
               name={'Export'}
               SummaryChild={<h5 className="p-0 m-0 text-primary">Select Export</h5>}
               dropdownList={[
@@ -81,7 +81,7 @@ const TableFilterActions = ({
                 { id: 1, name: 'selected', showName: 'Selected Rows' },
                 { id: 2, name: 'all', showName: 'All Rows' }
               ]}
-              commonFunction={(e) => handleExport(e.name, apiUrl)}
+              commonFunction={(e) => exportData(e.name)}
             />
           )}
         </>

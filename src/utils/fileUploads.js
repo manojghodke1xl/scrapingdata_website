@@ -1,6 +1,6 @@
 import { showNotification } from './showNotification';
 
-export async function uploadFile({ file = null, isImage = false, isPdf = false, isVideo = false, setDetails = () => {}, fieldName = 'image' }) {
+export const uploadFile = async ({ file = null, isImage = false, isPdf = false, isVideo = false, setDetails = () => {}, fieldName = 'image' }) => {
   if (!file) return;
 
   const { name, size, type } = file;
@@ -56,9 +56,9 @@ export async function uploadFile({ file = null, isImage = false, isPdf = false, 
     console.error('Upload error:', error);
     showNotification('error', error.message);
   }
-}
+};
 
-export async function uploadMultipleFiles(files = []) {
+export const uploadMultipleFiles = async (files = []) => {
   if (!files.length) return;
 
   const fileIds = [];
@@ -91,4 +91,4 @@ export async function uploadMultipleFiles(files = []) {
   }
 
   return fileIds;
-}
+};

@@ -9,6 +9,7 @@ import { handleDeleteConfirm, handleDuplicateConfirm, handleSitesUpdate, handleS
 import TableView from './TableView';
 import TableFilter from './TableFilter';
 import TableFilterActions from './TableFilterActions';
+import { handleExport } from '../../helpers/exportHandler';
 
 const TableComponent = ({
   selectable,
@@ -66,7 +67,7 @@ const TableComponent = ({
     selectedSites: [],
     siteToggle: false,
     status: '',
-    selectedCategory: {}
+    selectedCategory: null
   });
   const [filterState, setFilterState] = useState({
     searchTerm: '',
@@ -142,6 +143,8 @@ const TableComponent = ({
   const handleDuplicate = () =>
     handleDuplicateConfirm(selectionState.selectedItems, selectionState.selectedSites, duplicateApi, setLoading, setSelectionState, setRefresh, setModalState, setTableState);
 
+  const handleExportTable = (type) => handleExport({ type, apiUrl, rows, headers });
+
   const handleCategorySelect = (category) => {
     if (category.name === 'Status') setShowFilter((prev) => ({ ...prev, status: !prev.status }));
     if (category.name === 'Sites') setShowFilter((prev) => ({ ...prev, sites: !prev.sites }));
@@ -154,7 +157,7 @@ const TableComponent = ({
 
   const handleClearFilter = () => {
     setModalState({ isDeleteModelOpen: false, isSitesModelOpen: false, isDuplicateModelOpen: false });
-    setSelectionState({ selectedItems: [], isAllSelected: false, selectedSites: [], siteToggle: false, status: '', selectedCategory: {} });
+    setSelectionState({ selectedItems: [], isAllSelected: false, selectedSites: [], siteToggle: false, status: '', selectedCategory: null });
     setFilterState({ searchTerm: '', searchKey: '', siteId: '', eventId: '', statusFilter: '' });
     setShowFilter({ status: false, sites: false, event: false });
   };
@@ -196,7 +199,7 @@ const TableComponent = ({
               handleStatusChange={handleStatusChange}
               setExportDropdownOpen={setExportDropdownOpen}
               exportDropdownOpen={exportDropdownOpen}
-              apiUrl={apiUrl}
+              exportData={handleExportTable}
               selectedCategory={selectionState.selectedCategory}
               handleClearFilter={handleClearFilter}
             />

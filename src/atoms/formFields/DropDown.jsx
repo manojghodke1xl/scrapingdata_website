@@ -3,7 +3,7 @@ import { IoAdd } from 'react-icons/io5';
 import SearchComponent from '../common/SearchComponent';
 import { IoIosArrowDown } from 'react-icons/io';
 
-function DropDown({mt='mt-5', name, SummaryChild, dropdownList = [], commonFunction, search, selected, add = false, setIsNewSegment, error }) {
+const DropDown = ({ mt = 'mt-5', width = 'w-full', name, SummaryChild, dropdownList = [], commonFunction, search, selected, add = false, setIsNewSegment, error }) => {
   const dropdownRef = useRef(null);
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -25,11 +25,11 @@ function DropDown({mt='mt-5', name, SummaryChild, dropdownList = [], commonFunct
       <details
         ref={dropdownRef}
         name={name}
-        className={`relative w-full cursor-default rounded-xl bg-white pl-3 pr-10 text-left text-primary shadow-sm border border-primary focus:outline-none focus:ring-0 sm:text-lg sm:leading-6 ${mt}`}
+        className={`relative ${width} cursor-default rounded-xl bg-white pl-3 pr-10 text-left text-primary shadow-sm border border-primary focus:outline-none focus:ring-0 sm:text-lg sm:leading-6 ${mt}`}
       >
         <summary className="cursor-pointer py-2.5 pr-8 text-left text-primary list-none focus:outline-none focus:ring-0 focus:border-0">
           <span className="flex items-center">
-            <span className="block font-medium whitespace-nowrap text-[16px]">{SummaryChild}</span>
+            <span className="block font-medium whitespace-nowrap text-[16px]">{dropdownList.find((item) => item.name === selected)?.showName || SummaryChild}</span>
           </span>
           <span className="absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
             <IoIosArrowDown />
@@ -86,6 +86,6 @@ function DropDown({mt='mt-5', name, SummaryChild, dropdownList = [], commonFunct
       {error && <p className="text-red-500 mt-1 text-sm">{error}</p>}
     </div>
   );
-}
+};
 
 export default DropDown;

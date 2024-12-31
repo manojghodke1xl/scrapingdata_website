@@ -62,7 +62,9 @@ const RazorpayIntegration = () => {
           <div className="w-full">
             <DropDown
               name="environment"
-              SummaryChild={<h5 className="p-0 m-0 text-primary">{razorpayDetails?.envObject?.showName || 'Development'}</h5>}
+              SummaryChild={
+                <h5 className="p-0 m-0 text-primary">{razorpayDetails?.envObject?.showName || razorpayDetails?.environment === 'development' ? 'Development' : 'Production'}</h5>
+              }
               dropdownList={[
                 { id: 0, showName: 'Development', name: 'development' },
                 { id: 1, showName: 'Production', name: 'production' }
@@ -73,11 +75,11 @@ const RazorpayIntegration = () => {
               error={errors.environment}
             />
             <FormField
-              label="Api Key"
+              label="Key Id"
               type="text"
               id="keyId"
               name="keyId"
-              placeholder="Api Key"
+              placeholder="Key Id"
               onChange={(e) => {
                 setRazorpayDetails((prev) => ({ ...prev, keyId: e.target.value }));
                 if (errors.keyId) setErrors((prev) => ({ ...prev, keyId: '' }));
@@ -86,11 +88,11 @@ const RazorpayIntegration = () => {
               errorMessage={errors.keyId}
             />
             <FormField
-              label="Api Secret"
+              label="Secret key"
               type="text"
               id="keySecret"
               name="keySecret"
-              placeholder="Api Secret"
+              placeholder="Secret key"
               onChange={(e) => {
                 setRazorpayDetails((prev) => ({ ...prev, keySecret: e.target.value }));
                 if (errors.keySecret) setErrors((prev) => ({ ...prev, keySecret: '' }));
