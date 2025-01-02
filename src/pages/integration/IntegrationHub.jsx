@@ -8,6 +8,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { getIntegrationBySite, updatePaymentIntegrationApi } from '../../apis/payment-integration-apis';
 import { showNotification } from '../../utils/showNotification';
 import useGlobalContext from '../../hooks/useGlobalContext';
+import { FaBoxOpen } from 'react-icons/fa';
 
 const IntegrationHub = () => {
   const { setLoading, isLoading } = useGlobalContext();
@@ -107,7 +108,17 @@ const IntegrationHub = () => {
               <div className="flex justify-between items-center">
                 <img src={item.img} className="w-12" alt={item.name} />
                 {item.id !== 'zohocrm' && (
-                  <input type="radio" name="default" checked={integrationData?.payment?.default === item.id} onClick={() => handleDefault(item.id)} disabled={isLoading} />
+                  <div
+                    className={`flex justify-center items-center border rounded-full p-2 ${
+                      integrationData?.payment?.default === item.id ? 'bg-primary border-primary' : 'bg-white border-secondary'
+                    }`}
+                  >
+                    <FaBoxOpen
+                      className={`text-2xl ${integrationData?.payment?.default === item.id ? 'text-white' : 'text-darkblue'}`}
+                      onClick={() => handleDefault(item.id)}
+                      disabled={isLoading}
+                    />
+                  </div>
                 )}
               </div>
               <h1>{item.name}</h1>
