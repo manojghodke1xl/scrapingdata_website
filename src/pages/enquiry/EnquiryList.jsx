@@ -18,7 +18,7 @@ const EnquiryList = () => {
       exportData: enquiry,
       name: <TruncatableFieldModal title={'Customer Name'} content={name} />,
       email: <TruncatableFieldModal title={'Customer Email'} content={email} />,
-      sites: <TruncatableFieldModal title={'Sites'} content={`${site?.name} (${site?.host})`} />,
+      site: <TruncatableFieldModal title={'Sites'} content={`${site?.name} (${site?.host})`} />,
       createdAt: formatDateTime(createdAt),
       updatedAt: formatDateTime(updatedAt)
     };
@@ -47,7 +47,7 @@ const EnquiryList = () => {
                   { label: 'Sr No.', key: 'srno' },
                   { label: 'Customer Name', key: 'name' },
                   { label: 'Email', key: 'email' },
-                  { label: 'Sites', key: 'sites' },
+                  { label: 'Sites', key: 'site' },
                   { label: 'Created Date', key: 'createdAt' },
                   { label: 'Updated Date', key: 'updatedAt' }
                 ]}

@@ -1,13 +1,32 @@
 import { getMethodCall } from '../apis/api-handler';
 import { showNotification } from '../utils/showNotification';
 
-export const handleExport = (type, apiUrl) => {
-  if (type === 'all') {
+export const handleExport = ({ type, apiUrl, rows, headers, selected }) => {
+  if (type === 'visible') {
+    const visibleData = rows.map((row) =>
+      headers.reduce((result, header) => {
+        if (header.key !== 'srno') result[header.key] = row.exportData[header.key];
+        return result;
+      }, {})
+    );
+    const csvContent = generateCSV(visibleData);
+    downloadCSV(csvContent, `view_visible_${apiUrl}_details.csv`);
+  } else if (type === 'selected') {
+    const selectedData = rows
+      .filter((row) => selected.some((selectedRow) => selectedRow === row.exportData._id))
+      .map((row) =>
+        headers.reduce((result, header) => {
+          if (header.key !== 'srno') result[header.key] = row.exportData[header.key];
+          return result;
+        }, {})
+      );
+    const csvContent = generateCSV(selectedData);
+    downloadCSV(csvContent, `view_selected_${apiUrl}_details.csv`);
+  } else if (type === 'all') {
     (async () => {
       const { status, data } = await getMethodCall(`${import.meta.env.VITE_API_URL}/${apiUrl}`);
-      console.log(status, data);
       if (status) {
-        const apiUrlMap = {
+        const apiUrlMapping = {
           feedback: 'feedbacks',
           recaptcha: 'recaptchas',
           'faq-category': 'faqCategories',
@@ -17,63 +36,55 @@ export const handleExport = (type, apiUrl) => {
           'partner-logo': 'partnerlogos'
         };
 
-        const exportData = data[apiUrlMap[apiUrl] || apiUrl];
-
-        // Flattening objects using reduce
-        const flattenObject = (obj, parentKey = '') =>
-          Object.keys(obj).reduce((acc, key) => {
-            const newKey = parentKey ? `${parentKey}.${key}` : key;
-
-            if (key === 'isActive') {
-              // Custom handling for isActive field
-              acc[newKey] = obj[key] === true ? 'true' : '"false"';
-            } else if (key === 'site' || key === 'sites') {
-              // Handle specific keys like 'site' and 'sites'
-              if (Array.isArray(obj[key])) {
-                acc[newKey] = `"${
-                  obj[key]
-                    .reduce((str, site) => {
-                      if (site.name && site.host) return `${str}${str ? ', ' : ''}${site.name} (${site.host})`;
-                      return str;
-                    }, '')
-                    .replace(/"/g, '""') || 'N/A'
-                }"`;
-              } else if (typeof obj[key] === 'object' && obj[key] !== null) acc[newKey] = obj[key].name && obj[key].host ? `"${obj[key].name} (${obj[key].host})"` : '"N/A"';
-              else acc[newKey] = '"N/A"';
-            } else if (typeof obj[key] === 'object' && obj[key] !== null) {
-              // Recursive flattening for nested objects
-              Object.assign(acc, flattenObject(obj[key], newKey));
-            } else {
-              // Escape double quotes and enclose in quotes
-              acc[newKey] = typeof obj[key] === 'string' ? `"${obj[key].replace(/"/g, '""')}"` : obj[key];
-            }
-            return acc;
-          }, {});
-
-        // Generate CSV headers using the keys of the first flattened object
-        const headers = Object.keys(flattenObject(exportData[0]));
-        const csvContent = exportData.reduce((csv, row, index) => {
-          // Flatten each row
-          const flattenedRow = flattenObject(row);
-          // Map headers to corresponding values
-          const values = headers.map((header) => flattenedRow[header] || '""');
-          // Add headers only once (for the first row)
-          if (index === 0) csv += headers.join(',') + '\n';
-          csv += values.join(',') + '\n';
-          return csv;
-        }, '');
-
-        // Create a Blob containing the CSV file
-        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', `view_all_${apiUrl}_details.csv`);
-        document.body.appendChild(link);
-        link.click();
-        URL.revokeObjectURL(url);
-        document.body.removeChild(link);
+        const allData = data[apiUrlMapping[apiUrl] || apiUrl];
+        const csvContent = generateCSV(allData);
+        downloadCSV(csvContent, `view_all_${apiUrl}_details.csv`);
       } else showNotification('warn', data);
     })();
   }
+};
+
+const flattenObject = (object, parentKey = '') =>
+  Object.keys(object).reduce((accumulator, key) => {
+    const newKey = parentKey ? `${parentKey}.${key}` : key;
+
+    if (key === 'isActive') accumulator[newKey] = object[key] ? 'true' : '"false"';
+    else if (key === 'site' || key === 'sites') {
+      if (Array.isArray(object[key])) {
+        accumulator[newKey] = `"${
+          object[key]
+            .reduce((result, site) => {
+              return site.name && site.host ? `${result}${result ? ', ' : ''}${site.name} (${site.host})` : result;
+            }, '')
+            .replace(/"/g, '""') || 'N/A'
+        }"`;
+      } else if (object[key]?.name && object[key]?.host) accumulator[newKey] = `"${object[key].name} (${object[key].host})"`;
+      else accumulator[newKey] = '"N/A"';
+    } else if (typeof object[key] === 'object' && object[key] !== null) Object.assign(accumulator, flattenObject(object[key], newKey));
+    else accumulator[newKey] = typeof object[key] === 'string' ? `"${object[key].replace(/"/g, '""')}"` : object[key];
+
+    return accumulator;
+  }, {});
+
+const generateCSV = (data) => {
+  const csvHeaders = Object.keys(flattenObject(data[0] || {}));
+  return data.reduce((csvContent, row, rowIndex) => {
+    const flattenedRow = flattenObject(row);
+    const rowValues = csvHeaders.map((header) => flattenedRow[header] || '""');
+    if (rowIndex === 0) csvContent += csvHeaders.join(',') + '\n';
+    csvContent += rowValues.join(',') + '\n';
+    return csvContent;
+  }, '');
+};
+
+const downloadCSV = (csvContent, fileName) => {
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const downloadLink = document.createElement('a');
+  downloadLink.href = url;
+  downloadLink.setAttribute('download', fileName);
+  document.body.appendChild(downloadLink);
+  downloadLink.click();
+  URL.revokeObjectURL(url);
+  document.body.removeChild(downloadLink);
 };

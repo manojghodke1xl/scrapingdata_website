@@ -63,7 +63,6 @@ const ZohocrmIntegration = () => {
           </div>
           <div className="w-full">
             <div className="-mb-4 text-primary">Select Site</div>
-            {console.log(siteData)}
             <DropDown
               name="Sites"
               dropdownList={allSites.map((site) => ({ id: site._id, showName: site.name, name: site._id }))}

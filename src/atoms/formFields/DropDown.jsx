@@ -10,9 +10,7 @@ const DropDown = ({ mt = 'mt-5', width = 'w-full', name, SummaryChild, dropdownL
   const filteredList = dropdownList.filter((item) => item.showName.toLowerCase().includes(searchQuery.toLowerCase()));
 
   const handleClickOutside = useCallback((event) => {
-    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-      dropdownRef.current.removeAttribute('open');
-    }
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) dropdownRef.current.removeAttribute('open');
   }, []);
 
   useEffect(() => {
@@ -45,11 +43,15 @@ const DropDown = ({ mt = 'mt-5', width = 'w-full', name, SummaryChild, dropdownL
             {filteredList.map((item) => (
               <li
                 key={item.id || item.name}
-                className={`group relative cursor-default select-none py-2 pl-3 pr-9 text-primary ${item.name === selected ? 'bg-fadedblue' : 'hover:bg-gray-50'}`}
+                className={`group relative cursor-default select-none py-2 pl-3 pr-9 text-primary ${item.name === selected ? 'bg-fadedblue' : 'hover:bg-gray-50'} ${
+                  item.disabled ? 'cursor-not-allowed' : ''
+                }`}
                 onClick={(e) => {
                   e.stopPropagation();
-                  (item.seperateFunction || commonFunction)(item);
-                  e.currentTarget.closest('details').removeAttribute('open');
+                  if (!item.disabled) {
+                    (item.seperateFunction || commonFunction)(item);
+                    e.currentTarget.closest('details').removeAttribute('open');
+                  }
                 }}
               >
                 <div className="flex flex-col items-start ml-3">

@@ -143,7 +143,7 @@ const TableComponent = ({
   const handleDuplicate = () =>
     handleDuplicateConfirm(selectionState.selectedItems, selectionState.selectedSites, duplicateApi, setLoading, setSelectionState, setRefresh, setModalState, setTableState);
 
-  const handleExportTable = (type) => handleExport({ type, apiUrl, rows, headers });
+  const handleExportTable = (type) => handleExport({ type, apiUrl, rows, headers, selected: selectionState.selectedItems });
 
   const handleCategorySelect = (category) => {
     if (category.name === 'Status') setShowFilter((prev) => ({ ...prev, status: !prev.status }));
