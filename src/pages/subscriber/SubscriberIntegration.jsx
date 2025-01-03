@@ -45,7 +45,7 @@ const SubscriberIntegration = () => {
       title: 'Response Details',
       content: `{
   "statusCode": 200,
-  "message": "Mailing list added successfully"
+  "message": "You have subscribed successfully"
 }`
     }
   ];
