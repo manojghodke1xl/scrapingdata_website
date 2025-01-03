@@ -8,7 +8,7 @@ const Dashboard = () => {
       </div>
       <div className=" gap-6 ptpb-4">
         <div className="border p-4 rounded-xl border-primary flex flex-col gap-2">
-          <div className="text-3xl font-semibold flex items-center justify-center">Welcome to MarsCMS&apos;s Enquiry Management System</div>
+          <div className="text-3xl font-semibold flex items-center justify-center">Welcome to MarsCMS</div>
         </div>
       </div>
     </div>

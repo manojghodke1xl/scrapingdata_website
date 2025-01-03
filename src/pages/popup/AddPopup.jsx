@@ -8,7 +8,6 @@ import ToggleComponent from '../../atoms/formFields/ToggleComponent';
 import { showNotification } from '../../utils/showNotification';
 import { addPopupApi, getPopupById, updatePopupApi } from '../../apis/popup-apis';
 import FileUpload from '../../atoms/formFields/FileUpload';
-import { CiImageOn } from 'react-icons/ci';
 import TextareaComponent from '../../atoms/formFields/TextareaComponent';
 import DateTimePicker from '../../atoms/formFields/DateTimePicker';
 import { formatDateTime } from '../../utils/dateFormats';
@@ -17,6 +16,7 @@ import { getAllCaseStudyApi } from '../../apis/caseStudy-apis';
 import MultiSelectCheckbox from '../../atoms/formFields/MultiSelectCheckBox';
 import NoteComponent from '../../atoms/common/NoteComponent';
 import { addPopupNote, editPopupNote } from './PopupNotes';
+import { FaRegImage } from 'react-icons/fa';
 
 const AddPopup = () => {
   const navigate = useNavigate();
@@ -254,7 +254,7 @@ const AddPopup = () => {
                     errorMessage={errors.title}
                   />
                   <FileUpload
-                    logo={<CiImageOn className="text-primary text-2xl" />}
+                    logo={<FaRegImage className="text-primary text-2xl" />}
                     error={errors.image}
                     setErrors={setErrors}
                     acceptedTypes={['.jpeg', '.png']}

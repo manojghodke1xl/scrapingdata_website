@@ -1,14 +1,23 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { TbUserQuestion } from 'react-icons/tb';
-import { GiAlliedStar } from 'react-icons/gi';
-import { RiLightbulbLine } from 'react-icons/ri';
-import { BiSupport } from 'react-icons/bi';
-import { LiaUserLockSolid } from 'react-icons/lia';
-import { IoExtensionPuzzleOutline } from 'react-icons/io5';
-import { addOns, admin, enquiresPaths, essentials, features, navLinks, support } from './sidebarTabData';
-// import SearchComponent from '../../../atoms/common/SearchComponent';
+import { TbFileSearch, TbUsersGroup } from 'react-icons/tb';
+import { IoSettingsOutline } from 'react-icons/io5';
+import { MdMessage } from 'react-icons/md';
+import { FaRegImage, FaRegQuestionCircle } from 'react-icons/fa';
+import { FiCalendar } from 'react-icons/fi';
+import {
+  adminNavLinks,
+  contentManagementPath,
+  siteSettingsPath,
+  testimonialsPath,
+  navLinks,
+  mediaManagementPath,
+  eventManagementPath,
+  faqManagementPath,
+  leadsManagementPath
+} from './sidebarTabData';
 import ReusableAccordion from '../../../atoms/sidebar/ReusableAccordion';
+// import SearchComponent from '../../../atoms/common/SearchComponent';
 
 const MaterialSidebar = () => {
   const { pathname } = useLocation();
@@ -35,47 +44,66 @@ const MaterialSidebar = () => {
             </Link>
           ))}
           <ReusableAccordion
-            title="Enquires"
-            links={enquiresPaths}
-            icon={<TbUserQuestion />}
-            isOpen={openAccordion === 'Enquires'}
-            onToggle={() => setOpenAccordion(openAccordion === 'Enquires' ? null : 'Enquires')}
+            title="Content Management"
+            links={contentManagementPath}
+            icon={<TbFileSearch />}
+            isOpen={openAccordion === 'Content Management'}
+            onToggle={() => setOpenAccordion(openAccordion === 'Content Management' ? null : 'Content Management')}
           />
           <ReusableAccordion
-            title="Features"
-            links={features}
-            icon={<GiAlliedStar />}
-            isOpen={openAccordion === 'Features'}
-            onToggle={() => setOpenAccordion(openAccordion === 'Features' ? null : 'Features')}
+            title="Lead Management"
+            links={leadsManagementPath}
+            icon={<TbUsersGroup />}
+            isOpen={openAccordion === 'Lead Management'}
+            onToggle={() => setOpenAccordion(openAccordion === 'Lead Management' ? null : 'Lead Management')}
           />
           <ReusableAccordion
-            title="Essentials"
-            links={essentials}
-            icon={<RiLightbulbLine />}
-            isOpen={openAccordion === 'Essentials'}
-            onToggle={() => setOpenAccordion(openAccordion === 'Essentials' ? null : 'Essentials')}
+            title="Site Settings"
+            links={siteSettingsPath}
+            icon={<IoSettingsOutline />}
+            isOpen={openAccordion === 'Site Settings'}
+            onToggle={() => setOpenAccordion(openAccordion === 'Site Settings' ? null : 'Site Settings')}
           />
           <ReusableAccordion
-            title="Admin"
-            links={admin}
-            icon={<LiaUserLockSolid />}
-            isOpen={openAccordion === 'Admin'}
-            onToggle={() => setOpenAccordion(openAccordion === 'Admin' ? null : 'Admin')}
+            title="Media Management"
+            links={mediaManagementPath}
+            icon={<FaRegImage />}
+            isOpen={openAccordion === 'Media Management'}
+            onToggle={() => setOpenAccordion(openAccordion === 'Media Management' ? null : 'Media Management')}
           />
           <ReusableAccordion
-            title="Support"
-            links={support}
-            icon={<BiSupport />}
-            isOpen={openAccordion === 'Support'}
-            onToggle={() => setOpenAccordion(openAccordion === 'Support' ? null : 'Support')}
+            title="Event Management"
+            links={eventManagementPath}
+            icon={<FiCalendar />}
+            isOpen={openAccordion === 'Event Management'}
+            onToggle={() => setOpenAccordion(openAccordion === 'Event Management' ? null : 'Event Management')}
           />
           <ReusableAccordion
-            title="Add-ons"
-            links={addOns}
-            icon={<IoExtensionPuzzleOutline />}
-            isOpen={openAccordion === 'Add-ons'}
-            onToggle={() => setOpenAccordion(openAccordion === 'Add-ons' ? null : 'Add-ons')}
+            title="Faq Management"
+            links={faqManagementPath}
+            icon={<FaRegQuestionCircle />}
+            isOpen={openAccordion === 'Faq Management'}
+            onToggle={() => setOpenAccordion(openAccordion === 'Faq Management' ? null : 'Faq Management')}
           />
+
+          <ReusableAccordion
+            title="Testimonials"
+            links={testimonialsPath}
+            icon={<MdMessage />}
+            isOpen={openAccordion === 'Testimonials'}
+            onToggle={() => setOpenAccordion(openAccordion === 'Features' ? null : 'Testimonials')}
+          />
+
+          {adminNavLinks.map(({ to, title, icon }) => (
+            <Link
+              key={title}
+              to={to[0]}
+              className={`py-2.5 px-3 rounded-xl flex gap-3 items-center ${isActive(to) ? 'bg-fadedblue text-blue' : 'text-primary hover:bg-gray-100 bg-white'}`}
+            >
+              <span className="text-3xl">{icon}</span>
+              <span>{title}</span>
+            </Link>
+          ))}
         </div>
       </div>
     </div>

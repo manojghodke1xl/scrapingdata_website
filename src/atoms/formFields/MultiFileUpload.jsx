@@ -1,8 +1,7 @@
 import { useEffect, useRef, useState, useMemo } from 'react';
 import { uploadMultipleFiles } from '../../utils/fileUploads';
 import { showNotification } from '../../utils/showNotification';
-import { CiImageOn } from 'react-icons/ci';
-import { FaRegEdit } from 'react-icons/fa';
+import { FaRegEdit, FaRegImage } from 'react-icons/fa';
 import { IoCloseOutline } from 'react-icons/io5';
 
 const MultipleFileUpload = ({ imagePreviewUrl: externalImagePreviewUrl, onUploadSuccess, id, isMultiple = false, setLoading, error }) => {
@@ -58,7 +57,7 @@ const MultipleFileUpload = ({ imagePreviewUrl: externalImagePreviewUrl, onUpload
     <>
       <div className="w-full border border-primary rounded-xl p-6 shadow-sm">
         <h1 className="text-primary text-lg mb-3 text-left flex items-center gap-2">
-          <CiImageOn className="text-primary text-2xl" />
+          <FaRegImage  className="text-primary text-2xl" />
           Upload Image{isMultiple ? 's' : ''}
         </h1>
 

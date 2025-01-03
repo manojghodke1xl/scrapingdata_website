@@ -161,8 +161,11 @@ const AddEvent = () => {
               label={'Date'}
               placeholder={formatDateTime(new Date())}
               selectedDateTime={eventDetails.date}
-              setSelectedDateTime={(e) => setEventDetails((prev) => ({ ...prev, date: e }))}
-              errorMessage={errors.startDate}
+              setSelectedDateTime={(e) => {
+                setEventDetails((prev) => ({ ...prev, date: e }));
+                if (errors.date) setErrors((prev) => ({ ...prev, date: '' }));
+              }}
+              errorMessage={errors.date}
             />
           </div>
         </div>

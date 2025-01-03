@@ -9,10 +9,10 @@ import TextareaComponent from '../../atoms/formFields/TextareaComponent';
 import MultiSelectCheckbox from '../../atoms/formFields/MultiSelectCheckBox';
 import ToggleComponent from '../../atoms/formFields/ToggleComponent';
 import FileUpload from '../../atoms/formFields/FileUpload';
-import { CiImageOn } from 'react-icons/ci';
 import { BsFilePdf } from 'react-icons/bs';
 import NoteComponent from '../../atoms/common/NoteComponent';
 import { addGuideNote, editGuideNote } from './GuideNotes';
+import { FaRegImage } from 'react-icons/fa';
 
 const AddGuides = () => {
   const navigate = useNavigate();
@@ -150,7 +150,7 @@ const AddGuides = () => {
           </div>
           <div className="dropdown-container relative w-full mt-2">
             <FileUpload
-              logo={<CiImageOn className="text-primary text-2xl" />}
+              logo={<FaRegImage className="text-primary text-2xl" />}
               error={errors.image}
               setErrors={setErrors}
               acceptedTypes={['.jpeg', '.png']}

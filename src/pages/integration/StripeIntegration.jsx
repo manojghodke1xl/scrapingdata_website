@@ -19,8 +19,8 @@ const StripeIntegration = () => {
 
   const validate = () => {
     const newErrors = {};
-    if (!stripeDetails.publicKey) newErrors.publicKey = 'Api Key Id is required';
-    if (!stripeDetails.secretKey) newErrors.secretKey = 'Api Secret is required';
+    if (!stripeDetails.publicKey) newErrors.publicKey = 'Public Key is required';
+    if (!stripeDetails.secretKey) newErrors.secretKey = 'Secret Key is required';
     if (!stripeDetails.environment) newErrors.environment = 'Environment is required';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { IoFilterSharp } from 'react-icons/io5';
 import SearchComponent from '../common/SearchComponent';
-import { IoMdCheckmark } from 'react-icons/io';
+// import { IoMdCheckmark } from 'react-icons/io';
 
 const Filters = ({ categories, onCategorySelect, setSelectedCategory, selectedCategory }) => {
   const [isOpenCategories, setIsOpenCategories] = useState(false);
@@ -33,12 +33,11 @@ const Filters = ({ categories, onCategorySelect, setSelectedCategory, selectedCa
               <SearchComponent />
             </div>
             <div className="relative">
+              {/*${selectedCategory?.id === category.id ? 'bg-lightcyan' : ''}*/}
               {categories?.map((category) => (
                 <li
                   key={category.id}
-                  className={`group relative cursor-default select-none py-2 pl-3 pr-14 text-primary hover:bg-gray-50 ${
-                    selectedCategory?.id === category.id ? 'bg-lightcyan' : ''
-                  }`}
+                  className={`group relative cursor-default select-none py-2 pl-3 pr-14 text-primary hover:bg-gray-50`}
                   onClick={(e) => {
                     e.currentTarget.closest('details').removeAttribute('open');
                     setSelectedCategory(category);
@@ -46,14 +45,15 @@ const Filters = ({ categories, onCategorySelect, setSelectedCategory, selectedCa
                   }}
                 >
                   <div className="flex items-center">
-                    <span className={`ml-3 block whitespace-nowrap font-normal ${selectedCategory?.id === category.id ? 'font-semibold' : ''}`}>{category.name}</span>
+                    {/* ${selectedCategory?.id === category.id ? 'font-semibold' : ''} */}
+                    <span className={`ml-3 block whitespace-nowrap font-normal`}>{category.name}</span>
                   </div>
 
-                  {selectedCategory?.id === category.id && (
+                  {/* {selectedCategory?.id === category.id && (
                     <span className="absolute inset-y-0 right-0 flex items-center pr-4 text-primary">
                       <IoMdCheckmark />
                     </span>
-                  )}
+                  )} */}
                 </li>
               ))}
             </div>

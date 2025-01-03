@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { showNotification } from '../../utils/showNotification';
 import { FiCopy } from 'react-icons/fi';
 
-const MailingListIntegration = () => {
+const SubscriberIntegration = () => {
   const [isScrollable, setIsScrollable] = useState(false);
 
   const sections = [
@@ -112,4 +112,4 @@ const MailingListIntegration = () => {
   );
 };
 
-export default MailingListIntegration;
+export default SubscriberIntegration;

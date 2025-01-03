@@ -9,6 +9,7 @@ const TableFilterActions = ({
   modifySite,
   modifyStatus,
   duplicateBtn,
+  isFilterActive,
   selectionState,
   setSelectionState,
   setModalState,
@@ -17,7 +18,6 @@ const TableFilterActions = ({
   setExportDropdownOpen,
   exportDropdownOpen,
   exportData,
-  selectedCategory,
   handleClearFilter
 }) => {
   return (
@@ -91,7 +91,7 @@ const TableFilterActions = ({
           )}
         </>
       )}
-      {selectedCategory && (
+      {isFilterActive && (
         <button
           className="sm:w-fit text-primary font-normal hover:bg-gray-50 rounded-xl border border-primary py-2 px-3 sm:px-2 sm:py-2 md:px-3 whitespace-nowrap flex gap-1 sm:gap-2"
           onClick={handleClearFilter}

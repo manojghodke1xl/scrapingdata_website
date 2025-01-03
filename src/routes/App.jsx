@@ -14,7 +14,7 @@ import TestimonialRoutes from './private-routes/TestimonialRoutes';
 import RecaptchaRoutes from './private-routes/RecaptchaRoutes';
 import FaqRoutes from './private-routes/FaqRoutes';
 import EnquiryRoutes from './private-routes/EnquiryRoutes';
-import MailingListRoutes from './private-routes/MailingListRoutes';
+import SubscribersRoutes from './private-routes/SubscribersRoutes';
 import FeedbackRoutes from './private-routes/FeedbackRoutes';
 import SiteRoutes from './private-routes/SiteRoutes';
 import PopupRoutes from './private-routes/PopupRoutes';
@@ -56,7 +56,7 @@ const App = () => {
                 <Route path="/faq/*" element={<FaqRoutes />} />
                 <Route path="/faq-category/*" element={<FaqCategoryRoutes />} />
                 <Route path="/enquiry/*" element={<EnquiryRoutes />} />
-                <Route path="/mailing/*" element={<MailingListRoutes />} />
+                <Route path="/subscriber/*" element={<SubscribersRoutes />} />
                 <Route path="/feedback/*" element={<FeedbackRoutes />} />
                 <Route path="/website/*" element={<SiteRoutes />} />
                 <Route path="/pop-up/*" element={<PopupRoutes />} />

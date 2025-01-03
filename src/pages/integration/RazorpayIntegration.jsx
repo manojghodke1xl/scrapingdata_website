@@ -19,8 +19,8 @@ const RazorpayIntegration = () => {
 
   const validate = () => {
     const newErrors = {};
-    if (!razorpayDetails.keyId) newErrors.keyId = 'Api Key Id is required';
-    if (!razorpayDetails.keySecret) newErrors.keySecret = 'Api Secret is required';
+    if (!razorpayDetails.keyId) newErrors.keyId = 'Key Id is required';
+    if (!razorpayDetails.keySecret) newErrors.keySecret = 'Key Secret is required';
     if (!razorpayDetails.environment) newErrors.environment = 'Environment is required';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -86,11 +86,11 @@ const RazorpayIntegration = () => {
               errorMessage={errors.keyId}
             />
             <FormField
-              label="Secret key"
+              label="Key Secret"
               type="text"
               id="keySecret"
               name="keySecret"
-              placeholder="Secret key"
+              placeholder="Key Secret"
               onChange={(e) => {
                 setRazorpayDetails((prev) => ({ ...prev, keySecret: e.target.value }));
                 if (errors.keySecret) setErrors((prev) => ({ ...prev, keySecret: '' }));

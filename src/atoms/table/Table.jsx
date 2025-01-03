@@ -83,6 +83,19 @@ const TableComponent = ({
   });
   const [exportDropdownOpen, setExportDropdownOpen] = useState(false);
 
+  const isFilterActive = useMemo(() => {
+    return (
+      filterState.searchTerm !== '' ||
+      filterState.searchKey !== '' ||
+      filterState.statusFilter !== '' ||
+      filterState.siteId !== '' ||
+      filterState.eventId !== '' ||
+      showFilter.status ||
+      showFilter.sites ||
+      showFilter.event
+    );
+  }, [filterState, showFilter]);
+
   const totalPages = useMemo(() => Math.ceil(tableState.totalCount / tableState.itemsPerPage), [tableState.totalCount, tableState.itemsPerPage]);
 
   const [err, data, setRefresh] = useSetTimeout(
@@ -146,9 +159,9 @@ const TableComponent = ({
   const handleExportTable = (type) => handleExport({ type, apiUrl, rows, headers, selected: selectionState.selectedItems });
 
   const handleCategorySelect = (category) => {
-    if (category.name === 'Status') setShowFilter((prev) => ({ ...prev, status: !prev.status }));
-    if (category.name === 'Sites') setShowFilter((prev) => ({ ...prev, sites: !prev.sites }));
-    if (category.name === 'Event') setShowFilter((prev) => ({ ...prev, event: !prev.event }));
+    if (category.name === 'Status') setShowFilter((prev) => ({ ...prev, status: true }));
+    if (category.name === 'Sites') setShowFilter((prev) => ({ ...prev, sites: true }));
+    if (category.name === 'Event') setShowFilter((prev) => ({ ...prev, event: true }));
     if (category.name === 'Search') {
       setFilterState({ searchTerm: '', searchKey: '' });
       setSelectionState((prev) => ({ ...prev, selectedCategory: { ...category, type: 'search' } }));
@@ -177,6 +190,7 @@ const TableComponent = ({
             filterCategory={filterCategory}
             handleCategorySelect={handleCategorySelect}
             showFilter={showFilter}
+            setShowFilter={setShowFilter}
             statuses={statuses}
             allSites={allSites}
             events={events}
@@ -192,6 +206,7 @@ const TableComponent = ({
               modifySite={modifySite}
               modifyStatus={modifyStatus}
               duplicateBtn={duplicateBtn}
+              isFilterActive={isFilterActive}
               selectionState={selectionState}
               setSelectionState={setSelectionState}
               setModalState={setModalState}
@@ -200,7 +215,6 @@ const TableComponent = ({
               setExportDropdownOpen={setExportDropdownOpen}
               exportDropdownOpen={exportDropdownOpen}
               exportData={handleExportTable}
-              selectedCategory={selectionState.selectedCategory}
               handleClearFilter={handleClearFilter}
             />
           </div>

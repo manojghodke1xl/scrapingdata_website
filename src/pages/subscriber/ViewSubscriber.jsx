@@ -8,7 +8,7 @@ import { CiCircleInfo } from 'react-icons/ci';
 import NoteComponent from '../../atoms/common/NoteComponent';
 import { viewMailingNote } from './MailingNotes';
 
-const ViewMailing = () => {
+const ViewSubscriber = () => {
   const { id } = useParams();
   const { setLoading } = useGlobalContext();
   const [mailingList, setMailingList] = useState({});
@@ -41,10 +41,10 @@ const ViewMailing = () => {
     <div className="py-8 p-4 sm:p-8 overflow-x-hidden mb-20">
       <div className="w-full pb-8 border-b border-primary gap-y-4 gap-2 flex flex-col items-start md:flex-row lg:flex-col xl:flex-row justify-between lg:items-start md:items-end xl:items-end">
         <div>
-          <span className="text-3xl font-semibold text-dark">Mailing List Details</span>
+          <span className="text-3xl font-semibold text-dark">Subscriber Details</span>
         </div>
         <div className=" w-full flex gap-4 justify-end items-end md:w-fit lg:w-full xl:w-fit">
-          <Link to={'/mailing/mailing-list'} className="px-4 py-2 text-primary font-medium bg-white hover:bg-gray-50 rounded-xl border border-primary whitespace-nowrap">
+          <Link to={'/subscriber/subscriber-list'} className="px-4 py-2 text-primary font-medium bg-white hover:bg-gray-50 rounded-xl border border-primary whitespace-nowrap">
             Back
           </Link>
         </div>
@@ -127,7 +127,7 @@ const ViewMailing = () => {
       </div>
       {!isScrollable && (
         <div className="w-full flex justify-end items-center gap-4 pt-8  border- border-primary">
-          <Link to={'/mailing/mailing-list'} className="px-4 py-2 text-primary font-medium bg-white hover:bg-gray-50 rounded-xl border border-primary whitespace-nowrap">
+          <Link to={'/subscriber/subscriber-list'} className="px-4 py-2 text-primary font-medium bg-white hover:bg-gray-50 rounded-xl border border-primary whitespace-nowrap">
             Back
           </Link>
         </div>
@@ -136,4 +136,4 @@ const ViewMailing = () => {
   );
 };
 
-export default ViewMailing;
+export default ViewSubscriber;

@@ -46,7 +46,7 @@ const PopupList = () => {
             </Link>
             <Link to="/pop-up/pop-up-integration" className="flex gap-2 h-fit items-center px-2.5 md:px-2 sm:px-4 rounded-xl py-2.5 bg-primary hover:bg-hover text-white">
               <AiOutlineApi size={22} />
-              <span className="hidden md:block">Api Integration</span>
+              <span className="hidden md:block">API Integration</span>
             </Link>
           </div>
         </div>

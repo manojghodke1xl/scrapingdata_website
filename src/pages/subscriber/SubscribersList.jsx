@@ -8,7 +8,7 @@ import { mailingListNote } from './MailingNotes';
 import NoteComponent from '../../atoms/common/NoteComponent';
 import { AiOutlineApi } from 'react-icons/ai';
 
-const MailingList = () => {
+const SubscribersList = () => {
   const [lists, setLists] = useState([]);
 
   const rows = lists.map((list) => {
@@ -29,11 +29,11 @@ const MailingList = () => {
       <div className=" w-full">
         <div className="w-full flex md:flex-wrap gap-y-3 sm:flex-nowrap justify-between pb-5 border-b border-primary">
           <div className="">
-            <h4 className="text-3xl text-dark">All Mailing List</h4>
+            <h4 className="text-3xl text-dark">All Subscribers</h4>
           </div>
 
           <div className="w-full flex justify-end sm:w-fit">
-            <Link to="/mailing/mailing-integration" className="flex gap-2 h-fit items-center px-2.5 md:px-2 sm:px-4 rounded-xl py-2.5 bg-primary hover:bg-hover text-white">
+            <Link to="/subscriber/subscriber-integration" className="flex gap-2 h-fit items-center px-2.5 md:px-2 sm:px-4 rounded-xl py-2.5 bg-primary hover:bg-hover text-white">
               <AiOutlineApi size={22} />
               <span className="hidden md:block">API Integration</span>
             </Link>
@@ -59,7 +59,7 @@ const MailingList = () => {
                 pagination={true}
                 actions={true}
                 view={true}
-                viewPath={'/mailing/view-mailing'}
+                viewPath={'/subscriber/view-subscriber'}
                 search={true}
                 filter={true}
                 filterCategory={[{ id: 0, name: 'Sites' }]}
@@ -69,7 +69,7 @@ const MailingList = () => {
                 ]}
                 deleteBtn={true}
                 deleteLabel={'Delete Mailing List'}
-                deleteMessage={'Are you sure you want to delete this mailing list?'}
+                deleteMessage={'Are you sure you want to delete this subscriber list?'}
                 deleteApiUrl={deleteMailingListApi}
               />
             </div>
@@ -81,4 +81,4 @@ const MailingList = () => {
   );
 };
 
-export default MailingList;
+export default SubscribersList;

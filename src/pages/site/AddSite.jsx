@@ -16,7 +16,7 @@ import { addWebsiteNote, editWebsiteNote } from './SiteNotes';
 const AddSite = () => {
   const navigate = useNavigate();
   const { id = '' } = useParams();
-  const { setLoading } = useGlobalContext();
+  const { setLoading, dispatch } = useGlobalContext();
 
   const [isScrollable, setIsScrollable] = useState(false);
   const [errors, setErrors] = useState({ forwardEmails: '' });
@@ -133,6 +133,7 @@ const AddSite = () => {
       const { status, data } = await (id ? updateSiteApi(id, siteDetails) : addSiteApi(siteDetails));
       if (status) {
         showNotification('success', data.message);
+        dispatch({ type: 'SET_ALL_SITES', payload: [] });
         if (siteDetails.sendCRM) return navigate(`/zoho-auth/${data?.data?.id}`);
         else return navigate('/website/website-list');
       } else showNotification('warn', data);
@@ -174,7 +175,7 @@ const AddSite = () => {
               />
               <FormField
                 label="Site Host"
-                type="text"
+                type="url"
                 id="host"
                 name="host"
                 placeholder="Site Host"
@@ -430,7 +431,6 @@ const AddSite = () => {
             </div>
           </div>
         </div>
-        adminEnquiryEmails
       </div>
 
       <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
