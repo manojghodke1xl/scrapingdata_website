@@ -1,3 +1,6 @@
+import StatsList from '../../atoms/dashboard/StatsList';
+import { dashBoardStats } from './dashboardData';
+
 const Dashboard = () => {
   return (
     <div className="p-8">
@@ -6,10 +9,8 @@ const Dashboard = () => {
           <h4 className="text-3xl text-dark">Dashboard</h4>
         </div>
       </div>
-      <div className=" gap-6 ptpb-4">
-        <div className="border p-4 rounded-xl border-primary flex flex-col gap-2">
-          <div className="text-3xl font-semibold flex items-center justify-center">Welcome to MarsCMS</div>
-        </div>
+      <div className="grid sm:grid-cols-2 xl:grid-cols-4 gap-6 ptpb-4 w-full">
+        <StatsList list={dashBoardStats} />
       </div>
     </div>
   );

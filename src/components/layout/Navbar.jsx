@@ -7,7 +7,9 @@ import useGlobalContext from '../../hooks/useGlobalContext';
 const Navbar = () => {
   const { dispatch } = useGlobalContext();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const sidebarRef = useRef(null);
+  const dropdownRef = useRef(null);
 
   const handleToggleSidebar = useCallback(() => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -19,6 +21,16 @@ const Navbar = () => {
     },
     [handleToggleSidebar]
   );
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   useEffect(() => {
     if (isSidebarOpen) document.addEventListener('mousedown', handleClickOutside);
@@ -35,9 +47,18 @@ const Navbar = () => {
         </div>
 
         <div className="flex gap-1 sm:gap-2 items-center pr-6">
-          <span className="hidden sm:block">
-            <img src={Person} width={34} alt="Person" onClick={() => dispatch({ type: 'SIGNOUT' })} />
+          <span className="hidden sm:block" onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
+            <img src={Person} width={34} alt="Person" className="cursor-pointer" />
           </span>
+
+          {/* Dropdown Menu */}
+          {isDropdownOpen && (
+            <div ref={dropdownRef} className="absolute top-10 right-0 mt-2 w-48 bg-white border border-gray-300 rounded-lg shadow-lg z-50">
+              <button onClick={() => dispatch({ type: 'SIGNOUT' })} className="w-full text-left px-4 py-2 hover:bg-gray-100">
+                Logout
+              </button>
+            </div>
+          )}
           <div className="flex lg:hidden ml-3">
             <button onClick={handleToggleSidebar}>
               <IoIosMenu className="text-4xl text-primary" />

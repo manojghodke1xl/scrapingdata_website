@@ -38,7 +38,7 @@ const SmtpList = () => {
           <div className="-m-1.5 overflow-x-auto">
             <div className="p-1.5 min-w-full align-middle">
               <TableComponent
-                // selectable={true}
+                selectable={true}
                 headers={[
                   { label: 'Sr No.', key: 'srno' },
                   { label: 'Name', key: 'name' },

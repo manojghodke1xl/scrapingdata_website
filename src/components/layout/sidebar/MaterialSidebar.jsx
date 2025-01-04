@@ -17,10 +17,12 @@ import {
   leadsManagementPath
 } from './sidebarTabData';
 import ReusableAccordion from '../../../atoms/sidebar/ReusableAccordion';
+import useGlobalContext from '../../../hooks/useGlobalContext';
 // import SearchComponent from '../../../atoms/common/SearchComponent';
 
 const MaterialSidebar = () => {
   const { pathname } = useLocation();
+  const { auth } = useGlobalContext();
   const [openAccordion, setOpenAccordion] = useState(null);
 
   const isActive = (menuPaths) => menuPaths.some((path) => pathname.startsWith(path));
@@ -94,16 +96,18 @@ const MaterialSidebar = () => {
             onToggle={() => setOpenAccordion(openAccordion === 'Features' ? null : 'Testimonials')}
           />
 
-          {adminNavLinks.map(({ to, title, icon }) => (
-            <Link
-              key={title}
-              to={to[0]}
-              className={`py-2.5 px-3 rounded-xl flex gap-3 items-center ${isActive(to) ? 'bg-fadedblue text-blue' : 'text-primary hover:bg-gray-100 bg-white'}`}
-            >
-              <span className="text-3xl">{icon}</span>
-              <span>{title}</span>
-            </Link>
-          ))}
+          {adminNavLinks
+            .filter(({ title }) => auth.isSuperAdmin || title === 'Payments')
+            .map(({ to, title, icon }) => (
+              <Link
+                key={title}
+                to={to[0]}
+                className={`py-2.5 px-3 rounded-xl flex gap-3 items-center ${isActive(to) ? 'bg-fadedblue text-blue' : 'text-primary hover:bg-gray-100 bg-white'}`}
+              >
+                <span className="text-3xl">{icon}</span>
+                <span>{title}</span>
+              </Link>
+            ))}
         </div>
       </div>
     </div>
