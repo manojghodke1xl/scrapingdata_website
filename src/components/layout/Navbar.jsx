@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import Person from '../../assets/images/person.png';
-import Logo from '../../assets/images/MarsCMS-logo.png';
+import Logo from '../../assets/images/marsCMS-logo.png';
 import MaterialSidebar from './sidebar/MaterialSidebar';
 import { IoIosMenu } from 'react-icons/io';
 import useGlobalContext from '../../hooks/useGlobalContext';
