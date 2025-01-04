@@ -395,7 +395,7 @@ const AddPopup = () => {
             <div className="w-full">
               <DropDown
                 name="Sites"
-                dropdownList={availableSites.map((site) => ({ id: site._id, showName: site.name, name: site._id }))}
+                dropdownList={availableSites.map((site) => ({ id: site._id, showName: `${site.name} (${site.host})`, name: site._id }))}
                 SummaryChild={<h5 className="p-0 m-0 text-primary">{popupDetails.siteObj ? popupDetails.siteObj.showName : 'Sites'}</h5>}
                 search={true}
                 selected={popupDetails.site}

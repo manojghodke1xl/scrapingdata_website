@@ -136,9 +136,10 @@ const AddEvent = () => {
           </div>
           <div className="w-full">
             <div>
+              {console.log(availableSites)}
               <DropDown
                 name="Sites"
-                dropdownList={availableSites.map((site) => ({ id: site._id, showName: site.name, name: site._id }))}
+                dropdownList={availableSites.map((site) => ({ id: site._id, showName: `${site.name} (${site.host})`, name: site._id }))}
                 SummaryChild={<h5 className="p-0 m-0 text-primary">{eventDetails.siteObj?.showName || 'Sites'}</h5>}
                 search={true}
                 selected={eventDetails.site}
