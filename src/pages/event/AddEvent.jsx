@@ -136,7 +136,6 @@ const AddEvent = () => {
           </div>
           <div className="w-full">
             <div>
-              {console.log(availableSites)}
               <DropDown
                 name="Sites"
                 dropdownList={availableSites.map((site) => ({ id: site._id, showName: `${site.name} (${site.host})`, name: site._id }))}

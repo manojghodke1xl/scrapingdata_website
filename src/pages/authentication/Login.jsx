@@ -1,7 +1,8 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import FormField from '../../atoms/formFields/InputField';
 import { showNotification } from '../../utils/showNotification';
-import { useState } from 'react';
+import Logo from '../../assets/images/MarsCMS-logo.png';
 import useGlobalContext from '../../hooks/useGlobalContext';
 
 const Login = () => {
@@ -35,7 +36,7 @@ const Login = () => {
     <div className="w-full h-full py-8 px-3 sm:p-8">
       <div className="w-full flex gap-2 items-center">
         <span>
-          <h1 className="text-3xl">MarsCMS</h1>
+          <img src={Logo} width={160} alt="logo" />
         </span>
       </div>
 

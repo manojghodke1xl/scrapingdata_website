@@ -108,6 +108,33 @@ const PaypalIntegration = () => {
           </div>
         </div>
       </div>
+      <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
+        <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
+          <div className="sm:w-7/12 w-full flex flex-col">
+            <span className=" text-primary">Redirect URL Details</span>
+          </div>
+          <div className="w-full">
+            <FormField
+              label="Success URL"
+              type="url"
+              id="success"
+              name="success"
+              placeholder="Success URL"
+              onChange={(e) => setPaypalDetails((prev) => ({ ...prev, redirectUrl: { ...prev.redirectUrl, success: e.target.value } }))}
+              value={paypalDetails?.redirectUrl?.success}
+            />
+            <FormField
+              label="Failure URL"
+              type="url"
+              id="failure"
+              name="failure"
+              placeholder="Failure URL"
+              onChange={(e) => setPaypalDetails((prev) => ({ ...prev, redirectUrl: { ...prev.redirectUrl, failure: e.target.value } }))}
+              value={paypalDetails?.redirectUrl?.failure}
+            />
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

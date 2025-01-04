@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import Person from '../../assets/images/person.png';
+import Logo from '../../assets/images/MarsCMS-logo.png';
 import MaterialSidebar from './sidebar/MaterialSidebar';
 import { IoIosMenu } from 'react-icons/io';
 import useGlobalContext from '../../hooks/useGlobalContext';
@@ -43,7 +44,7 @@ const Navbar = () => {
     <>
       <div className="w-screen py-2 px-4 sm:px-6 flex justify-between border-b border-primary">
         <div className="px-2 flex items-center font-bold">
-          <h1 className="text-3xl">MarsCMS</h1>
+          <img src={Logo} width={160} alt="logo" />
         </div>
 
         <div className="flex gap-1 sm:gap-2 items-center pr-6">
