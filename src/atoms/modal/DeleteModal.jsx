@@ -24,7 +24,7 @@ const DeleteModal = ({ isDeleteModalOpen, onConfirm, setDeleteModalOpen, label, 
               <button onClick={() => setDeleteModalOpen((prev) => ({ ...prev, isDeleteModelOpen: false }))} className=" w-1/4 rounded-xl border border-primary text-primary py-2 ">
                 Cancel
               </button>
-              <button onClick={onConfirm} className="w-1/4 rounded-xl bg-red-500 text-white py-2 ">
+              <button onClick={onConfirm} className="w-1/4 rounded-xl bg-danger text-white py-2 ">
                 Confirm
               </button>
             </div>

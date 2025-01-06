@@ -63,7 +63,10 @@ const TableFilterActions = ({
       {exportBtn && (
         <>
           <button
-            onClick={() => setExportDropdownOpen((prev) => !prev)}
+            onClick={() => {
+              setExportDropdownOpen((prev) => !prev);
+              setModalState((prev) => ({ ...prev, isExportModelOpen: true }));
+            }}
             className="sm:w-fit text-primary font-normal hover:bg-gray-50 rounded-xl border border-primary py-2 px-3 sm:px-2 sm:py-2 md:px-3 whitespace-nowrap flex gap-1 sm:gap-2"
           >
             <CiExport size={20} strokeWidth="1.2" fill="none" />

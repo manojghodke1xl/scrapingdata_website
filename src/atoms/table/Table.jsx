@@ -10,6 +10,7 @@ import TableView from './TableView';
 import TableFilter from './TableFilter';
 import TableFilterActions from './TableFilterActions';
 import { handleExport } from '../../helpers/exportHandler';
+import ExportDataModal from '../modal/ExportDataModal';
 
 const TableComponent = ({
   selectable,
@@ -54,7 +55,8 @@ const TableComponent = ({
   const [modalState, setModalState] = useState({
     isDuplicateModelOpen: false,
     isDeleteModelOpen: false,
-    isSitesModelOpen: false
+    isSitesModelOpen: false,
+    isExportModelOpen: false
   });
   const [tableState, setTableState] = useState({
     currentPage: 1,
@@ -284,6 +286,7 @@ const TableComponent = ({
           setSelectedSites={setSelectionState}
           onConfirm={handleDuplicate}
         />
+        <ExportDataModal isExportModalOpen={modalState.isExportModelOpen} selectedData={selectionState} setExportModalOpen={setModalState} handleExportTable={handleExportTable} />
       </div>
     </div>
   );

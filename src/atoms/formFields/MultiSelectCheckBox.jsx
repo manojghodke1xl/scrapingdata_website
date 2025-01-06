@@ -84,7 +84,7 @@ const MultiSelectCheckbox = ({
                 placeholder="Search"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-3 py-2 border border-primary rounded-md text-secondary placeholder-secondary focus:outline-none focus:border-secondary"
+                className="w-full pl-10 pr-3 py-2 border border-primary rounded-xl text-secondary placeholder-secondary focus:outline-none focus:border-secondary"
               />
             </div>
           </div>

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useCallback, useState } from 'react';
 import { IoAdd } from 'react-icons/io5';
 import SearchComponent from '../common/SearchComponent';
-import { IoIosArrowDown } from 'react-icons/io';
+import { IoIosArrowDown, IoMdCheckmark } from 'react-icons/io';
 
 const DropDown = ({ mt = 'mt-5', width = 'w-full', name, SummaryChild, dropdownList = [], commonFunction, search, selected, add = false, setIsNewSegment, error }) => {
   const dropdownRef = useRef(null);
@@ -60,9 +60,7 @@ const DropDown = ({ mt = 'mt-5', width = 'w-full', name, SummaryChild, dropdownL
                 </div>
                 {item.name === selected && (
                   <span className="absolute inset-y-0 right-0 flex items-center pr-4 text-white">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368">
-                      <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
-                    </svg>
+                    <IoMdCheckmark className="text-primary text-xl" />
                   </span>
                 )}
               </li>
