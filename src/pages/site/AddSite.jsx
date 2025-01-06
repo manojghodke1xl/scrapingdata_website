@@ -11,7 +11,8 @@ import DropDown from '../../atoms/formFields/DropDown';
 import TextareaComponent from '../../atoms/formFields/TextareaComponent';
 import ApiIntegrationModal from '../../atoms/modal/ApiIntegrationModal';
 import NoteComponent from '../../atoms/common/NoteComponent';
-import { addWebsiteNote, editWebsiteNote } from './SiteNotes';
+import { addWebsiteNote, editWebsiteNote, enquiryIntegration, subscriberIntegration } from './SiteNotes';
+import MultiSelectCheckbox from '../../atoms/formFields/MultiSelectCheckBox';
 
 const AddSite = () => {
   const navigate = useNavigate();
@@ -43,7 +44,8 @@ const AddSite = () => {
     sendCRM: false,
     // sendCRMData: { clientId: "", clientSecret: "" },
     enquiryWebhookUrl: '',
-    mailinglistWebhookUrl: ''
+    mailinglistWebhookUrl: '',
+    modules: []
   });
 
   const checkScrollability = () => {
@@ -453,6 +455,24 @@ const AddSite = () => {
                 search={true}
                 commonFunction={(e) => setSiteDetails((prev) => ({ ...prev, smtp: e.id, smtpObj: e }))}
               />
+              <MultiSelectCheckbox
+                options={[
+                  { _id: 'casestudy', name: 'Case Study' },
+                  { _id: 'guide', name: 'Guide' },
+                  { _id: 'popup', name: 'Popup' },
+                  { _id: 'recaptcha', name: 'reCAPTCHA' },
+                  { _id: 'clientlogo', name: 'Client Logo' },
+                  { _id: 'gallery', name: 'Gallery' },
+                  { _id: 'partnerlogo', name: 'Partner Logo' },
+                  { _id: 'events', name: 'Events' },
+                  { _id: 'faq', name: 'FAQ' },
+                  { _id: 'testimonial', name: 'Testimonial' }
+                ]}
+                label={'Select Modules'}
+                selected={siteDetails.modules}
+                onChange={(newModules) => setSiteDetails((prev) => ({ ...prev, modules: newModules }))}
+                mode="objects"
+              />
             </div>
           </div>
         </div>
@@ -502,55 +522,8 @@ const AddSite = () => {
           <FormButtons to="/website/website-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} />
         </div>
       )}
-      <ApiIntegrationModal
-        isIntegrationModalOpen={isEnquiryModalOpen}
-        setIntegrationModalOpen={setEnquiryModalOpen}
-        sections={[
-          {
-            title: 'Request Method',
-            content: 'POST'
-          },
-          {
-            title: 'Response Details',
-            content: `{
-  "name": "John Doe",
-  "email": "john.doe@example.com",
-  "mobile": "+1234567890",
-  "ccode": "91",
-  "message": "This is a sample message.",
-  "service": "Web Development",
-  "subject": "Enquiry about services",
-  "header": "Content-Type: application/json",
-  "uastring": "userAgent",
-  "ipaddress": "192.168.1.1",
-  "site": "website key"
-}`
-          }
-        ]}
-      />
-
-      <ApiIntegrationModal
-        isIntegrationModalOpen={isMailingListModalOpen}
-        setIntegrationModalOpen={setMailingListModalOpen}
-        sections={[
-          {
-            title: 'Request Method',
-            content: 'POST'
-          },
-          {
-            title: 'Response Details',
-            content: `{
-  "name": "John Doe",
-  "email": "john.doe@example.com",
-  "list": "Updates",
-  "header": "Content-Type: application/json",
-  "uastring": "userAgent",
-  "ipaddress": "192.168.1.1",
-  "site": "website key"
-}`
-          }
-        ]}
-      />
+      <ApiIntegrationModal isIntegrationModalOpen={isEnquiryModalOpen} setIntegrationModalOpen={setEnquiryModalOpen} sections={enquiryIntegration} />
+      <ApiIntegrationModal isIntegrationModalOpen={isMailingListModalOpen} setIntegrationModalOpen={setMailingListModalOpen} sections={subscriberIntegration} />
     </div>
   );
 };

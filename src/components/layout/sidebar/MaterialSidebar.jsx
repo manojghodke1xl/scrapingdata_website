@@ -26,6 +26,7 @@ const MaterialSidebar = () => {
   const [openAccordion, setOpenAccordion] = useState(null);
 
   const isActive = (menuPaths) => menuPaths.some((path) => pathname.startsWith(path));
+  const handleLinkClick = () => setOpenAccordion(null);
 
   return (
     <div className="w-[320px] h-full px-3 ptpb-4 sm:py-6 relative">
@@ -39,6 +40,7 @@ const MaterialSidebar = () => {
             <Link
               key={title}
               to={to[0]}
+              onClick={handleLinkClick}
               className={`py-2.5 px-3 rounded-xl flex gap-3 items-center ${isActive(to) ? 'bg-fadedblue text-blue' : 'text-primary hover:bg-gray-100 bg-white'}`}
             >
               <span className="text-3xl">{icon}</span>
@@ -87,21 +89,21 @@ const MaterialSidebar = () => {
             isOpen={openAccordion === 'Faq Management'}
             onToggle={() => setOpenAccordion(openAccordion === 'Faq Management' ? null : 'Faq Management')}
           />
-
           <ReusableAccordion
             title="Testimonials"
             links={testimonialsPath}
             icon={<MdMessage />}
             isOpen={openAccordion === 'Testimonials'}
-            onToggle={() => setOpenAccordion(openAccordion === 'Features' ? null : 'Testimonials')}
+            onToggle={() => setOpenAccordion(openAccordion === 'Testimonials' ? null : 'Testimonials')}
           />
 
           {adminNavLinks
-            .filter(({ title }) => auth.isSuperAdmin || title === 'Payments')
+            .filter(({ title }) => auth.isSuperAdmin || title !== 'Admin Management')
             .map(({ to, title, icon }) => (
               <Link
                 key={title}
                 to={to[0]}
+                onClick={handleLinkClick}
                 className={`py-2.5 px-3 rounded-xl flex gap-3 items-center ${isActive(to) ? 'bg-fadedblue text-blue' : 'text-primary hover:bg-gray-100 bg-white'}`}
               >
                 <span className="text-3xl">{icon}</span>
