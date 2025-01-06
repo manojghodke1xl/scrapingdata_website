@@ -2,7 +2,16 @@ import { useState } from 'react';
 import { IoSearchOutline } from 'react-icons/io5';
 import { IoIosArrowDown } from 'react-icons/io';
 
-const MultiSelectCheckbox = ({ options, label, onChange, isSuperAdmin, selected, error, marginTop }) => {
+const MultiSelectCheckbox = ({
+  options,
+  label,
+  onChange,
+  isSuperAdmin,
+  selected = [],
+  error,
+  marginTop,
+  mode = 'ids' // 'ids' or 'objects'
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -10,25 +19,50 @@ const MultiSelectCheckbox = ({ options, label, onChange, isSuperAdmin, selected,
   const filteredOptions = options.filter((option) => option.name.toLowerCase().includes(searchQuery.toLowerCase()));
 
   // Handle selecting/deselecting individual checkboxes
-  const handleChange = (id) => {
-    const newSelectedOptions = selected.includes(id)
-      ? selected.filter((selectedId) => selectedId !== id) // Remove the id
-      : [...selected, id]; // Add the id
-    onChange(newSelectedOptions); // Send updated list of IDs to parent component
+  const handleChange = (key) => {
+    if (mode === 'ids') {
+      const newSelectedOptions = selected.includes(key)
+        ? selected.filter((selectedId) => selectedId !== key) // Remove the key
+        : [...selected, key]; // Add the key
+      onChange(newSelectedOptions);
+    } else if (mode === 'objects') {
+      const newSelectedOptions = selected.some((item) => item[key] !== undefined)
+        ? selected.filter((item) => item[key] === undefined) // Remove the key-value pair
+        : [...selected, { [key]: true }]; // Add the key-value pair
+      onChange(newSelectedOptions);
+    }
   };
 
   // Handle "Select All" logic
   const handleSelectAll = () => {
-    const allIds = filteredOptions.map((option) => option._id);
-    const newSelectedOptions = selected.length === allIds.length ? [] : allIds;
-    onChange(newSelectedOptions);
+    if (mode === 'ids') {
+      const allKeys = filteredOptions.map((option) => option._id);
+      const newSelectedOptions = selected.length === allKeys.length ? [] : allKeys; // Toggle selection
+      onChange(newSelectedOptions);
+    } else if (mode === 'objects') {
+      const allFilteredKeys = filteredOptions.map((option) => option._id);
+      const allFilteredSelected = selected.filter((item) => allFilteredKeys.includes(Object.keys(item)[0])).length === allFilteredKeys.length;
+
+      // Toggle selection for each object
+      const newSelectedOptions = allFilteredSelected
+        ? selected.filter((item) => !allFilteredKeys.includes(Object.keys(item)[0])) // Deselect all
+        : [
+            ...selected.filter((item) => !allFilteredKeys.includes(Object.keys(item)[0])), // Keep already selected items that are not in the filtered options
+            ...filteredOptions.map((option) => ({ [option._id]: true })) // Select all
+          ];
+
+      onChange(newSelectedOptions);
+    }
   };
+
+  const isSelectAllChecked =
+    mode === 'ids' ? selected.length > 0 && selected.length === filteredOptions.length : filteredOptions.every((option) => selected.some((item) => item[option._id] === true));
 
   return (
     <div className={`relative w-full ${marginTop || 'mt-5'} `}>
       {/* Dropdown Header */}
       <button
-        type="buttton"
+        type="button"
         onClick={() => setIsOpen(!isOpen)}
         className={`w-full flex items-center justify-between px-3 py-3 border rounded-xl ${
           error ? 'border-fadered focus:border-fadered' : ' border-primary focus:border-blue'
@@ -62,7 +96,7 @@ const MultiSelectCheckbox = ({ options, label, onChange, isSuperAdmin, selected,
               <input
                 type="checkbox"
                 id="select-all"
-                checked={selected?.length > 0 && selected?.length === filteredOptions?.length}
+                checked={isSelectAllChecked}
                 onChange={handleSelectAll}
                 className="h-4 w-4 rounded border-primary text-blue focus:ring-blue-500"
               />
@@ -72,21 +106,30 @@ const MultiSelectCheckbox = ({ options, label, onChange, isSuperAdmin, selected,
             </div>
 
             {/* Individual Options */}
-            {filteredOptions?.map((option) => (
-              <div key={option._id} className={`flex items-center px-3 py-2 hover:bg-fadedblue ${selected?.includes(option._id) ? 'bg-fadedblue ' : ''} `}>
-                <input
-                  type="checkbox"
-                  id={option._id}
-                  checked={isSuperAdmin ? isSuperAdmin || selected?.includes(option._id) : selected?.includes(option._id)} // Check based on isSuperAdmin or selected sites
-                  onChange={() => handleChange(option._id)} // Pass ID to handler
-                  className={`h-4 w-4 rounded border-primary text-blue focus:ring-blue-500 ${error ? 'border-red-500' : ''}`} // Add red border if there's an error
-                  disabled={isSuperAdmin} // Disable if isSuperAdmin
-                />
-                <label htmlFor={option._id} className="ml-2 text-secondary cursor-pointer select-none">
-                  {option.name}
-                </label>
-              </div>
-            ))}
+            {filteredOptions?.map((option) => {
+              const isChecked =
+                mode === 'ids'
+                  ? isSuperAdmin
+                    ? isSuperAdmin || selected.includes(option._id)
+                    : selected.includes(option._id)
+                  : selected.some((item) => item[option._id] === true);
+
+              return (
+                <div key={option._id} className={`flex items-center px-3 py-2 hover:bg-fadedblue ${isChecked ? 'bg-fadedblue ' : ''} `}>
+                  <input
+                    type="checkbox"
+                    id={option._id}
+                    checked={isChecked}
+                    onChange={() => handleChange(option._id)}
+                    className={`h-4 w-4 rounded border-primary text-blue focus:ring-blue-500 ${error ? 'border-red-500' : ''}`}
+                    disabled={isSuperAdmin}
+                  />
+                  <label htmlFor={option._id} className="ml-2 text-secondary cursor-pointer select-none">
+                    {option.name}
+                  </label>
+                </div>
+              );
+            })}
           </div>
         </div>
       )}

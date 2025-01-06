@@ -72,16 +72,15 @@ const TableView = ({
             <tr key={row.id} className={`border-b border-primary ${selectionState.selectedItems.includes(row.id) ? 'bg-blue-50' : 'hover:bg-gray-50'}`}>
               {selectable && (
                 <td className="px-4 py-2">
-                  {!row.isSuperAdmin && (
-                    <label className="inline-flex items-center cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={selectionState.selectedItems.includes(row.id)}
-                        onChange={() => handleRowCheckboxChange(row.id)}
-                        className="form-checkbox h-4 w-4 text-blue-600"
-                      />
-                    </label>
-                  )}
+                  <label className="inline-flex items-center cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={selectionState.selectedItems.includes(row.id)}
+                      onChange={() => handleRowCheckboxChange(row.id)}
+                      className="form-checkbox h-4 w-4 text-blue-600"
+                      disabled={row.isSuperAdmin}
+                    />
+                  </label>
                 </td>
               )}
               {headers.map((header, headerIndex) => (
