@@ -12,23 +12,28 @@ import DateTimePicker from '../../atoms/formFields/DateTimePicker';
 import { formatDateTime } from '../../utils/dateFormats';
 import NoteComponent from '../../atoms/common/NoteComponent';
 import { addCouponNote, editCouponNote } from './CouponNotes';
+import MultiSelectCheckbox from '../../atoms/formFields/MultiSelectCheckBox';
 
 const AddCoupon = () => {
   const navigate = useNavigate();
   const { id = '' } = useParams();
-  const { setLoading } = useGlobalContext();
+  const {
+    auth: { allSites: availableSites },
+    setLoading
+  } = useGlobalContext();
 
   const [isScrollable, setIsScrollable] = useState(false);
   const [errors, setErrors] = useState({});
   const [couponDetails, setCouponDetails] = useState({
     code: '',
     info: '',
-    startDate: '',
+    startDate: new Date(),
     endDate: '',
     minAmount: '',
     type: '',
     upto: '',
     value: '',
+    sites: [],
     isActive: true,
     isGlobal: false,
     useOnce: false,
@@ -43,7 +48,7 @@ const AddCoupon = () => {
     if (!couponDetails.endDate) newErrors.endDate = 'End Date is required';
     if (!couponDetails.type) newErrors.type = 'Coupon Type is required';
     if (!couponDetails.value) newErrors.value = 'Discount value is required';
-    if (!couponDetails.upto) newErrors.upto = 'Discount Upto is required for percentage discounts';
+    if (couponDetails.sites.length === 0) newErrors.sites = 'At least one site must be selected';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -219,12 +224,8 @@ const AddCoupon = () => {
                 id="upto"
                 name="upto"
                 placeholder="Discount Upto"
-                onChange={(e) => {
-                  setCouponDetails((prev) => ({ ...prev, upto: e.target.value }));
-                  if (errors.upto) setErrors((prev) => ({ ...prev, upto: '' }));
-                }}
+                onChange={(e) => setCouponDetails((prev) => ({ ...prev, upto: e.target.value }))}
                 value={couponDetails.upto}
-                errorMessage={errors.upto}
               />
             </div>
           </div>
@@ -238,6 +239,16 @@ const AddCoupon = () => {
           </div>
           <div className="w-full">
             <div className="w-full">
+              <MultiSelectCheckbox
+                options={availableSites}
+                label="Select Sites"
+                onChange={(selected) => {
+                  setCouponDetails((prev) => ({ ...prev, sites: selected }));
+                  if (errors.sites) setErrors((prev) => ({ ...prev, sites: '' }));
+                }}
+                selected={couponDetails.sites}
+                error={errors.sites}
+              />
               <ToggleComponent
                 label={'Is Coupon Active?'}
                 isEnableState={couponDetails.isActive}
