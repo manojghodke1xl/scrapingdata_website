@@ -1,7 +1,7 @@
 import { useEffect, useRef, useCallback, useState } from 'react';
 import { IoAdd } from 'react-icons/io5';
 import SearchComponent from '../common/SearchComponent';
-import { IoIosArrowDown, IoMdCheckmark } from 'react-icons/io';
+import { IoIosArrowDown } from 'react-icons/io';
 
 const DropDown = ({ mt = 'mt-5', width = 'w-full', name, SummaryChild, dropdownList = [], commonFunction, search, selected, add = false, setIsNewSegment, error }) => {
   const dropdownRef = useRef(null);
@@ -58,11 +58,6 @@ const DropDown = ({ mt = 'mt-5', width = 'w-full', name, SummaryChild, dropdownL
                   <span className={`block whitespace-nowrap font-normal ${item.name === selected ? 'font-semibold' : ''}`}>{item.showName}</span>
                   {item.description && <span className="text-sm text-secondary font-normal">{item.description}</span>}
                 </div>
-                {item.name === selected && (
-                  <span className="absolute inset-y-0 right-0 flex items-center pr-4 text-white">
-                    <IoMdCheckmark className="text-primary text-xl" />
-                  </span>
-                )}
               </li>
             ))}
             {add && (

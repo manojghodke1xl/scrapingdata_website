@@ -5,7 +5,10 @@ export const handleExport = ({ type, apiUrl, rows, headers, selected }) => {
   if (type === 'visible') {
     const visibleData = rows.map((row) =>
       headers.reduce((result, header) => {
-        if (header.key !== 'srno') result[header.key] = row.exportData[header.key];
+        if (header.key !== 'srno') {
+          if (header.key === 'keys') result['keys'] = row.exportData['_id'];
+          else result[header.key] = row.exportData[header.key];
+        }
         return result;
       }, {})
     );
@@ -16,7 +19,10 @@ export const handleExport = ({ type, apiUrl, rows, headers, selected }) => {
       .filter((row) => selected.some((selectedRow) => selectedRow === row.exportData._id))
       .map((row) =>
         headers.reduce((result, header) => {
-          if (header.key !== 'srno') result[header.key] = row.exportData[header.key];
+          if (header.key !== 'srno') {
+            if (header.key === 'keys') result['keys'] = row.exportData['_id'];
+            else result[header.key] = row.exportData[header.key];
+          }
           return result;
         }, {})
       );

@@ -1,8 +1,8 @@
 import RadioField from '../formFields/RadioField';
 import { useState } from 'react';
-import AdvancedFilterComponent from '../filter/AdvancedFilterComponent';
 import ToggleComponent from '../formFields/ToggleComponent';
 import CustomColumnComponent from '../filter/CustomColumnSelecter';
+import AdvancedFilter from '../filter/AdvancedFilterComponent';
 
 const ExportDataModal = ({ isExportModalOpen, setExportModalOpen, label, selectedData, handleExportTable }) => {
   const [selectionState, setSelectionState] = useState({
@@ -12,10 +12,48 @@ const ExportDataModal = ({ isExportModalOpen, setExportModalOpen, label, selecte
     selectedFileFormat: 'xlsx'
   });
 
+  const handleDefaultState = () => setSelectionState({ selectedRecords: 'currentPage', selectedColumns: 'visible', selectedData: 'allData', selectedFileFormat: 'xlsx' });
+
+  const handleExport = () => {
+    // Define conditions for the export options
+    const exportConditions = {
+      all:
+        selectionState.selectedRecords === 'allRecords' &&
+        selectionState.selectedData === 'allData' &&
+        selectionState.selectedColumns === 'allColumns' &&
+        selectionState.selectedFileFormat === 'csv',
+      visible:
+        selectionState.selectedRecords === 'currentPage' &&
+        selectionState.selectedData === 'allData' &&
+        selectionState.selectedColumns === 'visible' &&
+        selectionState.selectedFileFormat === 'csv',
+      selected:
+        selectionState.selectedRecords === 'selectedRecords' &&
+        selectionState.selectedData === 'allData' &&
+        selectionState.selectedColumns === 'visible' &&
+        selectionState.selectedFileFormat === 'csv'
+    };
+
+    // Check which condition matches and execute the corresponding export
+    if (exportConditions.all) handleExportTable('all');
+    else if (exportConditions.visible) handleExportTable('visible');
+    else if (exportConditions.selected) handleExportTable('selected');
+
+    setExportModalOpen((prev) => ({ ...prev, isExportModelOpen: false }));
+    handleDefaultState();
+  };
+
   if (!isExportModalOpen) return null;
+
   return (
     <div className="fixed inset-0 z-10 overflow-y-auto">
-      <div className="fixed inset-0 bg-gray-300 bg-opacity-75 transition-opacity" onClick={() => setExportModalOpen((prev) => ({ ...prev, isExportModelOpen: false }))} />
+      <div
+        className="fixed inset-0 bg-gray-300 bg-opacity-75 transition-opacity"
+        onClick={() => {
+          setExportModalOpen((prev) => ({ ...prev, isExportModelOpen: false }));
+          handleDefaultState();
+        }}
+      />
       <div className="flex items-start justify-center w-full min-h-screen px-2 text-center lg:absolute lg:top-[12%]">
         <div className="bg-white rounded-2xl text-left overflow-hidden shadow-xl transform transition-all w-[95%] sm:w-[80%] md:w-fit px-6 2xl:px-8 py-6">
           <div className="w-full flex justify-end items-center">
@@ -78,7 +116,7 @@ const ExportDataModal = ({ isExportModalOpen, setExportModalOpen, label, selecte
                   label={'Filtered Data'}
                 />
               </div>
-              {selectionState.selectedData === 'filterdData' && <AdvancedFilterComponent />}
+              {selectionState.selectedData === 'filterdData' && <AdvancedFilter />}
             </div>
 
             <div className="border p-4 rounded-xl border-primary flex flex-col gap-2 w-full mt-4">
@@ -145,18 +183,16 @@ const ExportDataModal = ({ isExportModalOpen, setExportModalOpen, label, selecte
 
             <div className="border-b border-primary w-full mt-4" />
             <div className="flex justify-end gap-5 w-full mt-6 ">
-              <button onClick={() => setExportModalOpen((prev) => ({ ...prev, isExportModelOpen: false }))} className=" w-1/4 rounded-xl border border-primary text-primary py-2 ">
-                Cancel
-              </button>
               <button
                 onClick={() => {
-                  if (selectionState.selectedRecords === 'allRecords' && selectionState.selectedData === 'allData' && selectionState.selectedColumns === 'allColumns') {
-                    handleExportTable('all');
-                  }
                   setExportModalOpen((prev) => ({ ...prev, isExportModelOpen: false }));
+                  handleDefaultState();
                 }}
-                className="w-1/4 rounded-xl bg-darkblue text-white py-2 "
+                className=" w-1/4 rounded-xl border border-primary text-primary py-2 "
               >
+                Cancel
+              </button>
+              <button onClick={handleExport} className="w-1/4 rounded-xl bg-darkblue text-white py-2 ">
                 Export
               </button>
             </div>

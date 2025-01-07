@@ -76,7 +76,6 @@ const SiteList = () => {
                 appsPath={'/apps/integration'}
                 search={true}
                 filter={true}
-                deleteBtn={true}
                 filterCategory={[{ id: 2, name: 'Status' }]}
                 statuses={[
                   { id: 0, name: 'Active', bgColor: '#ECFDF3', color: '#027948', dotColor: '#12B76A' },
