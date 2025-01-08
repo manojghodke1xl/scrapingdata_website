@@ -17,7 +17,7 @@ import MultiSelectCheckbox from '../../atoms/formFields/MultiSelectCheckBox';
 const AddSite = () => {
   const navigate = useNavigate();
   const { id = '' } = useParams();
-  const { setLoading, dispatch } = useGlobalContext();
+  const { setLoading, dispatch, isLoading } = useGlobalContext();
 
   const [isScrollable, setIsScrollable] = useState(false);
   const [errors, setErrors] = useState({ forwardEmails: '' });
@@ -83,28 +83,28 @@ const AddSite = () => {
 
   const validate = () => {
     const newErrors = {};
-    if (!siteDetails.name) newErrors.name = 'Name is required';
-    if (!siteDetails.host) newErrors.host = 'Host is required';
+    if (!siteDetails.name.trim()) newErrors.name = 'Name is required';
+    if (!siteDetails.host.trim()) newErrors.host = 'Host is required';
     if (!siteDetails.smtp) newErrors.smtp = 'SMTP is required';
 
     if (siteDetails.sendUserEnquiry) {
-      if (!siteDetails.userEnquiryMailData?.subject) newErrors.subject = 'Subject is required';
+      if (!siteDetails.userEnquiryMailData?.subject.trim()) newErrors.subject = 'Subject is required';
       if (!siteDetails.userEnquiryMailData?.body) newErrors.body = 'Body is required';
     }
 
     if (siteDetails.sendUserMailingList) {
-      if (!siteDetails.userMailingListMailData?.subject) newErrors.subject = 'Subject is required';
+      if (!siteDetails.userMailingListMailData?.subject.trim()) newErrors.subject = 'Subject is required';
       if (!siteDetails.userMailingListMailData?.body) newErrors.body = 'Body is required';
     }
 
     if (siteDetails.sendAdminEnquiry) {
-      if (!siteDetails.adminEnquiryMailData?.subject) newErrors.subject = 'Subject is required';
+      if (!siteDetails.adminEnquiryMailData?.subject.trim()) newErrors.subject = 'Subject is required';
       if (!siteDetails.adminEnquiryMailData?.body) newErrors.body = 'Body is required';
       if (!siteDetails.adminEnquiryEmails.length) newErrors.adminEnquiryEmails = 'At least one email is required';
     }
 
     if (siteDetails.sendAdminMailingList) {
-      if (!siteDetails.adminMailingListMailData?.subject) newErrors.subject = 'Subject is required';
+      if (!siteDetails.adminMailingListMailData?.subject.trim()) newErrors.subject = 'Subject is required';
       if (!siteDetails.adminMailingListMailData?.body) newErrors.body = 'Body is required';
       if (!siteDetails.adminMailingListEmails.length) newErrors.adminMailingListEmails = 'At least one email is required';
     }
@@ -152,7 +152,7 @@ const AddSite = () => {
         <div>
           <span className="text-3xl font-semibold text-dark">{id ? 'Edit' : 'Add'} Site</span>
         </div>
-        <FormButtons to="/website/website-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} />
+        <FormButtons to="/website/website-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} loading={isLoading} />
       </div>
 
       <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
@@ -454,6 +454,7 @@ const AddSite = () => {
                 selected={siteDetails.smtp}
                 search={true}
                 commonFunction={(e) => setSiteDetails((prev) => ({ ...prev, smtp: e.id, smtpObj: e }))}
+                error={errors.smtp}
               />
               <MultiSelectCheckbox
                 options={[
@@ -519,7 +520,7 @@ const AddSite = () => {
       </div>
       {!isScrollable && (
         <div className="w-full flex justify-end items-center gap-4 pt-8  border- border-primary">
-          <FormButtons to="/website/website-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} />
+          <FormButtons to="/website/website-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} loading={isLoading} />
         </div>
       )}
       <ApiIntegrationModal isIntegrationModalOpen={isEnquiryModalOpen} setIntegrationModalOpen={setEnquiryModalOpen} sections={enquiryIntegration} />

@@ -12,7 +12,7 @@ import DropDown from '../../atoms/formFields/DropDown';
 const AddSmtp = () => {
   const navigate = useNavigate();
   const { id = '' } = useParams();
-  const { setLoading } = useGlobalContext();
+  const { setLoading, isLoading } = useGlobalContext();
 
   const [errors, setErrors] = useState({});
   const [isScrollable, setIsScrollable] = useState(false);
@@ -30,10 +30,8 @@ const AddSmtp = () => {
       setLoading(true);
       (async () => {
         const { status, data } = await getSmtpByIdApi(id);
-        if (status) {
-          const { ...rest } = data.smtp;
-          setSmtpDetails({ ...rest, password: '' });
-        } else showNotification('warn', data);
+        if (status) setSmtpDetails(data.smtp);
+        else showNotification('warn', data);
       })()
         .catch((error) => showNotification('error', error.message))
         .finally(() => setLoading(false));
@@ -42,19 +40,19 @@ const AddSmtp = () => {
 
   const validate = () => {
     const newErrors = {};
-    if (!smtpDetails.name) newErrors.name = 'Name is required';
-    if (!smtpDetails.host) newErrors.host = 'Host is required';
+    if (!smtpDetails.name.trim()) newErrors.name = 'Name is required';
+    if (!smtpDetails.host.trim()) newErrors.host = 'Host is required';
     if (smtpDetails.secure === '') newErrors.secure = 'Security protocol is required.';
     if (!smtpDetails.port) newErrors.port = 'Port is required';
     if (!smtpDetails.user) newErrors.user = 'User is required';
-    if (!smtpDetails.password && !id) newErrors.password = 'Password is required';
+    if (!smtpDetails.password) newErrors.password = 'Password is required';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!validate) return;
+    if (!validate()) return;
     setLoading(true);
     try {
       const { status, data } = await (id ? updateSmtpApi(id, smtpDetails) : addSmtpApi(smtpDetails));
@@ -88,7 +86,7 @@ const AddSmtp = () => {
         <div>
           <span className="text-3xl font-semibold text-dark">{id ? 'Edit' : 'Add'} SMTP</span>
         </div>
-        <FormButtons to="/smtp/smtp-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} />
+        <FormButtons to="/smtp/smtp-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} loading={isLoading} />
       </div>
 
       <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
@@ -155,12 +153,8 @@ const AddSmtp = () => {
                 id="senderEmail"
                 name="senderEmail"
                 placeholder="Sender Email"
-                onChange={(e) => {
-                  setSmtpDetails((prev) => ({ ...prev, senderEmail: e.target.value }));
-                  // if (errors.senderEmail) setErrors((prev) => ({ ...prev, senderEmail: '' }));
-                }}
+                onChange={(e) => setSmtpDetails((prev) => ({ ...prev, senderEmail: e.target.value }))}
                 value={smtpDetails.senderEmail}
-                // errorMessage={errors.senderEmail}
               />
               <FormField
                 label="User"
@@ -224,7 +218,7 @@ const AddSmtp = () => {
       </div>
       {!isScrollable && (
         <div className="w-full flex justify-end items-center gap-4 pt-8  border- border-primary">
-          <FormButtons to="/smtp/smtp-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} />
+          <FormButtons to="/smtp/smtp-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} loading={isLoading} />
         </div>
       )}
     </div>

@@ -3,7 +3,7 @@ import { IoAdd } from 'react-icons/io5';
 import SearchComponent from '../common/SearchComponent';
 import { IoIosArrowDown } from 'react-icons/io';
 
-const DropDown = ({ mt = 'mt-5', width = 'w-full', name, SummaryChild, dropdownList = [], commonFunction, search, selected, add = false, setIsNewSegment, error }) => {
+const DropDown = ({ mt = '', width = 'w-full', name, SummaryChild, dropdownList = [], commonFunction, search, selected, add = false, setIsNewSegment, error }) => {
   const dropdownRef = useRef(null);
   const [searchQuery, setSearchQuery] = useState('');
 
