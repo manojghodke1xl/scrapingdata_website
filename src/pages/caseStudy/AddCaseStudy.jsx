@@ -19,7 +19,8 @@ const AddCaseStudy = () => {
   const { id = '' } = useParams();
   const {
     auth: { allSites: availableSites },
-    setLoading
+    setLoading,
+    isLoading
   } = useGlobalContext();
 
   const [isScrollable, setIsScrollable] = useState(false);
@@ -107,7 +108,7 @@ const AddCaseStudy = () => {
         <div>
           <span className="text-3xl font-semibold text-dark">{id ? 'Edit' : 'Add'} Case Study</span>
         </div>
-        <FormButtons to="/case-study/case-study-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} />
+        <FormButtons to="/case-study/case-study-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} loading={isLoading} />
       </div>
 
       <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
@@ -192,7 +193,9 @@ const AddCaseStudy = () => {
           <div className="w-full">
             <div className="w-full">
               <MultiSelectCheckbox
-                options={availableSites}
+                options={availableSites
+                  .filter((site) => site.modules.some((module) => module.casestudy === true))
+                  .map((site) => ({ name: `${site.name} (${site.host})`, _id: site._id }))}
                 label="Select Sites"
                 onChange={(selected) => {
                   setCaseStudyDetails((prev) => ({ ...prev, sites: selected }));
@@ -201,6 +204,7 @@ const AddCaseStudy = () => {
                 selected={caseStudyDetails.sites}
                 error={errors.sites}
               />
+              {console.log(caseStudyDetails)}
               <ToggleComponent
                 label={'Is Case Study Active?'}
                 isEnableState={caseStudyDetails.isActive}
@@ -256,7 +260,7 @@ const AddCaseStudy = () => {
       </div>
       {!isScrollable && (
         <div className="w-full flex justify-end items-center gap-4 pt-8  border- border-primary">
-          <FormButtons to="/case-study/case-study-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} />
+          <FormButtons to="/case-study/case-study-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} loading={isLoading} />
         </div>
       )}
     </div>

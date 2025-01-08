@@ -66,7 +66,7 @@ const AddAdmin = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
-    // setLoading(true);
+    setLoading(true);
     const { password, ...rest } = adminDetails;
     if (password) rest.password = password;
     try {
@@ -77,8 +77,9 @@ const AddAdmin = () => {
       } else showNotification('warn', data);
     } catch (error) {
       showNotification('error', error.message);
+    } finally {
+      setLoading(false);
     }
-    // .finally(() => setLoading(false));
   };
 
   const checkScrollability = () => {
@@ -123,6 +124,7 @@ const AddAdmin = () => {
                 errorMessage={errors.name}
               />
               <FormField
+                divClassName={'mt-5'}
                 label="Admin Email"
                 type="email"
                 id="email"
@@ -136,6 +138,7 @@ const AddAdmin = () => {
                 errorMessage={errors.email}
               />
               <FormField
+                divClassName={'mt-5'}
                 label="Admin Password"
                 type="password"
                 id="password"
@@ -162,7 +165,9 @@ const AddAdmin = () => {
           <div className="w-full">
             <div className="w-full">
               <MultiSelectCheckbox
-                options={availableSites}
+                options={availableSites
+                  .filter((site) => site.modules.some((module) => module.admin === true))
+                  .map((site) => ({ name: `${site.name} (${site.host})`, _id: site._id }))}
                 label="Select Sites"
                 onChange={(selected) => {
                   setAdminDetails((prev) => ({ ...prev, sites: selected }));

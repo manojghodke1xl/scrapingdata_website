@@ -1,8 +1,8 @@
 import { CiCircleInfo } from 'react-icons/ci';
 
-const ToggleComponent = ({ bgColor, label, description, isEnableState, setIsEnableState }) => {
+const ToggleComponent = ({ divClassName = 'mt-5', bgColor, label, description, isEnableState, setIsEnableState }) => {
   return (
-    <div className={`rounded-xl border border-primary py-2 px-4 w-full flex justify-between items-center mt-5 ${bgColor}`}>
+    <div className={`${divClassName} rounded-xl border border-primary py-2 px-4 w-full flex justify-between items-center ${bgColor}`}>
       <div className="flex flex-col">
         <div className="flex gap-2 items-center">
           <span className="font-medium">{label}</span>

@@ -19,7 +19,8 @@ const AddCoupon = () => {
   const { id = '' } = useParams();
   const {
     auth: { allSites: availableSites },
-    setLoading
+    setLoading,
+    isLoading
   } = useGlobalContext();
 
   const [isScrollable, setIsScrollable] = useState(false);
@@ -105,7 +106,7 @@ const AddCoupon = () => {
         <div>
           <span className="text-3xl font-semibold text-dark">{id ? 'Edit' : 'Add'} Coupon</span>
         </div>
-        <FormButtons to="/coupon/coupon-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} />
+        <FormButtons to="/coupon/coupon-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} loading={isLoading} />
       </div>
 
       <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
@@ -136,6 +137,7 @@ const AddCoupon = () => {
                 value={couponDetails.info}
                 onChange={(e) => setCouponDetails((prev) => ({ ...prev, info: e.target.value }))}
                 charCount={false}
+                errorMessage={errors.info}
               />
             </div>
           </div>
@@ -160,6 +162,7 @@ const AddCoupon = () => {
               errorMessage={errors.startDate}
             />
             <DateTimePicker
+              divClassName={'mt-5'}
               id={'endDate'}
               label={'End Date'}
               placeholder={formatDateTime(new Date())}
@@ -191,6 +194,7 @@ const AddCoupon = () => {
                 onChange={(e) => setCouponDetails((prev) => ({ ...prev, minAmount: e.target.value }))}
               />
               <DropDown
+                mt="mt-5"
                 name="type"
                 SummaryChild={<h5 className="p-0 m-0 text-primary">{couponDetails.typeObject?.showName || 'Coupon Type'}</h5>}
                 dropdownList={[
@@ -240,7 +244,9 @@ const AddCoupon = () => {
           <div className="w-full">
             <div className="w-full">
               <MultiSelectCheckbox
-                options={availableSites}
+                options={availableSites
+                  .filter((site) => site.modules.some((module) => module.coupon === true))
+                  .map((site) => ({ name: `${site.name} (${site.host})`, _id: site._id }))}
                 label="Select Sites"
                 onChange={(selected) => {
                   setCouponDetails((prev) => ({ ...prev, sites: selected }));
@@ -280,7 +286,7 @@ const AddCoupon = () => {
       </div>
       {!isScrollable && (
         <div className="w-full flex justify-end items-center gap-4 pt-8  border- border-primary">
-          <FormButtons to="/coupon/coupon-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} />
+          <FormButtons to="/coupon/coupon-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} loading={isLoading} />
         </div>
       )}
     </div>

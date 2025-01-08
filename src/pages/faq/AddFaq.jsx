@@ -17,13 +17,14 @@ const AddFaq = () => {
   const { id = '' } = useParams();
   const {
     auth: { allSites: availableSites },
-    setLoading
+    setLoading,
+    isLoading
   } = useGlobalContext();
   const [faqDetails, setFaqDetails] = useState({
-    email: '',
-    name: '',
-    password: '',
+    question: '',
+    answer: '',
     sites: [],
+    faqCategory: [],
     isActive: true,
     isGlobal: false
   });
@@ -60,15 +61,16 @@ const AddFaq = () => {
   }, [id, setLoading]);
 
   const validate = () => {
-    const errors = {};
-    if (!faqDetails.question) errors.question = 'Please enter question.';
-    if (!faqDetails.answer) errors.answer = 'Please enter answer.';
-    if (!faqDetails.sites.length) errors.sites = 'Please select at least one site.';
-    if (!faqDetails.faqCategory.length) errors.faqCategory = 'Please select at least one faq category.';
-    setErrors(errors);
-    return Object.keys(errors).length === 0;
+    const newErrors = {};
+    if (!faqDetails.question.trim()) newErrors.question = 'Please enter question.';
+    if (!faqDetails.answer.trim()) newErrors.answer = 'Please enter answer.';
+    if (!faqDetails.sites.length) newErrors.sites = 'Please select at least one site.';
+    if (!faqDetails.faqCategory.length) newErrors.faqCategory = 'Please select at least one faq category.';
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
+  console.log(errors);
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
@@ -104,7 +106,7 @@ const AddFaq = () => {
         <div>
           <span className="text-3xl font-semibold text-dark">{id ? 'Edit' : 'Add'} FAQ</span>
         </div>
-        <FormButtons to="/faq/faq-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} />
+        <FormButtons to="/faq/faq-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} loading={isLoading} />
       </div>
 
       <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
@@ -151,7 +153,9 @@ const AddFaq = () => {
           <div className="w-full">
             <div className="w-full">
               <MultiSelectCheckbox
-                options={availableSites}
+                options={availableSites
+                  .filter((site) => site.modules.some((module) => module.faq === true))
+                  .map((site) => ({ name: `${site.name} (${site.host})`, _id: site._id }))}
                 label="Select Sites"
                 onChange={(selected) => {
                   setFaqDetails((prev) => ({ ...prev, sites: selected }));
@@ -161,6 +165,7 @@ const AddFaq = () => {
                 error={errors.sites}
               />
               <MultiSelectCheckbox
+                divClassName={'mt-5'}
                 options={availableFaqCategories}
                 label="Select Faq Categories"
                 onChange={(selected) => {
@@ -181,7 +186,12 @@ const AddFaq = () => {
             <span className="block text-primary">FAQ Status and Visibility</span>
           </div>
           <div className="dropdown-container relative w-full mt-2">
-            <ToggleComponent label={'Is FAQ Active?'} isEnableState={faqDetails.isActive} setIsEnableState={(value) => setFaqDetails((prev) => ({ ...prev, isActive: value }))} />
+            <ToggleComponent
+              divClassName={''}
+              label={'Is FAQ Active?'}
+              isEnableState={faqDetails.isActive}
+              setIsEnableState={(value) => setFaqDetails((prev) => ({ ...prev, isActive: value }))}
+            />
             <ToggleComponent label={'Is FAQ Global?'} isEnableState={faqDetails.isGlobal} setIsEnableState={(value) => setFaqDetails((prev) => ({ ...prev, isGlobal: value }))} />
           </div>
         </div>
@@ -192,7 +202,7 @@ const AddFaq = () => {
       </div>
       {!isScrollable && (
         <div className="w-full flex justify-end items-center gap-4 pt-8  border- border-primary">
-          <FormButtons to="/faq/faq-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} />
+          <FormButtons to="/faq/faq-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} loading={isLoading} />
         </div>
       )}
     </div>

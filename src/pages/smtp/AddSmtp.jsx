@@ -110,6 +110,7 @@ const AddSmtp = () => {
                 errorMessage={errors.name}
               />
               <FormField
+                divClassName={'mt-5'}
                 label="Host"
                 type="text"
                 id="host"
@@ -123,6 +124,7 @@ const AddSmtp = () => {
                 errorMessage={errors.host}
               />
               <FormField
+                divClassName={'mt-5'}
                 label="Port"
                 type="number"
                 id="port"
@@ -157,6 +159,7 @@ const AddSmtp = () => {
                 value={smtpDetails.senderEmail}
               />
               <FormField
+                divClassName={'mt-5'}
                 label="User"
                 type="text"
                 id="user"
@@ -170,6 +173,7 @@ const AddSmtp = () => {
                 errorMessage={errors.user}
               />
               <FormField
+                divClassName={'mt-5'}
                 label="Password"
                 type="password"
                 id="password"
@@ -197,6 +201,7 @@ const AddSmtp = () => {
             <div>
               <DropDown
                 name="Security Protocol"
+                label="Security Protocol"
                 SummaryChild={<h5 className="p-0 m-0 text-primary">{smtpDetails.secureObj?.showName ? smtpDetails.secureObj?.showName : 'None'}</h5>}
                 dropdownList={[
                   { id: 0, showName: 'None', name: 'None' },

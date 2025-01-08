@@ -2,6 +2,8 @@ import { useState } from 'react';
 import TruncatableFieldModal from '../../atoms/modal/TruncatableFeildModel';
 import { formatDateTime } from '../../utils/dateFormats';
 import TableComponent from '../../atoms/table/Table';
+import { Link } from 'react-router-dom';
+import { AiOutlineApi } from 'react-icons/ai';
 
 const PaymentList = () => {
   const [payments, setPayments] = useState([]);
@@ -34,6 +36,13 @@ const PaymentList = () => {
         <div className="w-full flex md:flex-wrap gap-y-3 sm:flex-nowrap justify-between pb-5 border-b border-primary">
           <div className="">
             <h4 className="text-3xl text-dark">All Payments List</h4>
+          </div>
+
+          <div className="w-full flex justify-end sm:w-fit gap-2">
+            <Link to="/payments/payment-integration" className="flex gap-2 h-fit items-center px-2.5 md:px-2 sm:px-4 rounded-xl py-2.5 bg-primary hover:bg-hover text-white">
+              <AiOutlineApi size={22} />
+              <span className="hidden md:block">API Integration</span>
+            </Link>
           </div>
         </div>
         <div className="flex flex-col">

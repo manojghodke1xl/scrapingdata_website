@@ -50,7 +50,7 @@ const RazorpayIntegration = () => {
           <span className="text-3xl font-semibold text-dark">Razorpay Configuration</span>
         </div>
         <div className=" w-full flex gap-4 justify-end items-end md:w-fit lg:w-full xl:w-fit">
-          <FormButtons to={`/apps/integration/${siteId}`} onClick={handleSubmit} disabled={isLoading} />
+          <FormButtons to={`/apps/integration/${siteId}`} onClick={handleSubmit} loading={isLoading} />
         </div>
       </div>
 
@@ -73,6 +73,7 @@ const RazorpayIntegration = () => {
               error={errors.environment}
             />
             <FormField
+              divClassName={'mt-5'}
               label="Key Id"
               type="text"
               id="keyId"
@@ -86,6 +87,7 @@ const RazorpayIntegration = () => {
               errorMessage={errors.keyId}
             />
             <FormField
+              divClassName={'mt-5'}
               label="Key Secret"
               type="text"
               id="keySecret"
@@ -123,6 +125,7 @@ const RazorpayIntegration = () => {
               value={razorpayDetails?.redirectUrl?.success}
             />
             <FormField
+              divClassName={'mt-5'}
               label="Failure URL"
               type="url"
               id="failure"

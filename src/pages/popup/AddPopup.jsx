@@ -23,7 +23,8 @@ const AddPopup = () => {
   const { id = '' } = useParams();
   const {
     auth: { allSites: availableSites },
-    setLoading
+    setLoading,
+    isLoading
   } = useGlobalContext();
 
   const [isScrollable, setIsScrollable] = useState(false);
@@ -168,7 +169,7 @@ const AddPopup = () => {
         <div>
           <span className="text-3xl font-semibold text-dark">{id ? 'Edit' : 'Add'} Popup</span>
         </div>
-        <FormButtons to="/pop-up/pop-up-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} />
+        <FormButtons to="/pop-up/pop-up-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} loading={isLoading} />
       </div>
 
       <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
@@ -192,7 +193,9 @@ const AddPopup = () => {
                 errorMessage={errors.name}
               />
               <DropDown
+                mt="mt-5"
                 name="position"
+                label={'Position'}
                 SummaryChild={<h5 className="p-0 m-0 text-primary">{popupDetails.positionObj ? popupDetails.positionObj.showName : 'Position'}</h5>}
                 dropdownList={[
                   { id: 0, showName: 'Center-popup', name: 'center-popup' },
@@ -208,6 +211,8 @@ const AddPopup = () => {
               />
 
               <DropDown
+                mt="mt-5"
+                label={'Content Type'}
                 name="contentType"
                 SummaryChild={<h5 className="p-0 m-0 text-primary">{popupDetails.contentObj ? popupDetails.contentObj.showName : 'Basic'}</h5>}
                 dropdownList={[
@@ -241,6 +246,7 @@ const AddPopup = () => {
               {popupDetails.contentType === 'basic' && (
                 <div>
                   <FormField
+                    divClassName="mt-5"
                     label="Title"
                     type="text"
                     id="title"
@@ -254,6 +260,7 @@ const AddPopup = () => {
                     errorMessage={errors.title}
                   />
                   <FileUpload
+                    divClassName={'mt-5'}
                     logo={<FaRegImage className="text-primary text-2xl" />}
                     error={errors.image}
                     setErrors={setErrors}
@@ -287,6 +294,7 @@ const AddPopup = () => {
                 value={popupDetails.afterPageLoad}
               />
               <FormField
+                divClassName={'mt-5'}
                 label="At Page Scroll"
                 type="number"
                 id="atPageScroll"
@@ -297,6 +305,7 @@ const AddPopup = () => {
               />
 
               <FormField
+                divClassName={'mt-5'}
                 label="Again when Cancelled"
                 type="number"
                 id="againWhenCanceled"
@@ -307,6 +316,8 @@ const AddPopup = () => {
               />
 
               <DropDown
+                mt="mt-5"
+                label={'Show on Device Type'}
                 name="type"
                 SummaryChild={<h5 className="p-0 m-0 text-primary">{popupDetails.deviceObj ? popupDetails.deviceObj.showName : 'All'}</h5>}
                 dropdownList={[
@@ -330,30 +341,25 @@ const AddPopup = () => {
           </div>
           <div className="w-full">
             <div className="w-full">
-              <>
-                <label className="block text-sm font-medium text-primary">Settings</label>
-                <MultiSelectCheckbox marginTop="mt-2" options={getOptions()} label="Select Settings" onChange={handleSettingsChange} selected={getSelectedSettings()} />
-              </>
+              <MultiSelectCheckbox formLabel="Settings" options={getOptions()} label="Select Settings" onChange={handleSettingsChange} selected={getSelectedSettings()} />
 
               {popupDetails.contentType === 'guide' || popupDetails.contentType === 'casestudy' ? (
-                <>
-                  <label className="block text-sm font-medium text-primary mt-5">Additional {popupDetails.contentType === 'guide' ? 'Guides' : 'Case Studies'}</label>
-                  <MultiSelectCheckbox
-                    marginTop="mt-2"
-                    options={contentDetials.map((content) => ({
-                      _id: content._id,
-                      name: content.title
-                    }))}
-                    label={`Select ${popupDetails.contentType === 'guide' ? 'Guides' : 'Case Studies'}`}
-                    onChange={(selected) => {
-                      setPopupDetails((prev) => ({
-                        ...prev,
-                        [popupDetails.contentType === 'guide' ? 'moreGuides' : 'moreCaseStudies']: selected
-                      }));
-                    }}
-                    selected={popupDetails.contentType === 'guide' ? popupDetails.moreGuides : popupDetails.moreCaseStudies}
-                  />
-                </>
+                <MultiSelectCheckbox
+                  divClassName={'mt-5'}
+                  formLabel={`Additional ${popupDetails.contentType === 'guide' ? 'Guides' : 'Case Studies'}`}
+                  options={contentDetials.map((content) => ({
+                    _id: content._id,
+                    name: content.title
+                  }))}
+                  label={`Select ${popupDetails.contentType === 'guide' ? 'Guides' : 'Case Studies'}`}
+                  onChange={(selected) => {
+                    setPopupDetails((prev) => ({
+                      ...prev,
+                      [popupDetails.contentType === 'guide' ? 'moreGuides' : 'moreCaseStudies']: selected
+                    }));
+                  }}
+                  selected={popupDetails.contentType === 'guide' ? popupDetails.moreGuides : popupDetails.moreCaseStudies}
+                />
               ) : null}
             </div>
           </div>
@@ -375,6 +381,7 @@ const AddPopup = () => {
                 setSelectedDateTime={(e) => setPopupDetails((prev) => ({ ...prev, publishDate: e }))}
               />
               <DateTimePicker
+                divClassName={'mt-5'}
                 id={'archiveDate'}
                 label={'Archive Date'}
                 placeholder={formatDateTime(new Date())}
@@ -395,7 +402,10 @@ const AddPopup = () => {
             <div className="w-full">
               <DropDown
                 name="Sites"
-                dropdownList={availableSites.map((site) => ({ id: site._id, showName: `${site.name} (${site.host})`, name: site._id }))}
+                label={'Select Site'}
+                dropdownList={availableSites
+                  .filter((site) => site.modules.some((module) => module.popup === true))
+                  .map((site) => ({ id: site._id, showName: `${site.name} (${site.host})`, name: site._id }))}
                 SummaryChild={<h5 className="p-0 m-0 text-primary">{popupDetails.siteObj ? popupDetails.siteObj.showName : 'Sites'}</h5>}
                 search={true}
                 selected={popupDetails.site}
@@ -434,7 +444,7 @@ const AddPopup = () => {
       </div>
       {!isScrollable && (
         <div className="w-full flex justify-end items-center gap-4 pt-8  border- border-primary">
-          <FormButtons to="/pop-up/pop-up-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} />
+          <FormButtons to="/pop-up/pop-up-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} loading={isLoading} />
         </div>
       )}
     </div>

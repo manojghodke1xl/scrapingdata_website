@@ -11,7 +11,7 @@ import { addTestimonialCategoryNote, editTestimonialCategoryNote } from './Testi
 const AddTestimonialCategory = () => {
   const navigate = useNavigate();
   const { id = '' } = useParams();
-  const { setLoading } = useGlobalContext();
+  const { setLoading, isLoading } = useGlobalContext();
   const [isScrollable, setIsScrollable] = useState(false);
   const [categoryName, setCategoryName] = useState('');
   const [errors, setErrors] = useState({});
@@ -77,7 +77,7 @@ const AddTestimonialCategory = () => {
         <div>
           <span className="text-3xl font-semibold text-dark">{id ? 'Edit' : 'Add'} Testimonial Category</span>
         </div>
-        <FormButtons to="/testimonials/testimonial-category-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} />
+        <FormButtons to="/testimonials/testimonial-category-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} loading={isLoading} />
       </div>
 
       <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
@@ -110,7 +110,7 @@ const AddTestimonialCategory = () => {
       </div>
       {!isScrollable && (
         <div className="w-full flex justify-end items-center gap-4 pt-8  border- border-primary">
-          <FormButtons to="/testimonials/testimonial-category-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} />
+          <FormButtons to="/testimonials/testimonial-category-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} loading={isLoading} />
         </div>
       )}
     </div>

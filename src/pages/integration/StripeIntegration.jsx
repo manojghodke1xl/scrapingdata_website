@@ -50,7 +50,7 @@ const StripeIntegration = () => {
           <span className="text-3xl font-semibold text-dark">Stripe Configuration</span>
         </div>
         <div className=" w-full flex gap-4 justify-end items-end md:w-fit lg:w-full xl:w-fit">
-          <FormButtons to={`/apps/integration/${siteId}`} onClick={handleSubmit} disabled={isLoading} />
+          <FormButtons to={`/apps/integration/${siteId}`} onClick={handleSubmit} loading={isLoading} />
         </div>
       </div>
 
@@ -73,6 +73,7 @@ const StripeIntegration = () => {
               error={errors.environment}
             />
             <FormField
+              divClassName={'mt-5'}
               label="Public Key"
               type="text"
               id="publicKey"
@@ -86,6 +87,7 @@ const StripeIntegration = () => {
               errorMessage={errors.publicKey}
             />
             <FormField
+              divClassName={'mt-5'}
               label="Secret Key"
               type="text"
               id="secretKey"
@@ -124,6 +126,7 @@ const StripeIntegration = () => {
               value={stripeDetails?.redirectUrl?.success}
             />
             <FormField
+              divClassName={'mt-5'}
               label="Failure URL"
               type="url"
               id="failure"

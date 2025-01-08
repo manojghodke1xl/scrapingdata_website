@@ -11,7 +11,7 @@ import { addFaqCategoryNote, editFaqCategoryNote } from './FaqCategoryNotes';
 const AddFaqCategory = () => {
   const navigate = useNavigate();
   const { id = '' } = useParams();
-  const { setLoading } = useGlobalContext();
+  const { setLoading, isLoading } = useGlobalContext();
   const [isScrollable, setIsScrollable] = useState(false);
   const [fqaCategoryName, setFqaCategoryName] = useState('');
   const [errors, setErrors] = useState({});
@@ -78,7 +78,7 @@ const AddFaqCategory = () => {
         <div>
           <span className="text-3xl font-semibold text-dark">{id ? 'Edit' : 'Add'} FAQ Category</span>
         </div>
-        <FormButtons to="/faq-category/faq-category-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} />
+        <FormButtons to="/faq-category/faq-category-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} loading={isLoading} />
       </div>
 
       <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
@@ -111,7 +111,7 @@ const AddFaqCategory = () => {
       </div>
       {!isScrollable && (
         <div className="w-full flex justify-end items-center gap-4 pt-8  border- border-primary">
-          <FormButtons to="/faq-category/faq-category-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} />
+          <FormButtons to="/faq-category/faq-category-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} loading={isLoading} />
         </div>
       )}
     </div>
