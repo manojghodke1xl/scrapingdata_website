@@ -246,6 +246,8 @@ const TableComponent = ({
             viewPath={viewPath}
             apps={apps}
             appsPath={appsPath}
+            currentPage={tableState.currentPage}
+            itemsPerPage={tableState.itemsPerPage}
           />
         </div>
         <div className="w-full mt-2">

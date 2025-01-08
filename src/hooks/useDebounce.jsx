@@ -17,7 +17,7 @@ const useSetTimeout = (apiUrl, page, limit, val, key, a, site, event, delay = 50
           headers: { Authorization: localStorage.getItem('auth') }
         });
         const { data, error } = await res.json();
-        if (res.status === 403 && error === 'jwt expired') dispatch({ type: 'SIGNOUT' });
+        if (res.status === 403 || res.status === 401 || error === 'jwt expired') dispatch({ type: 'SIGNOUT' });
         if (!res.ok) throw new Error(`HTTP error! status: ${res.status} - ${error}`);
         setData(data);
       } catch (err) {

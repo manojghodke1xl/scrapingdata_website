@@ -16,7 +16,9 @@ const TableView = ({
   view,
   viewPath,
   apps,
-  appsPath
+  appsPath,
+  currentPage,
+  itemsPerPage
 }) => {
   const navigate = useNavigate();
   return (
@@ -85,9 +87,7 @@ const TableView = ({
               )}
               {headers.map((header, headerIndex) => (
                 <td key={`${row.id}-${headerIndex}`} className="px-6 py-2 text-secondary whitespace-nowrap font-medium">
-                  {header.key === 'srno'
-                    ? (index + 1).toString().padStart(3, '0') // Handle Sr No.
-                    : row[header.key]}
+                  {header.key === 'srno' ? ((currentPage - 1) * itemsPerPage + (index + 1)).toString().padStart(3, '0') : row[header.key]}
                 </td>
               ))}
               {actions && (
