@@ -14,6 +14,22 @@ import NoteComponent from '../../atoms/common/NoteComponent';
 import { addWebsiteNote, editWebsiteNote, enquiryIntegration, subscriberIntegration } from './SiteNotes';
 import MultiSelectCheckbox from '../../atoms/formFields/MultiSelectCheckBox';
 
+const moduleOptions = [
+  { _id: 'admin', name: 'Admin' },
+  { _id: 'casestudy', name: 'Case Study' },
+  { _id: 'guide', name: 'Guide' },
+  { _id: 'popup', name: 'Popup' },
+  { _id: 'coupon', name: 'Coupon' },
+  { _id: 'recaptcha', name: 'reCAPTCHA' },
+  { _id: 'clientlogo', name: 'Client Logo' },
+  { _id: 'gallery', name: 'Gallery' },
+  { _id: 'partnerlogo', name: 'Partner Logo' },
+  { _id: 'events', name: 'Events' },
+  { _id: 'faq', name: 'FAQ' },
+  { _id: 'testimonial', name: 'Testimonial' },
+  { _id: 'zoho', name: 'Zoho' }
+];
+
 const AddSite = () => {
   const navigate = useNavigate();
   const { id = '' } = useParams();
@@ -45,7 +61,7 @@ const AddSite = () => {
     // sendCRMData: { clientId: "", clientSecret: "" },
     enquiryWebhookUrl: '',
     mailinglistWebhookUrl: '',
-    modules: []
+    modules: moduleOptions.map((option) => ({ [option._id]: true }))
   });
 
   const checkScrollability = () => {
@@ -465,21 +481,7 @@ const AddSite = () => {
           <div className="w-full">
             <div>
               <MultiSelectCheckbox
-                options={[
-                  { _id: 'admin', name: 'Admin' },
-                  { _id: 'casestudy', name: 'Case Study' },
-                  { _id: 'guide', name: 'Guide' },
-                  { _id: 'popup', name: 'Popup' },
-                  { _id: 'coupon', name: 'Coupon' },
-                  { _id: 'recaptcha', name: 'reCAPTCHA' },
-                  { _id: 'clientlogo', name: 'Client Logo' },
-                  { _id: 'gallery', name: 'Gallery' },
-                  { _id: 'partnerlogo', name: 'Partner Logo' },
-                  { _id: 'events', name: 'Events' },
-                  { _id: 'faq', name: 'FAQ' },
-                  { _id: 'testimonial', name: 'Testimonial' },
-                  { _id: 'zoho', name: 'Zoho' }
-                ]}
+                options={moduleOptions}
                 label={'Select Modules'}
                 formLabel={'Select Modules'}
                 selected={siteDetails.modules}
