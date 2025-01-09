@@ -152,8 +152,7 @@ const AddSite = () => {
       if (status) {
         showNotification('success', data.message);
         dispatch({ type: 'SET_ALL_SITES', payload: [] });
-        if (siteDetails.sendCRM) return navigate(`/zoho-auth/${data?.data?.id}`);
-        else return navigate('/website/website-list');
+        navigate('/website/website-list');
       } else showNotification('warn', data);
     } catch (error) {
       showNotification('error', error.message);

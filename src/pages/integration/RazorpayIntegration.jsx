@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import FormButtons from '../../atoms/formFields/FormButtons';
 import FormField from '../../atoms/formFields/InputField';
@@ -11,10 +11,8 @@ import { updatePaymentIntegrationApi } from '../../apis/payment-integration-apis
 const RazorpayIntegration = () => {
   const navigate = useNavigate();
   const { setLoading, isLoading } = useGlobalContext();
-  const {
-    state: { paymentData, siteId }
-  } = useLocation();
-  const [razorpayDetails, setRazorpayDetails] = useState(paymentData);
+  const { state } = useLocation();
+  const [razorpayDetails, setRazorpayDetails] = useState(state?.paymentData);
   const [errors, setErrors] = useState({});
 
   const validate = () => {
@@ -31,7 +29,7 @@ const RazorpayIntegration = () => {
     if (!validate()) return;
     setLoading(true);
     try {
-      const { status, data } = await updatePaymentIntegrationApi(siteId, { razorpay: razorpayDetails });
+      const { status, data } = await updatePaymentIntegrationApi(state.siteId, { razorpay: razorpayDetails });
       if (status) {
         showNotification('success', data.message);
         navigate('/apps/app');
@@ -43,6 +41,12 @@ const RazorpayIntegration = () => {
     }
   };
 
+  useEffect(() => {
+    if (!state) navigate('/apps/app');
+  }, [state, navigate]);
+
+  if (!state) return null;
+
   return (
     <div className="py-8 p-4 sm:p-8 overflow-x-hidden mb-20">
       <div className="w-full pb-8 border-b border-primary gap-y-4 gap-2 flex flex-col items-start md:flex-row lg:flex-col xl:flex-row justify-between lg:items-start md:items-end xl:items-end">
@@ -50,7 +54,7 @@ const RazorpayIntegration = () => {
           <span className="text-3xl font-semibold text-dark">Razorpay Configuration</span>
         </div>
         <div className=" w-full flex gap-4 justify-end items-end md:w-fit lg:w-full xl:w-fit">
-          <FormButtons to={`/apps/integration/${siteId}`} onClick={handleSubmit} loading={isLoading} />
+          <FormButtons to={`/apps/integration/${state?.siteId}`} onClick={handleSubmit} loading={isLoading} />
         </div>
       </div>
 

@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import FormButtons from '../../atoms/formFields/FormButtons';
 import FormField from '../../atoms/formFields/InputField';
 import DropDown from '../../atoms/formFields/DropDown';
@@ -11,17 +11,15 @@ const ZohocrmIntegration = () => {
     // setLoading,
     isLoading
   } = useGlobalContext();
-  // const navigate = useNavigate();
-  const {
-    state: { siteId }
-  } = useLocation();
+  const navigate = useNavigate();
+  const { state } = useLocation();
 
   const [zohocrmDetails, setZohocrmDetails] = useState({
     clientId: '',
     clientSecret: ''
   });
   const [errors, setErrors] = useState({});
-  const [siteData, setSiteData] = useState();
+  const [siteData, setSiteData] = useState({ id: state?.siteId, name: state?.siteId, showName: '' });
 
   // const validate = () => {
   //   const newErrors = {};
@@ -48,6 +46,12 @@ const ZohocrmIntegration = () => {
 
   console.log(zohocrmDetails);
 
+  useEffect(() => {
+    if (!state) navigate('/apps/app');
+  }, [state, navigate]);
+
+  if (!state) return null;
+
   return (
     <div className="py-8 p-4 sm:p-8 overflow-x-hidden mb-20">
       <div className="w-full pb-8 border-b border-primary gap-y-4 gap-2 flex flex-col items-start md:flex-row lg:flex-col xl:flex-row justify-between lg:items-start md:items-end xl:items-end">
@@ -55,7 +59,7 @@ const ZohocrmIntegration = () => {
           <span className="text-3xl font-semibold text-dark">Zoho CRM Configuration</span>
         </div>
         <div className=" w-full flex gap-4 justify-end items-end md:w-fit lg:w-full xl:w-fit">
-          <FormButtons to={`/apps/integration/${siteId}`} loading={isLoading} btnLebal="Add" />
+          <FormButtons to={`/apps/integration/${state?.siteId}`} loading={isLoading} btnLebal="Add" />
         </div>
       </div>
 
