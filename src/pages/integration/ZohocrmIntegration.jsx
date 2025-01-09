@@ -4,10 +4,13 @@ import FormButtons from '../../atoms/formFields/FormButtons';
 import FormField from '../../atoms/formFields/InputField';
 import DropDown from '../../atoms/formFields/DropDown';
 import useGlobalContext from '../../hooks/useGlobalContext';
+import { updatePaymentIntegrationApi } from '../../apis/payment-integration-apis';
+import { showNotification } from '../../utils/showNotification';
 
 const ZohocrmIntegration = () => {
   const {
     auth: { allSites },
+    setLoading,
     isLoading
   } = useGlobalContext();
   const navigate = useNavigate();
@@ -25,11 +28,19 @@ const ZohocrmIntegration = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const verifyZoho = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     if (!validate()) return;
-    const redirectUri = `${import.meta.env.VITE_API_URL}/zohocallback`;
-    const authURL = `https://accounts.zoho.com/oauth/v2/auth?response_type=code&client_id=${zohocrmDetails.clientId}&scope=ZohoCRM.modules.ALL&redirect_uri=${redirectUri}&access_type=offline&state=${state?.siteId}`;
-    navigate(authURL);
+    setLoading(true);
+    try {
+      const { status, data } = await updatePaymentIntegrationApi(siteData.id, undefined, { zoho: zohocrmDetails });
+      if (status) navigate('/apps/app');
+      else showNotification('warn', data);
+    } catch (error) {
+      showNotification('error', error.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -45,7 +56,7 @@ const ZohocrmIntegration = () => {
           <span className="text-3xl font-semibold text-dark">Zoho CRM Configuration</span>
         </div>
         <div className=" w-full flex gap-4 justify-end items-end md:w-fit lg:w-full xl:w-fit">
-          <FormButtons to={`/apps/integration/${state?.siteId}`} loading={isLoading} btnLebal="Add" onClick={verifyZoho} />
+          <FormButtons to={`/apps/integration/${state?.siteId}`} loading={isLoading} btnLebal="Add" onClick={handleSubmit} />
         </div>
       </div>
 
