@@ -34,6 +34,7 @@ const ZohocrmIntegration = () => {
     setLoading(true);
     try {
       const { status, data } = await updatePaymentIntegrationApi(siteData.id, undefined, { zoho: zohocrmDetails });
+      if (data.link) window.open(data.link);
       if (status) navigate('/apps/app');
       else showNotification('warn', data);
     } catch (error) {
