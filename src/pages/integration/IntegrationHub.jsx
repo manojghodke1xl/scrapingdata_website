@@ -18,7 +18,6 @@ const IntegrationHub = () => {
   const getIntegration = useCallback(async () => {
     try {
       setLoading(true);
-
       const { status, data } = await getIntegrationBySite(id);
       if (status) {
         setIntegrationData(data);
@@ -85,7 +84,7 @@ const IntegrationHub = () => {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 2xl:grid-cols-4 gap-4 mt-5">
         {integrationList.map((item) => {
-          const isVerified = integrationData?.payment?.[item.id]?.isVerified;
+          const isVerified = item.id === 'zohocrm' ? integrationData?.crm?.zoho?.isVerfied : integrationData?.payment?.[item.id]?.isVerified;
           const paymentData = integrationData?.payment?.[item.id] || null;
           return (
             <div key={item.name} className="rounded-xl border border-primary p-4 flex flex-col gap-4">
@@ -105,7 +104,7 @@ const IntegrationHub = () => {
                 {isVerified && (
                   <button
                     className="w-fit border border-primary p-2 rounded-xl font-normal"
-                    onClick={() => navigate(`/apps/integration/${item.id}`, { state: { paymentData, siteId: id } })}
+                    onClick={() => navigate(`/apps/integration/${item.id}`, { state: { paymentData: item.id === 'zohocrm' ? integrationData.crm : paymentData, siteId: id } })}
                     disabled={isLoading}
                   >
                     Re-configure
