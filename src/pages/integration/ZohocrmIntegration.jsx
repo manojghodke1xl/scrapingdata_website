@@ -4,47 +4,45 @@ import FormButtons from '../../atoms/formFields/FormButtons';
 import FormField from '../../atoms/formFields/InputField';
 import DropDown from '../../atoms/formFields/DropDown';
 import useGlobalContext from '../../hooks/useGlobalContext';
+import { updatePaymentIntegrationApi } from '../../apis/payment-integration-apis';
+import { showNotification } from '../../utils/showNotification';
 
 const ZohocrmIntegration = () => {
   const {
     auth: { allSites },
-    // setLoading,
+    setLoading,
     isLoading
   } = useGlobalContext();
   const navigate = useNavigate();
   const { state } = useLocation();
 
-  const [zohocrmDetails, setZohocrmDetails] = useState({
-    clientId: '',
-    clientSecret: ''
-  });
+  const [zohocrmDetails, setZohocrmDetails] = useState(state?.paymentData || {});
   const [errors, setErrors] = useState({});
   const [siteData, setSiteData] = useState({ id: state?.siteId, name: state?.siteId, showName: '' });
 
-  // const validate = () => {
-  //   const newErrors = {};
-  //   if (!zohocrmDetails.clientId) newErrors.clientId = 'Client Id is required';
-  //   if (!zohocrmDetails.clientSecret) newErrors.clientSecret = 'Client Secret is required';
-  //   setErrors(newErrors);
-  //   return Object.keys(newErrors).length === 0;
-  // };
+  const validate = () => {
+    const newErrors = {};
+    if (!zohocrmDetails.clientId) newErrors.clientId = 'Client Id is required';
+    if (!zohocrmDetails.clientSecret) newErrors.clientSecret = 'Client Secret is required';
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   if (!validate()) return;
-  //   setLoading(true);
-  //   try {
-  //     const { status, data } = await addPaymentIntegrationApi(siteData.id, { zohocrm: zohocrmDetails });
-  //     if (status) navigate('/apps/app');
-  //     else showNotification('warn', data);
-  //   } catch (error) {
-  //     showNotification('error', error.message);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
-  console.log(zohocrmDetails);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!validate()) return;
+    setLoading(true);
+    try {
+      const { status, data } = await updatePaymentIntegrationApi(siteData.id, undefined, { zoho: zohocrmDetails });
+      if (data.link) window.open(data.link);
+      if (status) navigate('/apps/app');
+      else showNotification('warn', data);
+    } catch (error) {
+      showNotification('error', error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     if (!state) navigate('/apps/app');
@@ -59,7 +57,7 @@ const ZohocrmIntegration = () => {
           <span className="text-3xl font-semibold text-dark">Zoho CRM Configuration</span>
         </div>
         <div className=" w-full flex gap-4 justify-end items-end md:w-fit lg:w-full xl:w-fit">
-          <FormButtons to={`/apps/integration/${state?.siteId}`} loading={isLoading} btnLebal="Add" />
+          <FormButtons to={`/apps/integration/${state?.siteId}`} loading={isLoading} btnLebal="Add" onClick={handleSubmit} />
         </div>
       </div>
 

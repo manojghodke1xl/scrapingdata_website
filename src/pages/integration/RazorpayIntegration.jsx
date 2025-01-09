@@ -12,7 +12,7 @@ const RazorpayIntegration = () => {
   const navigate = useNavigate();
   const { setLoading, isLoading } = useGlobalContext();
   const { state } = useLocation();
-  const [razorpayDetails, setRazorpayDetails] = useState(state?.paymentData);
+  const [razorpayDetails, setRazorpayDetails] = useState(state?.paymentData || {});
   const [errors, setErrors] = useState({});
 
   const validate = () => {
