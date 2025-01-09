@@ -13,6 +13,7 @@ import ExportDataModal from '../modal/ExportDataModal';
 
 const TableComponent = ({
   selectable,
+  siteModule,
   tableData,
   apiUrl,
   tableCountLabel,
@@ -174,6 +175,11 @@ const TableComponent = ({
     setShowFilter({ status: false, sites: false, event: false });
   };
 
+  const availableSites =
+    siteModule === 'participant' || siteModule === 'payment'
+      ? allSites
+      : allSites.filter((site) => site.modules?.some((module) => module[siteModule] === true)).map((site) => ({ name: site.name, _id: site._id }));
+
   return (
     <div className="overflow-hidden">
       <div className="my-8 rounded-xl border border-primary overflow-hidden">
@@ -191,7 +197,7 @@ const TableComponent = ({
             showFilter={showFilter}
             setShowFilter={setShowFilter}
             statuses={statuses}
-            allSites={allSites}
+            allSites={availableSites}
             events={events}
           />
           <div
@@ -269,7 +275,7 @@ const TableComponent = ({
           setSitesModelOpen={setModalState}
           selectedSites={selectionState.selectedSites}
           setSelectedSites={setSelectionState}
-          availableSites={allSites}
+          availableSites={availableSites}
           onConfirm={handleSitesChange}
           siteToggle={selectionState.siteToggle}
         />
@@ -280,7 +286,7 @@ const TableComponent = ({
           duplicateBtn={duplicateBtn}
           setSitesModelOpen={setModalState}
           selectedSites={selectionState.selectedSites}
-          availableSites={allSites}
+          availableSites={availableSites}
           setSelectedSites={setSelectionState}
           onConfirm={handleDuplicate}
         />

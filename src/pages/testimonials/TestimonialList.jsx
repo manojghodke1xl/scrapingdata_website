@@ -47,6 +47,7 @@ const TestimonialList = () => {
             <div className="p-1.5 min-w-full align-middle">
               <TableComponent
                 selectable={true}
+                siteModule={'testimonial'}
                 headers={[
                   { label: 'Sr No.', key: 'srno' },
                   { label: 'Name', key: 'name' },

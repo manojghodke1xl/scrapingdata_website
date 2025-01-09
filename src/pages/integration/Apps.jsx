@@ -39,7 +39,9 @@ const Apps = () => {
             <DropDown
               mt="mt-5"
               name="Sites"
-              dropdownList={allSites.map((site) => ({ id: site._id, showName: `${site.name} (${site.host})`, name: site._id }))}
+              dropdownList={allSites
+                .filter((site) => site.modules?.some((module) => module.apps === true))
+                .map((site) => ({ id: site._id, showName: `${site.name} (${site.host})`, name: site._id }))}
               SummaryChild={<h5 className="p-0 m-0 text-primary">{siteData.showName || 'Sites'}</h5>}
               search={true}
               selected={siteData.name}
@@ -58,3 +60,4 @@ const Apps = () => {
 };
 
 export default Apps;
+0

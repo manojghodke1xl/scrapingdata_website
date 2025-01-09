@@ -1,16 +1,17 @@
 import RadioField from '../formFields/RadioField';
 import { useState } from 'react';
 import ToggleComponent from '../formFields/ToggleComponent';
-import AdvancedFilter from '../filter/AdvancedFilterComponent';
+// import AdvancedFilter from '../filter/AdvancedFilterComponent';
 import CustomColumnSelector from '../filter/CustomColumnSelector';
 import { exportHandler } from '../../helpers/exportHandler';
+import { showNotification } from '../../utils/showNotification';
 
 const ExportDataModal = ({ isExportModalOpen, setExportModalOpen, label, selectedData, apiUrl, rows, headers, customColumns }) => {
   const [selectionState, setSelectionState] = useState({
     selectedRecords: 'currentPage',
     selectedColumns: 'visible',
     selectedData: 'allData',
-    selectedFileFormat: 'xlsx'
+    selectedFileFormat: 'csv'
   });
 
   const [selectedColumns, setSelectedColumns] = useState([]);
@@ -50,7 +51,7 @@ const ExportDataModal = ({ isExportModalOpen, setExportModalOpen, label, selecte
     else if (exportConditions.visible) handleExportTable('visible');
     else if (exportConditions.selected) handleExportTable('selected');
     else if (exportConditions.custom) handleExportTable('visible');
-
+    else showNotification('warn', 'Please select the correct export options');
     setExportModalOpen((prev) => ({ ...prev, isExportModelOpen: false }));
     handleDefaultState();
   };
@@ -128,7 +129,7 @@ const ExportDataModal = ({ isExportModalOpen, setExportModalOpen, label, selecte
                   label={'Filtered Data'}
                 />
               </div>
-              {selectionState.selectedData === 'filterdData' && <AdvancedFilter />}
+              {/* {selectionState.selectedData === 'filterdData' && <AdvancedFilter />} */}
             </div>
 
             <div className="border p-4 rounded-xl border-primary flex flex-col gap-2 w-full mt-4">

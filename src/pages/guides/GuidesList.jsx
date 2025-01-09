@@ -16,7 +16,7 @@ const GuidesList = () => {
     const { _id, title, isActive, sites, createdAt, updatedAt } = guide;
     return {
       id: _id,
-      exportData:guide,
+      exportData: guide,
       title: <TruncatableFieldModal title={'Title'} content={title} />,
       sites: <TruncatableFieldModal title={'Sites'} content={sites.map((s) => `${s.name} (${s.host})`).join(', ')} />,
       isActive: (
@@ -53,6 +53,7 @@ const GuidesList = () => {
             <div className="p-1.5 min-w-full align-middle">
               <TableComponent
                 selectable={true}
+                siteModule={'guide'}
                 headers={[
                   { label: 'Sr No.', key: 'srno' },
                   { label: 'Title', key: 'title' },

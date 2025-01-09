@@ -42,6 +42,7 @@ const EventList = () => {
             <div className="p-1.5 min-w-full align-middle">
               <TableComponent
                 selectable={true}
+                siteModule={'events'}
                 headers={[
                   { label: 'Sr No.', key: 'srno' },
                   { label: 'Event Name', key: 'name' },

@@ -50,6 +50,7 @@ const PartnerLogoList = () => {
               <TableComponent
                 selectable={true}
                 search={true}
+                siteModule={'partnerlogo'}
                 headers={[
                   { label: 'Sr No.', key: 'srno' },
                   { label: 'Image', key: 'image' },

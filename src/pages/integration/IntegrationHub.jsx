@@ -30,10 +30,7 @@ const IntegrationHub = () => {
   }, [id, setLoading]);
 
   useEffect(() => {
-    if (id) {
-      setLoading(true);
-      getIntegration();
-    }
+    if (id) getIntegration();
   }, [getIntegration, id, setLoading]);
 
   const integrationList = [

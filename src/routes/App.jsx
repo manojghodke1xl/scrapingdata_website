@@ -1,3 +1,4 @@
+import { lazy } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import { GlobalProvider } from '../contexts/providers/GlobalProvider';
@@ -30,6 +31,8 @@ import IntegrationRoutes from './private-routes/IntegrationRoutes';
 import FaqCategoryRoutes from './private-routes/FaqCategoryRoutes';
 import 'react-toastify/dist/ReactToastify.css';
 
+const ZohoStatus = lazy(() => import('../pages/integration/ZohoStatus'));
+
 const App = () => {
   return (
     <GlobalProvider>
@@ -45,7 +48,7 @@ const App = () => {
             <Route element={<AuthComponent />}>
               <Route element={<StructuredLayout />}>
                 <Route path="/dashboard" element={<Dashboard />} />
-                {/* <Route path="/auth-status/:id" /> */}
+                <Route path="/auth-status/:id" element={<ZohoStatus />} />
 
                 {/* Nested Private Routes */}
                 <Route path="/admin/*" element={<AdminRoutes />} />

@@ -51,6 +51,7 @@ const CouponList = () => {
             <div className="p-1.5 min-w-full align-middle">
               <TableComponent
                 selectable={true}
+                siteModule={'coupon'}
                 headers={[
                   { label: 'Sr No.', key: 'srno' },
                   { label: 'Coupon Code', key: 'code' },

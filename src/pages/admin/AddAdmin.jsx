@@ -165,9 +165,7 @@ const AddAdmin = () => {
           <div className="w-full">
             <div className="w-full">
               <MultiSelectCheckbox
-                options={availableSites
-                  .filter((site) => site.modules?.some((module) => module.admin === true))
-                  .map((site) => ({ name: `${site.name} (${site.host})`, _id: site._id }))}
+                options={availableSites.map((site) => ({ name: `${site.name} (${site.host})`, _id: site._id }))}
                 label="Select Sites"
                 onChange={(selected) => {
                   setAdminDetails((prev) => ({ ...prev, sites: selected }));

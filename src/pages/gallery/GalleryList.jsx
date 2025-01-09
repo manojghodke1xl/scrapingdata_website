@@ -50,6 +50,7 @@ const GalleryList = () => {
               <TableComponent
                 selectable={true}
                 search={true}
+                siteModule={'gallery'}
                 headers={[
                   { label: 'Sr No.', key: 'srno' },
                   { label: 'Image', key: 'image' },
