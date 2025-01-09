@@ -45,6 +45,7 @@ const App = () => {
             <Route element={<AuthComponent />}>
               <Route element={<StructuredLayout />}>
                 <Route path="/dashboard" element={<Dashboard />} />
+                {/* <Route path="/auth-status/:id" /> */}
 
                 {/* Nested Private Routes */}
                 <Route path="/admin/*" element={<AdminRoutes />} />

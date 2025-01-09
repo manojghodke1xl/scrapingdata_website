@@ -15,7 +15,6 @@ import { addWebsiteNote, editWebsiteNote, enquiryIntegration, subscriberIntegrat
 import MultiSelectCheckbox from '../../atoms/formFields/MultiSelectCheckBox';
 
 const moduleOptions = [
-  { _id: 'admin', name: 'Admin' },
   { _id: 'casestudy', name: 'Case Study' },
   { _id: 'guide', name: 'Guide' },
   { _id: 'popup', name: 'Popup' },
@@ -27,7 +26,7 @@ const moduleOptions = [
   { _id: 'events', name: 'Events' },
   { _id: 'faq', name: 'FAQ' },
   { _id: 'testimonial', name: 'Testimonial' },
-  { _id: 'zoho', name: 'Zoho' }
+  { _id: 'apps', name: 'Apps' }
 ];
 
 const AddSite = () => {
