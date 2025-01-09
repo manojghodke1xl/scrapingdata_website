@@ -264,7 +264,7 @@ const AddTestimonial = () => {
             <div className="w-full">
               <MultiSelectCheckbox
                 options={availableSites
-                  .filter((site) => site.modules.some((module) => module.testimonial === true))
+                  .filter((site) => site.modules?.some((module) => module.testimonial === true))
                   .map((site) => ({ name: `${site.name} (${site.host})`, _id: site._id }))}
                 label="Select Sites"
                 formLabel={'Select Sites'}

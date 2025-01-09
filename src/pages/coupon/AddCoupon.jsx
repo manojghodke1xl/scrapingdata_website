@@ -245,7 +245,7 @@ const AddCoupon = () => {
             <div className="w-full">
               <MultiSelectCheckbox
                 options={availableSites
-                  .filter((site) => site.modules.some((module) => module.coupon === true))
+                  .filter((site) => site.modules?.some((module) => module.coupon === true))
                   .map((site) => ({ name: `${site.name} (${site.host})`, _id: site._id }))}
                 label="Select Sites"
                 onChange={(selected) => {

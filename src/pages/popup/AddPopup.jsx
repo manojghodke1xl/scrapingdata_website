@@ -404,7 +404,7 @@ const AddPopup = () => {
                 name="Sites"
                 label={'Select Site'}
                 dropdownList={availableSites
-                  .filter((site) => site.modules.some((module) => module.popup === true))
+                  .filter((site) => site.modules?.some((module) => module.popup === true))
                   .map((site) => ({ id: site._id, showName: `${site.name} (${site.host})`, name: site._id }))}
                 SummaryChild={<h5 className="p-0 m-0 text-primary">{popupDetails.siteObj ? popupDetails.siteObj.showName : 'Sites'}</h5>}
                 search={true}

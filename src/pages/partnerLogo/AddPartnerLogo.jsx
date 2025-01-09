@@ -132,7 +132,7 @@ const AddPartnerLogo = () => {
             <div className="w-full">
               <MultiSelectCheckbox
                 options={availableSites
-                  .filter((site) => site.modules.some((module) => module.partnerlogo === true))
+                  .filter((site) => site.modules?.some((module) => module.partnerlogo === true))
                   .map((site) => ({ name: `${site.name} (${site.host})`, _id: site._id }))}
                 label="Select Sites"
                 onChange={(selected) => {

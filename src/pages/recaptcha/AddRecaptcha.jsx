@@ -138,7 +138,7 @@ const AddRecaptcha = () => {
             <div className="w-full">
               <MultiSelectCheckbox
                 options={availableSites
-                  .filter((site) => site.modules.some((module) => module.recaptcha === true))
+                  .filter((site) => site.modules?.some((module) => module.recaptcha === true))
                   .map((site) => ({ name: `${site.name} (${site.host})`, _id: site._id }))}
                 label="Select Sites"
                 formLabel="Select Sites"

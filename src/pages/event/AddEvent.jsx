@@ -140,7 +140,7 @@ const AddEvent = () => {
               <DropDown
                 name="Sites"
                 dropdownList={availableSites
-                  .filter((site) => site.modules.some((module) => module.events === true))
+                  .filter((site) => site.modules?.some((module) => module.events === true))
                   .map((site) => ({ id: site._id, showName: `${site.name} (${site.host})`, name: site._id }))}
                 SummaryChild={<h5 className="p-0 m-0 text-primary">{eventDetails.siteObj?.showName || 'Sites'}</h5>}
                 search={true}

@@ -154,7 +154,7 @@ const AddFaq = () => {
             <div className="w-full">
               <MultiSelectCheckbox
                 options={availableSites
-                  .filter((site) => site.modules.some((module) => module.faq === true))
+                  .filter((site) => site.modules?.some((module) => module.faq === true))
                   .map((site) => ({ name: `${site.name} (${site.host})`, _id: site._id }))}
                 label="Select Sites"
                 onChange={(selected) => {
