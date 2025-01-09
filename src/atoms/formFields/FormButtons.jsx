@@ -6,7 +6,12 @@ const FormButtons = ({ loading = false, to = '', type = 'submit', onClick, btnLe
       <Link to={to} className="px-4 py-2 text-primary font-medium bg-white hover:bg-gray-50 rounded-xl border border-primary whitespace-nowrap">
         Cancel
       </Link>
-      <button type={type} className="px-4 py-2 text-white font-medium bg-primary hover:bg-hover rounded-xl whitespace-nowrap" disabled={loading} onClick={onClick}>
+      <button
+        type={type}
+        className="px-4 py-2 text-white font-medium bg-primary hover:bg-hover rounded-xl whitespace-nowrap disabled:bg-fadedblue"
+        disabled={loading}
+        onClick={onClick}
+      >
         {btnLebal}
       </button>
     </div>

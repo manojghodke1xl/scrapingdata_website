@@ -49,10 +49,10 @@ export const faqManagementPath = [
 
 export const testimonialsPath = [
   { title: 'Testimonials', to: ['/testimonials/testimonial-list', '/testimonials/add-testimonial', '/testimonials/edit-testimonial'] },
-  { title: 'Testimonial Categories', to: ['/testimonials/testimonial-category-list', '/testimonials/add-testimonial-category', '/testimonials/edit-testimonial-category'] }
+  { title: 'Testimonial Categories', to: ['/testimonials/testimonial-category-list', '/testimonials/add-testimonials-category', '/testimonials/edit-testimonials-category'] }
 ];
 
 export const adminNavLinks = [
-  { title: 'Payments', to: ['/payments/payment-list'], icon: <VscCreditCard /> },
+  { title: 'Payments', to: ['/payments/payment-list', '/payments/payment-integration'], icon: <VscCreditCard /> },
   { title: 'Admin Management', to: ['/admin/admin-list', '/admin/add-admin', '/admin/edit-admin'], icon: <RiAdminLine /> }
 ];

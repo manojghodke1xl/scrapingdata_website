@@ -14,8 +14,8 @@ const TestimonialRoutes = () => {
       <Route path="/add-testimonial" element={<AddTestimonial />} />
       <Route path="/edit-testimonial/:id" element={<AddTestimonial />} />
       <Route path="/testimonial-category-list" element={<TestimonialCategoryList />} />
-      <Route path="/add-testimonial-category" element={<AddTestimonialCategory />} />
-      <Route path="/edit-testimonial-category/:id" element={<AddTestimonialCategory />} />
+      <Route path="/add-testimonials-category" element={<AddTestimonialCategory />} />
+      <Route path="/edit-testimonials-category/:id" element={<AddTestimonialCategory />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );

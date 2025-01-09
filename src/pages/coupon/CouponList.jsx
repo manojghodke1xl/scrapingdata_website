@@ -12,7 +12,7 @@ const CouponList = () => {
   const [coupons, setCoupons] = useState([]);
 
   const rows = coupons.map((coupon) => {
-    const { _id, code, type, value, minAmount, isActive, createdAt, updatedAt } = coupon;
+    const { _id, code, type, value, minAmount, isActive, sites, createdAt, updatedAt } = coupon;
     return {
       id: _id,
       exportData: coupon,
@@ -20,6 +20,7 @@ const CouponList = () => {
       type: <TruncatableFieldModal title={'Discount Type'} content={type} />,
       value: <TruncatableFieldModal title={'Discount Value'} content={value} />,
       minAmount: <TruncatableFieldModal title={'Minimum purchase Amount'} content={minAmount} />,
+      sites: <TruncatableFieldModal title={'Sites'} content={sites.map((s) => `${s.name} (${s.host})`).join(', ')} />,
       isActive: (
         <div className={`rounded-xl ${isActive ? 'bg-[#ECFDF3] text-[#027948]' : 'bg-[#F2F4F7] text-[#344054]'} px-2 py-1 w-fit flex gap-2 items-center`}>
           <span className={`min-w-[12px] min-h-[12px] rounded-full ${isActive ? 'bg-[#12B76A]' : 'bg-[#667085]'}`}></span>
@@ -57,6 +58,7 @@ const CouponList = () => {
                   { label: 'Discount Value', key: 'value' },
                   { label: 'Minimum purchase Amount', key: 'minAmount' },
                   { label: 'Status', key: 'isActive' },
+                  { label: 'Sites', key: 'sites' },
                   { label: 'Created Date', key: 'createdAt' },
                   { label: 'Updated Date', key: 'updatedAt' }
                 ]}

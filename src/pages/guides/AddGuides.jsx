@@ -19,7 +19,8 @@ const AddGuides = () => {
   const { id = '' } = useParams();
   const {
     auth: { allSites: availableSites },
-    setLoading
+    setLoading,
+    isLoading
   } = useGlobalContext();
 
   const [isScrollable, setIsScrollable] = useState(false);
@@ -106,7 +107,7 @@ const AddGuides = () => {
         <div>
           <span className="text-3xl font-semibold text-dark">{id ? 'Edit' : 'Add'} Guide</span>
         </div>
-        <FormButtons to="/guides/guides-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} />
+        <FormButtons to="/guides/guides-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} loading={isLoading} />
       </div>
 
       <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
@@ -160,6 +161,7 @@ const AddGuides = () => {
               imagePreviewUrl={guideDetails.imageFile?.url}
             />
             <FileUpload
+              divClassName={'mt-5'}
               logo={<BsFilePdf className="text-primary text-2xl" />}
               error={errors.pdf}
               setErrors={setErrors}
@@ -245,7 +247,7 @@ const AddGuides = () => {
       </div>
       {!isScrollable && (
         <div className="w-full flex justify-end items-center gap-4 pt-8  border- border-primary">
-          <FormButtons to="/guides/guides-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} />
+          <FormButtons to="/guides/guides-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} loading={isLoading} />
         </div>
       )}
     </div>

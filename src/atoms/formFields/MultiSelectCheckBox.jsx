@@ -4,12 +4,13 @@ import { IoIosArrowDown } from 'react-icons/io';
 
 const MultiSelectCheckbox = ({
   options,
+  formLabel,
   label,
   onChange,
   isSuperAdmin,
   selected = [],
   error,
-  marginTop,
+  divClassName,
   mode = 'ids' // 'ids' or 'objects'
 }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -59,7 +60,8 @@ const MultiSelectCheckbox = ({
     mode === 'ids' ? selected.length > 0 && selected.length === filteredOptions.length : filteredOptions.every((option) => selected.some((item) => item[option._id] === true));
 
   return (
-    <div className={`relative w-full ${marginTop || 'mt-5'} `}>
+    <div className={`${divClassName} relative w-full`}>
+      <label className="block text-sm font-medium text-primary mb-2">{formLabel}</label>
       {/* Dropdown Header */}
       <button
         type="button"
@@ -68,7 +70,8 @@ const MultiSelectCheckbox = ({
           error ? 'border-fadered focus:border-fadered' : ' border-primary focus:border-blue'
         } bg-white text-primary`}
       >
-        <span>{label}</span>
+        <span className="font-medium text-primary">{label}</span>
+
         <IoIosArrowDown className={`transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
       </button>
 

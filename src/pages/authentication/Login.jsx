@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import FormField from '../../atoms/formFields/InputField';
 import { showNotification } from '../../utils/showNotification';
-import Logo from '../../assets/images/MarsCMS-logo.png';
+import Logo from '../../assets/images/marsCMS-logo.png';
 import useGlobalContext from '../../hooks/useGlobalContext';
 
 const Login = () => {

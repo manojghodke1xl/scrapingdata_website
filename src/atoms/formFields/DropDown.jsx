@@ -3,7 +3,7 @@ import { IoAdd } from 'react-icons/io5';
 import SearchComponent from '../common/SearchComponent';
 import { IoIosArrowDown } from 'react-icons/io';
 
-const DropDown = ({ mt = 'mt-5', width = 'w-full', name, SummaryChild, dropdownList = [], commonFunction, search, selected, add = false, setIsNewSegment, error }) => {
+const DropDown = ({ mt = '', width = 'w-full', name, label, SummaryChild, dropdownList = [], commonFunction, search, selected, add = false, setIsNewSegment, error }) => {
   const dropdownRef = useRef(null);
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -19,11 +19,12 @@ const DropDown = ({ mt = 'mt-5', width = 'w-full', name, SummaryChild, dropdownL
   }, [handleClickOutside]);
 
   return (
-    <div className="w-full">
+    <div className={`w-full ${mt}`}>
+      <label className="block text-sm font-medium text-primary mb-2">{label}</label>
       <details
         ref={dropdownRef}
         name={name}
-        className={`relative ${width} cursor-default rounded-xl bg-white pl-3 pr-10 text-left text-primary shadow-sm border border-primary focus:outline-none focus:ring-0 sm:text-lg sm:leading-6 ${mt}`}
+        className={`relative ${width} cursor-default rounded-xl bg-white pl-3 pr-10 text-left text-primary shadow-sm border border-primary focus:outline-none focus:ring-0 sm:text-lg sm:leading-6 `}
       >
         <summary className="cursor-pointer py-2.5 pr-8 text-left text-primary list-none focus:outline-none focus:ring-0 focus:border-0">
           <span className="flex items-center">

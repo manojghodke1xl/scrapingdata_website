@@ -16,7 +16,8 @@ const AddRecaptcha = () => {
   const { id = '' } = useParams();
   const {
     auth: { allSites: availableSites },
-    setLoading
+    setLoading,
+    isLoading
   } = useGlobalContext();
 
   const [recaptcha, setRecaptcha] = useState({
@@ -93,7 +94,7 @@ const AddRecaptcha = () => {
         <div>
           <span className="text-3xl font-semibold text-dark">{id ? 'Edit' : 'Add'} reCAPTCHA</span>
         </div>
-        <FormButtons to="/recaptcha/recaptcha-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} />
+        <FormButtons to="/recaptcha/recaptcha-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} loading={isLoading} />
       </div>
 
       <div className="w-full justify-center items-center border-b  border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end ">
@@ -104,6 +105,7 @@ const AddRecaptcha = () => {
           <div className="dropdown-container relative w-full mt-2 ">
             <DropDown
               name="Version"
+              label={'Select Version'}
               SummaryChild={<h5 className="p-0 m-0 text-primary">{recaptcha.versionObj?.showName || 'v2'}</h5>}
               dropdownList={[
                 { id: 0, showName: 'v2', name: 'v2' },
@@ -135,8 +137,11 @@ const AddRecaptcha = () => {
           <div className="w-full">
             <div className="w-full">
               <MultiSelectCheckbox
-                options={availableSites}
+                options={availableSites
+                  .filter((site) => site.modules?.some((module) => module.recaptcha === true))
+                  .map((site) => ({ name: `${site.name} (${site.host})`, _id: site._id }))}
                 label="Select Sites"
+                formLabel="Select Sites"
                 onChange={(selected) => {
                   setRecaptcha((prev) => ({ ...prev, sites: selected }));
                   if (errors.sites) setErrors((prev) => ({ ...prev, sites: '' }));
@@ -170,6 +175,7 @@ const AddRecaptcha = () => {
                 errorMessage={errors.sitekey}
               />
               <FormField
+                divClassName={'mt-5'}
                 label="Secret key"
                 type="text"
                 id="secretkey"
@@ -192,7 +198,7 @@ const AddRecaptcha = () => {
       </div>
       {!isScrollable && (
         <div className="w-full flex justify-end items-center gap-4 pt-8  border- border-primary">
-          <FormButtons to="/recaptcha/recaptcha-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} />
+          <FormButtons to="/recaptcha/recaptcha-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} loading={isLoading} />
         </div>
       )}
     </div>

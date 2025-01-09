@@ -21,7 +21,8 @@ const AddTestimonial = () => {
   const { id = '' } = useParams();
   const {
     auth: { allSites: availableSites },
-    setLoading
+    setLoading,
+    isLoading
   } = useGlobalContext();
 
   const [isScrollable, setIsScrollable] = useState(false);
@@ -117,7 +118,7 @@ const AddTestimonial = () => {
         <div>
           <span className="text-3xl font-semibold text-dark">{id ? 'Edit' : 'Add'} Testimonial</span>
         </div>
-        <FormButtons to="/testimonials/testimonial-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} />
+        <FormButtons to="/testimonials/testimonial-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} loading={isLoading} />
       </div>
 
       <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
@@ -161,7 +162,8 @@ const AddTestimonial = () => {
           </div>
           <div className="dropdown-container relative w-full mt-2">
             <DropDown
-              name="Version"
+              name="type"
+              label={'Content Type'}
               SummaryChild={<h5 className="p-0 m-0 text-primary">{testimonialDetails.typeObj ? testimonialDetails.typeObj.showName : 'Text'}</h5>}
               dropdownList={[
                 { id: 0, showName: 'Text', name: 'text' },
@@ -186,6 +188,7 @@ const AddTestimonial = () => {
 
             {testimonialDetails.type === 'image' && (
               <FileUpload
+                divClassName={'mt-5'}
                 logo={<FaRegImage className="text-primary text-2xl" />}
                 error={errors.image}
                 setErrors={setErrors}
@@ -223,6 +226,7 @@ const AddTestimonial = () => {
                 {testimonialDetails.videoBolean ? (
                   <div className="w-full flex flex-col gap-y-2">
                     <FormField
+                      divClassName={'mt-5'}
                       label="Video URL"
                       type="text"
                       id="videoUrl"
@@ -234,6 +238,7 @@ const AddTestimonial = () => {
                   </div>
                 ) : (
                   <FileUpload
+                    divClassName={'mt-5'}
                     logo={<RiVideoUploadLine className="text-primary text-2xl" />}
                     error={errors.video}
                     setErrors={setErrors}
@@ -258,8 +263,11 @@ const AddTestimonial = () => {
           <div className="w-full">
             <div className="w-full">
               <MultiSelectCheckbox
-                options={availableSites}
+                options={availableSites
+                  .filter((site) => site.modules?.some((module) => module.testimonial === true))
+                  .map((site) => ({ name: `${site.name} (${site.host})`, _id: site._id }))}
                 label="Select Sites"
+                formLabel={'Select Sites'}
                 onChange={(selected) => {
                   setTestimonialDetails((prev) => ({ ...prev, sites: selected }));
                   if (errors.sites) setErrors((prev) => ({ ...prev, sites: '' }));
@@ -269,8 +277,10 @@ const AddTestimonial = () => {
               />
 
               <MultiSelectCheckbox
+                divClassName={'mt-5'}
                 options={availableCategories}
                 label="Select Categories"
+                formLabel={'Select Categories'}
                 onChange={(selected) => {
                   setTestimonialDetails((prev) => ({ ...prev, categories: selected }));
                   if (errors.categories) setErrors((prev) => ({ ...prev, categories: '' }));
@@ -310,7 +320,7 @@ const AddTestimonial = () => {
       </div>
       {!isScrollable && (
         <div className="w-full flex justify-end items-center gap-4 pt-8  border- border-primary">
-          <FormButtons to="/testimonials/testimonial-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} />
+          <FormButtons to="/testimonials/testimonial-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} loading={isLoading} />
         </div>
       )}
     </div>

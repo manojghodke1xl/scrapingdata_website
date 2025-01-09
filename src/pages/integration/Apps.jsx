@@ -37,6 +37,7 @@ const Apps = () => {
           <div className="w-1/4 min-w-fit mt-5">
             <div className="-mb-4 text-primary">Select Site</div>
             <DropDown
+              mt="mt-5"
               name="Sites"
               dropdownList={allSites.map((site) => ({ id: site._id, showName: `${site.name} (${site.host})`, name: site._id }))}
               SummaryChild={<h5 className="p-0 m-0 text-primary">{siteData.showName || 'Sites'}</h5>}

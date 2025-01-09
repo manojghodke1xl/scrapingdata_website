@@ -14,10 +14,26 @@ import NoteComponent from '../../atoms/common/NoteComponent';
 import { addWebsiteNote, editWebsiteNote, enquiryIntegration, subscriberIntegration } from './SiteNotes';
 import MultiSelectCheckbox from '../../atoms/formFields/MultiSelectCheckBox';
 
+const moduleOptions = [
+  { _id: 'admin', name: 'Admin' },
+  { _id: 'casestudy', name: 'Case Study' },
+  { _id: 'guide', name: 'Guide' },
+  { _id: 'popup', name: 'Popup' },
+  { _id: 'coupon', name: 'Coupon' },
+  { _id: 'recaptcha', name: 'reCAPTCHA' },
+  { _id: 'clientlogo', name: 'Client Logo' },
+  { _id: 'gallery', name: 'Gallery' },
+  { _id: 'partnerlogo', name: 'Partner Logo' },
+  { _id: 'events', name: 'Events' },
+  { _id: 'faq', name: 'FAQ' },
+  { _id: 'testimonial', name: 'Testimonial' },
+  { _id: 'zoho', name: 'Zoho' }
+];
+
 const AddSite = () => {
   const navigate = useNavigate();
   const { id = '' } = useParams();
-  const { setLoading, dispatch } = useGlobalContext();
+  const { setLoading, dispatch, isLoading } = useGlobalContext();
 
   const [isScrollable, setIsScrollable] = useState(false);
   const [errors, setErrors] = useState({ forwardEmails: '' });
@@ -45,7 +61,7 @@ const AddSite = () => {
     // sendCRMData: { clientId: "", clientSecret: "" },
     enquiryWebhookUrl: '',
     mailinglistWebhookUrl: '',
-    modules: []
+    modules: moduleOptions.map((option) => ({ [option._id]: true }))
   });
 
   const checkScrollability = () => {
@@ -83,28 +99,28 @@ const AddSite = () => {
 
   const validate = () => {
     const newErrors = {};
-    if (!siteDetails.name) newErrors.name = 'Name is required';
-    if (!siteDetails.host) newErrors.host = 'Host is required';
+    if (!siteDetails.name.trim()) newErrors.name = 'Name is required';
+    if (!siteDetails.host.trim()) newErrors.host = 'Host is required';
     if (!siteDetails.smtp) newErrors.smtp = 'SMTP is required';
 
     if (siteDetails.sendUserEnquiry) {
-      if (!siteDetails.userEnquiryMailData?.subject) newErrors.subject = 'Subject is required';
+      if (!siteDetails.userEnquiryMailData?.subject.trim()) newErrors.subject = 'Subject is required';
       if (!siteDetails.userEnquiryMailData?.body) newErrors.body = 'Body is required';
     }
 
     if (siteDetails.sendUserMailingList) {
-      if (!siteDetails.userMailingListMailData?.subject) newErrors.subject = 'Subject is required';
+      if (!siteDetails.userMailingListMailData?.subject.trim()) newErrors.subject = 'Subject is required';
       if (!siteDetails.userMailingListMailData?.body) newErrors.body = 'Body is required';
     }
 
     if (siteDetails.sendAdminEnquiry) {
-      if (!siteDetails.adminEnquiryMailData?.subject) newErrors.subject = 'Subject is required';
+      if (!siteDetails.adminEnquiryMailData?.subject.trim()) newErrors.subject = 'Subject is required';
       if (!siteDetails.adminEnquiryMailData?.body) newErrors.body = 'Body is required';
       if (!siteDetails.adminEnquiryEmails.length) newErrors.adminEnquiryEmails = 'At least one email is required';
     }
 
     if (siteDetails.sendAdminMailingList) {
-      if (!siteDetails.adminMailingListMailData?.subject) newErrors.subject = 'Subject is required';
+      if (!siteDetails.adminMailingListMailData?.subject.trim()) newErrors.subject = 'Subject is required';
       if (!siteDetails.adminMailingListMailData?.body) newErrors.body = 'Body is required';
       if (!siteDetails.adminMailingListEmails.length) newErrors.adminMailingListEmails = 'At least one email is required';
     }
@@ -136,8 +152,7 @@ const AddSite = () => {
       if (status) {
         showNotification('success', data.message);
         dispatch({ type: 'SET_ALL_SITES', payload: [] });
-        if (siteDetails.sendCRM) return navigate(`/zoho-auth/${data?.data?.id}`);
-        else return navigate('/website/website-list');
+        navigate('/website/website-list');
       } else showNotification('warn', data);
     } catch (error) {
       showNotification('error', error.message);
@@ -152,7 +167,7 @@ const AddSite = () => {
         <div>
           <span className="text-3xl font-semibold text-dark">{id ? 'Edit' : 'Add'} Site</span>
         </div>
-        <FormButtons to="/website/website-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} />
+        <FormButtons to="/website/website-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} loading={isLoading} />
       </div>
 
       <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
@@ -442,33 +457,32 @@ const AddSite = () => {
           </div>
           <div className="w-full">
             <div>
-              {/* <ToggleComponent
-                label={'Send CRM'}
-                isEnableState={siteDetails.sendCRM}
-                setIsEnableState={(value) => setSiteDetails((prev) => ({ ...prev, sendCRM: value, sendCRMData: undefined }))}
-              /> */}
               <DropDown
                 name="SMTP"
+                label={'Select SMTP'}
                 SummaryChild={<h5 className="p-0 m-0 text-primary">{siteDetails.smtpObj ? siteDetails.smtpObj.showName : 'SMTP'}</h5>}
                 dropdownList={smtpOptions.map((option) => ({ id: option._id, showName: option.name, name: option._id }))}
                 selected={siteDetails.smtp}
                 search={true}
                 commonFunction={(e) => setSiteDetails((prev) => ({ ...prev, smtp: e.id, smtpObj: e }))}
+                error={errors.smtp}
               />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
+        <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
+          <div className="sm:w-7/12 w-full flex flex-col">
+            <span className=" text-primary">Module Information</span>
+          </div>
+          <div className="w-full">
+            <div>
               <MultiSelectCheckbox
-                options={[
-                  { _id: 'casestudy', name: 'Case Study' },
-                  { _id: 'guide', name: 'Guide' },
-                  { _id: 'popup', name: 'Popup' },
-                  { _id: 'recaptcha', name: 'reCAPTCHA' },
-                  { _id: 'clientlogo', name: 'Client Logo' },
-                  { _id: 'gallery', name: 'Gallery' },
-                  { _id: 'partnerlogo', name: 'Partner Logo' },
-                  { _id: 'events', name: 'Events' },
-                  { _id: 'faq', name: 'FAQ' },
-                  { _id: 'testimonial', name: 'Testimonial' }
-                ]}
+                options={moduleOptions}
                 label={'Select Modules'}
+                formLabel={'Select Modules'}
                 selected={siteDetails.modules}
                 onChange={(newModules) => setSiteDetails((prev) => ({ ...prev, modules: newModules }))}
                 mode="objects"
@@ -498,6 +512,7 @@ const AddSite = () => {
                 Preview Data
               </button>
               <FormField
+                divClassName={'mt-5'}
                 label="Mailing List Webhook URL"
                 type="url"
                 id="mailinglistWebhookUrl"
@@ -519,7 +534,7 @@ const AddSite = () => {
       </div>
       {!isScrollable && (
         <div className="w-full flex justify-end items-center gap-4 pt-8  border- border-primary">
-          <FormButtons to="/website/website-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} />
+          <FormButtons to="/website/website-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} loading={isLoading} />
         </div>
       )}
       <ApiIntegrationModal isIntegrationModalOpen={isEnquiryModalOpen} setIntegrationModalOpen={setEnquiryModalOpen} sections={enquiryIntegration} />

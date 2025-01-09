@@ -73,7 +73,7 @@ export const GlobalProvider = ({ children }) => {
       try {
         const { status, data } = await getAllSitesApi();
         if (status) dispatch({ type: 'SET_ALL_SITES', payload: data.sites });
-        else if (data === 'jwt expired') dispatch({ type: 'SIGNOUT' });
+        else if (status === false || data === 'jwt expired') dispatch({ type: 'SIGNOUT' });
         else showNotification('warn', data);
       } catch (error) {
         showNotification('error', error.message);

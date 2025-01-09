@@ -15,7 +15,8 @@ const AddEvent = () => {
   const { id = '' } = useParams();
   const {
     auth: { allSites: availableSites },
-    setLoading
+    setLoading,
+    isLoading
   } = useGlobalContext();
   const [isScrollable, setIsScrollable] = useState(false);
   const [errors, setErrors] = useState({});
@@ -88,7 +89,7 @@ const AddEvent = () => {
         <div>
           <span className="text-3xl font-semibold text-dark">{id ? 'Edit' : 'Add'} Event</span>
         </div>
-        <FormButtons to="/events/event-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} />
+        <FormButtons to="/events/event-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} loading={isLoading} />
       </div>
 
       <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
@@ -138,7 +139,9 @@ const AddEvent = () => {
             <div>
               <DropDown
                 name="Sites"
-                dropdownList={availableSites.map((site) => ({ id: site._id, showName: `${site.name} (${site.host})`, name: site._id }))}
+                dropdownList={availableSites
+                  .filter((site) => site.modules?.some((module) => module.events === true))
+                  .map((site) => ({ id: site._id, showName: `${site.name} (${site.host})`, name: site._id }))}
                 SummaryChild={<h5 className="p-0 m-0 text-primary">{eventDetails.siteObj?.showName || 'Sites'}</h5>}
                 search={true}
                 selected={eventDetails.site}
@@ -176,7 +179,7 @@ const AddEvent = () => {
 </div> */}
       {!isScrollable && (
         <div className="w-full flex justify-end items-center gap-4 pt-8  border- border-primary">
-          <FormButtons to="/events/event-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} />
+          <FormButtons to="/events/event-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} loading={isLoading} />
         </div>
       )}
     </div>

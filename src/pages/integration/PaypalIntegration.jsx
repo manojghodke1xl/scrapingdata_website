@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import useGlobalContext from '../../hooks/useGlobalContext';
 import FormButtons from '../../atoms/formFields/FormButtons';
@@ -11,11 +11,9 @@ import { updatePaymentIntegrationApi } from '../../apis/payment-integration-apis
 const PaypalIntegration = () => {
   const navigate = useNavigate();
   const { setLoading, isLoading } = useGlobalContext();
-  const {
-    state: { paymentData, siteId }
-  } = useLocation();
+  const { state } = useLocation();
 
-  const [paypalDetails, setPaypalDetails] = useState(paymentData);
+  const [paypalDetails, setPaypalDetails] = useState(state?.paymentData);
   const [errors, setErrors] = useState({});
 
   const validate = () => {
@@ -32,7 +30,7 @@ const PaypalIntegration = () => {
     if (!validate()) return;
     setLoading(true);
     try {
-      const { status, data } = await updatePaymentIntegrationApi(siteId, { paypal: paypalDetails });
+      const { status, data } = await updatePaymentIntegrationApi(state.siteId, { paypal: paypalDetails });
       if (status) {
         showNotification('success', data.message);
         navigate('/apps/app');
@@ -44,6 +42,12 @@ const PaypalIntegration = () => {
     }
   };
 
+  useEffect(() => {
+    if (!state) navigate('/apps/app');
+  }, [state, navigate]);
+
+  if (!state) return null;
+
   return (
     <div className="py-8 p-4 sm:p-8 overflow-x-hidden mb-20">
       <div className="w-full pb-8 border-b border-primary gap-y-4 gap-2 flex flex-col items-start md:flex-row lg:flex-col xl:flex-row justify-between lg:items-start md:items-end xl:items-end">
@@ -51,7 +55,7 @@ const PaypalIntegration = () => {
           <span className="text-3xl font-semibold text-dark">PayPal Configuration</span>
         </div>
         <div className=" w-full flex gap-4 justify-end items-end md:w-fit lg:w-full xl:w-fit">
-          <FormButtons to={`/apps/integration/${siteId}`} onClick={handleSubmit} disabled={isLoading} />
+          <FormButtons to={`/apps/integration/${state?.siteId}`} onClick={handleSubmit} loading={isLoading} />
         </div>
       </div>
 
@@ -74,6 +78,7 @@ const PaypalIntegration = () => {
               error={errors.environment}
             />
             <FormField
+              divClassName={'mt-5'}
               label="Client Id"
               type="text"
               id="clientId"
@@ -87,6 +92,7 @@ const PaypalIntegration = () => {
               errorMessage={errors.clientId}
             />
             <FormField
+              divClassName={'mt-5'}
               label="Client Secret"
               type="text"
               id="clientSecret"
@@ -124,6 +130,7 @@ const PaypalIntegration = () => {
               value={paypalDetails?.redirectUrl?.success}
             />
             <FormField
+              divClassName={'mt-5'}
               label="Failure URL"
               type="url"
               id="failure"

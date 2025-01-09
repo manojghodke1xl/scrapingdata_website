@@ -5,7 +5,7 @@ const FormField = ({ divClassName, label, type = 'text', name, id, placeholder, 
   const [showPassword, setShowPassword] = useState(false);
 
   return (
-    <div className={`${divClassName} w-full mt-5`}>
+    <div className={`${divClassName} w-full`}>
       <label htmlFor={id} className="block text-sm font-medium text-primary">
         {label}
       </label>

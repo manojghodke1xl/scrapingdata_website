@@ -8,6 +8,7 @@ import { IoCloseOutline } from 'react-icons/io5';
 import { BsFilePdf } from 'react-icons/bs';
 
 const FileUpload = ({
+  divClassName,
   logo,
   imagePreviewUrl: externalImagePreviewUrl,
   error,
@@ -71,7 +72,7 @@ const FileUpload = ({
 
   return (
     <>
-      <div className="w-full border border-primary rounded-xl p-6 shadow-sm mt-5">
+      <div className={`${divClassName} w-full border border-primary rounded-xl p-6 shadow-sm`}>
         <h1 className="text-primary text-lg mb-3 text-left flex items-center gap-2">
           {logo || <MdOutlineUploadFile className="text-primary text-2xl" />}
           Upload {isImage ? 'Image' : isPdf ? 'PDF' : isVideo ? 'Video' : 'File'}

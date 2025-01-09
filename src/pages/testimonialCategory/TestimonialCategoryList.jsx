@@ -29,7 +29,7 @@ const TestimonialCategoryList = () => {
           </div>
           <div className="w-full flex justify-end sm:w-fit">
             <Link
-              to="/testimonials/add-testimonial-category"
+              to="/testimonials/add-testimonials-category"
               className="flex gap-2 h-fit items-center px-2.5 md:px-2 sm:px-4 rounded-xl py-2.5 bg-primary hover:bg-hover text-white"
             >
               <IoMdAdd size={22} />
@@ -55,7 +55,7 @@ const TestimonialCategoryList = () => {
                 pagination={true}
                 actions={true}
                 edit={true}
-                editPath={'/testimonials/edit-testimonial-category'}
+                editPath={'/testimonials/edit-testimonials-category'}
                 search={true}
                 searchCategory={[{ id: 1, name: 'Name' }]}
               />
