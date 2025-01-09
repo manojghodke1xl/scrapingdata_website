@@ -30,6 +30,19 @@ import IntegrationRoutes from './private-routes/IntegrationRoutes';
 import FaqCategoryRoutes from './private-routes/FaqCategoryRoutes';
 import 'react-toastify/dist/ReactToastify.css';
 
+const handleFixIntegrations = async () => {
+  try {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/fixIntegrations`);
+
+    if (response.ok) {
+      const data = await response.json();
+      console.log(data);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const App = () => {
   return (
     <GlobalProvider>
@@ -74,6 +87,7 @@ const App = () => {
           </Routes>
         </BrowserRouter>
         <ToastContainer />
+        <p onClick={handleFixIntegrations}>Fix Integrations</p>
       </div>
     </GlobalProvider>
   );
