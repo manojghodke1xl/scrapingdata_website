@@ -1,7 +1,8 @@
 import { getMethodCall } from '../apis/api-handler';
 import { showNotification } from '../utils/showNotification';
 
-export const handleExport = ({ type, apiUrl, rows, headers, selected }) => {
+export const exportHandler = ({ type, apiUrl, rows, headers, selected }) => {
+  console.log({ type, apiUrl, rows, headers, selected });
   if (type === 'visible') {
     const visibleData = rows.map((row) =>
       headers.reduce((result, header) => {

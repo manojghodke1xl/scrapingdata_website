@@ -1,16 +1,22 @@
 import RadioField from '../formFields/RadioField';
 import { useState } from 'react';
 import ToggleComponent from '../formFields/ToggleComponent';
-import CustomColumnComponent from '../filter/CustomColumnSelecter';
 import AdvancedFilter from '../filter/AdvancedFilterComponent';
+import CustomColumnSelector from '../filter/CustomColumnSelector';
+import { exportHandler } from '../../helpers/exportHandler';
 
-const ExportDataModal = ({ isExportModalOpen, setExportModalOpen, label, selectedData, handleExportTable }) => {
+const ExportDataModal = ({ isExportModalOpen, setExportModalOpen, label, selectedData, apiUrl, rows, headers, customColumns }) => {
   const [selectionState, setSelectionState] = useState({
     selectedRecords: 'currentPage',
     selectedColumns: 'visible',
     selectedData: 'allData',
     selectedFileFormat: 'xlsx'
   });
+
+  const [selectedColumns, setSelectedColumns] = useState([]);
+
+  const handleExportTable = (type) =>
+    exportHandler({ type, apiUrl, rows, headers: selectionState.selectedColumns === 'customColumns' ? selectedColumns : headers, selected: selectedData.selectedItems });
 
   const handleDefaultState = () => setSelectionState({ selectedRecords: 'currentPage', selectedColumns: 'visible', selectedData: 'allData', selectedFileFormat: 'xlsx' });
 
@@ -31,6 +37,11 @@ const ExportDataModal = ({ isExportModalOpen, setExportModalOpen, label, selecte
         selectionState.selectedRecords === 'selectedRecords' &&
         selectionState.selectedData === 'allData' &&
         selectionState.selectedColumns === 'visible' &&
+        selectionState.selectedFileFormat === 'csv',
+      custom:
+        selectionState.selectedRecords === 'currentPage' &&
+        selectionState.selectedData === 'allData' &&
+        selectionState.selectedColumns === 'customColumns' &&
         selectionState.selectedFileFormat === 'csv'
     };
 
@@ -38,6 +49,7 @@ const ExportDataModal = ({ isExportModalOpen, setExportModalOpen, label, selecte
     if (exportConditions.all) handleExportTable('all');
     else if (exportConditions.visible) handleExportTable('visible');
     else if (exportConditions.selected) handleExportTable('selected');
+    else if (exportConditions.custom) handleExportTable('visible');
 
     setExportModalOpen((prev) => ({ ...prev, isExportModelOpen: false }));
     handleDefaultState();
@@ -147,7 +159,7 @@ const ExportDataModal = ({ isExportModalOpen, setExportModalOpen, label, selecte
                   label={'Custom Columns'}
                 />
               </div>
-              {selectionState.selectedColumns === 'customColumns' && <CustomColumnComponent options={[]} />}
+              {selectionState.selectedColumns === 'customColumns' && <CustomColumnSelector customColumns={customColumns} setSelectedColumns={setSelectedColumns} />}
             </div>
 
             <div className="border p-4 rounded-xl border-primary flex flex-col gap-2 w-full mt-4">

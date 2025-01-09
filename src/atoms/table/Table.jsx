@@ -9,7 +9,6 @@ import { handleDeleteConfirm, handleDuplicateConfirm, handleSitesUpdate, handleS
 import TableView from './TableView';
 import TableFilter from './TableFilter';
 import TableFilterActions from './TableFilterActions';
-import { handleExport } from '../../helpers/exportHandler';
 import ExportDataModal from '../modal/ExportDataModal';
 
 const TableComponent = ({
@@ -158,8 +157,6 @@ const TableComponent = ({
   const handleDuplicate = () =>
     handleDuplicateConfirm(selectionState.selectedItems, selectionState.selectedSites, duplicateApi, setLoading, setSelectionState, setRefresh, setModalState, setTableState);
 
-  const handleExportTable = (type) => handleExport({ type, apiUrl, rows, headers, selected: selectionState.selectedItems });
-
   const handleCategorySelect = (category) => {
     if (category.name === 'Status') setShowFilter((prev) => ({ ...prev, status: true }));
     if (category.name === 'Sites') setShowFilter((prev) => ({ ...prev, sites: true }));
@@ -216,7 +213,6 @@ const TableComponent = ({
               handleStatusChange={handleStatusChange}
               setExportDropdownOpen={setExportDropdownOpen}
               exportDropdownOpen={exportDropdownOpen}
-              exportData={handleExportTable}
               handleClearFilter={handleClearFilter}
             />
           </div>
@@ -288,7 +284,16 @@ const TableComponent = ({
           setSelectedSites={setSelectionState}
           onConfirm={handleDuplicate}
         />
-        <ExportDataModal isExportModalOpen={modalState.isExportModelOpen} selectedData={selectionState} setExportModalOpen={setModalState} handleExportTable={handleExportTable} />
+        <ExportDataModal
+          isExportModalOpen={modalState.isExportModelOpen}
+          setExportModalOpen={setModalState}
+          label="Export Data"
+          selectedData={selectionState}
+          apiUrl={apiUrl}
+          rows={rows}
+          headers={headers}
+          customColumns={rows.map((row) => row.exportData)}
+        />
       </div>
     </div>
   );
