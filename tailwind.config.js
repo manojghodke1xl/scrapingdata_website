@@ -31,6 +31,7 @@ export default {
         lightblue: '#095fe3',
         danger: ' #f04438',
         fadedblue: '#EFF8FF',
+        fadedred: '#fef3f2',
         darkgray: '#D0D5DD',
         lightcyan: '#E0EAFF',
         success: '#ECFDF3',
