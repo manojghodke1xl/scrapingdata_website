@@ -114,7 +114,7 @@ const AddPackage = () => {
             <div>
               <DropDown
                 name="Events"
-                dropdownList={events?.map((event) => ({ name: event._id, showName: event.name, id: event._id }))}
+                dropdownList={events?.map((event) => ({ name: event._id, showName: `${event.name} (${event.venue})`, id: event._id }))}
                 SummaryChild={<h5 className="p-0 m-0 text-primary">Events</h5>}
                 search={true}
                 selected={packageDetials.event}

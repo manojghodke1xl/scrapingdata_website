@@ -15,11 +15,11 @@ export const navLinks = [
 
 export const leadsManagementPath = [
   { title: 'Enquiry', to: ['/enquiry/enquiry-list', '/enquiry/view-enquiry', '/enquiry/enquiry-integration'] },
-  { title: 'Subscribers', to: ['/subscriber/subscriber-list', '/subscriber/view-subscriber', '/subscriber/subscriber-integration'] }
+  { title: 'Subscribers', to: ['/subscriber/subscriber-list', '/subscriber/view-subscriber', '/subscriber/subscriber-integration'] },
+  { title: 'Feedback', to: ['/feedback/feedback-list', '/feedback/view-feedback', '/feedback/feedback-integration'] }
 ];
 
 export const contentManagementPath = [
-  { title: 'Feedback', to: ['/feedback/feedback-list', '/feedback/view-feedback', '/feedback/feedback-integration'] },
   { title: 'Case Study', to: ['/case-study/case-study-list', '/case-study/add-case-study', '/case-study/edit-case-study', '/case-study/case-study-integration'] },
   { title: 'Guides', to: ['/guides/guides-list', '/guides/add-guides', '/guides/edit-guides', '/guides/guides-integration'] },
   { title: 'Pop-up', to: ['/pop-up/pop-up-list', '/pop-up/add-pop-up', '/pop-up/edit-pop-up'] }
