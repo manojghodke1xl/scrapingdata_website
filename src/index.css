@@ -518,7 +518,7 @@ details[open] .icon-open {
 }
 
 .react-datepicker__day:hover {
-  background-color: #eff8ff !important; /* fadedblue */
+  background-color: #175CD3 !important; /* fadedblue */
   border-radius: 6px !important;
 }
 

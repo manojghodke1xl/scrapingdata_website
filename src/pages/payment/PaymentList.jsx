@@ -9,7 +9,7 @@ const PaymentList = () => {
   const [payments, setPayments] = useState([]);
 
   const rows = payments.map((payment) => {
-    const { _id, site, event, participant, amount, currency, channel, createdAt, updatedAt } = payment;
+    const { _id, site, event, participant, amount, currency, channel, status, createdAt, updatedAt } = payment;
     return {
       id: _id,
       exportData: payment,
@@ -19,12 +19,16 @@ const PaymentList = () => {
       amount: <TruncatableFieldModal title={'Amount'} content={amount} />,
       currency: <TruncatableFieldModal title={'Currency'} content={currency} />,
       channel: channel === 'razorpay' ? 'Razorpay' : channel === 'stripe' ? 'Stripe' : 'PayPal',
-      //   status: (
-      //     <div className={`rounded-xl ${isActive ? 'bg-[#ECFDF3] text-[#027948]' : 'bg-[#F2F4F7] text-[#344054]'} px-2 py-1 w-fit flex gap-2 items-center`}>
-      //       <span className={`min-w-[12px] min-h-[12px] rounded-full ${isActive ? 'bg-[#12B76A]' : 'bg-[#667085]'}`}></span>
-      //       <span>{isActive ? 'Active' : 'Inactive'}</span>
-      //     </div>
-      //   ),
+      status: (
+        <div
+          className={`rounded-xl ${
+            status === 'success' ? 'bg-lightgreen text-success' : status === 'pending' ? 'bg-fadeyellow text-pending' : 'bg-fadedred text-failed'
+          } px-2 py-1 w-fit flex gap-2 items-center`}
+        >
+          <span className={`min-w-[12px] min-h-[12px] rounded-full ${status === 'success' ? 'bg-green' : 'bg-pending'}`}></span>
+          <span>{status === 'success' ? 'Success' : status === 'pending' ? 'Pending' : 'Failed'}</span>
+        </div>
+      ),
       createdAt: formatDateTime(createdAt),
       updatedAt: formatDateTime(updatedAt)
     };
@@ -59,6 +63,7 @@ const PaymentList = () => {
                   { label: 'Amount', key: 'amount' },
                   { label: 'Currency', key: 'currency' },
                   { label: 'Channel', key: 'channel' },
+                  { label: 'Status', key: 'status' },
                   { label: 'Created Date', key: 'createdAt' },
                   { label: 'Updated Date', key: 'updatedAt' }
                 ]}
@@ -67,14 +72,16 @@ const PaymentList = () => {
                 apiUrl={'payments'}
                 tableCountLabel={true}
                 pagination={true}
-                // actions={true}
+                actions={true}
+                view={true}
+                viewPath={'/payments/payment'}
                 search={true}
-                // filter={true}
+                filter={true}
                 // deleteBtn={true}
-                // filterCategory={[
-                //   { id: 1, name: 'Sites' },
-                //     { id: 2, name: 'Status' }
-                // ]}
+                filterCategory={[
+                  { id: 1, name: 'Sites' },
+                  { id: 2, name: 'Status' }
+                ]}
                 // statuses={[
                 //   { id: 0, name: 'Active', bgColor: '#ECFDF3', color: '#027948', dotColor: '#12B76A' },
                 //   { id: 2, name: 'Inactive', bgColor: '#F2F4F7', color: '#344054', dotColor: '#667085' }

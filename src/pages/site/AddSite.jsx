@@ -190,6 +190,7 @@ const AddSite = () => {
                 errorMessage={errors.name}
               />
               <FormField
+              divClassName={'mt-5'}
                 label="Site Host"
                 type="url"
                 id="host"
@@ -358,7 +359,7 @@ const AddSite = () => {
                         {email}
                         <button
                           type="button"
-                          className="px-2 py-1 text-white bg-danger hover:bg-danger rounded"
+                          className="px-2 py-1 text-white bg-red hover:bg-red rounded"
                           onClick={() => removeItemAtIndex(setSiteDetails, 'adminEnquiryEmails', index)}
                         >
                           Remove
@@ -434,7 +435,7 @@ const AddSite = () => {
                         {email}
                         <button
                           type="button"
-                          className="px-2 py-1 text-white bg-danger hover:bg-danger rounded"
+                          className="px-2 py-1 text-white bg-red hover:bg-red rounded"
                           onClick={() => removeItemAtIndex(setSiteDetails, 'adminMailingListEmails', index)}
                         >
                           Remove
@@ -507,7 +508,7 @@ const AddSite = () => {
                 onChange={(e) => setSiteDetails((prev) => ({ ...prev, enquiryWebhookUrl: e.target.value }))}
                 value={siteDetails.enquiryWebhookUrl}
               />
-              <button onClick={() => setEnquiryModalOpen(true)} className="w-1/4 rounded-xl bg-darkblue text-white py-2 mt-2">
+              <button onClick={() => setEnquiryModalOpen(true)} className="w-fit whitespace-nowrap rounded-xl bg-darkblue text-white p-2 mt-2">
                 Preview Data
               </button>
               <FormField
@@ -520,7 +521,7 @@ const AddSite = () => {
                 onChange={(e) => setSiteDetails((prev) => ({ ...prev, mailinglistWebhookUrl: e.target.value }))}
                 value={siteDetails.mailinglistWebhookUrl}
               />
-              <button onClick={() => setMailingListModalOpen(true)} className="w-1/4 rounded-xl bg-darkblue text-white py-2 mt-2">
+              <button onClick={() => setMailingListModalOpen(true)} className="w-fit whitespace-nowrap rounded-xl bg-darkblue text-white p-2 mt-2">
                 Preview Data
               </button>
             </div>

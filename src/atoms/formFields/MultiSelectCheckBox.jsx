@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { IoSearchOutline } from 'react-icons/io5';
 import { IoIosArrowDown } from 'react-icons/io';
 
@@ -15,6 +15,7 @@ const MultiSelectCheckbox = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const dropdownRef = useRef(null);
 
   // Filter options based on the search query
   const filteredOptions = options.filter((option) => option.name.toLowerCase().includes(searchQuery.toLowerCase()));
@@ -59,8 +60,21 @@ const MultiSelectCheckbox = ({
   const isSelectAllChecked =
     mode === 'ids' ? selected.length > 0 && selected.length === filteredOptions.length : filteredOptions.every((option) => selected.some((item) => item[option._id] === true));
 
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) setIsOpen(false);
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   return (
-    <div className={`${divClassName} relative w-full`}>
+    <div className={`${divClassName} relative w-full`} ref={dropdownRef}>
       <label className="block text-sm font-medium text-primary mb-2">{formLabel}</label>
       {/* Dropdown Header */}
       <button

@@ -60,6 +60,8 @@ const EventList = () => {
                 actions={true}
                 edit={true}
                 editPath={'/events/edit-event'}
+                view={true}
+                viewPath={'/events/view-event'}
                 search={true}
                 filter={true}
                 filterCategory={[{ id: 1, name: 'Status' }]}

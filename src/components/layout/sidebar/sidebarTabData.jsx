@@ -39,7 +39,8 @@ export const mediaManagementPath = [
 
 export const eventManagementPath = [
   { title: 'Events', to: ['/events/event-list', '/events/add-event', '/events/edit-event'] },
-  { title: 'Participants', to: ['/participants/participant-list'] }
+  { title: 'Participants', to: ['/participants/participant-list'] },
+  { title: 'Packages', to: ['/packages/package-list', '/packages/add-package', '/packages/edit-package'] }
 ];
 
 export const faqManagementPath = [

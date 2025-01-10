@@ -24,6 +24,7 @@ const AddEvent = () => {
     name: '',
     venue: '',
     date: '',
+    lastBookingDate: '',
     site: ''
   });
 
@@ -31,6 +32,7 @@ const AddEvent = () => {
     const newErrors = {};
     if (!eventDetails.name.trim()) newErrors.name = 'Name is required';
     if (!eventDetails.date) newErrors.date = 'Date is required';
+    if (!eventDetails.lastBookingDate) newErrors.lastBookingDate = 'Last booking date is required';
     if (!eventDetails.venue.trim()) newErrors.venue = 'Venue is required';
     if (!eventDetails.site) newErrors.site = 'Site is required';
     setErrors(newErrors);
@@ -142,10 +144,13 @@ const AddEvent = () => {
                 dropdownList={availableSites
                   .filter((site) => site.modules?.some((module) => module.events === true))
                   .map((site) => ({ id: site._id, showName: `${site.name} (${site.host})`, name: site._id }))}
-                SummaryChild={<h5 className="p-0 m-0 text-primary">{eventDetails.siteObj?.showName || 'Sites'}</h5>}
+                SummaryChild={<h5 className="p-0 m-0 text-primary">Sites</h5>}
                 search={true}
                 selected={eventDetails.site}
-                commonFunction={(e) => setEventDetails((prev) => ({ ...prev, site: e.name, siteObj: e }))}
+                commonFunction={(e) => {
+                  setEventDetails((prev) => ({ ...prev, site: e.name }));
+                  if (errors.site) setErrors((prev) => ({ ...prev, site: '' }));
+                }}
                 error={errors.site}
               />
             </div>
@@ -169,6 +174,18 @@ const AddEvent = () => {
                 if (errors.date) setErrors((prev) => ({ ...prev, date: '' }));
               }}
               errorMessage={errors.date}
+            />
+            <DateTimePicker
+              divClassName={'mt-5'}
+              id={'lastBookingDate'}
+              label={'Last Booking Date'}
+              placeholder={formatDateTime(new Date())}
+              selectedDateTime={eventDetails.lastBookingDate}
+              setSelectedDateTime={(e) => {
+                setEventDetails((prev) => ({ ...prev, lastBookingDate: e }));
+                if (errors.lastBookingDate) setErrors((prev) => ({ ...prev, lastBookingDate: '' }));
+              }}
+              errorMessage={errors.lastBookingDate}
             />
           </div>
         </div>

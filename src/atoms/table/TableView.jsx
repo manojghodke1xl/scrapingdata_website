@@ -32,7 +32,7 @@ const TableView = ({
                   type="checkbox"
                   checked={selectionState.isAllSelected}
                   onChange={handleMasterCheckboxChange}
-                  className="form-checkbox h-4 w-4 text-blue-600 focus:outline-none"
+                  className="form-checkbox h-4 w-4 text-blue-600 focus:outline-none cursor-pointer"
                 />
               </label>
             </th>
@@ -79,7 +79,7 @@ const TableView = ({
                       type="checkbox"
                       checked={selectionState.selectedItems.includes(row.id)}
                       onChange={() => handleRowCheckboxChange(row.id)}
-                      className="form-checkbox h-4 w-4 text-blue-600"
+                      className="form-checkbox h-4 w-4 text-blue-600 cursor-pointer focus:outline-none"
                       disabled={row.isSuperAdmin}
                     />
                   </label>
@@ -91,10 +91,10 @@ const TableView = ({
                 </td>
               ))}
               {actions && (
-                <td className="w-full flex gap-2 items-center px-6 py-2 whitespace-nowrap font-medium text-secondary hover:text-gray-900">
-                  {edit && !row.isSuperAdmin && <MdEdit className="text-2xl" onClick={() => navigate(editPath + '/' + row.id)} />}
-                  {view && !row.isSuperAdmin && <MdRemoveRedEye className="text-2xl" onClick={() => navigate(viewPath + '/' + row.id)} />}
-                  {apps && !row.isSuperAdmin && <MdOutlineApps className="text-2xl" onClick={() => navigate(appsPath + '/' + row.id)} />}
+                <td className="w-full flex gap-2 items-center px-6 py-2 whitespace-nowrap font-medium text-secondary">
+                  {edit && !row.isSuperAdmin && <MdEdit className="text-2xl hover:text-gray-900 cursor-pointer" onClick={() => navigate(editPath + '/' + row.id)} />}
+                  {view && !row.isSuperAdmin && <MdRemoveRedEye className="text-2xl hover:text-gray-900 cursor-pointer" onClick={() => navigate(viewPath + '/' + row.id)} />}
+                  {apps && !row.isSuperAdmin && <MdOutlineApps className="text-2xl hover:text-gray-900 cursor-pointer" onClick={() => navigate(appsPath + '/' + row.id)} />}
                 </td>
               )}
             </tr>

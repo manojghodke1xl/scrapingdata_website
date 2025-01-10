@@ -1,6 +1,6 @@
 import RadioField from '../formFields/RadioField';
 import { useState } from 'react';
-import ToggleComponent from '../formFields/ToggleComponent';
+// import ToggleComponent from '../formFields/ToggleComponent';
 // import AdvancedFilter from '../filter/AdvancedFilterComponent';
 import CustomColumnSelector from '../filter/CustomColumnSelector';
 import { exportHandler } from '../../helpers/exportHandler';
@@ -120,14 +120,14 @@ const ExportDataModal = ({ isExportModalOpen, setExportModalOpen, label, selecte
                   onChange={() => setSelectionState((prev) => ({ ...prev, selectedData: 'allData' }))}
                   label={'All Data'}
                 />
-                <RadioField
+                {/* <RadioField
                   id="filteredData"
                   name={'data'}
                   value="filterdData"
                   checked={selectionState.selectedData === 'filterdData'}
                   onChange={() => setSelectionState((prev) => ({ ...prev, selectedData: 'filterdData' }))}
                   label={'Filtered Data'}
-                />
+                /> */}
               </div>
               {/* {selectionState.selectedData === 'filterdData' && <AdvancedFilter />} */}
             </div>
@@ -166,14 +166,14 @@ const ExportDataModal = ({ isExportModalOpen, setExportModalOpen, label, selecte
             <div className="border p-4 rounded-xl border-primary flex flex-col gap-2 w-full mt-4">
               <h1 className="text-primary font-semibold">Select File Format</h1>
               <div className="flex justify-start gap-x-5">
-                <RadioField
+                {/* <RadioField
                   id="xlsx"
                   name={'fileFormat'}
                   value="xlsx"
                   checked={selectionState.selectedFileFormat === 'xlsx'}
                   onChange={() => setSelectionState((prev) => ({ ...prev, selectedFileFormat: 'xlsx' }))}
                   label={'XLSX'}
-                />
+                /> */}
                 <RadioField
                   id="csv"
                   name={'fileFormat'}
@@ -182,17 +182,17 @@ const ExportDataModal = ({ isExportModalOpen, setExportModalOpen, label, selecte
                   onChange={() => setSelectionState((prev) => ({ ...prev, selectedFileFormat: 'csv' }))}
                   label={'CSV'}
                 />
-                <RadioField
+                {/* <RadioField
                   id="pdf"
                   name={'fileFormat'}
                   value="pdf"
                   checked={selectionState.selectedFileFormat === 'pdf'}
                   onChange={() => setSelectionState((prev) => ({ ...prev, selectedFileFormat: 'pdf' }))}
                   label={'PDF'}
-                />
+                /> */}
               </div>
             </div>
-            <ToggleComponent label={'Save this as a preset for future exports.'} isEnableState={true} setIsEnableState={() => {}} />
+            {/* <ToggleComponent label={'Save this as a preset for future exports.'} isEnableState={true} setIsEnableState={() => {}} /> */}
 
             <div className="border-b border-primary w-full mt-4" />
             <div className="flex justify-end gap-5 w-full mt-6 ">
