@@ -20,7 +20,7 @@ const PackageList = () => {
       title: <TruncatableFieldModal title={'Package Title'} content={title} />,
       amount: <TruncatableFieldModal title={'Amount'} content={amount} />,
       maxLimit: <TruncatableFieldModal title={'Max Limit'} content={maxLimit} />,
-      event: <TruncatableFieldModal title={'Event'} content={event.name} />,
+      event: <TruncatableFieldModal title={'Event'} content={`${event.name} (${event.venue})`} />,
       createdAt: formatDateTime(createdAt),
       updatedAt: formatDateTime(updatedAt)
     };
