@@ -22,14 +22,14 @@ const CaseStudyIntegration = () => {
   "email": "john.doe@example.com",
   "mobile": "+1234567890",
   "ccode": "91",
-  "site": "website key"
+  "site": "site key"
 }`
     },
     {
       title: 'Mandatory Parameters',
       content: `{
   "email": "john.doe@example.com",
-  "site": "website key"
+  "site": "site key"
 }`
     },
     {

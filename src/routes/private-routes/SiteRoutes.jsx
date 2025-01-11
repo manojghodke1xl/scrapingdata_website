@@ -8,9 +8,9 @@ const PageNotFound = lazy(() => import('../../pages/common/PageNotFound'));
 const SiteRoutes = () => {
   return (
     <Routes>
-      <Route path="/website-list" element={<SiteList />} />
-      <Route path="/add-website" element={<AddSite />} />
-      <Route path="/edit-website/:id" element={<AddSite />} />
+      <Route path="/site-list" element={<SiteList />} />
+      <Route path="/add-site" element={<AddSite />} />
+      <Route path="/edit-site/:id" element={<AddSite />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );

@@ -66,6 +66,8 @@ const EventList = () => {
                 editPath={'/events/edit-event'}
                 view={true}
                 viewPath={'/events/view-event'}
+                copy={true}
+                copyPath={'/events/duplicate-event'}
                 search={true}
                 filter={true}
                 filterCategory={[{ id: 1, name: 'Status' }]}

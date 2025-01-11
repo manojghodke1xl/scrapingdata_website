@@ -11,6 +11,7 @@ const PartnerLoogoRoutes = () => {
       <Route path="/partner-logo-list" element={<PartnerLogoList />} />
       <Route path="/add-partner-logo" element={<AddPartnerLogo />} />
       <Route path="/edit-partner-logo/:id" element={<AddPartnerLogo />} />
+      <Route path="/duplicate-partner-logo/:id" element={<AddPartnerLogo />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );

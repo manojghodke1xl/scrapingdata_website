@@ -67,6 +67,8 @@ const PartnerLogoList = () => {
                 actions={true}
                 edit={true}
                 editPath={'/partner-logo/edit-partner-logo'}
+                copy={true}
+                copyPath={'/partner-logo/duplicate-partner-logo'}
                 filter={true}
                 filterCategory={[
                   { id: 1, name: 'Sites' },

@@ -11,6 +11,7 @@ const RecaptchaRoutes = () => {
       <Route path="/recaptcha-list" element={<RecaptchaList />} />
       <Route path="/add-recaptcha" element={<AddRecaptcha />} />
       <Route path="/edit-recaptcha/:id" element={<AddRecaptcha />} />
+      <Route path="/duplicate-recaptcha/:id" element={<AddRecaptcha />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );

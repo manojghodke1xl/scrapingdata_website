@@ -59,7 +59,6 @@ const DropDown = ({ mt = '', width = 'w-full', name, label, SummaryChild, dropdo
                   }
                 }}
               >
-                {console.log(selected)}
                 <div className="flex flex-col items-start ml-3">
                   <span className={`block whitespace-nowrap font-normal ${item.name === selected ? 'font-semibold' : ''}`}>{item.showName}</span>
                   {item.description && <span className="text-sm text-secondary font-normal">{item.description}</span>}

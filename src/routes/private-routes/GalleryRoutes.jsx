@@ -11,6 +11,7 @@ const GalleryRoutes = () => {
       <Route path="/gallery-list" element={<GalleryList />} />
       <Route path="/add-gallery" element={<AddGallery />} />
       <Route path="/edit-gallery/:id" element={<AddGallery />} />
+      <Route path="/duplicate-gallery/:id" element={<AddGallery />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );

@@ -151,7 +151,7 @@ const AddSite = () => {
       if (status) {
         showNotification('success', data.message);
         dispatch({ type: 'SET_ALL_SITES', payload: [] });
-        navigate('/website/website-list');
+        navigate('/site/site-list');
       } else showNotification('warn', data);
     } catch (error) {
       showNotification('error', error.message);
@@ -166,7 +166,7 @@ const AddSite = () => {
         <div>
           <span className="text-3xl font-semibold text-dark">{id ? 'Edit' : 'Add'} Site</span>
         </div>
-        <FormButtons to="/website/website-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} loading={isLoading} />
+        <FormButtons to="/site/site-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} loading={isLoading} />
       </div>
 
       <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
@@ -190,7 +190,7 @@ const AddSite = () => {
                 errorMessage={errors.name}
               />
               <FormField
-              divClassName={'mt-5'}
+                divClassName={'mt-5'}
                 label="Site Host"
                 type="url"
                 id="host"
@@ -534,7 +534,7 @@ const AddSite = () => {
       </div>
       {!isScrollable && (
         <div className="w-full flex justify-end items-center gap-4 pt-8  border- border-primary">
-          <FormButtons to="/website/website-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} loading={isLoading} />
+          <FormButtons to="/site/site-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} loading={isLoading} />
         </div>
       )}
       <ApiIntegrationModal isIntegrationModalOpen={isEnquiryModalOpen} setIntegrationModalOpen={setEnquiryModalOpen} sections={enquiryIntegration} />

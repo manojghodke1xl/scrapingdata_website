@@ -13,6 +13,7 @@ const EventRoutes = () => {
       <Route path="/add-event" element={<AddEvent />} />
       <Route path="/edit-event/:id" element={<AddEvent />} />
       <Route path="/view-event/:id" element={<EventDetails />} />
+      <Route path="/duplicate-event/:id" element={<AddEvent />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );

@@ -11,6 +11,7 @@ const CouponRoutes = () => {
       <Route path="/coupon-list" element={<CouponList />} />
       <Route path="/add-coupon" element={<AddCoupon />} />
       <Route path="/edit-coupon/:id" element={<AddCoupon />} />
+      <Route path='/duplicate-coupon/:id' element={<AddCoupon />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );

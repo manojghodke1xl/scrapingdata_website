@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import useGlobalContext from '../../hooks/useGlobalContext';
 import { addCouponApi, getCouponByIdApi, updateCouponApi } from '../../apis/coupon';
 import { showNotification } from '../../utils/showNotification';
@@ -22,6 +22,8 @@ const AddCoupon = () => {
     setLoading,
     isLoading
   } = useGlobalContext();
+  const { pathname } = useLocation();
+  const isDuplicate = pathname.includes('duplicate');
 
   const [isScrollable, setIsScrollable] = useState(false);
   const [errors, setErrors] = useState({});
@@ -76,7 +78,7 @@ const AddCoupon = () => {
     if (!validate()) return;
     setLoading(true);
     try {
-      const { status, data } = await (id ? updateCouponApi(id, couponDetails) : addCouponApi(couponDetails));
+      const { status, data } = await (id ? (isDuplicate ? addCouponApi(couponDetails) : updateCouponApi(id, couponDetails)) : addCouponApi(couponDetails));
       if (status) {
         showNotification('success', data.message);
         navigate('/coupon/coupon-list');
@@ -104,9 +106,9 @@ const AddCoupon = () => {
     <div className="py-8 p-4 sm:p-8 overflow-x-hidden mb-20">
       <div className="w-full pb-8 border-b border-primary gap-y-4 gap-2 flex flex-col items-start md:flex-row lg:flex-col xl:flex-row justify-between lg:items-start md:items-end xl:items-end">
         <div>
-          <span className="text-3xl font-semibold text-dark">{id ? 'Edit' : 'Add'} Coupon</span>
+          <span className="text-3xl font-semibold text-dark">{id ? (isDuplicate ? 'Add' : 'Edit') : 'Add'} Coupon</span>
         </div>
-        <FormButtons to="/coupon/coupon-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} loading={isLoading} />
+        <FormButtons to="/coupon/coupon-list" type="submit" onClick={handleSubmit} btnLebal={id ? (isDuplicate ? 'Add' : 'Save Changes') : 'Add'} loading={isLoading} />
       </div>
 
       <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
@@ -286,7 +288,7 @@ const AddCoupon = () => {
       </div>
       {!isScrollable && (
         <div className="w-full flex justify-end items-center gap-4 pt-8  border- border-primary">
-          <FormButtons to="/coupon/coupon-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} loading={isLoading} />
+          <FormButtons to="/coupon/coupon-list" type="submit" onClick={handleSubmit} btnLebal={id ? (isDuplicate ? 'Add' : 'Save Changes') : 'Add'} loading={isLoading} />
         </div>
       )}
     </div>

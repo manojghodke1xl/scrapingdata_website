@@ -11,6 +11,7 @@ const FaqRoutes = () => {
       <Route path="/faq-list" element={<FaqList />} />
       <Route path="/add-faq" element={<AddFaq />} />
       <Route path="/edit-faq/:id" element={<AddFaq />} />
+      <Route path="/duplicate-faq/:id" element={<AddFaq />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );

@@ -13,6 +13,7 @@ const CaseStudyRoutes = () => {
       <Route path="/add-case-study" element={<AddCaseStudy />} />
       <Route path="/edit-case-study/:id" element={<AddCaseStudy />} />
       <Route path="/case-study-integration" element={<CaseStudyIntegration />} />
+      <Route path="/duplicate-case-study/:id" element={<AddCaseStudy />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );

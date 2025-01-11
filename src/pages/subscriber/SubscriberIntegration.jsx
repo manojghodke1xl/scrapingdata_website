@@ -24,21 +24,21 @@ const SubscriberIntegration = () => {
   "header": "Content-Type: application/json",
   "uastring": "userAgent",
   "ipaddress": "192.168.1.1",
-  "site": "website key"
+  "site": "site key"
 }`
     },
     {
       title: 'Mandatory Parameters',
       content: `{
   "email": "john.doe@example.com",
-  "site": "website key"
+  "site": "site key"
 }`
     },
     {
       title: 'Request Headers',
       content: `{
   "email": "john.doe@example.com",
-  "site": "website key"
+  "site": "site key"
 }`
     },
     {
@@ -74,7 +74,7 @@ const SubscriberIntegration = () => {
           <span className="text-3xl font-semibold text-dark">API Integration</span>
         </div>
         <div className=" w-full flex gap-4 justify-end items-end md:w-fit lg:w-full xl:w-fit">
-          <Link to={'/mailing/mailing-list'} className="px-4 py-2 text-primary font-medium bg-white hover:bg-gray-50 rounded-xl border border-primary whitespace-nowrap">
+          <Link to={'/subscriber/subscriber-list'} className="px-4 py-2 text-primary font-medium bg-white hover:bg-gray-50 rounded-xl border border-primary whitespace-nowrap">
             Back
           </Link>
         </div>
@@ -103,7 +103,7 @@ const SubscriberIntegration = () => {
 
       {!isScrollable && (
         <div className="w-full flex justify-end items-center gap-4 pt-8  border- border-primary">
-          <Link to={'/mailing/mailing-list'} className="px-4 py-2 text-primary font-medium bg-white hover:bg-gray-50 rounded-xl border border-primary whitespace-nowrap">
+          <Link to={'/subscriber/subscriber-list'} className="px-4 py-2 text-primary font-medium bg-white hover:bg-gray-50 rounded-xl border border-primary whitespace-nowrap">
             Back
           </Link>
         </div>

@@ -27,6 +27,8 @@ const TableComponent = ({
   viewPath,
   apps,
   appsPath,
+  copy,
+  copyPath,
   search,
   filter,
   exportBtn = true,
@@ -250,6 +252,8 @@ const TableComponent = ({
             viewPath={viewPath}
             apps={apps}
             appsPath={appsPath}
+            copy={copy}
+            copyPath={copyPath}
             currentPage={tableState.currentPage}
             itemsPerPage={tableState.itemsPerPage}
           />

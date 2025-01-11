@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import useGlobalContext from '../../hooks/useGlobalContext';
 import { showNotification } from '../../utils/showNotification';
 import FormButtons from '../../atoms/formFields/FormButtons';
@@ -18,6 +18,8 @@ const AddGallery = () => {
     setLoading,
     isLoading
   } = useGlobalContext();
+  const { pathname } = useLocation();
+  const isDuplicate = pathname.includes('duplicate');
 
   const [isScrollable, setIsScrollable] = useState(false);
   const [errors, setErrors] = useState({});
@@ -64,7 +66,7 @@ const AddGallery = () => {
     if (!validate()) return;
     setLoading(true);
     try {
-      const { status, data } = await (id ? updateGalleryApi(id, galleryDetails) : addGalleryApi(galleryDetails));
+      const { status, data } = await (id ? (isDuplicate ? addGalleryApi(galleryDetails) : updateGalleryApi(id, galleryDetails)) : addGalleryApi(galleryDetails));
       if (status) {
         showNotification('success', data.message);
         navigate('/gallery/gallery-list');
@@ -92,9 +94,9 @@ const AddGallery = () => {
     <div className="py-8 p-4 sm:p-8 overflow-x-hidden mb-20">
       <div className="w-full pb-8 border-b border-primary gap-y-4 gap-2 flex flex-col items-start md:flex-row lg:flex-col xl:flex-row justify-between lg:items-start md:items-end xl:items-end">
         <div>
-          <span className="text-3xl font-semibold text-dark">{id ? 'Edit' : 'Add'} Gallery</span>
+          <span className="text-3xl font-semibold text-dark">{id ? (isDuplicate ? 'Add' : 'Edit') : 'Add'} Gallery</span>
         </div>
-        <FormButtons to="/gallery/gallery-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} loading={isLoading} />
+        <FormButtons to="/gallery/gallery-list" type="submit" onClick={handleSubmit} btnLebal={id ? (isDuplicate ? 'Add' : 'Save Changes') : 'Add'} loading={isLoading} />
       </div>
 
       <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
@@ -159,7 +161,7 @@ const AddGallery = () => {
       </div>
       {!isScrollable && (
         <div className="w-full flex justify-end items-center gap-4 pt-8  border- border-primary">
-          <FormButtons to="/gallery/gallery-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} loading={isLoading} />
+          <FormButtons to="/gallery/gallery-list" type="submit" onClick={handleSubmit} btnLebal={id ? (isDuplicate ? 'Add' : 'Save Changes') : 'Add'} loading={isLoading} />
         </div>
       )}
     </div>

@@ -69,6 +69,8 @@ const RecaptchaList = () => {
                 actions={true}
                 edit={true}
                 editPath={'/recaptcha/edit-recaptcha'}
+                copy={true}
+                copyPath={'/recaptcha/duplicate-recaptcha'}
                 search={true}
                 filter={true}
                 filterCategory={[

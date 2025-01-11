@@ -13,6 +13,7 @@ const PopupRoutes = () => {
       <Route path="/add-pop-up" element={<AddPopup />} />
       <Route path="/edit-pop-up/:id" element={<AddPopup />} />
       <Route path="/pop-up-integration" element={<PopupIntegration />} />
+      <Route path="/duplicate-pop-up/:id" element={<AddPopup />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );

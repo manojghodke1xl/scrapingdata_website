@@ -67,6 +67,8 @@ const ClientLogoList = () => {
                 actions={true}
                 edit={true}
                 editPath={'/client-logo/edit-client-logo'}
+                copy={true}
+                copyPath={'/client-logo/duplicate-client-logo'}
                 filter={true}
                 filterCategory={[
                   { id: 1, name: 'Sites' },

@@ -18,9 +18,9 @@ const PackageList = () => {
       id: _id,
       exportData: userPackage,
       title: <TruncatableFieldModal title={'Package Title'} content={title} />,
-      amount: <TruncatableFieldModal title={'Amount'} content={amount} />,
-      maxLimit: <TruncatableFieldModal title={'Max Limit'} content={maxLimit} />,
       event: <TruncatableFieldModal title={'Event'} content={`${event.name} (${event.venue})`} />,
+      amount: <TruncatableFieldModal title={'Price'} content={amount} />,
+      maxLimit: <TruncatableFieldModal title={'Max Limit'} content={maxLimit} />,
       createdAt: formatDateTime(createdAt),
       updatedAt: formatDateTime(updatedAt)
     };
@@ -57,9 +57,9 @@ const PackageList = () => {
                 headers={[
                   { label: 'Sr No.', key: 'srno' },
                   { label: 'Package Title', key: 'title' },
-                  { label: 'Amount', key: 'amount' },
-                  { label: 'Booking Limit', key: 'maxLimit' },
                   { label: 'Event', key: 'event' },
+                  { label: 'Price', key: 'amount' },
+                  { label: 'Max Attendees', key: 'maxLimit' },
                   { label: 'Created Date', key: 'createdAt' },
                   { label: 'Updated Date', key: 'updatedAt' }
                 ]}
@@ -72,6 +72,8 @@ const PackageList = () => {
                 actions={true}
                 edit={true}
                 editPath={'/packages/edit-package'}
+                copy={true}
+                copyPath={'/packages/duplicate-package'}
                 search={true}
                 filter={true}
                 filterCategory={[{ id: 1, name: 'Event' }]}

@@ -11,6 +11,7 @@ const ClientLogoRoutes = () => {
       <Route path="/client-logo-list" element={<ClientLogoList />} />
       <Route path="/add-client-logo" element={<AddClientLogo />} />
       <Route path="/edit-client-logo/:id" element={<AddClientLogo />} />
+      <Route path="/duplicate-client-logo/:id" element={<AddClientLogo />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );

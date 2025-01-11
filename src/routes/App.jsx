@@ -31,6 +31,7 @@ import IntegrationRoutes from './private-routes/IntegrationRoutes';
 import FaqCategoryRoutes from './private-routes/FaqCategoryRoutes';
 import 'react-toastify/dist/ReactToastify.css';
 import PackageRoutes from './private-routes/PackageRoutes';
+import TestimonialCategoryRoutes from './private-routes/TestimonialCategoryRoutes';
 
 const ZohoStatus = lazy(() => import('../pages/integration/ZohoStatus'));
 
@@ -57,13 +58,14 @@ const App = () => {
                 <Route path="/case-study/*" element={<CaseStudyRoutes />} />
                 <Route path="/guides/*" element={<GuidesRoutes />} />
                 <Route path="/testimonials/*" element={<TestimonialRoutes />} />
+                <Route path="/testimonial-category/*" element={<TestimonialCategoryRoutes />} />
                 <Route path="/recaptcha/*" element={<RecaptchaRoutes />} />
                 <Route path="/faq/*" element={<FaqRoutes />} />
                 <Route path="/faq-category/*" element={<FaqCategoryRoutes />} />
                 <Route path="/enquiry/*" element={<EnquiryRoutes />} />
                 <Route path="/subscriber/*" element={<SubscribersRoutes />} />
                 <Route path="/feedback/*" element={<FeedbackRoutes />} />
-                <Route path="/website/*" element={<SiteRoutes />} />
+                <Route path="/site/*" element={<SiteRoutes />} />
                 <Route path="/pop-up/*" element={<PopupRoutes />} />
                 <Route path="/client-logo/*" element={<ClientLogoRoutes />} />
                 <Route path="/gallery/*" element={<GalleryRoutes />} />

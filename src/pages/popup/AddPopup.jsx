@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import FormButtons from '../../atoms/formFields/FormButtons';
 import { useEffect, useState } from 'react';
 import useGlobalContext from '../../hooks/useGlobalContext';
@@ -26,6 +26,8 @@ const AddPopup = () => {
     setLoading,
     isLoading
   } = useGlobalContext();
+  const { pathname } = useLocation();
+  const isDuplicate = pathname.includes('duplicate');
 
   const [isScrollable, setIsScrollable] = useState(false);
   const [errors, setErrors] = useState({});
@@ -104,7 +106,7 @@ const AddPopup = () => {
     if (!validate()) return;
     setLoading(true);
     try {
-      const { status, data } = await (id ? updatePopupApi(id, popupDetails) : addPopupApi(popupDetails));
+      const { status, data } = await (id ? (isDuplicate ? addPopupApi(popupDetails) : updatePopupApi(id, popupDetails)) : addPopupApi(popupDetails));
       if (status) {
         showNotification('success', data.message);
         navigate('/pop-up/pop-up-list');
@@ -167,9 +169,9 @@ const AddPopup = () => {
     <div className="py-8 p-4 sm:p-8 overflow-x-hidden mb-20">
       <div className="w-full pb-8 border-b border-primary gap-y-4 gap-2 flex flex-col items-start md:flex-row lg:flex-col xl:flex-row justify-between lg:items-start md:items-end xl:items-end">
         <div>
-          <span className="text-3xl font-semibold text-dark">{id ? 'Edit' : 'Add'} Popup</span>
+          <span className="text-3xl font-semibold text-dark">{id ? (isDuplicate ? 'Add' : 'Edit') : 'Add'} Popup</span>
         </div>
-        <FormButtons to="/pop-up/pop-up-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} loading={isLoading} />
+        <FormButtons to="/pop-up/pop-up-list" type="submit" onClick={handleSubmit} btnLebal={id ? (isDuplicate ? 'Add' : 'Save Changes') : 'Add'} loading={isLoading} />
       </div>
 
       <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
@@ -444,7 +446,7 @@ const AddPopup = () => {
       </div>
       {!isScrollable && (
         <div className="w-full flex justify-end items-center gap-4 pt-8  border- border-primary">
-          <FormButtons to="/pop-up/pop-up-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} loading={isLoading} />
+          <FormButtons to="/pop-up/pop-up-list" type="submit" onClick={handleSubmit} btnLebal={id ? (isDuplicate ? 'Add' : 'Save Changes') : 'Add'} loading={isLoading} />
         </div>
       )}
     </div>

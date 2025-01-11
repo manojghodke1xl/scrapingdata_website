@@ -35,7 +35,7 @@ const CaseStudyList = () => {
       <div className=" w-full">
         <div className="w-full flex md:flex-wrap gap-y-3 sm:flex-nowrap justify-between pb-5 border-b border-primary">
           <div className="">
-            <h4 className="text-3xl text-dark">All Case Study List</h4>
+            <h4 className="text-3xl text-dark">Case Study</h4>
           </div>
           <div className="w-full flex justify-end sm:w-fit gap-2">
             <Link to="/case-study/add-case-study" className="flex gap-2 h-fit items-center px-2.5 md:px-2 sm:px-4 rounded-xl py-2.5 border border-primary text-primary">
@@ -53,7 +53,7 @@ const CaseStudyList = () => {
             <div className="p-1.5 min-w-full align-middle">
               <TableComponent
                 selectable={true}
-                siteModule='casestudy'
+                siteModule="casestudy"
                 headers={[
                   { label: 'Sr No.', key: 'srno' },
                   { label: 'Title', key: 'title' },
@@ -70,6 +70,8 @@ const CaseStudyList = () => {
                 actions={true}
                 edit={true}
                 editPath={'/case-study/edit-case-study'}
+                copy={true}
+                copyPath={'/case-study/duplicate-case-study'}
                 search={true}
                 filter={true}
                 filterCategory={[

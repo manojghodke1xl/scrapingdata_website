@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { TbFileSearch, TbUsersGroup } from 'react-icons/tb';
 import { IoSettingsOutline } from 'react-icons/io5';
 import { MdMessage } from 'react-icons/md';
-import { FaRegImage, FaRegQuestionCircle } from 'react-icons/fa';
+import { FaBullhorn, FaRegImage, FaRegQuestionCircle } from 'react-icons/fa';
 import { FiCalendar } from 'react-icons/fi';
 import {
   adminNavLinks,
@@ -14,7 +14,8 @@ import {
   mediaManagementPath,
   eventManagementPath,
   faqManagementPath,
-  leadsManagementPath
+  leadsManagementPath,
+  marketingManagementPath
 } from './sidebarTabData';
 import ReusableAccordion from '../../../atoms/sidebar/ReusableAccordion';
 import useGlobalContext from '../../../hooks/useGlobalContext';
@@ -61,6 +62,15 @@ const MaterialSidebar = () => {
             isOpen={openAccordion === 'Lead Management'}
             onToggle={() => setOpenAccordion(openAccordion === 'Lead Management' ? null : 'Lead Management')}
           />
+
+          <ReusableAccordion
+            title="Marketing Management"
+            links={marketingManagementPath}
+            icon={<FaBullhorn  />}
+            isOpen={openAccordion === 'Marketing Management"'}
+            onToggle={() => setOpenAccordion(openAccordion === 'Marketing Management"' ? null : 'Marketing Management"')}
+          />
+
           <ReusableAccordion
             title="Site Settings"
             links={siteSettingsPath}

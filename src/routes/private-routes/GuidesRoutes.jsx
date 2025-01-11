@@ -10,9 +10,10 @@ const GuidesRoutes = () => {
   return (
     <Routes>
       <Route path="/guides-list" element={<GuidesList />} />
-      <Route path="/add-guides" element={<AddGuides />} />
-      <Route path="/edit-guides/:id" element={<AddGuides />} />
+      <Route path="/add-guide" element={<AddGuides />} />
+      <Route path="/edit-guide/:id" element={<AddGuides />} />
       <Route path="/guides-integration" element={<GuildesIntegration />} />
+      <Route path="/duplicate-guide/:id" element={<AddGuides />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );

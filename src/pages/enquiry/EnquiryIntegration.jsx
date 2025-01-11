@@ -28,14 +28,14 @@ const EnquiryIntegration = () => {
   "header": "Content-Type: application/json",
   "uastring": "userAgent",
   "ipaddress": "192.168.1.1",
-  "site": "website key"
+  "site": "site key"
 }`
     },
     {
       title: 'Mandatory Parameters',
       content: `{
   "email": "john.doe@example.com",
-  "site": "website key"
+  "site": "site key"
 }`
     },
     {

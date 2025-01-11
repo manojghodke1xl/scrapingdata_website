@@ -10,7 +10,7 @@ const ParticipantList = () => {
   const [event, setEvent] = useState([]);
 
   const rows = participants.map((participant) => {
-    const { _id, site, event, name, email, attendees, createdAt, updatedAt } = participant;
+    const { _id, site, event, name, email, attendees, status, createdAt, updatedAt } = participant;
     return {
       id: _id,
       exportData: participant,
@@ -19,12 +19,16 @@ const ParticipantList = () => {
       attendees: attendees,
       site: <TruncatableFieldModal title={'Sites'} content={`${site?.name} (${site?.host})`} />,
       event: <TruncatableFieldModal title={'Event'} content={event.name} />,
-      //   status: (
-      //     <div className={`rounded-xl ${isActive ? 'bg-[#ECFDF3] text-[#027948]' : 'bg-[#F2F4F7] text-[#344054]'} px-2 py-1 w-fit flex gap-2 items-center`}>
-      //       <span className={`min-w-[12px] min-h-[12px] rounded-full ${isActive ? 'bg-[#12B76A]' : 'bg-[#667085]'}`}></span>
-      //       <span>{isActive ? 'Active' : 'Inactive'}</span>
-      //     </div>
-      //   ),
+      status: (
+        <div
+          className={`rounded-xl ${
+            status === 'confirmed' ? 'bg-lightgreen text-success' : status === 'pending' ? 'bg-fadeyellow text-pending' : 'bg-fadedred text-failed'
+          } px-2 py-1 w-fit flex gap-2 items-center`}
+        >
+          <span className={`min-w-[12px] min-h-[12px] rounded-full ${status === 'confirmed' ? 'bg-green' : 'bg-pending'}`}></span>
+          <span>{status === 'confirmed' ? 'Confirmed' : status === 'pending' ? 'Pending' : status === 'cancelled' ? 'Cancelled' : 'Failed'}</span>
+        </div>
+      ),
       createdAt: formatDateTime(createdAt),
       updatedAt: formatDateTime(updatedAt)
     };
@@ -59,6 +63,7 @@ const ParticipantList = () => {
                   { label: 'Attendees', key: 'attendees' },
                   { label: 'Sites', key: 'site' },
                   { label: 'Event', key: 'event' },
+                  { label: 'Status', key: 'status' },
                   { label: 'Created Date', key: 'createdAt' },
                   { label: 'Updated Date', key: 'updatedAt' }
                 ]}
@@ -84,8 +89,6 @@ const ParticipantList = () => {
                   { id: 1, name: 'Name' },
                   { id: 2, name: 'Email' }
                 ]}
-                // view={true}
-                // viewPath={'/participant/participant-view'}
               />
             </div>
           </div>

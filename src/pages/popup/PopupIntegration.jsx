@@ -21,13 +21,13 @@ const PopupIntegration = () => {
   "header": "Content-Type: application/json",
   "uastring": "userAgent",
   "ipaddress": "192.168.1.1",
-  "sitekey": "website key"
+  "sitekey": "site key"
 }`
     },
     {
       title: 'Mandatory Parameters',
       content: `{
-  "sitekey": "website key"
+  "sitekey": "site key"
 }`
     },
     {

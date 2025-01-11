@@ -67,6 +67,8 @@ const GalleryList = () => {
                 actions={true}
                 edit={true}
                 editPath={'/gallery/edit-gallery'}
+                copy={true}
+                copyPath={'/gallery/duplicate-gallery'}
                 filter={true}
                 filterCategory={[
                   { id: 1, name: 'Sites' },

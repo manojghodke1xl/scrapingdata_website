@@ -38,7 +38,7 @@ const GuidesList = () => {
             <h4 className="text-3xl text-dark">All Guides List</h4>
           </div>
           <div className="w-full flex justify-end sm:w-fit gap-2">
-            <Link to="/guides/add-guides" className="flex gap-2 h-fit items-center px-2.5 md:px-2 sm:px-4 rounded-xl py-2.5 border border-primary text-primary">
+            <Link to="/guides/add-guide" className="flex gap-2 h-fit items-center px-2.5 md:px-2 sm:px-4 rounded-xl py-2.5 border border-primary text-primary">
               <IoMdAdd size={22} />
               <span className="hidden md:block">Add Guides</span>
             </Link>
@@ -69,7 +69,9 @@ const GuidesList = () => {
                 pagination={true}
                 actions={true}
                 edit={true}
-                editPath={'/guides/edit-guides'}
+                editPath={'/guides/edit-guide'}
+                copy={true}
+                copyPath={'/guides/duplicate-guide'}
                 search={true}
                 filter={true}
                 filterCategory={[
