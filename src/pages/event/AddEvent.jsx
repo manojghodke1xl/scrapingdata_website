@@ -24,6 +24,7 @@ const AddEvent = () => {
     name: '',
     venue: '',
     date: '',
+    endDate: '',
     lastBookingDate: '',
     site: ''
   });
@@ -31,7 +32,8 @@ const AddEvent = () => {
   const validate = () => {
     const newErrors = {};
     if (!eventDetails.name.trim()) newErrors.name = 'Name is required';
-    if (!eventDetails.date) newErrors.date = 'Date is required';
+    if (!eventDetails.date) newErrors.date = 'Start Date is required';
+    if (!eventDetails.endDate) newErrors.endDate = 'End date is required';
     if (!eventDetails.lastBookingDate) newErrors.lastBookingDate = 'Last booking date is required';
     if (!eventDetails.venue.trim()) newErrors.venue = 'Venue is required';
     if (!eventDetails.site) newErrors.site = 'Site is required';
@@ -116,7 +118,7 @@ const AddEvent = () => {
               />
               <TextareaComponent
                 label="Venue"
-                placeholder="Enter a description..."
+                placeholder="Venue..."
                 id="info"
                 name="info"
                 value={eventDetails.venue}
@@ -166,7 +168,7 @@ const AddEvent = () => {
           <div className="dropdown-container relative w-full mt-2">
             <DateTimePicker
               id={'date'}
-              label={'Date'}
+              label={'Start Date'}
               placeholder={formatDateTime(new Date())}
               selectedDateTime={eventDetails.date}
               setSelectedDateTime={(e) => {
@@ -174,6 +176,18 @@ const AddEvent = () => {
                 if (errors.date) setErrors((prev) => ({ ...prev, date: '' }));
               }}
               errorMessage={errors.date}
+            />
+            <DateTimePicker
+              divClassName={'mt-5'}
+              id={'endDate'}
+              label={'End Date'}
+              placeholder={formatDateTime(new Date())}
+              selectedDateTime={eventDetails.endDate}
+              setSelectedDateTime={(e) => {
+                setEventDetails((prev) => ({ ...prev, endDate: e }));
+                if (errors.endDate) setErrors((prev) => ({ ...prev, endDate: '' }));
+              }}
+              errorMessage={errors.endDate}
             />
             <DateTimePicker
               divClassName={'mt-5'}

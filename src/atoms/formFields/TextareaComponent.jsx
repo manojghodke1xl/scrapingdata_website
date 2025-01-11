@@ -1,9 +1,11 @@
+import { useState, useEffect } from 'react';
+
 const TextareaComponent = ({
   divClassName = '',
   label,
   id,
   name,
-  value,
+  value = '',
   placeholder = '',
   maxLength = 500,
   minLength = 10,
@@ -17,9 +19,20 @@ const TextareaComponent = ({
   spellCheck = true,
   onChange,
   errorMessage = '',
-  charCount,
   hint = ''
 }) => {
+  const [charCount, setCharCount] = useState(value.length);
+
+  useEffect(() => {
+    setCharCount(value.length);
+  }, [value]);
+
+  const handleChange = (event) => {
+    const newValue = event.target.value;
+    setCharCount(newValue.length);
+    onChange && onChange(event);
+  };
+
   return (
     <div className={`${divClassName} w-full mt-5`}>
       <label htmlFor={id} className="block text-sm font-medium text-primary">
@@ -41,7 +54,7 @@ const TextareaComponent = ({
           autoFocus={autoFocus}
           wrap={wrap}
           spellCheck={spellCheck}
-          onChange={onChange}
+          onChange={handleChange}
           className={`w-full mt-2 rounded-xl border ${
             errorMessage ? 'border-fadered focus:border-fadered' : 'border-primary focus:border-blue'
           } font-normal focus:outline-none focus:ring-0 px-4 py-2.5 placeholder:text-gray-400 text-dark bg-transparent`}

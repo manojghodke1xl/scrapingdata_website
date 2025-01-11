@@ -10,14 +10,16 @@ const EventList = () => {
   const [events, setEvents] = useState([]);
 
   const rows = events.map((event) => {
-    const { _id, name, date, venue, site, createdAt, updatedAt } = event;
+    const { _id, name, date, endDate, lastBookingDate, venue, site, createdAt, updatedAt } = event;
     return {
       id: _id,
       exportData: event,
       name: <TruncatableFieldModal title={'Event Name'} content={name} />,
-      date: formatDateTime(date),
       site: <TruncatableFieldModal title={'Sites'} content={`${site?.name} (${site?.host})`} />,
       venue: <TruncatableFieldModal title={'Venue'} content={venue} />,
+      date: formatDateTime(date),
+      endDate: formatDateTime(endDate),
+      lastBookingDate: formatDateTime(lastBookingDate),
       createdAt: formatDateTime(createdAt),
       updatedAt: formatDateTime(updatedAt)
     };
@@ -46,9 +48,11 @@ const EventList = () => {
                 headers={[
                   { label: 'Sr No.', key: 'srno' },
                   { label: 'Event Name', key: 'name' },
-                  { label: 'Scheduled Date', key: 'date' },
                   { label: 'Sites', key: 'site' },
                   { label: 'Venue', key: 'venue' },
+                  { label: 'Start Date', key: 'date' },
+                  { label: 'End Date', key: 'endDate' },
+                  { label: 'Last Booking Date', key: 'lastBookingDate' },
                   { label: 'Created Date', key: 'createdAt' },
                   { label: 'Updated Date', key: 'updatedAt' }
                 ]}

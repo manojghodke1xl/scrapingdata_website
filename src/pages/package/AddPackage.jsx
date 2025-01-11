@@ -172,6 +172,7 @@ const AddPackage = () => {
                 errorMessage={errors.amount}
               />
               <FormField
+                divClassName={'mt-5'}
                 label="Max Limit"
                 type="number"
                 id="maxLimit"
