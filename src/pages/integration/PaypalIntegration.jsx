@@ -7,14 +7,41 @@ import FormField from '../../atoms/formFields/InputField';
 import ToggleComponent from '../../atoms/formFields/ToggleComponent';
 import { showNotification } from '../../utils/showNotification';
 import { updatePaymentIntegrationApi } from '../../apis/payment-integration-apis';
+import MultiSelectCheckbox from '../../atoms/formFields/MultiSelectCheckBox';
 
 const PaypalIntegration = () => {
   const navigate = useNavigate();
   const { setLoading, isLoading } = useGlobalContext();
   const { state } = useLocation();
 
-  const [paypalDetails, setPaypalDetails] = useState(state?.paymentData);
+  const [paypalDetails, setPaypalDetails] = useState(
+    state?.paymentData || {
+      clientId: '',
+      clientSecret: '',
+      environment: 'development',
+      supports: {
+        INR: false,
+        AED: false,
+        USD: false
+      },
+      redirectUrl: {
+        success: '',
+        failure: ''
+      }
+    }
+  );
   const [errors, setErrors] = useState({});
+
+  const handleCurrencyChange = (selected) => {
+    setPaypalDetails((prevDetails) => ({
+      ...prevDetails,
+      supports: {
+        ...prevDetails.supports,
+        AED: selected.includes('AED'),
+        USD: selected.includes('USD')
+      }
+    }));
+  };
 
   const validate = () => {
     const newErrors = {};
@@ -114,6 +141,31 @@ const PaypalIntegration = () => {
           </div>
         </div>
       </div>
+
+      <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
+        <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
+          <div className="sm:w-7/12 w-full flex flex-col">
+            <span className=" text-primary">Curreny Support</span>
+          </div>
+          <div className="w-full">
+            <MultiSelectCheckbox
+              options={[
+                { _id: 'AED', name: 'AED' },
+                { _id: 'USD', name: 'USD' }
+              ]}
+              formLabel="Supported Currencies"
+              label="Select Currencies"
+              onChange={handleCurrencyChange}
+              selected={Object?.entries(paypalDetails?.supports)
+                .filter(([, value]) => value)
+                .map(([key]) => key)}
+              error={errors?.supports}
+              divClassName="mb-4"
+            />
+          </div>
+        </div>
+      </div>
+
       <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
         <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
           <div className="sm:w-7/12 w-full flex flex-col">

@@ -32,6 +32,7 @@ import FaqCategoryRoutes from './private-routes/FaqCategoryRoutes';
 import 'react-toastify/dist/ReactToastify.css';
 import PackageRoutes from './private-routes/PackageRoutes';
 import TestimonialCategoryRoutes from './private-routes/TestimonialCategoryRoutes';
+import ProductRoutes from './private-routes/productRoutes';
 
 const ZohoStatus = lazy(() => import('../pages/integration/ZohoStatus'));
 
@@ -76,6 +77,7 @@ const App = () => {
                 <Route path="/payments/*" element={<PaymentRoutes />} />
                 <Route path="/apps/*" element={<IntegrationRoutes />} />
                 <Route path="/packages/*" element={<PackageRoutes />} />
+                <Route path="/products/*" element={<ProductRoutes />} />
               </Route>
             </Route>
             <Route path="*" element={<PageNotFound />} />

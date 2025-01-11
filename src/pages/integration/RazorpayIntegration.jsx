@@ -7,12 +7,28 @@ import DropDown from '../../atoms/formFields/DropDown';
 import useGlobalContext from '../../hooks/useGlobalContext';
 import { showNotification } from '../../utils/showNotification';
 import { updatePaymentIntegrationApi } from '../../apis/payment-integration-apis';
+import MultiSelectCheckbox from '../../atoms/formFields/MultiSelectCheckBox';
 
 const RazorpayIntegration = () => {
   const navigate = useNavigate();
   const { setLoading, isLoading } = useGlobalContext();
   const { state } = useLocation();
-  const [razorpayDetails, setRazorpayDetails] = useState(state?.paymentData || {});
+  const [razorpayDetails, setRazorpayDetails] = useState(
+    state?.paymentData || {
+      keyId: '',
+      keySecret: '',
+      environment: 'development',
+      supports: {
+        INR: false,
+        AED: false,
+        USD: false
+      },
+      redirectUrl: {
+        success: '',
+        failure: ''
+      }
+    }
+  );
   const [errors, setErrors] = useState({});
 
   const validate = () => {
@@ -22,6 +38,18 @@ const RazorpayIntegration = () => {
     if (!razorpayDetails.environment) newErrors.environment = 'Environment is required';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
+  };
+
+  const handleCurrencyChange = (selected) => {
+    setRazorpayDetails((prevDetails) => ({
+      ...prevDetails,
+      supports: {
+        ...prevDetails.supports,
+        INR: selected.includes('INR'),
+        AED: selected.includes('AED'),
+        USD: selected.includes('USD')
+      }
+    }));
   };
 
   const handleSubmit = async (e) => {
@@ -113,6 +141,32 @@ const RazorpayIntegration = () => {
           </div>
         </div>
       </div>
+
+      <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
+        <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
+          <div className="sm:w-7/12 w-full flex flex-col">
+            <span className=" text-primary">Curreny Support</span>
+          </div>
+          <div className="w-full">
+            <MultiSelectCheckbox
+              options={[
+                { _id: 'INR', name: 'INR' },
+                { _id: 'AED', name: 'AED' },
+                { _id: 'USD', name: 'USD' }
+              ]}
+              formLabel="Supported Currencies"
+              label="Select Currencies"
+              onChange={handleCurrencyChange}
+              selected={Object?.entries(razorpayDetails?.supports)
+                .filter(([, value]) => value)
+                .map(([key]) => key)}
+              error={errors?.supports}
+              divClassName="mb-4"
+            />
+          </div>
+        </div>
+      </div>
+
       <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
         <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
           <div className="sm:w-7/12 w-full flex flex-col">
