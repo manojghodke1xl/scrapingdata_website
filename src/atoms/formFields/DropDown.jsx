@@ -25,13 +25,14 @@ const DropDown = ({ mt = '', width = 'w-full', name, label, SummaryChild, dropdo
       <details
         ref={dropdownRef}
         name={name}
-        className={`relative ${width} cursor-default rounded-xl bg-white pl-3 pr-10 text-left text-primary shadow-sm border border-primary focus:outline-none focus:ring-0 sm:text-lg sm:leading-6 `}
+        className={`relative ${width} cursor-default rounded-xl bg-white pl-3 pr-10 text-left text-primary shadow-sm border ${
+          error ? 'border-danger' : 'border-primary'
+        } focus:outline-none focus:ring-0 sm:text-lg sm:leading-6 `}
       >
         <summary className="cursor-pointer py-2.5 pr-8 text-left text-primary list-none focus:outline-none focus:ring-0 focus:border-0">
           <span className="flex items-center">
             <span className="block font-medium whitespace-nowrap text-[16px]">
-              <TruncatableFieldModal title={label} content={dropdownList.find((item) => item.name === selected)?.showName || SummaryChild} maxLength={100} />
-              {/* {} */}
+              <TruncatableFieldModal title={label} content={dropdownList.find((item) => item.name === selected)?.showName || SummaryChild} maxLength={50} />
             </span>
           </span>
           <span className="absolute inset-y-0 right-0 ml-3 flex items-center pr-2">

@@ -76,7 +76,7 @@ const CouponList = () => {
                 search={true}
                 filter={true}
                 deleteBtn={true}
-                filterCategory={[{ id: 2, name: 'Status' }]}
+                filterCategory={[{ id: 0, name: 'Status' }]}
                 statuses={[
                   { id: 0, name: 'Active', bgColor: '#ECFDF3', color: '#027948', dotColor: '#12B76A' },
                   { id: 2, name: 'Inactive', bgColor: '#F2F4F7', color: '#344054', dotColor: '#667085' }

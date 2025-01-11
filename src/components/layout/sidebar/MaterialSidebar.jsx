@@ -15,7 +15,8 @@ import {
   eventManagementPath,
   faqManagementPath,
   leadsManagementPath,
-  marketingManagementPath
+  marketingManagementPath,
+  productManagementPath
 } from './sidebarTabData';
 import ReusableAccordion from '../../../atoms/sidebar/ReusableAccordion';
 import useGlobalContext from '../../../hooks/useGlobalContext';
@@ -66,9 +67,17 @@ const MaterialSidebar = () => {
           <ReusableAccordion
             title="Marketing Management"
             links={marketingManagementPath}
-            icon={<FaBullhorn  />}
+            icon={<FaBullhorn />}
             isOpen={openAccordion === 'Marketing Management"'}
             onToggle={() => setOpenAccordion(openAccordion === 'Marketing Management"' ? null : 'Marketing Management"')}
+          />
+
+          <ReusableAccordion
+            title="Product Management"
+            links={productManagementPath}
+            icon={<FaBullhorn />}
+            isOpen={openAccordion === 'Product Management'}
+            onToggle={() => setOpenAccordion(openAccordion === 'Product Management' ? null : 'Product Management')}
           />
 
           <ReusableAccordion

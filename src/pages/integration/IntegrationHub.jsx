@@ -19,9 +19,8 @@ const IntegrationHub = () => {
     try {
       setLoading(true);
       const { status, data } = await getIntegrationBySite(id);
-      if (status) {
-        setIntegrationData(data);
-      } else showNotification('warn', data);
+      if (status) setIntegrationData(data);
+      else showNotification('warn', data);
     } catch (error) {
       showNotification('error', error.message);
     } finally {

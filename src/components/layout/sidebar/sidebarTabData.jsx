@@ -30,6 +30,10 @@ export const contentManagementPath = [
 
 export const marketingManagementPath = [{ title: 'Coupon Management', to: ['/coupon/coupon-list', '/coupon/add-coupon', '/coupon/edit-coupon', '/coupon/duplicate-coupon'] }];
 
+export const productManagementPath = [
+  { title: 'Product Management', to: ['/products/product-list', '/products/add-product', '/products/edit-product', '/products/duplicate-product'] }
+];
+
 export const siteSettingsPath = [
   { title: 'SMTP Settings', to: ['/smtp/smtp-list', '/smtp/add-smtp', '/smtp/edit-smtp'] },
   { title: 'reCAPTCHA Settings', to: ['/recaptcha/recaptcha-list', '/recaptcha/add-recaptcha', '/recaptcha/edit-recaptcha', '/recaptcha/duplicate-recaptcha'] }
