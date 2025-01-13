@@ -156,7 +156,7 @@ const PaypalIntegration = () => {
               formLabel="Supported Currencies"
               label="Select Currencies"
               onChange={handleCurrencyChange}
-              selected={Object?.entries(paypalDetails?.supports)
+              selected={Object.entries(paypalDetails?.supports ?? {})
                 .filter(([, value]) => value)
                 .map(([key]) => key)}
               error={errors?.supports}

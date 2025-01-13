@@ -157,7 +157,7 @@ const RazorpayIntegration = () => {
               formLabel="Supported Currencies"
               label="Select Currencies"
               onChange={handleCurrencyChange}
-              selected={Object?.entries(razorpayDetails?.supports)
+              selected={Object.entries(razorpayDetails?.supports ?? {})
                 .filter(([, value]) => value)
                 .map(([key]) => key)}
               error={errors?.supports}

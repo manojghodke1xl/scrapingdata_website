@@ -157,7 +157,7 @@ const StripeIntegration = () => {
               formLabel="Supported Currencies"
               label="Select Currencies"
               onChange={handleCurrencyChange}
-              selected={Object.entries(stripeDetails?.supports)
+              selected={Object.entries(stripeDetails?.supports ?? {})
                 .filter(([, value]) => value)
                 .map(([key]) => key)}
               error={errors?.supports}
