@@ -174,6 +174,7 @@ const AddCaseStudy = () => {
               imagePreviewUrl={caseStudyDetails.imageFile?.url}
             />
             <FileUpload
+              divClassName={'mt-5'}
               logo={<BsFilePdf className="text-primary text-2xl" />}
               error={errors.image}
               setErrors={setErrors}

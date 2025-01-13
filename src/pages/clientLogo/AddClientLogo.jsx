@@ -110,8 +110,12 @@ const AddClientLogo = () => {
                   if (errors.images) setErrors((prev) => ({ ...prev, images: '' }));
                 }}
                 id={id}
-                isMultiple={!id}
+                label={'Upload Client Logo'}
+                allowedTypes={['image/png', 'image/jpeg', 'application/svg+xml', 'image/gif']}
+                allowedFileTypes={['.png', '.jpeg', '.svg', '.gif']}
+                isMultiple
                 imagePreviewUrl={clientlogoDetails.imageFile?.url}
+                isImage
                 setLoading={setLoading}
                 error={errors.images}
               />

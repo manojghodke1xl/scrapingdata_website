@@ -12,6 +12,10 @@ import ToggleComponent from '../../atoms/formFields/ToggleComponent';
 import MultiSelectCheckbox from '../../atoms/formFields/MultiSelectCheckBox';
 import { getIntegrationBySite } from '../../apis/payment-integration-apis';
 import { addProductApi, getProductByIdApi, updateProductApi } from '../../apis/product-apis';
+import MultipleFileUpload from '../../atoms/formFields/MultiFileUpload';
+import { acceptedExtensions, acceptedProductTypes } from './productStaticData';
+import FileUpload from '../../atoms/formFields/FileUpload';
+import { FaRegImage } from 'react-icons/fa';
 
 const AddProduct = () => {
   const navigate = useNavigate();
@@ -38,12 +42,14 @@ const AddProduct = () => {
     inStock: true,
     stock: 0,
     type: '',
+    image: '',
+    gallery: [],
+    digitalProducts: [],
     shippingDestinations: {
       india: false,
       uae: false,
       restOfTheWorld: false
     },
-    digitalFileType: '',
     currencies: {
       INR: 0,
       AED: 0,
@@ -64,7 +70,7 @@ const AddProduct = () => {
         newErrors.shippingDestinations = 'At least one Shipping Destinations is required';
     }
 
-    if (productDetails.type === 'Digital' && !productDetails.digitalFileType) newErrors.digitalFileType = 'Digital File Type is required';
+    if (productDetails.type === 'Digital' && !productDetails.digitalProducts) newErrors.digitalProducts = 'Digital Product is required';
 
     if (!productDetails.site) newErrors.site = 'Site is required';
 
@@ -78,8 +84,19 @@ const AddProduct = () => {
       (async () => {
         try {
           const { status, data } = await getProductByIdApi(id);
-          if (status) setProductDetails(data.product);
-          else showNotification('warn', data);
+          if (status) {
+            const { image, digitalProducts, gallery, ...rest } = data.product;
+            setProductDetails((prev) => ({
+              ...prev,
+              ...rest,
+              image: image ? image.url : '',
+              imageFile: image ? image : {},
+              digitalProducts: digitalProducts ? digitalProducts.map((product) => product._id) : '',
+              digitalProductsFile: digitalProducts ? digitalProducts.map((product) => ({ _id: product._id, url: product.url })) : [],
+              gallery: gallery ? gallery.map((product) => product._id) : [],
+              galleryFile: gallery ? gallery.map((product) => ({ _id: product._id, url: product.url })) : []
+            }));
+          } else showNotification('warn', data);
         } catch (error) {
           showNotification('error', error.message);
         } finally {
@@ -190,16 +207,6 @@ const AddProduct = () => {
                 value={productDetails.name}
                 errorMessage={errors.name}
               />
-              <TextareaComponent
-                label="Description"
-                placeholder="Enter a description..."
-                id="info"
-                name="info"
-                value={productDetails.description}
-                onChange={(e) => setProductDetails((prev) => ({ ...prev, description: e.target.value }))}
-                charCount={false}
-                errorMessage={errors.description}
-              />
 
               <TextareaComponent
                 label="Short Description"
@@ -212,87 +219,54 @@ const AddProduct = () => {
                 errorMessage={errors.shortDescription}
                 maxLength={100}
               />
-            </div>
-          </div>
-        </div>
-      </div>
 
-      <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
-        <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
-          <div className="sm:w-7/12 w-full flex flex-col">
-            <span className=" text-primary">Pricing</span>
-          </div>
-          <div className="w-full">
-            <div>
-              <FormField
-                label="Price"
-                type="number"
-                id="price"
-                name="price"
-                placeholder="Price"
-                onChange={(e) => {
-                  setProductDetails((prev) => ({ ...prev, price: e.target.value }));
-                  if (errors.price) setErrors((prev) => ({ ...prev, price: '' }));
-                }}
-                value={productDetails.price}
-                errorMessage={errors.price}
-              />
-              <FormField
-                divClassName={'mt-5'}
-                label="Discount Price"
-                type="number"
-                id="salePrice"
-                name="salePrice"
-                placeholder="Discount Price"
-                onChange={(e) => {
-                  setProductDetails((prev) => ({ ...prev, salePrice: e.target.value }));
-                  if (errors.salePrice) setErrors((prev) => ({ ...prev, salePrice: '' }));
-                }}
-                value={productDetails.salePrice}
-                errorMessage={errors.salePrice}
-              />
-              <DateTimePicker
-                divClassName={'mt-5'}
-                id={'saleEndDate'}
-                label="Sale End Date"
-                placeholder={formatDateTime(new Date())}
-                selectedDateTime={productDetails.saleEndDate}
-                setSelectedDateTime={(date) => setProductDetails((prev) => ({ ...prev, saleEndDate: date }))}
-                errorMessage={errors.saleEndDate}
+              <TextareaComponent
+                label="Description"
+                placeholder="Enter a description..."
+                id="info"
+                name="info"
+                value={productDetails.description}
+                onChange={(e) => setProductDetails((prev) => ({ ...prev, description: e.target.value }))}
+                charCount={false}
+                errorMessage={errors.description}
               />
             </div>
           </div>
         </div>
       </div>
 
-      <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
+      <div className="w-full justify-center items-center border-b  border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end ">
         <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
           <div className="sm:w-7/12 w-full flex flex-col">
-            <span className=" text-primary">Stock and Availability</span>
+            <span className="block text-primary">Media Upload</span>
           </div>
-          <div className="w-full">
-            <div>
-              <ToggleComponent
-                label={'In Stock'}
-                isEnableState={productDetails.inStock}
-                setIsEnableState={(e) => setProductDetails((prev) => ({ ...prev, inStock: e }))}
-                errorMessage={errors.inStock}
-              />
-              <FormField
-                divClassName={'mt-5'}
-                label="Stock"
-                type="number"
-                id="stock"
-                name="stock"
-                placeholder="Stock"
-                onChange={(e) => {
-                  setProductDetails((prev) => ({ ...prev, stock: e.target.value }));
-                  if (errors.stock) setErrors((prev) => ({ ...prev, stock: '' }));
-                }}
-                value={productDetails.stock}
-                errorMessage={errors.stock}
-              />
-            </div>
+          <div className="dropdown-container relative w-full mt-2">
+            <FileUpload
+              logo={<FaRegImage className="text-primary text-2xl" />}
+              error={errors.image}
+              setErrors={setErrors}
+              acceptedTypes={['.jpeg', '.png']}
+              fieldName="image"
+              isImage
+              setDetails={setProductDetails}
+              imagePreviewUrl={productDetails.imageFile?.url}
+            />
+
+            <MultipleFileUpload
+              divClassName={'mt-5'}
+              onUploadSuccess={(files) => {
+                setProductDetails((prev) => ({ ...prev, gallery: files }));
+                if (errors.gallery) setErrors((prev) => ({ ...prev, gallery: '' }));
+              }}
+              id={id}
+              isMultiple
+              label="Upload Gallery"
+              allowedTypes={['image/jpeg', 'image/png', 'image/gif', 'image/svg+xml', 'video/mp4', 'video/quicktime']}
+              allowedFileTypes={['.jpeg', '.png', '.gif', '.svg', '.mp4', '.mov']}
+              imagePreviewUrl={productDetails?.galleryFile?.map((file) => file.url)}
+              setLoading={setLoading}
+              error={errors.gallery}
+            />
           </div>
         </div>
       </div>
@@ -397,23 +371,101 @@ const AddProduct = () => {
               )}
 
               {productDetails.type === 'Digital' && (
-                <DropDown
-                  name="Digital File Type"
-                  dropdownList={[
-                    { id: 0, showName: 'PDF', name: 'PDF' },
-                    { id: 1, showName: 'PPT', name: 'PPT' },
-                    { id: 2, showName: 'Digital File', name: 'Digital File' }
-                  ]}
-                  SummaryChild={<h5 className="p-0 m-0 text-primary">Digital File Type</h5>}
-                  search={true}
-                  selected={productDetails.digitalFileType}
-                  commonFunction={(e) => {
-                    setProductDetails((prev) => ({ ...prev, digitalFileType: e.name }));
-                    if (errors.digitalFileType) setErrors((prev) => ({ ...prev, digitalFileType: '' }));
+                <MultipleFileUpload
+                  divClassName={'mt-5'}
+                  onUploadSuccess={(files) => {
+                    setProductDetails((prev) => ({ ...prev, digitalProducts: files }));
+                    if (errors.digitalProducts) setErrors((prev) => ({ ...prev, digitalProducts: '' }));
                   }}
-                  error={errors.digitalFileType}
+                  id={id}
+                  isMultiple={!id}
+                  allowedTypes={acceptedProductTypes}
+                  allowedFileTypes={acceptedExtensions}
+                  imagePreviewUrl={productDetails?.digitalProductsFile?.map((file) => file.url)}
+                  setLoading={setLoading}
+                  error={errors.digitalProducts}
                 />
               )}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
+        <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
+          <div className="sm:w-7/12 w-full flex flex-col">
+            <span className=" text-primary">Pricing Information</span>
+          </div>
+          <div className="w-full">
+            <div>
+              <FormField
+                label="Price"
+                type="number"
+                id="price"
+                name="price"
+                placeholder="Price"
+                onChange={(e) => {
+                  setProductDetails((prev) => ({ ...prev, price: e.target.value }));
+                  if (errors.price) setErrors((prev) => ({ ...prev, price: '' }));
+                }}
+                value={productDetails.price}
+                errorMessage={errors.price}
+              />
+              <FormField
+                divClassName={'mt-5'}
+                label="Discount Price"
+                type="number"
+                id="salePrice"
+                name="salePrice"
+                placeholder="Discount Price"
+                onChange={(e) => {
+                  setProductDetails((prev) => ({ ...prev, salePrice: e.target.value }));
+                  if (errors.salePrice) setErrors((prev) => ({ ...prev, salePrice: '' }));
+                }}
+                value={productDetails.salePrice}
+                errorMessage={errors.salePrice}
+              />
+              <DateTimePicker
+                divClassName={'mt-5'}
+                id={'saleEndDate'}
+                label="Sale End Date"
+                placeholder={formatDateTime(new Date())}
+                selectedDateTime={productDetails.saleEndDate}
+                setSelectedDateTime={(date) => setProductDetails((prev) => ({ ...prev, saleEndDate: date }))}
+                errorMessage={errors.saleEndDate}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
+        <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
+          <div className="sm:w-7/12 w-full flex flex-col">
+            <span className=" text-primary">Stock and Availability</span>
+          </div>
+          <div className="w-full">
+            <div>
+              <ToggleComponent
+                label={'In Stock'}
+                isEnableState={productDetails.inStock}
+                setIsEnableState={(e) => setProductDetails((prev) => ({ ...prev, inStock: e }))}
+                errorMessage={errors.inStock}
+              />
+              <FormField
+                divClassName={'mt-5'}
+                label="Stock"
+                type="number"
+                id="stock"
+                name="stock"
+                placeholder="Stock"
+                onChange={(e) => {
+                  setProductDetails((prev) => ({ ...prev, stock: e.target.value }));
+                  if (errors.stock) setErrors((prev) => ({ ...prev, stock: '' }));
+                }}
+                value={productDetails.stock}
+                errorMessage={errors.stock}
+              />
             </div>
           </div>
         </div>

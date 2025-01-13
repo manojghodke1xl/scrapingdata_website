@@ -119,8 +119,12 @@ const AddPartnerLogo = () => {
                   if (errors.images) setErrors((prev) => ({ ...prev, images: '' }));
                 }}
                 id={id}
-                isMultiple={!id}
+                label={'Upload Partner Logo'}
+                isMultiple
+                allowedTypes={['image/png', 'image/jpeg', 'application/svg+xml', 'image/gif']}
+                allowedFileTypes={['.png', '.jpeg', '.svg', '.gif']}
                 imagePreviewUrl={partnerlogoDetails.imageFile?.url}
+                isImage
                 setLoading={setLoading}
                 error={errors.images}
               />

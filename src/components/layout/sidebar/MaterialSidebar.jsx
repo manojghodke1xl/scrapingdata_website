@@ -20,6 +20,7 @@ import {
 } from './sidebarTabData';
 import ReusableAccordion from '../../../atoms/sidebar/ReusableAccordion';
 import useGlobalContext from '../../../hooks/useGlobalContext';
+import { AiOutlineProduct } from 'react-icons/ai';
 // import SearchComponent from '../../../atoms/common/SearchComponent';
 
 const MaterialSidebar = () => {
@@ -49,19 +50,13 @@ const MaterialSidebar = () => {
               <span>{title}</span>
             </Link>
           ))}
+          
           <ReusableAccordion
             title="Content Management"
             links={contentManagementPath}
             icon={<TbFileSearch />}
             isOpen={openAccordion === 'Content Management'}
             onToggle={() => setOpenAccordion(openAccordion === 'Content Management' ? null : 'Content Management')}
-          />
-          <ReusableAccordion
-            title="Lead Management"
-            links={leadsManagementPath}
-            icon={<TbUsersGroup />}
-            isOpen={openAccordion === 'Lead Management'}
-            onToggle={() => setOpenAccordion(openAccordion === 'Lead Management' ? null : 'Lead Management')}
           />
 
           <ReusableAccordion
@@ -75,9 +70,17 @@ const MaterialSidebar = () => {
           <ReusableAccordion
             title="Product Management"
             links={productManagementPath}
-            icon={<FaBullhorn />}
+            icon={<AiOutlineProduct />}
             isOpen={openAccordion === 'Product Management'}
             onToggle={() => setOpenAccordion(openAccordion === 'Product Management' ? null : 'Product Management')}
+          />
+
+          <ReusableAccordion
+            title="Lead Management"
+            links={leadsManagementPath}
+            icon={<TbUsersGroup />}
+            isOpen={openAccordion === 'Lead Management'}
+            onToggle={() => setOpenAccordion(openAccordion === 'Lead Management' ? null : 'Lead Management')}
           />
 
           <ReusableAccordion
@@ -87,6 +90,7 @@ const MaterialSidebar = () => {
             isOpen={openAccordion === 'Site Settings'}
             onToggle={() => setOpenAccordion(openAccordion === 'Site Settings' ? null : 'Site Settings')}
           />
+
           <ReusableAccordion
             title="Media Management"
             links={mediaManagementPath}
@@ -94,6 +98,7 @@ const MaterialSidebar = () => {
             isOpen={openAccordion === 'Media Management'}
             onToggle={() => setOpenAccordion(openAccordion === 'Media Management' ? null : 'Media Management')}
           />
+
           <ReusableAccordion
             title="Event Management"
             links={eventManagementPath}
@@ -101,6 +106,7 @@ const MaterialSidebar = () => {
             isOpen={openAccordion === 'Event Management'}
             onToggle={() => setOpenAccordion(openAccordion === 'Event Management' ? null : 'Event Management')}
           />
+
           <ReusableAccordion
             title="Faq Management"
             links={faqManagementPath}
@@ -108,6 +114,7 @@ const MaterialSidebar = () => {
             isOpen={openAccordion === 'Faq Management'}
             onToggle={() => setOpenAccordion(openAccordion === 'Faq Management' ? null : 'Faq Management')}
           />
+
           <ReusableAccordion
             title="Testimonials"
             links={testimonialsPath}

@@ -112,8 +112,12 @@ const AddGallery = () => {
                   if (errors.images) setErrors((prev) => ({ ...prev, images: '' }));
                 }}
                 id={id}
-                isMultiple={!id}
+                isMultiple
+                label={'Upload Gallery Images'}
+                allowedTypes={['image/png', 'image/jpeg', 'image/svg+xml', 'image/gif']}
+                allowedFileTypes={['.png', '.jpeg', '.svg', '.gif']}
                 imagePreviewUrl={galleryDetails.imageFile?.url}
+                isImage
                 setLoading={setLoading}
                 error={errors.images}
               />
