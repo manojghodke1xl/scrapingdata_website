@@ -1,6 +1,6 @@
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import useGlobalContext from '../../hooks/useGlobalContext';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { addPackageApi, getPackageByIdApi, updatePackageApi } from '../../apis/package-apis';
 import { showNotification } from '../../utils/showNotification';
 import FormButtons from '../../atoms/formFields/FormButtons';
@@ -8,6 +8,7 @@ import FormField from '../../atoms/formFields/InputField';
 import TextareaComponent from '../../atoms/formFields/TextareaComponent';
 import { getAllEventsApi } from '../../apis/event-apis';
 import DropDown from '../../atoms/formFields/DropDown';
+import { getIntegrationBySite } from '../../apis/payment-integration-apis';
 
 const AddPackage = () => {
   const navigate = useNavigate();
@@ -21,18 +22,33 @@ const AddPackage = () => {
   const [packageDetials, setPackageDetails] = useState({
     title: '',
     description: '',
-    amount: '',
+    currencies: {
+      INR: 0,
+      AED: 0,
+      USD: 0
+    },
     maxLimit: '',
     event: ''
   });
   const [events, setEvents] = useState([]);
+  const [paymentData, setPaymentData] = useState({});
 
   const validate = () => {
     const newErrors = {};
+
     if (!packageDetials.title.trim()) newErrors.title = 'Name is required';
     if (packageDetials.amount < 0 || !packageDetials.amount) newErrors.amount = 'Amount should be greater than 0';
     if (packageDetials.maxLimit < 0 || !packageDetials.maxLimit) newErrors.maxLimit = 'Max limit should be greater than 0';
     if (!packageDetials.event) newErrors.event = 'Event is required';
+    if ((paymentData?.razorpay?.supports?.INR || paymentData?.stripe?.supports?.INR || paymentData?.paypal?.supports?.INR) && !packageDetials.currencies.INR)
+      newErrors.currencies = { ...newErrors.currencies, INR: 'INR is required' };
+
+    if ((paymentData?.razorpay?.supports?.AED || paymentData?.stripe?.supports?.AED || paymentData?.paypal?.supports?.AED) && !packageDetials.currencies.AED)
+      newErrors.currencies = { ...newErrors.currencies, AED: 'AED is required' };
+
+    if ((paymentData?.razorpay?.supports?.USD || paymentData?.stripe?.supports?.USD || paymentData?.paypal?.supports?.USD) && !packageDetials.currencies.USD)
+      newErrors.currencies = { ...newErrors.currencies, USD: 'USD is required' };
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -98,6 +114,25 @@ const AddPackage = () => {
     return () => window.removeEventListener('resize', checkScrollability);
   }, []);
 
+  const getIntegration = useCallback(async () => {
+    try {
+      setLoading(true);
+      const { status, data } = await getIntegrationBySite(packageDetials.site);
+      if (status) setPaymentData(data.payment);
+      else showNotification('warn', data);
+    } catch (error) {
+      showNotification('error', error.message);
+    } finally {
+      setLoading(false);
+    }
+  }, [packageDetials.site, setLoading]);
+
+  useEffect(() => {
+    if (packageDetials.site) getIntegration();
+  }, [getIntegration, packageDetials.site, setLoading]);
+
+  console.log(paymentData);
+
   return (
     <div className="py-8 p-4 sm:p-8 overflow-x-hidden mb-20">
       <div className="w-full pb-8 border-b border-primary gap-y-4 gap-2 flex flex-col items-start md:flex-row lg:flex-col xl:flex-row justify-between lg:items-start md:items-end xl:items-end">
@@ -116,12 +151,13 @@ const AddPackage = () => {
             <div>
               <DropDown
                 name="Events"
-                dropdownList={events?.map((event) => ({ name: event._id, showName: `${event.name} (${event.venue})`, id: event._id }))}
+                dropdownList={events?.map((event) => ({ name: event._id, showName: `${event.name} (${event.venue})`, id: event._id, site: event.site._id }))}
                 SummaryChild={<h5 className="p-0 m-0 text-primary">Events</h5>}
                 search={true}
                 selected={packageDetials.event}
                 commonFunction={(e) => {
-                  setPackageDetails((prev) => ({ ...prev, event: e.name }));
+                  console.log(e);
+                  setPackageDetails((prev) => ({ ...prev, event: e.name, site: e.site }));
                   if (errors.event) setErrors((prev) => ({ ...prev, event: '' }));
                 }}
                 error={errors.event}
@@ -160,7 +196,58 @@ const AddPackage = () => {
                 onChange={(e) => setPackageDetails((prev) => ({ ...prev, description: e.target.value }))}
                 charCount={false}
               />
+
+              {(paymentData?.razorpay?.supports?.INR || paymentData?.stripe?.supports?.INR || paymentData?.paypal?.supports?.INR) && (
+                <FormField
+                  divClassName={'mt-5'}
+                  label="INR Amount"
+                  type="number"
+                  id="currencies"
+                  name="currencies"
+                  placeholder="INR Amount"
+                  onChange={(e) => {
+                    setPackageDetails((prev) => ({ ...prev, currencies: { ...prev.currencies, INR: e.target.value } }));
+                    if (errors.currencies) setErrors((prev) => ({ ...prev, currencies: { INR: '' } }));
+                  }}
+                  value={packageDetials.currencies?.INR}
+                  errorMessage={errors.currencies?.INR}
+                />
+              )}
+              {(paymentData?.razorpay?.supports?.AED || paymentData?.stripe?.supports?.AED || paymentData?.paypal?.supports?.AED) && (
+                <FormField
+                  divClassName={'mt-5'}
+                  label="AED Amount"
+                  type="number"
+                  id="currencies"
+                  name="currencies"
+                  placeholder="AED Amount"
+                  onChange={(e) => {
+                    setPackageDetails((prev) => ({ ...prev, currencies: { ...prev.currencies, AED: e.target.value } }));
+                    if (errors.currencies) setErrors((prev) => ({ ...prev, currencies: { AED: '' } }));
+                  }}
+                  value={packageDetials.currencies?.AED}
+                  errorMessage={errors.currencies?.AED}
+                />
+              )}
+
+              {(paymentData?.razorpay?.supports?.USD || paymentData?.stripe?.supports?.USD || paymentData?.paypal?.supports?.USD) && (
+                <FormField
+                  divClassName={'mt-5'}
+                  label="USD Amount"
+                  type="number"
+                  id="currencies"
+                  name="currencies"
+                  placeholder="USD Amount"
+                  onChange={(e) => {
+                    setPackageDetails((prev) => ({ ...prev, currencies: { ...prev.currencies, USD: e.target.value } }));
+                    if (errors.currencies) setErrors((prev) => ({ ...prev, currencies: { USD: '' } }));
+                  }}
+                  value={packageDetials.currencies?.USD}
+                  errorMessage={errors.currencies?.USD}
+                />
+              )}
               <FormField
+                divClassName={'mt-5'}
                 label="Amount"
                 type="number"
                 id="amount"
@@ -173,6 +260,7 @@ const AddPackage = () => {
                 value={packageDetials.amount}
                 errorMessage={errors.amount}
               />
+
               <FormField
                 divClassName={'mt-5'}
                 label="Max Limit"

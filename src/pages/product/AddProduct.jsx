@@ -155,8 +155,6 @@ const AddProduct = () => {
     if (productDetails.site) getIntegration();
   }, [getIntegration, productDetails.site, setLoading]);
 
-  console.log(paymentData);
-
   return (
     <div className="py-8 p-4 sm:p-8 overflow-x-hidden mb-20">
       <div className="w-full pb-8 border-b border-primary gap-y-4 gap-2 flex flex-col items-start md:flex-row lg:flex-col xl:flex-row justify-between lg:items-start md:items-end xl:items-end">
@@ -378,10 +376,10 @@ const AddProduct = () => {
                   placeholder="INR Currency"
                   onChange={(e) => {
                     setProductDetails((prev) => ({ ...prev, currencies: { ...prev.currencies, INR: e.target.value } }));
-                    if (errors.Currency) setErrors((prev) => ({ ...prev, Currency: '' }));
+                    if (errors.currencies) setErrors((prev) => ({ ...prev, currencies: '' }));
                   }}
                   value={productDetails.currencies?.INR}
-                  errorMessage={errors.Currency}
+                  errorMessage={errors.currencies}
                 />
               )}
               {productDetails.shippingDestinations.uae && (
@@ -394,10 +392,10 @@ const AddProduct = () => {
                   placeholder="AED Currency"
                   onChange={(e) => {
                     setProductDetails((prev) => ({ ...prev, currencies: { ...prev.currencies, AED: e.target.value } }));
-                    if (errors.Currency) setErrors((prev) => ({ ...prev, Currency: '' }));
+                    if (errors.currencies) setErrors((prev) => ({ ...prev, currencies: '' }));
                   }}
                   value={productDetails.currencies?.AED}
-                  errorMessage={errors.Currency}
+                  errorMessage={errors.currencies}
                 />
               )}
               {productDetails.shippingDestinations.restOfTheWorld && (
@@ -410,10 +408,10 @@ const AddProduct = () => {
                   placeholder="USD Currency"
                   onChange={(e) => {
                     setProductDetails((prev) => ({ ...prev, currencies: { ...prev.currencies, USD: e.target.value } }));
-                    if (errors.Currency) setErrors((prev) => ({ ...prev, Currency: '' }));
+                    if (errors.currencies) setErrors((prev) => ({ ...prev, currencies: '' }));
                   }}
                   value={productDetails.currencies?.USD}
-                  errorMessage={errors.Currency}
+                  errorMessage={errors.currencies}
                 />
               )}
 
