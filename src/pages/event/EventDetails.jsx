@@ -1,9 +1,32 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { getEventByIdApi } from '../../apis/event-apis';
+import { showNotification } from '../../utils/showNotification';
+import useGlobalContext from '../../hooks/useGlobalContext';
+import { formatDateTime } from '../../utils/dateFormats';
 
 const EventDetails = () => {
-  const { id = '' } = useParams();
+  const { id } = useParams();
   const [isScrollable, setIsScrollable] = useState(false);
+  const [event, setEvent] = useState({});
+  const { setLoading } = useGlobalContext();
+
+  useEffect(() => {
+    setLoading(true);
+    (async () => {
+      try {
+        const { status, data } = await getEventByIdApi(id);
+        if (status) setEvent(data.event);
+        else showNotification('warn', data);
+      } catch (error) {
+        showNotification('error', error.message);
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, [id, setLoading]);
+
+  console.log(event);
 
   const checkScrollability = () => {
     const contentHeight = document.documentElement.scrollHeight;
@@ -16,8 +39,6 @@ const EventDetails = () => {
     window.addEventListener('resize', checkScrollability);
     return () => window.removeEventListener('resize', checkScrollability);
   }, []);
-
-  console.log(id);
 
   return (
     <div className="py-8 p-4 sm:p-8 overflow-x-hidden mb-20">
@@ -39,12 +60,16 @@ const EventDetails = () => {
           </div>
           <div className="w-full grid grid-cols-1 gap-5">
             <div className="mt-5">
+              <h1 className="font-semibold text-primary">Event Key</h1>
+              <p className="text-secondary">{event?._id || 'No Key available'}</p>
+            </div>
+            <div className="mt-5">
               <h1 className="font-semibold text-primary">Event Name</h1>
-              <p className="text-secondary"></p>
+              <p className="text-secondary">{event?.name || 'No name available'}</p>
             </div>
             <div className="mt-5">
               <h1 className="font-semibold text-primary">Venue</h1>
-              <p className="text-secondary"></p>
+              <p className="text-secondary">{event?.venue || 'No venue available'}</p>
             </div>
           </div>
         </div>
@@ -57,8 +82,16 @@ const EventDetails = () => {
           </div>
           <div className="w-full gap-5">
             <div className="mt-5">
-              <h1 className="font-semibold text-primary">Date</h1>
-              <p className="text-secondary"></p>
+              <h1 className="font-semibold text-primary">Start Date</h1>
+              <p className="text-secondary">{formatDateTime(event?.date) || 'No start date available'} </p>
+            </div>
+            <div className="mt-5">
+              <h1 className="font-semibold text-primary">End Date</h1>
+              <p className="text-secondary">{formatDateTime(event?.endDate) || 'No end date available'} </p>
+            </div>
+            <div className="mt-5">
+              <h1 className="font-semibold text-primary">Last Booking Date</h1>
+              <p className="text-secondary">{formatDateTime(event?.lastBookingDate) || 'No last booking date available'}</p>
             </div>
           </div>
         </div>
@@ -72,13 +105,13 @@ const EventDetails = () => {
           <div className="w-full grid grid-cols-2 gap-5">
             <div className="mt-5">
               <h1 className="font-semibold text-primary">Site</h1>
-              <p className="text-secondary"></p>
+              <p className="text-secondary">{event?.site?.name && event?.site?.host ? `${event.site.name} (${event.site.host})` : 'No site available'}</p>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
+      {/* <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
         <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className=" text-primary">
@@ -106,7 +139,7 @@ const EventDetails = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
 
       {/* <div className="w-full justify-center items-center border-b  border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end ">
           <NoteComponent note={viewEnquiryNote} />

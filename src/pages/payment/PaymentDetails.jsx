@@ -1,9 +1,30 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import useGlobalContext from '../../hooks/useGlobalContext';
+import { showNotification } from '../../utils/showNotification';
+import { getPaymentById } from '../../apis/payment-apis';
+import { formatDateTime } from '../../utils/dateFormats';
 
 const PaymentDetails = () => {
   const { id = '' } = useParams();
   const [isScrollable, setIsScrollable] = useState(false);
+  const { setLoading } = useGlobalContext();
+  const [payment, setPayment] = useState({});
+
+  useEffect(() => {
+    setLoading(true);
+    (async () => {
+      try {
+        const { status, data } = await getPaymentById(id);
+        if (status) setPayment(data.payment);
+        else showNotification('warn', data);
+      } catch (error) {
+        showNotification('error', error.message);
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, [id, setLoading]);
 
   const checkScrollability = () => {
     const contentHeight = document.documentElement.scrollHeight;
@@ -17,7 +38,6 @@ const PaymentDetails = () => {
     return () => window.removeEventListener('resize', checkScrollability);
   }, []);
 
-  console.log(id);
   return (
     <div className="py-8 p-4 sm:p-8 overflow-x-hidden mb-20">
       <div className="w-full pb-8 border-b border-primary gap-y-4 gap-2 flex flex-col items-start md:flex-row lg:flex-col xl:flex-row justify-between lg:items-start md:items-end xl:items-end">
@@ -40,11 +60,11 @@ const PaymentDetails = () => {
           <div className="w-full grid grid-cols-1 gap-5">
             <div className="mt-5">
               <h1 className="font-semibold text-primary">Customer Name</h1>
-              <p className="text-secondary"></p>
+              <p className="text-secondary"> {payment?.participant?.name || 'No name available'} </p>
             </div>
             <div className="mt-5">
               <h1 className="font-semibold text-primary">Site Name</h1>
-              <p className="text-secondary"></p>
+              <p className="text-secondary">{payment?.site?.name && payment?.site?.host ? `${payment.site.name} (${payment.site.host})` : 'No site available'}</p>
             </div>
           </div>
         </div>
@@ -60,24 +80,24 @@ const PaymentDetails = () => {
           <div className="w-full">
             <div className="mt-5">
               <h1 className="font-semibold text-primary">Event Name</h1>
-              <p className="text-secondary"> </p>
+              <p className="text-secondary">{payment?.event?.name || ' No name available'} </p>
             </div>
             <div className="w-full grid grid-cols-2 gap-5">
               <div className="mt-5">
                 <h1 className="font-semibold text-primary">Currency</h1>
-                <p className="text-secondary"> </p>
+                <p className="text-secondary">{payment?.currency || ' No currency available'} </p>
               </div>
               <div className="mt-5">
                 <h1 className="font-semibold text-primary">Amount</h1>
-                <p className="text-secondary"></p>
+                <p className="text-secondary">{payment?.amount || ' No amount available'} </p>
               </div>
               <div className="mt-5">
                 <h1 className="font-semibold text-primary">Payment Method</h1>
-                <p className="text-secondary"></p>
+                <p className="text-secondary"> {payment?.channel || ' No payment method available'} </p>
               </div>
               <div className="mt-5">
                 <h1 className="font-semibold text-primary">Payment Status</h1>
-                <p className="text-secondary"></p>
+                <p className="text-secondary">{payment.status || ' No status available'} </p>
               </div>
             </div>
           </div>
@@ -92,11 +112,11 @@ const PaymentDetails = () => {
           <div className="w-full grid grid-cols-2 gap-5">
             <div className="mt-5">
               <h1 className="font-semibold text-primary">Created Date</h1>
-              <p className="text-secondary"></p>
+              <p className="text-secondary">{formatDateTime(payment?.createdAt) || 'Invalid Date'} </p>
             </div>
             <div className="mt-5">
               <h1 className="font-semibold text-primary">Updated Date</h1>
-              <p className="text-secondary"></p>
+              <p className="text-secondary">{formatDateTime(payment?.updatedAt) || 'Invalid Date'} </p>
             </div>
           </div>
         </div>

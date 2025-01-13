@@ -16,6 +16,7 @@ import MultipleFileUpload from '../../atoms/formFields/MultiFileUpload';
 import { acceptedExtensions, acceptedProductTypes } from './productStaticData';
 import FileUpload from '../../atoms/formFields/FileUpload';
 import { FaRegImage } from 'react-icons/fa';
+import FileTypesTooltip from '../../atoms/formFields/FileTypesTooltip';
 
 const AddProduct = () => {
   const navigate = useNavigate();
@@ -62,12 +63,14 @@ const AddProduct = () => {
     const newErrors = {};
     if (!productDetails.name.trim()) newErrors.name = 'Name is required';
     if (!productDetails.price || productDetails.price < 0) newErrors.price = 'Price should be greater than 0';
-    if (!productDetails.salePrice) newErrors.salePrice = 'Discount Price should be greater than 0';
+    if (!productDetails.salePrice || productDetails.salePrice < 0) newErrors.salePrice = 'Discount Price should be greater than 0';
     if (!productDetails.inStock) newErrors.inStock = 'In Stock is required';
     if (!productDetails.type) newErrors.type = 'Type is required';
     if (productDetails.type === 'Physical') {
       if (productDetails.shippingDestinations.india === false && productDetails.shippingDestinations.uae === false && productDetails.shippingDestinations.restOfTheWorld === false)
         newErrors.shippingDestinations = 'At least one Shipping Destinations is required';
+      if (productDetails.type === 'Physical' && Object.keys(paymentData).length === 0)
+        newErrors.shippingDestinations = 'Please configure payment gateway to select the shipping destinations';
     }
 
     if (productDetails.type === 'Digital' && !productDetails.digitalProducts) newErrors.digitalProducts = 'Digital Product is required';
@@ -288,8 +291,15 @@ const AddProduct = () => {
                 search={true}
                 selected={productDetails.type}
                 commonFunction={(e) => {
-                  setProductDetails((prev) => ({ ...prev, type: e.name }));
-                  if (errors.type) setErrors((prev) => ({ ...prev, type: '' }));
+                  setProductDetails((prev) => {
+                    const updatedDetails = { ...prev, type: e.name };
+                    if (e.name === 'Physical') return { ...updatedDetails, digitalProducts: [] };
+                    return {
+                      ...updatedDetails,
+                      shippingDestinations: { india: false, uae: false, restOfTheWorld: false },
+                      currencies: { INR: 0, AED: 0, USD: 0 }
+                    };
+                  });
                 }}
                 error={errors.type}
               />
@@ -304,6 +314,43 @@ const AddProduct = () => {
                   formLabel="Shipping Destinations"
                   label="Shipping Destinations"
                   onChange={(selected) => {
+                    let error = '';
+
+                    if (selected.includes('india') && (paymentData.razorpay.supports.INR || paymentData.stripe.supports.INR || paymentData.paypal.supports.INR)) {
+                      setProductDetails((prevDetails) => ({
+                        ...prevDetails,
+                        shippingDestinations: {
+                          ...prevDetails.shippingDestinations,
+                          india: selected.includes('india')
+                        }
+                      }));
+                    } else if (selected.includes('uae') && (paymentData.razorpay.supports.AED || paymentData.stripe.supports.AED || paymentData.paypal.supports.AED)) {
+                      setProductDetails((prevDetails) => ({
+                        ...prevDetails,
+                        shippingDestinations: {
+                          ...prevDetails.shippingDestinations,
+                          uae: selected.includes('uae')
+                        }
+                      }));
+                    } else if (selected.includes('restOfTheWorld') && (paymentData.razorpay.supports.USD || paymentData.stripe.supports.USD || paymentData.paypal.supports.USD)) {
+                      setProductDetails((prevDetails) => ({
+                        ...prevDetails,
+                        shippingDestinations: {
+                          ...prevDetails.shippingDestinations,
+                          restOfTheWorld: selected.includes('restOfTheWorld')
+                        }
+                      }));
+                    } else if (selected.includes('india') && (!paymentData.razorpay.supports.INR || !paymentData.stripe.supports.INR || !paymentData.paypal.supports.INR)) {
+                      error = 'Please add support for INR currency in your payment gateway configuration';
+                    } else if (selected.includes('uae') && (!paymentData.razorpay.supports.AED || !paymentData.stripe.supports.AED || !paymentData.paypal.supports.AED)) {
+                      error = 'Please add support for AED currency in your payment gateway configuration';
+                    } else if (
+                      selected.includes('restOfTheWorld') &&
+                      (!paymentData.razorpay.supports.USD || !paymentData.stripe.supports.USD || !paymentData.paypal.supports.USD)
+                    ) {
+                      error = 'Please add support for USD currency in your payment gateway configuration';
+                    }
+                    setErrors((prev) => ({ ...prev, shippingDestinations: error }));
                     setProductDetails((prevDetails) => ({
                       ...prevDetails,
                       shippingDestinations: {
@@ -381,6 +428,7 @@ const AddProduct = () => {
                   isMultiple={!id}
                   allowedTypes={acceptedProductTypes}
                   allowedFileTypes={acceptedExtensions}
+                  toolTip={<FileTypesTooltip />}
                   imagePreviewUrl={productDetails?.digitalProductsFile?.map((file) => file.url)}
                   setLoading={setLoading}
                   error={errors.digitalProducts}

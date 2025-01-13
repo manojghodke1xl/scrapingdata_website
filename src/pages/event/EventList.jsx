@@ -14,6 +14,7 @@ const EventList = () => {
     return {
       id: _id,
       exportData: event,
+      Keys: _id,
       name: <TruncatableFieldModal title={'Event Name'} content={name} />,
       site: <TruncatableFieldModal title={'Sites'} content={`${site?.name} (${site?.host})`} />,
       venue: <TruncatableFieldModal title={'Venue'} content={venue} />,
@@ -47,6 +48,7 @@ const EventList = () => {
                 siteModule={'events'}
                 headers={[
                   { label: 'Sr No.', key: 'srno' },
+                  { label: 'Keys', key: 'Keys' },
                   { label: 'Event Name', key: 'name' },
                   { label: 'Sites', key: 'site' },
                   { label: 'Venue', key: 'venue' },

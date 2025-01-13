@@ -10,6 +10,7 @@ const MultiSelectCheckbox = ({
   isSuperAdmin,
   selected = [],
   error,
+  disabled,
   divClassName,
   mode = 'ids' // 'ids' or 'objects'
 }) => {
@@ -139,7 +140,7 @@ const MultiSelectCheckbox = ({
                     checked={isChecked}
                     onChange={() => handleChange(option._id)}
                     className={`h-4 w-4 rounded border-primary text-blue focus:ring-blue-500 ${error ? 'border-red-500' : ''}`}
-                    disabled={isSuperAdmin}
+                    disabled={isSuperAdmin || disabled}
                   />
                   <label htmlFor={option._id} className="ml-2 text-secondary cursor-pointer select-none">
                     {option.name}

@@ -3,7 +3,6 @@ import { uploadMultipleFiles } from '../../utils/fileUploads';
 import { showNotification } from '../../utils/showNotification';
 import { FaRegEdit, FaRegImage } from 'react-icons/fa';
 import { IoCloseOutline } from 'react-icons/io5';
-import TruncatableFieldModal from '../modal/TruncatableFeildModel';
 import { CiExport } from 'react-icons/ci';
 
 const MultipleFileUpload = ({
@@ -14,6 +13,7 @@ const MultipleFileUpload = ({
   label,
   allowedTypes,
   allowedFileTypes,
+  toolTip,
   isImage = false,
   isMultiple = false,
   setLoading,
@@ -116,9 +116,7 @@ const MultipleFileUpload = ({
               </div>
             </div>
 
-            <p className="font-normal text-xs text-primary text-center m-auto">
-              <TruncatableFieldModal title={'Accepted file types'} content={`Accepted file types: ${allowedFileTypes.join(', ')}`} maxLength={85} />
-            </p>
+            <p className="font-normal text-xs text-primary text-center m-auto">{toolTip ? toolTip : `Accepted file types: ${allowedFileTypes.join(', ')}`}</p>
           </div>
         )}
       </div>

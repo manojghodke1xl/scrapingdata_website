@@ -50,7 +50,8 @@ const AddEvent = () => {
       (async () => {
         try {
           const { status, data } = await getEventByIdApi(id);
-          if (status) setEventDetails(data.event);
+          const { site, ...rest } = data.event;
+          if (status) setEventDetails((prev) => ({ ...prev, ...rest, site: site._id }));
           else showNotification('warn', data);
         } catch (error) {
           showNotification('error', error.message);
