@@ -46,12 +46,20 @@ const AddPackage = () => {
     if (!packageDetails.title.trim()) newErrors.title = 'Name is required';
     if (packageDetails.maxLimit < 0 || !packageDetails.maxLimit) newErrors.maxLimit = 'Max limit should be greater than 0';
     if (!packageDetails.event) newErrors.event = 'Event is required';
+    // if (
+    //   (paymentData?.razorpay?.supports?.INR || paymentData?.stripe?.supports?.INR || paymentData?.paypal?.supports?.INR) &&
+    //   (!packageDetails.amount || packageDetails.amount <= 0) &&
+    //   packageDetails.currencyNotes.INR
+    // ) {
+    //   newErrors.amount = 'INR is required';
+    // }
+
     if (
       (paymentData?.razorpay?.supports?.INR || paymentData?.stripe?.supports?.INR || paymentData?.paypal?.supports?.INR) &&
-      (!packageDetails.amount || packageDetails.amount <= 0) &&
+      (!packageDetails.currencies.INR || packageDetails.currencies.INR <= 0) &&
       packageDetails.currencyNotes.INR
     ) {
-      newErrors.amount = 'INR is required';
+      newErrors.currencies = { ...newErrors.currencies, INR: 'AED is required' };
     }
 
     if (
@@ -258,20 +266,37 @@ const AddPackage = () => {
                   />
 
                   {(paymentData?.razorpay?.supports?.INR || paymentData?.stripe?.supports?.INR || paymentData?.paypal?.supports?.INR) && packageDetails?.currencyNotes?.INR && (
-                    <FormField
-                      divClassName={'mt-5'}
-                      label="Amount (in INR)"
-                      type="number"
-                      id="amount"
-                      name="amount"
-                      placeholder="Amount (in INR)"
-                      onChange={(e) => {
-                        setPackageDetails((prev) => ({ ...prev, amount: e.target.value }));
-                        if (errors.amount) setErrors((prev) => ({ ...prev, amount: '' }));
-                      }}
-                      value={packageDetails.amount}
-                      errorMessage={errors.amount}
-                    />
+                    <>
+                      <FormField
+                        divClassName={'mt-5'}
+                        label="Amount"
+                        type="number"
+                        id="amount"
+                        name="amount"
+                        placeholder="Amount"
+                        onChange={(e) => {
+                          setPackageDetails((prev) => ({ ...prev, amount: e.target.value }));
+                          if (errors.amount) setErrors((prev) => ({ ...prev, amount: '' }));
+                        }}
+                        value={packageDetails.amount}
+                        errorMessage={errors.amount}
+                      />
+
+                      <FormField
+                        divClassName={'mt-5'}
+                        label="Amount (in INR)"
+                        type="number"
+                        id="amount"
+                        name="amount"
+                        placeholder="Amount (in INR)"
+                        onChange={(e) => {
+                          setPackageDetails((prev) => ({ ...prev, currencies: { ...prev.currencies, INR: e.target.value } }));
+                          if (errors.currencies?.INR) setErrors((prev) => ({ ...prev, currencies: { INR: '' } }));
+                        }}
+                        value={packageDetails.currencies?.INR}
+                        errorMessage={errors.currencies?.INR}
+                      />
+                    </>
                   )}
                   {(paymentData?.razorpay?.supports?.AED || paymentData?.stripe?.supports?.AED || paymentData?.paypal?.supports?.AED) && packageDetails?.currencyNotes?.AED && (
                     <FormField
