@@ -50,9 +50,9 @@ const MaterialSidebar = () => {
               <span>{title}</span>
             </Link>
           ))}
-          
+
           <ReusableAccordion
-            title="Content"
+            title="Contents"
             links={contentManagementPath}
             icon={<TbFileSearch />}
             isOpen={openAccordion === 'Contents'}
@@ -68,7 +68,7 @@ const MaterialSidebar = () => {
           />
 
           <ReusableAccordion
-            title="Product"
+            title="Products"
             links={productManagementPath}
             icon={<AiOutlineProduct />}
             isOpen={openAccordion === 'Products'}
@@ -76,7 +76,7 @@ const MaterialSidebar = () => {
           />
 
           <ReusableAccordion
-            title="Lead"
+            title="Leads"
             links={leadsManagementPath}
             icon={<TbUsersGroup />}
             isOpen={openAccordion === 'Leads'}
@@ -100,7 +100,7 @@ const MaterialSidebar = () => {
           />
 
           <ReusableAccordion
-            title="Event"
+            title="Events"
             links={eventManagementPath}
             icon={<FiCalendar />}
             isOpen={openAccordion === 'Events'}
@@ -108,7 +108,7 @@ const MaterialSidebar = () => {
           />
 
           <ReusableAccordion
-            title="Faq"
+            title="Faqs"
             links={faqManagementPath}
             icon={<FaRegQuestionCircle />}
             isOpen={openAccordion === 'Faqs'}
