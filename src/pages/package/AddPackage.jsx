@@ -215,14 +215,12 @@ const AddPackage = () => {
                       let error = '';
                       const updatedCurrencyNotes = {};
 
-                      // Supported currencies in the payment gateways
                       const supportedCurrencies = {
-                        INR: paymentData.razorpay.supports.INR || paymentData.stripe.supports.INR || paymentData.paypal.supports.INR,
-                        AED: paymentData.razorpay.supports.AED || paymentData.stripe.supports.AED || paymentData.paypal.supports.AED,
-                        USD: paymentData.razorpay.supports.USD || paymentData.stripe.supports.USD || paymentData.paypal.supports.USD
+                        INR: paymentData?.razorpay?.supports?.INR || paymentData?.stripe?.supports?.INR || paymentData?.paypal?.supports?.INR,
+                        AED: paymentData?.razorpay?.supports?.AED || paymentData?.stripe?.supports?.AED || paymentData?.paypal?.supports?.AED,
+                        USD: paymentData?.razorpay?.supports?.USD || paymentData?.stripe?.supports?.USD || paymentData?.paypal?.supports?.USD
                       };
 
-                      // Iterate over selected currencies and update state
                       selected.forEach((currency) => {
                         if (supportedCurrencies[currency]) updatedCurrencyNotes[currency] = true;
                         else error = `Please add support for ${currency} currency in your payment gateway configuration`;
