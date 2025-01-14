@@ -242,7 +242,7 @@ const AddPackage = () => {
                     error={errors?.currencyNotes}
                   />
 
-                  {(paymentData?.razorpay?.supports?.INR || paymentData?.stripe?.supports?.INR || paymentData?.paypal?.supports?.INR) && packageDetails.currencyNotes.INR && (
+                  {(paymentData?.razorpay?.supports?.INR || paymentData?.stripe?.supports?.INR || paymentData?.paypal?.supports?.INR) && packageDetails?.currencyNotes?.INR && (
                     <FormField
                       divClassName={'mt-5'}
                       label="Amount (in INR)"
@@ -258,7 +258,7 @@ const AddPackage = () => {
                       errorMessage={errors.amount}
                     />
                   )}
-                  {(paymentData?.razorpay?.supports?.AED || paymentData?.stripe?.supports?.AED || paymentData?.paypal?.supports?.AED) && packageDetails.currencyNotes.AED && (
+                  {(paymentData?.razorpay?.supports?.AED || paymentData?.stripe?.supports?.AED || paymentData?.paypal?.supports?.AED) && packageDetails?.currencyNotes?.AED && (
                     <FormField
                       divClassName={'mt-5'}
                       label="Amount (in AED)"
@@ -275,7 +275,7 @@ const AddPackage = () => {
                     />
                   )}
 
-                  {(paymentData?.razorpay?.supports?.USD || paymentData?.stripe?.supports?.USD || paymentData?.paypal?.supports?.USD) && packageDetails.currencyNotes.USD && (
+                  {(paymentData?.razorpay?.supports?.USD || paymentData?.stripe?.supports?.USD || paymentData?.paypal?.supports?.USD) && packageDetails?.currencyNotes?.USD && (
                     <FormField
                       divClassName={'mt-5'}
                       label="USD Amount"
@@ -292,7 +292,7 @@ const AddPackage = () => {
                     />
                   )}
 
-                  {(packageDetails.currencyNotes.INR || packageDetails.currencyNotes.AED || packageDetails.currencyNotes.USD) && (
+                  {(packageDetails?.currencyNotes.INR || packageDetails?.currencyNotes?.AED || packageDetails?.currencyNotes?.USD) && (
                     <FormField
                       divClassName={'mt-5'}
                       label="Max Limit"
