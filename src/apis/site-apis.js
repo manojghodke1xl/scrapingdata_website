@@ -1,7 +1,7 @@
 import { getMethodCall, postMethodCall, putMethodCall } from './api-handler';
 
 export const getAllSitesApi = async () => {
-  return await getMethodCall(`${import.meta.env.VITE_API_URL}/allSites`);
+  return await getMethodCall(`${import.meta.env.VITE_API_URL}/all-Sites`);
 };
 
 export const getSiteByIdApi = async (id) => {

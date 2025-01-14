@@ -31,7 +31,8 @@ export const contentManagementPath = [
 export const marketingManagementPath = [{ title: 'Coupon Management', to: ['/coupon/coupon-list', '/coupon/add-coupon', '/coupon/edit-coupon', '/coupon/duplicate-coupon'] }];
 
 export const productManagementPath = [
-  { title: 'Product Management', to: ['/products/product-list', '/products/add-product', '/products/edit-product', '/products/duplicate-product'] }
+  { title: 'Product Management', to: ['/products/product-list', '/products/add-product', '/products/edit-product', '/products/duplicate-product'] },
+  { title: 'Orders', to: ['/orders/order-list'] }
 ];
 
 export const siteSettingsPath = [
@@ -48,7 +49,8 @@ export const mediaManagementPath = [
 export const eventManagementPath = [
   { title: 'Events', to: ['/events/event-list', '/events/add-event', '/events/edit-event', '/events/duplicate-event', '/events/view-event'] },
   { title: 'Participants', to: ['/participants/participant-list'] },
-  { title: 'Packages', to: ['/packages/package-list', '/packages/add-package', '/packages/edit-package', '/packages/duplicate-package'] }
+  { title: 'Packages', to: ['/packages/package-list', '/packages/add-package', '/packages/edit-package', '/packages/duplicate-package'] },
+  { title: 'Bookings', to: ['/bookings/booking-list'] }
 ];
 
 export const faqManagementPath = [

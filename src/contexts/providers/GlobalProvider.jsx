@@ -3,19 +3,16 @@ import { GlobalContext } from '../contexts/GlobalContext';
 import { getAllSitesApi } from '../../apis/site-apis';
 import { showNotification } from '../../utils/showNotification';
 
-// Default state with `allSites` as an empty array
 const defaultState = {
   id: '',
   isSuperAdmin: false,
   exp: 0,
   iat: 0,
-  allSites: [] // Store all sites here
+  allSites: []
 };
 
-// Get auth token from localStorage, or use the default state if missing or malformed
 const storage = localStorage.getItem('auth');
 
-// Decode token and handle errors gracefully
 const authState = storage
   ? (() => {
       try {
@@ -29,13 +26,11 @@ const authState = storage
     })()
   : defaultState;
 
-// Reducer to handle authentication and state changes
 const authReducer = (state, action) => {
   const { type, payload } = action;
 
   switch (type) {
     case 'SIGNIN': {
-      // Store token in localStorage
       localStorage.setItem('auth', `Bearer ${payload}`);
       try {
         const decoded = JSON.parse(window.atob(payload.split('.')[1]));
@@ -47,7 +42,6 @@ const authReducer = (state, action) => {
     }
 
     case 'SIGNOUT': {
-      // Clear token from localStorage
       localStorage.removeItem('auth');
       return { ...defaultState };
     }
@@ -61,7 +55,6 @@ const authReducer = (state, action) => {
   }
 };
 
-// Context Provider Component
 export const GlobalProvider = ({ children }) => {
   const [auth, dispatch] = useReducer(authReducer, authState);
   const [isLoading, setLoading] = useState(false);
