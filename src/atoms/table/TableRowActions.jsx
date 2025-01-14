@@ -1,9 +1,10 @@
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { FiCopy } from 'react-icons/fi';
 import { MdEdit, MdOutlineApps, MdRemoveRedEye } from 'react-icons/md';
+import { RiDeleteBinLine } from 'react-icons/ri';
 import { useNavigate } from 'react-router-dom';
 
-const TableRowActions = ({ row, edit, editPath, view, viewPath, apps, appsPath, copy, copyPath }) => {
+const TableRowActions = ({ row, edit, editPath, view, viewPath, apps, appsPath, copy, copyPath, deleteAction, setSelectionState, setModalState }) => {
   const navigate = useNavigate();
 
   // Function to count the available actions
@@ -12,7 +13,8 @@ const TableRowActions = ({ row, edit, editPath, view, viewPath, apps, appsPath, 
       { type: 'edit', show: edit && !row.isSuperAdmin },
       { type: 'view', show: view && !row.isSuperAdmin },
       { type: 'apps', show: apps && !row.isSuperAdmin },
-      { type: 'copy', show: copy && !row.isSuperAdmin }
+      { type: 'copy', show: copy && !row.isSuperAdmin },
+      { type: 'delete', show: deleteAction && !row.isSuperAdmin && !row.hasBooking }
     ].filter((action) => action.show);
   };
 
@@ -36,12 +38,17 @@ const TableRowActions = ({ row, edit, editPath, view, viewPath, apps, appsPath, 
                   if (action.type === 'view') navigate(viewPath + '/' + row.id);
                   if (action.type === 'apps') navigate(appsPath + '/' + row.id);
                   if (action.type === 'copy') navigate(copyPath + '/' + row.id);
+                  if (action.type === 'delete') {
+                    setSelectionState((prev) => ({ ...prev, deleteId: row.id }));
+                    setModalState((prev) => ({ ...prev, isDeleteModelOpen: true }));
+                  }
                 }}
               >
                 {action.type === 'edit' && <MdEdit size={20} />}
                 {action.type === 'view' && <MdRemoveRedEye size={20} />}
                 {action.type === 'apps' && <MdOutlineApps size={20} />}
                 {action.type === 'copy' && <FiCopy size={20} />}
+                {action.type === 'delete' && <RiDeleteBinLine />}
                 {action.type.charAt(0).toUpperCase() + action.type.slice(1)}
               </button>
             ))}
@@ -57,12 +64,17 @@ const TableRowActions = ({ row, edit, editPath, view, viewPath, apps, appsPath, 
               if (action.type === 'view') navigate(viewPath + '/' + row.id);
               if (action.type === 'apps') navigate(appsPath + '/' + row.id);
               if (action.type === 'copy') navigate(copyPath + '/' + row.id);
+              if (action.type === 'delete') {
+                setSelectionState((prev) => ({ ...prev, deleteId: row.id }));
+                setModalState((prev) => ({ ...prev, isDeleteModelOpen: true }));
+              }
             }}
           >
             {action.type === 'edit' && <MdEdit />}
             {action.type === 'view' && <MdRemoveRedEye />}
             {action.type === 'apps' && <MdOutlineApps />}
             {action.type === 'copy' && <FiCopy />}
+            {action.type === 'delete' && <RiDeleteBinLine />}
           </span>
         ))
       )}

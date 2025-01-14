@@ -4,18 +4,19 @@ import TableComponent from '../../atoms/table/Table';
 import { useEffect, useState } from 'react';
 import { formatDateTime } from '../../utils/dateFormats';
 import TruncatableFieldModal from '../../atoms/modal/TruncatableFeildModel';
-import { deletePackageApi } from '../../apis/package-apis';
 import { getAllEventsApi } from '../../apis/event-apis';
 import { showNotification } from '../../utils/showNotification';
+import { deletePackageApi } from '../../apis/package-apis';
 
 const PackageList = () => {
   const [packages, setPackages] = useState([]);
   const [event, setEvent] = useState([]);
 
   const rows = packages.map((userPackage) => {
-    const { _id, title, amount, maxLimit, event, createdAt, updatedAt } = userPackage;
+    const { _id, title, amount, maxLimit, hasBooking, event, createdAt, updatedAt } = userPackage;
     return {
       id: _id,
+      hasBooking,
       exportData: userPackage,
       title: <TruncatableFieldModal title={'Package Title'} content={title} />,
       event: <TruncatableFieldModal title={'Event'} content={`${event.name} (${event.venue})`} />,
@@ -74,6 +75,7 @@ const PackageList = () => {
                 editPath={'/packages/edit-package'}
                 copy={true}
                 copyPath={'/packages/duplicate-package'}
+                deleteAction={true}
                 search={true}
                 filter={true}
                 filterCategory={[{ id: 1, name: 'Event' }]}

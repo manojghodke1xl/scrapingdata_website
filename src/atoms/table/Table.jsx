@@ -29,6 +29,7 @@ const TableComponent = ({
   appsPath,
   copy,
   copyPath,
+  deleteAction,
   search,
   filter,
   exportBtn = true,
@@ -71,6 +72,7 @@ const TableComponent = ({
     selectedSites: [],
     siteToggle: false,
     status: '',
+    deleteId: '',
     selectedCategory: null
   });
   const [filterState, setFilterState] = useState({
@@ -142,6 +144,11 @@ const TableComponent = ({
   };
 
   const handleDelete = () => handleDeleteConfirm(selectionState.selectedItems, deleteApi, setLoading, setSelectionState, setRefresh, setModalState, setTableState);
+
+  const handleRowDelete = () => {
+    handleDeleteConfirm([selectionState.deleteId], deleteApi, setLoading, setSelectionState, setRefresh, setModalState, setTableState);
+  };
+
   const handleStatusChange = (statusUpdate) =>
     handleStatusUpdate(
       selectionState.selectedItems,
@@ -172,7 +179,7 @@ const TableComponent = ({
 
   const handleClearFilter = () => {
     setModalState({ isDeleteModelOpen: false, isSitesModelOpen: false, isDuplicateModelOpen: false });
-    setSelectionState({ selectedItems: [], isAllSelected: false, selectedSites: [], siteToggle: false, status: '', selectedCategory: null });
+    setSelectionState({ selectedItems: [], isAllSelected: false, selectedSites: [], siteToggle: false, status: '', deleteId: '', selectedCategory: null });
     setFilterState({ searchTerm: '', searchKey: '', siteId: '', eventId: '', statusFilter: '' });
     setShowFilter({ status: false, sites: false, event: false });
   };
@@ -240,6 +247,7 @@ const TableComponent = ({
           <TableView
             selectable={selectable}
             selectionState={selectionState}
+            setSelectionState={setSelectionState}
             handleMasterCheckboxChange={handleMasterCheckboxChange}
             handleRowCheckboxChange={handleRowCheckboxChange}
             headers={headers}
@@ -254,8 +262,14 @@ const TableComponent = ({
             appsPath={appsPath}
             copy={copy}
             copyPath={copyPath}
+            deleteAction={deleteAction}
+            handleRowDelete={(id) => console.log({ id })}
             currentPage={tableState.currentPage}
             itemsPerPage={tableState.itemsPerPage}
+            modalState={modalState}
+            setModalState={setModalState}
+            deleteLabel={deleteLabel}
+            deleteMessage={deleteMessage}
           />
         </div>
         <div className="w-full mt-2">
@@ -283,7 +297,13 @@ const TableComponent = ({
           onConfirm={handleSitesChange}
           siteToggle={selectionState.siteToggle}
         />
-        <DeleteModal isDeleteModalOpen={modalState.isDeleteModelOpen} onConfirm={handleDelete} setDeleteModalOpen={setModalState} label={deleteLabel} message={deleteMessage} />
+        <DeleteModal
+          isDeleteModalOpen={modalState.isDeleteModelOpen}
+          onConfirm={selectionState.deleteId ? handleRowDelete : handleDelete}
+          setDeleteModalOpen={setModalState}
+          label={deleteLabel}
+          message={deleteMessage}
+        />
         <SiteModal
           label={'Duplicate Popups'}
           isOpen={modalState.isDuplicateModelOpen}

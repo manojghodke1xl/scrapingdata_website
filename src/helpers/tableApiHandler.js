@@ -7,7 +7,7 @@ export const handleDeleteConfirm = async (selectedItems, deleteApi, setLoading, 
     const { status, data } = await deleteApi(selectedItems);
     if (status) {
       showNotification('success', data.message);
-      setSelectionState({ selectedItems: [], isAllSelected: false });
+      setSelectionState({ selectedItems: [], isAllSelected: false, deleteId: '' });
       setRefresh((r) => !r);
     } else showNotification('warn', data);
   } catch (error) {
