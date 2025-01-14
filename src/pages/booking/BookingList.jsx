@@ -16,7 +16,8 @@ const BookingList = () => {
       site,
       staus,
       createdAt,
-      updatedAt
+      updatedAt,
+      mobileNumber
     } = booking;
     console.log(staus);
 
@@ -26,6 +27,7 @@ const BookingList = () => {
       Keys: _id,
       name: <TruncatableFieldModal title={'Customer Name'} content={name} />,
       email: <TruncatableFieldModal title={'Email'} content={email} />,
+      email: <TruncatableFieldModal title={'Mobile Number'} content={mobileNumber} />,
       event: <TruncatableFieldModal title={'Event Name'} content={`${event.name} (${event.venue})`} />,
       title: <TruncatableFieldModal title={'Package Name'} content={title} />,
       site: <TruncatableFieldModal title={'Sites'} content={`${site?.name} (${site?.host})`} />,
