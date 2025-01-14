@@ -44,17 +44,31 @@ const AddPackage = () => {
     const newErrors = {};
 
     if (!packageDetails.title.trim()) newErrors.title = 'Name is required';
-    if (packageDetails.amount < 0 || !packageDetails.amount) newErrors.amount = 'Amount should be greater than 0';
     if (packageDetails.maxLimit < 0 || !packageDetails.maxLimit) newErrors.maxLimit = 'Max limit should be greater than 0';
     if (!packageDetails.event) newErrors.event = 'Event is required';
-    if ((paymentData?.razorpay?.supports?.INR || paymentData?.stripe?.supports?.INR || paymentData?.paypal?.supports?.INR) && !packageDetails.amount)
+    if (
+      (paymentData?.razorpay?.supports?.INR || paymentData?.stripe?.supports?.INR || paymentData?.paypal?.supports?.INR) &&
+      (!packageDetails.amount || packageDetails.amount <= 0) &&
+      packageDetails.currencyNotes.INR
+    ) {
       newErrors.amount = 'INR is required';
+    }
 
-    if ((paymentData?.razorpay?.supports?.AED || paymentData?.stripe?.supports?.AED || paymentData?.paypal?.supports?.AED) && !packageDetails.currencies.AED)
+    if (
+      (paymentData?.razorpay?.supports?.AED || paymentData?.stripe?.supports?.AED || paymentData?.paypal?.supports?.AED) &&
+      (!packageDetails.currencies.AED || packageDetails.currencies.AED <= 0) &&
+      packageDetails.currencyNotes.AED
+    ) {
       newErrors.currencies = { ...newErrors.currencies, AED: 'AED is required' };
+    }
 
-    if ((paymentData?.razorpay?.supports?.USD || paymentData?.stripe?.supports?.USD || paymentData?.paypal?.supports?.USD) && !packageDetails.currencies.USD)
+    if (
+      (paymentData?.razorpay?.supports?.USD || paymentData?.stripe?.supports?.USD || paymentData?.paypal?.supports?.USD) &&
+      (!packageDetails.currencies.USD || packageDetails.currencies.USD <= 0) &&
+      packageDetails.currencyNotes.USD
+    ) {
       newErrors.currencies = { ...newErrors.currencies, USD: 'USD is required' };
+    }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -92,9 +106,12 @@ const AddPackage = () => {
     }
   }, [id, setLoading]);
 
+  console.log(errors);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
+    console.log(packageDetails);
     setLoading(true);
     try {
       const { status, data } = await (id ? (isDuplicate ? addPackageApi(packageDetails) : updatePackageApi(id, packageDetails)) : addPackageApi(packageDetails));

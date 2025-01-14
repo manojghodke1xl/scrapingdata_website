@@ -52,35 +52,35 @@ const MaterialSidebar = () => {
           ))}
           
           <ReusableAccordion
-            title="Content Management"
+            title="Content"
             links={contentManagementPath}
             icon={<TbFileSearch />}
-            isOpen={openAccordion === 'Content Management'}
-            onToggle={() => setOpenAccordion(openAccordion === 'Content Management' ? null : 'Content Management')}
+            isOpen={openAccordion === 'Contents'}
+            onToggle={() => setOpenAccordion(openAccordion === 'Contents' ? null : 'Contents')}
           />
 
           <ReusableAccordion
-            title="Marketing Management"
+            title="Marketing"
             links={marketingManagementPath}
             icon={<FaBullhorn />}
-            isOpen={openAccordion === 'Marketing Management"'}
-            onToggle={() => setOpenAccordion(openAccordion === 'Marketing Management"' ? null : 'Marketing Management"')}
+            isOpen={openAccordion === 'Marketing'}
+            onToggle={() => setOpenAccordion(openAccordion === 'Marketing' ? null : 'Marketing')}
           />
 
           <ReusableAccordion
-            title="Product Management"
+            title="Product"
             links={productManagementPath}
             icon={<AiOutlineProduct />}
-            isOpen={openAccordion === 'Product Management'}
-            onToggle={() => setOpenAccordion(openAccordion === 'Product Management' ? null : 'Product Management')}
+            isOpen={openAccordion === 'Products'}
+            onToggle={() => setOpenAccordion(openAccordion === 'Products' ? null : 'Products')}
           />
 
           <ReusableAccordion
-            title="Lead Management"
+            title="Lead"
             links={leadsManagementPath}
             icon={<TbUsersGroup />}
-            isOpen={openAccordion === 'Lead Management'}
-            onToggle={() => setOpenAccordion(openAccordion === 'Lead Management' ? null : 'Lead Management')}
+            isOpen={openAccordion === 'Leads'}
+            onToggle={() => setOpenAccordion(openAccordion === 'Leads' ? null : 'Leads')}
           />
 
           <ReusableAccordion
@@ -92,27 +92,27 @@ const MaterialSidebar = () => {
           />
 
           <ReusableAccordion
-            title="Media Management"
+            title="Media"
             links={mediaManagementPath}
             icon={<FaRegImage />}
-            isOpen={openAccordion === 'Media Management'}
-            onToggle={() => setOpenAccordion(openAccordion === 'Media Management' ? null : 'Media Management')}
+            isOpen={openAccordion === 'Media'}
+            onToggle={() => setOpenAccordion(openAccordion === 'Media' ? null : 'Media')}
           />
 
           <ReusableAccordion
-            title="Event Management"
+            title="Event"
             links={eventManagementPath}
             icon={<FiCalendar />}
-            isOpen={openAccordion === 'Event Management'}
-            onToggle={() => setOpenAccordion(openAccordion === 'Event Management' ? null : 'Event Management')}
+            isOpen={openAccordion === 'Events'}
+            onToggle={() => setOpenAccordion(openAccordion === 'Events' ? null : 'Events')}
           />
 
           <ReusableAccordion
-            title="Faq Management"
+            title="Faq"
             links={faqManagementPath}
             icon={<FaRegQuestionCircle />}
-            isOpen={openAccordion === 'Faq Management'}
-            onToggle={() => setOpenAccordion(openAccordion === 'Faq Management' ? null : 'Faq Management')}
+            isOpen={openAccordion === 'Faqs'}
+            onToggle={() => setOpenAccordion(openAccordion === 'Faqs' ? null : 'Faqs')}
           />
 
           <ReusableAccordion
@@ -124,7 +124,7 @@ const MaterialSidebar = () => {
           />
 
           {adminNavLinks
-            .filter(({ title }) => auth.isSuperAdmin || title !== 'Admin Management')
+            .filter(({ title }) => auth.isSuperAdmin || title !== 'Admin')
             .map(({ to, title, icon }) => (
               <Link
                 key={title}

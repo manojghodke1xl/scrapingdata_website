@@ -28,10 +28,10 @@ export const contentManagementPath = [
   { title: 'Pop-up', to: ['/pop-up/pop-up-list', '/pop-up/add-pop-up', '/pop-up/edit-pop-up'] }
 ];
 
-export const marketingManagementPath = [{ title: 'Coupon Management', to: ['/coupon/coupon-list', '/coupon/add-coupon', '/coupon/edit-coupon', '/coupon/duplicate-coupon'] }];
+export const marketingManagementPath = [{ title: 'Coupon', to: ['/coupon/coupon-list', '/coupon/add-coupon', '/coupon/edit-coupon', '/coupon/duplicate-coupon'] }];
 
 export const productManagementPath = [
-  { title: 'Product Management', to: ['/products/product-list', '/products/add-product', '/products/edit-product', '/products/duplicate-product'] },
+  { title: 'Product', to: ['/products/product-list', '/products/add-product', '/products/edit-product', '/products/duplicate-product'] },
   { title: 'Orders', to: ['/orders/order-list'] }
 ];
 
@@ -68,5 +68,5 @@ export const testimonialsPath = [
 
 export const adminNavLinks = [
   { title: 'Payments', to: ['/payments/payment-list', '/payments/payment-integration'], icon: <VscCreditCard /> },
-  { title: 'Admin Management', to: ['/admin/admin-list', '/admin/add-admin', '/admin/edit-admin'], icon: <RiAdminLine /> }
+  { title: 'Admin', to: ['/admin/admin-list', '/admin/add-admin', '/admin/edit-admin'], icon: <RiAdminLine /> }
 ];
