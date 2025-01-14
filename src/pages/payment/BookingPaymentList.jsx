@@ -13,13 +13,19 @@ const BookingPaymentList = () => {
       payment: { channel, amount, currency, status },
       site,
       createdAt,
-      updatedAt
+      updatedAt,
+      phoneNumber,
+      phoneCode,
+      email
     } = payment;
 
     return {
       id: _id,
       exportData: payment.payment,
       customer: <TruncatableFieldModal title={'Participant'} content={customer.name} />,
+      email: <TruncatableFieldModal title={'Email'} content={email} />,
+      phoneCode: <TruncatableFieldModal title={'Phone Code'} content={phoneCode} />,
+      phoneNumber: <TruncatableFieldModal title={'Mobile Number'} content={phoneNumber} />,
       site: <TruncatableFieldModal title={'Sites'} content={`${site?.name} (${site?.host})`} />,
       amount: <TruncatableFieldModal title={'Amount'} content={amount} />,
       currency: <TruncatableFieldModal title={'Currency'} content={currency} />,
@@ -63,6 +69,9 @@ const BookingPaymentList = () => {
                 headers={[
                   { label: 'Sr No.', key: 'srno' },
                   { label: 'Customer Name', key: 'customer' },
+                  { label: 'Email', key: 'email' },
+                  { label: 'Phone Code', key: 'phoneCode' },
+                  { label: 'Mobile Number', key: 'phoneNumber' },
                   { label: 'Site', key: 'site' },
                   { label: 'Amount', key: 'amount' },
                   { label: 'Currency', key: 'currency' },
