@@ -313,54 +313,28 @@ const AddProduct = () => {
                   label="Shipping Destinations"
                   onChange={(selected) => {
                     let error = '';
+                    const updatedShippingDestinations = {};
 
-                    if (selected.includes('india') && (paymentData.razorpay.supports.INR || paymentData.stripe.supports.INR || paymentData.paypal.supports.INR)) {
-                      setProductDetails((prevDetails) => ({
-                        ...prevDetails,
-                        shippingDestinations: {
-                          ...prevDetails.shippingDestinations,
-                          india: selected.includes('india')
-                        }
-                      }));
-                    } else if (selected.includes('uae') && (paymentData.razorpay.supports.AED || paymentData.stripe.supports.AED || paymentData.paypal.supports.AED)) {
-                      setProductDetails((prevDetails) => ({
-                        ...prevDetails,
-                        shippingDestinations: {
-                          ...prevDetails.shippingDestinations,
-                          uae: selected.includes('uae')
-                        }
-                      }));
-                    } else if (selected.includes('restOfTheWorld') && (paymentData.razorpay.supports.USD || paymentData.stripe.supports.USD || paymentData.paypal.supports.USD)) {
-                      setProductDetails((prevDetails) => ({
-                        ...prevDetails,
-                        shippingDestinations: {
-                          ...prevDetails.shippingDestinations,
-                          restOfTheWorld: selected.includes('restOfTheWorld')
-                        }
-                      }));
-                    } else if (selected.includes('india') && (!paymentData.razorpay.supports.INR || !paymentData.stripe.supports.INR || !paymentData.paypal.supports.INR)) {
-                      error = 'Please add support for INR currency in your payment gateway configuration';
-                    } else if (selected.includes('uae') && (!paymentData.razorpay.supports.AED || !paymentData.stripe.supports.AED || !paymentData.paypal.supports.AED)) {
-                      error = 'Please add support for AED currency in your payment gateway configuration';
-                    } else if (
-                      selected.includes('restOfTheWorld') &&
-                      (!paymentData.razorpay.supports.USD || !paymentData.stripe.supports.USD || !paymentData.paypal.supports.USD)
-                    ) {
-                      error = 'Please add support for USD currency in your payment gateway configuration';
-                    }
+                    const supportedRegions = {
+                      india: paymentData.razorpay.supports.INR || paymentData.stripe.supports.INR || paymentData.paypal.supports.INR,
+                      uae: paymentData.razorpay.supports.AED || paymentData.stripe.supports.AED || paymentData.paypal.supports.AED,
+                      restOfTheWorld: paymentData.razorpay.supports.USD || paymentData.stripe.supports.USD || paymentData.paypal.supports.USD
+                    };
+
+                    selected.forEach((region) => {
+                      if (supportedRegions[region]) updatedShippingDestinations[region] = true;
+                      else error = `Please add support for the required currency for ${region} in your payment gateway configuration`;
+                    });
+
                     setErrors((prev) => ({ ...prev, shippingDestinations: error }));
                     setProductDetails((prevDetails) => ({
                       ...prevDetails,
-                      shippingDestinations: {
-                        ...prevDetails.shippingDestinations,
-                        india: selected.includes('india'),
-                        uae: selected.includes('uae'),
-                        restOfTheWorld: selected.includes('restOfTheWorld')
-                      }
+                      shippingDestinations: updatedShippingDestinations
                     }));
-                    if (errors.shippingDestinations) setErrors((prev) => ({ ...prev, shippingDestinations: '' }));
+
+                    if (!error) setErrors((prev) => ({ ...prev, shippingDestinations: '' }));
                   }}
-                  selected={Object.entries(productDetails?.shippingDestinations)
+                  selected={Object.entries(productDetails?.shippingDestinations ?? {})
                     .filter(([, value]) => value)
                     .map(([key]) => key)}
                   error={errors?.shippingDestinations}
