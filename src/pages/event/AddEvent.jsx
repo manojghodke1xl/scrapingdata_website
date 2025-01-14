@@ -9,6 +9,7 @@ import { formatDateTime } from '../../utils/dateFormats';
 import DropDown from '../../atoms/formFields/DropDown';
 import { showNotification } from '../../utils/showNotification';
 import { addEventApi, getEventByIdApi, updateEventApi } from '../../apis/event-apis';
+import ToggleComponent from '../../atoms/formFields/ToggleComponent';
 
 const AddEvent = () => {
   const navigate = useNavigate();
@@ -29,8 +30,24 @@ const AddEvent = () => {
     date: '',
     endDate: '',
     lastBookingDate: '',
+    sendAdminEmails: false,
+    adminEmails: [],
     site: ''
   });
+  const [emailInput, setEmailInput] = useState('');
+  console.log(eventDetails);
+
+  const removeItemAtIndex = (setDetails, key, indexToRemove) => setDetails((prev) => ({ ...prev, [key]: prev[key].filter((_, index) => index !== indexToRemove) }));
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const validateAndAddInput = (e, inputValue, setInputValue, setStateDetails, key, regexPattern) => {
+    e.preventDefault();
+    if (inputValue && regexPattern.test(inputValue)) {
+      setStateDetails((prev) => ({ ...prev, [key]: [...(prev[key] || []), inputValue] }));
+      setInputValue('');
+      setErrors((prev) => ({ ...prev, forwardEmails: '' }));
+    } else setErrors((prev) => ({ ...prev, forwardEmails: 'Please enter a valid email address.' }));
+  };
 
   const validate = () => {
     const newErrors = {};
@@ -40,6 +57,10 @@ const AddEvent = () => {
     if (!eventDetails.lastBookingDate) newErrors.lastBookingDate = 'Last booking date is required';
     if (!eventDetails.venue.trim()) newErrors.venue = 'Venue is required';
     if (!eventDetails.site) newErrors.site = 'Site is required';
+
+    if (eventDetails.sendAdminEmails) {
+      if (!eventDetails.adminEmails.length) newErrors.adminEmails = 'At least one email is required';
+    }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -205,6 +226,61 @@ const AddEvent = () => {
               }}
               errorMessage={errors.lastBookingDate}
             />
+          </div>
+        </div>
+      </div>
+
+      <div className="w-full justify-center items-center border-b  border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end ">
+        <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
+          <div className="sm:w-7/12 w-full flex flex-col">
+            <span className="block text-primary">Notification Preferences</span>
+          </div>
+          <div className="dropdown-container relative w-full mt-2">
+            <ToggleComponent
+              bgColor={'bg-grey'}
+              label={'Send Admin Emails'}
+              isEnableState={eventDetails.sendAdminEmails}
+              setIsEnableState={(value) => setEventDetails((prev) => ({ ...prev, sendAdminEmails: value, adminEmails: [] }))}
+            />
+
+            {eventDetails.sendAdminEmails && (
+              <div>
+                <FormField
+                  divClassName={'mt-5'}
+                  label="Email ID"
+                  type="email"
+                  id="email"
+                  name="email"
+                  placeholder="Email ID"
+                  value={emailInput}
+                  onChange={(e) => {
+                    if (errors.forwardEmails) setErrors((prev) => ({ ...prev, forwardEmails: '' }));
+                    if (errors.adminEmails) setErrors((prev) => ({ ...prev, adminEmails: '' }));
+                    setEmailInput(e.target.value);
+                  }}
+                  errorMessage={errors.forwardEmails || errors.adminEmails}
+                />
+
+                <button
+                  type="button"
+                  className="px-4 py-2 text-white font-medium bg-primary hover:bg-hover rounded-xl whitespace-nowrap mt-5"
+                  onClick={(e) => validateAndAddInput(e, emailInput, setEmailInput, setEventDetails, 'adminEmails', emailRegex)}
+                >
+                  Add Email
+                </button>
+
+                <ul className="space-y-2 mt-5">
+                  {eventDetails.adminEmails.map((email, index) => (
+                    <li key={index} className="flex justify-between items-center p-2 bg-white shadow rounded-md">
+                      {email}
+                      <button type="button" className="px-2 py-1 text-white bg-red hover:bg-red rounded" onClick={() => removeItemAtIndex(setEventDetails, 'adminEmails', index)}>
+                        Remove
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
         </div>
       </div>

@@ -1,7 +1,6 @@
 import { RiAdminLine } from 'react-icons/ri';
 import { RxDashboard } from 'react-icons/rx';
 import { TbApps, TbWorld } from 'react-icons/tb';
-import { VscCreditCard } from 'react-icons/vsc';
 
 export const navLinks = [
   { title: 'Dashboard', to: ['/dashboard'], icon: <RxDashboard /> },
@@ -32,7 +31,8 @@ export const marketingManagementPath = [{ title: 'Coupon', to: ['/coupon/coupon-
 
 export const productManagementPath = [
   { title: 'Product', to: ['/products/product-list', '/products/add-product', '/products/edit-product', '/products/duplicate-product'] },
-  { title: 'Orders', to: ['/orders/order-list'] }
+  { title: 'Orders', to: ['/orders/order-list'] },
+  { title: 'Order Payments', to: ['/payments/order-payment-list'] }
 ];
 
 export const siteSettingsPath = [
@@ -50,7 +50,8 @@ export const eventManagementPath = [
   { title: 'Events', to: ['/events/event-list', '/events/add-event', '/events/edit-event', '/events/duplicate-event', '/events/view-event'] },
   { title: 'Participants', to: ['/participants/participant-list'] },
   { title: 'Packages', to: ['/packages/package-list', '/packages/add-package', '/packages/edit-package', '/packages/duplicate-package'] },
-  { title: 'Bookings', to: ['/bookings/booking-list'] }
+  { title: 'Bookings', to: ['/bookings/booking-list'] },
+  { title: 'Booking Payments', to: ['/payments/booking-payment-list'] }
 ];
 
 export const faqManagementPath = [
@@ -66,7 +67,4 @@ export const testimonialsPath = [
   }
 ];
 
-export const adminNavLinks = [
-  { title: 'Payments', to: ['/payments/payment-list', '/payments/payment-integration'], icon: <VscCreditCard /> },
-  { title: 'Admin', to: ['/admin/admin-list', '/admin/add-admin', '/admin/edit-admin'], icon: <RiAdminLine /> }
-];
+export const adminNavLinks = [{ title: 'Admin', to: ['/admin/admin-list', '/admin/add-admin', '/admin/edit-admin'], icon: <RiAdminLine /> }];
