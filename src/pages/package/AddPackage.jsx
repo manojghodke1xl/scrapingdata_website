@@ -292,7 +292,7 @@ const AddPackage = () => {
                     />
                   )}
 
-                  {(packageDetails?.currencyNotes.INR || packageDetails?.currencyNotes?.AED || packageDetails?.currencyNotes?.USD) && (
+                  {(packageDetails?.currencyNotes?.INR || packageDetails?.currencyNotes?.AED || packageDetails?.currencyNotes?.USD) && (
                     <FormField
                       divClassName={'mt-5'}
                       label="Max Limit"
