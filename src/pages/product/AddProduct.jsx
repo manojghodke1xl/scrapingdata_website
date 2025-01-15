@@ -37,8 +37,6 @@ const AddProduct = () => {
     name: '',
     description: '',
     shortDescription: '',
-    price: '',
-    salePrice: '',
     saleEndDate: null,
     inStock: true,
     stock: 0,
@@ -62,8 +60,6 @@ const AddProduct = () => {
   const validate = () => {
     const newErrors = {};
     if (!productDetails.name.trim()) newErrors.name = 'Name is required';
-    if (!productDetails.price || productDetails.price < 0) newErrors.price = 'Price should be greater than 0';
-    if (!productDetails.salePrice || productDetails.salePrice < 0) newErrors.salePrice = 'Discount Price should be greater than 0';
     if (!productDetails.inStock) newErrors.inStock = 'In Stock is required';
     if (!productDetails.type) newErrors.type = 'Type is required';
     if (productDetails.type === 'Physical') {
@@ -414,54 +410,6 @@ const AddProduct = () => {
       <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
         <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
           <div className="sm:w-7/12 w-full flex flex-col">
-            <span className=" text-primary">Pricing Information</span>
-          </div>
-          <div className="w-full">
-            <div>
-              <FormField
-                label="Price"
-                type="number"
-                id="price"
-                name="price"
-                placeholder="Price"
-                onChange={(e) => {
-                  setProductDetails((prev) => ({ ...prev, price: e.target.value }));
-                  if (errors.price) setErrors((prev) => ({ ...prev, price: '' }));
-                }}
-                value={productDetails.price}
-                errorMessage={errors.price}
-              />
-              <FormField
-                divClassName={'mt-5'}
-                label="Discount Price"
-                type="number"
-                id="salePrice"
-                name="salePrice"
-                placeholder="Discount Price"
-                onChange={(e) => {
-                  setProductDetails((prev) => ({ ...prev, salePrice: e.target.value }));
-                  if (errors.salePrice) setErrors((prev) => ({ ...prev, salePrice: '' }));
-                }}
-                value={productDetails.salePrice}
-                errorMessage={errors.salePrice}
-              />
-              <DateTimePicker
-                divClassName={'mt-5'}
-                id={'saleEndDate'}
-                label="Sale End Date"
-                placeholder={formatDateTime(new Date())}
-                selectedDateTime={productDetails.saleEndDate}
-                setSelectedDateTime={(date) => setProductDetails((prev) => ({ ...prev, saleEndDate: date }))}
-                errorMessage={errors.saleEndDate}
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
-        <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
-          <div className="sm:w-7/12 w-full flex flex-col">
             <span className=" text-primary">Stock and Availability</span>
           </div>
           <div className="w-full">
@@ -485,6 +433,15 @@ const AddProduct = () => {
                 }}
                 value={productDetails.stock}
                 errorMessage={errors.stock}
+              />
+              <DateTimePicker
+                divClassName={'mt-5'}
+                id={'saleEndDate'}
+                label="Sale End Date"
+                placeholder={formatDateTime(new Date())}
+                selectedDateTime={productDetails.saleEndDate}
+                setSelectedDateTime={(date) => setProductDetails((prev) => ({ ...prev, saleEndDate: date }))}
+                errorMessage={errors.saleEndDate}
               />
             </div>
           </div>

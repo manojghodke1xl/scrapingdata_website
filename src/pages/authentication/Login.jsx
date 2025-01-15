@@ -8,8 +8,8 @@ import useGlobalContext from '../../hooks/useGlobalContext';
 const Login = () => {
   const navigate = useNavigate();
   const { dispatch, setLoading } = useGlobalContext();
-  const [email, setEmail] = useState(import.meta.env.DEV ? 'envato@1xl.com' : '');
-  const [password, setPassword] = useState(import.meta.env.DEV ? 'Hitesh@1536' : '');
+  const [email, setEmail] = useState(import.meta.env.DEV ? 'vishwajeet.patil@dreamsinternational.in' : '');
+  const [password, setPassword] = useState(import.meta.env.DEV ? 'Vishu@123' : '');
 
   const loginAccount = async (e) => {
     e.preventDefault();

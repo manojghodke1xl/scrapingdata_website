@@ -16,8 +16,10 @@ const AddAdmin = () => {
     setLoading,
     isLoading
   } = useGlobalContext();
+
   const navigate = useNavigate();
   const { id = '' } = useParams();
+
   const [adminDetails, setAdminDetails] = useState({
     email: '',
     name: '',
@@ -26,6 +28,7 @@ const AddAdmin = () => {
     isBlocked: false,
     isSuperAdmin: false
   });
+
   const [errors, setErrors] = useState({});
   const [isScrollable, setIsScrollable] = useState(false);
 
