@@ -297,7 +297,7 @@ const AddProduct = () => {
                 }}
                 error={errors.type}
               />
-              {productDetails.type === 'Physical' && (
+              {(productDetails.type === 'Physical' || productDetails.type === 'Digital') && (
                 <MultiSelectCheckbox
                   divClassName={'mt-5'}
                   options={[
