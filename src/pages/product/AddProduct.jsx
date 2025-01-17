@@ -44,12 +44,18 @@ const AddProduct = () => {
     image: '',
     gallery: [],
     digitalProducts: [],
+    emailTemplate: '',
     shippingDestinations: {
       india: false,
       uae: false,
       restOfTheWorld: false
     },
     currencies: {
+      INR: 0,
+      AED: 0,
+      USD: 0
+    },
+    charges: {
       INR: 0,
       AED: 0,
       USD: 0
@@ -336,14 +342,15 @@ const AddProduct = () => {
                   error={errors?.shippingDestinations}
                 />
               )}
+
               {productDetails.shippingDestinations.india && (
                 <FormField
                   divClassName={'mt-5'}
-                  label="INR Currency"
+                  label="Price (INR)"
                   type="number"
                   id="currencies"
                   name="currencies"
-                  placeholder="INR Currency"
+                  placeholder="Price (INR)"
                   onChange={(e) => {
                     setProductDetails((prev) => ({ ...prev, currencies: { ...prev.currencies, INR: e.target.value } }));
                     if (errors.currencies) setErrors((prev) => ({ ...prev, currencies: '' }));
@@ -352,14 +359,32 @@ const AddProduct = () => {
                   errorMessage={errors.currencies}
                 />
               )}
-              {productDetails.shippingDestinations.uae && (
+
+              {productDetails.type === 'Physical' && productDetails.shippingDestinations.india && (
                 <FormField
                   divClassName={'mt-5'}
-                  label="AED Currency"
+                  label="Charges (INR)"
                   type="number"
                   id="currencies"
                   name="currencies"
-                  placeholder="AED Currency"
+                  placeholder="Charges (INR)"
+                  onChange={(e) => {
+                    setProductDetails((prev) => ({ ...prev, charges: { ...prev.charges, INR: e.target.value } }));
+                    if (errors.charges) setErrors((prev) => ({ ...prev, charges: '' }));
+                  }}
+                  value={productDetails.charges?.INR}
+                  errorMessage={errors.charges}
+                />
+              )}
+
+              {productDetails.shippingDestinations.uae && (
+                <FormField
+                  divClassName={'mt-5'}
+                  label="Price (AED)"
+                  type="number"
+                  id="currencies"
+                  name="currencies"
+                  placeholder="Price (AED)"
                   onChange={(e) => {
                     setProductDetails((prev) => ({ ...prev, currencies: { ...prev.currencies, AED: e.target.value } }));
                     if (errors.currencies) setErrors((prev) => ({ ...prev, currencies: '' }));
@@ -368,14 +393,31 @@ const AddProduct = () => {
                   errorMessage={errors.currencies}
                 />
               )}
-              {productDetails.shippingDestinations.restOfTheWorld && (
+              {productDetails.type === 'Physical' && productDetails.shippingDestinations.uae && (
                 <FormField
                   divClassName={'mt-5'}
-                  label="USD Currency"
+                  label="Charges (AED)"
                   type="number"
                   id="currencies"
                   name="currencies"
-                  placeholder="USD Currency"
+                  placeholder="Charges (AED)"
+                  onChange={(e) => {
+                    setProductDetails((prev) => ({ ...prev, charges: { ...prev.charges, AED: e.target.value } }));
+                    if (errors.charges) setErrors((prev) => ({ ...prev, charges: '' }));
+                  }}
+                  value={productDetails.charges?.AED}
+                  errorMessage={errors.charges}
+                />
+              )}
+
+              {productDetails.shippingDestinations.restOfTheWorld && (
+                <FormField
+                  divClassName={'mt-5'}
+                  label="Price (USD)"
+                  type="number"
+                  id="currencies"
+                  name="currencies"
+                  placeholder="Price (USD)"
                   onChange={(e) => {
                     setProductDetails((prev) => ({ ...prev, currencies: { ...prev.currencies, USD: e.target.value } }));
                     if (errors.currencies) setErrors((prev) => ({ ...prev, currencies: '' }));
@@ -385,19 +427,35 @@ const AddProduct = () => {
                 />
               )}
 
+              {productDetails.type === 'Physical' && productDetails.shippingDestinations.restOfTheWorld && (
+                <FormField
+                  divClassName={'mt-5'}
+                  label="Charges (USD)"
+                  type="number"
+                  id="currencies"
+                  name="currencies"
+                  placeholder="Charges (USD)"
+                  onChange={(e) => {
+                    setProductDetails((prev) => ({ ...prev, charges: { ...prev.charges, USD: e.target.value } }));
+                    if (errors.charges) setErrors((prev) => ({ ...prev, charges: '' }));
+                  }}
+                  value={productDetails.charges?.USD}
+                  errorMessage={errors.charges}
+                />
+              )}
               {productDetails.type === 'Digital' && (
                 <MultipleFileUpload
                   divClassName={'mt-5'}
                   onUploadSuccess={(files) => {
-                    setProductDetails((prev) => ({ ...prev, digitalProducts: files }));
+                    setProductDetails((prev) => ({ ...prev, digitalProducts: [...(prev.digitalProducts || []), ...files] }));
                     if (errors.digitalProducts) setErrors((prev) => ({ ...prev, digitalProducts: '' }));
                   }}
                   id={id}
-                  isMultiple={!id}
+                  isMultiple={true}
                   allowedTypes={acceptedProductTypes}
                   allowedFileTypes={acceptedExtensions}
                   toolTip={<FileTypesTooltip />}
-                  imagePreviewUrl={productDetails?.digitalProductsFile?.map((file) => file.url)}
+                  imagePreviewUrl={productDetails?.digitalProductsFile?.map((file) => file?.url)}
                   setLoading={setLoading}
                   error={errors.digitalProducts}
                 />
