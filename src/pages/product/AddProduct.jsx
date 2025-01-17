@@ -90,10 +90,10 @@ const AddProduct = () => {
               ...rest,
               image: image ? image.url : '',
               imageFile: image ? image : {},
-              digitalProducts: digitalProducts ? digitalProducts.map((product) => product._id) : '',
-              digitalProductsFile: digitalProducts ? digitalProducts.map((product) => ({ _id: product._id, url: product.url })) : [],
-              gallery: gallery ? gallery.map((product) => product._id) : [],
-              galleryFile: gallery ? gallery.map((product) => ({ _id: product._id, url: product.url })) : []
+              digitalProducts: digitalProducts ? digitalProducts.map((product) => product?._id) : '',
+              digitalProductsFile: digitalProducts ? digitalProducts.map((product) => ({ _id: product?._id, url: product?.url })) : [],
+              gallery: gallery ? gallery.map((product) => product?._id) : [],
+              galleryFile: gallery ? gallery.map((product) => ({ _id: product?._id, url: product?.url })) : []
             }));
           } else showNotification('warn', data);
         } catch (error) {
