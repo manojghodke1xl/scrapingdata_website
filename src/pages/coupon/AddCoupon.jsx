@@ -198,6 +198,7 @@ const AddCoupon = () => {
               <DropDown
                 mt="mt-5"
                 name="type"
+                label="Discount Type"
                 SummaryChild={<h5 className="p-0 m-0 text-primary">{couponDetails.typeObject?.showName || 'Coupon Type'}</h5>}
                 dropdownList={[
                   { id: 0, showName: 'Percentage', name: 'percentage' },
@@ -212,6 +213,7 @@ const AddCoupon = () => {
                 error={errors.type}
               />
               <FormField
+                divClassName={'mt-5'}
                 label="Discount Value"
                 type="number"
                 id="value"
@@ -225,6 +227,7 @@ const AddCoupon = () => {
                 errorMessage={errors.value}
               />
               <FormField
+                divClassName={'mt-5'}
                 label="Discount Upto"
                 type="number"
                 id="upto"

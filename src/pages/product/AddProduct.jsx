@@ -41,7 +41,7 @@ const AddProduct = () => {
     inStock: true,
     stock: 0,
     type: '',
-    image: '',
+    // image: '',
     gallery: [],
     digitalProducts: [],
     emailTemplate: '',
@@ -75,10 +75,22 @@ const AddProduct = () => {
         newErrors.shippingDestinations = 'Please configure payment gateway to select the shipping destinations';
     }
 
+    if (productDetails.type === 'Physical' || productDetails.type === 'Digital') {
+      if (!productDetails.currencies.INR) newErrors.currencies = { ...newErrors.currencies, INR: 'Price in INR is required ' };
+      if (!productDetails.currencies.AED) newErrors.currencies = { ...newErrors.currencies, AED: 'Price in AED is required ' };
+      if (!productDetails.currencies.USD) newErrors.currencies = { ...newErrors.currencies, USD: 'Price in USD is required ' };
+    }
+
+    if (productDetails.type === 'Physical') {
+      if (!productDetails.charges.INR) newErrors.charges = { ...newErrors.charges, INR: 'Charges in INR is required ' };
+      if (!productDetails.charges.AED) newErrors.charges = { ...newErrors.charges, AED: 'Charges in AED is required ' };
+      if (!productDetails.charges.USD) newErrors.currencies = { ...newErrors.currencies, USD: 'Charges in USD is required ' };
+    }
+
     if (productDetails.type === 'Digital' && !productDetails.digitalProducts) newErrors.digitalProducts = 'Digital Product is required';
 
     if (!productDetails.site) newErrors.site = 'Site is required';
-
+    if (!productDetails.saleEndDate) newErrors.saleEndDate = 'Sale End Date is required';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -258,7 +270,7 @@ const AddProduct = () => {
             <MultipleFileUpload
               divClassName={'mt-5'}
               onUploadSuccess={(files) => {
-                setProductDetails((prev) => ({ ...prev, gallery: files }));
+                setProductDetails((prev) => ({ ...prev, gallery: [...(prev.gallery || []), ...files] }));
                 if (errors.gallery) setErrors((prev) => ({ ...prev, gallery: '' }));
               }}
               id={id}
@@ -348,15 +360,15 @@ const AddProduct = () => {
                   divClassName={'mt-5'}
                   label="Price (INR)"
                   type="number"
-                  id="currencies"
-                  name="currencies"
+                  id="INR"
+                  name="INR"
                   placeholder="Price (INR)"
                   onChange={(e) => {
                     setProductDetails((prev) => ({ ...prev, currencies: { ...prev.currencies, INR: e.target.value } }));
-                    if (errors.currencies) setErrors((prev) => ({ ...prev, currencies: '' }));
+                    if (errors.currencies?.INR) setErrors((prev) => ({ ...prev, currencies: { ...prev.currencies, INR: '' } }));
                   }}
                   value={productDetails.currencies?.INR}
-                  errorMessage={errors.currencies}
+                  errorMessage={errors.currencies?.INR}
                 />
               )}
 
@@ -365,15 +377,15 @@ const AddProduct = () => {
                   divClassName={'mt-5'}
                   label="Charges (INR)"
                   type="number"
-                  id="currencies"
-                  name="currencies"
+                  id="INR"
+                  name="INR"
                   placeholder="Charges (INR)"
                   onChange={(e) => {
                     setProductDetails((prev) => ({ ...prev, charges: { ...prev.charges, INR: e.target.value } }));
-                    if (errors.charges) setErrors((prev) => ({ ...prev, charges: '' }));
+                    if (errors.charges?.INR) setErrors((prev) => ({ ...prev, charges: { ...prev.charges, INR: '' } }));
                   }}
                   value={productDetails.charges?.INR}
-                  errorMessage={errors.charges}
+                  errorMessage={errors.charges?.INR}
                 />
               )}
 
@@ -382,15 +394,15 @@ const AddProduct = () => {
                   divClassName={'mt-5'}
                   label="Price (AED)"
                   type="number"
-                  id="currencies"
-                  name="currencies"
+                  id="AED"
+                  name="AED"
                   placeholder="Price (AED)"
                   onChange={(e) => {
                     setProductDetails((prev) => ({ ...prev, currencies: { ...prev.currencies, AED: e.target.value } }));
-                    if (errors.currencies) setErrors((prev) => ({ ...prev, currencies: '' }));
+                    if (errors.currencies?.AED) setErrors((prev) => ({ ...prev, currencies: { ...prev.currencies, AED: '' } }));
                   }}
                   value={productDetails.currencies?.AED}
-                  errorMessage={errors.currencies}
+                  errorMessage={errors.currencies?.AED}
                 />
               )}
               {productDetails.type === 'Physical' && productDetails.shippingDestinations.uae && (
@@ -398,15 +410,15 @@ const AddProduct = () => {
                   divClassName={'mt-5'}
                   label="Charges (AED)"
                   type="number"
-                  id="currencies"
-                  name="currencies"
+                  id="AED"
+                  name="AED"
                   placeholder="Charges (AED)"
                   onChange={(e) => {
                     setProductDetails((prev) => ({ ...prev, charges: { ...prev.charges, AED: e.target.value } }));
-                    if (errors.charges) setErrors((prev) => ({ ...prev, charges: '' }));
+                    if (errors.charges?.AED) setErrors((prev) => ({ ...prev, charges: { ...prev.charges, AED: '' } }));
                   }}
                   value={productDetails.charges?.AED}
-                  errorMessage={errors.charges}
+                  errorMessage={errors.charges?.AED}
                 />
               )}
 
@@ -415,15 +427,15 @@ const AddProduct = () => {
                   divClassName={'mt-5'}
                   label="Price (USD)"
                   type="number"
-                  id="currencies"
-                  name="currencies"
+                  id="USD"
+                  name="USD"
                   placeholder="Price (USD)"
                   onChange={(e) => {
                     setProductDetails((prev) => ({ ...prev, currencies: { ...prev.currencies, USD: e.target.value } }));
-                    if (errors.currencies) setErrors((prev) => ({ ...prev, currencies: '' }));
+                    if (errors.currencies?.USD) setErrors((prev) => ({ ...prev, currencies: { ...prev.currencies, USD: '' } }));
                   }}
                   value={productDetails.currencies?.USD}
-                  errorMessage={errors.currencies}
+                  errorMessage={errors.currencies?.USD}
                 />
               )}
 
@@ -432,12 +444,12 @@ const AddProduct = () => {
                   divClassName={'mt-5'}
                   label="Charges (USD)"
                   type="number"
-                  id="currencies"
-                  name="currencies"
+                  id="USD"
+                  name="USD"
                   placeholder="Charges (USD)"
                   onChange={(e) => {
                     setProductDetails((prev) => ({ ...prev, charges: { ...prev.charges, USD: e.target.value } }));
-                    if (errors.charges) setErrors((prev) => ({ ...prev, charges: '' }));
+                    if (errors.charges?.USD) setErrors((prev) => ({ ...prev, charges: { ...prev.charges, USD: '' } }));
                   }}
                   value={productDetails.charges?.USD}
                   errorMessage={errors.charges}

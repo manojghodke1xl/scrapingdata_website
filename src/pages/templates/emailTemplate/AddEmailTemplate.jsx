@@ -52,10 +52,7 @@ const AddEmailTemplate = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('before validation', emailTemplate);
-
     if (!validate()) return;
-    console.log('after validation', emailTemplate);
     setLoading(true);
     try {
       const { status, data } = await (id ? updateEmailTemplateApi(id, emailTemplate) : addEmailTemplateApi(emailTemplate));

@@ -29,7 +29,6 @@ import EventRoutes from './private-routes/EventRoutes';
 import PaymentRoutes from './private-routes/PaymentRoutes';
 import IntegrationRoutes from './private-routes/IntegrationRoutes';
 import FaqCategoryRoutes from './private-routes/FaqCategoryRoutes';
-import 'react-toastify/dist/ReactToastify.css';
 import PackageRoutes from './private-routes/PackageRoutes';
 import TestimonialCategoryRoutes from './private-routes/TestimonialCategoryRoutes';
 import ProductRoutes from './private-routes/productRoutes';

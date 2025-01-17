@@ -106,7 +106,7 @@ const AddClientLogo = () => {
             <div>
               <MultipleFileUpload
                 onUploadSuccess={(files) => {
-                  setClientLogoDetails((prev) => ({ ...prev, images: files }));
+                  setClientLogoDetails((prev) => ({ ...prev, images: [...(prev.images || []), ...files] }));
                   if (errors.images) setErrors((prev) => ({ ...prev, images: '' }));
                 }}
                 id={id}

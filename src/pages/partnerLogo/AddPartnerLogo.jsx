@@ -115,7 +115,7 @@ const AddPartnerLogo = () => {
             <div>
               <MultipleFileUpload
                 onUploadSuccess={(files) => {
-                  setPartnerLogoDetails((prev) => ({ ...prev, images: files }));
+                  setPartnerLogoDetails((prev) => ({ ...prev, images: [...(prev.images || []), ...files] }));
                   if (errors.images) setErrors((prev) => ({ ...prev, images: '' }));
                 }}
                 id={id}

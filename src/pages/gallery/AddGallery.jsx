@@ -108,7 +108,7 @@ const AddGallery = () => {
             <div>
               <MultipleFileUpload
                 onUploadSuccess={(files) => {
-                  setGalleryDetails((prev) => ({ ...prev, images: files }));
+                  setGalleryDetails((prev) => ({ ...prev, images: [...(prev.images || []), ...files] }));
                   if (errors.images) setErrors((prev) => ({ ...prev, images: '' }));
                 }}
                 id={id}

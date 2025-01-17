@@ -65,6 +65,7 @@ const MultipleFileUpload = ({
   const handleDelete = (indexToRemove) => {
     setSelectedFiles((prev) => prev.filter((_, index) => index !== indexToRemove));
   };
+  console.log(allowedFileTypes.join(','));
 
   return (
     <div className={`${divClassName} w-full border border-primary rounded-xl p-6 shadow-sm`}>
@@ -93,7 +94,7 @@ const MultipleFileUpload = ({
             ))}
             {isMultiple && (
               <>
-                <input type="file" onChange={handleFileChange} className="hidden" accept=".png,.jpeg,.svg,.gif" ref={fileInputRef} multiple={isMultiple} />
+                <input type="file" onChange={handleFileChange} className="hidden" accept={`.${allowedTypes.join(', ')}`} ref={fileInputRef} multiple={isMultiple} />
                 <div className="flex items-center justify-center h-32 border-2 border-dashed border-primary rounded-xl cursor-pointer" onClick={() => fileInputRef.current.click()}>
                   <span className="text-primary">+ Add More</span>
                 </div>
@@ -105,7 +106,7 @@ const MultipleFileUpload = ({
             <p className="font-normal text-sm text-primary w-5/12 text-center m-auto">Choose {isMultiple ? 'files' : 'a file'} or drag and drop here to upload</p>
 
             <div className="flex items-center m-auto justify-center my-4">
-              <input type="file" onChange={handleFileChange} className="hidden" accept={`.${allowedFileTypes.join(', ')}`} ref={fileInputRef} multiple={isMultiple} />
+              <input type="file" onChange={handleFileChange} className="hidden" accept={`.${allowedTypes.join(', ')}`} ref={fileInputRef} multiple={isMultiple} />
               <div className="w-full flex justify-center">
                 <button
                   className="text-primary font-medium cursor-pointer inline-block px-4 py-2 border hover:bg-gray-50 border-primary rounded-xl shadow-sm"
