@@ -63,6 +63,8 @@ const AddProduct = () => {
     site: ''
   });
 
+  console.log(errors);
+
   const validate = () => {
     const newErrors = {};
     if (!productDetails.name.trim()) newErrors.name = 'Name is required';
@@ -76,9 +78,15 @@ const AddProduct = () => {
     }
 
     if (productDetails.type === 'Physical' || productDetails.type === 'Digital') {
-      if (!productDetails.currencies.INR) newErrors.currencies = { ...newErrors.currencies, INR: 'Price in INR is required ' };
-      if (!productDetails.currencies.AED) newErrors.currencies = { ...newErrors.currencies, AED: 'Price in AED is required ' };
-      if (!productDetails.currencies.USD) newErrors.currencies = { ...newErrors.currencies, USD: 'Price in USD is required ' };
+      if (productDetails.shippingDestinations.india) {
+        if (!productDetails.currencies.INR) newErrors.currencies = { ...newErrors.currencies, INR: 'Price in INR is required ' };
+      }
+      if (productDetails.shippingDestinations.uae) {
+        if (!productDetails.currencies.AED) newErrors.currencies = { ...newErrors.currencies, AED: 'Price in AED is required ' };
+      }
+      if (productDetails.shippingDestinations.restOfTheWorld) {
+        if (!productDetails.currencies.USD) newErrors.currencies = { ...newErrors.currencies, USD: 'Price in USD is required ' };
+      }
     }
 
     if (productDetails.type === 'Physical') {
@@ -463,11 +471,11 @@ const AddProduct = () => {
                     if (errors.digitalProducts) setErrors((prev) => ({ ...prev, digitalProducts: '' }));
                   }}
                   id={id}
-                  isMultiple={true}
+                  isMultiple
                   allowedTypes={acceptedProductTypes}
                   allowedFileTypes={acceptedExtensions}
                   toolTip={<FileTypesTooltip />}
-                  imagePreviewUrl={productDetails?.digitalProductsFile?.map((file) => file?.url)}
+                  imagePreviewUrl={productDetails?.digitalProductsFile?.map((file) => file?.name)}
                   setLoading={setLoading}
                   error={errors.digitalProducts}
                 />
@@ -510,7 +518,10 @@ const AddProduct = () => {
                 label="Sale End Date"
                 placeholder={formatDateTime(new Date())}
                 selectedDateTime={productDetails.saleEndDate}
-                setSelectedDateTime={(date) => setProductDetails((prev) => ({ ...prev, saleEndDate: date }))}
+                setSelectedDateTime={(date) => {
+                  setProductDetails((prev) => ({ ...prev, saleEndDate: date }));
+                  if (errors.saleEndDate) setErrors((prev) => ({ ...prev, saleEndDate: '' }));
+                }}
                 errorMessage={errors.saleEndDate}
               />
             </div>

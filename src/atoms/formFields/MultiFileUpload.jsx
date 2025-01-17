@@ -50,7 +50,7 @@ const MultipleFileUpload = ({
         const fileIds = await uploadMultipleFiles(validFiles);
         if (onUploadSuccess) {
           if (!id) onUploadSuccess(fileIds);
-          else onUploadSuccess(fileIds[0]);
+          else onUploadSuccess(fileIds);
         }
         const newFiles = isMultiple ? [...selectedFiles, ...validFiles] : [validFiles[0]];
         setSelectedFiles(newFiles);
@@ -65,7 +65,6 @@ const MultipleFileUpload = ({
   const handleDelete = (indexToRemove) => {
     setSelectedFiles((prev) => prev.filter((_, index) => index !== indexToRemove));
   };
-  console.log(allowedFileTypes.join(','));
 
   return (
     <div className={`${divClassName} w-full border border-primary rounded-xl p-6 shadow-sm`}>
