@@ -26,7 +26,6 @@ const EventDetails = () => {
     })();
   }, [id, setLoading]);
 
-  console.log(event);
 
   const checkScrollability = () => {
     const contentHeight = document.documentElement.scrollHeight;

@@ -20,7 +20,6 @@ const BookingList = () => {
       phoneNumber,
       phoneCode
     } = booking;
-    console.log(staus);
 
     return {
       id: _id,

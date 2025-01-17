@@ -35,6 +35,8 @@ import TestimonialCategoryRoutes from './private-routes/TestimonialCategoryRoute
 import ProductRoutes from './private-routes/productRoutes';
 import BookingRoutes from './private-routes/BookingRoutes';
 import OrderRoutes from './private-routes/OrderRoutes';
+import TemplateRoutes from './private-routes/TemplateRoutes';
+import FilesRoutes from './private-routes/FilesRoutes';
 
 const ZohoStatus = lazy(() => import('../pages/integration/ZohoStatus'));
 
@@ -82,6 +84,8 @@ const App = () => {
                 <Route path="/packages/*" element={<PackageRoutes />} />
                 <Route path="/products/*" element={<ProductRoutes />} />
                 <Route path="/orders/*" element={<OrderRoutes />} />
+                <Route path="/templates/*" element={<TemplateRoutes />} />
+                <Route path="/files/*" element={<FilesRoutes />} />
               </Route>
             </Route>
             <Route path="*" element={<PageNotFound />} />

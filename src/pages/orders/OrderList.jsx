@@ -7,14 +7,14 @@ const OrderList = () => {
   const [orders, setOrders] = useState([]);
 
   const rows = orders.map((order) => {
-    const { _id, status, customer, product, createdAt, updatedAt } = order;
+    const { _id, status, customer, createdAt, updatedAt } = order;
 
     return {
       id: _id,
       exportData: order,
       Keys: _id,
       customer: <TruncatableFieldModal title={'Customer Name'} content={customer.name} />,
-      product: <TruncatableFieldModal title={'Product Name'} content={product.name} />,
+      // product: <TruncatableFieldModal title={'Product Name'} content={product.name} />,
       status: (
         <div
           className={`rounded-xl ${
@@ -47,7 +47,7 @@ const OrderList = () => {
                 headers={[
                   { label: 'Sr No.', key: 'srno' },
                   { label: 'Customer', key: 'customer' },
-                  { label: 'Product', key: 'product' },
+                  // { label: 'Product', key: 'product' },
                   { label: 'Status', key: 'status' },
                   { label: 'Created At', key: 'createdAt' },
                   { label: 'Updated At', key: 'updatedAt' }

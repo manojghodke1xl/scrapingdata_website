@@ -263,7 +263,6 @@ const TableComponent = ({
             copy={copy}
             copyPath={copyPath}
             deleteAction={deleteAction}
-            handleRowDelete={(id) => console.log({ id })}
             currentPage={tableState.currentPage}
             itemsPerPage={tableState.itemsPerPage}
             modalState={modalState}

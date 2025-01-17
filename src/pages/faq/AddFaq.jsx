@@ -73,7 +73,6 @@ const AddFaq = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  console.log(errors);
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;

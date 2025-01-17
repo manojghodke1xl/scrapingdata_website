@@ -207,7 +207,6 @@ const AddCaseStudy = () => {
                 selected={caseStudyDetails.sites}
                 error={errors.sites}
               />
-              {console.log(caseStudyDetails)}
               <ToggleComponent
                 label={'Is Case Study Active?'}
                 isEnableState={caseStudyDetails.isActive}

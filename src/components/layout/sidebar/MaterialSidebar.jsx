@@ -1,22 +1,24 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { TbFileSearch, TbUsersGroup } from 'react-icons/tb';
+import { TbFileSearch, TbTemplate, TbUsersGroup } from 'react-icons/tb';
 import { IoSettingsOutline } from 'react-icons/io5';
 import { MdMessage } from 'react-icons/md';
-import { FaBullhorn, FaRegImage, FaRegQuestionCircle } from 'react-icons/fa';
+import { FaBullhorn, FaRegFile, FaRegImage, FaRegQuestionCircle } from 'react-icons/fa';
 import { FiCalendar } from 'react-icons/fi';
 import {
   adminNavLinks,
-  contentManagementPath,
+  contentsPath,
   siteSettingsPath,
   testimonialsPath,
   navLinks,
-  mediaManagementPath,
-  eventManagementPath,
-  faqManagementPath,
-  leadsManagementPath,
-  marketingManagementPath,
-  productManagementPath
+  mediaPath,
+  eventsPath,
+  faqsPath,
+  leadsPath,
+  marketingPath,
+  productsPath,
+  templatePath,
+  filesPath
 } from './sidebarTabData';
 import ReusableAccordion from '../../../atoms/sidebar/ReusableAccordion';
 import useGlobalContext from '../../../hooks/useGlobalContext';
@@ -53,7 +55,7 @@ const MaterialSidebar = () => {
 
           <ReusableAccordion
             title="Contents"
-            links={contentManagementPath}
+            links={contentsPath}
             icon={<TbFileSearch />}
             isOpen={openAccordion === 'Contents'}
             onToggle={() => setOpenAccordion(openAccordion === 'Contents' ? null : 'Contents')}
@@ -61,7 +63,7 @@ const MaterialSidebar = () => {
 
           <ReusableAccordion
             title="Marketing"
-            links={marketingManagementPath}
+            links={marketingPath}
             icon={<FaBullhorn />}
             isOpen={openAccordion === 'Marketing'}
             onToggle={() => setOpenAccordion(openAccordion === 'Marketing' ? null : 'Marketing')}
@@ -69,7 +71,7 @@ const MaterialSidebar = () => {
 
           <ReusableAccordion
             title="Products"
-            links={productManagementPath}
+            links={productsPath}
             icon={<AiOutlineProduct />}
             isOpen={openAccordion === 'Products'}
             onToggle={() => setOpenAccordion(openAccordion === 'Products' ? null : 'Products')}
@@ -77,7 +79,7 @@ const MaterialSidebar = () => {
 
           <ReusableAccordion
             title="Leads"
-            links={leadsManagementPath}
+            links={leadsPath}
             icon={<TbUsersGroup />}
             isOpen={openAccordion === 'Leads'}
             onToggle={() => setOpenAccordion(openAccordion === 'Leads' ? null : 'Leads')}
@@ -93,15 +95,23 @@ const MaterialSidebar = () => {
 
           <ReusableAccordion
             title="Media"
-            links={mediaManagementPath}
+            links={mediaPath}
             icon={<FaRegImage />}
             isOpen={openAccordion === 'Media'}
             onToggle={() => setOpenAccordion(openAccordion === 'Media' ? null : 'Media')}
           />
 
           <ReusableAccordion
+            title="Files"
+            links={filesPath}
+            icon={<FaRegFile />}
+            isOpen={openAccordion === 'Files'}
+            onToggle={() => setOpenAccordion(openAccordion === 'Files' ? null : 'Files')}
+          />
+
+          <ReusableAccordion
             title="Events"
-            links={eventManagementPath}
+            links={eventsPath}
             icon={<FiCalendar />}
             isOpen={openAccordion === 'Events'}
             onToggle={() => setOpenAccordion(openAccordion === 'Events' ? null : 'Events')}
@@ -109,7 +119,7 @@ const MaterialSidebar = () => {
 
           <ReusableAccordion
             title="Faqs"
-            links={faqManagementPath}
+            links={faqsPath}
             icon={<FaRegQuestionCircle />}
             isOpen={openAccordion === 'Faqs'}
             onToggle={() => setOpenAccordion(openAccordion === 'Faqs' ? null : 'Faqs')}
@@ -121,6 +131,14 @@ const MaterialSidebar = () => {
             icon={<MdMessage />}
             isOpen={openAccordion === 'Testimonials'}
             onToggle={() => setOpenAccordion(openAccordion === 'Testimonials' ? null : 'Testimonials')}
+          />
+
+          <ReusableAccordion
+            title="Templates"
+            links={templatePath}
+            icon={<TbTemplate />}
+            isOpen={openAccordion === 'Templates'}
+            onToggle={() => setOpenAccordion(openAccordion === 'Templates' ? null : 'Templates')}
           />
 
           {adminNavLinks

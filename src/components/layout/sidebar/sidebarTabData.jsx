@@ -12,13 +12,13 @@ export const navLinks = [
   { title: 'All Sites', to: ['/site/site-list', '/site/add-site', '/site/edit-site'], icon: <TbWorld /> }
 ];
 
-export const leadsManagementPath = [
+export const leadsPath = [
   { title: 'Enquiry', to: ['/enquiry/enquiry-list', '/enquiry/view-enquiry', '/enquiry/enquiry-integration'] },
   { title: 'Subscribers', to: ['/subscriber/subscriber-list', '/subscriber/view-subscriber', '/subscriber/subscriber-integration'] },
   { title: 'Feedback', to: ['/feedback/feedback-list', '/feedback/view-feedback', '/feedback/feedback-integration'] }
 ];
 
-export const contentManagementPath = [
+export const contentsPath = [
   {
     title: 'Case Study',
     to: ['/case-study/case-study-list', '/case-study/add-case-study', '/case-study/edit-case-study', '/case-study/case-study-integration', '/case-study/duplicate-case-study']
@@ -27,9 +27,9 @@ export const contentManagementPath = [
   { title: 'Pop-up', to: ['/pop-up/pop-up-list', '/pop-up/add-pop-up', '/pop-up/edit-pop-up'] }
 ];
 
-export const marketingManagementPath = [{ title: 'Coupon', to: ['/coupon/coupon-list', '/coupon/add-coupon', '/coupon/edit-coupon', '/coupon/duplicate-coupon'] }];
+export const marketingPath = [{ title: 'Coupon', to: ['/coupon/coupon-list', '/coupon/add-coupon', '/coupon/edit-coupon', '/coupon/duplicate-coupon'] }];
 
-export const productManagementPath = [
+export const productsPath = [
   { title: 'Product', to: ['/products/product-list', '/products/add-product', '/products/edit-product', '/products/duplicate-product'] },
   { title: 'Orders', to: ['/orders/order-list'] },
   { title: 'Order Payments', to: ['/payments/order-payment-list'] }
@@ -40,13 +40,15 @@ export const siteSettingsPath = [
   { title: 'reCAPTCHA Settings', to: ['/recaptcha/recaptcha-list', '/recaptcha/add-recaptcha', '/recaptcha/edit-recaptcha', '/recaptcha/duplicate-recaptcha'] }
 ];
 
-export const mediaManagementPath = [
+export const mediaPath = [
   { title: 'Client Logo', to: ['/client-logo/client-logo-list', '/client-logo/add-client-logo', '/client-logo/edit-client-logo', '/client-logo/duplicate-client-logo'] },
   { title: 'Gallery', to: ['/gallery/gallery-list', '/gallery/add-gallery', '/gallery/edit-gallery', '/gallery/duplicate-gallery'] },
   { title: 'Partner Logo', to: ['/partner-logo/partner-logo-list', '/partner-logo/add-partner-logo', '/partner-logo/edit-partner-logo', '/partner-logo/duplicate-partner-logo'] }
 ];
 
-export const eventManagementPath = [
+export const filesPath = [{ title: 'Files', to: ['/files/file-list', '/files/add-file', '/files/edit-file', '/files/duplicate-file'] }];
+
+export const eventsPath = [
   { title: 'Events', to: ['/events/event-list', '/events/add-event', '/events/edit-event', '/events/duplicate-event', '/events/view-event'] },
   { title: 'Participants', to: ['/participants/participant-list'] },
   { title: 'Packages', to: ['/packages/package-list', '/packages/add-package', '/packages/edit-package', '/packages/duplicate-package'] },
@@ -54,7 +56,7 @@ export const eventManagementPath = [
   { title: 'Booking Payments', to: ['/payments/booking-payment-list'] }
 ];
 
-export const faqManagementPath = [
+export const faqsPath = [
   { title: 'FAQ Categories', to: ['/faq-category/faq-category-list', '/faq-category/add-faq-category', '/faq-category/edit-faq-category'] },
   { title: 'FAQ', to: ['/faq/faq-list', '/faq/add-faq', '/faq/edit-faq', '/faq/duplicate-faq'] }
 ];
@@ -66,5 +68,7 @@ export const testimonialsPath = [
     to: ['/testimonial-category/testimonial-category-list', '/testimonial-category/add-testimonial-category', '/testimonial-category/edit-testimonial-category']
   }
 ];
+
+export const templatePath = [{ title: 'Email Templates', to: ['/templates/email-template-list', '/templates/add-email-template', '/templates/edit-email-template'] }];
 
 export const adminNavLinks = [{ title: 'Admin', to: ['/admin/admin-list', '/admin/add-admin', '/admin/edit-admin'], icon: <RiAdminLine /> }];

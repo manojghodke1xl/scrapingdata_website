@@ -35,7 +35,6 @@ const AddEvent = () => {
     site: ''
   });
   const [emailInput, setEmailInput] = useState('');
-  console.log(eventDetails);
 
   const removeItemAtIndex = (setDetails, key, indexToRemove) => setDetails((prev) => ({ ...prev, [key]: prev[key].filter((_, index) => index !== indexToRemove) }));
 
