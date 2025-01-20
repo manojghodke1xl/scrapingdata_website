@@ -17,7 +17,7 @@ const FormField = ({ divClassName, label, type = 'text', name, id, placeholder, 
           value={value}
           name={name}
           placeholder={placeholder}
-          className={`w-full mt-2 rounded-xl border  ${
+          className={`w-full mt-2 rounded-xl border bg-white ${
             errorMessage ? 'border-fadered focus:border-fadered' : ' border-primary focus:border-blue'
           } font-normal focus:outline-none focus:ring-0 px-4 py-2.5 focus:border  placeholder:text-gray-400 text-dark bg-transparent`}
           disabled={disabled}

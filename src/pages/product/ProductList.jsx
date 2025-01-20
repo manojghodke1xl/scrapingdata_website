@@ -10,14 +10,13 @@ const ProductList = () => {
   const [products, setProducts] = useState([]);
 
   const rows = products.map((product) => {
-    const { _id, name, stock, price, salePrice, site, createdAt, updatedAt } = product;
+    const { _id, name, stock, site, createdAt, updatedAt } = product;
     return {
       id: _id,
       exportData: product,
+      key: _id,
       name: <TruncatableFieldModal title={'Product Name'} content={name} />,
       stock: <TruncatableFieldModal title={'Stock'} content={stock} />,
-      price: <TruncatableFieldModal title={'Price'} content={price} />,
-      salePrice: <TruncatableFieldModal title={'Sale Price'} content={salePrice} />,
       site: <TruncatableFieldModal title={'Sites'} content={`${site.name} (${site.host})}`} />,
       createdAt: formatDateTime(createdAt),
       updatedAt: formatDateTime(updatedAt)
@@ -45,10 +44,9 @@ const ProductList = () => {
                 siteModule={'products'}
                 headers={[
                   { label: 'Sr No.', key: 'srno' },
+                  { label: 'Key', key: 'key' },
                   { label: 'Product Name', key: 'name' },
                   { label: 'Stock', key: 'stock' },
-                  { label: 'Price', key: 'price' },
-                  { label: 'Discount Price', key: 'salePrice' },
                   { label: 'Sites', key: 'site' },
                   { label: 'Created Date', key: 'createdAt' },
                   { label: 'Updated Date', key: 'updatedAt' }

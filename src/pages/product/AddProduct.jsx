@@ -1,22 +1,24 @@
+import { useCallback, useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import FormButtons from '../../atoms/formFields/FormButtons';
 import useGlobalContext from '../../hooks/useGlobalContext';
-import { useCallback, useEffect, useState } from 'react';
-import { showNotification } from '../../utils/showNotification';
+import DropDown from '../../atoms/formFields/DropDown';
 import FormField from '../../atoms/formFields/InputField';
 import TextareaComponent from '../../atoms/formFields/TextareaComponent';
-import DropDown from '../../atoms/formFields/DropDown';
-import DateTimePicker from '../../atoms/formFields/DateTimePicker';
-import { formatDateTime } from '../../utils/dateFormats';
+import { FaRegImage } from 'react-icons/fa';
+import FileUpload from '../../atoms/formFields/FileUpload';
+import MultipleFileUpload from '../../atoms/formFields/MultiFileUpload';
 import ToggleComponent from '../../atoms/formFields/ToggleComponent';
 import MultiSelectCheckbox from '../../atoms/formFields/MultiSelectCheckBox';
-import { getIntegrationBySite } from '../../apis/payment-integration-apis';
-import { addProductApi, getProductByIdApi, updateProductApi } from '../../apis/product-apis';
-import MultipleFileUpload from '../../atoms/formFields/MultiFileUpload';
 import { acceptedExtensions, acceptedProductTypes } from './productStaticData';
-import FileUpload from '../../atoms/formFields/FileUpload';
-import { FaRegImage } from 'react-icons/fa';
 import FileTypesTooltip from '../../atoms/formFields/FileTypesTooltip';
+import { Accordion, AccordionBody, AccordionHeader } from '@material-tailwind/react';
+import { IoIosArrowDown } from 'react-icons/io';
+import DateTimePicker from '../../atoms/formFields/DateTimePicker';
+import { formatDateTime } from '../../utils/dateFormats';
+import { addProductApi, getProductByIdApi, updateProductApi } from '../../apis/product-apis';
+import { showNotification } from '../../utils/showNotification';
+import { getIntegrationBySite } from '../../apis/payment-integration-apis';
 
 const AddProduct = () => {
   const navigate = useNavigate();
@@ -28,7 +30,7 @@ const AddProduct = () => {
   } = useGlobalContext();
   const { pathname } = useLocation();
   const isDuplicate = pathname.includes('duplicate');
-
+  const [isOpen, setIsOpen] = useState(null);
   const [isScrollable, setIsScrollable] = useState(false);
   const [errors, setErrors] = useState({});
   const [paymentData, setPaymentData] = useState({});
@@ -37,71 +39,21 @@ const AddProduct = () => {
     name: '',
     description: '',
     shortDescription: '',
-    saleEndDate: null,
-    inStock: true,
-    stock: 0,
-    type: '',
+    saleEndDate: '',
+    inStock: false,
+    manageInventry: false,
+    onSale: false,
+    stock: '',
+    type: 'Physical',
+    shippingDetails: [],
+    currencies: [],
+    price: {},
+    salePrice: {},
     // image: '',
     gallery: [],
     digitalProducts: [],
-    emailTemplate: '',
-    shippingDestinations: {
-      india: false,
-      uae: false,
-      restOfTheWorld: false
-    },
-    currencies: {
-      INR: 0,
-      AED: 0,
-      USD: 0
-    },
-    charges: {
-      INR: 0,
-      AED: 0,
-      USD: 0
-    },
     site: ''
   });
-
-  console.log(errors);
-
-  const validate = () => {
-    const newErrors = {};
-    if (!productDetails.name.trim()) newErrors.name = 'Name is required';
-    if (!productDetails.inStock) newErrors.inStock = 'In Stock is required';
-    if (!productDetails.type) newErrors.type = 'Type is required';
-    if (productDetails.type === 'Physical') {
-      if (productDetails.shippingDestinations.india === false && productDetails.shippingDestinations.uae === false && productDetails.shippingDestinations.restOfTheWorld === false)
-        newErrors.shippingDestinations = 'At least one Shipping Destinations is required';
-      if (productDetails.type === 'Physical' && Object.keys(paymentData).length === 0)
-        newErrors.shippingDestinations = 'Please configure payment gateway to select the shipping destinations';
-    }
-
-    if (productDetails.type === 'Physical' || productDetails.type === 'Digital') {
-      if (productDetails.shippingDestinations.india) {
-        if (!productDetails.currencies.INR) newErrors.currencies = { ...newErrors.currencies, INR: 'Price in INR is required ' };
-      }
-      if (productDetails.shippingDestinations.uae) {
-        if (!productDetails.currencies.AED) newErrors.currencies = { ...newErrors.currencies, AED: 'Price in AED is required ' };
-      }
-      if (productDetails.shippingDestinations.restOfTheWorld) {
-        if (!productDetails.currencies.USD) newErrors.currencies = { ...newErrors.currencies, USD: 'Price in USD is required ' };
-      }
-    }
-
-    if (productDetails.type === 'Physical') {
-      if (!productDetails.charges.INR) newErrors.charges = { ...newErrors.charges, INR: 'Charges in INR is required ' };
-      if (!productDetails.charges.AED) newErrors.charges = { ...newErrors.charges, AED: 'Charges in AED is required ' };
-      if (!productDetails.charges.USD) newErrors.currencies = { ...newErrors.currencies, USD: 'Charges in USD is required ' };
-    }
-
-    if (productDetails.type === 'Digital' && !productDetails.digitalProducts) newErrors.digitalProducts = 'Digital Product is required';
-
-    if (!productDetails.site) newErrors.site = 'Site is required';
-    if (!productDetails.saleEndDate) newErrors.saleEndDate = 'Sale End Date is required';
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
 
   useEffect(() => {
     if (id) {
@@ -131,6 +83,45 @@ const AddProduct = () => {
     }
   }, [id, setLoading]);
 
+  const validate = () => {
+    const newErrors = {};
+    if (!productDetails.name.trim()) newErrors.name = 'Name is required';
+    if (!productDetails.type) newErrors.type = 'Product Type is required';
+    if (!productDetails.site) newErrors.site = 'Site is required';
+    if (productDetails.currencies.length === 0) newErrors.currencies = 'Currencies are required';
+
+    if (productDetails.type === 'Physical') {
+      if (productDetails.shippingDetails.length === 0) newErrors.shippingDetails = 'Shipping details are required';
+    }
+    if (productDetails.onSale && !productDetails.saleEndDate) newErrors.saleEndDate = 'Sale end date is required';
+
+    if (productDetails.currencies.length > 0) {
+      const newErrorsPrice = {};
+      const newErrorsSalePrice = {};
+      productDetails.currencies.forEach((currency) => {
+        if (!productDetails.price?.[currency]) newErrorsPrice[currency] = `Price for ${currency} currency is required`;
+        if (productDetails.onSale && !productDetails.salePrice[currency]) newErrorsSalePrice[currency] = `Sale Price for ${currency} currency is required`;
+
+        if (productDetails.shippingDetails.length > 0) {
+          productDetails.shippingDetails.forEach((shipping) => {
+            if (!shipping.charges?.[currency]) {
+              newErrors.charges = newErrors.charges || {};
+              newErrors.charges[currency] = `Charges for ${currency} currency is required`;
+            }
+          });
+        }
+      });
+
+      if (Object.keys(newErrorsPrice).length > 0) newErrors.price = newErrorsPrice;
+      if (Object.keys(newErrorsSalePrice).length > 0) newErrors.salePrice = newErrorsSalePrice;
+    }
+
+    if (productDetails.type === 'Digital' && productDetails.digitalProducts.length === 0) newErrors.digitalProducts = 'At least one digital product is required';
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
@@ -147,6 +138,8 @@ const AddProduct = () => {
       setLoading(false);
     }
   };
+
+  console.log(productDetails);
 
   const checkScrollability = () => {
     const contentHeight = document.documentElement.scrollHeight;
@@ -177,19 +170,24 @@ const AddProduct = () => {
     if (productDetails.site) getIntegration();
   }, [getIntegration, productDetails.site, setLoading]);
 
+  const capitalizeFirstLetter = (str) => {
+    if (!str) return '';
+    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+  };
+
   return (
     <div className="py-8 p-4 sm:p-8 overflow-x-hidden mb-20">
       <div className="w-full pb-8 border-b border-primary gap-y-4 gap-2 flex flex-col items-start md:flex-row lg:flex-col xl:flex-row justify-between lg:items-start md:items-end xl:items-end">
         <div>
-          <span className="text-3xl font-semibold text-dark">{id ? (isDuplicate ? 'Add' : 'Edit') : 'Add'} Product</span>
+          <span className="text-3xl font-semibold text-dark">{id ? 'Edit' : 'Add'} Product</span>
         </div>
-        <FormButtons to="/products/product-list" type="submit" onClick={handleSubmit} btnLebal={id ? (isDuplicate ? 'Add' : 'Save Changes') : 'Add'} loading={isLoading} />
+        <FormButtons to="/products/product-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} loading={isLoading} />
       </div>
 
       <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
         <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
           <div className="sm:w-7/12 w-full flex flex-col">
-            <span className=" text-primary">Site Settings</span>
+            <span className=" text-primary ">Category Details</span>
           </div>
           <div className="w-full">
             <div>
@@ -290,228 +288,128 @@ const AddProduct = () => {
               setLoading={setLoading}
               error={errors.gallery}
             />
-          </div>
-        </div>
-      </div>
-
-      <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
-        <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
-          <div className="sm:w-7/12 w-full flex flex-col">
-            <span className=" text-primary">Product Type</span>
-          </div>
-          <div className="w-full">
-            <div>
-              <DropDown
-                name="Sites"
-                dropdownList={[
-                  { id: 0, showName: 'Physical', name: 'Physical' },
-                  { id: 1, showName: 'Digital', name: 'Digital' }
-                ]}
-                SummaryChild={<h5 className="p-0 m-0 text-primary">Type</h5>}
-                search={true}
-                selected={productDetails.type}
-                commonFunction={(e) => {
-                  setProductDetails((prev) => {
-                    const updatedDetails = { ...prev, type: e.name };
-                    if (e.name === 'Physical') return { ...updatedDetails, digitalProducts: [] };
-                    return {
-                      ...updatedDetails,
-                      shippingDestinations: { india: false, uae: false, restOfTheWorld: false },
-                      currencies: { INR: 0, AED: 0, USD: 0 }
-                    };
-                  });
-                }}
-                error={errors.type}
-              />
-              {(productDetails.type === 'Physical' || productDetails.type === 'Digital') && (
-                <MultiSelectCheckbox
-                  divClassName={'mt-5'}
-                  options={[
-                    { _id: 'india', name: 'India' },
-                    { _id: 'uae', name: 'UAE' },
-                    { _id: 'restOfTheWorld', name: 'World' }
-                  ]}
-                  formLabel="Shipping Destinations"
-                  label="Shipping Destinations"
-                  onChange={(selected) => {
-                    let error = '';
-                    const updatedShippingDestinations = {};
-
-                    const supportedRegions = {
-                      india: paymentData.razorpay.supports.INR || paymentData.stripe.supports.INR || paymentData.paypal.supports.INR,
-                      uae: paymentData.razorpay.supports.AED || paymentData.stripe.supports.AED || paymentData.paypal.supports.AED,
-                      restOfTheWorld: paymentData.razorpay.supports.USD || paymentData.stripe.supports.USD || paymentData.paypal.supports.USD
-                    };
-
-                    selected.forEach((region) => {
-                      if (supportedRegions[region]) updatedShippingDestinations[region] = true;
-                      else error = `Please add support for the required currency for ${region} in your payment gateway configuration`;
-                    });
-
-                    setErrors((prev) => ({ ...prev, shippingDestinations: error }));
-                    setProductDetails((prevDetails) => ({
-                      ...prevDetails,
-                      shippingDestinations: updatedShippingDestinations
-                    }));
-
-                    if (!error) setErrors((prev) => ({ ...prev, shippingDestinations: '' }));
-                  }}
-                  selected={Object.entries(productDetails?.shippingDestinations ?? {})
-                    .filter(([, value]) => value)
-                    .map(([key]) => key)}
-                  error={errors?.shippingDestinations}
-                />
-              )}
-
-              {productDetails.shippingDestinations.india && (
-                <FormField
-                  divClassName={'mt-5'}
-                  label="Price (INR)"
-                  type="number"
-                  id="INR"
-                  name="INR"
-                  placeholder="Price (INR)"
-                  onChange={(e) => {
-                    setProductDetails((prev) => ({ ...prev, currencies: { ...prev.currencies, INR: e.target.value } }));
-                    if (errors.currencies?.INR) setErrors((prev) => ({ ...prev, currencies: { ...prev.currencies, INR: '' } }));
-                  }}
-                  value={productDetails.currencies?.INR}
-                  errorMessage={errors.currencies?.INR}
-                />
-              )}
-
-              {productDetails.type === 'Physical' && productDetails.shippingDestinations.india && (
-                <FormField
-                  divClassName={'mt-5'}
-                  label="Charges (INR)"
-                  type="number"
-                  id="INR"
-                  name="INR"
-                  placeholder="Charges (INR)"
-                  onChange={(e) => {
-                    setProductDetails((prev) => ({ ...prev, charges: { ...prev.charges, INR: e.target.value } }));
-                    if (errors.charges?.INR) setErrors((prev) => ({ ...prev, charges: { ...prev.charges, INR: '' } }));
-                  }}
-                  value={productDetails.charges?.INR}
-                  errorMessage={errors.charges?.INR}
-                />
-              )}
-
-              {productDetails.shippingDestinations.uae && (
-                <FormField
-                  divClassName={'mt-5'}
-                  label="Price (AED)"
-                  type="number"
-                  id="AED"
-                  name="AED"
-                  placeholder="Price (AED)"
-                  onChange={(e) => {
-                    setProductDetails((prev) => ({ ...prev, currencies: { ...prev.currencies, AED: e.target.value } }));
-                    if (errors.currencies?.AED) setErrors((prev) => ({ ...prev, currencies: { ...prev.currencies, AED: '' } }));
-                  }}
-                  value={productDetails.currencies?.AED}
-                  errorMessage={errors.currencies?.AED}
-                />
-              )}
-              {productDetails.type === 'Physical' && productDetails.shippingDestinations.uae && (
-                <FormField
-                  divClassName={'mt-5'}
-                  label="Charges (AED)"
-                  type="number"
-                  id="AED"
-                  name="AED"
-                  placeholder="Charges (AED)"
-                  onChange={(e) => {
-                    setProductDetails((prev) => ({ ...prev, charges: { ...prev.charges, AED: e.target.value } }));
-                    if (errors.charges?.AED) setErrors((prev) => ({ ...prev, charges: { ...prev.charges, AED: '' } }));
-                  }}
-                  value={productDetails.charges?.AED}
-                  errorMessage={errors.charges?.AED}
-                />
-              )}
-
-              {productDetails.shippingDestinations.restOfTheWorld && (
-                <FormField
-                  divClassName={'mt-5'}
-                  label="Price (USD)"
-                  type="number"
-                  id="USD"
-                  name="USD"
-                  placeholder="Price (USD)"
-                  onChange={(e) => {
-                    setProductDetails((prev) => ({ ...prev, currencies: { ...prev.currencies, USD: e.target.value } }));
-                    if (errors.currencies?.USD) setErrors((prev) => ({ ...prev, currencies: { ...prev.currencies, USD: '' } }));
-                  }}
-                  value={productDetails.currencies?.USD}
-                  errorMessage={errors.currencies?.USD}
-                />
-              )}
-
-              {productDetails.type === 'Physical' && productDetails.shippingDestinations.restOfTheWorld && (
-                <FormField
-                  divClassName={'mt-5'}
-                  label="Charges (USD)"
-                  type="number"
-                  id="USD"
-                  name="USD"
-                  placeholder="Charges (USD)"
-                  onChange={(e) => {
-                    setProductDetails((prev) => ({ ...prev, charges: { ...prev.charges, USD: e.target.value } }));
-                    if (errors.charges?.USD) setErrors((prev) => ({ ...prev, charges: { ...prev.charges, USD: '' } }));
-                  }}
-                  value={productDetails.charges?.USD}
-                  errorMessage={errors.charges}
-                />
-              )}
-              {productDetails.type === 'Digital' && (
-                <MultipleFileUpload
-                  divClassName={'mt-5'}
-                  onUploadSuccess={(files) => {
-                    setProductDetails((prev) => ({ ...prev, digitalProducts: [...(prev.digitalProducts || []), ...files] }));
-                    if (errors.digitalProducts) setErrors((prev) => ({ ...prev, digitalProducts: '' }));
-                  }}
-                  id={id}
-                  isMultiple
-                  allowedTypes={acceptedProductTypes}
-                  allowedFileTypes={acceptedExtensions}
-                  toolTip={<FileTypesTooltip />}
-                  imagePreviewUrl={productDetails?.digitalProductsFile?.map((file) => file?.name)}
-                  setLoading={setLoading}
-                  error={errors.digitalProducts}
-                />
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
-        <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
-          <div className="sm:w-7/12 w-full flex flex-col">
-            <span className=" text-primary">Stock and Availability</span>
-          </div>
-          <div className="w-full">
-            <div>
-              <ToggleComponent
-                label={'In Stock'}
-                isEnableState={productDetails.inStock}
-                setIsEnableState={(e) => setProductDetails((prev) => ({ ...prev, inStock: e }))}
-                errorMessage={errors.inStock}
-              />
-              <FormField
+            {productDetails.type === 'Digital' && (
+              <MultipleFileUpload
                 divClassName={'mt-5'}
-                label="Stock"
-                type="number"
-                id="stock"
-                name="stock"
-                placeholder="Stock"
-                onChange={(e) => {
-                  setProductDetails((prev) => ({ ...prev, stock: e.target.value }));
-                  if (errors.stock) setErrors((prev) => ({ ...prev, stock: '' }));
+                label={'Upload Digital Products'}
+                onUploadSuccess={(files) => {
+                  setProductDetails((prev) => ({ ...prev, digitalProducts: [...(prev.digitalProducts || []), ...files] }));
+                  if (errors.digitalProducts) setErrors((prev) => ({ ...prev, digitalProducts: '' }));
                 }}
-                value={productDetails.stock}
-                errorMessage={errors.stock}
+                isMultiple
+                allowedTypes={acceptedProductTypes}
+                allowedFileTypes={acceptedExtensions}
+                toolTip={<FileTypesTooltip />}
+                imagePreviewUrl={productDetails?.digitalProductsFile?.map((file) => file?.name)}
+                setLoading={setLoading}
+                error={errors.digitalProducts}
               />
+            )}
+          </div>
+        </div>
+      </div>
+
+      <div className="w-full justify-center items-center border-b  border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end ">
+        <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
+          <div className="sm:w-7/12 w-full flex flex-col">
+            <span className="block text-primary">Product Type</span>
+          </div>
+          <div className="dropdown-container relative w-full mt-2">
+            <DropDown
+              name="type"
+              label="Product Type"
+              dropdownList={[
+                { id: 0, showName: 'Physical', name: 'Physical' },
+                { id: 1, showName: 'Digital', name: 'Digital' }
+              ]}
+              SummaryChild={<h5 className="p-0 m-0 text-primary">Type</h5>}
+              search={true}
+              selected={productDetails.type}
+              commonFunction={(e) => {
+                setProductDetails((prev) => {
+                  const updatedDetails = { ...prev, type: e.name };
+                  if (e.name === 'Physical') return { ...updatedDetails, digitalProducts: [] };
+                  return { ...updatedDetails, shippingDetails: [], manageInventry: false, stock: 0, inStock: false };
+                });
+              }}
+              error={errors.type}
+            />
+            {productDetails.type === 'Physical' && (
+              <ToggleComponent
+                label={'Manage Inventory'}
+                isEnableState={productDetails.manageInventry}
+                setIsEnableState={(e) => setProductDetails((prev) => ({ ...prev, manageInventry: e, stock: 0, inStock: false }))}
+                errorMessage={errors.manageInventry}
+              />
+            )}
+
+            <ToggleComponent
+              label={'Product on Sale ?'}
+              isEnableState={productDetails.onSale}
+              setIsEnableState={(e) => setProductDetails((prev) => ({ ...prev, onSale: e, salePrice: {}, saleEndDate: '' }))}
+              errorMessage={errors.onSale}
+            />
+
+            {(productDetails.type === 'Physical' || productDetails.type === 'Digital') && (
+              <MultiSelectCheckbox
+                divClassName={'mt-5'}
+                formLabel={'Select the currencies you want to sell in your product'}
+                label={'Select Currencies'}
+                options={[
+                  { _id: 'INR', name: 'INR' },
+                  { _id: 'AED', name: 'AED' },
+                  { _id: 'USD', name: 'USD' }
+                ]}
+                onChange={(selected) => {
+                  const supportedRegions = {
+                    INR: paymentData?.razorpay?.supports?.INR || paymentData?.stripe?.supports?.INR || paymentData?.paypal?.supports?.INR,
+                    AED: paymentData?.razorpay?.supports?.AED || paymentData?.stripe?.supports?.AED || paymentData?.paypal?.supports?.AED,
+                    USD: paymentData?.razorpay?.supports?.USD || paymentData?.stripe?.supports?.USD || paymentData?.paypal?.supports?.USD
+                  };
+
+                  if (!selected.every((currency) => supportedRegions[currency])) {
+                    if (!productDetails.site) setErrors({ ...errors, currencies: 'Site is required to select currencies' });
+                    else setErrors({ ...errors, currencies: 'Please select only supported currencies' });
+                    return;
+                  }
+
+                  setProductDetails((prev) => ({
+                    ...prev,
+                    currencies: selected,
+                    price: selected.reduce((acc, currency) => ({ ...acc, [currency]: '' }), {}),
+                    salePrice: selected.reduce((acc, currency) => ({ ...acc, [currency]: '' }), {})
+                  }));
+                  if (errors.currencies) setErrors({ ...errors, currencies: '' });
+                }}
+                selected={productDetails.currencies}
+                error={errors.currencies}
+              />
+            )}
+
+            {productDetails.type === 'Physical' && (
+              <MultiSelectCheckbox
+                divClassName={'mt-5'}
+                formLabel={'Select the Shipping Destinations you want to sell in your product'}
+                label={'Select Shipping Destinations'}
+                options={[
+                  { _id: 'india', name: 'India' },
+                  { _id: 'uae', name: 'UAE' },
+                  { _id: 'restOfTheWorld', name: 'World' }
+                ]}
+                onChange={(selected) => {
+                  const newShippingDetails = selected.map((destination) => ({ destination }));
+                  setProductDetails((prev) => ({
+                    ...prev,
+                    shippingDetails: newShippingDetails
+                  }));
+                  if (errors.shippingDetails) setErrors({ ...errors, shippingDetails: '' });
+                }}
+                selected={productDetails.shippingDetails.map((item) => item.destination)}
+                error={errors.shippingDetails}
+              />
+            )}
+
+            {productDetails.onSale && (
               <DateTimePicker
                 divClassName={'mt-5'}
                 id={'saleEndDate'}
@@ -524,17 +422,160 @@ const AddProduct = () => {
                 }}
                 errorMessage={errors.saleEndDate}
               />
-            </div>
+            )}
           </div>
         </div>
       </div>
 
+      {productDetails.currencies.length > 0 && (
+        <div className="w-full justify-center items-center border-b  border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end ">
+          <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
+            <div className="sm:w-7/12 w-full flex flex-col">
+              <span className="block text-primary">Pricing</span>
+            </div>
+            <div className="dropdown-container relative w-full mt-2">
+              {productDetails.currencies.map((currency) => (
+                <div key={currency} className="flex md:flex-row flex-col items-center justify-between md:gap-5">
+                  <FormField
+                    divClassName={'mt-5'}
+                    label={`Price (${currency})`}
+                    type="number"
+                    id={`price-${currency}`}
+                    name={`price-${currency}`}
+                    placeholder={`Price (${currency})`}
+                    onChange={(e) => {
+                      setProductDetails((prev) => ({ ...prev, price: { ...prev.price, [currency]: e.target.value } }));
+                      if (errors.price?.[currency]) setErrors((prev) => ({ ...prev, price: { ...prev.price, [currency]: '' } }));
+                    }}
+                    value={productDetails.price?.[currency] ?? ''}
+                    errorMessage={errors.price?.[currency]}
+                  />
+                  {productDetails.onSale && (
+                    <FormField
+                      divClassName={'mt-5'}
+                      label={`Sale Price (${currency})`}
+                      type="number"
+                      id={`salePrice-${currency}`}
+                      name={`salePrice-${currency}`}
+                      placeholder={`Sale Price (${currency})`}
+                      onChange={(e) => {
+                        setProductDetails((prev) => ({ ...prev, salePrice: { ...prev.salePrice, [currency]: e.target.value } }));
+                        if (errors.salePrice?.[currency]) setErrors((prev) => ({ ...prev, salePrice: { ...prev.salePrice, [currency]: '' } }));
+                      }}
+                      value={productDetails.salePrice?.[currency] ?? ''}
+                      errorMessage={errors.salePrice?.[currency]}
+                    />
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {productDetails.shippingDetails.length > 0 && (
+        <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
+          <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
+            <div className="sm:w-7/12 w-full flex flex-col">
+              <span className=" text-primary">Shipping Charges</span>
+            </div>
+            <div className="w-full">
+              <div>
+                <div>
+                  {productDetails.shippingDetails.map((shipping) => (
+                    <div key={shipping.destination}>
+                      <Accordion
+                        open={isOpen === shipping.destination}
+                        icon={<IoIosArrowDown className={`${isOpen === shipping.destination ? 'rotate-180' : ''} h-4 w-4 transition-transform`} />}
+                        className="bg-transparent text-base mt-5 p-4 bg-grey rounded-xl border border-primary"
+                      >
+                        <AccordionHeader
+                          onClick={() => setIsOpen(isOpen === shipping.destination ? null : shipping.destination)}
+                          className={`py-2.5 px-3 text-left text-base rounded-xl flex gap-2 items-center border border-primary shadow-none focus:outline-none hover:bg-gray-100 bg-white text-primary`}
+                        >
+                          <div className="flex gap-4 items-center">
+                            <span>{capitalizeFirstLetter(shipping.destination === 'restOfTheWorld' ? 'Rest of the World' : shipping.destination)}</span>
+                          </div>
+                        </AccordionHeader>
+                        <AccordionBody className="space-y-1">
+                          <div className="flex md:flex-row flex-col items-center justify-between md:gap-5">
+                            {productDetails.currencies.map((currency) => (
+                              <div key={currency}>
+                                <FormField
+                                  divClassName={'mt-2'}
+                                  label={`Charges (${currency})`}
+                                  type="number"
+                                  id={`charges-${shipping.destination}-${currency}`}
+                                  name={`charges-${shipping.destination}-${currency}`}
+                                  placeholder={`Charges (${currency})`}
+                                  onChange={(e) => {
+                                    const chargeValue = e.target.value;
+                                    setProductDetails((prev) => {
+                                      const updatedShippingDetails = prev.shippingDetails.map((detail) => {
+                                        if (detail.destination === shipping.destination) return { ...detail, charges: { ...detail.charges, [currency]: chargeValue } };
+                                        return detail;
+                                      });
+                                      return { ...prev, shippingDetails: updatedShippingDetails };
+                                    });
+                                    if (errors.charges?.[currency]) setErrors((prev) => ({ ...prev, charges: { ...prev.charges, [currency]: '' } }));
+                                  }}
+                                  value={productDetails.shippingDetails.find((detail) => detail.destination === shipping.destination)?.charges?.[currency] || ''}
+                                  errorMessage={errors.charges?.[currency]}
+                                />
+                              </div>
+                            ))}
+                          </div>
+                        </AccordionBody>
+                      </Accordion>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {productDetails.manageInventry && (
+        <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
+          <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
+            <div className="sm:w-7/12 w-full flex flex-col">
+              <span className=" text-primary">Stock and Availability</span>
+            </div>
+            <div className="w-full">
+              <div>
+                <ToggleComponent
+                  label={'In Stock'}
+                  isEnableState={productDetails.inStock}
+                  setIsEnableState={(e) => setProductDetails((prev) => ({ ...prev, inStock: e }))}
+                  errorMessage={errors.inStock}
+                />
+                <FormField
+                  divClassName={'mt-5'}
+                  label="Stock"
+                  type="number"
+                  id="stock"
+                  name="stock"
+                  placeholder="Stock"
+                  onChange={(e) => {
+                    setProductDetails((prev) => ({ ...prev, stock: e.target.value }));
+                    if (errors.stock) setErrors((prev) => ({ ...prev, stock: '' }));
+                  }}
+                  value={productDetails.stock}
+                  errorMessage={errors.stock}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* <div className="w-full justify-center items-center border-b  border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end ">
-        <NoteComponent note={id ? editCouponNote : addCouponNote} />
+        <NoteComponent note={id ? editFaqCategoryNote : addFaqCategoryNote} />
       </div> */}
       {!isScrollable && (
         <div className="w-full flex justify-end items-center gap-4 pt-8  border- border-primary">
-          <FormButtons to="/products/product-list" type="submit" onClick={handleSubmit} btnLebal={id ? (isDuplicate ? 'Add' : 'Save Changes') : 'Add'} loading={isLoading} />
+          <FormButtons to="/faq-category/faq-category-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} loading={isLoading} />
         </div>
       )}
     </div>
