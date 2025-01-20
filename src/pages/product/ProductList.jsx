@@ -18,7 +18,7 @@ const ProductList = () => {
       stock: <TruncatableFieldModal title={'Stock'} content={stock} />,
       price: <TruncatableFieldModal title={'Price'} content={price} />,
       salePrice: <TruncatableFieldModal title={'Sale Price'} content={salePrice} />,
-      sites: <TruncatableFieldModal title={'Sites'} content={`${site.name} (${site.host})}`} />,
+      site: <TruncatableFieldModal title={'Sites'} content={`${site.name} (${site.host})}`} />,
       createdAt: formatDateTime(createdAt),
       updatedAt: formatDateTime(updatedAt)
     };
@@ -49,7 +49,7 @@ const ProductList = () => {
                   { label: 'Stock', key: 'stock' },
                   { label: 'Price', key: 'price' },
                   { label: 'Discount Price', key: 'salePrice' },
-                  { label: 'Sites', key: 'sites' },
+                  { label: 'Sites', key: 'site' },
                   { label: 'Created Date', key: 'createdAt' },
                   { label: 'Updated Date', key: 'updatedAt' }
                 ]}

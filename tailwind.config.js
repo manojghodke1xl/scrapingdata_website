@@ -11,7 +11,7 @@ export default {
         darkblue: '#0856cd',
         placeholder: '#667085',
         success: '#027948',
-        pending: '#f79009',
+        pending: '#B54708',
         failed: '#f04438',
         danger: '#b32318',
         white: '#FFFFFF'
@@ -38,8 +38,8 @@ export default {
         success: '#ECFDF3',
         green: '#12b76a',
         lightgreen: '#ecfdf3',
-        pending: '#f79009',
-        fadeyellow: '#fffaeb',
+        pending: '#F79009',
+        fadeyellow: '#FFFAEB',
         darkgray: '#D0D5DD',
         grey: '#F9FAFB'
       },

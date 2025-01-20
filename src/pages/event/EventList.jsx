@@ -72,7 +72,10 @@ const EventList = () => {
                 copyPath={'/events/duplicate-event'}
                 search={true}
                 filter={true}
-                filterCategory={[{ id: 1, name: 'Status' }]}
+                filterCategory={[
+                  { id: 0, name: 'Status' },
+                  { id: 1, name: 'Sites' }
+                ]}
                 statuses={[
                   { id: 0, name: 'Active', bgColor: '#ECFDF3', color: '#027948', dotColor: '#12B76A' },
                   { id: 2, name: 'Inactive', bgColor: '#F2F4F7', color: '#344054', dotColor: '#667085' }

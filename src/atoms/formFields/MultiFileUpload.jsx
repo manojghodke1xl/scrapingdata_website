@@ -116,7 +116,7 @@ const MultipleFileUpload = ({
               </div>
             </div>
 
-            <p className="font-normal text-xs text-primary text-center m-auto">{toolTip ? toolTip : `Accepted file types: ${allowedFileTypes.join(', ')}`}</p>
+            <div className="font-normal text-xs text-primary text-center m-auto">{toolTip ? toolTip : `Accepted file types: ${allowedFileTypes.join(', ')}`}</div>
           </div>
         )}
       </div>

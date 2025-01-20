@@ -172,7 +172,7 @@ const TableComponent = ({
     if (category.name === 'Sites') setShowFilter((prev) => ({ ...prev, sites: true }));
     if (category.name === 'Event') setShowFilter((prev) => ({ ...prev, event: true }));
     if (category.name === 'Search') {
-      setFilterState({ searchTerm: '', searchKey: '' });
+      setFilterState((prev) => ({ ...prev, searchTerm: '', searchKey: '' }));
       setSelectionState((prev) => ({ ...prev, selectedCategory: { ...category, type: 'search' } }));
     }
   };
@@ -185,7 +185,7 @@ const TableComponent = ({
   };
 
   const availableSites =
-    siteModule === 'participant' || siteModule === 'payment'
+    siteModule === 'participant' || siteModule === 'payment' || siteModule === 'products'
       ? allSites
       : allSites.filter((site) => site.modules?.some((module) => module[siteModule] === true)).map((site) => ({ name: site.name, _id: site._id }));
 
