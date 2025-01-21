@@ -18,6 +18,7 @@ const PackageList = () => {
       id: _id,
       hasBooking,
       exportData: userPackage,
+      key: _id,
       title: <TruncatableFieldModal title={'Package Title'} content={title} />,
       event: <TruncatableFieldModal title={'Event'} content={`${event.name} (${event.venue})`} />,
       amount: <TruncatableFieldModal title={'Price'} content={amount} />,
@@ -57,6 +58,7 @@ const PackageList = () => {
                 siteModule={'packages'}
                 headers={[
                   { label: 'Sr No.', key: 'srno' },
+                  { label: 'Key', key: 'key' },
                   { label: 'Package Title', key: 'title' },
                   { label: 'Event', key: 'event' },
                   { label: 'Price', key: 'amount' },

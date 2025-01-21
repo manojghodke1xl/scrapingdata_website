@@ -48,6 +48,9 @@ const PaypalIntegration = () => {
     if (!paypalDetails.clientId) newErrors.clientId = 'Client Id is required';
     if (!paypalDetails.clientSecret) newErrors.clientSecret = 'Client Secret is required';
     if (!paypalDetails.environment) newErrors.environment = 'Environment is required';
+    if (!paypalDetails.redirectUrl?.success) newErrors.redirectUrlsuccess = 'Succes Redirect URL is required';
+    if (!paypalDetails.redirectUrl?.failure) newErrors.redirectUrlfailure = 'Failure Redirect URL is required';
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -82,7 +85,7 @@ const PaypalIntegration = () => {
           <span className="text-3xl font-semibold text-dark">PayPal Configuration</span>
         </div>
         <div className=" w-full flex gap-4 justify-end items-end md:w-fit lg:w-full xl:w-fit">
-          <FormButtons to={`/apps/integration/${state?.siteId}`} onClick={handleSubmit} loading={isLoading} />
+          <FormButtons to={`/apps/integration/${state?.siteId}`} onClick={handleSubmit} loading={isLoading} btnLebal="Save" />
         </div>
       </div>
 
@@ -178,8 +181,12 @@ const PaypalIntegration = () => {
               id="success"
               name="success"
               placeholder="Success URL"
-              onChange={(e) => setPaypalDetails((prev) => ({ ...prev, redirectUrl: { ...prev.redirectUrl, success: e.target.value } }))}
+              onChange={(e) => {
+                setPaypalDetails((prev) => ({ ...prev, redirectUrl: { ...prev.redirectUrl, success: e.target.value } }));
+                if (errors.redirectUrlsuccess) setErrors((prev) => ({ ...prev, redirectUrlsuccess: '' }));
+              }}
               value={paypalDetails?.redirectUrl?.success}
+              errorMessage={errors.redirectUrlsuccess}
             />
             <FormField
               divClassName={'mt-5'}
@@ -188,8 +195,12 @@ const PaypalIntegration = () => {
               id="failure"
               name="failure"
               placeholder="Failure URL"
-              onChange={(e) => setPaypalDetails((prev) => ({ ...prev, redirectUrl: { ...prev.redirectUrl, failure: e.target.value } }))}
+              onChange={(e) => {
+                setPaypalDetails((prev) => ({ ...prev, redirectUrl: { ...prev.redirectUrl, failure: e.target.value } }));
+                if (errors.redirectUrlfailure) setErrors((prev) => ({ ...prev, redirectUrlfailure: '' }));
+              }}
               value={paypalDetails?.redirectUrl?.failure}
+              errorMessage={errors.redirectUrlfailure}
             />
           </div>
         </div>

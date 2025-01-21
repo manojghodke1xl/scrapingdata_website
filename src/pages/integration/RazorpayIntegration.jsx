@@ -36,6 +36,8 @@ const RazorpayIntegration = () => {
     if (!razorpayDetails.keyId) newErrors.keyId = 'Key Id is required';
     if (!razorpayDetails.keySecret) newErrors.keySecret = 'Key Secret is required';
     if (!razorpayDetails.environment) newErrors.environment = 'Environment is required';
+    if (!razorpayDetails.redirectUrl?.success) newErrors.redirectUrlsuccess = 'Succes Redirect URL is required';
+    if (!razorpayDetails.redirectUrl?.failure) newErrors.redirectUrlfailure = 'Failure Redirect URL is required';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -82,7 +84,7 @@ const RazorpayIntegration = () => {
           <span className="text-3xl font-semibold text-dark">Razorpay Configuration</span>
         </div>
         <div className=" w-full flex gap-4 justify-end items-end md:w-fit lg:w-full xl:w-fit">
-          <FormButtons to={`/apps/integration/${state?.siteId}`} onClick={handleSubmit} loading={isLoading} />
+          <FormButtons to={`/apps/integration/${state?.siteId}`} onClick={handleSubmit} loading={isLoading} btnLebal="Save" />
         </div>
       </div>
 
@@ -179,8 +181,12 @@ const RazorpayIntegration = () => {
               id="success"
               name="success"
               placeholder="Success URL"
-              onChange={(e) => setRazorpayDetails((prev) => ({ ...prev, redirectUrl: { ...prev.redirectUrl, success: e.target.value } }))}
+              onChange={(e) => {
+                setRazorpayDetails((prev) => ({ ...prev, redirectUrl: { ...prev.redirectUrl, success: e.target.value } }));
+                if (errors.redirectUrlsuccess) setErrors((prev) => ({ ...prev, redirectUrlsuccess: '' }));
+              }}
               value={razorpayDetails?.redirectUrl?.success}
+              errorMessage={errors.redirectUrlsuccess}
             />
             <FormField
               divClassName={'mt-5'}
@@ -189,8 +195,12 @@ const RazorpayIntegration = () => {
               id="failure"
               name="failure"
               placeholder="Failure URL"
-              onChange={(e) => setRazorpayDetails((prev) => ({ ...prev, redirectUrl: { ...prev.redirectUrl, failure: e.target.value } }))}
+              onChange={(e) => {
+                setRazorpayDetails((prev) => ({ ...prev, redirectUrl: { ...prev.redirectUrl, failure: e.target.value } }));
+                if (errors.redirectUrlfailure) setErrors((prev) => ({ ...prev, redirectUrlfailure: '' }));
+              }}
               value={razorpayDetails?.redirectUrl?.failure}
+              errorMessage={errors.redirectUrlfailure}
             />
           </div>
         </div>

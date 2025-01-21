@@ -51,7 +51,7 @@ const AddProduct = () => {
     salePrice: {},
     // image: '',
     gallery: [],
-    digitalProducts: [],
+    // digitalProducts: [],
     site: ''
   });
 
@@ -82,6 +82,8 @@ const AddProduct = () => {
       })();
     }
   }, [id, setLoading]);
+
+  console.log(errors);
 
   const validate = () => {
     const newErrors = {};
@@ -138,8 +140,6 @@ const AddProduct = () => {
       setLoading(false);
     }
   };
-
-  console.log(productDetails);
 
   const checkScrollability = () => {
     const contentHeight = document.documentElement.scrollHeight;
@@ -487,17 +487,19 @@ const AddProduct = () => {
                       <Accordion
                         open={isOpen === shipping.destination}
                         icon={<IoIosArrowDown className={`${isOpen === shipping.destination ? 'rotate-180' : ''} h-4 w-4 transition-transform`} />}
-                        className="bg-transparent text-base mt-5 p-4 bg-grey rounded-xl border border-primary"
+                        className={`bg-transparent text-base mt-5 ${isOpen === shipping.destination ? 'bg-grey border border-primary' : ''}  rounded-xl`}
                       >
                         <AccordionHeader
                           onClick={() => setIsOpen(isOpen === shipping.destination ? null : shipping.destination)}
-                          className={`py-2.5 px-3 text-left text-base rounded-xl flex gap-2 items-center border border-primary shadow-none focus:outline-none hover:bg-gray-100 bg-white text-primary`}
+                          className={`py-2.5 px-3 text-left text-base flex gap-2 items-center border ${
+                            isOpen === shipping.destination ? 'rounded-t-xl' : 'rounded-xl'
+                          } border-primary shadow-none focus:outline-none bg-white text-primary`}
                         >
                           <div className="flex gap-4 items-center">
                             <span>{capitalizeFirstLetter(shipping.destination === 'restOfTheWorld' ? 'Rest of the World' : shipping.destination)}</span>
                           </div>
                         </AccordionHeader>
-                        <AccordionBody className="space-y-1">
+                        <AccordionBody className="space-y-1 p-4">
                           <div className="flex md:flex-row flex-col items-center justify-between md:gap-5">
                             {productDetails.currencies.map((currency) => (
                               <div key={currency}>

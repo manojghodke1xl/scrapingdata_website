@@ -133,7 +133,7 @@ const MultiSelectCheckbox = ({
                   : selected.some((item) => item[option._id] === true);
 
               return (
-                <div key={option._id} className={`flex items-center px-3 py-2 hover:bg-fadedblue ${isChecked ? 'bg-fadedblue ' : ''} `}>
+                <div key={option._id} className={`flex items-center px-3 py-2 hover:bg-grey ${isChecked ? 'bg-fadedblue ' : ''} `}>
                   <input
                     type="checkbox"
                     id={option._id}

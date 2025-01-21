@@ -118,11 +118,11 @@ const MaterialSidebar = () => {
           />
 
           <ReusableAccordion
-            title="Faqs"
+            title="FAQs"
             links={faqsPath}
             icon={<FaRegQuestionCircle />}
-            isOpen={openAccordion === 'Faqs'}
-            onToggle={() => setOpenAccordion(openAccordion === 'Faqs' ? null : 'Faqs')}
+            isOpen={openAccordion === 'FAQs'}
+            onToggle={() => setOpenAccordion(openAccordion === 'FAQs' ? null : 'FAQs')}
           />
 
           <ReusableAccordion

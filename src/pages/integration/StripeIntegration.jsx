@@ -48,6 +48,8 @@ const StripeIntegration = () => {
     if (!stripeDetails.publicKey) newErrors.publicKey = 'Public Key is required';
     if (!stripeDetails.secretKey) newErrors.secretKey = 'Secret Key is required';
     if (!stripeDetails.environment) newErrors.environment = 'Environment is required';
+    if (!stripeDetails.redirectUrl?.success) newErrors.redirectUrlsuccess = 'Succes Redirect URL is required';
+    if (!stripeDetails.redirectUrl?.failure) newErrors.redirectUrlfailure = 'Failure Redirect URL is required';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -82,7 +84,7 @@ const StripeIntegration = () => {
           <span className="text-3xl font-semibold text-dark">Stripe Configuration</span>
         </div>
         <div className=" w-full flex gap-4 justify-end items-end md:w-fit lg:w-full xl:w-fit">
-          <FormButtons to={`/apps/integration/${state?.siteId}`} onClick={handleSubmit} loading={isLoading} />
+          <FormButtons to={`/apps/integration/${state?.siteId}`} onClick={handleSubmit} loading={isLoading} btnLebal="Save" />
         </div>
       </div>
 
@@ -179,8 +181,12 @@ const StripeIntegration = () => {
               id="success"
               name="success"
               placeholder="Success URL"
-              onChange={(e) => setStripeDetails((prev) => ({ ...prev, redirectUrl: { ...prev.redirectUrl, success: e.target.value } }))}
+              onChange={(e) => {
+                setStripeDetails((prev) => ({ ...prev, redirectUrl: { ...prev.redirectUrl, success: e.target.value } }));
+                if (errors.redirectUrlsuccess) setErrors((prev) => ({ ...prev, redirectUrlsuccess: '' }));
+              }}
               value={stripeDetails?.redirectUrl?.success}
+              errorMessage={errors.redirectUrlsuccess}
             />
             <FormField
               divClassName={'mt-5'}
@@ -189,8 +195,12 @@ const StripeIntegration = () => {
               id="failure"
               name="failure"
               placeholder="Failure URL"
-              onChange={(e) => setStripeDetails((prev) => ({ ...prev, redirectUrl: { ...prev.redirectUrl, failure: e.target.value } }))}
+              onChange={(e) => {
+                setStripeDetails((prev) => ({ ...prev, redirectUrl: { ...prev.redirectUrl, failure: e.target.value } }));
+                if (errors.redirectUrlfailure) setErrors((prev) => ({ ...prev, redirectUrlfailure: '' }));
+              }}
               value={stripeDetails?.redirectUrl?.failure}
+              errorMessage={errors.redirectUrlfailure}
             />
           </div>
         </div>
