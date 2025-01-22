@@ -10,8 +10,7 @@ const OrderPaymentList = () => {
     const {
       _id,
       customer,
-      payment: { channel, amount, currency, status },
-      site,
+      payment: { channel, amount, currency, status, site },
       createdAt,
       updatedAt
     } = payment;
