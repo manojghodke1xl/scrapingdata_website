@@ -66,7 +66,7 @@ const AddProduct = () => {
             setProductDetails((prev) => ({
               ...prev,
               ...rest,
-              image: image ? image.url : '',
+              image: image ? image._id : '',
               imageFile: image ? image : {},
               digitalProducts: digitalProducts ? digitalProducts.map((product) => product?._id) : '',
               digitalProductsFile: digitalProducts ? digitalProducts.map((product) => ({ _id: product?._id, url: product?.url })) : [],
@@ -118,7 +118,7 @@ const AddProduct = () => {
       if (Object.keys(newErrorsSalePrice).length > 0) newErrors.salePrice = newErrorsSalePrice;
     }
 
-    if (productDetails.type === 'Digital' && productDetails.digitalProducts.length === 0) newErrors.digitalProducts = 'At least one digital product is required';
+    if (productDetails.type === 'Digital' && productDetails.digitalProducts?.length === 0) newErrors.digitalProducts = 'At least one digital product is required';
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
