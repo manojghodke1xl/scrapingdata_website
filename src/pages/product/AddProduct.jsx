@@ -16,7 +16,7 @@ import { Accordion, AccordionBody, AccordionHeader } from '@material-tailwind/re
 import { IoIosArrowDown } from 'react-icons/io';
 import DateTimePicker from '../../atoms/formFields/DateTimePicker';
 import { formatDateTime } from '../../utils/dateFormats';
-import { addProductApi, getProductByIdApi, updateProductApi } from '../../apis/product-apis';
+import { addProductApi, getProductByIdApi, getProductsBySiteApi, updateProductApi } from '../../apis/product-apis';
 import { showNotification } from '../../utils/showNotification';
 import { getIntegrationBySite } from '../../apis/payment-integration-apis';
 
@@ -34,6 +34,7 @@ const AddProduct = () => {
   const [isScrollable, setIsScrollable] = useState(false);
   const [errors, setErrors] = useState({});
   const [paymentData, setPaymentData] = useState({});
+  const [siteProducts, setSiteProducts] = useState([]);
 
   const [productDetails, setProductDetails] = useState({
     name: '',
@@ -43,6 +44,13 @@ const AddProduct = () => {
     inStock: false,
     manageInventry: false,
     onSale: false,
+    upsell: false,
+    crossSell: false,
+    postPurchase: false,
+    maximumQuantity: '',
+    // upsellProducts: [],
+    // crossSellProducts: [],
+    // postPurchaseProducts: [],
     stock: '',
     type: 'Physical',
     shippingDetails: [],
@@ -62,10 +70,12 @@ const AddProduct = () => {
         try {
           const { status, data } = await getProductByIdApi(id);
           if (status) {
-            const { image, digitalProducts, gallery, ...rest } = data.product;
+            const { image, digitalProducts, gallery, site, ...rest } = data.product;
             setProductDetails((prev) => ({
               ...prev,
               ...rest,
+              site: site ? site._id : '',
+              siteData: site ? site : {},
               image: image ? image._id : '',
               imageFile: image ? image : {},
               digitalProducts: digitalProducts ? digitalProducts.map((product) => product?._id) : '',
@@ -83,7 +93,20 @@ const AddProduct = () => {
     }
   }, [id, setLoading]);
 
-  console.log(errors);
+  const getProductsBySite = useCallback(async () => {
+    try {
+      const { status, data } = await getProductsBySiteApi(productDetails.site);
+      if (status) {
+        setSiteProducts(data.products);
+      } else showNotification('warn', data);
+    } catch (error) {
+      showNotification('error', error.message);
+    }
+  }, [productDetails.site]);
+
+  useEffect(() => {
+    if (productDetails.site && siteProducts.length === 0) getProductsBySite();
+  }, [getProductsBySite, productDetails.site, siteProducts.length]);
 
   const validate = () => {
     const newErrors = {};
@@ -175,6 +198,8 @@ const AddProduct = () => {
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
   };
 
+  const relatedProducts = siteProducts.filter((pid) => (id ? pid._id !== id : pid));
+
   return (
     <div className="py-8 p-4 sm:p-8 overflow-x-hidden mb-20">
       <div className="w-full pb-8 border-b border-primary gap-y-4 gap-2 flex flex-col items-start md:flex-row lg:flex-col xl:flex-row justify-between lg:items-start md:items-end xl:items-end">
@@ -187,22 +212,28 @@ const AddProduct = () => {
       <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
         <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
           <div className="sm:w-7/12 w-full flex flex-col">
-            <span className=" text-primary ">Category Details</span>
+            <span className=" text-primary ">Site Association</span>
           </div>
           <div className="w-full">
             <div>
-              <DropDown
-                name="Sites"
-                dropdownList={availableSites.map((site) => ({ id: site._id, showName: `${site.name} (${site.host})`, name: site._id }))}
-                SummaryChild={<h5 className="p-0 m-0 text-primary">Sites</h5>}
-                search={true}
-                selected={productDetails.site}
-                commonFunction={(e) => {
-                  setProductDetails((prev) => ({ ...prev, site: e.name }));
-                  if (errors.site) setErrors((prev) => ({ ...prev, site: '' }));
-                }}
-                error={errors.site}
-              />
+              {id && !isDuplicate ? (
+                <h1 className="text-xl flex items-center gap-2 font-bold ">
+                  <span className="text-primary">Site: {`${productDetails?.siteData?.name} (${productDetails?.siteData?.host})`}</span>
+                </h1>
+              ) : (
+                <DropDown
+                  name="Sites"
+                  dropdownList={availableSites.map((site) => ({ id: site._id, showName: `${site.name} (${site.host})`, name: site._id }))}
+                  SummaryChild={<h5 className="p-0 m-0 text-primary">Sites</h5>}
+                  search={true}
+                  selected={productDetails.site}
+                  commonFunction={(e) => {
+                    setProductDetails((prev) => ({ ...prev, site: e.name }));
+                    if (errors.site) setErrors((prev) => ({ ...prev, site: '' }));
+                  }}
+                  error={errors.site}
+                />
+              )}
             </div>
           </div>
         </div>
@@ -230,6 +261,7 @@ const AddProduct = () => {
               />
 
               <TextareaComponent
+                divClassName="mt-5"
                 label="Short Description"
                 placeholder="Enter a description..."
                 id="shortDescription"
@@ -250,6 +282,20 @@ const AddProduct = () => {
                 onChange={(e) => setProductDetails((prev) => ({ ...prev, description: e.target.value }))}
                 charCount={false}
                 errorMessage={errors.description}
+              />
+
+              <FormField
+                label="Maximum Quantity of Product purchase per order"
+                type="number"
+                id="maximumQuantity"
+                name="maximumQuantity"
+                placeholder="Maximum Quantity"
+                onChange={(e) => {
+                  setProductDetails((prev) => ({ ...prev, maximumQuantity: e.target.value }));
+                  if (errors.maximumQuantity) setErrors((prev) => ({ ...prev, maximumQuantity: '' }));
+                }}
+                value={productDetails.maximumQuantity}
+                errorMessage={errors.maximumQuantity}
               />
             </div>
           </div>
@@ -303,6 +349,66 @@ const AddProduct = () => {
                 imagePreviewUrl={productDetails?.digitalProductsFile?.map((file) => file?.name)}
                 setLoading={setLoading}
                 error={errors.digitalProducts}
+              />
+            )}
+          </div>
+        </div>
+      </div>
+
+      <div className="w-full justify-center items-center border-b  border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end ">
+        <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
+          <div className="sm:w-7/12 w-full flex flex-col">
+            <span className="block text-primary">Related Products</span>
+          </div>
+          <div className="dropdown-container relative w-full mt-2">
+            <ToggleComponent
+              label={'Product up-sell ?'}
+              isEnableState={productDetails.upsell}
+              setIsEnableState={(e) => setProductDetails((prev) => ({ ...prev, upsell: e, upsellProducts: e ? [] : null }))}
+              errorMessage={errors.upsell}
+            />
+
+            {productDetails.upsell && (
+              <MultiSelectCheckbox
+                divClassName={'mt-5'}
+                label={'Select up-sell Products'}
+                options={relatedProducts}
+                selected={productDetails.upsellProducts}
+                onChange={(e) => setProductDetails((prev) => ({ ...prev, upsellProducts: e }))}
+              />
+            )}
+
+            <ToggleComponent
+              label={'Product cross-sell ?'}
+              isEnableState={productDetails.crossSell}
+              setIsEnableState={(e) => setProductDetails((prev) => ({ ...prev, crossSell: e, crossSellProducts: e ? [] : null }))}
+              errorMessage={errors.crossSell}
+            />
+
+            {productDetails.crossSell && (
+              <MultiSelectCheckbox
+                divClassName={'mt-5'}
+                label={'Select cross-sell Products'}
+                options={relatedProducts}
+                selected={productDetails.crossSellProducts}
+                onChange={(e) => setProductDetails((prev) => ({ ...prev, crossSellProducts: e }))}
+              />
+            )}
+
+            <ToggleComponent
+              label={'Product post-purchase ?'}
+              isEnableState={productDetails.postPurchase}
+              setIsEnableState={(e) => setProductDetails((prev) => ({ ...prev, postPurchase: e, postPurchaseProducts: e ? [] : null }))}
+              errorMessage={errors.postPurchase}
+            />
+
+            {productDetails.postPurchase && (
+              <MultiSelectCheckbox
+                divClassName={'mt-5'}
+                label={'Select post-purchase Products'}
+                options={relatedProducts}
+                selected={productDetails.postPurchaseProducts}
+                onChange={(e) => setProductDetails((prev) => ({ ...prev, postPurchaseProducts: e }))}
               />
             )}
           </div>
