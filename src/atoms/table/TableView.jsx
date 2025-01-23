@@ -57,7 +57,7 @@ const TableView = ({
           </tr>
         </thead>
         <tbody>
-          {isLoading ? (
+          {isLoading || rows.length === 0 ? (
             <tr>
               <td colSpan={headers.length + (selectable ? 1 : 0) + (actions ? 1 : 0)}>
                 <div role="status" className="w-full border border-gray-200 divide-y divide-gray-200 rounded shadow animate-pulse dark:divide-gray-200 dark:border-gray-200">
@@ -115,11 +115,14 @@ const TableView = ({
               );
             })
           ) : (
-            <tr>
-              <td colSpan={headers.length + (selectable ? 1 : 0) + (actions ? 1 : 0)} className="text-center py-4 text-gray-500 border-b border-primary">
-                No data available
-              </td>
-            </tr>
+            !isLoading &&
+            rows.length === 0 && (
+              <tr>
+                <td colSpan={headers.length + (selectable ? 1 : 0) + (actions ? 1 : 0)} className="text-center py-4 text-gray-500 border-b border-primary">
+                  No data available
+                </td>
+              </tr>
+            )
           )}
         </tbody>
       </table>
