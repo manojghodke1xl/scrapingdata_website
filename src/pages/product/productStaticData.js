@@ -1,6 +1,7 @@
 export const acceptedProductTypes = [
   // PDF
   'application/pdf',
+  '.pdf',
 
   // PowerPoint
   'application/vnd.ms-powerpoint',

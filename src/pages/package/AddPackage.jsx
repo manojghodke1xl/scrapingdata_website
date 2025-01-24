@@ -46,7 +46,8 @@ const AddPackage = () => {
     if (!packageDetails.title.trim()) newErrors.title = 'Name is required';
     if (packageDetails.maxLimit < 0 || !packageDetails.maxLimit) newErrors.maxLimit = 'Max limit should be greater than 0';
     if (!packageDetails.event) newErrors.event = 'Event is required';
-    if (!packageDetails.ticketIdPattern.trim()) newErrors.ticketIdPattern = 'Ticket ID Pattern is required';
+    if (!packageDetails.ticketIdPattern) newErrors.ticketIdPattern = 'Ticket ID Pattern is required';
+    if (!packageDetails.ticketIdPattern?.trim()) newErrors.ticketIdPattern = 'Ticket ID Pattern is required';
     if (
       (paymentData?.razorpay?.supports?.INR || paymentData?.stripe?.supports?.INR || paymentData?.paypal?.supports?.INR) &&
       (!packageDetails.currencies.INR || packageDetails.currencies.INR <= 0) &&
