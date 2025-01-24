@@ -15,3 +15,7 @@ export const getFileByIdApi = async (id) => {
 export const deleteFileApi = async (ids) => {
   return await deleteMethodCall(`${import.meta.env.VITE_API_URL}/file`, ids);
 };
+
+export const getFilesBySiteIdApi = async (id) => {
+  return await getMethodCall(`${import.meta.env.VITE_API_URL}/files-site/${id}`);
+};

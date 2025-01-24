@@ -14,7 +14,7 @@ const BookingList = () => {
       event,
       package: { title },
       site,
-      staus,
+      status,
       createdAt,
       updatedAt,
       phoneNumber,
@@ -32,14 +32,14 @@ const BookingList = () => {
       event: <TruncatableFieldModal title={'Event Name'} content={`${event.name} (${event.venue})`} />,
       title: <TruncatableFieldModal title={'Package Name'} content={title} />,
       site: <TruncatableFieldModal title={'Sites'} content={`${site?.name} (${site?.host})`} />,
-      staus: (
+      status: (
         <div
           className={`rounded-xl ${
-            staus === 'success' ? 'bg-lightgreen text-success' : staus === 'pending' ? 'bg-fadeyellow text-pending' : 'bg-fadedred text-failed'
+            status === 'success' ? 'bg-lightgreen text-success' : status === 'pending' ? 'bg-fadeyellow text-pending' : 'bg-fadedred text-failed'
           } px-2 py-1 w-fit flex gap-2 items-center`}
         >
-          <span className={`min-w-[12px] min-h-[12px] rounded-full ${staus === 'success' ? 'bg-green' : 'bg-pending'}`}></span>
-          <span>{staus === 'success' ? 'Success' : staus === 'pending' ? 'Pending' : 'Failed'}</span>
+          <span className={`min-w-[12px] min-h-[12px] rounded-full ${status === 'success' ? 'bg-green' : 'bg-pending'}`}></span>
+          <span>{status === 'success' ? 'Success' : status === 'pending' ? 'Pending' : 'Failed'}</span>
         </div>
       ),
       createdAt: formatDateTime(createdAt),
@@ -71,7 +71,7 @@ const BookingList = () => {
                   { label: 'Event', key: 'event' },
                   { label: 'Package', key: 'title' },
                   { label: 'Site', key: 'site' },
-                  { label: 'Status', key: 'staus' },
+                  { label: 'Status', key: 'status' },
                   { label: 'Created At', key: 'createdAt' },
                   { label: 'Updated At', key: 'updatedAt' }
                 ]}
