@@ -10,23 +10,23 @@ const ParticipantList = () => {
   const [event, setEvent] = useState([]);
 
   const rows = participants.map((participant) => {
-    const { _id, site, event, name, email, attendees, status, createdAt, updatedAt } = participant;
+    const { _id, booking, createdAt, updatedAt, ticketId } = participant;
     return {
       id: _id,
       exportData: participant,
-      name: <TruncatableFieldModal title={'Name'} content={name} />,
-      email: <TruncatableFieldModal title={'Email'} content={email} />,
-      attendees: attendees,
-      site: <TruncatableFieldModal title={'Sites'} content={`${site?.name} (${site?.host})`} />,
-      event: <TruncatableFieldModal title={'Event'} content={event.name} />,
+      name: <TruncatableFieldModal title={'Name'} content={booking?.name ?? ''} />,
+      email: <TruncatableFieldModal title={'Email'} content={booking?.email ?? ''} />,
+      ticketId: <TruncatableFieldModal title={'Ticket ID'} content={ticketId ?? ''} />,
+      site: <TruncatableFieldModal title={'Sites'} content={`${booking?.site?.name} (${booking?.site?.host})`} />,
+      event: <TruncatableFieldModal title={'Event'} content={booking?.event?.name ?? ''} />,
       status: (
         <div
           className={`rounded-xl ${
-            status === 'confirmed' ? 'bg-lightgreen text-success' : status === 'pending' ? 'bg-fadeyellow text-pending' : 'bg-fadedred text-failed'
+            booking?.status === 'success' ? 'bg-lightgreen text-success' : booking?.status === 'pending' ? 'bg-fadeyellow text-pending' : 'bg-fadedred text-failed'
           } px-2 py-1 w-fit flex gap-2 items-center`}
         >
-          <span className={`min-w-[12px] min-h-[12px] rounded-full ${status === 'confirmed' ? 'bg-green' : 'bg-pending'}`}></span>
-          <span>{status === 'confirmed' ? 'Confirmed' : status === 'pending' ? 'Pending' : status === 'cancelled' ? 'Cancelled' : 'Failed'}</span>
+          <span className={`min-w-[12px] min-h-[12px] rounded-full ${booking?.status === 'success' ? 'bg-green' : 'bg-pending'}`}></span>
+          <span>{booking?.status === 'success' ? 'Confirmed' : booking?.status === 'pending' ? 'Pending' : booking?.status === 'cancelled' ? 'Cancelled' : 'Failed'}</span>
         </div>
       ),
       createdAt: formatDateTime(createdAt),
@@ -60,7 +60,7 @@ const ParticipantList = () => {
                   { label: 'Sr No.', key: 'srno' },
                   { label: 'Name', key: 'name' },
                   { label: 'Email', key: 'email' },
-                  { label: 'Attendees', key: 'attendees' },
+                  { label: 'Ticket ID', key: 'ticketId' },
                   { label: 'Sites', key: 'site' },
                   { label: 'Event', key: 'event' },
                   { label: 'Status', key: 'status' },

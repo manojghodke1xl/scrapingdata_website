@@ -23,6 +23,7 @@ const AddPackage = () => {
   const [packageDetails, setPackageDetails] = useState({
     title: '',
     description: '',
+    ticketIdPattern: '',
     currencyNotes: {
       INR: false,
       AED: false,
@@ -45,6 +46,7 @@ const AddPackage = () => {
     if (!packageDetails.title.trim()) newErrors.title = 'Name is required';
     if (packageDetails.maxLimit < 0 || !packageDetails.maxLimit) newErrors.maxLimit = 'Max limit should be greater than 0';
     if (!packageDetails.event) newErrors.event = 'Event is required';
+    if (!packageDetails.ticketIdPattern.trim()) newErrors.ticketIdPattern = 'Ticket ID Pattern is required';
     if (
       (paymentData?.razorpay?.supports?.INR || paymentData?.stripe?.supports?.INR || paymentData?.paypal?.supports?.INR) &&
       (!packageDetails.currencies.INR || packageDetails.currencies.INR <= 0) &&
@@ -212,6 +214,19 @@ const AddPackage = () => {
                 value={packageDetails?.description}
                 onChange={(e) => setPackageDetails((prev) => ({ ...prev, description: e.target.value }))}
                 charCount={false}
+              />
+              <FormField
+                label="Ticket ID Pattern"
+                type="text"
+                id="ticketIdPattern"
+                name="ticketIdPattern"
+                placeholder="Ticket ID Pattern"
+                onChange={(e) => {
+                  setPackageDetails((prev) => ({ ...prev, ticketIdPattern: e.target.value }));
+                  if (errors.ticketIdPattern) setErrors((prev) => ({ ...prev, ticketIdPattern: '' }));
+                }}
+                value={packageDetails.ticketIdPattern}
+                errorMessage={errors.ticketIdPattern}
               />
               {packageDetails.event && (
                 <>
