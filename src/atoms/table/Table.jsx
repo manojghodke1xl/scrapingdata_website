@@ -243,7 +243,7 @@ const TableComponent = ({
           </div>
         )}
 
-        <div className="overflow-x-auto custom-scrollbar ">
+        <div className="overflow-x-auto custom-scrollbar">
           <TableView
             selectable={selectable}
             selectionState={selectionState}

@@ -13,7 +13,7 @@ const StructuredLayout = () => {
               <MaterialSidebar />
             </div>
           </div>
-          <div className="calcc-widthhh overflow-y-auto min-h-screen">
+          <div className="calcc-widthhh overflow-y-auto min-h-screen custom-scrollbar">
             <Outlet />
           </div>
         </div>
