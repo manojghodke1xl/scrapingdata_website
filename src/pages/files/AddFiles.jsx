@@ -6,9 +6,9 @@ import { acceptedExtensions, acceptedProductTypes } from '../product/productStat
 import DropDown from '../../atoms/formFields/DropDown';
 import useGlobalContext from '../../hooks/useGlobalContext';
 import { useEffect, useState } from 'react';
-import { uploadMultipleFiles } from '../../utils/fileUploads';
+import { uploadMultipleCustomFiles } from '../../utils/fileUploads';
 import { showNotification } from '../../utils/showNotification';
-import { addFileApi, updateFileApi } from '../../apis/file-apis';
+import { addFileApi, getFileByIdApi, updateFileApi } from '../../apis/file-apis';
 
 const AddFiles = () => {
   const navigate = useNavigate();
@@ -29,9 +29,26 @@ const AddFiles = () => {
     attachments: []
   });
 
+  useEffect(() => {
+    if (id) {
+      setLoading(true);
+      (async () => {
+        const { status, data } = await getFileByIdApi(id);
+        if (status) {
+          const { site, attachments, ...rest } = data.file;
+          setFile((prev) => ({ ...prev, ...rest, site: site._id, attachments }));
+        } else showNotification('warn', data);
+        setLoading(false);
+      })()
+        .catch((error) => showNotification('error', error.message))
+        .finally(() => setLoading(false));
+    }
+  }, [id, setLoading]);
+
   const handleFileUpload = (e) => {
     e.preventDefault();
-    setAttachments([...attachments, ...e.target.files]);
+    const newFiles = Array.from(e.target.files).map((file) => ({ file, customName: file.name }));
+    setAttachments((prev) => [...prev, ...newFiles]);
     if (errors.files) setErrors({ ...errors, files: '' });
   };
 
@@ -46,7 +63,7 @@ const AddFiles = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
-    const fileIds = await uploadMultipleFiles(attachments);
+    const fileIds = await uploadMultipleCustomFiles(attachments);
     if (fileIds.length > 0) {
       const payload = {
         site: file.site,
@@ -123,6 +140,8 @@ const AddFiles = () => {
                 label={'Attachment Files'}
                 isMultiple
                 files={attachments}
+                existingFiles={file.attachments}
+                setExistingFiles={setFile}
                 setFiles={setAttachments}
                 allowedTypes={acceptedProductTypes}
                 allowedFileTypes={acceptedExtensions}

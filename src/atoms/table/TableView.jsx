@@ -118,8 +118,8 @@ const TableView = ({
             !isLoading &&
             rows.length === 0 && (
               <tr>
-                <td colSpan={headers.length + (selectable ? 1 : 0) + (actions ? 1 : 0)} className="text-center py-4 text-gray-500 border-b border-primary">
-                  No data available
+                <td colSpan={headers.length + (selectable ? 1 : 0) + (actions ? 1 : 0)} className="text-center ">
+                  <p className="text-secondary p-4 border-b border-primary">No Data Available</p>
                 </td>
               </tr>
             )

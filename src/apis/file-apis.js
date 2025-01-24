@@ -9,7 +9,7 @@ export const updateFileApi = async (id, userData) => {
 };
 
 export const getFileByIdApi = async (id) => {
-  return await getMethodCall(`${import.meta.env.VITE_API_URL}/file/${id}`);
+  return await getMethodCall(`${import.meta.env.VITE_API_URL}/file/${id}?p=1`);
 };
 
 export const deleteFileApi = async (ids) => {

@@ -92,3 +92,36 @@ export const uploadMultipleFiles = async (files = []) => {
 
   return fileIds;
 };
+
+export const uploadMultipleCustomFiles = async (files = []) => {
+  if (!files.length) return;
+
+  const fileIds = [];
+
+  for (const userFile of files) {
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/upload`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: localStorage.getItem('auth')
+      },
+      body: JSON.stringify({ name: userFile.customName, size: userFile.file.size, mime: userFile.file.type })
+    });
+
+    const { data, error } = await res.json();
+
+    if (!res.ok) throw new Error(error || 'Failed to get upload details');
+
+    const fd = new FormData();
+    for (const [key, val] of Object.entries(data.fields)) fd.append(key, val);
+    fd.append('file', userFile.file);
+
+    const uploadRes = await fetch(data.url, { method: 'POST', body: fd });
+
+    if (!uploadRes.ok) throw new Error('File upload failed');
+
+    fileIds.push(data._id);
+  }
+
+  return fileIds;
+};

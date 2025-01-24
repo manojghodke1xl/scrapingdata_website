@@ -12,7 +12,7 @@ const TruncatableFieldModal = ({ title, content = '', maxLength = 20 }) => {
   return (
     <>
       <span>
-        {isTruncated ? content.substring(0, maxLength) + '...' : content}{' '}
+        {isTruncated ? content.substring(0, maxLength) + '...' : content === '' ? '-' : content}{' '}
         {isTruncated && (
           <button onClick={handleOpen} className="btn btn-link p-0 m-0" style={{ textDecoration: 'none' }} aria-label="View full content">
             View

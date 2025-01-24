@@ -23,12 +23,12 @@ const TableRowActions = ({ row, edit, editPath, view, viewPath, apps, appsPath, 
   return (
     <td className="w-full flex gap-2 items-center px-6 py-2 whitespace-nowrap font-medium text-secondary">
       {/* If there are more than 2 actions, show dropdown */}
-      {availableActions.length > 2 ? (
-        <details className="relative inline-block text-left">
+      {availableActions.length > 0 && (
+        <details className="inline-block text-left">
           <summary className="text-white p-1.5 rounded-xl hover:bg-white cursor-pointer focus:outline-none">
             <BsThreeDotsVertical size={20} className="text-secondary hover:text-primary" />
           </summary>
-          <ul className="absolute top-full mt-2 right-0 z-40 w-40 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5">
+          <ul className="absolute mt-2 right-10 z-40 w-40 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5">
             {availableActions.map((action, i) => (
               <button
                 key={i}
@@ -54,29 +54,6 @@ const TableRowActions = ({ row, edit, editPath, view, viewPath, apps, appsPath, 
             ))}
           </ul>
         </details>
-      ) : (
-        availableActions.map((action, i) => (
-          <span
-            key={i}
-            className="text-2xl hover:text-gray-900 cursor-pointer"
-            onClick={() => {
-              if (action.type === 'edit') navigate(editPath + '/' + row.id);
-              if (action.type === 'view') navigate(viewPath + '/' + row.id);
-              if (action.type === 'apps') navigate(appsPath + '/' + row.id);
-              if (action.type === 'copy') navigate(copyPath + '/' + row.id);
-              if (action.type === 'delete') {
-                setSelectionState((prev) => ({ ...prev, deleteId: row.id }));
-                setModalState((prev) => ({ ...prev, isDeleteModelOpen: true }));
-              }
-            }}
-          >
-            {action.type === 'edit' && <MdEdit />}
-            {action.type === 'view' && <MdRemoveRedEye />}
-            {action.type === 'apps' && <MdOutlineApps />}
-            {action.type === 'copy' && <FiCopy />}
-            {action.type === 'delete' && <RiDeleteBinLine />}
-          </span>
-        ))
       )}
     </td>
   );

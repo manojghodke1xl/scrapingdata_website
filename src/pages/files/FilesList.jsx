@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { IoMdAdd } from 'react-icons/io';
 import TruncatableFieldModal from '../../atoms/modal/TruncatableFeildModel';
 import { formatDateTime } from '../../utils/dateFormats';
+import { deleteFileApi } from '../../apis/file-apis';
 
 const FilesList = () => {
   const [files, setFiles] = useState([]);
@@ -51,11 +52,15 @@ const FilesList = () => {
                 apiUrl={'files'}
                 tableCountLabel={true}
                 pagination={true}
-                actions={true}
+                // actions={true}
                 // edit={true}
                 // editPath={'/files/edit-file'}
                 // view={true}
                 // viewPath={'/files/view-file'}
+                deleteBtn={true}
+                deleteApi={deleteFileApi}
+                deleteMessage="Are you sure you want to delete this file?"
+                deleteLabel={'Delete File'}
                 search={true}
                 filter={true}
                 filterCategory={[{ id: 1, name: 'Sites' }]}
