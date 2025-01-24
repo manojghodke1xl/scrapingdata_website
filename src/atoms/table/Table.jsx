@@ -63,7 +63,7 @@ const TableComponent = ({
   });
   const [tableState, setTableState] = useState({
     currentPage: 1,
-    itemsPerPage: 10,
+    itemsPerPage: 25,
     totalCount: 0
   });
   const [selectionState, setSelectionState] = useState({

@@ -21,9 +21,9 @@ const TableRowActions = ({ row, edit, editPath, view, viewPath, apps, appsPath, 
   const availableActions = getActions(row);
 
   return (
-    <td className="flex gap-2 items-center px-6 py-2 whitespace-nowrap font-medium text-secondary">
+    <td className="flex gap-2 items-center px-6 whitespace-nowrap font-medium text-secondary text-sm">
       {/* If there are more than 2 actions, show dropdown */}
-      {availableActions.length > 0 ?   (
+      {availableActions.length > 0 ? (
         <details className="inline-block text-left">
           <summary className="text-white p-1.5 rounded-xl hover:bg-white cursor-pointer focus:outline-none">
             <BsThreeDotsVertical size={20} className="text-secondary hover:text-primary" />
@@ -32,7 +32,7 @@ const TableRowActions = ({ row, edit, editPath, view, viewPath, apps, appsPath, 
             {availableActions.map((action, i) => (
               <button
                 key={i}
-                className="w-full flex gap-2 items-center px-4 py-2 text-sm text-secondary hover:bg-gray-100 hover:text-primary cursor-pointer focus:outline-none"
+                className="w-full flex gap-2 items-center px-4 py-2 text-secondary hover:bg-gray-100 hover:text-primary cursor-pointer focus:outline-none"
                 onClick={() => {
                   if (action.type === 'edit') navigate(editPath + '/' + row.id);
                   if (action.type === 'view') navigate(viewPath + '/' + row.id);

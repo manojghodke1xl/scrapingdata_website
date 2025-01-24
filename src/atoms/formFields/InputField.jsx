@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
-const FormField = ({ divClassName, label, type = 'text', name, id, placeholder, showPasswordToggle = false, disabled, errorMessage = '', onChange, value }) => {
+const FormField = ({ divClassName, label, type = 'text', name, id, placeholder, showPasswordToggle = false, disabled, errorMessage = '', onChange, value, preview = false }) => {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
@@ -34,6 +34,11 @@ const FormField = ({ divClassName, label, type = 'text', name, id, placeholder, 
         )}
       </div>
       {errorMessage && <p className="text-red-500 mt-1 text-sm">{errorMessage}</p>}
+      {preview && (
+        <p className="text-secondary mt-1 text-sm">
+          <span className="text-primary font-semibold">Ticket preview:</span> {preview}
+        </p>
+      )}
     </div>
   );
 };

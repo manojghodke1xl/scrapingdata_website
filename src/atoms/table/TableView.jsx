@@ -26,11 +26,11 @@ const TableView = ({
 }) => {
   return (
     <>
-      <table className="min-w-full divide-y divide-gray-200">
+      <table className="min-w-full divide-y divide-gray-200 text-sm ">
         <thead>
           <tr>
             {selectable && (
-              <th scope="col" className="px-4 py-2.5 text-left">
+              <th scope="col" className="px-4 py-2 text-left">
                 <label className="inline-flex items-center cursor-pointer">
                   <input
                     type="checkbox"
@@ -42,7 +42,7 @@ const TableView = ({
               </th>
             )}
             {headers?.map((header, index) => (
-              <th key={index} scope="col" className="px-6 py-2.5 text-left font-semibold text-primary">
+              <th key={index} scope="col" className="px-6 text-left font-semibold text-primary">
                 <div className="flex items-center gap-2">
                   <span className="whitespace-nowrap">{header.label}</span>
                   {header.sortable !== false && <RxCaretSort size={20} strokeWidth="0.5" fill="none" />}
@@ -50,7 +50,7 @@ const TableView = ({
               </th>
             ))}
             {actions && (
-              <th scope="col" className="px-6 py-2 text-left font-semibold text-primary">
+              <th scope="col" className="px-6 text-left font-semibold text-primary">
                 Actions
               </th>
             )}
@@ -91,7 +91,7 @@ const TableView = ({
                     </td>
                   )}
                   {headers.map((header, headerIndex) => (
-                    <td key={`${row.id}-${headerIndex}`} className="px-6 py-2 text-secondary whitespace-nowrap font-medium">
+                    <td key={`${row.id}-${headerIndex}`} className="px-6 text-secondary whitespace-nowrap font-medium">
                       {header.key === 'srno' ? ((currentPage - 1) * itemsPerPage + (index + 1)).toString().padStart(3, '0') : row[header.key]}
                     </td>
                   ))}

@@ -215,6 +215,7 @@ const AddPackage = () => {
                 onChange={(e) => setPackageDetails((prev) => ({ ...prev, description: e.target.value }))}
                 charCount={false}
               />
+
               <FormField
                 label="Ticket ID Pattern"
                 type="text"
@@ -222,12 +223,14 @@ const AddPackage = () => {
                 name="ticketIdPattern"
                 placeholder="Ticket ID Pattern"
                 onChange={(e) => {
-                  setPackageDetails((prev) => ({ ...prev, ticketIdPattern: e.target.value }));
+                  setPackageDetails((prev) => ({ ...prev, ticketIdPattern: e.target.value.replace(/[^a-zA-Z0-9]/g, '').toUpperCase() }));
                   if (errors.ticketIdPattern) setErrors((prev) => ({ ...prev, ticketIdPattern: '' }));
                 }}
                 value={packageDetails.ticketIdPattern}
+                preview={packageDetails.ticketIdPattern ? `${packageDetails.ticketIdPattern}_001` : ''}
                 errorMessage={errors.ticketIdPattern}
               />
+              {id && <p className="text-secondary text-sm mt-4"> If you change ticket pattern it won&apos;t any impact on existing tickets already generated in this package.</p>}
               {packageDetails.event && (
                 <>
                   <MultiSelectCheckbox
