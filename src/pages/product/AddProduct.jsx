@@ -76,7 +76,7 @@ const AddProduct = () => {
               ...rest,
               site: site ? site._id : '',
               siteData: site ? site : {},
-              image: image ? image._id : '',
+              image: image ? image._id : undefined,
               imageFile: image ? image : {},
               digitalProducts: digitalProducts ? digitalProducts.map((product) => product?._id) : '',
               digitalProductsFile: digitalProducts ? digitalProducts.map((product) => ({ _id: product?._id, url: product?.url })) : [],
@@ -364,7 +364,7 @@ const AddProduct = () => {
             <ToggleComponent
               label={'Product up-sell ?'}
               isEnableState={productDetails.upsell}
-              setIsEnableState={(e) => setProductDetails((prev) => ({ ...prev, upsell: e, upsellProducts: e ? [] : null }))}
+              setIsEnableState={(e) => setProductDetails((prev) => ({ ...prev, upsell: e, upsellProducts: [] }))}
               errorMessage={errors.upsell}
             />
 
@@ -381,7 +381,7 @@ const AddProduct = () => {
             <ToggleComponent
               label={'Product cross-sell ?'}
               isEnableState={productDetails.crossSell}
-              setIsEnableState={(e) => setProductDetails((prev) => ({ ...prev, crossSell: e, crossSellProducts: e ? [] : null }))}
+              setIsEnableState={(e) => setProductDetails((prev) => ({ ...prev, crossSell: e, crossSellProducts: [] }))}
               errorMessage={errors.crossSell}
             />
 
@@ -398,7 +398,7 @@ const AddProduct = () => {
             <ToggleComponent
               label={'Product post-purchase ?'}
               isEnableState={productDetails.postPurchase}
-              setIsEnableState={(e) => setProductDetails((prev) => ({ ...prev, postPurchase: e, postPurchaseProducts: e ? [] : null }))}
+              setIsEnableState={(e) => setProductDetails((prev) => ({ ...prev, postPurchase: e, postPurchaseProducts: [] }))}
               errorMessage={errors.postPurchase}
             />
 
