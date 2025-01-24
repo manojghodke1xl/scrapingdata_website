@@ -51,6 +51,7 @@ const AddCoupon = () => {
     if (!couponDetails.endDate) newErrors.endDate = 'End Date is required';
     if (!couponDetails.type) newErrors.type = 'Coupon Type is required';
     if (!couponDetails.value) newErrors.value = 'Discount value is required';
+    if (couponDetails.type === 'percentage' && (couponDetails.value < 1 || couponDetails.value > 100)) newErrors.value = 'Discount value should be between 1 and 100 as type is percentage';
     if (couponDetails.sites.length === 0) newErrors.sites = 'At least one site must be selected';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;

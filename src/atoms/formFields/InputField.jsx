@@ -14,6 +14,7 @@ const FormField = ({ divClassName, label, type = 'text', name, id, placeholder, 
           type={showPasswordToggle && showPassword ? 'text' : type}
           id={id}
           onChange={onChange}
+          onWheel={(e) => e.target.blur()}
           value={value}
           name={name}
           placeholder={placeholder}

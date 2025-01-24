@@ -57,7 +57,7 @@ const TableView = ({
           </tr>
         </thead>
         <tbody>
-          {isLoading || rows.length === 0 ? (
+          {isLoading ? (
             <tr>
               <td colSpan={headers.length + (selectable ? 1 : 0) + (actions ? 1 : 0)}>
                 <div role="status" className="w-full border border-gray-200 divide-y divide-gray-200 rounded shadow animate-pulse dark:divide-gray-200 dark:border-gray-200">
