@@ -30,7 +30,7 @@ const FeedbackList = () => {
   });
 
   return (
-    <div className="min-h-screen py-8 p-4 sm:p-8 overflow-x-hidden mb-20">
+    <div className="py-8 p-4 sm:p-8 overflow-x-hidden mb-20">
       <div className=" w-full">
         <div className="w-full flex md:flex-wrap gap-y-3 sm:flex-nowrap justify-between pb-5 border-b border-primary">
           <div className="">
