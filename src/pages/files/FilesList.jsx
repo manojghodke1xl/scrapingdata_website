@@ -11,10 +11,11 @@ const FilesList = () => {
 
   const rows = files.map((files) => {
     const { _id, site, attachments, createdAt, updatedAt } = files;
+    console.log('site', site);
     return {
       id: _id,
       attachments: <TruncatableFieldModal title={'File Name'} content={attachments.map((a) => `${a.name}`).join(', ')} />,
-      sites: <TruncatableFieldModal title={'Sites'} content={`${site.name} (${site.host})}`} />,
+      site: <TruncatableFieldModal title={'Sites'} content={`${site.name} (${site.host})}`} />,
       createdAt: formatDateTime(createdAt),
       updatedAt: formatDateTime(updatedAt)
     };

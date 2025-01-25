@@ -15,7 +15,7 @@ const modules = {
   ]
 };
 
-const TextEditor = ({ value, onChange, label = 'Body', placeholder = '', maxLength = 5000 }) => {
+const TextEditor = ({ value, onChange, label = 'Body', placeholder = '', errorMessage = '', maxLength = 5000 }) => {
   return (
     <div className="mt-5">
       <label htmlFor="editor" className="block text-gray-700 font-semibold mb-2">
@@ -27,7 +27,9 @@ const TextEditor = ({ value, onChange, label = 'Body', placeholder = '', maxLeng
         value={value}
         onChange={onChange}
         placeholder={placeholder}
-        className="rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className={`rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 border ${
+          errorMessage ? 'border-fadered focus:border-fadered' : ' border-primary focus:border-blue'
+        } `}
         modules={modules}
         formats={['header', 'bold', 'italic', 'underline', 'strike', 'blockquote', 'list', 'bullet', 'indent', 'color', 'link', 'image']}
       />
@@ -36,6 +38,7 @@ const TextEditor = ({ value, onChange, label = 'Body', placeholder = '', maxLeng
           {value.length}/{maxLength}
         </p>
       </div>
+      {errorMessage && <p className="text-red-500 mt-1 text-sm">{errorMessage}</p>}
     </div>
   );
 };

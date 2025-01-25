@@ -7,6 +7,12 @@ import FormField from '../../../atoms/formFields/InputField';
 import TextEditor from '../../../atoms/formFields/TextEditor';
 import { addEmailTemplateApi, getEmailTemplateByIdApi, updateEmailTemplateApi } from '../../../apis/templates/email-template-apis';
 import { showNotification } from '../../../utils/showNotification';
+import DocumentFileUpload from '../../../atoms/formFields/DocumentFileUpload';
+import { acceptedExtensions, acceptedProductTypes } from '../../product/productStaticData';
+import FileTypesTooltip from '../../../atoms/formFields/FileTypesTooltip';
+import MultiSelectCheckbox from '../../../atoms/formFields/MultiSelectCheckBox';
+import { getFilesBySiteIdApi } from '../../../apis/file-apis';
+import { uploadMultipleCustomFiles } from '../../../utils/fileUploads';
 
 const AddEmailTemplate = () => {
   const navigate = useNavigate();
@@ -22,8 +28,11 @@ const AddEmailTemplate = () => {
     site: '',
     name: '',
     subject: '',
-    body: ''
+    body: '',
+    files: []
   });
+  const [files, setFiles] = useState([]);
+  const [attachments, setAttachments] = useState([]);
 
   useEffect(() => {
     if (id) {
@@ -40,6 +49,22 @@ const AddEmailTemplate = () => {
     }
   }, [id, setLoading]);
 
+  useEffect(() => {
+    if (emailTemplate.site) {
+      (async () => {
+        const { status, data } = await getFilesBySiteIdApi(emailTemplate.site);
+        if (status) {
+          setFiles(data.file);
+        } else showNotification('warn', data);
+      })().catch((error) => showNotification('error', error.message));
+    }
+  }, [emailTemplate.site, setLoading]);
+
+  const handleFileUpload = (e) => {
+    e.preventDefault();
+    const newFiles = Array.from(e.target.files).map((file) => ({ file, customName: file.name }));
+    setAttachments((prev) => [...prev, ...newFiles]);
+  };
   const validate = () => {
     const newErrors = {};
     if (!emailTemplate.site) newErrors.site = 'Site is required';
@@ -55,7 +80,10 @@ const AddEmailTemplate = () => {
     if (!validate()) return;
     setLoading(true);
     try {
-      const { status, data } = await (id ? updateEmailTemplateApi(id, emailTemplate) : addEmailTemplateApi(emailTemplate));
+      let fileIds = [];
+      if (attachments.length > 0) fileIds = await uploadMultipleCustomFiles(attachments);
+      const payload = { ...emailTemplate, files: [...emailTemplate.files, ...fileIds], fileId: files._id };
+      const { status, data } = await (id ? updateEmailTemplateApi(id, payload) : addEmailTemplateApi(payload));
       if (status) {
         showNotification('success', data.message);
         navigate('/templates/email-template-list');
@@ -130,7 +158,7 @@ const AddEmailTemplate = () => {
                   setEmailTemplate((prev) => ({ ...prev, name: e.target.value }));
                   if (errors.name) setErrors((prev) => ({ ...prev, name: '' }));
                 }}
-                error={errors.name}
+                errorMessage={errors.name}
               />
               {/* <DropDown
                 mt="mt-5"
@@ -223,10 +251,50 @@ const AddEmailTemplate = () => {
                   setEmailTemplate((prev) => ({ ...prev, subject: e.target.value }));
                   if (errors.subject) setErrors((prev) => ({ ...prev, subject: '' }));
                 }}
-                error={errors.subject}
+                errorMessage={errors.subject}
               />
 
-              <TextEditor value={emailTemplate.body} onChange={(e) => setEmailTemplate((prev) => ({ ...prev, body: e }))} label="Body" placeholder="Body..." />
+              <TextEditor
+                value={emailTemplate.body}
+                onChange={(e) => {
+                  setEmailTemplate((prev) => ({ ...prev, body: e }));
+                  if (errors.body) setErrors((prev) => ({ ...prev, body: '' }));
+                }}
+                label="Body"
+                placeholder="Body..."
+                errorMessage={errors.body}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
+        <div className="w-full flex flex-col gap-y-2 md:flex-row justify-evenly">
+          <div className="sm:w-1/4 w-full flex flex-col">
+            <span className="block text-primary">Attached Document</span>
+          </div>
+          <div className="w-full">
+            <div className="w-full sm:w-1/2">
+              <MultiSelectCheckbox
+                options={files.attachments || []}
+                formLabel={'Select File'}
+                label={'Invoice.pdf, Document.doc'}
+                selected={emailTemplate.files}
+                onChange={(e) => setEmailTemplate((prev) => ({ ...prev, files: e }))}
+              />
+
+              <DocumentFileUpload
+                divClassName={'mt-5'}
+                label={'Attachment Files'}
+                isMultiple
+                files={attachments}
+                setFiles={setAttachments}
+                allowedTypes={acceptedProductTypes}
+                allowedFileTypes={acceptedExtensions}
+                handleFileUpload={handleFileUpload}
+                toolTip={<FileTypesTooltip />}
+              />
             </div>
           </div>
         </div>

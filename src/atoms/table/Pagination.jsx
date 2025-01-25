@@ -79,7 +79,8 @@ const Pagination = ({ currentPage, totalPages, totalRecords, itemsPerPage, setIt
             <input
               type="number"
               onWheel={(e) => e.target.blur()}
-              onChange={(e) => setItemsPerPage((prev) => ({ ...prev, itemsPerPage: e.target.value, currentPage: 1 }))}
+              onKeyDown={(e) => e.key === 'Enter' && setItemsPerPage({ ...itemsPerPage, itemsPerPage: e.target.value, currentPage: 1 })}
+              onBlur={(e) => setItemsPerPage((prev) => ({ ...prev, itemsPerPage: e.target.value, currentPage: 1 }))}
               value={itemsPerPage}
               className={`h-8 min-w-[2.5rem] px-2 text-sm rounded-xl border text-center font-normal focus:outline-none focus:ring-0 focus:border-blue placeholder:text-gray-400 text-dark bg-transparent transition-all`}
               style={{ width: `${Math.max(2.5, itemsPerPage.toString().length * 0.7)}rem` }}
@@ -124,7 +125,14 @@ const Pagination = ({ currentPage, totalPages, totalRecords, itemsPerPage, setIt
             <input
               type="number"
               onWheel={(e) => e.target.blur()}
-              onChange={(e) => {
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  const newPage = Number(e.target.value);
+                  setItemsPerPage((prev) => ({ ...prev, currentPage: newPage }));
+                  handlePageChange(newPage);
+                }
+              }}
+              onBlur={(e) => {
                 const newPage = Number(e.target.value);
                 setItemsPerPage((prev) => ({ ...prev, currentPage: newPage }));
                 handlePageChange(newPage);

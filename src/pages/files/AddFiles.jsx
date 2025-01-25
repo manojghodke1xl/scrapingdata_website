@@ -132,7 +132,7 @@ const AddFiles = () => {
       <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end ">
         <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
           <div className="sm:w-7/12 w-full flex flex-col">
-            <span className="block text-primary">Site and Visibility Settings</span>
+            <span className="block text-primary">Basic Information</span>
           </div>
           <div className="w-full">
             <div className="w-full">
