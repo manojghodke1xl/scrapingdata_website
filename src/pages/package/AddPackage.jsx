@@ -10,6 +10,7 @@ import { getAllEventsApi } from '../../apis/event-apis';
 import DropDown from '../../atoms/formFields/DropDown';
 import { getIntegrationByEvent } from '../../apis/payment-integration-apis';
 import MultiSelectCheckbox from '../../atoms/formFields/MultiSelectCheckBox';
+import { getTemplateByEventApi } from '../../apis/templates/email-template-apis';
 
 const AddPackage = () => {
   const navigate = useNavigate();
@@ -39,6 +40,7 @@ const AddPackage = () => {
   });
   const [events, setEvents] = useState([]);
   const [paymentData, setPaymentData] = useState({});
+  const [templates, setTemplates] = useState([]);
 
   const validate = () => {
     const newErrors = {};
@@ -48,6 +50,8 @@ const AddPackage = () => {
     if (!packageDetails.event) newErrors.event = 'Event is required';
     if (!packageDetails.ticketIdPattern) newErrors.ticketIdPattern = 'Ticket ID Pattern is required';
     if (!packageDetails.ticketIdPattern?.trim()) newErrors.ticketIdPattern = 'Ticket ID Pattern is required';
+    if (packageDetails.event && !packageDetails.template) newErrors.template = 'Template is required';
+
     if (
       (paymentData?.razorpay?.supports?.INR || paymentData?.stripe?.supports?.INR || paymentData?.paypal?.supports?.INR) &&
       (!packageDetails.currencies.INR || packageDetails.currencies.INR <= 0) &&
@@ -107,6 +111,20 @@ const AddPackage = () => {
       })();
     }
   }, [id, setLoading]);
+
+  useEffect(() => {
+    if (packageDetails.event) {
+      (async () => {
+        try {
+          const { status, data } = await getTemplateByEventApi(packageDetails.event);
+          if (status) setTemplates(data.emailTemplates);
+          else showNotification('warn', data);
+        } catch (error) {
+          showNotification('error', error.message);
+        }
+      })();
+    }
+  }, [packageDetails.event]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -208,6 +226,7 @@ const AddPackage = () => {
                 errorMessage={errors.title}
               />
               <TextareaComponent
+                divClassName="mt-5"
                 label="Description"
                 placeholder="Enter a description..."
                 id="description"
@@ -218,6 +237,7 @@ const AddPackage = () => {
               />
 
               <FormField
+                divClassName={'mt-5'}
                 label="Ticket ID Pattern"
                 type="text"
                 id="ticketIdPattern"
@@ -232,123 +252,162 @@ const AddPackage = () => {
                 errorMessage={errors.ticketIdPattern}
               />
               {id && <p className="text-secondary text-sm mt-4"> If you change ticket pattern it won&apos;t any impact on existing tickets already generated in this package.</p>}
-              {packageDetails.event && (
-                <>
-                  <MultiSelectCheckbox
-                    divClassName={'mt-5'}
-                    options={[
-                      { _id: 'INR', name: 'INR' },
-                      { _id: 'AED', name: 'AED' },
-                      { _id: 'USD', name: 'USD' }
-                    ]}
-                    formLabel="Currencies"
-                    label="Select Currencies"
-                    onChange={(selected) => {
-                      let error = '';
-                      const updatedCurrencyNotes = {};
-
-                      const supportedCurrencies = {
-                        INR: paymentData?.razorpay?.supports?.INR || paymentData?.stripe?.supports?.INR || paymentData?.paypal?.supports?.INR,
-                        AED: paymentData?.razorpay?.supports?.AED || paymentData?.stripe?.supports?.AED || paymentData?.paypal?.supports?.AED,
-                        USD: paymentData?.razorpay?.supports?.USD || paymentData?.stripe?.supports?.USD || paymentData?.paypal?.supports?.USD
-                      };
-
-                      selected.forEach((currency) => {
-                        if (supportedCurrencies[currency]) updatedCurrencyNotes[currency] = true;
-                        else error = `Please add support for ${currency} currency in your payment gateway configuration`;
-                      });
-
-                      setErrors((prev) => ({ ...prev, currencyNotes: error }));
-                      setPackageDetails((prevDetails) => ({
-                        ...prevDetails,
-                        currencyNotes: updatedCurrencyNotes
-                      }));
-
-                      if (!error) setErrors((prev) => ({ ...prev, currencyNotes: '' }));
-                    }}
-                    selected={Object.entries(packageDetails?.currencyNotes ?? {})
-                      .filter(([, value]) => value)
-                      .map(([key]) => key)}
-                    error={errors?.currencyNotes}
-                  />
-
-                  {(paymentData?.razorpay?.supports?.INR || paymentData?.stripe?.supports?.INR || paymentData?.paypal?.supports?.INR) && packageDetails?.currencyNotes?.INR && (
-                    <FormField
-                      divClassName={'mt-5'}
-                      label="Amount (in INR)"
-                      type="number"
-                      id="amount"
-                      name="amount"
-                      placeholder="Amount (in INR)"
-                      onChange={(e) => {
-                        setPackageDetails((prev) => ({ ...prev, currencies: { ...prev.currencies, INR: e.target.value } }));
-                        if (errors.currencies?.INR) setErrors((prev) => ({ ...prev, currencies: { INR: '' } }));
-                      }}
-                      value={packageDetails.currencies?.INR}
-                      errorMessage={errors.currencies?.INR}
-                    />
-                  )}
-                  {(paymentData?.razorpay?.supports?.AED || paymentData?.stripe?.supports?.AED || paymentData?.paypal?.supports?.AED) && packageDetails?.currencyNotes?.AED && (
-                    <FormField
-                      divClassName={'mt-5'}
-                      label="Amount (in AED)"
-                      type="number"
-                      id="currencies"
-                      name="currencies"
-                      placeholder="Amount (in AED)"
-                      onChange={(e) => {
-                        setPackageDetails((prev) => ({ ...prev, currencies: { ...prev.currencies, AED: e.target.value } }));
-                        if (errors.currencies) setErrors((prev) => ({ ...prev, currencies: { AED: '' } }));
-                      }}
-                      value={packageDetails.currencies?.AED}
-                      errorMessage={errors.currencies?.AED}
-                    />
-                  )}
-
-                  {(paymentData?.razorpay?.supports?.USD || paymentData?.stripe?.supports?.USD || paymentData?.paypal?.supports?.USD) && packageDetails?.currencyNotes?.USD && (
-                    <FormField
-                      divClassName={'mt-5'}
-                      label="USD Amount"
-                      type="number"
-                      id="currencies"
-                      name="currencies"
-                      placeholder="USD Amount"
-                      onChange={(e) => {
-                        setPackageDetails((prev) => ({ ...prev, currencies: { ...prev.currencies, USD: e.target.value } }));
-                        if (errors.currencies) setErrors((prev) => ({ ...prev, currencies: { USD: '' } }));
-                      }}
-                      value={packageDetails.currencies?.USD}
-                      errorMessage={errors.currencies?.USD}
-                    />
-                  )}
-
-                  {(packageDetails?.currencyNotes?.INR || packageDetails?.currencyNotes?.AED || packageDetails?.currencyNotes?.USD) && (
-                    <FormField
-                      divClassName={'mt-5'}
-                      label="Max Limit"
-                      type="number"
-                      id="maxLimit"
-                      name="maxLimit"
-                      placeholder="Max Limit"
-                      onChange={(e) => {
-                        setPackageDetails((prev) => ({ ...prev, maxLimit: e.target.value }));
-                        if (errors.maxLimit) setErrors((prev) => ({ ...prev, maxLimit: '' }));
-                      }}
-                      value={packageDetails.maxLimit}
-                      errorMessage={errors.maxLimit}
-                    />
-                  )}
-                  <br />
-                  <br />
-                  <br />
-                  <br />
-                  <br />
-                </>
-              )}
             </div>
           </div>
         </div>
       </div>
+
+      {packageDetails.event && (
+        <>
+          <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
+            <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
+              <div className="sm:w-7/12 w-full flex flex-col">
+                <span className=" text-primary">Template Details</span>
+              </div>
+              <div className="w-full">
+                <div>
+                  <DropDown
+                    label={'Select Template'}
+                    name="Template"
+                    dropdownList={templates?.map((template) => ({ name: template._id, showName: template.name, id: template._id }))}
+                    SummaryChild={<h5 className="p-0 m-0 text-primary">Templates</h5>}
+                    search={true}
+                    selected={packageDetails.template}
+                    commonFunction={(e) => {
+                      setPackageDetails((prev) => ({ ...prev, template: e.name }));
+                      if (errors.template) setErrors((prev) => ({ ...prev, template: '' }));
+                    }}
+                    error={errors.template}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
+            <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
+              <div className="sm:w-7/12 w-full flex flex-col">
+                <span className=" text-primary">Additional Details</span>
+              </div>
+              <div className="w-full">
+                <div>
+                  <>
+                    <MultiSelectCheckbox
+                      divClassName={'mt-5'}
+                      options={[
+                        { _id: 'INR', name: 'INR' },
+                        { _id: 'AED', name: 'AED' },
+                        { _id: 'USD', name: 'USD' }
+                      ]}
+                      formLabel="Currencies"
+                      label="Select Currencies"
+                      onChange={(selected) => {
+                        let error = '';
+                        const updatedCurrencyNotes = {};
+
+                        const supportedCurrencies = {
+                          INR: paymentData?.razorpay?.supports?.INR || paymentData?.stripe?.supports?.INR || paymentData?.paypal?.supports?.INR,
+                          AED: paymentData?.razorpay?.supports?.AED || paymentData?.stripe?.supports?.AED || paymentData?.paypal?.supports?.AED,
+                          USD: paymentData?.razorpay?.supports?.USD || paymentData?.stripe?.supports?.USD || paymentData?.paypal?.supports?.USD
+                        };
+
+                        selected.forEach((currency) => {
+                          if (supportedCurrencies[currency]) updatedCurrencyNotes[currency] = true;
+                          else error = `Please add support for ${currency} currency in your payment gateway configuration`;
+                        });
+
+                        setErrors((prev) => ({ ...prev, currencyNotes: error }));
+                        setPackageDetails((prevDetails) => ({
+                          ...prevDetails,
+                          currencyNotes: updatedCurrencyNotes
+                        }));
+
+                        if (!error) setErrors((prev) => ({ ...prev, currencyNotes: '' }));
+                      }}
+                      selected={Object.entries(packageDetails?.currencyNotes ?? {})
+                        .filter(([, value]) => value)
+                        .map(([key]) => key)}
+                      error={errors?.currencyNotes}
+                    />
+
+                    {(paymentData?.razorpay?.supports?.INR || paymentData?.stripe?.supports?.INR || paymentData?.paypal?.supports?.INR) && packageDetails?.currencyNotes?.INR && (
+                      <FormField
+                        divClassName={'mt-5'}
+                        label="Amount (in INR)"
+                        type="number"
+                        id="amount"
+                        name="amount"
+                        placeholder="Amount (in INR)"
+                        onChange={(e) => {
+                          setPackageDetails((prev) => ({ ...prev, currencies: { ...prev.currencies, INR: e.target.value } }));
+                          if (errors.currencies?.INR) setErrors((prev) => ({ ...prev, currencies: { INR: '' } }));
+                        }}
+                        value={packageDetails.currencies?.INR}
+                        errorMessage={errors.currencies?.INR}
+                      />
+                    )}
+                    {(paymentData?.razorpay?.supports?.AED || paymentData?.stripe?.supports?.AED || paymentData?.paypal?.supports?.AED) && packageDetails?.currencyNotes?.AED && (
+                      <FormField
+                        divClassName={'mt-5'}
+                        label="Amount (in AED)"
+                        type="number"
+                        id="currencies"
+                        name="currencies"
+                        placeholder="Amount (in AED)"
+                        onChange={(e) => {
+                          setPackageDetails((prev) => ({ ...prev, currencies: { ...prev.currencies, AED: e.target.value } }));
+                          if (errors.currencies) setErrors((prev) => ({ ...prev, currencies: { AED: '' } }));
+                        }}
+                        value={packageDetails.currencies?.AED}
+                        errorMessage={errors.currencies?.AED}
+                      />
+                    )}
+
+                    {(paymentData?.razorpay?.supports?.USD || paymentData?.stripe?.supports?.USD || paymentData?.paypal?.supports?.USD) && packageDetails?.currencyNotes?.USD && (
+                      <FormField
+                        divClassName={'mt-5'}
+                        label="USD Amount"
+                        type="number"
+                        id="currencies"
+                        name="currencies"
+                        placeholder="USD Amount"
+                        onChange={(e) => {
+                          setPackageDetails((prev) => ({ ...prev, currencies: { ...prev.currencies, USD: e.target.value } }));
+                          if (errors.currencies) setErrors((prev) => ({ ...prev, currencies: { USD: '' } }));
+                        }}
+                        value={packageDetails.currencies?.USD}
+                        errorMessage={errors.currencies?.USD}
+                      />
+                    )}
+
+                    {(packageDetails?.currencyNotes?.INR || packageDetails?.currencyNotes?.AED || packageDetails?.currencyNotes?.USD) && (
+                      <FormField
+                        divClassName={'mt-5'}
+                        label="Max Limit"
+                        type="number"
+                        id="maxLimit"
+                        name="maxLimit"
+                        placeholder="Max Limit"
+                        onChange={(e) => {
+                          setPackageDetails((prev) => ({ ...prev, maxLimit: e.target.value }));
+                          if (errors.maxLimit) setErrors((prev) => ({ ...prev, maxLimit: '' }));
+                        }}
+                        value={packageDetails.maxLimit}
+                        errorMessage={errors.maxLimit}
+                      />
+                    )}
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                  </>
+                </div>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
 
       {/* <div className="w-full justify-center items-center border-b  border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end ">
 <NoteComponent note={id ? editAdminNote : addAdminNote} />

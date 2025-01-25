@@ -15,3 +15,7 @@ export const updateEmailTemplateApi = async (id, data) => {
 export const deleteEmailTemplateApi = async (ids) => {
   return await deleteMethodCall(`${import.meta.env.VITE_API_URL}/email-template/`, ids);
 };
+
+export const getTemplateByEventApi = async (id) => {
+  return await getMethodCall(`${import.meta.env.VITE_API_URL}/email-template/event/${id}`);
+};
