@@ -36,12 +36,6 @@ const TruncatableFieldModal = ({ title, content = '', maxLength = 20 }) => {
                 <div className="border-b border-primary w-full">
                   <p className="mb-4 w-full text-primary font-normal text-base text-wrap">{content}</p>
                 </div>
-
-                <div className="flex justify-end gap-5 w-full mt-6 ">
-                  <button onClick={handleClose} className=" w-1/4 rounded-xl border border-primary text-primary py-2 ">
-                    Close
-                  </button>
-                </div>
               </div>
             </div>
           </div>

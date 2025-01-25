@@ -7,6 +7,7 @@ import { deleteMailingListApi } from '../../apis/mailing-apis';
 import { mailingListNote } from './MailingNotes';
 import NoteComponent from '../../atoms/common/NoteComponent';
 import { AiOutlineApi } from 'react-icons/ai';
+import { IoMdAdd } from 'react-icons/io';
 
 const SubscribersList = () => {
   const [lists, setLists] = useState([]);
@@ -31,8 +32,11 @@ const SubscribersList = () => {
           <div className="">
             <h4 className="text-3xl text-dark">All Subscribers</h4>
           </div>
-
-          <div className="w-full flex justify-end sm:w-fit">
+          <div className="w-full flex justify-end sm:w-fit gap-2">
+            <Link to="/subscriber/add-subscriber" className="flex gap-2 h-fit items-center px-2.5 md:px-2 sm:px-4 rounded-xl py-2.5 border border-primary text-primary">
+              <IoMdAdd size={22} />
+              <span className="hidden md:block">Add Subscriber</span>
+            </Link>
             <Link to="/subscriber/subscriber-integration" className="flex gap-2 h-fit items-center px-2.5 md:px-2 sm:px-4 rounded-xl py-2.5 bg-primary hover:bg-hover text-white">
               <AiOutlineApi size={22} />
               <span className="hidden md:block">API Integration</span>

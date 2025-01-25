@@ -624,3 +624,24 @@ details[open] .icon-open {
   font-weight: 500 !important;
   color: #344054 !important; /* primary */
 }
+
+
+.react-tel-input .form-control {
+  border: none !important;
+  width: 95% !important;
+  padding: 0.1rem 14px 0.1rem 60px;
+  border-radius: 0.75rem 0 0 0.75rem;
+}
+
+.react-tel-input .flag-dropdown {
+  outline: none !important;
+  left: 0;
+  border-radius: 0.75rem 0 0 0.75rem;
+  border: none;
+  border-right: 1px solid #D0D5DD !important;
+}
+
+.react-tel-input .form-control:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}

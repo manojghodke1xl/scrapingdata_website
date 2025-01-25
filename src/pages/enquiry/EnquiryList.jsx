@@ -7,17 +7,20 @@ import { deleteEnquiryApi } from '../../apis/enquiry-apis';
 import NoteComponent from '../../atoms/common/NoteComponent';
 import { enquiryListNote } from './EnquiryNotes';
 import { AiOutlineApi } from 'react-icons/ai';
+import { IoMdAdd } from 'react-icons/io';
 
 const EnquiryList = () => {
   const [enquiries, setEnquiries] = useState([]);
 
   const rows = enquiries.map((enquiry) => {
-    const { _id, name, email, createdAt, updatedAt, site } = enquiry;
+    const { _id, name, email, service, subject, createdAt, updatedAt, site } = enquiry;
     return {
       id: _id,
       exportData: enquiry,
       name: <TruncatableFieldModal title={'Customer Name'} content={name} />,
       email: <TruncatableFieldModal title={'Customer Email'} content={email} />,
+      service: <TruncatableFieldModal title={'Feedback Service'} content={service} />,
+      subject: <TruncatableFieldModal title={'Subject'} content={subject} />,
       site: <TruncatableFieldModal title={'Sites'} content={`${site?.name} (${site?.host})`} />,
       createdAt: formatDateTime(createdAt),
       updatedAt: formatDateTime(updatedAt)
@@ -31,7 +34,11 @@ const EnquiryList = () => {
           <div className="">
             <h4 className="text-3xl text-dark">All Enquiries List</h4>
           </div>
-          <div className="w-full flex justify-end sm:w-fit">
+          <div className="w-full flex justify-end sm:w-fit gap-2">
+            <Link to="/enquiry/add-enquiry" className="flex gap-2 h-fit items-center px-2.5 md:px-2 sm:px-4 rounded-xl py-2.5 border border-primary text-primary">
+              <IoMdAdd size={22} />
+              <span className="hidden md:block">Add Enquiry</span>
+            </Link>
             <Link to="/enquiry/enquiry-integration" className="flex gap-2 h-fit items-center px-2.5 md:px-2 sm:px-4 rounded-xl py-2.5 bg-primary hover:bg-hover text-white">
               <AiOutlineApi size={22} />
               <span className="hidden md:block">API Integration</span>
@@ -47,6 +54,8 @@ const EnquiryList = () => {
                   { label: 'Sr No.', key: 'srno' },
                   { label: 'Customer Name', key: 'name' },
                   { label: 'Email', key: 'email' },
+                  { label: 'Enquiry Service', key: 'service' },
+                  { label: 'Subject', key: 'subject' },
                   { label: 'Sites', key: 'site' },
                   { label: 'Created Date', key: 'createdAt' },
                   { label: 'Updated Date', key: 'updatedAt' }

@@ -7,22 +7,21 @@ import { deleteFeedbackApi } from '../../apis/feedback-apis';
 import NoteComponent from '../../atoms/common/NoteComponent';
 import { feedbackListNote } from './FeedbackNote';
 import { AiOutlineApi } from 'react-icons/ai';
+import { IoMdAdd } from 'react-icons/io';
 
 const FeedbackList = () => {
   const [feedbacks, setFeedbacks] = useState([]);
 
   const rows = feedbacks.map((feedback) => {
-    const { _id, name, email, ccode, mobile, service, subject, feedbackMessage, createdAt, updatedAt, site } = feedback;
+    const { _id, name, email, service, subject, createdAt, updatedAt, site } = feedback;
 
     return {
       id: _id,
       exportData: feedback,
       name: <TruncatableFieldModal title={'Customer Name'} content={name} />,
       email: <TruncatableFieldModal title={'Email'} content={email} />,
-      mobile: <TruncatableFieldModal title={'Phone Number'} content={`${ccode ?? ''} ${mobile ?? ''}`} maxLength={15} />,
       service: <TruncatableFieldModal title={'Feedback Service'} content={service} />,
-      subject: <TruncatableFieldModal title={'Subject'} content={subject} maxLength={20} />,
-      feedbackMessage: <TruncatableFieldModal title={'Message'} content={feedbackMessage} maxLength={50} />,
+      subject: <TruncatableFieldModal title={'Subject'} content={subject} />,
       site: <TruncatableFieldModal title={'Sites'} content={`${site?.name} (${site?.host})`} />,
       createdAt: formatDateTime(createdAt),
       updatedAt: formatDateTime(updatedAt)
@@ -36,7 +35,11 @@ const FeedbackList = () => {
           <div className="">
             <h4 className="text-3xl text-dark">All Feedback List</h4>
           </div>
-          <div className="w-full flex justify-end sm:w-fit">
+          <div className="w-full flex justify-end sm:w-fit gap-2">
+            <Link to="/feedback/add-feedback" className="flex gap-2 h-fit items-center px-2.5 md:px-2 sm:px-4 rounded-xl py-2.5 border border-primary text-primary">
+              <IoMdAdd size={22} />
+              <span className="hidden md:block">Add Enquiry</span>
+            </Link>
             <Link to="/feedback/feedback-integration" className="flex gap-2 h-fit items-center px-2.5 md:px-2 sm:px-4 rounded-xl py-2.5 bg-primary hover:bg-hover text-white">
               <AiOutlineApi size={22} />
               <span className="hidden md:block">API Integration</span>
@@ -52,10 +55,8 @@ const FeedbackList = () => {
                   { label: 'Sr No.', key: 'srno' },
                   { label: 'Customer Name', key: 'name' },
                   { label: 'Email', key: 'email' },
-                  { label: 'Phone Number', key: 'mobile' },
                   { label: 'Feedback Service', key: 'service' },
                   { label: 'Subject', key: 'subject' },
-                  { label: 'Message', key: 'feedbackMessage' },
                   { label: 'Sites', key: 'site' },
                   { label: 'Created Date', key: 'createdAt' },
                   { label: 'Updated Date', key: 'updatedAt' }
