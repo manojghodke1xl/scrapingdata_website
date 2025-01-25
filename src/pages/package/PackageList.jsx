@@ -13,7 +13,7 @@ const PackageList = () => {
   const [event, setEvent] = useState([]);
 
   const rows = packages.map((userPackage) => {
-    const { _id, title, amount, maxLimit, hasBooking, event, createdAt, updatedAt } = userPackage;
+    const { _id, title, amount, maxLimit, hasBooking, event, createdAt, updatedAt, ticketIdPattern } = userPackage;
     return {
       id: _id,
       hasBooking,
@@ -23,6 +23,7 @@ const PackageList = () => {
       event: <TruncatableFieldModal title={'Event'} content={`${event.name} (${event.venue})`} />,
       amount: <TruncatableFieldModal title={'Price'} content={amount} />,
       maxLimit: <TruncatableFieldModal title={'Max Limit'} content={maxLimit} />,
+      ticketIdPattern: <TruncatableFieldModal title={'Ticket ID Pattern'} content={ticketIdPattern} />,
       createdAt: formatDateTime(createdAt),
       updatedAt: formatDateTime(updatedAt)
     };
@@ -63,6 +64,7 @@ const PackageList = () => {
                   { label: 'Event', key: 'event' },
                   { label: 'Price', key: 'amount' },
                   { label: 'Max Attendees', key: 'maxLimit' },
+                  { label: 'Ticket ID Pattern', key: 'ticketIdPattern' },
                   { label: 'Created Date', key: 'createdAt' },
                   { label: 'Updated Date', key: 'updatedAt' }
                 ]}
