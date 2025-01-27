@@ -1,6 +1,10 @@
+import { useState } from 'react';
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa';
 
 const Pagination = ({ currentPage, totalPages, totalRecords, itemsPerPage, setItemsPerPage, handlePageChange }) => {
+  const [page, setPage] = useState(currentPage);
+  const [items, setItems] = useState(itemsPerPage);
+
   const renderPaginationLinks = () => {
     const paginationArray = [];
 
@@ -78,12 +82,14 @@ const Pagination = ({ currentPage, totalPages, totalRecords, itemsPerPage, setIt
             <span className="text-secondary whitespace-nowrap">Records Per Page:</span>
             <input
               type="number"
+              min="1"
               onWheel={(e) => e.target.blur()}
-              onKeyDown={(e) => e.key === 'Enter' && setItemsPerPage({ ...itemsPerPage, itemsPerPage: e.target.value, currentPage: 1 })}
-              onBlur={(e) => setItemsPerPage((prev) => ({ ...prev, itemsPerPage: e.target.value, currentPage: 1 }))}
-              value={itemsPerPage}
+              onKeyDown={(e) => e.key === 'Enter' && setItemsPerPage({ ...itemsPerPage, itemsPerPage: parseInt(e.target.value, 10) || 1, currentPage: 1 })}
+              onBlur={(e) => setItemsPerPage((prev) => ({ ...prev, itemsPerPage: parseInt(e.target.value, 10) || 1, currentPage: 1 }))}
+              onChange={(e) => setItems(e.target.value)}
+              value={items}
               className={`h-8 min-w-[2.5rem] px-2 text-sm rounded-xl border text-center font-normal focus:outline-none focus:ring-0 focus:border-blue placeholder:text-gray-400 text-dark bg-transparent transition-all`}
-              style={{ width: `${Math.max(2.5, itemsPerPage.toString().length * 0.7)}rem` }}
+              style={{ width: `${Math.max(2.5, items.toString().length * 0.7)}rem` }}
             />
           </div>
         </div>
@@ -124,22 +130,27 @@ const Pagination = ({ currentPage, totalPages, totalRecords, itemsPerPage, setIt
             Page &nbsp;
             <input
               type="number"
+              min="1"
+              max={totalPages}
               onWheel={(e) => e.target.blur()}
               onKeyDown={(e) => {
                 if (e.key === 'Enter') {
-                  const newPage = Number(e.target.value);
+                  const newPage = Math.min(Math.max(1, parseInt(e.target.value, 10)), totalPages);
                   setItemsPerPage((prev) => ({ ...prev, currentPage: newPage }));
                   handlePageChange(newPage);
+                  setPage(newPage);
                 }
               }}
               onBlur={(e) => {
-                const newPage = Number(e.target.value);
+                const newPage = Math.min(Math.max(1, parseInt(e.target.value, 10)), totalPages);
                 setItemsPerPage((prev) => ({ ...prev, currentPage: newPage }));
                 handlePageChange(newPage);
+                setPage(newPage);
               }}
-              value={currentPage}
+              onChange={(e) => setPage(e.target.value)}
+              value={page}
               className={`h-8 min-w-[2.5rem] px-2 text-sm rounded-xl border text-center font-normal focus:outline-none focus:ring-0 focus:border-blue placeholder:text-gray-400 text-dark bg-transparent transition-all`}
-              style={{ width: `${Math.max(2.5, itemsPerPage.toString().length * 0.7)}rem` }}
+              style={{ width: `${Math.max(2.5, page.toString().length * 0.7)}rem` }}
             />
             &nbsp;of {totalPages}
           </span>
