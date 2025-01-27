@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import TruncatableFieldModal from '../../atoms/modal/TruncatableFeildModel';
+import TruncatableFieldToolTip from '../../atoms/modal/TruncatableFeildModel';
 import { formatDateTime } from '../../utils/dateFormats';
 import TableComponent from '../../atoms/table/Table';
 import { Link } from 'react-router-dom';
@@ -13,11 +13,11 @@ const PaymentList = () => {
     return {
       id: _id,
       exportData: payment,
-      participant: <TruncatableFieldModal title={'Participant'} content={participant.name} />,
-      site: <TruncatableFieldModal title={'Sites'} content={`${site?.name} (${site?.host})`} />,
-      event: <TruncatableFieldModal title={'Event'} content={event.name} />,
-      amount: <TruncatableFieldModal title={'Amount'} content={amount} />,
-      currency: <TruncatableFieldModal title={'Currency'} content={currency} />,
+      participant: <TruncatableFieldToolTip title={'Participant'} content={participant.name} />,
+      site: <TruncatableFieldToolTip title={'Sites'} content={`${site?.name} (${site?.host})`} />,
+      event: <TruncatableFieldToolTip title={'Event'} content={event.name} />,
+      amount: <TruncatableFieldToolTip title={'Amount'} content={amount} />,
+      currency: <TruncatableFieldToolTip title={'Currency'} content={currency} />,
       channel: channel === 'razorpay' ? 'Razorpay' : channel === 'stripe' ? 'Stripe' : 'PayPal',
       status: (
         <div

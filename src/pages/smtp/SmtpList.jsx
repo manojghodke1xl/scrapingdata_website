@@ -2,10 +2,10 @@ import { IoMdAdd } from 'react-icons/io';
 import { Link } from 'react-router-dom';
 import TableComponent from '../../atoms/table/Table';
 import { useState } from 'react';
-import TruncatableFieldModal from '../../atoms/modal/TruncatableFeildModel';
 import { formatDateTime } from '../../utils/dateFormats';
 import NoteComponent from '../../atoms/common/NoteComponent';
 import { listSMTPNote } from './SmtpNotes';
+import TruncatableFieldToolTip from '../../atoms/common/TruncatableFeildToolTip';
 
 const SmtpList = () => {
   const [smtps, setSmtps] = useState([]);
@@ -14,8 +14,8 @@ const SmtpList = () => {
     const { _id, name, host, createdAt, updatedAt } = smtp;
     return {
       id: _id,
-      name: <TruncatableFieldModal title={'Name'} content={name} />,
-      host: <TruncatableFieldModal title={'Host'} content={host} />,
+      name: <TruncatableFieldToolTip title={'Name'} content={name} />,
+      host: <TruncatableFieldToolTip title={'Host'} content={host} />,
       createdAt: formatDateTime(createdAt),
       updatedAt: formatDateTime(updatedAt)
     };

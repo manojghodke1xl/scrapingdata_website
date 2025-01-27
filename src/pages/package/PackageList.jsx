@@ -3,10 +3,10 @@ import { Link } from 'react-router-dom';
 import TableComponent from '../../atoms/table/Table';
 import { useEffect, useState } from 'react';
 import { formatDateTime } from '../../utils/dateFormats';
-import TruncatableFieldModal from '../../atoms/modal/TruncatableFeildModel';
 import { getAllEventsApi } from '../../apis/event-apis';
 import { showNotification } from '../../utils/showNotification';
 import { deletePackageApi } from '../../apis/package-apis';
+import TruncatableFieldToolTip from '../../atoms/common/TruncatableFeildToolTip';
 
 const PackageList = () => {
   const [packages, setPackages] = useState([]);
@@ -19,11 +19,11 @@ const PackageList = () => {
       hasBooking,
       exportData: userPackage,
       key: _id,
-      title: <TruncatableFieldModal title={'Package Title'} content={title} />,
-      event: <TruncatableFieldModal title={'Event'} content={`${event.name} (${event.venue})`} />,
-      amount: <TruncatableFieldModal title={'Price'} content={amount} />,
-      maxLimit: <TruncatableFieldModal title={'Max Limit'} content={maxLimit} />,
-      ticketIdPattern: <TruncatableFieldModal title={'Ticket ID Pattern'} content={ticketIdPattern} />,
+      title: <TruncatableFieldToolTip title={'Package Title'} content={title} />,
+      event: <TruncatableFieldToolTip title={'Event'} content={`${event.name} (${event.venue})`} />,
+      amount: <TruncatableFieldToolTip title={'Price'} content={amount} />,
+      maxLimit: <TruncatableFieldToolTip title={'Max Limit'} content={maxLimit} />,
+      ticketIdPattern: <TruncatableFieldToolTip title={'Ticket ID Pattern'} content={ticketIdPattern} />,
       createdAt: formatDateTime(createdAt),
       updatedAt: formatDateTime(updatedAt)
     };

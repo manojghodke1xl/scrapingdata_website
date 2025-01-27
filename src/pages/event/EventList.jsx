@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import TruncatableFieldModal from '../../atoms/modal/TruncatableFeildModel';
 import { formatDateTime } from '../../utils/dateFormats';
 import { Link } from 'react-router-dom';
 import { IoMdAdd } from 'react-icons/io';
 import TableComponent from '../../atoms/table/Table';
 import { deleteEventApi } from '../../apis/event-apis';
+import TruncatableFieldToolTip from '../../atoms/common/TruncatableFeildToolTip';
 
 const EventList = () => {
   const [events, setEvents] = useState([]);
@@ -15,9 +15,9 @@ const EventList = () => {
       id: _id,
       exportData: event,
       Keys: _id,
-      name: <TruncatableFieldModal title={'Event Name'} content={name} />,
-      site: <TruncatableFieldModal title={'Sites'} content={`${site?.name} (${site?.host})`} />,
-      venue: <TruncatableFieldModal title={'Venue'} content={venue} />,
+      name: <TruncatableFieldToolTip title={'Event Name'} content={name} />,
+      site: <TruncatableFieldToolTip title={'Sites'} content={`${site?.name} (${site?.host})`} />,
+      venue: <TruncatableFieldToolTip title={'Venue'} content={venue} />,
       date: formatDateTime(date),
       endDate: formatDateTime(endDate),
       lastBookingDate: formatDateTime(lastBookingDate),
@@ -27,9 +27,9 @@ const EventList = () => {
   });
 
   return (
-    <div className="py-8 p-4 sm:p-8 overflow-x-hidden mb-20">
+    <div className="py-5 px-8 overflow-x-hidden mb-10">
       <div className=" w-full">
-        <div className="w-full flex md:flex-wrap gap-y-3 sm:flex-nowrap justify-between pb-5 border-b border-primary">
+        <div className="w-full flex md:flex-wrap gap-y-3 sm:flex-nowrap justify-between">
           <div className="">
             <h4 className="text-3xl text-dark">All Events List</h4>
           </div>
@@ -42,7 +42,7 @@ const EventList = () => {
         </div>
         <div className="flex flex-col">
           <div className="-m-1.5 overflow-x-auto">
-            <div className="p-1.5 min-w-full align-middle">
+            <div className="min-w-full align-middle">
               <TableComponent
                 selectable={true}
                 siteModule={'events'}

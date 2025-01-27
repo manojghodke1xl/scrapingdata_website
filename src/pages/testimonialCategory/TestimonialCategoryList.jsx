@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import TruncatableFieldModal from '../../atoms/modal/TruncatableFeildModel';
 import { formatDateTime } from '../../utils/dateFormats';
 import { Link } from 'react-router-dom';
 import { IoMdAdd } from 'react-icons/io';
 import TableComponent from '../../atoms/table/Table';
 import NoteComponent from '../../atoms/common/NoteComponent';
 import { testimonialCategoryListNote } from './TestimonialCategoryNotes';
+import TruncatableFieldToolTip from '../../atoms/common/TruncatableFeildToolTip';
 
 const TestimonialCategoryList = () => {
   const [testimonialCategories, setTestimonialCategories] = useState([]);
@@ -14,7 +14,7 @@ const TestimonialCategoryList = () => {
     const { _id, name, createdAt, updatedAt } = testimonialCategory;
     return {
       id: _id,
-      name: <TruncatableFieldModal title={'Name'} content={name} />,
+      name: <TruncatableFieldToolTip title={'Name'} content={name} />,
       createdAt: formatDateTime(createdAt),
       updatedAt: formatDateTime(updatedAt)
     };

@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import TruncatableFieldModal from '../../atoms/modal/TruncatableFeildModel';
 import { formatDateTime } from '../../utils/dateFormats';
 import TableComponent from '../../atoms/table/Table';
 import { Link } from 'react-router-dom';
@@ -8,6 +7,7 @@ import NoteComponent from '../../atoms/common/NoteComponent';
 import { feedbackListNote } from './FeedbackNote';
 import { AiOutlineApi } from 'react-icons/ai';
 import { IoMdAdd } from 'react-icons/io';
+import TruncatableFieldToolTip from '../../atoms/common/TruncatableFeildToolTip';
 
 const FeedbackList = () => {
   const [feedbacks, setFeedbacks] = useState([]);
@@ -18,11 +18,11 @@ const FeedbackList = () => {
     return {
       id: _id,
       exportData: feedback,
-      name: <TruncatableFieldModal title={'Customer Name'} content={name} />,
-      email: <TruncatableFieldModal title={'Email'} content={email} />,
-      service: <TruncatableFieldModal title={'Feedback Service'} content={service} />,
-      subject: <TruncatableFieldModal title={'Subject'} content={subject} />,
-      site: <TruncatableFieldModal title={'Sites'} content={`${site?.name} (${site?.host})`} />,
+      name: <TruncatableFieldToolTip title={'Customer Name'} content={name} />,
+      email: <TruncatableFieldToolTip title={'Email'} content={email} />,
+      service: <TruncatableFieldToolTip title={'Feedback Service'} content={service} />,
+      subject: <TruncatableFieldToolTip title={'Subject'} content={subject} />,
+      site: <TruncatableFieldToolTip title={'Sites'} content={`${site?.name} (${site?.host})`} />,
       createdAt: formatDateTime(createdAt),
       updatedAt: formatDateTime(updatedAt)
     };

@@ -3,6 +3,8 @@ import FormButtons from '../../../atoms/formFields/FormButtons';
 import useGlobalContext from '../../../hooks/useGlobalContext';
 import { useEffect, useState } from 'react';
 import FormField from '../../../atoms/formFields/InputField';
+import { addTemplateCategoryApi, getTemplateCategoryByIdApi, updateTemplateCategoryApi } from '../../../apis/templates/template-category';
+import { showNotification } from '../../../utils/showNotification';
 
 const AddTemplateCategory = () => {
   const navigate = useNavigate();
@@ -11,9 +13,23 @@ const AddTemplateCategory = () => {
   const [isScrollable, setIsScrollable] = useState(false);
   const [templateCategory, setTemplateCategory] = useState({
     name: '',
-    variableMap: [{ label: '', model: 'Event', key: '', name: '' }]
+    variableMap: [{ label: '', model: '', key: '', name: '' }]
   });
   const [errors, setErrors] = useState({});
+
+  useEffect(() => {
+    if (id) {
+      const fetchTemplateCategory = async () => {
+        try {
+          const { data } = await getTemplateCategoryByIdApi(id);
+          setTemplateCategory(data.templateCategory);
+        } catch (error) {
+          showNotification('error', error.message);
+        }
+      };
+      fetchTemplateCategory();
+    }
+  }, [id]);
 
   const handleVariableChange = (index, field, value) => {
     const updatedVariables = [...templateCategory.variableMap];
@@ -42,16 +58,18 @@ const AddTemplateCategory = () => {
     e.preventDefault();
     if (!validate()) return;
     console.log('templateCategory', templateCategory);
-    // setLoading(true);
-    // try {
-    //   const { status, data } = id ? await updateTemplateCategoryApi(id, templateCategory) : await addTemplateCategoryApi(templateCategory);
-    //   if (status) navigate('/templates/template-category/template-category-list');
-    //   else showNotification('warn', data);
-    // } catch (error) {
-    //   showNotification('error', error.message);
-    // } finally {
-    //   setLoading(false);
-    // }
+    setLoading(true);
+    try {
+      const { status, data } = id ? await updateTemplateCategoryApi(id, templateCategory) : await addTemplateCategoryApi(templateCategory);
+      if (status) {
+        showNotification('success', data.message);
+        navigate('/templates/template-category-list');
+      } else showNotification('warn', data);
+    } catch (error) {
+      showNotification('error', error.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const checkScrollability = () => {
@@ -72,7 +90,7 @@ const AddTemplateCategory = () => {
         <div>
           <span className="text-3xl font-semibold text-dark">{id ? 'Edit' : 'Add'} Template Category</span>
         </div>
-        <FormButtons to="/faq-category/faq-category-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} loading={isLoading} />
+        <FormButtons to="/templates/template-category-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} loading={isLoading} />
       </div>
 
       <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
@@ -89,7 +107,7 @@ const AddTemplateCategory = () => {
                 name="fqaCategoryName"
                 placeholder="Category Name"
                 onChange={(e) => {
-                  setTemplateCategory(e.target.value);
+                  setTemplateCategory((prev) => ({ ...prev, name: e.target.value }));
                   if (errors.name) setErrors((prev) => ({ ...prev, name: '' }));
                 }}
                 value={templateCategory.name}
@@ -167,7 +185,7 @@ const AddTemplateCategory = () => {
       </div> */}
       {!isScrollable && (
         <div className="w-full flex justify-end items-center gap-4 pt-8  border- border-primary">
-          <FormButtons to="/faq-category/faq-category-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} loading={isLoading} />
+          <FormButtons to="/templates/template-category-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} loading={isLoading} />
         </div>
       )}
     </div>

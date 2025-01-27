@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import TruncatableFieldModal from '../../atoms/modal/TruncatableFeildModel';
 import { formatDateTime } from '../../utils/dateFormats';
 import { IoMdAdd } from 'react-icons/io';
 import { Link } from 'react-router-dom';
@@ -8,6 +7,7 @@ import useGlobalContext from '../../hooks/useGlobalContext';
 import { updateSiteStatusApi } from '../../apis/site-apis';
 import NoteComponent from '../../atoms/common/NoteComponent';
 import { websiteListNote } from './SiteNotes';
+import TruncatableFieldToolTip from '../../atoms/common/TruncatableFeildToolTip';
 
 const SiteList = () => {
   const [sites, setSites] = useState([]);
@@ -21,8 +21,8 @@ const SiteList = () => {
       id: _id,
       exportData: site,
       keys: _id,
-      name: <TruncatableFieldModal title={'Website Name'} content={name} />,
-      host: <TruncatableFieldModal title={'Web Address'} content={host} />,
+      name: <TruncatableFieldToolTip title={'Website Name'} content={name} />,
+      host: <TruncatableFieldToolTip title={'Web Address'} content={host} />,
       isActive: (
         <div className={`rounded-xl ${isActive ? 'bg-[#ECFDF3] text-[#027948]' : 'bg-[#F2F4F7] text-[#344054]'} px-2 py-1 w-fit flex gap-2 items-center`}>
           <span className={`min-w-[12px] min-h-[12px] rounded-full ${isActive ? 'bg-[#12B76A]' : 'bg-[#667085]'}`}></span>

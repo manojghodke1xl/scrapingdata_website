@@ -13,6 +13,7 @@ import FileTypesTooltip from '../../../atoms/formFields/FileTypesTooltip';
 import MultiSelectCheckbox from '../../../atoms/formFields/MultiSelectCheckBox';
 import { getFilesBySiteIdApi } from '../../../apis/file-apis';
 import { uploadMultipleCustomFiles } from '../../../utils/fileUploads';
+import { getAllTemplateCategoriesApi } from '../../../apis/templates/template-category';
 
 const AddEmailTemplate = () => {
   const navigate = useNavigate();
@@ -29,10 +30,12 @@ const AddEmailTemplate = () => {
     name: '',
     subject: '',
     body: '',
+    templateCategory: '',
     files: []
   });
   const [files, setFiles] = useState([]);
   const [attachments, setAttachments] = useState([]);
+  const [templateCategories, setTemplateCategories] = useState([]);
 
   useEffect(() => {
     if (id) {
@@ -59,6 +62,15 @@ const AddEmailTemplate = () => {
       })().catch((error) => showNotification('error', error.message));
     }
   }, [emailTemplate.site, setLoading]);
+
+  useEffect(() => {
+    (async () => {
+      const { status, data } = await getAllTemplateCategoriesApi();
+      if (status) {
+        setTemplateCategories(data.templateCategories);
+      } else showNotification('warn', data);
+    })().catch((error) => showNotification('error', error.message));
+  }, []);
 
   const handleFileUpload = (e) => {
     e.preventDefault();
@@ -106,6 +118,8 @@ const AddEmailTemplate = () => {
     window.addEventListener('resize', checkScrollability);
     return () => window.removeEventListener('resize', checkScrollability);
   }, [isScrollable]);
+
+  const variables = templateCategories.filter((item) => item._id === emailTemplate.templateCategory)[0]?.variableMap;
 
   return (
     <div className="py-8 p-4 sm:p-8 overflow-x-hidden mb-20">
@@ -160,76 +174,36 @@ const AddEmailTemplate = () => {
                 }}
                 errorMessage={errors.name}
               />
-              {/* <DropDown
+              {console.log('emailTemplate', emailTemplate)}
+              <DropDown
                 mt="mt-5"
                 name="category"
                 label="Category"
                 SummaryChild={<h5 className="text-primary p-0 m-0">Category</h5>}
-                dropdownList={[]}
-                selected={emailTemplate.category}
+                dropdownList={templateCategories.map((category) => ({ id: category._id, showName: category.name, name: category._id }))}
+                selected={emailTemplate.templateCategory}
                 search={true}
                 commonFunction={(e) => {
-                  setEmailTemplate((prev) => ({ ...prev, category: e.name }));
-                  if (errors.category) setErrors((prev) => ({ ...prev, category: '' }));
+                  setEmailTemplate((prev) => ({ ...prev, templateCategory: e.name }));
+                  if (errors.templateCategory) setErrors((prev) => ({ ...prev, templateCategory: '' }));
                 }}
-                error={errors.category}
-              /> */}
+                error={errors.templateCategory}
+              />
             </div>
 
-            {/* <div className="mt-5 w-full">
-              <label className="block text-sm font-medium text-primary">Placeholders</label>
-              <div className="border border-primary rounded-xl mt-2 flex flex-col md:flex-row p-4 gap-y-2 items-start justify-between">
-                <div className="space-y-4">
-                  <div className="flex items-center justify-start gap-1">
-                    <p className="text-primary">User: </p>
-                    <p className="text-blue">{`{recipient_name}`}</p>
-                  </div>
-                  <div className="flex items-center justify-start gap-1">
-                    <p className="text-primary">Venue:</p>
-                    <p className="text-blue">{`{venue}`} </p>
-                  </div>
-                  <div className="flex items-center justify-start gap-1">
-                    <p className="text-primary">Check-in-Time:</p>
-                    <p className="text-blue">{`{check_in_time}`} </p>
-                  </div>
-                  <div className="flex items-center justify-start gap-1">
-                    <p className="text-primary">Contact Information:</p>
-                    <p className="text-blue">{`{contact_information}`} </p>
-                  </div>
-                </div>
-
-                <div className="space-y-4">
-                  <div className="flex items-center justify-start gap-1">
-                    <p className="text-primary">Event Name:</p>
-                    <p className="text-blue">{`{event_name}`} </p>
-                  </div>
-                  <div className="flex items-center justify-start gap-1">
-                    <p className="text-primary">Event Time:</p>
-                    <p className="text-blue">{`{event_time}`} </p>
-                  </div>
-                  <div className="flex items-center justify-start gap-1">
-                    <p className="text-primary">Event-related Material:</p>
-                    <p className="text-blue">{`{event-related_material}`} </p>
-                  </div>
-                </div>
-                <div className="space-y-4">
-                  <div className="flex items-center justify-start gap-1">
-                    <p className="text-primary">Event Date:</p>
-                    <p className="text-blue">{`{event_date}`} </p>
-                  </div>
-
-                  <div className="flex items-center justify-start gap-1">
-                    <p className="text-primary">Agenda Highlights:</p>
-                    <p className="text-blue">{`{agenda_highlights}`} </p>
-                  </div>
-
-                  <div className="flex items-center justify-start gap-1">
-                    <p className="text-primary">Your Organization Name:</p>
-                    <p className="text-blue">{`{organization_name}`} </p>
-                  </div>
+            {variables && variables.length > 0 && (
+              <div className="mt-5 w-full">
+                <label className="block text-sm font-medium text-primary">Placeholders</label>
+                <div className="border border-primary rounded-xl mt-2 p-4 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+                  {variables.map((variable) => (
+                    <div className="flex items-center justify-start" key={variable.key}>
+                      <p className="text-primary">{variable.label} : </p> &nbsp;
+                      <p className="text-blue">{`{${variable.name}}`}</p>
+                    </div>
+                  ))}
                 </div>
               </div>
-            </div> */}
+            )}
           </div>
         </div>
       </div>

@@ -50,7 +50,7 @@ const AddPackage = () => {
     if (!packageDetails.event) newErrors.event = 'Event is required';
     if (!packageDetails.ticketIdPattern) newErrors.ticketIdPattern = 'Ticket ID Pattern is required';
     if (!packageDetails.ticketIdPattern?.trim()) newErrors.ticketIdPattern = 'Ticket ID Pattern is required';
-    if (packageDetails.event && !packageDetails.template) newErrors.template = 'Template is required';
+    // if (packageDetails.event && !packageDetails.template) newErrors.template = 'Template is required';
 
     if (
       (paymentData?.razorpay?.supports?.INR || paymentData?.stripe?.supports?.INR || paymentData?.paypal?.supports?.INR) &&

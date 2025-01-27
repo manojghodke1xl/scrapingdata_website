@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import TruncatableFieldModal from '../../atoms/modal/TruncatableFeildModel';
 import { formatDateTime } from '../../utils/dateFormats';
 import TableComponent from '../../atoms/table/Table';
 import { Link } from 'react-router-dom';
@@ -7,6 +6,7 @@ import { IoMdAdd } from 'react-icons/io';
 import { deletePartnerLogoApi, updatePartnerLogoSitesApi, updatePartnerLogoStatusApi } from '../../apis/partner-logo-apis';
 import NoteComponent from '../../atoms/common/NoteComponent';
 import { partnerLogoListNote } from './PartnerLogoNotes';
+import TruncatableFieldToolTip from '../../atoms/common/TruncatableFeildToolTip';
 
 const PartnerLogoList = () => {
   const [partnerlogos, setPartnerLogos] = useState([]);
@@ -18,7 +18,7 @@ const PartnerLogoList = () => {
       id: _id,
       exportData: partnerLogo,
       image: <img src={image.url} alt="Company Logo" className="w-8 h-8 rounded" />,
-      sites: <TruncatableFieldModal title={'Sites'} content={sites.map((s) => `${s.name} (${s.host})`).join(', ')} />,
+      sites: <TruncatableFieldToolTip title={'Sites'} content={sites.map((s) => `${s.name} (${s.host})`).join(', ')} />,
       isActive: (
         <div className={`rounded-xl ${isActive ? 'bg-[#ECFDF3] text-[#027948]' : 'bg-[#F2F4F7] text-[#344054]'} px-2 py-1 w-fit flex gap-2 items-center`}>
           <span className={`min-w-[12px] min-h-[12px] rounded-full ${isActive ? 'bg-[#12B76A]' : 'bg-[#667085]'}`}></span>

@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import TruncatableFieldModal from '../../atoms/modal/TruncatableFeildModel';
 import { formatDateTime } from '../../utils/dateFormats';
 import { Link } from 'react-router-dom';
 import { IoMdAdd } from 'react-icons/io';
 import TableComponent from '../../atoms/table/Table';
 import { faqCategoryListNotes } from './FaqCategoryNotes';
 import NoteComponent from '../../atoms/common/NoteComponent';
+import TruncatableFieldToolTip from '../../atoms/common/TruncatableFeildToolTip';
 
 const FaqCategoryList = () => {
   const [faqCategories, setFaqCategories] = useState([]);
@@ -15,7 +15,7 @@ const FaqCategoryList = () => {
     return {
       id: _id,
       exportData: faqCategory,
-      name: <TruncatableFieldModal title={'Name'} content={name} />,
+      name: <TruncatableFieldToolTip title={'Name'} content={name} />,
       createdAt: formatDateTime(createdAt),
       updatedAt: formatDateTime(updatedAt)
     };

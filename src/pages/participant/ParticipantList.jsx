@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import TruncatableFieldModal from '../../atoms/modal/TruncatableFeildModel';
 import { formatDateTime } from '../../utils/dateFormats';
 import TableComponent from '../../atoms/table/Table';
 import { getAllEventsApi } from '../../apis/event-apis';
 import { showNotification } from '../../utils/showNotification';
+import TruncatableFieldToolTip from '../../atoms/common/TruncatableFeildToolTip';
 
 const ParticipantList = () => {
   const [participants, setParticipants] = useState([]);
@@ -14,11 +14,11 @@ const ParticipantList = () => {
     return {
       id: _id,
       exportData: participant,
-      name: <TruncatableFieldModal title={'Name'} content={booking?.name ?? ''} />,
-      email: <TruncatableFieldModal title={'Email'} content={booking?.email ?? ''} />,
-      ticketId: <TruncatableFieldModal title={'Ticket ID'} content={ticketId ?? ''} />,
-      site: <TruncatableFieldModal title={'Sites'} content={`${booking?.site?.name} (${booking?.site?.host})`} />,
-      event: <TruncatableFieldModal title={'Event'} content={booking?.event?.name ?? ''} />,
+      name: <TruncatableFieldToolTip title={'Name'} content={booking?.name ?? ''} />,
+      email: <TruncatableFieldToolTip title={'Email'} content={booking?.email ?? ''} />,
+      ticketId: <TruncatableFieldToolTip title={'Ticket ID'} content={ticketId ?? ''} />,
+      site: <TruncatableFieldToolTip title={'Sites'} content={`${booking?.site?.name} (${booking?.site?.host})`} />,
+      event: <TruncatableFieldToolTip title={'Event'} content={booking?.event?.name ?? ''} />,
       status: (
         <div
           className={`rounded-xl ${

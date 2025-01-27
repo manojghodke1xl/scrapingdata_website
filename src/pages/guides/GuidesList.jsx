@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import TableComponent from '../../atoms/table/Table';
-import TruncatableFieldModal from '../../atoms/modal/TruncatableFeildModel';
 import { formatDateTime } from '../../utils/dateFormats';
 import { Link } from 'react-router-dom';
 import { IoMdAdd } from 'react-icons/io';
@@ -8,6 +7,7 @@ import { updateGuideSitesApi, updateGuideStatusApi } from '../../apis/guide-apis
 import NoteComponent from '../../atoms/common/NoteComponent';
 import { guideListNote } from './GuideNotes';
 import { AiOutlineApi } from 'react-icons/ai';
+import TruncatableFieldToolTip from '../../atoms/common/TruncatableFeildToolTip';
 
 const GuidesList = () => {
   const [guides, setGuides] = useState([]);
@@ -17,8 +17,8 @@ const GuidesList = () => {
     return {
       id: _id,
       exportData: guide,
-      title: <TruncatableFieldModal title={'Title'} content={title} />,
-      sites: <TruncatableFieldModal title={'Sites'} content={sites.map((s) => `${s.name} (${s.host})`).join(', ')} />,
+      title: <TruncatableFieldToolTip title={'Title'} content={title} />,
+      sites: <TruncatableFieldToolTip title={'Sites'} content={sites.map((s) => `${s.name} (${s.host})`).join(', ')} />,
       isActive: (
         <div className={`rounded-xl ${isActive ? 'bg-[#ECFDF3] text-[#027948]' : 'bg-[#F2F4F7] text-[#344054]'} px-2 py-1 w-fit flex gap-2 items-center`}>
           <span className={`min-w-[12px] min-h-[12px] rounded-full ${isActive ? 'bg-[#12B76A]' : 'bg-[#667085]'}`}></span>

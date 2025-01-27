@@ -2,7 +2,7 @@ import { IoMdAdd } from 'react-icons/io';
 import { Link } from 'react-router-dom';
 import TableComponent from '../../atoms/table/Table';
 import { useState } from 'react';
-import TruncatableFieldModal from '../../atoms/modal/TruncatableFeildModel';
+import TruncatableFieldToolTip from '../../atoms/common/TruncatableFeildToolTip';
 import { formatDateTime } from '../../utils/dateFormats';
 import useGlobalContext from '../../hooks/useGlobalContext';
 import { updateAdminStatusApi } from '../../apis/admin-apis';
@@ -21,10 +21,10 @@ const AdminList = () => {
       id: _id,
       isSuperAdmin,
       exportData: admin,
-      name: <TruncatableFieldModal title={'Name'} content={name} />,
-      email: <TruncatableFieldModal title={'Email'} content={email} />,
+      name: <TruncatableFieldToolTip title={'Name'} content={name} />,
+      email: <TruncatableFieldToolTip title={'Email'} content={email} />,
       sites: (
-        <TruncatableFieldModal
+        <TruncatableFieldToolTip
           title={'Sites'}
           content={isSuperAdmin ? allSites.map((s) => `${s.name} (${s.host})`).join(', ') : sites.map((s) => `${s.name} (${s.host})`).join(', ')}
         />

@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import TruncatableFieldModal from '../../atoms/modal/TruncatableFeildModel';
 import { formatDateTime } from '../../utils/dateFormats';
 import TableComponent from '../../atoms/table/Table';
+import TruncatableFieldToolTip from '../../atoms/common/TruncatableFeildToolTip';
 
 const BookingPaymentList = () => {
   const [bookingPayments, setBookingPayments] = useState([]);
@@ -22,13 +22,13 @@ const BookingPaymentList = () => {
     return {
       id: _id,
       exportData: payment.payment,
-      customer: <TruncatableFieldModal title={'Participant'} content={customer.name} />,
-      email: <TruncatableFieldModal title={'Email'} content={email} />,
-      phoneCode: <TruncatableFieldModal title={'Phone Code'} content={phoneCode} />,
-      phoneNumber: <TruncatableFieldModal title={'Mobile Number'} content={phoneNumber} />,
-      site: <TruncatableFieldModal title={'Sites'} content={`${site?.name} (${site?.host})`} />,
-      amount: <TruncatableFieldModal title={'Amount'} content={amount} />,
-      currency: <TruncatableFieldModal title={'Currency'} content={currency} />,
+      customer: <TruncatableFieldToolTip title={'Participant'} content={customer.name} />,
+      email: <TruncatableFieldToolTip title={'Email'} content={email} />,
+      phoneCode: <TruncatableFieldToolTip title={'Phone Code'} content={phoneCode} />,
+      phoneNumber: <TruncatableFieldToolTip title={'Mobile Number'} content={phoneNumber} />,
+      site: <TruncatableFieldToolTip title={'Sites'} content={`${site?.name} (${site?.host})`} />,
+      amount: <TruncatableFieldToolTip title={'Amount'} content={amount} />,
+      currency: <TruncatableFieldToolTip title={'Currency'} content={currency} />,
       channel: channel === 'razorpay' ? 'Razorpay' : channel === 'stripe' ? 'Stripe' : 'PayPal',
       status: (
         <div

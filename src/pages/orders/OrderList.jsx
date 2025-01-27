@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import TruncatableFieldModal from '../../atoms/modal/TruncatableFeildModel';
 import TableComponent from '../../atoms/table/Table';
 import { formatDateTime } from '../../utils/dateFormats';
+import TruncatableFieldToolTip from '../../atoms/common/TruncatableFeildToolTip';
 
 const OrderList = () => {
   const [orders, setOrders] = useState([]);
@@ -13,8 +13,7 @@ const OrderList = () => {
       id: _id,
       exportData: order,
       Keys: _id,
-      customer: <TruncatableFieldModal title={'Customer Name'} content={customer.name} />,
-      // product: <TruncatableFieldModal title={'Product Name'} content={product.name} />,
+      customer: <TruncatableFieldToolTip title={'Customer Name'} content={customer.name} />,
       status: (
         <div
           className={`rounded-xl ${

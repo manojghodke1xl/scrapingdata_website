@@ -191,7 +191,7 @@ const TableComponent = ({
 
   return (
     <div className="overflow-hidden">
-      <div className="my-8 rounded-xl border border-primary overflow-hidden">
+      <div className="my-4 rounded-xl border border-primary overflow-hidden">
         <div className="w-full flex flex-col sm:flex-row flex-wrap gap-y-4 justify-between items-center px-3 sm:px-6 ptpb-4 border-b border-primary">
           <TableFilter
             search={search}

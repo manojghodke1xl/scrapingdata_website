@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import TruncatableFieldModal from '../../atoms/modal/TruncatableFeildModel';
 import { formatDateTime } from '../../utils/dateFormats';
 import { Link } from 'react-router-dom';
 import { IoMdAdd } from 'react-icons/io';
 import TableComponent from '../../atoms/table/Table';
 import { deleteProductApi } from '../../apis/product-apis';
+import TruncatableFieldToolTip from '../../atoms/common/TruncatableFeildToolTip';
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
@@ -15,9 +15,9 @@ const ProductList = () => {
       id: _id,
       exportData: product,
       key: _id,
-      name: <TruncatableFieldModal title={'Product Name'} content={name} />,
-      type: <TruncatableFieldModal title={'Product Type'} content={type} />,
-      site: <TruncatableFieldModal title={'Sites'} content={`${site.name} (${site.host})}`} />,
+      name: <TruncatableFieldToolTip title={'Product Name'} content={name} />,
+      type: <TruncatableFieldToolTip title={'Product Type'} content={type} />,
+      site: <TruncatableFieldToolTip title={'Sites'} content={`${site.name} (${site.host})}`} />,
       createdAt: formatDateTime(createdAt),
       updatedAt: formatDateTime(updatedAt)
     };

@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import TruncatableFieldModal from '../../atoms/modal/TruncatableFeildModel';
 import { formatDateTime } from '../../utils/dateFormats';
 import TableComponent from '../../atoms/table/Table';
+import TruncatableFieldToolTip from '../../atoms/common/TruncatableFeildToolTip';
 
 const OrderPaymentList = () => {
   const [bookingPayments, setBookingPayments] = useState([]);
@@ -18,10 +18,10 @@ const OrderPaymentList = () => {
     return {
       id: _id,
       exportData: payment.payments,
-      customer: <TruncatableFieldModal title={'Participant'} content={customer.name} />,
-      site: <TruncatableFieldModal title={'Sites'} content={`${site?.name} (${site?.host})`} />,
-      amount: <TruncatableFieldModal title={'Amount'} content={amount} />,
-      currency: <TruncatableFieldModal title={'Currency'} content={currency} />,
+      customer: <TruncatableFieldToolTip title={'Participant'} content={customer.name} />,
+      site: <TruncatableFieldToolTip title={'Sites'} content={`${site?.name} (${site?.host})`} />,
+      amount: <TruncatableFieldToolTip title={'Amount'} content={amount} />,
+      currency: <TruncatableFieldToolTip title={'Currency'} content={currency} />,
       channel: channel === 'razorpay' ? 'Razorpay' : channel === 'stripe' ? 'Stripe' : 'PayPal',
       status: (
         <div

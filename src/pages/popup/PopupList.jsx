@@ -1,4 +1,3 @@
-import TruncatableFieldModal from '../../atoms/modal/TruncatableFeildModel';
 import { formatDateTime } from '../../utils/dateFormats';
 import { Link } from 'react-router-dom';
 import { IoMdAdd } from 'react-icons/io';
@@ -8,6 +7,7 @@ import { deletePopupApi, duplicatePopupApi, updatePopupStatusApi } from '../../a
 import NoteComponent from '../../atoms/common/NoteComponent';
 import { listPopupNote } from './PopupNotes';
 import { AiOutlineApi } from 'react-icons/ai';
+import TruncatableFieldToolTip from '../../atoms/common/TruncatableFeildToolTip';
 
 const PopupList = () => {
   const [popups, setPopups] = useState([]);
@@ -17,8 +17,8 @@ const PopupList = () => {
     return {
       id: _id,
       exportData: popup,
-      name: <TruncatableFieldModal title={'Name'} content={name} />,
-      site: <TruncatableFieldModal title={'Sites'} content={`${site?.name} (${site?.host}) `} maxLength={20} />,
+      name: <TruncatableFieldToolTip title={'Name'} content={name} />,
+      site: <TruncatableFieldToolTip title={'Sites'} content={`${site?.name} (${site?.host}) `} maxLength={20} />,
       showOnDeviceType: showOnDeviceType === 'mobile' ? 'Mobile' : showOnDeviceType === 'desktop' ? 'Desktop' : 'All',
       contentType: contentType === 'guide' ? 'Guide' : contentType === 'casestudy' ? 'Case Study' : 'Basic',
       isActive: (

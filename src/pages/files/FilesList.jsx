@@ -2,9 +2,9 @@ import { useState } from 'react';
 import TableComponent from '../../atoms/table/Table';
 import { Link } from 'react-router-dom';
 import { IoMdAdd } from 'react-icons/io';
-import TruncatableFieldModal from '../../atoms/modal/TruncatableFeildModel';
 import { formatDateTime } from '../../utils/dateFormats';
 import { deleteFileApi } from '../../apis/file-apis';
+import TruncatableFieldToolTip from '../../atoms/common/TruncatableFeildToolTip';
 
 const FilesList = () => {
   const [files, setFiles] = useState([]);
@@ -14,8 +14,8 @@ const FilesList = () => {
     console.log('site', site);
     return {
       id: _id,
-      attachments: <TruncatableFieldModal title={'File Name'} content={attachments.map((a) => `${a.name}`).join(', ')} />,
-      site: <TruncatableFieldModal title={'Sites'} content={`${site.name} (${site.host})}`} />,
+      attachments: <TruncatableFieldToolTip title={'File Name'} content={attachments.map((a) => `${a.name}`).join(', ')} />,
+      site: <TruncatableFieldToolTip title={'Sites'} content={`${site.name} (${site.host})}`} />,
       createdAt: formatDateTime(createdAt),
       updatedAt: formatDateTime(updatedAt)
     };

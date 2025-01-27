@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import TruncatableFieldModal from '../../atoms/modal/TruncatableFeildModel';
 import { formatDateTime } from '../../utils/dateFormats';
 import { Link } from 'react-router-dom';
 import { IoMdAdd } from 'react-icons/io';
@@ -7,6 +6,7 @@ import TableComponent from '../../atoms/table/Table';
 import { updateTestimonialSitesApi, updateTestimonialStatusApi } from '../../apis/testimonial-apis';
 import NoteComponent from '../../atoms/common/NoteComponent';
 import { testimonialListNote } from './TestimonialNotes';
+import TruncatableFieldToolTip from '../../atoms/common/TruncatableFeildToolTip';
 
 const TestimonialList = () => {
   const [testimonials, setTestimonials] = useState([]);
@@ -15,8 +15,8 @@ const TestimonialList = () => {
     const { _id, name, isActive, sites, createdAt, updatedAt } = testimonial;
     return {
       id: _id,
-      name: <TruncatableFieldModal title={'Name'} content={name} />,
-      sites: <TruncatableFieldModal title={'Sites'} content={sites.map((s) => `${s.name} (${s.host})`).join(', ')} />,
+      name: <TruncatableFieldToolTip title={'Name'} content={name} />,
+      sites: <TruncatableFieldToolTip title={'Sites'} content={sites.map((s) => `${s.name} (${s.host})`).join(', ')} />,
       isActive: (
         <div className={`rounded-xl ${isActive ? 'bg-[#ECFDF3] text-[#027948]' : 'bg-[#F2F4F7] text-[#344054]'} px-2 py-1 w-fit flex gap-2 items-center`}>
           <span className={`min-w-[12px] min-h-[12px] rounded-full ${isActive ? 'bg-[#12B76A]' : 'bg-[#667085]'}`}></span>

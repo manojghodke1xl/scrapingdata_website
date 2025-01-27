@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import TruncatableFieldModal from '../../atoms/modal/TruncatableFeildModel';
 import { formatDateTime } from '../../utils/dateFormats';
 import TableComponent from '../../atoms/table/Table';
 import { Link } from 'react-router-dom';
@@ -8,6 +7,7 @@ import { mailingListNote } from './MailingNotes';
 import NoteComponent from '../../atoms/common/NoteComponent';
 import { AiOutlineApi } from 'react-icons/ai';
 import { IoMdAdd } from 'react-icons/io';
+import TruncatableFieldToolTip from '../../atoms/common/TruncatableFeildToolTip';
 
 const SubscribersList = () => {
   const [lists, setLists] = useState([]);
@@ -17,9 +17,9 @@ const SubscribersList = () => {
     return {
       id: _id,
       exportData: list,
-      name: <TruncatableFieldModal title={'Name'} content={name} />,
-      email: <TruncatableFieldModal title={'Email'} content={email} />,
-      site: <TruncatableFieldModal title={'Sites'} content={`${site?.name} (${site?.host})`} />,
+      name: <TruncatableFieldToolTip title={'Name'} content={name} />,
+      email: <TruncatableFieldToolTip title={'Email'} content={email} />,
+      site: <TruncatableFieldToolTip title={'Sites'} content={`${site?.name} (${site?.host})`} />,
       createdAt: formatDateTime(createdAt),
       updatedAt: formatDateTime(updatedAt)
     };

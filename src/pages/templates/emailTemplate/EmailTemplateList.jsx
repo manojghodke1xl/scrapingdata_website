@@ -2,9 +2,9 @@ import { IoMdAdd } from 'react-icons/io';
 import { Link } from 'react-router-dom';
 import TableComponent from '../../../atoms/table/Table';
 import { useState } from 'react';
-import TruncatableFieldModal from '../../../atoms/modal/TruncatableFeildModel';
 import { formatDateTime } from '../../../utils/dateFormats';
 import { deleteEmailTemplateApi } from '../../../apis/templates/email-template-apis';
+import TruncatableFieldToolTip from '../../../atoms/common/TruncatableFeildToolTip';
 
 const EmailTemplateList = () => {
   const [emailTemplates, setEmailTemplates] = useState([]);
@@ -14,9 +14,9 @@ const EmailTemplateList = () => {
     return {
       id: _id,
       exportData: emailTemplate,
-      name: <TruncatableFieldModal title={'Name'} content={name} />,
-      subject: <TruncatableFieldModal title={'Subject'} content={subject} />,
-      site: <TruncatableFieldModal title={'Sites'} content={`${site?.name} (${site?.host})`} />,
+      name: <TruncatableFieldToolTip title={'Name'} content={name} />,
+      subject: <TruncatableFieldToolTip title={'Subject'} content={subject} />,
+      site: <TruncatableFieldToolTip title={'Sites'} content={`${site?.name} (${site?.host})`} />,
       createdAt: formatDateTime(createdAt),
       updatedAt: formatDateTime(updatedAt)
     };
