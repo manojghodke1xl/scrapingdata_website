@@ -70,6 +70,8 @@ const EventList = () => {
                 viewPath={'/events/view-event'}
                 copy={true}
                 copyPath={'/events/duplicate-event'}
+                managePackage={true}
+                managePackagePath={'/packages/package-list'}
                 search={true}
                 filter={true}
                 filterCategory={[

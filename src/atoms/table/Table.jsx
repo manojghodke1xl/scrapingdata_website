@@ -29,6 +29,8 @@ const TableComponent = ({
   appsPath,
   copy,
   copyPath,
+  managePackage,
+  managePackagePath,
   deleteAction,
   search,
   filter,
@@ -47,7 +49,8 @@ const TableComponent = ({
   adminStatus,
   modifyStatusApi,
   modifySite,
-  modifySiteApi
+  modifySiteApi,
+  eventId: packageEvent
 }) => {
   const {
     auth: { allSites },
@@ -114,6 +117,13 @@ const TableComponent = ({
     filterState.siteId,
     filterState.eventId
   );
+
+  useEffect(() => {
+    if (packageEvent) {
+      setShowFilter((prev) => ({ ...prev, event: true }));
+      setFilterState((prev) => ({ ...prev, eventId: packageEvent }));
+    }
+  }, [packageEvent]);
 
   useEffect(() => {
     if (data) {
@@ -269,6 +279,8 @@ const TableComponent = ({
             setModalState={setModalState}
             deleteLabel={deleteLabel}
             deleteMessage={deleteMessage}
+            managePackage={managePackage}
+            managePackagePath={managePackagePath}
           />
         </div>
         <div className="w-full mt-2">

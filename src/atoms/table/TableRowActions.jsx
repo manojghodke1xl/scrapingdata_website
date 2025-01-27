@@ -1,12 +1,28 @@
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { FiCopy } from 'react-icons/fi';
-import { MdEdit, MdOutlineApps, MdRemoveRedEye } from 'react-icons/md';
+import { MdEdit, MdOutlineApps, MdRemoveRedEye, MdOutlineInventory2 } from 'react-icons/md';
 import { RiDeleteBinLine } from 'react-icons/ri';
 import { useNavigate } from 'react-router-dom';
 
-const TableRowActions = ({ row, edit, editPath, view, viewPath, apps, appsPath, copy, copyPath, deleteAction, setSelectionState, setModalState }) => {
+const TableRowActions = ({
+  row,
+  edit,
+  editPath,
+  view,
+  viewPath,
+  apps,
+  appsPath,
+  copy,
+  copyPath,
+  deleteAction,
+  setSelectionState,
+  setModalState,
+  managePackage,
+  managePackagePath
+}) => {
   const navigate = useNavigate();
 
+  console.log(managePackage, managePackagePath);
   // Function to count the available actions
   const getActions = (row) => {
     return [
@@ -14,7 +30,8 @@ const TableRowActions = ({ row, edit, editPath, view, viewPath, apps, appsPath, 
       { type: 'view', show: view && !row.isSuperAdmin },
       { type: 'apps', show: apps && !row.isSuperAdmin },
       { type: 'copy', show: copy && !row.isSuperAdmin },
-      { type: 'delete', show: deleteAction && !row.isSuperAdmin && !row.hasBooking }
+      { type: 'delete', show: deleteAction && !row.isSuperAdmin && !row.hasBooking },
+      { type: 'managePackage', show: managePackage }
     ].filter((action) => action.show);
   };
 
@@ -28,7 +45,7 @@ const TableRowActions = ({ row, edit, editPath, view, viewPath, apps, appsPath, 
           <summary className="text-white p-1.5 rounded-xl hover:bg-white cursor-pointer focus:outline-none">
             <BsThreeDotsVertical size={20} className="text-secondary hover:text-primary" />
           </summary>
-          <ul className="absolute mt-2 right-10 z-40 w-40 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5">
+          <ul className={`absolute mt-2 right-10 z-40 ${managePackage ? 'w-50' : 'w-40'} rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5`}>
             {availableActions.map((action, i) => (
               <button
                 key={i}
@@ -42,14 +59,16 @@ const TableRowActions = ({ row, edit, editPath, view, viewPath, apps, appsPath, 
                     setSelectionState((prev) => ({ ...prev, deleteId: row.id }));
                     setModalState((prev) => ({ ...prev, isDeleteModelOpen: true }));
                   }
+                  if (action.type === 'managePackage') navigate(`${managePackagePath}?eventId=${row.id}`);
                 }}
               >
                 {action.type === 'edit' && <MdEdit size={20} />}
                 {action.type === 'view' && <MdRemoveRedEye size={20} />}
                 {action.type === 'apps' && <MdOutlineApps size={20} />}
                 {action.type === 'copy' && <FiCopy size={20} />}
-                {action.type === 'delete' && <RiDeleteBinLine />}
-                {action.type.charAt(0).toUpperCase() + action.type.slice(1)}
+                {action.type === 'delete' && <RiDeleteBinLine size={20} />}
+                {action.type === 'managePackage' && <MdOutlineInventory2 size={20} />}
+                {action.type === 'managePackage' ? 'Manage Package' : action.type.charAt(0).toUpperCase() + action.type.slice(1)}
               </button>
             ))}
           </ul>

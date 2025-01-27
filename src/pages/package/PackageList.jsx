@@ -1,5 +1,5 @@
 import { IoMdAdd } from 'react-icons/io';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import TableComponent from '../../atoms/table/Table';
 import { useEffect, useState } from 'react';
 import { formatDateTime } from '../../utils/dateFormats';
@@ -9,8 +9,14 @@ import { deletePackageApi } from '../../apis/package-apis';
 import TruncatableFieldToolTip from '../../atoms/common/TruncatableFeildToolTip';
 
 const PackageList = () => {
+  const [searchParams] = useSearchParams();
+  const eventId = searchParams.get('eventId');
   const [packages, setPackages] = useState([]);
   const [event, setEvent] = useState([]);
+  // const [filterState, setFilterState] = useState({ eventId });
+  // const [showFilter, setShowFilter] = useState({ event: true });
+
+  console.log('eventId', eventId);
 
   const rows = packages.map((userPackage) => {
     const { _id, title, amount, maxLimit, hasBooking, event, createdAt, updatedAt, ticketIdPattern } = userPackage;
@@ -85,6 +91,7 @@ const PackageList = () => {
                 filterCategory={[{ id: 1, name: 'Event' }]}
                 searchCategory={[{ id: 1, name: 'Name' }]}
                 deleteBtn={true}
+                eventId={eventId}
                 deleteApi={deletePackageApi}
                 deleteLabel={'Delete Package'}
                 deleteMessage={'Are you sure you want to delete this package?'}

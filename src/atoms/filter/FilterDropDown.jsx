@@ -1,9 +1,19 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { IoIosArrowDown } from 'react-icons/io';
 
-const FilterDropDowm = ({ name, data, setDataId }) => {
+const FilterDropDown = ({ name, data, selected, setDataId }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedSites, setSelectedSites] = useState(null);
+  console.log('selected', selected);
+
+  useEffect(() => {
+    if (selected) {
+      const selectedItem = data?.find((item) => item._id === selected);
+      if (selectedItem) {
+        setSelectedSites(selectedItem);
+      }
+    }
+  }, [selected, data]);
 
   const handleCheckboxClick = (site) => {
     setSelectedSites(site);
@@ -24,7 +34,7 @@ const FilterDropDowm = ({ name, data, setDataId }) => {
             <span className="block font-medium whitespace-nowrap text-[16px]">
               {selectedSites?.name ? (
                 <span>
-                  {name} : {selectedSites.name}
+                  {name} : {data.find((item) => item._id === selected)?.name}
                 </span>
               ) : (
                 <span className="text-secondary font-normal flex gap-2 items-center">
@@ -46,7 +56,7 @@ const FilterDropDowm = ({ name, data, setDataId }) => {
                 onClick={() => handleCheckboxClick(site)}
               >
                 <div className="flex items-center">
-                  <div className={`ml-1 whitespace-nowrap font-normal flex gap-4 items-center ${selectedSites?._id === status.id ? 'font-semibold' : ''}`}>
+                  <div className={`ml-1 whitespace-nowrap font-normal flex gap-4 items-center ${selectedSites?._id === site._id ? 'font-semibold' : ''}`}>
                     <div className="px-2 py-1 rounded-lg flex gap-2 items-center">
                       <span className="w-[8px] h-[8px] rounded-full"></span>
                       <span>{site.name}</span>
@@ -65,4 +75,4 @@ const FilterDropDowm = ({ name, data, setDataId }) => {
   );
 };
 
-export default FilterDropDowm;
+export default FilterDropDown;

@@ -86,7 +86,7 @@ const TableFilter = ({
               >
                 <IoCloseOutline />
               </div>
-              <FilterDropDowm name={'Event'} data={events} setDataId={(id) => setFilterState((prev) => ({ ...prev, eventId: id }))} />
+              <FilterDropDowm name={'Event'} data={events} selected={filterState.eventId} setDataId={(id) => setFilterState((prev) => ({ ...prev, eventId: id }))} />
             </div>
           )}
         </>

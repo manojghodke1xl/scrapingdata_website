@@ -22,7 +22,9 @@ const TableView = ({
   deleteAction,
   currentPage,
   itemsPerPage,
-  setModalState
+  setModalState,
+  managePackage,
+  managePackagePath
 }) => {
   return (
     <>
@@ -109,6 +111,8 @@ const TableView = ({
                       deleteAction={deleteAction}
                       setSelectionState={setSelectionState}
                       setModalState={setModalState}
+                      managePackage={managePackage}
+                      managePackagePath={managePackagePath}
                     />
                   )}
                 </tr>
