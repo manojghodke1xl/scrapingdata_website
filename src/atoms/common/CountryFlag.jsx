@@ -13,9 +13,8 @@ const CountryFlag = ({ dialingCode }) => {
     }
   }, [dialingCode]);
 
-  console.log('countryCode', countryCode);
   return (
-    <div className="flex items-center justify-center">{countryCode ? <div className={`country-flag flag ${countryCode}`} /> : <div className="text-primary text-sm"> - </div>}</div>
+    <div className="flex items-center justify-center">{countryCode ? <div className={`country-flag flag  ${countryCode}`} /> : <div className="text-primary text-sm pr-2">-</div>}</div>
   );
 };
 
