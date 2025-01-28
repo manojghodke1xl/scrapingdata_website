@@ -11,7 +11,6 @@ const FilesList = () => {
 
   const rows = files.map((files) => {
     const { _id, site, attachments, createdAt, updatedAt } = files;
-    console.log('site', site);
     return {
       id: _id,
       attachments: <TruncatableFieldToolTip title={'File Name'} content={attachments.map((a) => `${a.name}`).join(', ')} />,

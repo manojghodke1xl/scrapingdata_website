@@ -4,7 +4,6 @@ import { IoIosArrowDown } from 'react-icons/io';
 const FilterDropDown = ({ name, data, selected, setDataId }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedSites, setSelectedSites] = useState(null);
-  console.log('selected', selected);
 
   useEffect(() => {
     if (selected) {

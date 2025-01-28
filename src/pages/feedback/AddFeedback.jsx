@@ -63,7 +63,6 @@ const AddFeedback = () => {
   };
 
   const handlePhoneChange = (value, countryData) => {
-    console.log(value, countryData);
     const numericValue = value.replace(/\D/g, '');
     const requiredLength = countryData.format.replace(/[^.]/g, '').length;
     if (numericValue.length < requiredLength)

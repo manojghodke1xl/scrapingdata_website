@@ -174,7 +174,6 @@ const AddEmailTemplate = () => {
                 }}
                 errorMessage={errors.name}
               />
-              {console.log('emailTemplate', emailTemplate)}
               <DropDown
                 mt="mt-5"
                 name="category"

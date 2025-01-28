@@ -8,7 +8,7 @@ const TruncatableFieldToolTip = ({ content = '', maxLength = 20 }) => {
 
   return (
     <>
-      <span className="flex items-center justify-between">
+      <span className="flex items-center justify-start">
         {isTruncated ? content.substring(0, maxLength) + '...' : content === '' ? '-' : content}{' '}
         {isTruncated && (
           <button

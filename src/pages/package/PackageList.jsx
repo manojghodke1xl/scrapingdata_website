@@ -7,16 +7,13 @@ import { getAllEventsApi } from '../../apis/event-apis';
 import { showNotification } from '../../utils/showNotification';
 import { deletePackageApi } from '../../apis/package-apis';
 import TruncatableFieldToolTip from '../../atoms/common/TruncatableFeildToolTip';
+import TruncatableCopyFeild from '../../atoms/common/TruncatableCopyFeild';
 
 const PackageList = () => {
   const [searchParams] = useSearchParams();
   const eventId = searchParams.get('eventId');
   const [packages, setPackages] = useState([]);
   const [event, setEvent] = useState([]);
-  // const [filterState, setFilterState] = useState({ eventId });
-  // const [showFilter, setShowFilter] = useState({ event: true });
-
-  console.log('eventId', eventId);
 
   const rows = packages.map((userPackage) => {
     const { _id, title, amount, maxLimit, hasBooking, event, createdAt, updatedAt, ticketIdPattern } = userPackage;
@@ -24,9 +21,10 @@ const PackageList = () => {
       id: _id,
       hasBooking,
       exportData: userPackage,
-      key: _id,
+      key: <TruncatableCopyFeild content={_id} />,
       title: <TruncatableFieldToolTip title={'Package Title'} content={title} />,
       event: <TruncatableFieldToolTip title={'Event'} content={`${event.name} (${event.venue})`} />,
+      date: formatDateTime(event.date),
       amount: <TruncatableFieldToolTip title={'Price'} content={amount} />,
       maxLimit: <TruncatableFieldToolTip title={'Max Limit'} content={maxLimit} />,
       ticketIdPattern: <TruncatableFieldToolTip title={'Ticket ID Pattern'} content={ticketIdPattern} />,
@@ -68,6 +66,7 @@ const PackageList = () => {
                   { label: 'Key', key: 'key' },
                   { label: 'Package Title', key: 'title' },
                   { label: 'Event', key: 'event' },
+                  { label: 'Event Date', key: 'date' },
                   { label: 'Price', key: 'amount' },
                   { label: 'Max Attendees', key: 'maxLimit' },
                   { label: 'Ticket ID Pattern', key: 'ticketIdPattern' },

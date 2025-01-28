@@ -57,7 +57,6 @@ const AddTemplateCategory = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
-    console.log('templateCategory', templateCategory);
     setLoading(true);
     try {
       const { status, data } = id ? await updateTemplateCategoryApi(id, templateCategory) : await addTemplateCategoryApi(templateCategory);

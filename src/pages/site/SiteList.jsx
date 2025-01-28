@@ -8,6 +8,7 @@ import { updateSiteStatusApi } from '../../apis/site-apis';
 import NoteComponent from '../../atoms/common/NoteComponent';
 import { websiteListNote } from './SiteNotes';
 import TruncatableFieldToolTip from '../../atoms/common/TruncatableFeildToolTip';
+import TruncatableCopyFeild from '../../atoms/common/TruncatableCopyFeild';
 
 const SiteList = () => {
   const [sites, setSites] = useState([]);
@@ -20,7 +21,7 @@ const SiteList = () => {
     return {
       id: _id,
       exportData: site,
-      keys: _id,
+      keys: <TruncatableCopyFeild content={_id} />,
       name: <TruncatableFieldToolTip title={'Website Name'} content={name} />,
       host: <TruncatableFieldToolTip title={'Web Address'} content={host} />,
       isActive: (

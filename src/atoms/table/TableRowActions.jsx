@@ -22,7 +22,6 @@ const TableRowActions = ({
 }) => {
   const navigate = useNavigate();
 
-  console.log(managePackage, managePackagePath);
   // Function to count the available actions
   const getActions = (row) => {
     return [

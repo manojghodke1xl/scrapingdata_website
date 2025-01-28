@@ -5,6 +5,7 @@ import { IoMdAdd } from 'react-icons/io';
 import TableComponent from '../../atoms/table/Table';
 import { deleteEventApi } from '../../apis/event-apis';
 import TruncatableFieldToolTip from '../../atoms/common/TruncatableFeildToolTip';
+import TruncatableCopyFeild from '../../atoms/common/TruncatableCopyFeild';
 
 const EventList = () => {
   const [events, setEvents] = useState([]);
@@ -14,7 +15,7 @@ const EventList = () => {
     return {
       id: _id,
       exportData: event,
-      Keys: _id,
+      Keys: <TruncatableCopyFeild content={_id} />,
       name: <TruncatableFieldToolTip title={'Event Name'} content={name} />,
       site: <TruncatableFieldToolTip title={'Sites'} content={`${site?.name} (${site?.host})`} />,
       venue: <TruncatableFieldToolTip title={'Venue'} content={venue} />,

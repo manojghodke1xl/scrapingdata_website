@@ -2,6 +2,7 @@ import { useState } from 'react';
 import TableComponent from '../../atoms/table/Table';
 import TruncatableFieldToolTip from '../../atoms/common/TruncatableFeildToolTip';
 import { formatDateTime } from '../../utils/dateFormats';
+import TruncatableCopyFeild from '../../atoms/common/TruncatableCopyFeild';
 
 const BookingList = () => {
   const [bookings, setBookings] = useState([]);
@@ -24,7 +25,7 @@ const BookingList = () => {
     return {
       id: _id,
       exportData: booking,
-      Keys: _id,
+      Keys: <TruncatableCopyFeild content={_id} />,
       name: <TruncatableFieldToolTip title={'Customer Name'} content={name} />,
       email: <TruncatableFieldToolTip title={'Email'} content={email} />,
       phoneCode: <TruncatableFieldToolTip title={'Phone Code'} content={phoneCode} />,

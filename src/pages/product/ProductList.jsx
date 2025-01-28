@@ -5,6 +5,7 @@ import { IoMdAdd } from 'react-icons/io';
 import TableComponent from '../../atoms/table/Table';
 import { deleteProductApi } from '../../apis/product-apis';
 import TruncatableFieldToolTip from '../../atoms/common/TruncatableFeildToolTip';
+import TruncatableCopyFeild from '../../atoms/common/TruncatableCopyFeild';
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
@@ -14,7 +15,7 @@ const ProductList = () => {
     return {
       id: _id,
       exportData: product,
-      key: _id,
+      key: <TruncatableCopyFeild content={_id} />,
       name: <TruncatableFieldToolTip title={'Product Name'} content={name} />,
       type: <TruncatableFieldToolTip title={'Product Type'} content={type} />,
       site: <TruncatableFieldToolTip title={'Sites'} content={`${site.name} (${site.host})}`} />,
