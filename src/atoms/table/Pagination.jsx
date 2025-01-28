@@ -76,7 +76,7 @@ const Pagination = ({ currentPage, totalPages, totalRecords, itemsPerPage, setIt
 
   return (
     <div className="flex items-center justify-between bg-white px-2 sm:px-6 gap-4">
-      <div className="w-full flex flex-col sm:flex-row gap-y-5 justify-center xl:justify-between flex-wrap xl:flex-nowrap py-2 items-center">
+      <div className="w-full flex flex-col sm:flex-row gap-y-5 justify-center xl:justify-between flex-wrap xl:flex-nowrap py-2 items-center gap-4">
         <div className="flex gap-3 items-start">
           <div className="dropdown-container w-full sm:min-w-[200px] sm:max-w-[260px] flex gap-3 items-center order-1 lg:order-1 xl:order-1">
             <span className="text-secondary whitespace-nowrap">Records Per Page:</span>
@@ -126,7 +126,7 @@ const Pagination = ({ currentPage, totalPages, totalRecords, itemsPerPage, setIt
         </div>
 
         <div className="flex gap-3 items-center order-3">
-          <span className="flex items-center text-[15px] font-medium px-4 py-2 rounded-xl bg-gray-50 text-primary">
+          <span className="flex items-center text-[15px] font-medium px-4 py-2 rounded-xl text-primary">
             Page &nbsp;
             <input
               type="number"

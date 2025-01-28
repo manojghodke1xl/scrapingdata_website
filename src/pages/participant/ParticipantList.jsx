@@ -74,7 +74,7 @@ const ParticipantList = () => {
                 selectable={true}
                 siteModule={'participant'}
                 headers={[
-                  { label: 'Sr No.', key: 'srno' },
+                  { label: 'Sr. No.', key: 'srno' },
                   { label: 'Name', key: 'name' },
                   { label: 'Email', key: 'email' },
                   { label: 'Country', key: 'country' },

@@ -50,7 +50,7 @@ const AdminList = () => {
               <TableComponent
                 selectable={true}
                 headers={[
-                  { label: 'Sr No.', key: 'srno' },
+                  { label: 'Sr. No.', key: 'srno' },
                   { label: 'Admin Name', key: 'name' },
                   { label: 'Admin Email', key: 'email' },
                   { label: 'Sites', key: 'sites' },

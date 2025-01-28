@@ -31,7 +31,7 @@ const EnquiryList = () => {
     <div className="py-5 px-8 overflow-x-hidden mb-10">
       <div className=" w-full">
         <TableHeader
-          heading="Enquiries"
+          heading="Enquiry"
           btn2={true}
           btn1={true}
           href1={'/enquiry/enquiry-integration'}
@@ -47,7 +47,7 @@ const EnquiryList = () => {
               <TableComponent
                 selectable={true}
                 headers={[
-                  { label: 'Sr No.', key: 'srno' },
+                  { label: 'Sr. No.', key: 'srno' },
                   { label: 'Customer Name', key: 'name' },
                   { label: 'Email', key: 'email' },
                   { label: 'Enquiry Service', key: 'service' },

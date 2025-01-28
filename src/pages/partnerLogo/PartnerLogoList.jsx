@@ -42,7 +42,7 @@ const PartnerLogoList = () => {
                 search={true}
                 siteModule={'partnerlogo'}
                 headers={[
-                  { label: 'Sr No.', key: 'srno' },
+                  { label: 'Sr. No.', key: 'srno' },
                   { label: 'Image', key: 'image' },
                   { label: 'Sites', key: 'sites' },
                   { label: 'Status', key: 'isActive' },

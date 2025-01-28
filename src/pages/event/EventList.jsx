@@ -38,7 +38,7 @@ const EventList = () => {
                 selectable={true}
                 siteModule={'events'}
                 headers={[
-                  { label: 'Sr No.', key: 'srno' },
+                  { label: 'Sr. No.', key: 'srno' },
                   { label: 'Keys', key: 'Keys' },
                   { label: 'Event Name', key: 'name' },
                   { label: 'Sites', key: 'site' },

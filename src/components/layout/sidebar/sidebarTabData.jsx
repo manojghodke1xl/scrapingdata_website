@@ -14,23 +14,23 @@ export const navLinks = [
 
 export const leadsPath = [
   { title: 'Enquiry', to: ['/enquiry/enquiry-list', '/enquiry/view-enquiry', '/enquiry/enquiry-integration'] },
-  { title: 'Subscribers', to: ['/subscriber/subscriber-list', '/subscriber/view-subscriber', '/subscriber/subscriber-integration'] },
+  { title: 'Newsletter Subscribers', to: ['/subscriber/subscriber-list', '/subscriber/view-subscriber', '/subscriber/subscriber-integration'] },
   { title: 'Feedback', to: ['/feedback/feedback-list', '/feedback/view-feedback', '/feedback/feedback-integration'] }
 ];
 
 export const contentsPath = [
   {
-    title: 'Case Study',
+    title: 'Case Studies',
     to: ['/case-study/case-study-list', '/case-study/add-case-study', '/case-study/edit-case-study', '/case-study/case-study-integration', '/case-study/duplicate-case-study']
   },
   { title: 'Guides', to: ['/guides/guides-list', '/guides/add-guide', '/guides/edit-guide', '/guides/guides-integration', '/guides/duplicate-guide'] },
   { title: 'Pop-ups', to: ['/pop-up/pop-up-list', '/pop-up/add-pop-up', '/pop-up/edit-pop-up'] }
 ];
 
-export const marketingPath = [{ title: 'Coupon', to: ['/coupon/coupon-list', '/coupon/add-coupon', '/coupon/edit-coupon', '/coupon/duplicate-coupon'] }];
+export const marketingPath = [{ title: 'Coupons', to: ['/coupon/coupon-list', '/coupon/add-coupon', '/coupon/edit-coupon', '/coupon/duplicate-coupon'] }];
 
 export const productsPath = [
-  { title: 'Product', to: ['/products/product-list', '/products/add-product', '/products/edit-product', '/products/duplicate-product'] },
+  { title: 'Products', to: ['/products/product-list', '/products/add-product', '/products/edit-product', '/products/duplicate-product'] },
   { title: 'Orders', to: ['/orders/order-list'] },
   { title: 'Order Payments', to: ['/payments/order-payment-list'] }
 ];

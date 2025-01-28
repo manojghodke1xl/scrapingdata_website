@@ -43,7 +43,7 @@ const CouponList = () => {
                 selectable={true}
                 siteModule={'coupon'}
                 headers={[
-                  { label: 'Sr No.', key: 'srno' },
+                  { label: 'Sr. No.', key: 'srno' },
                   { label: 'Coupon Code', key: 'code' },
                   { label: 'Discount Type', key: 'type' },
                   { label: 'Discount Value', key: 'value' },

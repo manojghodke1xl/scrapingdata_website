@@ -30,7 +30,7 @@ const SmtpList = () => {
               <TableComponent
                 selectable={true}
                 headers={[
-                  { label: 'Sr No.', key: 'srno' },
+                  { label: 'Sr. No.', key: 'srno' },
                   { label: 'Name', key: 'name' },
                   { label: 'Host', key: 'host' },
                   { label: 'Created Date', key: 'createdAt' },

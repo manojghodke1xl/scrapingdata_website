@@ -50,7 +50,7 @@ const OrderPaymentList = () => {
                 selectable={true}
                 siteModule={'order-payments'}
                 headers={[
-                  { label: 'Sr No.', key: 'srno' },
+                  { label: 'Sr. No.', key: 'srno' },
                   { label: 'Customer Name', key: 'customer' },
                   { label: 'Site', key: 'site' },
                   { label: 'Amount', key: 'amount' },

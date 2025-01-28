@@ -42,7 +42,7 @@ const RecaptchaList = () => {
                 selectable={true}
                 siteModule={'recaptcha'}
                 headers={[
-                  { label: 'Sr No.', key: 'srno' },
+                  { label: 'Sr. No.', key: 'srno' },
                   { label: 'Sites', key: 'sites' },
                   { label: 'Version', key: 'version' },
                   { label: 'site Key', key: 'sitekey' },

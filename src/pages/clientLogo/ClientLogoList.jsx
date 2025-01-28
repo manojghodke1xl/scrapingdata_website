@@ -42,7 +42,7 @@ const ClientLogoList = () => {
                 siteModule={'clientlogo'}
                 search={true}
                 headers={[
-                  { label: 'Sr No.', key: 'srno' },
+                  { label: 'Sr. No.', key: 'srno' },
                   { label: 'Client Logo', key: 'image' },
                   { label: 'Sites', key: 'sites' },
                   { label: 'Status', key: 'isActive' },

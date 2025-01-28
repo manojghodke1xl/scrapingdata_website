@@ -51,7 +51,7 @@ const GuidesList = () => {
                 selectable={true}
                 siteModule={'guide'}
                 headers={[
-                  { label: 'Sr No.', key: 'srno' },
+                  { label: 'Sr. No.', key: 'srno' },
                   { label: 'Title', key: 'title' },
                   { label: 'Sites', key: 'sites' },
                   { label: 'Status', key: 'isActive' },

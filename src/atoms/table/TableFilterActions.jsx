@@ -24,7 +24,7 @@ const TableFilterActions = ({
           className="sm:w-fit text-primary font-normal hover:bg-gray-50 rounded-xl border border-primary py-2 px-3 sm:px-2 sm:py-2 md:px-3 whitespace-nowrap flex gap-1 sm:gap-2"
         >
           <RiDeleteBinLine size={20} />
-          <span className="hidden sm:block">Delete</span>
+          <span className="sm:text-base text-sm">Delete</span>
         </button>
       )}
       {modifyStatus && selectionState.selectedItems.length > 0 && (
@@ -35,7 +35,7 @@ const TableFilterActions = ({
               onClick={() => handleStatusChange(selectionState.status)}
               className="sm:w-fit text-primary font-normal hover:bg-gray-50 rounded-xl border border-primary py-2 px-3 sm:px-2 sm:py-2 md:px-3 whitespace-nowrap flex gap-1 sm:gap-2"
             >
-              <span className="hidden sm:block">Apply Status</span>
+              <span className="sm:text-base text-sm">Apply Status</span>
             </button>
           )}
         </>
@@ -66,13 +66,13 @@ const TableFilterActions = ({
             className="sm:w-fit text-primary font-normal hover:bg-gray-50 rounded-xl border border-primary py-2 px-3 sm:px-2 sm:py-2 md:px-3 whitespace-nowrap flex gap-1 sm:gap-2"
           >
             <CiExport size={20} strokeWidth="1.2" fill="none" />
-            <span className="hidden sm:block">Export</span>
+            <span className="sm:text-base text-sm">Export</span>
           </button>
         </>
       )}
       {isFilterActive && (
         <button
-          className="sm:w-fit text-primary font-normal hover:bg-gray-50 rounded-xl border border-primary py-2 px-3 sm:px-2 sm:py-2 md:px-3 whitespace-nowrap flex gap-1 sm:gap-2"
+          className="sm:w-fit text-primary font-normal hover:bg-gray-50 rounded-xl border border-primary py-2 px-3 sm:px-2 sm:py-2 md:px-3 whitespace-nowrap flex gap-1 sm:gap-2 text-sm sm:text-base"
           onClick={handleClearFilter}
         >
           Clear All

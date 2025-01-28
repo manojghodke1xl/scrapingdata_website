@@ -194,7 +194,7 @@ const TableComponent = ({
     setShowFilter({ status: false, sites: false, event: false });
   };
 
-  const modulesArray = ['participant', 'payment', 'products', 'booking-payments', 'order-payments'];
+  const modulesArray = ['participant', 'payment', 'products', 'booking-payments', 'order-payments', 'email-templates'];
 
   const availableSites = modulesArray.includes(siteModule)
     ? allSites
@@ -203,7 +203,7 @@ const TableComponent = ({
   return (
     <div className="overflow-hidden">
       <div className="my-4 rounded-xl border border-primary overflow-hidden">
-        <div className="w-full flex flex-col sm:flex-row flex-wrap gap-y-4 justify-between items-center px-3 sm:px-6 ptpb-4 border-b border-primary">
+        <div className="w-full flex flex-row sm:flex-row flex-wrap gap-y-4 justify-between items-center px-3 sm:px-6 ptpb-4 border-b border-primary">
           <TableFilter
             search={search}
             filterState={filterState}
@@ -222,8 +222,8 @@ const TableComponent = ({
           />
           <div
             className={`w-full xl:w-fit flex ${
-              (deleteBtn + search + filter + exportBtn + modifyStatus, modifySite + duplicateBtn >= 4 ? 'flex-wrap' : 'flex-nowrap')
-            } sm:justify-end justify-center gap-2 items-center`}
+              (deleteBtn + search + filter + exportBtn + modifyStatus, modifySite + duplicateBtn >= 3 ? 'flex-wrap' : 'flex-nowrap')
+            } xl:justify-end justify-start gap-2 items-center`}
           >
             <TableFilterActions
               deleteBtn={deleteBtn}

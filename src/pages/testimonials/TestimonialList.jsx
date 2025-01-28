@@ -39,7 +39,7 @@ const TestimonialList = () => {
                 selectable={true}
                 siteModule={'testimonial'}
                 headers={[
-                  { label: 'Sr No.', key: 'srno' },
+                  { label: 'Sr. No.', key: 'srno' },
                   { label: 'Name', key: 'name' },
                   { label: 'Sites', key: 'sites' },
                   { label: 'Status', key: 'isActive' },

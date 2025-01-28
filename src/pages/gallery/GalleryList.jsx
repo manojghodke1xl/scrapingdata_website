@@ -42,7 +42,7 @@ const GalleryList = () => {
                 search={true}
                 siteModule={'gallery'}
                 headers={[
-                  { label: 'Sr No.', key: 'srno' },
+                  { label: 'Sr. No.', key: 'srno' },
                   { label: 'Image', key: 'image' },
                   { label: 'Sites', key: 'sites' },
                   { label: 'Status', key: 'isActive' },

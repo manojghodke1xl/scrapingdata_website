@@ -53,7 +53,7 @@ const PopupList = () => {
                 selectable={true}
                 siteModule={'popup'}
                 headers={[
-                  { label: 'Sr No.', key: 'srno' },
+                  { label: 'Sr. No.', key: 'srno' },
                   { label: 'Name', key: 'name' },
                   { label: 'Sites', key: 'site' },
                   { label: 'Device Type', key: 'showOnDeviceType' },

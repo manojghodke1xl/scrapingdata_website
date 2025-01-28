@@ -36,8 +36,8 @@ const RazorpayIntegration = () => {
     if (!razorpayDetails.keyId) newErrors.keyId = 'Key Id is required';
     if (!razorpayDetails.keySecret) newErrors.keySecret = 'Key Secret is required';
     if (!razorpayDetails.environment) newErrors.environment = 'Environment is required';
-    if (!razorpayDetails.redirectUrl?.success) newErrors.redirectUrlsuccess = 'Succes Redirect URL is required';
-    if (!razorpayDetails.redirectUrl?.failure) newErrors.redirectUrlfailure = 'Failure Redirect URL is required';
+    if (!razorpayDetails.redirectUrl?.success) newErrors.redirectUrlsuccess = 'Succes URL is required';
+    if (!razorpayDetails.redirectUrl?.failure) newErrors.redirectUrlfailure = 'Failure URL is required';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };

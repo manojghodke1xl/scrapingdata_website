@@ -12,7 +12,6 @@ const AddTestimonialCategory = () => {
   const navigate = useNavigate();
   const { id = '' } = useParams();
   const { setLoading, isLoading } = useGlobalContext();
-  const [isScrollable, setIsScrollable] = useState(false);
   const [categoryName, setCategoryName] = useState('');
   const [errors, setErrors] = useState({});
 
@@ -59,17 +58,6 @@ const AddTestimonialCategory = () => {
       setLoading(false);
     }
   };
-  const checkScrollability = () => {
-    const contentHeight = document.documentElement.scrollHeight;
-    const windowHeight = window.innerHeight;
-    setIsScrollable(contentHeight > windowHeight);
-  };
-
-  useEffect(() => {
-    checkScrollability();
-    window.addEventListener('resize', checkScrollability);
-    return () => window.removeEventListener('resize', checkScrollability);
-  }, []);
 
   return (
     <div className="py-8 p-4 sm:p-8 overflow-x-hidden mb-20">
@@ -108,11 +96,6 @@ const AddTestimonialCategory = () => {
       <div className="w-full justify-center items-center border-b  border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end ">
         <NoteComponent note={id ? editTestimonialCategoryNote : addTestimonialCategoryNote} />
       </div>
-      {!isScrollable && (
-        <div className="w-full flex justify-end items-center gap-4 pt-8  border- border-primary">
-          <FormButtons to="/testimonial-category/testimonial-category-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} loading={isLoading} />
-        </div>
-      )}
     </div>
   );
 };

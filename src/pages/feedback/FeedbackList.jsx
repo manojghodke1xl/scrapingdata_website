@@ -48,7 +48,7 @@ const FeedbackList = () => {
               <TableComponent
                 selectable={true}
                 headers={[
-                  { label: 'Sr No.', key: 'srno' },
+                  { label: 'Sr. No.', key: 'srno' },
                   { label: 'Customer Name', key: 'name' },
                   { label: 'Email', key: 'email' },
                   { label: 'Feedback Service', key: 'service' },

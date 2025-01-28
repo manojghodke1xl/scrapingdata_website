@@ -33,7 +33,7 @@ const EmailTemplateList = () => {
                 selectable={true}
                 siteModule={'email-templates'}
                 headers={[
-                  { label: 'Sr No.', key: 'srno' },
+                  { label: 'Sr. No.', key: 'srno' },
                   { label: 'Name', key: 'name' },
                   { label: 'Subject', key: 'subject' },
                   { label: 'Sites', key: 'site' },
@@ -46,6 +46,12 @@ const EmailTemplateList = () => {
                 tableCountLabel={true}
                 pagination={true}
                 search={true}
+                searchCategory={[
+                  { id: 0, name: 'Name' },
+                  { id: 1, name: 'Subject' }
+                ]}
+                filter={true}
+                filterCategory={[{ id: 0, name: 'Sites' }]}
                 actions={true}
                 edit={true}
                 editPath={'/templates/edit-email-template'}

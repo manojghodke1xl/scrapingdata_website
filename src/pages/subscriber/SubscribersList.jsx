@@ -29,7 +29,7 @@ const SubscribersList = () => {
     <div className="py-5 px-8 overflow-x-hidden mb-10">
       <div className=" w-full">
         <TableHeader
-          heading={'Subscribers'}
+          heading="Newsletter Subscribers"
           btn1={true}
           href1={'/subscriber/subscriber-integration'}
           icon1={<AiOutlineApi size={22} />}
@@ -37,7 +37,7 @@ const SubscribersList = () => {
           btn2={true}
           href2={'/subscriber/add-subscriber'}
           icon2={<IoMdAdd size={22} />}
-          btnLabel2={'Add Subscriber'}
+          btnLabel2={'Add Newsletter Subscriber'}
         />
         <div className="flex flex-col">
           <div className="-m-1.5 overflow-x-auto">
@@ -45,7 +45,7 @@ const SubscribersList = () => {
               <TableComponent
                 selectable={true}
                 headers={[
-                  { label: 'Sr No.', key: 'srno' },
+                  { label: 'Sr. No.', key: 'srno' },
                   { label: 'Name', key: 'name' },
                   { label: 'Email', key: 'email' },
                   { label: 'Sites', key: 'site' },

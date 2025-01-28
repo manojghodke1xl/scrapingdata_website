@@ -31,7 +31,7 @@ const FilesList = () => {
                 selectable={true}
                 siteModule={'events'}
                 headers={[
-                  { label: 'Sr No.', key: 'srno' },
+                  { label: 'Sr. No.', key: 'srno' },
                   { label: 'File Name', key: 'attachments' },
                   { label: 'Sites', key: 'site' },
                   { label: 'Created Date', key: 'createdAt' },

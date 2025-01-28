@@ -31,7 +31,7 @@ const TemplateCategoryList = () => {
               <TableComponent
                 selectable={true}
                 headers={[
-                  { label: 'Sr No.', key: 'srno' },
+                  { label: 'Sr. No.', key: 'srno' },
                   { label: 'Key', key: 'key' },
                   { label: 'Name', key: 'name' },
                   { label: 'Created Date', key: 'createdAt' },

@@ -34,7 +34,7 @@ const ProductList = () => {
                 selectable={true}
                 siteModule={'products'}
                 headers={[
-                  { label: 'Sr No.', key: 'srno' },
+                  { label: 'Sr. No.', key: 'srno' },
                   { label: 'Key', key: 'key' },
                   { label: 'Product Name', key: 'name' },
                   { label: 'Product Type', key: 'type' },

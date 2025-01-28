@@ -41,7 +41,7 @@ const FaqList = () => {
                 selectable={true}
                 siteModule={'faq'}
                 headers={[
-                  { label: 'Sr No.', key: 'srno' },
+                  { label: 'Sr. No.', key: 'srno' },
                   { label: 'Sites', key: 'sites' },
                   { label: 'Question', key: 'question' },
                   { label: 'Answer', key: 'answer' },
