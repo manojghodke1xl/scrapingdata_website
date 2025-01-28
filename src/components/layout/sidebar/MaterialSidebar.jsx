@@ -25,13 +25,16 @@ import useGlobalContext from '../../../hooks/useGlobalContext';
 import { AiOutlineProduct } from 'react-icons/ai';
 // import SearchComponent from '../../../atoms/common/SearchComponent';
 
-const MaterialSidebar = () => {
+const MaterialSidebar = ({ handleToggleSidebar }) => {
   const { pathname } = useLocation();
   const { auth } = useGlobalContext();
   const [openAccordion, setOpenAccordion] = useState(null);
 
   const isActive = (menuPaths) => menuPaths.some((path) => pathname.startsWith(path));
-  const handleLinkClick = () => setOpenAccordion(null);
+  const handleLinkClick = () => {
+    setOpenAccordion(null);
+    handleToggleSidebar();
+  };
 
   return (
     <div className="w-[320px] h-full px-3 ptpb-4 sm:py-6 relative">
@@ -59,6 +62,7 @@ const MaterialSidebar = () => {
             icon={<TbFileSearch />}
             isOpen={openAccordion === 'Contents'}
             onToggle={() => setOpenAccordion(openAccordion === 'Contents' ? null : 'Contents')}
+            handleToggleSidebar={handleToggleSidebar}
           />
 
           <ReusableAccordion
@@ -67,6 +71,7 @@ const MaterialSidebar = () => {
             icon={<FaBullhorn />}
             isOpen={openAccordion === 'Marketing'}
             onToggle={() => setOpenAccordion(openAccordion === 'Marketing' ? null : 'Marketing')}
+            handleToggleSidebar={handleToggleSidebar}
           />
 
           <ReusableAccordion
@@ -75,6 +80,7 @@ const MaterialSidebar = () => {
             icon={<AiOutlineProduct />}
             isOpen={openAccordion === 'Products'}
             onToggle={() => setOpenAccordion(openAccordion === 'Products' ? null : 'Products')}
+            handleToggleSidebar={handleToggleSidebar}
           />
 
           <ReusableAccordion
@@ -83,6 +89,7 @@ const MaterialSidebar = () => {
             icon={<TbUsersGroup />}
             isOpen={openAccordion === 'Leads'}
             onToggle={() => setOpenAccordion(openAccordion === 'Leads' ? null : 'Leads')}
+            handleToggleSidebar={handleToggleSidebar}
           />
 
           <ReusableAccordion
@@ -91,6 +98,7 @@ const MaterialSidebar = () => {
             icon={<IoSettingsOutline />}
             isOpen={openAccordion === 'Site Settings'}
             onToggle={() => setOpenAccordion(openAccordion === 'Site Settings' ? null : 'Site Settings')}
+            handleToggleSidebar={handleToggleSidebar}
           />
 
           <ReusableAccordion
@@ -99,6 +107,7 @@ const MaterialSidebar = () => {
             icon={<FaRegImage />}
             isOpen={openAccordion === 'Media'}
             onToggle={() => setOpenAccordion(openAccordion === 'Media' ? null : 'Media')}
+            handleToggleSidebar={handleToggleSidebar}
           />
 
           <ReusableAccordion
@@ -107,6 +116,7 @@ const MaterialSidebar = () => {
             icon={<FaRegFile />}
             isOpen={openAccordion === 'Files'}
             onToggle={() => setOpenAccordion(openAccordion === 'Files' ? null : 'Files')}
+            handleToggleSidebar={handleToggleSidebar}
           />
 
           <ReusableAccordion
@@ -115,6 +125,7 @@ const MaterialSidebar = () => {
             icon={<FiCalendar />}
             isOpen={openAccordion === 'Events'}
             onToggle={() => setOpenAccordion(openAccordion === 'Events' ? null : 'Events')}
+            handleToggleSidebar={handleToggleSidebar}
           />
 
           <ReusableAccordion
@@ -123,6 +134,7 @@ const MaterialSidebar = () => {
             icon={<FaRegQuestionCircle />}
             isOpen={openAccordion === 'FAQs'}
             onToggle={() => setOpenAccordion(openAccordion === 'FAQs' ? null : 'FAQs')}
+            handleToggleSidebar={handleToggleSidebar}
           />
 
           <ReusableAccordion
@@ -131,6 +143,7 @@ const MaterialSidebar = () => {
             icon={<MdMessage />}
             isOpen={openAccordion === 'Testimonials'}
             onToggle={() => setOpenAccordion(openAccordion === 'Testimonials' ? null : 'Testimonials')}
+            handleToggleSidebar={handleToggleSidebar}
           />
 
           <ReusableAccordion
@@ -139,6 +152,7 @@ const MaterialSidebar = () => {
             icon={<TbTemplate />}
             isOpen={openAccordion === 'Templates'}
             onToggle={() => setOpenAccordion(openAccordion === 'Templates' ? null : 'Templates')}
+            handleToggleSidebar={handleToggleSidebar}
           />
 
           {adminNavLinks

@@ -56,7 +56,7 @@ const ViewFeedback = () => {
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className=" text-primary">Customer Details</span>
           </div>
-          <div className="w-full grid grid-cols-2 gap-5">
+          <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div className="mt-5">
               <h1 className="font-semibold text-primary">Customer Name</h1>
               <p className="text-secondary"> {feedback?.name || 'No name available'}</p>
@@ -74,7 +74,7 @@ const ViewFeedback = () => {
             <div className="mt-5">
               <h1 className="font-semibold text-primary">Country</h1>
               <p className="text-secondary flex items-center py-4 mt-2">
-                <CountryFlag dialingCode={feedback?.ccode?.startsWith('+') ? feedback?.ccode.slice(1) : feedback?.ccode} />
+                <CountryFlag dialingCode={feedback?.ccode?.startsWith('+') ? feedback?.ccode.slice(1) : feedback?.ccode} showName={true} />
               </p>
             </div>
             <div className="mt-5">
@@ -116,7 +116,7 @@ const ViewFeedback = () => {
             </span>
           </div>
           <div className="w-full">
-            <div className="w-full grid grid-cols-2 gap-5">
+            <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div className="mt-5">
                 <h1 className="font-semibold text-primary">Site Name</h1>
                 <p className="text-secondary"> {feedback?.site?.name || 'No Site Name available'}</p>
@@ -151,7 +151,7 @@ const ViewFeedback = () => {
               </div>
             </span>
           </div>
-          <div className="w-full grid grid-cols-2 gap-5">
+          <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div className="mt-5">
               <h1 className="font-semibold text-primary">Request Header</h1>
               <p className="text-secondary"> {feedback?.header || 'No header available'}</p>

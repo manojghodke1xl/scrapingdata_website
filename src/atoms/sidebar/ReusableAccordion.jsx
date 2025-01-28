@@ -2,7 +2,7 @@ import { Accordion, AccordionHeader, AccordionBody } from '@material-tailwind/re
 import { Link, useLocation } from 'react-router-dom';
 import { IoIosArrowDown } from 'react-icons/io';
 
-const ReusableAccordion = ({ title, links, icon, isOpen, onToggle }) => {
+const ReusableAccordion = ({ title, links, icon, isOpen, onToggle, handleToggleSidebar }) => {
   const { pathname } = useLocation();
   const isActive = (menuPaths) => menuPaths.some((path) => pathname.startsWith(path));
 
@@ -24,9 +24,8 @@ const ReusableAccordion = ({ title, links, icon, isOpen, onToggle }) => {
           <Link
             key={title}
             to={to[0]}
-            className={`block text-primary text-base px-4 font-medium rounded-xl py-2.5 ${
-              isActive(to) ? 'bg-fadedblue text-blue' : 'text-primary hover:bg-gray-100 bg-white'
-            }`}
+            onClick={handleToggleSidebar}
+            className={`block text-primary text-base px-4 font-medium rounded-xl py-2.5 ${isActive(to) ? 'bg-fadedblue text-blue' : 'text-primary hover:bg-gray-100 bg-white'}`}
           >
             <span>{title}</span>
           </Link>

@@ -57,7 +57,7 @@ const ViewSubscriber = () => {
               <div className="flex items-center gap-2">Customer Information</div>
             </span>
           </div>
-          <div className="w-full grid grid-cols-2 gap-5">
+          <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div className="mt-5">
               <h1 className="font-semibold text-primary">Name</h1>
               <p className="text-secondary"> {mailingList?.name || 'No name available'}</p>
@@ -85,7 +85,7 @@ const ViewSubscriber = () => {
               </div>
             </span>
           </div>
-          <div className="w-full grid grid-cols-2 gap-5">
+          <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div className="mt-5">
               <h1 className="font-semibold text-primary">Request Header</h1>
               <p className="text-secondary"> {mailingList?.header || 'No header available'}</p>
@@ -104,7 +104,7 @@ const ViewSubscriber = () => {
             <span className=" text-primary">Additional Information</span>
           </div>
           <div className="w-full">
-            <div className="w-full grid grid-cols-2">
+            <div className="w-full grid grid-cols-1 sm:grid-cols-2">
               <div className="mt-5">
                 <h1 className="font-semibold text-primary">IP Address</h1>
                 <p className="text-secondary"> {mailingList?.ipaddress || 'Not Present'}</p>
