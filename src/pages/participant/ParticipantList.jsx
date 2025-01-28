@@ -27,7 +27,7 @@ const ParticipantList = () => {
       exportData: participant,
       name: <TruncatableFieldToolTip title={'Name'} content={name ?? ''} />,
       email: <TruncatableFieldToolTip title={'Email'} content={email ?? ''} />,
-      country: <CountryFlag dialingCode={phoneCode?.startsWith('+') ? phoneCode.slice(1) : phoneCode} />,
+      country: <CountryFlag divClassName={'justify-center'} dialingCode={phoneCode?.startsWith('+') ? phoneCode.slice(1) : phoneCode} />,
       phoneNumber: (
         <TruncatableFieldToolTip
           title={'Mobile Number'}

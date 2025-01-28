@@ -7,6 +7,7 @@ import { CiCircleInfo } from 'react-icons/ci';
 import { formatDateTime } from '../../utils/dateFormats';
 import NoteComponent from '../../atoms/common/NoteComponent';
 import { viewFeedbackNote } from './FeedbackNote';
+import CountryFlag from '../../atoms/common/CountryFlag';
 
 const ViewFeedback = () => {
   const { id } = useParams();
@@ -72,7 +73,9 @@ const ViewFeedback = () => {
             </div>
             <div className="mt-5">
               <h1 className="font-semibold text-primary">Country</h1>
-              <p className="text-secondary"> {'No country available'}</p>
+              <p className="text-secondary flex items-center py-4 mt-2">
+                <CountryFlag dialingCode={feedback?.ccode?.startsWith('+') ? feedback?.ccode.slice(1) : feedback?.ccode} />
+              </p>
             </div>
             <div className="mt-5">
               <h1 className="font-semibold text-primary">Phone Number</h1>

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import phoneData from '../../utils/phoneInput.json';
 
-const CountryFlag = ({ dialingCode }) => {
+const CountryFlag = ({ divClassName, dialingCode }) => {
   const [countryCode, setCountryCode] = useState(null);
 
   useEffect(() => {
@@ -14,7 +14,9 @@ const CountryFlag = ({ dialingCode }) => {
   }, [dialingCode]);
 
   return (
-    <div className="flex items-center justify-center">{countryCode ? <div className={`country-flag flag  ${countryCode}`} /> : <div className="text-primary text-sm pr-2">-</div>}</div>
+    <div className={`${divClassName} flex items-center justify-start`}>
+      {countryCode ? <div className={`country-flag flag  ${countryCode}`} /> : <div className="text-primary text-sm pr-2">-</div>}
+    </div>
   );
 };
 
