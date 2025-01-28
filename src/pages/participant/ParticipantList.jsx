@@ -5,6 +5,7 @@ import { getAllEventsApi } from '../../apis/event-apis';
 import { showNotification } from '../../utils/showNotification';
 import TruncatableFieldToolTip from '../../atoms/common/TruncatableFeildToolTip';
 import CountryFlag from '../../atoms/common/CountryFlag';
+import TableHeader from '../../atoms/table/TableHeader';
 
 const ParticipantList = () => {
   const [participants, setParticipants] = useState([]);
@@ -63,13 +64,9 @@ const ParticipantList = () => {
   }, []);
 
   return (
-    <div className="py-8 p-4 sm:p-8 overflow-x-hidden mb-20">
+    <div className="py-5 px-8 overflow-x-hidden mb-10">
       <div className=" w-full">
-        <div className="w-full flex md:flex-wrap gap-y-3 sm:flex-nowrap justify-between pb-5 border-b border-primary">
-          <div className="">
-            <h4 className="text-3xl text-dark">All Participants List</h4>
-          </div>
-        </div>
+        <TableHeader heading={'Participants'} />
         <div className="flex flex-col">
           <div className="-m-1.5 overflow-x-auto">
             <div className="p-1.5 min-w-full align-middle">

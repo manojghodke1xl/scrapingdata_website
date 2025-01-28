@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { formatDateTime } from '../../utils/dateFormats';
-import { Link } from 'react-router-dom';
 import { IoMdAdd } from 'react-icons/io';
 import TableComponent from '../../atoms/table/Table';
 import { deleteEventApi } from '../../apis/event-apis';
 import TruncatableFieldToolTip from '../../atoms/common/TruncatableFeildToolTip';
 import TruncatableCopyFeild from '../../atoms/common/TruncatableCopyFeild';
+import TableHeader from '../../atoms/table/TableHeader';
 
 const EventList = () => {
   const [events, setEvents] = useState([]);
@@ -30,17 +30,7 @@ const EventList = () => {
   return (
     <div className="py-5 px-8 overflow-x-hidden mb-10">
       <div className=" w-full">
-        <div className="w-full flex md:flex-wrap gap-y-3 sm:flex-nowrap justify-between">
-          <div className="">
-            <h4 className="text-3xl text-dark">All Events List</h4>
-          </div>
-          <div className="w-full flex justify-end sm:w-fit">
-            <Link to="/events/add-event" className="flex gap-2 h-fit items-center px-2.5 md:px-2 sm:px-4 rounded-xl py-2.5 bg-primary hover:bg-hover text-white">
-              <IoMdAdd size={22} />
-              <span className="hidden md:block">Add Event</span>
-            </Link>
-          </div>
-        </div>
+        <TableHeader heading={'Events'} btn1={'Add Event'} href1={'/events/add-event'} icon1={<IoMdAdd size={22} />} btnLabel1={'Add Event'} />
         <div className="flex flex-col">
           <div className="-m-1.5 overflow-x-auto">
             <div className="min-w-full align-middle">

@@ -1,7 +1,7 @@
 import { FiCopy } from 'react-icons/fi';
 import { showNotification } from '../../utils/showNotification';
 import { useState } from 'react';
-import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import { FaEye } from 'react-icons/fa';
 
 const TruncatableCopyFeild = ({ content }) => {
   const [showTooltip, setShowTooltip] = useState(false);

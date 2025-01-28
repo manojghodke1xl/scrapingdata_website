@@ -194,10 +194,11 @@ const TableComponent = ({
     setShowFilter({ status: false, sites: false, event: false });
   };
 
-  const availableSites =
-    siteModule === 'participant' || siteModule === 'payment' || siteModule === 'products'
-      ? allSites
-      : allSites.filter((site) => site.modules?.some((module) => module[siteModule] === true)).map((site) => ({ name: site.name, _id: site._id }));
+  const modulesArray = ['participant', 'payment', 'products', 'booking-payments', 'order-payments'];
+
+  const availableSites = modulesArray.includes(siteModule)
+    ? allSites
+    : allSites.filter((site) => site.modules?.some((module) => module[siteModule] === true)).map((site) => ({ name: site.name, _id: site._id }));
 
   return (
     <div className="overflow-hidden">

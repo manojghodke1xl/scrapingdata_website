@@ -2,6 +2,7 @@ import { useState } from 'react';
 import TableComponent from '../../atoms/table/Table';
 import { formatDateTime } from '../../utils/dateFormats';
 import TruncatableFieldToolTip from '../../atoms/common/TruncatableFeildToolTip';
+import TableHeader from '../../atoms/table/TableHeader';
 
 const OrderList = () => {
   const [orders, setOrders] = useState([]);
@@ -30,13 +31,9 @@ const OrderList = () => {
   });
 
   return (
-    <div className="py-8 p-4 sm:p-8 overflow-x-hidden mb-20">
+    <div className="py-5 px-8 overflow-x-hidden mb-10">
       <div className=" w-full">
-        <div className="w-full flex md:flex-wrap gap-y-3 sm:flex-nowrap justify-between pb-5 border-b border-primary">
-          <div className="">
-            <h4 className="text-3xl text-dark">Orders</h4>
-          </div>
-        </div>
+        <TableHeader heading={'Orders'} />
         <div className="flex flex-col">
           <div className="-m-1.5 overflow-x-auto">
             <div className="p-1.5 min-w-full align-middle">

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { IoIosArrowDown } from 'react-icons/io';
+import TruncatableFieldToolTip from '../common/TruncatableFeildToolTip';
 
 const FilterDropDown = ({ name, data, selected, setDataId }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -19,6 +20,7 @@ const FilterDropDown = ({ name, data, selected, setDataId }) => {
     setDataId(site._id);
     setIsOpen(false);
   };
+  console.log('selected,data', selected, data);
 
   return (
     <div className="dropdown-container relative">
@@ -33,7 +35,7 @@ const FilterDropDown = ({ name, data, selected, setDataId }) => {
             <span className="block font-medium whitespace-nowrap text-[16px]">
               {selectedSites?.name ? (
                 <span>
-                  {name} : {data.find((item) => item._id === selected)?.name}
+                  <TruncatableFieldToolTip content={`${name}: ${data.find((item) => item._id === selected)?.name}`} />
                 </span>
               ) : (
                 <span className="text-secondary font-normal flex gap-2 items-center">

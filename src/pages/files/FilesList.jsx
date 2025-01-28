@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import TableComponent from '../../atoms/table/Table';
-import { Link } from 'react-router-dom';
 import { IoMdAdd } from 'react-icons/io';
 import { formatDateTime } from '../../utils/dateFormats';
 import { deleteFileApi } from '../../apis/file-apis';
 import TruncatableFieldToolTip from '../../atoms/common/TruncatableFeildToolTip';
+import TableHeader from '../../atoms/table/TableHeader';
 
 const FilesList = () => {
   const [files, setFiles] = useState([]);
@@ -21,19 +21,9 @@ const FilesList = () => {
   });
 
   return (
-    <div className="py-8 p-4 sm:p-8 overflow-x-hidden mb-20">
+    <div className="py-5 px-8 overflow-x-hidden mb-10">
       <div className=" w-full">
-        <div className="w-full flex md:flex-wrap gap-y-3 sm:flex-nowrap justify-between pb-5 border-b border-primary">
-          <div className="">
-            <h4 className="text-3xl text-dark">Files</h4>
-          </div>
-          <div className="w-full flex justify-end sm:w-fit">
-            <Link to="/files/add-file" className="flex gap-2 h-fit items-center px-2.5 md:px-2 sm:px-4 rounded-xl py-2.5 bg-primary hover:bg-hover text-white">
-              <IoMdAdd size={22} />
-              <span className="hidden md:block">Add File</span>
-            </Link>
-          </div>
-        </div>
+        <TableHeader heading={'Files'} btn1={true} href1={'/files/add-file'} icon1={<IoMdAdd size={22} />} btnLabel1={'Add File'} />
         <div className="flex flex-col">
           <div className="-m-1.5 overflow-x-auto">
             <div className="p-1.5 min-w-full align-middle">

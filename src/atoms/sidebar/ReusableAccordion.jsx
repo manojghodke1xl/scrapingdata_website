@@ -24,7 +24,7 @@ const ReusableAccordion = ({ title, links, icon, isOpen, onToggle }) => {
           <Link
             key={title}
             to={to[0]}
-            className={`block text-primary text-base px-4 font-medium rounded-xl py-2.5 capitalize ${
+            className={`block text-primary text-base px-4 font-medium rounded-xl py-2.5 ${
               isActive(to) ? 'bg-fadedblue text-blue' : 'text-primary hover:bg-gray-100 bg-white'
             }`}
           >

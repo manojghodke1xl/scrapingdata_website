@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { formatDateTime } from '../../utils/dateFormats';
 import TableComponent from '../../atoms/table/Table';
 import TruncatableFieldToolTip from '../../atoms/common/TruncatableFeildToolTip';
+import TableHeader from '../../atoms/table/TableHeader';
 
 const BookingPaymentList = () => {
   const [bookingPayments, setBookingPayments] = useState([]);
@@ -46,20 +47,9 @@ const BookingPaymentList = () => {
   });
 
   return (
-    <div className="py-8 p-4 sm:p-8 overflow-x-hidden mb-20">
+    <div className="py-5 px-8 overflow-x-hidden mb-10">
       <div className=" w-full">
-        <div className="w-full flex md:flex-wrap gap-y-3 sm:flex-nowrap justify-between pb-5 border-b border-primary">
-          <div className="">
-            <h4 className="text-3xl text-dark">Booking Payments</h4>
-          </div>
-
-          <div className="w-full flex justify-end sm:w-fit gap-2">
-            {/* <Link to="/payments/payment-integration" className="flex gap-2 h-fit items-center px-2.5 md:px-2 sm:px-4 rounded-xl py-2.5 bg-primary hover:bg-hover text-white">
-              <AiOutlineApi size={22} />
-              <span className="hidden md:block">API Integration</span>
-            </Link> */}
-          </div>
-        </div>
+        <TableHeader heading={'Booking Payments'} />
         <div className="flex flex-col">
           <div className="-m-1.5 overflow-x-auto">
             <div className="p-1.5 min-w-full align-middle">

@@ -1,5 +1,4 @@
 import { IoMdAdd } from 'react-icons/io';
-import { Link } from 'react-router-dom';
 import TableComponent from '../../atoms/table/Table';
 import { useState } from 'react';
 import TruncatableFieldToolTip from '../../atoms/common/TruncatableFeildToolTip';
@@ -8,6 +7,7 @@ import useGlobalContext from '../../hooks/useGlobalContext';
 import { updateAdminStatusApi } from '../../apis/admin-apis';
 import NoteComponent from '../../atoms/common/NoteComponent';
 import { adminListNote } from './AdminNotes';
+import TableHeader from '../../atoms/table/TableHeader';
 
 const AdminList = () => {
   const {
@@ -41,19 +41,9 @@ const AdminList = () => {
   });
 
   return (
-    <div className="min-h-scree py-8 p-4 sm:p-8 overflow-x-hidden mb-20">
-      <div className=" w-full">
-        <div className="w-full flex md:flex-wrap gap-y-3 sm:flex-nowrap justify-between pb-5 border-b border-primary">
-          <div className="">
-            <h4 className="text-3xl text-dark">Admin Management</h4>
-          </div>
-          <div className="w-full flex justify-end sm:w-fit">
-            <Link to="/admin/add-admin" className="flex gap-2 h-fit items-center px-2.5 md:px-2 sm:px-4 rounded-xl py-2.5 bg-primary hover:bg-hover text-white">
-              <IoMdAdd size={22} />
-              <span className="hidden md:block">Add Admin</span>
-            </Link>
-          </div>
-        </div>
+    <div className="py-5 px-8 overflow-x-hidden mb-10">
+      <div className="w-full">
+        <TableHeader heading={'Admins'} btn1={true} href1={'/admin/add-admin'} icon1={<IoMdAdd size={22} />} btnLabel1={'Add Admin'} />
         <div className="flex flex-col">
           <div className="-m-1.5 overflow-x-auto">
             <div className="p-1.5 min-w-full align-middle">

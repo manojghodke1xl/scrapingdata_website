@@ -4,6 +4,7 @@ import FilterDropDowm from '../filter/FilterDropDown';
 import Filters from '../filter/Filters';
 import SearchFilter from '../filter/SearchFilter';
 import StatusFilter from '../filter/StatusFilter';
+import { formatDateTime } from '../../utils/dateFormats';
 
 const TableFilter = ({
   search,
@@ -72,7 +73,7 @@ const TableFilter = ({
               >
                 <IoCloseOutline />
               </div>
-              <FilterDropDowm name={'Sites'} data={allSites} setDataId={(id) => setFilterState((prev) => ({ ...prev, siteId: id }))} />
+              <FilterDropDowm name={'Sites'} data={allSites} selected={filterState.siteId} setDataId={(id) => setFilterState((prev) => ({ ...prev, siteId: id }))} />
             </div>
           )}
           {showFilter.event && (
@@ -86,7 +87,12 @@ const TableFilter = ({
               >
                 <IoCloseOutline />
               </div>
-              <FilterDropDowm name={'Event'} data={events} selected={filterState.eventId} setDataId={(id) => setFilterState((prev) => ({ ...prev, eventId: id }))} />
+              <FilterDropDowm
+                name={'Event'}
+                data={events.map((event) => ({ name: `${event.name} (${formatDateTime(event.date)})`, _id: event._id }))}
+                selected={filterState.eventId}
+                setDataId={(id) => setFilterState((prev) => ({ ...prev, eventId: id }))}
+              />
             </div>
           )}
         </>
