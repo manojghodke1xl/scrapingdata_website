@@ -25,8 +25,12 @@ const BookingPaymentList = () => {
       exportData: payment.payment,
       customer: <TruncatableFieldToolTip title={'Participant'} content={customer.name} />,
       email: <TruncatableFieldToolTip title={'Email'} content={email} />,
-      phoneCode: <TruncatableFieldToolTip title={'Phone Code'} content={phoneCode} />,
-      phoneNumber: <TruncatableFieldToolTip title={'Mobile Number'} content={phoneNumber} />,
+      phoneNumber: (
+        <TruncatableFieldToolTip
+          title={'Mobile Number'}
+          content={`${phoneCode ? (phoneCode.startsWith('+') ? phoneCode : `+${phoneCode}`) : ''} ${phoneNumber ? phoneNumber : '-'}`}
+        />
+      ),
       site: <TruncatableFieldToolTip title={'Sites'} content={`${site?.name} (${site?.host})`} />,
       amount: <TruncatableFieldToolTip title={'Amount'} content={amount} />,
       currency: <TruncatableFieldToolTip title={'Currency'} content={currency} />,
@@ -60,7 +64,6 @@ const BookingPaymentList = () => {
                   { label: 'Sr No.', key: 'srno' },
                   { label: 'Customer Name', key: 'customer' },
                   { label: 'Email', key: 'email' },
-                  { label: 'Phone Code', key: 'phoneCode' },
                   { label: 'Mobile Number', key: 'phoneNumber' },
                   { label: 'Site', key: 'site' },
                   { label: 'Amount', key: 'amount' },
@@ -79,12 +82,9 @@ const BookingPaymentList = () => {
                 // view={true}
                 // viewPath={'/payments/payment'}
                 search={true}
-                // filter={true}
-                // deleteBtn={true}
-                // filterCategory={[
-                //   { id: 1, name: 'Sites' },
-                //   { id: 2, name: 'Status' }
-                // ]}
+                filter={true}
+                deleteBtn={true}
+                filterCategory={[{ id: 1, name: 'Sites' }]}
                 // statuses={[
                 //   { id: 0, name: 'Active', bgColor: '#ECFDF3', color: '#027948', dotColor: '#12B76A' },
                 //   { id: 2, name: 'Inactive', bgColor: '#F2F4F7', color: '#344054', dotColor: '#667085' }
