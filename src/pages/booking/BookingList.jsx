@@ -3,6 +3,7 @@ import TableComponent from '../../atoms/table/Table';
 import TruncatableFieldToolTip from '../../atoms/common/TruncatableFeildToolTip';
 import { formatDateTime } from '../../utils/dateFormats';
 import TruncatableCopyFeild from '../../atoms/common/TruncatableCopyFeild';
+import CountryFlag from '../../atoms/common/CountryFlag';
 
 const BookingList = () => {
   const [bookings, setBookings] = useState([]);
@@ -28,8 +29,13 @@ const BookingList = () => {
       Keys: <TruncatableCopyFeild content={_id} />,
       name: <TruncatableFieldToolTip title={'Customer Name'} content={name} />,
       email: <TruncatableFieldToolTip title={'Email'} content={email} />,
-      phoneCode: <TruncatableFieldToolTip title={'Phone Code'} content={phoneCode} />,
-      phoneNumber: <TruncatableFieldToolTip title={'Mobile Number'} content={phoneNumber} />,
+      phoneCode: <CountryFlag dialingCode={phoneCode?.startsWith('+') ? phoneCode.slice(1) : phoneCode} />,
+      phoneNumber: (
+        <TruncatableFieldToolTip
+          title={'Mobile Number'}
+          content={`${phoneCode ? (phoneCode.startsWith('+') ? phoneCode : `+${phoneCode}`) : ''} ${phoneNumber ? phoneNumber : '-'}`}
+        />
+      ),
       event: <TruncatableFieldToolTip title={'Event Name'} content={`${event.name} (${event.venue})`} />,
       title: <TruncatableFieldToolTip title={'Package Name'} content={title} />,
       site: <TruncatableFieldToolTip title={'Sites'} content={`${site?.name} (${site?.host})`} />,
@@ -67,7 +73,7 @@ const BookingList = () => {
                   { label: 'Keys', key: 'Keys' },
                   { label: 'Customer Name', key: 'name' },
                   { label: 'Email', key: 'email' },
-                  { label: 'Phone Code', key: 'phoneCode' },
+                  { label: 'Country', key: 'phoneCode' },
                   { label: 'Mobile Number', key: 'phoneNumber' },
                   { label: 'Event', key: 'event' },
                   { label: 'Package', key: 'title' },

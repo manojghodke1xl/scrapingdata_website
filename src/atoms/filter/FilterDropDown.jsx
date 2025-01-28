@@ -65,9 +65,9 @@ const FilterDropDown = ({ name, data, selected, setDataId }) => {
               </li>
             ))}
           </div>
-          <button className="w-full py-3 pb-5 font-normal text-left px-4 hover:bg-gray-50" onClick={(e) => e.currentTarget.closest('details').removeAttribute('open')}>
+          {/* <button className="w-full py-3 pb-5 font-normal text-left px-4 hover:bg-gray-50" onClick={(e) => e.currentTarget.closest('details').removeAttribute('open')}>
             Add to advanced filter
-          </button>
+          </button> */}
         </ul>
       </details>
     </div>

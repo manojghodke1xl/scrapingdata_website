@@ -1,0 +1,1474 @@
+[
+  {
+    "name": "Afghanistan",
+    "regions": ["asia"],
+    "code": "af",
+    "dialingCode": "93",
+    "phoneNumberFormat": "0#########"
+  },
+  {
+    "name": "Albania",
+    "regions": ["europe"],
+    "code": "al",
+    "dialingCode": "355",
+    "phoneNumberFormat": "0########"
+  },
+  {
+    "name": "Algeria",
+    "regions": ["africa", "north-africa"],
+    "code": "dz",
+    "dialingCode": "213",
+    "phoneNumberFormat": "0#########"
+  },
+  {
+    "name": "Andorra",
+    "regions": ["europe"],
+    "code": "ad",
+    "dialingCode": "376",
+    "phoneNumberFormat": "#### ###"
+  },
+  {
+    "name": "Angola",
+    "regions": ["africa"],
+    "code": "ao",
+    "dialingCode": "244",
+    "phoneNumberFormat": "9########"
+  },
+  {
+    "name": "Antigua and Barbuda",
+    "regions": ["america", "carribean"],
+    "code": "ag",
+    "dialingCode": "1268",
+    "phoneNumberFormat": "268-########"
+  },
+  {
+    "name": "Argentina",
+    "regions": ["america", "south-america"],
+    "code": "ar",
+    "dialingCode": "54",
+    "phoneNumberFormat": "0## #########"
+  },
+  {
+    "name": "Armenia",
+    "regions": ["asia", "ex-ussr"],
+    "code": "am",
+    "dialingCode": "374",
+    "phoneNumberFormat": "0## ### ## ##"
+  },
+  {
+    "name": "Aruba",
+    "regions": ["america", "carribean"],
+    "code": "aw",
+    "dialingCode": "297",
+    "phoneNumberFormat": "297-#######"
+  },
+  {
+    "name": "Australia",
+    "regions": ["oceania"],
+    "code": "au",
+    "dialingCode": "61",
+    "phoneNumberFormat": "0## ### ####"
+  },
+  {
+    "name": "Austria",
+    "regions": ["europe", "eu-union"],
+    "code": "at",
+    "dialingCode": "43",
+    "phoneNumberFormat": "0# ### ###"
+  },
+  {
+    "name": "Azerbaijan",
+    "regions": ["asia", "ex-ussr"],
+    "code": "az",
+    "dialingCode": "994",
+    "phoneNumberFormat": "0## ### ## ##"
+  },
+  {
+    "name": "Bahamas",
+    "regions": ["america", "carribean"],
+    "code": "bs",
+    "dialingCode": "1242",
+    "phoneNumberFormat": "242-###-####"
+  },
+  {
+    "name": "Bahrain",
+    "regions": ["middle-east"],
+    "code": "bh",
+    "dialingCode": "973",
+    "phoneNumberFormat": "0## ### ####"
+  },
+  {
+    "name": "Bangladesh",
+    "regions": ["asia"],
+    "code": "bd",
+    "dialingCode": "880",
+    "phoneNumberFormat": "0##########"
+  },
+  {
+    "name": "Barbados",
+    "regions": ["america", "carribean"],
+    "code": "bb",
+    "dialingCode": "1246",
+    "phoneNumberFormat": "246-###-####"
+  },
+  {
+    "name": "Belarus",
+    "regions": ["europe", "ex-ussr"],
+    "code": "by",
+    "dialingCode": "375",
+    "phoneNumberFormat": "0## ###-##-##"
+  },
+  {
+    "name": "Belgium",
+    "regions": ["europe", "eu-union"],
+    "code": "be",
+    "dialingCode": "32",
+    "phoneNumberFormat": "0# ### ###"
+  },
+  {
+    "name": "Belize",
+    "regions": ["america", "central-america"],
+    "code": "bz",
+    "dialingCode": "501",
+    "phoneNumberFormat": "501-####"
+  },
+  {
+    "name": "Benin",
+    "regions": ["africa"],
+    "code": "bj",
+    "dialingCode": "229",
+    "phoneNumberFormat": "0## ##-##-##"
+  },
+  {
+    "name": "Bhutan",
+    "regions": ["asia"],
+    "code": "bt",
+    "dialingCode": "975",
+    "phoneNumberFormat": "0# ### ####"
+  },
+  {
+    "name": "Bolivia",
+    "regions": ["america", "south-america"],
+    "code": "bo",
+    "dialingCode": "591",
+    "phoneNumberFormat": "0## ### ####"
+  },
+  {
+    "name": "Bosnia and Herzegovina",
+    "regions": ["europe", "ex-yugos"],
+    "code": "ba",
+    "dialingCode": "387",
+    "phoneNumberFormat": "0## ###-###"
+  },
+  {
+    "name": "Botswana",
+    "regions": ["africa"],
+    "code": "bw",
+    "dialingCode": "267",
+    "phoneNumberFormat": "0## ### ####"
+  },
+  {
+    "name": "Brazil",
+    "regions": ["america", "south-america"],
+    "code": "br",
+    "dialingCode": "55",
+    "phoneNumberFormat": "(##) ####-####"
+  },
+  {
+    "name": "British Indian Ocean Territory",
+    "regions": ["asia"],
+    "code": "io",
+    "dialingCode": "246",
+    "phoneNumberFormat": "246-###-###"
+  },
+  {
+    "name": "Brunei",
+    "regions": ["asia"],
+    "code": "bn",
+    "dialingCode": "673",
+    "phoneNumberFormat": "673-###-####"
+  },
+  {
+    "name": "Bulgaria",
+    "regions": ["europe", "eu-union"],
+    "code": "bg",
+    "dialingCode": "359",
+    "phoneNumberFormat": "0## ### ####"
+  },
+  {
+    "name": "Burkina Faso",
+    "regions": ["africa"],
+    "code": "bf",
+    "dialingCode": "226",
+    "phoneNumberFormat": "0## ##-##-##"
+  },
+  {
+    "name": "Burundi",
+    "regions": ["africa"],
+    "code": "bi",
+    "dialingCode": "257",
+    "phoneNumberFormat": "0## ##-##-##"
+  },
+  {
+    "name": "Cambodia",
+    "regions": ["asia"],
+    "code": "kh",
+    "dialingCode": "855",
+    "phoneNumberFormat": "0## ### ###"
+  },
+  {
+    "name": "Cameroon",
+    "regions": ["africa"],
+    "code": "cm",
+    "dialingCode": "237",
+    "phoneNumberFormat": "0## ### ###"
+  },
+  {
+    "name": "Canada",
+    "regions": ["america", "north-america"],
+    "code": "ca",
+    "dialingCode": "1",
+    "phoneNumberFormat": "(###) ###-####"
+  },
+  {
+    "name": "Cape Verde",
+    "regions": ["africa"],
+    "code": "cv",
+    "dialingCode": "238",
+    "phoneNumberFormat": "0## ###-##-##"
+  },
+  {
+    "name": "Caribbean Netherlands",
+    "regions": ["america", "carribean"],
+    "code": "bq",
+    "dialingCode": "599",
+    "phoneNumberFormat": "599-###-####"
+  },
+  {
+    "name": "Central African Republic",
+    "regions": ["africa"],
+    "code": "cf",
+    "dialingCode": "236",
+    "phoneNumberFormat": "0## ##-##-##"
+  },
+  {
+    "name": "Chad",
+    "regions": ["africa"],
+    "code": "td",
+    "dialingCode": "235",
+    "phoneNumberFormat": "0## ##-##-##"
+  },
+  {
+    "name": "Chile",
+    "regions": ["america", "south-america"],
+    "code": "cl",
+    "dialingCode": "56",
+    "phoneNumberFormat": "0##-###-####"
+  },
+  {
+    "name": "China",
+    "regions": ["asia"],
+    "code": "cn",
+    "dialingCode": "86",
+    "phoneNumberFormat": "0##-####-####"
+  },
+  {
+    "name": "Colombia",
+    "regions": ["america", "south-america"],
+    "code": "co",
+    "dialingCode": "57",
+    "phoneNumberFormat": "0# ### ####"
+  },
+  {
+    "name": "Comoros",
+    "regions": ["africa"],
+    "code": "km",
+    "dialingCode": "269",
+    "phoneNumberFormat": "0## ##-##-##"
+  },
+  {
+    "name": "Congo",
+    "regions": ["africa"],
+    "code": "cg",
+    "dialingCode": "242",
+    "phoneNumberFormat": "0## ##-##-##"
+  },
+  {
+    "name": "Congo, Democratic Republic of the",
+    "regions": ["africa"],
+    "code": "cd",
+    "dialingCode": "243",
+    "phoneNumberFormat": "0## ### ####"
+  },
+  {
+    "name": "Costa Rica",
+    "regions": ["america", "central-america"],
+    "code": "cr",
+    "dialingCode": "506",
+    "phoneNumberFormat": "0# ####-####"
+  },
+  {
+    "name": "Croatia",
+    "regions": ["europe", "eu-union"],
+    "code": "hr",
+    "dialingCode": "385",
+    "phoneNumberFormat": "0# ### ###"
+  },
+  {
+    "name": "Cuba",
+    "regions": ["america", "carribean"],
+    "code": "cu",
+    "dialingCode": "53",
+    "phoneNumberFormat": "0##-###-####"
+  },
+  {
+    "name": "Curacao",
+    "regions": ["america", "carribean"],
+    "code": "cw",
+    "dialingCode": "599",
+    "phoneNumberFormat": "599-###-####"
+  },
+  {
+    "name": "Cyprus",
+    "regions": ["europe"],
+    "code": "cy",
+    "dialingCode": "357",
+    "phoneNumberFormat": "0## ### ###"
+  },
+  {
+    "name": "Czechia",
+    "regions": ["europe", "eu-union"],
+    "code": "cz",
+    "dialingCode": "420",
+    "phoneNumberFormat": "0## ### ###"
+  },
+  {
+    "name": "Denmark",
+    "regions": ["europe", "eu-union"],
+    "code": "dk",
+    "dialingCode": "45",
+    "phoneNumberFormat": "0# ### ####"
+  },
+  {
+    "name": "Djibouti",
+    "regions": ["africa"],
+    "code": "dj",
+    "dialingCode": "253",
+    "phoneNumberFormat": "0## ##-##-##"
+  },
+  {
+    "name": "Dominica",
+    "regions": ["america", "carribean"],
+    "code": "dm",
+    "dialingCode": "1767",
+    "phoneNumberFormat": "767-###-####"
+  },
+  {
+    "name": "Dominican Republic",
+    "regions": ["america", "caribbean"],
+    "code": "do",
+    "dialingCode": "1809",
+    "phoneNumberFormat": "0##-###-####"
+  },
+  {
+    "name": "Ecuador",
+    "regions": ["america", "south-america"],
+    "code": "ec",
+    "dialingCode": "593",
+    "phoneNumberFormat": "0#-###-####"
+  },
+  {
+    "name": "Egypt",
+    "regions": ["africa", "north-africa"],
+    "code": "eg",
+    "dialingCode": "20",
+    "phoneNumberFormat": "0## #### ####"
+  },
+  {
+    "name": "El Salvador",
+    "regions": ["america", "central-america"],
+    "code": "sv",
+    "dialingCode": "503",
+    "phoneNumberFormat": "0# ### ####"
+  },
+  {
+    "name": "Equatorial Guinea",
+    "regions": ["africa"],
+    "code": "gq",
+    "dialingCode": "240",
+    "phoneNumberFormat": "0## ### ## ##"
+  },
+  {
+    "name": "Eritrea",
+    "regions": ["africa"],
+    "code": "er",
+    "dialingCode": "291",
+    "phoneNumberFormat": "0## #######"
+  },
+  {
+    "name": "Estonia",
+    "regions": ["europe", "eu-union"],
+    "code": "ee",
+    "dialingCode": "372",
+    "phoneNumberFormat": "0## #######"
+  },
+  {
+    "name": "Eswatini",
+    "regions": ["africa"],
+    "code": "sz",
+    "dialingCode": "268",
+    "phoneNumberFormat": "0## ### ####"
+  },
+  {
+    "name": "Ethiopia",
+    "regions": ["africa"],
+    "code": "et",
+    "dialingCode": "251",
+    "phoneNumberFormat": "0## #### ###"
+  },
+  {
+    "name": "Fiji",
+    "regions": ["oceania"],
+    "code": "fj",
+    "dialingCode": "679",
+    "phoneNumberFormat": "0## ### ###"
+  },
+  {
+    "name": "Finland",
+    "regions": ["europe", "eu-union"],
+    "code": "fi",
+    "dialingCode": "358",
+    "phoneNumberFormat": "0## ### ####"
+  },
+  {
+    "name": "France",
+    "regions": ["europe", "eu-union"],
+    "code": "fr",
+    "dialingCode": "33",
+    "phoneNumberFormat": "0# ## ## ## ##"
+  },
+  {
+    "name": "French Guiana",
+    "regions": ["america", "south-america"],
+    "code": "gf",
+    "dialingCode": "594",
+    "phoneNumberFormat": "0# ## ## ##"
+  },
+  {
+    "name": "French Polynesia",
+    "regions": ["oceania"],
+    "code": "pf",
+    "dialingCode": "689",
+    "phoneNumberFormat": "0## ## ##"
+  },
+  {
+    "name": "Gabon",
+    "regions": ["africa"],
+    "code": "ga",
+    "dialingCode": "241",
+    "phoneNumberFormat": "0## ### ## ##"
+  },
+  {
+    "name": "Gambia",
+    "regions": ["africa"],
+    "code": "gm",
+    "dialingCode": "220",
+    "phoneNumberFormat": "0## ######"
+  },
+  {
+    "name": "Georgia",
+    "regions": ["asia", "ex-ussr"],
+    "code": "ge",
+    "dialingCode": "995",
+    "phoneNumberFormat": "0## ### ####"
+  },
+  {
+    "name": "Germany",
+    "regions": ["europe", "eu-union"],
+    "code": "de",
+    "dialingCode": "49",
+    "phoneNumberFormat": "0## #### ####"
+  },
+  {
+    "name": "Ghana",
+    "regions": ["africa"],
+    "code": "gh",
+    "dialingCode": "233",
+    "phoneNumberFormat": "0## ### ####"
+  },
+  {
+    "name": "Greece",
+    "regions": ["europe", "eu-union"],
+    "code": "gr",
+    "dialingCode": "30",
+    "phoneNumberFormat": "0## ### ####"
+  },
+  {
+    "name": "Greenland",
+    "regions": ["north-america"],
+    "code": "gl",
+    "dialingCode": "299",
+    "phoneNumberFormat": "0## ###"
+  },
+  {
+    "name": "Grenada",
+    "regions": ["america", "carribean"],
+    "code": "gd",
+    "dialingCode": "1473",
+    "phoneNumberFormat": "473-###-####"
+  },
+  {
+    "name": "Guadeloupe",
+    "regions": ["america", "carribean"],
+    "code": "gp",
+    "dialingCode": "590",
+    "phoneNumberFormat": "590-###-####"
+  },
+  {
+    "name": "Guam",
+    "regions": ["oceania"],
+    "code": "gu",
+    "dialingCode": "1671",
+    "phoneNumberFormat": "671-###-####"
+  },
+  {
+    "name": "Guatemala",
+    "regions": ["america", "central-america"],
+    "code": "gt",
+    "dialingCode": "502",
+    "phoneNumberFormat": "0# ### ####"
+  },
+  {
+    "name": "Guinea",
+    "regions": ["africa"],
+    "code": "gn",
+    "dialingCode": "224",
+    "phoneNumberFormat": "0## #######"
+  },
+  {
+    "name": "Guinea-Bissau",
+    "regions": ["africa"],
+    "code": "gw",
+    "dialingCode": "245",
+    "phoneNumberFormat": "0## ####-##"
+  },
+  {
+    "name": "Guyana",
+    "regions": ["america", "south-america"],
+    "code": "gy",
+    "dialingCode": "592",
+    "phoneNumberFormat": "0## ###-####"
+  },
+  {
+    "name": "Haiti",
+    "regions": ["america", "carribean"],
+    "code": "ht",
+    "dialingCode": "509",
+    "phoneNumberFormat": "0## ###-####"
+  },
+  {
+    "name": "Honduras",
+    "regions": ["america", "central-america"],
+    "code": "hn",
+    "dialingCode": "504",
+    "phoneNumberFormat": "0# ### ####"
+  },
+  {
+    "name": "Hungary",
+    "regions": ["europe", "eu-union"],
+    "code": "hu",
+    "dialingCode": "36",
+    "phoneNumberFormat": "0## ### ####"
+  },
+  {
+    "name": "Iceland",
+    "regions": ["europe"],
+    "code": "is",
+    "dialingCode": "354",
+    "phoneNumberFormat": "0## ### ###"
+  },
+  {
+    "name": "India",
+    "regions": ["asia"],
+    "code": "in",
+    "dialingCode": "91",
+    "phoneNumberFormat": "0##########"
+  },
+  {
+    "name": "Indonesia",
+    "regions": ["asia"],
+    "code": "id",
+    "dialingCode": "62",
+    "phoneNumberFormat": "0##-####-####"
+  },
+  {
+    "name": "Iran",
+    "regions": ["asia", "middle-east"],
+    "code": "ir",
+    "dialingCode": "98",
+    "phoneNumberFormat": "0## ### ####"
+  },
+  {
+    "name": "Iraq",
+    "regions": ["asia", "middle-east"],
+    "code": "iq",
+    "dialingCode": "964",
+    "phoneNumberFormat": "0## #### ####"
+  },
+  {
+    "name": "Ireland",
+    "regions": ["europe", "eu-union"],
+    "code": "ie",
+    "dialingCode": "353",
+    "phoneNumberFormat": "0## ### ####"
+  },
+  {
+    "name": "Israel",
+    "regions": ["middle-east"],
+    "code": "il",
+    "dialingCode": "972",
+    "phoneNumberFormat": "0##-####-####"
+  },
+  {
+    "name": "Italy",
+    "regions": ["europe", "eu-union"],
+    "code": "it",
+    "dialingCode": "39",
+    "phoneNumberFormat": "0## ### ####"
+  },
+  {
+    "name": "Jamaica",
+    "regions": ["america", "carribean"],
+    "code": "jm",
+    "dialingCode": "1876",
+    "phoneNumberFormat": "876-###-####"
+  },
+  {
+    "name": "Japan",
+    "regions": ["asia"],
+    "code": "jp",
+    "dialingCode": "81",
+    "phoneNumberFormat": "0##-####-####"
+  },
+  {
+    "name": "Jordan",
+    "regions": ["middle-east"],
+    "code": "jo",
+    "dialingCode": "962",
+    "phoneNumberFormat": "0## #### ####"
+  },
+  {
+    "name": "Kazakhstan",
+    "regions": ["asia", "ex-ussr"],
+    "code": "kz",
+    "dialingCode": "7",
+    "phoneNumberFormat": "0## ###-##-##"
+  },
+  {
+    "name": "Kenya",
+    "regions": ["africa"],
+    "code": "ke",
+    "dialingCode": "254",
+    "phoneNumberFormat": "0## ### ####"
+  },
+  {
+    "name": "Kiribati",
+    "regions": ["oceania"],
+    "code": "ki",
+    "dialingCode": "686",
+    "phoneNumberFormat": "0## ####"
+  },
+  {
+    "name": "Korea, North",
+    "regions": ["asia"],
+    "code": "kp",
+    "dialingCode": "850",
+    "phoneNumberFormat": "0##-#####"
+  },
+  {
+    "name": "Korea, South",
+    "regions": ["asia"],
+    "code": "kr",
+    "dialingCode": "82",
+    "phoneNumberFormat": "0##-####-####"
+  },
+  {
+    "name": "Kuwait",
+    "regions": ["middle-east"],
+    "code": "kw",
+    "dialingCode": "965",
+    "phoneNumberFormat": "0## #### ####"
+  },
+  {
+    "name": "Kyrgyzstan",
+    "regions": ["asia", "ex-ussr"],
+    "code": "kg",
+    "dialingCode": "996",
+    "phoneNumberFormat": "0## ###-##-##"
+  },
+  {
+    "name": "Laos",
+    "regions": ["asia"],
+    "code": "la",
+    "dialingCode": "856",
+    "phoneNumberFormat": "0##-####-###"
+  },
+  {
+    "name": "Latvia",
+    "regions": ["europe", "eu-union"],
+    "code": "lv",
+    "dialingCode": "371",
+    "phoneNumberFormat": "0## ### ###"
+  },
+  {
+    "name": "Lebanon",
+    "regions": ["middle-east"],
+    "code": "lb",
+    "dialingCode": "961",
+    "phoneNumberFormat": "0## #### ###"
+  },
+  {
+    "name": "Lesotho",
+    "regions": ["africa"],
+    "code": "ls",
+    "dialingCode": "266",
+    "phoneNumberFormat": "0## ### ###"
+  },
+  {
+    "name": "Liberia",
+    "regions": ["africa"],
+    "code": "lr",
+    "dialingCode": "231",
+    "phoneNumberFormat": "0## #######"
+  },
+  {
+    "name": "Libya",
+    "regions": ["africa", "north-africa"],
+    "code": "ly",
+    "dialingCode": "218",
+    "phoneNumberFormat": "0## #######"
+  },
+  {
+    "name": "Liechtenstein",
+    "regions": ["europe"],
+    "code": "li",
+    "dialingCode": "423",
+    "phoneNumberFormat": "0## ### ####"
+  },
+  {
+    "name": "Lithuania",
+    "regions": ["europe", "eu-union"],
+    "code": "lt",
+    "dialingCode": "370",
+    "phoneNumberFormat": "0## ### ####"
+  },
+  {
+    "name": "Luxembourg",
+    "regions": ["europe", "eu-union"],
+    "code": "lu",
+    "dialingCode": "352",
+    "phoneNumberFormat": "0## ### ###"
+  },
+  {
+    "name": "Madagascar",
+    "regions": ["africa"],
+    "code": "mg",
+    "dialingCode": "261",
+    "phoneNumberFormat": "0## ### ####"
+  },
+  {
+    "name": "Malawi",
+    "regions": ["africa"],
+    "code": "mw",
+    "dialingCode": "265",
+    "phoneNumberFormat": "0## ### ####"
+  },
+  {
+    "name": "Malaysia",
+    "regions": ["asia"],
+    "code": "my",
+    "dialingCode": "60",
+    "phoneNumberFormat": "0##-###-####"
+  },
+  {
+    "name": "Maldives",
+    "regions": ["asia"],
+    "code": "mv",
+    "dialingCode": "960",
+    "phoneNumberFormat": "0##-#######"
+  },
+  {
+    "name": "Mali",
+    "regions": ["africa"],
+    "code": "ml",
+    "dialingCode": "223",
+    "phoneNumberFormat": "0## ##-##-##"
+  },
+  {
+    "name": "Malta",
+    "regions": ["europe", "eu-union"],
+    "code": "mt",
+    "dialingCode": "356",
+    "phoneNumberFormat": "0# ### ####"
+  },
+  {
+    "name": "Marshall Islands",
+    "regions": ["oceania"],
+    "code": "mh",
+    "dialingCode": "692",
+    "phoneNumberFormat": "692-###-####"
+  },
+  {
+    "name": "Mauritania",
+    "regions": ["africa"],
+    "code": "mr",
+    "dialingCode": "222",
+    "phoneNumberFormat": "0## ##-##-##"
+  },
+  {
+    "name": "Mauritius",
+    "regions": ["africa"],
+    "code": "mu",
+    "dialingCode": "230",
+    "phoneNumberFormat": "0## ### ####"
+  },
+  {
+    "name": "Mayotte",
+    "regions": ["africa"],
+    "code": "yt",
+    "dialingCode": "262",
+    "phoneNumberFormat": "0## ##-##-##"
+  },
+  {
+    "name": "Mexico",
+    "regions": ["america", "north-america"],
+    "code": "mx",
+    "dialingCode": "52",
+    "phoneNumberFormat": "0##-####-####"
+  },
+  {
+    "name": "Micronesia",
+    "regions": ["oceania"],
+    "code": "fm",
+    "dialingCode": "691",
+    "phoneNumberFormat": "0##-####"
+  },
+  {
+    "name": "Moldova",
+    "regions": ["europe", "eu-union"],
+    "code": "md",
+    "dialingCode": "373",
+    "phoneNumberFormat": "0## ### ###"
+  },
+  {
+    "name": "Monaco",
+    "regions": ["europe"],
+    "code": "mc",
+    "dialingCode": "377",
+    "phoneNumberFormat": "0## ### ## ##"
+  },
+  {
+    "name": "Mongolia",
+    "regions": ["asia"],
+    "code": "mn",
+    "dialingCode": "976",
+    "phoneNumberFormat": "0##-####-####"
+  },
+  {
+    "name": "Montenegro",
+    "regions": ["europe"],
+    "code": "me",
+    "dialingCode": "382",
+    "phoneNumberFormat": "0## ### ####"
+  },
+  {
+    "name": "Morocco",
+    "regions": ["africa", "north-africa"],
+    "code": "ma",
+    "dialingCode": "212",
+    "phoneNumberFormat": "0## ##-##-##"
+  },
+  {
+    "name": "Mozambique",
+    "regions": ["africa"],
+    "code": "mz",
+    "dialingCode": "258",
+    "phoneNumberFormat": "0## ### ####"
+  },
+  {
+    "name": "Myanmar",
+    "regions": ["asia"],
+    "code": "mm",
+    "dialingCode": "95",
+    "phoneNumberFormat": "0##-####-####"
+  },
+  {
+    "name": "Namibia",
+    "regions": ["africa"],
+    "code": "na",
+    "dialingCode": "264",
+    "phoneNumberFormat": "0## ### ####"
+  },
+  {
+    "name": "Nauru",
+    "regions": ["oceania"],
+    "code": "nr",
+    "dialingCode": "674",
+    "phoneNumberFormat": "0## ####"
+  },
+  {
+    "name": "Nepal",
+    "regions": ["asia"],
+    "code": "np",
+    "dialingCode": "977",
+    "phoneNumberFormat": "0##-####-####"
+  },
+  {
+    "name": "Netherlands",
+    "regions": ["europe", "eu-union"],
+    "code": "nl",
+    "dialingCode": "31",
+    "phoneNumberFormat": "0##-###-####"
+  },
+  {
+    "name": "New Caledonia",
+    "regions": ["oceania"],
+    "code": "nc",
+    "dialingCode": "687",
+    "phoneNumberFormat": "0## ## ##"
+  },
+  {
+    "name": "New Zealand",
+    "regions": ["oceania"],
+    "code": "nz",
+    "dialingCode": "64",
+    "phoneNumberFormat": "0## ### ####"
+  },
+  {
+    "name": "Nicaragua",
+    "regions": ["america", "central-america"],
+    "code": "ni",
+    "dialingCode": "505",
+    "phoneNumberFormat": "0# ### ####"
+  },
+  {
+    "name": "Niger",
+    "regions": ["africa"],
+    "code": "ne",
+    "dialingCode": "227",
+    "phoneNumberFormat": "0## ##-##-##"
+  },
+  {
+    "name": "Nigeria",
+    "regions": ["africa"],
+    "code": "ng",
+    "dialingCode": "234",
+    "phoneNumberFormat": "0## ### ####"
+  },
+  {
+    "name": "Niue",
+    "regions": ["oceania"],
+    "code": "nu",
+    "dialingCode": "683",
+    "phoneNumberFormat": "0## ###"
+  },
+  {
+    "name": "Norfolk Island",
+    "regions": ["oceania"],
+    "code": "nf",
+    "dialingCode": "672",
+    "phoneNumberFormat": "0## ###"
+  },
+  {
+    "name": "North Macedonia",
+    "regions": ["europe"],
+    "code": "mk",
+    "dialingCode": "389",
+    "phoneNumberFormat": "0## ### ####"
+  },
+  {
+    "name": "Northern Mariana Islands",
+    "regions": ["oceania"],
+    "code": "mp",
+    "dialingCode": "1670",
+    "phoneNumberFormat": "670-###-####"
+  },
+  {
+    "name": "Norway",
+    "regions": ["europe", "eu-union"],
+    "code": "no",
+    "dialingCode": "47",
+    "phoneNumberFormat": "0## ## ## ##"
+  },
+  {
+    "name": "Oman",
+    "regions": ["middle-east"],
+    "code": "om",
+    "dialingCode": "968",
+    "phoneNumberFormat": "0## #### ####"
+  },
+  {
+    "name": "Pakistan",
+    "regions": ["asia"],
+    "code": "pk",
+    "dialingCode": "92",
+    "phoneNumberFormat": "0##-####-####"
+  },
+  {
+    "name": "Palau",
+    "regions": ["oceania"],
+    "code": "pw",
+    "dialingCode": "680",
+    "phoneNumberFormat": "0##-####"
+  },
+  {
+    "name": "Panama",
+    "regions": ["america", "central-america"],
+    "code": "pa",
+    "dialingCode": "507",
+    "phoneNumberFormat": "0#-###-####"
+  },
+  {
+    "name": "Papua New Guinea",
+    "regions": ["oceania"],
+    "code": "pg",
+    "dialingCode": "675",
+    "phoneNumberFormat": "0## ### ##"
+  },
+  {
+    "name": "Paraguay",
+    "regions": ["america", "south-america"],
+    "code": "py",
+    "dialingCode": "595",
+    "phoneNumberFormat": "0## ###-####"
+  },
+  {
+    "name": "Peru",
+    "regions": ["america", "south-america"],
+    "code": "pe",
+    "dialingCode": "51",
+    "phoneNumberFormat": "0##-###-####"
+  },
+  {
+    "name": "Philippines",
+    "regions": ["asia"],
+    "code": "ph",
+    "dialingCode": "63",
+    "phoneNumberFormat": "0##-####-####"
+  },
+
+  {
+    "name": "Poland",
+    "regions": ["europe", "eu-union"],
+    "code": "pl",
+    "dialingCode": "48",
+    "phoneNumberFormat": "0## ### ###"
+  },
+  {
+    "name": "Portugal",
+    "regions": ["europe", "eu-union"],
+    "code": "pt",
+    "dialingCode": "351",
+    "phoneNumberFormat": "0# ### ###"
+  },
+  {
+    "name": "Puerto Rico",
+    "regions": ["america", "carribean"],
+    "code": "pr",
+    "dialingCode": "1787",
+    "phoneNumberFormat": "787-###-####"
+  },
+  {
+    "name": "Qatar",
+    "regions": ["middle-east"],
+    "code": "qa",
+    "dialingCode": "974",
+    "phoneNumberFormat": "0## #### ####"
+  },
+  {
+    "name": "Romania",
+    "regions": ["europe", "eu-union"],
+    "code": "ro",
+    "dialingCode": "40",
+    "phoneNumberFormat": "0## ### ###"
+  },
+  {
+    "name": "Russia",
+    "regions": ["europe", "ex-ussr"],
+    "code": "ru",
+    "dialingCode": "7",
+    "phoneNumberFormat": "0## ###-##-##"
+  },
+  {
+    "name": "Rwanda",
+    "regions": ["africa"],
+    "code": "rw",
+    "dialingCode": "250",
+    "phoneNumberFormat": "0## ### ####"
+  },
+  {
+    "name": "Saint Kitts and Nevis",
+    "regions": ["america", "carribean"],
+    "code": "kn",
+    "dialingCode": "1869",
+    "phoneNumberFormat": "869-###-####"
+  },
+  {
+    "name": "Saint Lucia",
+    "regions": ["america", "carribean"],
+    "code": "lc",
+    "dialingCode": "1758",
+    "phoneNumberFormat": "758-###-####"
+  },
+  {
+    "name": "Saint Pierre and Miquelon",
+    "regions": ["america", "north-america"],
+    "code": "pm",
+    "dialingCode": "508",
+    "phoneNumberFormat": "0## ## ##"
+  },
+  {
+    "name": "Saint Vincent and the Grenadines",
+    "regions": ["america", "carribean"],
+    "code": "vc",
+    "dialingCode": "1784",
+    "phoneNumberFormat": "784-###-####"
+  },
+  {
+    "name": "Samoa",
+    "regions": ["oceania"],
+    "code": "ws",
+    "dialingCode": "685",
+    "phoneNumberFormat": "0## ###"
+  },
+  {
+    "name": "San Marino",
+    "regions": ["europe"],
+    "code": "sm",
+    "dialingCode": "378",
+    "phoneNumberFormat": "0## ### ####"
+  },
+  {
+    "name": "Sao Tome and Principe",
+    "regions": ["africa"],
+    "code": "st",
+    "dialingCode": "239",
+    "phoneNumberFormat": "0## #######"
+  },
+  {
+    "name": "Saudi Arabia",
+    "regions": ["middle-east"],
+    "code": "sa",
+    "dialingCode": "966",
+    "phoneNumberFormat": "0## #### ####"
+  },
+  {
+    "name": "Senegal",
+    "regions": ["africa"],
+    "code": "sn",
+    "dialingCode": "221",
+    "phoneNumberFormat": "0## ##-##-##"
+  },
+  {
+    "name": "Serbia",
+    "regions": ["europe"],
+    "code": "rs",
+    "dialingCode": "381",
+    "phoneNumberFormat": "0## ### ####"
+  },
+  {
+    "name": "Seychelles",
+    "regions": ["africa"],
+    "code": "sc",
+    "dialingCode": "248",
+    "phoneNumberFormat": "0## ### ###"
+  },
+  {
+    "name": "Sierra Leone",
+    "regions": ["africa"],
+    "code": "sl",
+    "dialingCode": "232",
+    "phoneNumberFormat": "0## ### ###"
+  },
+  {
+    "name": "Singapore",
+    "regions": ["asia"],
+    "code": "sg",
+    "dialingCode": "65",
+    "phoneNumberFormat": "0##-###-####"
+  },
+  {
+    "name": "Sint Maarten",
+    "regions": ["america", "carribean"],
+    "code": "sx",
+    "dialingCode": "1721",
+    "phoneNumberFormat": "0##-###-####"
+  },
+  {
+    "name": "Slovakia",
+    "regions": ["europe", "eu-union"],
+    "code": "sk",
+    "dialingCode": "421",
+    "phoneNumberFormat": "0## ### ###"
+  },
+  {
+    "name": "Slovenia",
+    "regions": ["europe", "eu-union"],
+    "code": "si",
+    "dialingCode": "386",
+    "phoneNumberFormat": "0## ### ###"
+  },
+  {
+    "name": "Solomon Islands",
+    "regions": ["oceania"],
+    "code": "sb",
+    "dialingCode": "677",
+    "phoneNumberFormat": "0## ###"
+  },
+  {
+    "name": "Somalia",
+    "regions": ["africa"],
+    "code": "so",
+    "dialingCode": "252",
+    "phoneNumberFormat": "0## ### ###"
+  },
+  {
+    "name": "South Africa",
+    "regions": ["africa"],
+    "code": "za",
+    "dialingCode": "27",
+    "phoneNumberFormat": "0## ### ####"
+  },
+  {
+    "name": "South Sudan",
+    "regions": ["africa"],
+    "code": "ss",
+    "dialingCode": "211",
+    "phoneNumberFormat": "0## ### ####"
+  },
+  {
+    "name": "Spain",
+    "regions": ["europe", "eu-union"],
+    "code": "es",
+    "dialingCode": "34",
+    "phoneNumberFormat": "0# ### ###"
+  },
+  {
+    "name": "Sri Lanka",
+    "regions": ["asia"],
+    "code": "lk",
+    "dialingCode": "94",
+    "phoneNumberFormat": "0##-###-####"
+  },
+  {
+    "name": "Sudan",
+    "regions": ["africa"],
+    "code": "sd",
+    "dialingCode": "249",
+    "phoneNumberFormat": "0## ###-##-##"
+  },
+  {
+    "name": "Suriname",
+    "regions": ["america", "south-america"],
+    "code": "sr",
+    "dialingCode": "597",
+    "phoneNumberFormat": "0##-###-####"
+  },
+  {
+    "name": "Sweden",
+    "regions": ["europe", "eu-union"],
+    "code": "se",
+    "dialingCode": "46",
+    "phoneNumberFormat": "0##-### ###"
+  },
+  {
+    "name": "Switzerland",
+    "regions": ["europe"],
+    "code": "ch",
+    "dialingCode": "41",
+    "phoneNumberFormat": "0## ### ####"
+  },
+  {
+    "name": "Syria",
+    "regions": ["asia", "middle-east"],
+    "code": "sy",
+    "dialingCode": "963",
+    "phoneNumberFormat": "0## ### ####"
+  },
+  {
+    "name": "Taiwan",
+    "regions": ["asia"],
+    "code": "tw",
+    "dialingCode": "886",
+    "phoneNumberFormat": "0##-####-####"
+  },
+  {
+    "name": "Tajikistan",
+    "regions": ["asia"],
+    "code": "tj",
+    "dialingCode": "992",
+    "phoneNumberFormat": "0##-###-####"
+  },
+  {
+    "name": "Tanzania",
+    "regions": ["africa"],
+    "code": "tz",
+    "dialingCode": "255",
+    "phoneNumberFormat": "0## ### ####"
+  },
+  {
+    "name": "Thailand",
+    "regions": ["asia"],
+    "code": "th",
+    "dialingCode": "66",
+    "phoneNumberFormat": "0##-####-####"
+  },
+  {
+    "name": "Timor-Leste",
+    "regions": ["asia"],
+    "code": "tl",
+    "dialingCode": "670",
+    "phoneNumberFormat": "0##-###-####"
+  },
+  {
+    "name": "Togo",
+    "regions": ["africa"],
+    "code": "tg",
+    "dialingCode": "228",
+    "phoneNumberFormat": "0## ### ###"
+  },
+  {
+    "name": "Tonga",
+    "regions": ["oceania"],
+    "code": "to",
+    "dialingCode": "676",
+    "phoneNumberFormat": "0## ###"
+  },
+  {
+    "name": "Trinidad and Tobago",
+    "regions": ["america", "carribean"],
+    "code": "tt",
+    "dialingCode": "1868",
+    "phoneNumberFormat": "868-###-####"
+  },
+  {
+    "name": "Tunisia",
+    "regions": ["africa", "north-africa"],
+    "code": "tn",
+    "dialingCode": "216",
+    "phoneNumberFormat": "0## #### ###"
+  },
+  {
+    "name": "Turkey",
+    "regions": ["middle-east"],
+    "code": "tr",
+    "dialingCode": "90",
+    "phoneNumberFormat": "0## ### ####"
+  },
+  {
+    "name": "Turkmenistan",
+    "regions": ["asia"],
+    "code": "tm",
+    "dialingCode": "993",
+    "phoneNumberFormat": "0## ###-####"
+  },
+  {
+    "name": "Tuvalu",
+    "regions": ["oceania"],
+    "code": "tv",
+    "dialingCode": "688",
+    "phoneNumberFormat": "0## ###"
+  },
+  {
+    "name": "Uganda",
+    "regions": ["africa"],
+    "code": "ug",
+    "dialingCode": "256",
+    "phoneNumberFormat": "0## ### ####"
+  },
+  {
+    "name": "Ukraine",
+    "regions": ["europe", "ex-ussr"],
+    "code": "ua",
+    "dialingCode": "380",
+    "phoneNumberFormat": "0##-###-####"
+  },
+  {
+    "name": "United Arab Emirates",
+    "regions": ["middle-east"],
+    "code": "ae",
+    "dialingCode": "971",
+    "phoneNumberFormat": "0## #### ####"
+  },
+  {
+    "name": "United Kingdom",
+    "regions": ["europe", "eu-union"],
+    "code": "gb",
+    "dialingCode": "44",
+    "phoneNumberFormat": "0## ### ####"
+  },
+  {
+    "name": "United States",
+    "regions": ["america", "north-america"],
+    "code": "us",
+    "dialingCode": "1",
+    "phoneNumberFormat": "0### ### ####"
+  },
+  {
+    "name": "Uruguay",
+    "regions": ["america", "south-america"],
+    "code": "uy",
+    "dialingCode": "598",
+    "phoneNumberFormat": "0## ###-####"
+  },
+  {
+    "name": "Uzbekistan",
+    "regions": ["asia"],
+    "code": "uz",
+    "dialingCode": "998",
+    "phoneNumberFormat": "0##-###-####"
+  },
+  {
+    "name": "Vanuatu",
+    "regions": ["oceania"],
+    "code": "vu",
+    "dialingCode": "678",
+    "phoneNumberFormat": "0## ###"
+  },
+  {
+    "name": "Venezuela",
+    "regions": ["america", "south-america"],
+    "code": "ve",
+    "dialingCode": "58",
+    "phoneNumberFormat": "0##-###-####"
+  },
+  {
+    "name": "Vietnam",
+    "regions": ["asia"],
+    "code": "vn",
+    "dialingCode": "84",
+    "phoneNumberFormat": "0##-####-###"
+  },
+
+  {
+    "name": "Yemen",
+    "regions": ["middle-east"],
+    "code": "ye",
+    "dialingCode": "967",
+    "phoneNumberFormat": "0## #### ####"
+  },
+  {
+    "name": "Zambia",
+    "regions": ["africa"],
+    "code": "zm",
+    "dialingCode": "260",
+    "phoneNumberFormat": "0## ### ####"
+  },
+  {
+    "name": "Zimbabwe",
+    "regions": ["africa"],
+    "code": "zw",
+    "dialingCode": "263",
+    "phoneNumberFormat": "0## ### ####"
+  }
+]

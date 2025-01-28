@@ -6,6 +6,7 @@ import 'react-quill/dist/quill.snow.css';
 import 'react-toastify/dist/ReactToastify.css';
 import 'react-phone-input-2/lib/bootstrap.css';
 import './index.css';
+import './country.css';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
