@@ -52,7 +52,7 @@ export const eventsPath = [
   { title: 'Events', to: ['/events/event-list', '/events/add-event', '/events/edit-event', '/events/duplicate-event', '/events/view-event'] },
   { title: 'Participants', to: ['/participants/participant-list'] },
   { title: 'Packages', to: ['/packages/package-list', '/packages/add-package', '/packages/edit-package', '/packages/duplicate-package'] },
-  { title: 'Bookings', to: ['/bookings/booking-list'] },
+  // { title: 'Bookings', to: ['/bookings/booking-list'] },
   { title: 'Booking Payments', to: ['/payments/booking-payment-list'] }
 ];
 
