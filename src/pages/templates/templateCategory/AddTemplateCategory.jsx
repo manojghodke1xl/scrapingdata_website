@@ -13,7 +13,7 @@ const AddTemplateCategory = () => {
   const [isScrollable, setIsScrollable] = useState(false);
   const [templateCategory, setTemplateCategory] = useState({
     name: '',
-    variableMap: [{ label: '', model: '', key: '', name: '' }]
+    variableMap: [{ label: '', model: '', key: '', name: '', dataType: '' }]
   });
   const [errors, setErrors] = useState({});
 
@@ -165,6 +165,17 @@ const AddTemplateCategory = () => {
                     placeholder="Variable Name"
                     onChange={(e) => handleVariableChange(index, 'name', e.target.value)}
                     value={variable.name}
+                  />
+
+                  <FormField
+                    divClassName={'mt-5'}
+                    label="Variable Data Type"
+                    type="text"
+                    id="variableType"
+                    name="variableType"
+                    placeholder="Variable Data Type"
+                    onChange={(e) => handleVariableChange(index, 'dataType', e.target.value)}
+                    value={variable.dataType}
                   />
                   <button type="button" onClick={() => removeVariable(index)} className="px-4 py-2 mt-5 text-white bg-red text-sm rounded-xl">
                     Remove
