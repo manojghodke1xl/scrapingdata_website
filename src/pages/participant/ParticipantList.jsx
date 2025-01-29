@@ -17,15 +17,12 @@ const ParticipantList = () => {
       name,
       email,
       event,
-      package: { title, currencies, onSale, salePrice },
+      package: { title },
       site,
       status,
       phoneNumber,
-      phoneCode,
-      payment
+      phoneCode
     } = booking;
-
-    const { channel, currency, amount, coupon } = payment;
 
     return {
       id: _id,
@@ -44,11 +41,6 @@ const ParticipantList = () => {
       event: <TruncatableFieldToolTip title={'Event Name'} content={`${event.name} (${event.venue})`} />,
       eventDate: formatDateTime(event.date),
       title: <TruncatableFieldToolTip title={'Package Name'} content={title ?? ''} />,
-      channel: channel === 'razorpay' ? 'Razorpay' : channel === 'stripe' ? 'Stripe' : 'PayPal',
-      price: <TruncatableFieldToolTip title={'Currency'} content={currencies[currency]} />,
-      salePrice: onSale ? <TruncatableFieldToolTip title={'Sale Price'} content={salePrice[currency]} /> : '-',
-      amount: <TruncatableFieldToolTip title={'Paid Amount'} content={amount} />,
-      code: <TruncatableFieldToolTip title={'Coupon Code'} content={coupon?.code ?? ''} />,
       status: (
         <div
           className={`rounded-xl ${
@@ -93,11 +85,6 @@ const ParticipantList = () => {
                   { label: 'Event', key: 'event' },
                   { label: 'Event Date', key: 'eventDate' },
                   { label: 'Package', key: 'title' },
-                  { label: 'Channel', key: 'channel' },
-                  { label: 'Price', key: 'price' },
-                  { label: 'Sale Price', key: 'salePrice' },
-                  { label: 'Amount', key: 'amount' },
-                  { label: 'Coupon Code', key: 'code' },
                   { label: 'Status', key: 'status' },
                   { label: 'Created Date', key: 'createdAt' },
                   { label: 'Updated Date', key: 'updatedAt' }

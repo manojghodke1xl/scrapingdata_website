@@ -7,22 +7,25 @@ import TableHeader from '../../atoms/table/TableHeader';
 const BookingPaymentList = () => {
   const [bookingPayments, setBookingPayments] = useState([]);
 
-  const rows = bookingPayments.map((payment) => {
+  const rows = bookingPayments.map((booking) => {
     const {
       _id,
       customer,
       payment: { channel, amount, currency, status },
+      package: { currencies, onSale, salePrice },
       site,
+      attendee,
       createdAt,
       updatedAt,
       phoneNumber,
       phoneCode,
-      email
-    } = payment;
+      email,
+      coupon
+    } = booking;
 
     return {
       id: _id,
-      exportData: payment.payment,
+      exportData: booking,
       customer: <TruncatableFieldToolTip title={'Participant'} content={customer.name} />,
       email: <TruncatableFieldToolTip title={'Email'} content={email} />,
       phoneNumber: (
@@ -32,9 +35,13 @@ const BookingPaymentList = () => {
         />
       ),
       site: <TruncatableFieldToolTip title={'Sites'} content={`${site?.name} (${site?.host})`} />,
-      amount: <TruncatableFieldToolTip title={'Amount'} content={amount} />,
-      currency: <TruncatableFieldToolTip title={'Currency'} content={currency} />,
+      attendee: <TruncatableFieldToolTip title={'Attendee'} content={attendee ?? ''} />,
       channel: channel === 'razorpay' ? 'Razorpay' : channel === 'stripe' ? 'Stripe' : 'PayPal',
+      currency: <TruncatableFieldToolTip title={'Currency'} content={currency} />,
+      price: <TruncatableFieldToolTip title={'Price'} content={currencies?.[currency] ?? ''} />,
+      salePrice: onSale ? <TruncatableFieldToolTip title={'Discount Price'} content={salePrice?.[currency] ?? ''} /> : '-',
+      amount: <TruncatableFieldToolTip title={'Paid Amount'} content={amount} />,
+      coupon: <TruncatableFieldToolTip title={'Coupon'} content={coupon?.code ?? ''} />,
       status: (
         <div
           className={`rounded-xl ${
@@ -66,9 +73,13 @@ const BookingPaymentList = () => {
                   { label: 'Email', key: 'email' },
                   { label: 'Mobile Number', key: 'phoneNumber' },
                   { label: 'Site', key: 'site' },
-                  { label: 'Amount', key: 'amount' },
-                  { label: 'Currency', key: 'currency' },
+                  { label: 'Attendee', key: 'attendee' },
                   { label: 'Channel', key: 'channel' },
+                  { label: 'Currency', key: 'currency' },
+                  { label: 'Price', key: 'price' },
+                  { label: 'Discount Price', key: 'salePrice' },
+                  { label: 'Amount', key: 'amount' },
+                  { label: 'Coupon Code', key: 'coupon' },
                   { label: 'Status', key: 'status' },
                   { label: 'Created Date', key: 'createdAt' },
                   { label: 'Updated Date', key: 'updatedAt' }
