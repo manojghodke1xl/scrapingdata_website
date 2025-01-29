@@ -230,6 +230,7 @@ const AddSite = () => {
               {siteDetails.sendUserEnquiry && (
                 <div>
                   <FormField
+                    divClassName={'mt-5'}
                     label="Subject"
                     type="text"
                     id="subject"
@@ -243,6 +244,7 @@ const AddSite = () => {
                     errorMessage={errors.subject}
                   />
                   <TextareaComponent
+                    divClassName={'mt-5'}
                     label="Body"
                     placeholder="Body"
                     id="body"
@@ -267,6 +269,7 @@ const AddSite = () => {
               {siteDetails.sendUserMailingList && (
                 <div>
                   <FormField
+                    divClassName={'mt-5'}
                     label="Subject"
                     type="text"
                     id="subject"
@@ -280,6 +283,7 @@ const AddSite = () => {
                     errorMessage={errors.subject}
                   />
                   <TextareaComponent
+                    divClassName={'mt-5'}
                     label="Body"
                     placeholder="Body"
                     id="body"
@@ -304,6 +308,7 @@ const AddSite = () => {
               {siteDetails.sendAdminEnquiry && (
                 <div>
                   <FormField
+                    divClassName={'mt-5'}
                     label="Subject"
                     type="text"
                     id="subject"
@@ -317,6 +322,7 @@ const AddSite = () => {
                     errorMessage={errors.subject}
                   />
                   <TextareaComponent
+                    divClassName={'mt-5'}
                     label="Body"
                     placeholder="Body"
                     id="body"
@@ -380,6 +386,7 @@ const AddSite = () => {
               {siteDetails.sendAdminMailingList && (
                 <div>
                   <FormField
+                    divClassName={'mt-5'}
                     label="Subject"
                     type="text"
                     id="subject"
@@ -393,6 +400,7 @@ const AddSite = () => {
                     errorMessage={errors.subject}
                   />
                   <TextareaComponent
+                    divClassName={'mt-5'}
                     label="Body"
                     placeholder="Body"
                     id="body"
