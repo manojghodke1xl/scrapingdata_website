@@ -46,6 +46,7 @@ const AddSmtp = () => {
     if (!smtpDetails.port) newErrors.port = 'Port is required';
     if (!smtpDetails.user) newErrors.user = 'User is required';
     if (!smtpDetails.password) newErrors.password = 'Password is required';
+    if (!smtpDetails.senderEmail) newErrors.senderEmail = 'Sender Email is required';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -150,7 +151,17 @@ const AddSmtp = () => {
           <div className="w-full">
             <div>
               <FormField
+                label="Sender Name"
+                type="text"
+                id="senderName"
+                name="senderName"
+                placeholder="Sender Name"
+                onChange={(e) => setSmtpDetails((prev) => ({ ...prev, senderName: e.target.value }))}
+                value={smtpDetails.senderName}
+              />
+              <FormField
                 label="Sender Email"
+                divClassName={'mt-5'}
                 type="email"
                 id="senderEmail"
                 name="senderEmail"
