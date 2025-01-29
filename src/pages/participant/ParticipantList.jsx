@@ -26,7 +26,6 @@ const ParticipantList = () => {
     } = booking;
 
     const { channel, currency, amount, coupon } = payment;
-    console.log('payment', currencies[currency]);
 
     return {
       id: _id,
