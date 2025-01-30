@@ -28,7 +28,7 @@ const TableView = ({
 }) => {
   return (
     <>
-      <table className="min-w-full divide-y divide-gray-200 text-sm ">
+      <table className="min-w-full divide-y divide-gray-200 text-sm">
         <thead>
           <tr>
             {selectable && (
