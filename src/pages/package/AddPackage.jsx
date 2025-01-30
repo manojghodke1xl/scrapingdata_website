@@ -383,11 +383,11 @@ const AddPackage = () => {
                       <div className="flex flex-col md:flex-row items-center justify-between gap-4">
                         <FormField
                           divClassName={'mt-5'}
-                          label="Amount (in INR)"
+                          label="Price (in INR) is inclusive of tax"
                           type="number"
-                          id="amount"
-                          name="amount"
-                          placeholder="Amount (in INR)"
+                          id="currencies-INR"
+                          name="currencies-INR"
+                          placeholder="Price (in INR) is inclusive of tax"
                           onChange={(e) => {
                             setPackageDetails((prev) => ({ ...prev, currencies: { ...prev.currencies, INR: e.target.value } }));
                             if (errors.currencies?.INR) setErrors((prev) => ({ ...prev, currencies: { INR: '' } }));
@@ -417,11 +417,11 @@ const AddPackage = () => {
                       <div className="flex flex-col md:flex-row items-center justify-between gap-4">
                         <FormField
                           divClassName={'mt-5'}
-                          label="Amount (in AED)"
+                          label="Price (in AED) is inclusive of tax"
                           type="number"
                           id="currencies-AED"
                           name="currencies-AED"
-                          placeholder="Amount (in AED)"
+                          placeholder="Price (in AED) is inclusive of tax"
                           onChange={(e) => {
                             setPackageDetails((prev) => ({ ...prev, currencies: { ...prev.currencies, AED: e.target.value } }));
                             if (errors.currencies) setErrors((prev) => ({ ...prev, currencies: { AED: '' } }));
@@ -453,11 +453,11 @@ const AddPackage = () => {
                       <div className="flex flex-col md:flex-row items-center justify-between gap-4">
                         <FormField
                           divClassName={'mt-5'}
-                          label="USD Amount"
+                          label="Price (in USD) is inclusive of tax"
                           type="number"
-                          id="currencies"
-                          name="currencies"
-                          placeholder="USD Amount"
+                          id="currencies-USD"
+                          name="currencies-USD"
+                          placeholder="Price (in USD) is inclusive of tax"
                           onChange={(e) => {
                             setPackageDetails((prev) => ({ ...prev, currencies: { ...prev.currencies, USD: e.target.value } }));
                             if (errors.currencies) setErrors((prev) => ({ ...prev, currencies: { USD: '' } }));

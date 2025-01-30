@@ -544,11 +544,11 @@ const AddProduct = () => {
                 <div key={currency} className="flex md:flex-row flex-col items-center justify-between md:gap-5">
                   <FormField
                     divClassName={'mt-5'}
-                    label={`Price (${currency})`}
+                    label={`Price (${currency}) is inclusive of tax`}
                     type="number"
                     id={`price-${currency}`}
                     name={`price-${currency}`}
-                    placeholder={`Price (${currency})`}
+                    placeholder={`Price (${currency}) is inclusive of tax`}
                     onChange={(e) => {
                       setProductDetails((prev) => ({ ...prev, price: { ...prev.price, [currency]: e.target.value } }));
                       if (errors.price?.[currency]) setErrors((prev) => ({ ...prev, price: { ...prev.price, [currency]: '' } }));
