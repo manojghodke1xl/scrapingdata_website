@@ -9,6 +9,7 @@ import { BsFilePdf } from 'react-icons/bs';
 
 const FileUpload = ({
   divClassName,
+  label,
   logo,
   imagePreviewUrl: externalImagePreviewUrl,
   error,
@@ -17,8 +18,10 @@ const FileUpload = ({
   isImage = false,
   isPdf = false,
   isVideo = false,
+  isSvg = false,
   setDetails = () => {},
-  fieldName = 'image'
+  fieldName = 'image',
+  uploadToAWS = true
 }) => {
   const [selectedFile, setSelectedFile] = useState(null);
 
@@ -37,7 +40,28 @@ const FileUpload = ({
     const file = event.target.files[0];
     if (file) {
       setSelectedFile(file);
-      uploadFile({ file, isImage, isPdf, isVideo, setDetails, fieldName });
+      if (uploadToAWS) uploadFile({ file, isImage, isPdf, isVideo, setDetails, fieldName });
+      else {
+        console.log('file', file);
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const fileContent = e.target.result;
+          const decoder = new TextDecoder('utf-8');
+          const fileText = decoder.decode(fileContent);
+          console.log('fileContent', fileContent);
+          setDetails((prev) => ({
+            ...prev,
+            [fieldName]: {
+              name: file.name,
+              size: file.size,
+              type: file.type,
+              text: fileText,
+              fileData: fileContent
+            }
+          }));
+        };
+        reader.readAsArrayBuffer(file);
+      }
       setErrors((prev) => ({ ...prev, [fieldName]: '' }));
     } else {
       showNotification('warn', `Accepted file types: ${acceptedTypes.join(', ')}`);
@@ -49,6 +73,9 @@ const FileUpload = ({
     if (!imagePreview) return null;
 
     if (isImage) {
+      if (isSvg) {
+        return <svg className="rounded-xl flex justify-center m-auto w-3/5 h-full object-contain" dangerouslySetInnerHTML={{ __html: imagePreview }} />;
+      }
       return <img src={imagePreview} alt={selectedFile?.name || 'Image Preview'} className="rounded-xl flex justify-center m-auto w-3/5 h-32 object-contain" />;
     }
 
@@ -75,7 +102,7 @@ const FileUpload = ({
       <div className={`${divClassName} w-full border border-primary rounded-xl p-6 shadow-sm`}>
         <h1 className="text-primary text-lg mb-3 text-left flex items-center gap-2">
           {logo || <MdOutlineUploadFile className="text-primary text-2xl" />}
-          Upload {isImage ? 'Image' : isPdf ? 'PDF' : isVideo ? 'Video' : 'File'}
+          Upload {isImage ? label || 'Image' : isPdf ? label || 'PDF' : isVideo ? label || 'Video' : label || 'File'}
         </h1>
 
         <div className="border-2 border-primary rounded-xl text-center border-dashed p-3 w-auto">

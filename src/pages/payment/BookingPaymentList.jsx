@@ -73,7 +73,7 @@ const BookingPaymentList = () => {
                   { label: 'Email', key: 'email' },
                   { label: 'Mobile Number', key: 'phoneNumber' },
                   { label: 'Site', key: 'site' },
-                  { label: 'Attendee', key: 'attendee' },
+                  { label: 'Qty', key: 'attendee' },
                   { label: 'Channel', key: 'channel' },
                   { label: 'Currency', key: 'currency' },
                   { label: 'Price', key: 'price' },

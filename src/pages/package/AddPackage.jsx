@@ -14,6 +14,8 @@ import { getTemplateByEventApi } from '../../apis/templates/email-template-apis'
 import ToggleComponent from '../../atoms/formFields/ToggleComponent';
 import DateTimePicker from '../../atoms/formFields/DateTimePicker';
 import { formatDateTime } from '../../utils/dateFormats';
+import FileUpload from '../../atoms/formFields/FileUpload';
+import { FaRegImage } from 'react-icons/fa';
 
 const AddPackage = () => {
   const navigate = useNavigate();
@@ -30,6 +32,7 @@ const AddPackage = () => {
     ticketIdPattern: '',
     onSale: false,
     saleEndDate: '',
+    // ticketImage: '',
     currencyNotes: {
       INR: false,
       AED: false,
@@ -52,8 +55,6 @@ const AddPackage = () => {
   const [paymentData, setPaymentData] = useState({});
   const [templates, setTemplates] = useState([]);
 
-  console.log('packageDetails', packageDetails);
-
   const validate = () => {
     const newErrors = {};
 
@@ -65,32 +66,18 @@ const AddPackage = () => {
     // if (packageDetails.event && !packageDetails.template) newErrors.template = 'Template is required';
     if (packageDetails.onSale && !packageDetails.saleEndDate) newErrors.saleEndDate = 'Sale end date is required';
 
-    if (
-      (paymentData?.razorpay?.supports?.INR || paymentData?.stripe?.supports?.INR || paymentData?.paypal?.supports?.INR) &&
-      (!packageDetails.currencies.INR || packageDetails.currencies.INR <= 0) &&
-      packageDetails.currencyNotes.INR
-    ) {
-      newErrors.currencies = { ...newErrors.currencies, INR: 'INR is required' };
-      if (packageDetails.onSale && !packageDetails.salePrice.INR) newErrors.salePrice = { ...newErrors.salePrice, INR: 'INR is required' };
-    }
+    const supportedCurrencies = ['INR', 'AED', 'USD'];
 
-    if (
-      (paymentData?.razorpay?.supports?.AED || paymentData?.stripe?.supports?.AED || paymentData?.paypal?.supports?.AED) &&
-      (!packageDetails.currencies.AED || packageDetails.currencies.AED <= 0) &&
-      packageDetails.currencyNotes.AED
-    ) {
-      newErrors.currencies = { ...newErrors.currencies, AED: 'AED is required' };
-      if (packageDetails.onSale && !packageDetails.salePrice.AED) newErrors.salePrice = { ...newErrors.salePrice, AED: 'AED is required' };
-    }
-
-    if (
-      (paymentData?.razorpay?.supports?.USD || paymentData?.stripe?.supports?.USD || paymentData?.paypal?.supports?.USD) &&
-      (!packageDetails.currencies.USD || packageDetails.currencies.USD <= 0) &&
-      packageDetails.currencyNotes.USD
-    ) {
-      newErrors.currencies = { ...newErrors.currencies, USD: 'USD is required' };
-      if (packageDetails.onSale && !packageDetails.salePrice.USD) newErrors.salePrice = { ...newErrors.salePrice, USD: 'USD is required' };
-    }
+    supportedCurrencies.forEach((currency) => {
+      if (
+        (paymentData?.razorpay?.supports?.[currency] || paymentData?.stripe?.supports?.[currency] || paymentData?.paypal?.supports?.[currency]) &&
+        (!packageDetails.currencies[currency] || packageDetails.currencies[currency] <= 0) &&
+        packageDetails.currencyNotes[currency]
+      ) {
+        newErrors.currencies = { ...newErrors.currencies, [currency]: `Price in (${currency}) is required` };
+        if (packageDetails.onSale && !packageDetails.salePrice[currency]) newErrors.salePrice = { ...newErrors.salePrice, [currency]: `Sale Price in (${currency}) is required` };
+      }
+    });
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -117,8 +104,11 @@ const AddPackage = () => {
       (async () => {
         try {
           const { status, data } = await getPackageByIdApi(id);
-          if (status) setPackageDetails(data.package);
-          else showNotification('warn', data);
+          if (status) {
+            const { ticketImage, ...rest } = data.package;
+
+            setPackageDetails((prev) => ({ ...prev, ...rest, ticketImage: ticketImage ? ticketImage._id : undefined, ticketImageFile: ticketImage }));
+          } else showNotification('warn', data);
         } catch (error) {
           showNotification('error', error.message);
         } finally {
@@ -501,11 +491,21 @@ const AddPackage = () => {
                         errorMessage={errors.maxLimit}
                       />
                     )}
-                    <br />
-                    <br />
-                    <br />
-                    <br />
-                    <br />
+                    {console.log('packageDetails', packageDetails)}
+                    <FileUpload
+                      divClassName={'mt-5'}
+                      label={'Ticket Svg with {ticket_id} as variable'}
+                      logo={<FaRegImage className="text-primary text-2xl" />}
+                      error={errors.image}
+                      setErrors={setErrors}
+                      acceptedTypes={['.svg']}
+                      fieldName="ticketImage"
+                      isImage
+                      isSvg
+                      uploadToAWS={false}
+                      setDetails={setPackageDetails}
+                      imagePreviewUrl={packageDetails.ticketImage?.text}
+                    />
                   </>
                 </div>
               </div>

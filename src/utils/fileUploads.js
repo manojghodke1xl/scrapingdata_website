@@ -5,7 +5,7 @@ export const uploadFile = async ({ file = null, isImage = false, isPdf = false, 
 
   const { name, size, type } = file;
 
-  const validImageTypes = ['image/jpeg', 'image/png'];
+  const validImageTypes = ['image/jpeg', 'image/png', 'image/svg+xml'];
   const validPdfTypes = ['application/pdf'];
   const validVideoTypes = ['video/mp4', 'video/quicktime'];
 
