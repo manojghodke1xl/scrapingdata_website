@@ -20,8 +20,7 @@ const TableView = ({
   copy,
   copyPath,
   deleteAction,
-  currentPage,
-  itemsPerPage,
+  tableState,
   setModalState,
   managePackage,
   managePackagePath
@@ -94,7 +93,7 @@ const TableView = ({
                   )}
                   {headers.map((header, headerIndex) => (
                     <td key={`${row.id}-${headerIndex}`} className="px-2 text-secondary whitespace-nowrap font-medium">
-                      {header.key === 'srno' ? ((currentPage - 1) * itemsPerPage + (index + 1)).toString().padStart(3, '0') : row[header.key]}
+                      {header.key === 'srno' ? ((tableState.currentPage - 1) * tableState.itemsPerPage + (index + 1)).toString().padStart(3, '0') : row[header.key]}
                     </td>
                   ))}
                   {actions && (

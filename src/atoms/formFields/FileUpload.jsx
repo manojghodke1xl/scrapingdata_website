@@ -18,10 +18,8 @@ const FileUpload = ({
   isImage = false,
   isPdf = false,
   isVideo = false,
-  isSvg = false,
   setDetails = () => {},
-  fieldName = 'image',
-  uploadToAWS = true
+  fieldName = 'image'
 }) => {
   const [selectedFile, setSelectedFile] = useState(null);
 
@@ -40,20 +38,7 @@ const FileUpload = ({
     const file = event.target.files[0];
     if (file) {
       setSelectedFile(file);
-      if (uploadToAWS) uploadFile({ file, isImage, isPdf, isVideo, setDetails, fieldName });
-      else {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          const fileContent = e.target.result;
-          const decoder = new TextDecoder('utf-8');
-          const fileText = decoder.decode(fileContent);
-          setDetails((prev) => ({
-            ...prev,
-            [fieldName]: fileText
-          }));
-        };
-        reader.readAsArrayBuffer(file);
-      }
+      uploadFile({ file, isImage, isPdf, isVideo, setDetails, fieldName });
       setErrors((prev) => ({ ...prev, [fieldName]: '' }));
     } else {
       showNotification('warn', `Accepted file types: ${acceptedTypes.join(', ')}`);
@@ -64,12 +49,7 @@ const FileUpload = ({
   const renderPreview = () => {
     if (!imagePreview) return null;
 
-    if (isImage) {
-      if (isSvg) {
-        return <svg className="rounded-xl flex justify-center m-auto w-3/5 h-full object-contain" dangerouslySetInnerHTML={{ __html: imagePreview }} />;
-      }
-      return <img src={imagePreview} alt={selectedFile?.name || 'Image Preview'} className="rounded-xl flex justify-center m-auto w-3/5 h-32 object-contain" />;
-    }
+    if (isImage) return <img src={imagePreview} alt={selectedFile?.name || 'Image Preview'} className="rounded-xl flex justify-center m-auto w-3/5 h-32 object-contain" />;
 
     if (isVideo) {
       return (
@@ -91,7 +71,7 @@ const FileUpload = ({
 
   return (
     <>
-      <div className={`${divClassName} w-full border border-primary rounded-xl p-6 shadow-sm`}>
+      <div className={`${divClassName} w-full border ${error ? 'border-fadered focus:border-fadered' : ' border-primary focus:border-blue'} rounded-xl p-6 shadow-sm`}>
         <h1 className="text-primary text-lg mb-3 text-left flex items-center gap-2">
           {logo || <MdOutlineUploadFile className="text-primary text-2xl" />}
           Upload {isImage ? label || 'Image' : isPdf ? label || 'PDF' : isVideo ? label || 'Video' : label || 'File'}
@@ -176,7 +156,7 @@ const FileUpload = ({
           </div>
         )} */}
 
-        {error && <p className="text-red-500 text-sm">{error}</p>}
+        {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
       </div>
     </>
   );

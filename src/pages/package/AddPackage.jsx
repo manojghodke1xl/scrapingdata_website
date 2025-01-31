@@ -14,8 +14,7 @@ import { getTemplateByEventApi } from '../../apis/templates/email-template-apis'
 import ToggleComponent from '../../atoms/formFields/ToggleComponent';
 import DateTimePicker from '../../atoms/formFields/DateTimePicker';
 import { formatDateTime } from '../../utils/dateFormats';
-import FileUpload from '../../atoms/formFields/FileUpload';
-import { FaRegImage } from 'react-icons/fa';
+import { getAllTicketsApi } from '../../apis/event-ticket-apis';
 
 const AddPackage = () => {
   const navigate = useNavigate();
@@ -32,7 +31,7 @@ const AddPackage = () => {
     ticketIdPattern: '',
     onSale: false,
     saleEndDate: '',
-    ticketSvg: '',
+    ticket: '',
     currencyNotes: {
       INR: false,
       AED: false,
@@ -54,6 +53,7 @@ const AddPackage = () => {
   const [events, setEvents] = useState([]);
   const [paymentData, setPaymentData] = useState({});
   const [templates, setTemplates] = useState([]);
+  const [tickets, setTickets] = useState([]);
 
   const validate = () => {
     const newErrors = {};
@@ -65,6 +65,7 @@ const AddPackage = () => {
     if (!packageDetails.ticketIdPattern?.trim()) newErrors.ticketIdPattern = 'Ticket ID Pattern is required';
     // if (packageDetails.event && !packageDetails.template) newErrors.template = 'Template is required';
     if (packageDetails.onSale && !packageDetails.saleEndDate) newErrors.saleEndDate = 'Sale end date is required';
+    if (!packageDetails.ticket) newErrors.ticket = 'Ticket is required';
 
     const supportedCurrencies = ['INR', 'AED', 'USD'];
 
@@ -78,10 +79,23 @@ const AddPackage = () => {
         if (packageDetails.onSale && !packageDetails.salePrice[currency]) newErrors.salePrice = { ...newErrors.salePrice, [currency]: `Sale Price in (${currency}) is required` };
       }
     });
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
+
+  useEffect(() => {
+    if (packageDetails.event) {
+      (async () => {
+        try {
+          const { status, data } = await getAllTicketsApi();
+          if (status) setTickets(data.tickets);
+          else showNotification('warn', data);
+        } catch (error) {
+          showNotification('error', error.message);
+        }
+      })();
+    }
+  }, [packageDetails.event]);
 
   useEffect(() => {
     setLoading(true);
@@ -104,11 +118,8 @@ const AddPackage = () => {
       (async () => {
         try {
           const { status, data } = await getPackageByIdApi(id);
-          if (status) {
-            const { ticketSvg, ...rest } = data.package;
-
-            setPackageDetails((prev) => ({ ...prev, ...rest, ticketImage: ticketSvg }));
-          } else showNotification('warn', data);
+          if (status) setPackageDetails(data.package);
+          else showNotification('warn', data);
         } catch (error) {
           showNotification('error', error.message);
         } finally {
@@ -491,20 +502,19 @@ const AddPackage = () => {
                         errorMessage={errors.maxLimit}
                       />
                     )}
-                    {console.log('packageDetails', packageDetails)}
-                    <FileUpload
-                      divClassName={'mt-5'}
-                      label={'Ticket Svg with {ticket_id} as variable'}
-                      logo={<FaRegImage className="text-primary text-2xl" />}
-                      error={errors.image}
-                      setErrors={setErrors}
-                      acceptedTypes={['.svg']}
-                      fieldName="ticketSvg"
-                      isImage
-                      isSvg
-                      uploadToAWS={false}
-                      setDetails={setPackageDetails}
-                      imagePreviewUrl={packageDetails.ticketSvg}
+                    <DropDown
+                      mt="mt-5"
+                      name="Tickets"
+                      label={'Select Ticket'}
+                      dropdownList={tickets?.map((event) => ({ name: event._id, showName: event.name, id: event._id }))}
+                      SummaryChild={<h5 className="p-0 m-0 text-primary">Ticket</h5>}
+                      search={true}
+                      selected={packageDetails.ticket}
+                      commonFunction={(e) => {
+                        setPackageDetails((prev) => ({ ...prev, ticket: e.name }));
+                        if (errors.ticket) setErrors((prev) => ({ ...prev, ticket: '' }));
+                      }}
+                      error={errors.ticket}
                     />
                   </>
                 </div>

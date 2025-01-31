@@ -36,6 +36,7 @@ import BookingRoutes from './private-routes/BookingRoutes';
 import OrderRoutes from './private-routes/OrderRoutes';
 import TemplateRoutes from './private-routes/TemplateRoutes';
 import FilesRoutes from './private-routes/FilesRoutes';
+import EventTicketRoutes from './private-routes/eventTicketRoutes';
 
 const ZohoStatus = lazy(() => import('../pages/integration/ZohoStatus'));
 
@@ -85,6 +86,7 @@ const App = () => {
                 <Route path="/orders/*" element={<OrderRoutes />} />
                 <Route path="/templates/*" element={<TemplateRoutes />} />
                 <Route path="/files/*" element={<FilesRoutes />} />
+                <Route path="/tickets/*" element={<EventTicketRoutes />} />
               </Route>
             </Route>
             <Route path="*" element={<PageNotFound />} />
