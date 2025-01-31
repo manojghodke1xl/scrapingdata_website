@@ -42,22 +42,14 @@ const FileUpload = ({
       setSelectedFile(file);
       if (uploadToAWS) uploadFile({ file, isImage, isPdf, isVideo, setDetails, fieldName });
       else {
-        console.log('file', file);
         const reader = new FileReader();
         reader.onload = (e) => {
           const fileContent = e.target.result;
           const decoder = new TextDecoder('utf-8');
           const fileText = decoder.decode(fileContent);
-          console.log('fileContent', fileContent);
           setDetails((prev) => ({
             ...prev,
-            [fieldName]: {
-              name: file.name,
-              size: file.size,
-              type: file.type,
-              text: fileText,
-              fileData: fileContent
-            }
+            [fieldName]: fileText
           }));
         };
         reader.readAsArrayBuffer(file);

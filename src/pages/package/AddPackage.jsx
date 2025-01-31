@@ -32,7 +32,7 @@ const AddPackage = () => {
     ticketIdPattern: '',
     onSale: false,
     saleEndDate: '',
-    // ticketImage: '',
+    ticketSvg: '',
     currencyNotes: {
       INR: false,
       AED: false,
@@ -105,9 +105,9 @@ const AddPackage = () => {
         try {
           const { status, data } = await getPackageByIdApi(id);
           if (status) {
-            const { ticketImage, ...rest } = data.package;
+            const { ticketSvg, ...rest } = data.package;
 
-            setPackageDetails((prev) => ({ ...prev, ...rest, ticketImage: ticketImage ? ticketImage._id : undefined, ticketImageFile: ticketImage }));
+            setPackageDetails((prev) => ({ ...prev, ...rest, ticketImage: ticketSvg }));
           } else showNotification('warn', data);
         } catch (error) {
           showNotification('error', error.message);
@@ -499,12 +499,12 @@ const AddPackage = () => {
                       error={errors.image}
                       setErrors={setErrors}
                       acceptedTypes={['.svg']}
-                      fieldName="ticketImage"
+                      fieldName="ticketSvg"
                       isImage
                       isSvg
                       uploadToAWS={false}
                       setDetails={setPackageDetails}
-                      imagePreviewUrl={packageDetails.ticketImage?.text}
+                      imagePreviewUrl={packageDetails.ticketSvg}
                     />
                   </>
                 </div>
