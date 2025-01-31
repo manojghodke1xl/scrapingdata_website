@@ -237,6 +237,20 @@ const AddEmailTemplate = () => {
                 placeholder="Body..."
                 errorMessage={errors.body}
               />
+
+              {/* <FormField
+                type="textarea"
+                label="HTML Text"
+                name="htmlText"
+                id="htmlText"
+                placeholder="HTML Text"
+                value={emailTemplate.htmlText}
+                onChange={(e) => {
+                  setEmailTemplate((prev) => ({ ...prev, htmlText: e.target.value }));
+                  if (errors.htmlText) setErrors((prev) => ({ ...prev, htmlText: '' }));
+                }}
+                errorMessage={errors.htmlText}
+              /> */}
             </div>
           </div>
         </div>
