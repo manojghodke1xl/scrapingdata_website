@@ -22,7 +22,7 @@ const RecaptchaList = () => {
       secretkey: <TruncatableFieldToolTip title={'Title'} content={secretkey} />,
       isActive: (
         <div className={`rounded-xl ${isActive ? 'bg-[#ECFDF3] text-[#027948]' : 'bg-[#F2F4F7] text-[#344054]'} px-2 py-1 w-fit flex gap-2 items-center`}>
-          <span className={`min-w-[12px] min-h-[12px] rounded-full ${isActive ? 'bg-[#12B76A]' : 'bg-[#667085]'}`}></span>
+          <span className={`min-w-[8px] min-h-[8px] rounded-full ${isActive ? 'bg-[#12B76A]' : 'bg-[#667085]'}`}></span>
           <span>{isActive ? 'Active' : 'Inactive'}</span>
         </div>
       ),

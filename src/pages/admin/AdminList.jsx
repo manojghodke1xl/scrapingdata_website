@@ -31,7 +31,7 @@ const AdminList = () => {
       ),
       isBlocked: (
         <div className={`rounded-xl ${isBlocked ? 'bg-[#FEF3F2] text-[#B32318]' : 'bg-[#ECFDF3] text-[#027948]'} px-2 py-1 w-fit flex gap-2 items-center`}>
-          <span className={`min-w-[12px] min-h-[12px] rounded-full ${isBlocked ? 'bg-[#F04438]' : 'bg-[#12B76A]'}`}></span>
+          <span className={`min-w-[8px] min-h-[8px] rounded-full ${isBlocked ? 'bg-[#F04438]' : 'bg-[#12B76A]'}`}></span>
           <span>{isBlocked ? 'Blocked' : 'Active'}</span>
         </div>
       ),

@@ -11,35 +11,37 @@ const OrderPaymentList = () => {
     const {
       _id,
       customer,
-      payment: { channel, amount, currency, status, site },
+      payment: { channel, amount, currency, status, site, coupon },
       products,
       createdAt,
       updatedAt
     } = payment;
 
-    const product = products.map((p) => p.product.name).join(', ');
-    const totalPrice = products.reduce((sum, p) => sum + p.product.price[currency], 0);
-    const totalSalePrice = products.reduce((sum, p) => sum + p.product.salePrice[currency], 0);
+    const product = products?.map((p) => p.product?.name).join(', ');
+    const totalPrice = products?.reduce((sum, p) => sum + p?.product?.price?.[currency], 0);
+    const totalSalePrice = products?.reduce((sum, p) => sum + p?.product?.salePrice?.[currency], 0);
+
+    console.log('product', product);
 
     return {
       id: _id,
       exportData: payment,
-      customer: <TruncatableFieldToolTip title={'Participant'} content={customer.name} />,
-      site: <TruncatableFieldToolTip title={'Sites'} content={`${site?.name} (${site?.host})`} />,
-      amount: <TruncatableFieldToolTip title={'Amount'} content={amount} />,
-      currency: <TruncatableFieldToolTip title={'Currency'} content={currency} />,
+      customer: <TruncatableFieldToolTip content={customer.name} />,
+      site: <TruncatableFieldToolTip content={`${site?.name} (${site?.host})`} />,
+      amount: <TruncatableFieldToolTip content={amount} />,
       channel: channel === 'razorpay' ? 'Razorpay' : channel === 'stripe' ? 'Stripe' : 'PayPal',
-      products: <TruncatableFieldToolTip title={'Products'} content={product ?? '-'} />,
-      quantity: <TruncatableFieldToolTip title={'Quantity'} content={products.map((p) => p.quantity).join(', ') ?? '-'} />,
-      totalPrice: <TruncatableFieldToolTip title={'Total Price'} content={totalPrice ?? '-'} />,
-      totalSalePrice: <TruncatableFieldToolTip title={'Total Sale Price'} content={totalSalePrice ?? '-'} />,
+      products: <TruncatableFieldToolTip content={product ?? '-'} />,
+      quantity: <TruncatableFieldToolTip content={products.reduce((sum, p) => sum + p.quantity, 0) ?? '-'} />,
+      totalPrice: <TruncatableFieldToolTip content={totalPrice ? `${totalPrice} ${currency}` : '-'} />,
+      totalSalePrice: <TruncatableFieldToolTip content={totalSalePrice ? `${totalSalePrice} ${currency}` : '-'} />,
+      coupon: <TruncatableFieldToolTip content={coupon?.code ?? '-'} />,
       status: (
         <div
           className={`rounded-xl ${
             status === 'success' ? 'bg-lightgreen text-success' : status === 'pending' ? 'bg-fadeyellow text-pending' : 'bg-fadedred text-failed'
           } px-2 py-1 w-fit flex gap-2 items-center`}
         >
-          <span className={`min-w-[12px] min-h-[12px] rounded-full ${status === 'success' ? 'bg-green' : 'bg-pending'}`}></span>
+          <span className={`min-w-[8px] min-h-[8px] rounded-full ${status === 'success' ? 'bg-green' : 'bg-pending'}`}></span>
           <span>{status === 'success' ? 'Success' : status === 'pending' ? 'Pending' : 'Failed'}</span>
         </div>
       ),
@@ -62,13 +64,13 @@ const OrderPaymentList = () => {
                   { label: 'Sr. No.', key: 'srno' },
                   { label: 'Customer Name', key: 'customer' },
                   { label: 'Site', key: 'site' },
-                  { label: 'Amount', key: 'amount' },
-                  { label: 'Currency', key: 'currency' },
-                  { label: 'Channel', key: 'channel' },
                   { label: 'Products', key: 'products' },
-                  { label: 'Product Qty', key: 'quantity' },
+                  { label: 'Qty', key: 'quantity' },
+                  { label: 'Channel', key: 'channel' },
                   { label: 'Total Price', key: 'totalPrice' },
                   { label: 'Total Sale Price', key: 'totalSalePrice' },
+                  { label: 'Amount', key: 'amount' },
+                  { label: 'Coupon', key: 'coupon' },
                   { label: 'Status', key: 'status' },
                   { label: 'Created Date', key: 'createdAt' },
                   { label: 'Updated Date', key: 'updatedAt' }
