@@ -17,5 +17,5 @@ export const getEventTicketByIdApi = async (id) => {
 };
 
 export const getAllTicketsApi = async () => {
-  return await getMethodCall(`${import.meta.env.VITE_API_URL}/ticket/all`);
+  return await getMethodCall(`${import.meta.env.VITE_API_URL}/ticket`);
 };
