@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import useGlobalContext from '../../hooks/useGlobalContext';
 import { useState } from 'react';
 import FormButtons from '../../atoms/formFields/FormButtons';
@@ -8,7 +8,6 @@ import { updatePaymentIntegrationApi, whatsAppOauthoApi } from '../../apis/payme
 import { showNotification } from '../../utils/showNotification';
 
 const WhatsAppIntegration = () => {
-  const navigate = useNavigate();
   const { setLoading, isLoading } = useGlobalContext();
   const { state } = useLocation();
   console.log('state', state);
@@ -20,7 +19,8 @@ const WhatsAppIntegration = () => {
         phoneNumber: '',
         ccode: '',
         phoneNumberId: '',
-        accessToken: ''
+        appId: '',
+        appSecret: ''
       }
     ]
   );
@@ -132,13 +132,23 @@ const WhatsAppIntegration = () => {
                 />
                 <FormField
                   divClassName={'mt-5'}
-                  label="Token"
-                  placeholder="Enter token"
+                  label="App ID"
+                  placeholder="App ID"
                   type="text"
-                  name="accessToken"
-                  value={whatsapp.accessToken}
-                  onChange={(e) => handleVariableChange(index, 'accessToken', e.target.value)}
-                  errorMessage={errors[index]?.accessToken}
+                  name="appId"
+                  value={whatsapp.appId}
+                  onChange={(e) => handleVariableChange(index, 'appId', e.target.value)}
+                  errorMessage={errors[index]?.appId}
+                />
+                <FormField
+                  divClassName={'mt-5'}
+                  label="App Secret"
+                  placeholder="App Secret"
+                  type="text"
+                  name="appSecret"
+                  value={whatsapp.appSecret}
+                  onChange={(e) => handleVariableChange(index, 'appSecret', e.target.value)}
+                  errorMessage={errors[index]?.appSecret}
                 />
                 <button type="button" onClick={() => removeVariable(index)} className="px-4 py-2 mt-5 bg-red text-white rounded-xl">
                   Remove
