@@ -38,12 +38,13 @@ const WhatsAppIntegration = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!validate()) return;
+    console.log('the details', whatsappDetails);
+    // if (!validate()) return;
     setLoading(true);
     try {
-      // const { status, data } = await updatePaymentIntegrationApi(state.siteId, null, null, { whatsapp: whatsappDetails });
-      const { status: status2, data: data2 } = await whatsAppOauthoApi();
-      if (status2) window.location.href = data2.data.oauthUrl;
+      const { status, data } = await updatePaymentIntegrationApi(state.siteId, null, null, { whatsapp: whatsappDetails });
+      // const { status: status2, data: data2 } = await whatsAppOauthoApi();
+      if (status) window.location.href = data.data.oauthUrl;
       // navigate(data.data.oauthUrl);
       // else showNotification('error', data.message);
     } catch (error) {
