@@ -140,7 +140,6 @@ const AddGuides = () => {
                 name="desc"
                 value={guideDetails.desc}
                 onChange={(e) => setGuideDetails((prev) => ({ ...prev, desc: e.target.value }))}
-                charCount={false}
               />
             </div>
           </div>
@@ -239,7 +238,6 @@ const AddGuides = () => {
                 value={guideDetails.mailBody}
                 onChange={(e) => setGuideDetails((prev) => ({ ...prev, mailBody: e.target.value }))}
                 errorMessage={errors.mailBody}
-                charCount={false}
               />
             </div>
           </div>

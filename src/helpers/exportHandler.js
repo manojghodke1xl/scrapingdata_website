@@ -39,7 +39,11 @@ export const exportHandler = ({ type, apiUrl, rows, headers, selected }) => {
           faq: 'faqs',
           'client-logo': 'clientlogos',
           gallery: 'galleries',
-          'partner-logo': 'partnerlogos'
+          'partner-logo': 'partnerlogos',
+          'template-category/email': 'templateCategories',
+          'template/email': 'emailTemplates',
+          'template/sms': 'smsTemplates',
+          'template/whatsapp': 'whatsappTemplates'
         };
 
         const allData = data[apiUrlMapping[apiUrl] || apiUrl];

@@ -69,6 +69,10 @@ export const testimonialsPath = [
   }
 ];
 
-export const templatePath = [{ title: 'Email Templates', to: ['/templates/email-template-list', '/templates/add-email-template', '/templates/edit-email-template'] }];
+export const templatePath = [
+  { title: 'Email Templates', to: ['/templates/email-template-list', '/templates/add-email-template', '/templates/edit-email-template'] },
+  { title: 'SMS Templates', to: ['/templates/sms-template-list', '/templates/add-sms-template', '/templates/edit-sms-template'] },
+  { title: 'WhatsApp Templates', to: ['/templates/whatsapp-template-list', '/templates/add-whatsapp-template', '/templates/edit-whatsapp-template'] }
+];
 
 export const adminNavLinks = [{ title: 'Admin', to: ['/admin/admin-list', '/admin/add-admin', '/admin/edit-admin'], icon: <RiAdminLine /> }];

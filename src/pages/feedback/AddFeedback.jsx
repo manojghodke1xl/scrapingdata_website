@@ -157,7 +157,6 @@ const AddFeedback = () => {
                 name="service"
                 value={enquiryDetails.service}
                 onChange={(e) => setEnquiryDetails((prev) => ({ ...prev, service: e.target.value }))}
-                charCount={false}
               />
             </div>
           </div>
@@ -207,7 +206,6 @@ const AddFeedback = () => {
                 name="feedbackMessage"
                 value={enquiryDetails.feedbackMessage}
                 onChange={(e) => setEnquiryDetails((prev) => ({ ...prev, feedbackMessage: e.target.value }))}
-                charCount={false}
               />
             </div>
           </div>

@@ -255,7 +255,6 @@ const AddSite = () => {
                       if (errors.body) setErrors((prev) => ({ ...prev, body: '' }));
                     }}
                     errorMessage={errors.body}
-                    charCount={false}
                   />
                 </div>
               )}
@@ -294,7 +293,6 @@ const AddSite = () => {
                       if (errors.body) setErrors((prev) => ({ ...prev, body: '' }));
                     }}
                     errorMessage={errors.body}
-                    charCount={false}
                   />
                 </div>
               )}
@@ -333,7 +331,6 @@ const AddSite = () => {
                       if (errors.body) setErrors((prev) => ({ ...prev, body: '' }));
                     }}
                     errorMessage={errors.body}
-                    charCount={false}
                   />
 
                   <FormField
@@ -411,7 +408,6 @@ const AddSite = () => {
                       if (errors.body) setErrors((prev) => ({ ...prev, body: '' }));
                     }}
                     errorMessage={errors.body}
-                    charCount={false}
                   />
 
                   <FormField

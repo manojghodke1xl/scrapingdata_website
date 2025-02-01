@@ -34,9 +34,10 @@ import TestimonialCategoryRoutes from './private-routes/TestimonialCategoryRoute
 import ProductRoutes from './private-routes/productRoutes';
 import BookingRoutes from './private-routes/BookingRoutes';
 import OrderRoutes from './private-routes/OrderRoutes';
-import TemplateRoutes from './private-routes/TemplateRoutes';
+import TemplateRoutes from './private-routes/template/TemplateRoutes';
 import FilesRoutes from './private-routes/FilesRoutes';
 import EventTicketRoutes from './private-routes/eventTicketRoutes';
+import TemplateCategoryRoutes from './private-routes/template/TemplateCategoryRoutes';
 
 const ZohoStatus = lazy(() => import('../pages/integration/ZohoStatus'));
 
@@ -85,6 +86,7 @@ const App = () => {
                 <Route path="/products/*" element={<ProductRoutes />} />
                 <Route path="/orders/*" element={<OrderRoutes />} />
                 <Route path="/templates/*" element={<TemplateRoutes />} />
+                <Route path="/template-category/*" element={<TemplateCategoryRoutes />} />
                 <Route path="/files/*" element={<FilesRoutes />} />
                 <Route path="/tickets/*" element={<EventTicketRoutes />} />
               </Route>

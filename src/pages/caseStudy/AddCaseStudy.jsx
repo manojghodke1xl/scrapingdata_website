@@ -141,7 +141,6 @@ const AddCaseStudy = () => {
                 name="sdesc"
                 value={caseStudyDetails.sdesc}
                 onChange={(e) => setCaseStudyDetails((prev) => ({ ...prev, sdesc: e.target.value }))}
-                charCount={false}
               />
               <TextareaComponent
                 label="Long Description"
@@ -150,7 +149,6 @@ const AddCaseStudy = () => {
                 name="ldesc"
                 value={caseStudyDetails.ldesc}
                 onChange={(e) => setCaseStudyDetails((prev) => ({ ...prev, ldesc: e.target.value }))}
-                charCount={false}
                 maxLength={1000}
               />
             </div>
@@ -252,7 +250,6 @@ const AddCaseStudy = () => {
                 value={caseStudyDetails.mailBody}
                 onChange={(e) => setCaseStudyDetails((prev) => ({ ...prev, mailBody: e.target.value }))}
                 errorMessage={errors.mailBody}
-                charCount={false}
               />
             </div>
           </div>

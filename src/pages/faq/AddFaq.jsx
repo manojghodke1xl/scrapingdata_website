@@ -140,7 +140,6 @@ const AddFaq = () => {
                 value={faqDetails.answer}
                 onChange={(e) => setFaqDetails((prev) => ({ ...prev, answer: e.target.value }))}
                 errorMessage={errors.answer}
-                charCount={false}
               />
             </div>
           </div>

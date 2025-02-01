@@ -155,7 +155,6 @@ const AddTestimonial = () => {
                 name="desg"
                 value={testimonialDetails.desg}
                 onChange={(e) => setTestimonialDetails((prev) => ({ ...prev, desg: e.target.value }))}
-                charCount={false}
               />
             </div>
           </div>
@@ -215,7 +214,6 @@ const AddTestimonial = () => {
                 name="text"
                 value={testimonialDetails.text}
                 onChange={(e) => setTestimonialDetails((prev) => ({ ...prev, text: e.target.value }))}
-                charCount={false}
               />
             )}
             {testimonialDetails.type === 'video' && (

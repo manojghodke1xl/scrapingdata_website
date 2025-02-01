@@ -10,7 +10,7 @@ import { getAllEventsApi } from '../../apis/event-apis';
 import DropDown from '../../atoms/formFields/DropDown';
 import { getIntegrationByEvent } from '../../apis/payment-integration-apis';
 import MultiSelectCheckbox from '../../atoms/formFields/MultiSelectCheckBox';
-import { getTemplateByEventApi } from '../../apis/templates/email-template-apis';
+import { getTemplateByEventApi } from '../../apis/templates/template-apis';
 import ToggleComponent from '../../atoms/formFields/ToggleComponent';
 import DateTimePicker from '../../atoms/formFields/DateTimePicker';
 import { formatDateTime } from '../../utils/dateFormats';
@@ -250,7 +250,6 @@ const AddPackage = () => {
                 name="description"
                 value={packageDetails?.description}
                 onChange={(e) => setPackageDetails((prev) => ({ ...prev, description: e.target.value }))}
-                charCount={false}
               />
 
               <FormField

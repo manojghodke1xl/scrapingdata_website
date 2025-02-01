@@ -103,7 +103,6 @@ const AddEventTicket = () => {
                 name="description"
                 value={eventTicket?.description}
                 onChange={(e) => setEventTicket((prev) => ({ ...prev, description: e.target.value }))}
-                charCount={false}
               />
 
               <FileUpload

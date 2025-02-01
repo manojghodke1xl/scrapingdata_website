@@ -62,7 +62,7 @@ const AddTemplateCategory = () => {
       const { status, data } = id ? await updateTemplateCategoryApi(id, templateCategory) : await addTemplateCategoryApi(templateCategory);
       if (status) {
         showNotification('success', data.message);
-        navigate('/templates/template-category-list');
+        navigate('/template-category/template-category-list');
       } else showNotification('warn', data);
     } catch (error) {
       showNotification('error', error.message);
@@ -89,7 +89,7 @@ const AddTemplateCategory = () => {
         <div>
           <span className="text-3xl font-semibold text-dark">{id ? 'Edit' : 'Add'} Template Category</span>
         </div>
-        <FormButtons to="/templates/template-category-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} loading={isLoading} />
+        <FormButtons to="/template-category/template-category-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} loading={isLoading} />
       </div>
 
       <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
@@ -195,7 +195,7 @@ const AddTemplateCategory = () => {
       </div> */}
       {!isScrollable && (
         <div className="w-full flex justify-end items-center gap-4 pt-8  border- border-primary">
-          <FormButtons to="/templates/template-category-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} loading={isLoading} />
+          <FormButtons to="/template-category/template-category-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} loading={isLoading} />
         </div>
       )}
     </div>

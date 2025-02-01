@@ -157,7 +157,6 @@ const AddEnquiry = () => {
                 name="service"
                 value={enquiryDetails.service}
                 onChange={(e) => setEnquiryDetails((prev) => ({ ...prev, service: e.target.value }))}
-                charCount={false}
               />
             </div>
           </div>
@@ -207,7 +206,6 @@ const AddEnquiry = () => {
                 name="message"
                 value={enquiryDetails.message}
                 onChange={(e) => setEnquiryDetails((prev) => ({ ...prev, message: e.target.value }))}
-                charCount={false}
               />
             </div>
           </div>

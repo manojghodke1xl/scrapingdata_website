@@ -268,7 +268,6 @@ const AddProduct = () => {
                 name="shortDescription"
                 value={productDetails.shortDescription}
                 onChange={(e) => setProductDetails((prev) => ({ ...prev, shortDescription: e.target.value }))}
-                charCount={false}
                 errorMessage={errors.shortDescription}
                 maxLength={100}
               />
@@ -280,7 +279,6 @@ const AddProduct = () => {
                 name="info"
                 value={productDetails.description}
                 onChange={(e) => setProductDetails((prev) => ({ ...prev, description: e.target.value }))}
-                charCount={false}
                 errorMessage={errors.description}
               />
 
