@@ -30,12 +30,20 @@ const AddWhatsAppTemplate = () => {
     name: '',
     message: '',
     whatsAppTemplateName: '',
+    placeholders: [],
     // category: '',
     files: []
   });
+
   const [files, setFiles] = useState([]);
   const [attachments, setAttachments] = useState([]);
   const [templateCategories, setTemplateCategories] = useState([]);
+  const [placeholders, setPlaceholders] = useState([]);
+
+  useEffect(() => {
+    const matches = [...whatsAppTemplate.message.matchAll(/\{\{(\w+)\}\}/g)].map((match) => match[1]);
+    setPlaceholders([...new Set(matches)]);
+  }, [whatsAppTemplate.message]);
 
   useEffect(() => {
     if (id) {
@@ -229,7 +237,7 @@ const AddWhatsAppTemplate = () => {
             <div className="w-full sm:w-1/2">
               <TextareaComponent
                 divClassName="mt-5"
-                label="Message"
+                label="Message give variables in {{name}} format"
                 placeholder="Message..."
                 id="message"
                 name="message"
@@ -237,6 +245,33 @@ const AddWhatsAppTemplate = () => {
                 onChange={(e) => setWhatsAppTemplate((prev) => ({ ...prev, message: e.target.value }))}
                 errorMessage={errors.message}
               />
+              {placeholders.length > 0 && (
+                <div className="mt-5 w-full">
+                  <label className="block text-sm font-medium text-primary">Placeholders</label>
+                  <div className="space-y-2">
+                    {placeholders.map((placeholder) => (
+                      <div className="flex items-center space-x-2" key={placeholder}>
+                        <span className="text-primary whitespace-nowrap">{`{{${placeholder}}}`}:</span>
+                        <FormField
+                          name={placeholder}
+                          id={placeholder}
+                          placeholder={placeholder}
+                          value={whatsAppTemplate.placeholders.find((p) => Object.keys(p)[0] === placeholder)?.[placeholder] || ''}
+                          onChange={(e) => {
+                            const newValue = e.target.value;
+                            setWhatsAppTemplate((prev) => ({
+                              ...prev,
+                              placeholders: prev.placeholders.some((p) => Object.keys(p)[0] === placeholder)
+                                ? prev.placeholders.map((p) => (Object.keys(p)[0] === placeholder ? { [placeholder]: newValue } : p))
+                                : [...prev.placeholders, { [placeholder]: newValue }]
+                            }));
+                          }}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
