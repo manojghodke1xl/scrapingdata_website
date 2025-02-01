@@ -14,7 +14,7 @@ const StripeIntegration = () => {
   const { setLoading, isLoading } = useGlobalContext();
   const { state } = useLocation();
   const [stripeDetails, setStripeDetails] = useState(
-    state?.paymentData || {
+    state?.integrationData?.payment?.stripe || {
       publicKey: '',
       secretKey: '',
       environment: 'development',

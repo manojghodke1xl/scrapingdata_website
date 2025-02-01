@@ -14,7 +14,7 @@ const RazorpayIntegration = () => {
   const { setLoading, isLoading } = useGlobalContext();
   const { state } = useLocation();
   const [razorpayDetails, setRazorpayDetails] = useState(
-    state?.paymentData || {
+    state?.integrationData?.payment?.razorpay || {
       keyId: '',
       keySecret: '',
       environment: 'development',

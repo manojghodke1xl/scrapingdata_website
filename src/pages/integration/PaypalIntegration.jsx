@@ -15,7 +15,7 @@ const PaypalIntegration = () => {
   const { state } = useLocation();
 
   const [paypalDetails, setPaypalDetails] = useState(
-    state?.paymentData || {
+    state?.integrationData?.payment?.paypal || {
       clientId: '',
       clientSecret: '',
       environment: 'development',

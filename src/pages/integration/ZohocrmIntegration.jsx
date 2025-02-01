@@ -16,7 +16,7 @@ const ZohocrmIntegration = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
 
-  const [zohocrmDetails, setZohocrmDetails] = useState(state?.paymentData || {});
+  const [zohocrmDetails, setZohocrmDetails] = useState(state?.integrationData?.crm?.zoho || {});
   const [errors, setErrors] = useState({});
   const [siteData, setSiteData] = useState({ id: state?.siteId, name: state?.siteId, showName: '' });
 

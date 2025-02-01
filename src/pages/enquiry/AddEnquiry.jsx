@@ -128,7 +128,6 @@ const AddEnquiry = () => {
                 divClassName="mt-5"
                 label="Mobile Number"
                 placeholder="Mobile Number"
-                id="mobile"
                 name="mobile"
                 value={enquiryDetails.ccode + enquiryDetails.mobile}
                 handlePhoneChange={handlePhoneChange}

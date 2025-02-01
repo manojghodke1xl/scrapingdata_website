@@ -2,6 +2,8 @@ import RazorPay from '../../assets/images/razorpay.png';
 import PayPal from '../../assets/images/paypal.png';
 import Stripe from '../../assets/images/stripe.png';
 import ZohoCRM from '../../assets/images/zohocrm.png';
+import whatsApp from '../../assets/images/whatsapp.png';
+import sms from '../../assets/images/sms.png';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { IoMdCheckmark } from 'react-icons/io';
 import { useCallback, useEffect, useState } from 'react';
@@ -56,6 +58,18 @@ const IntegrationHub = () => {
       name: 'Zoho CRM',
       description: 'Streamline customer interactions, sales tracking, and data management with an all-in-one CRM integration platform.',
       id: 'zohocrm'
+    },
+    {
+      img: whatsApp,
+      name: 'WhatsApp Integration',
+      description: 'Engage with customers instantly using WhatsApp for support, notifications, and marketing automation.',
+      id: 'whatsapp'
+    },
+    {
+      img: sms,
+      name: 'SMS Integration',
+      description: 'Send transactional alerts, promotional messages, and customer updates via SMS for better engagement.',
+      id: 'sms'
     }
   ];
 
@@ -81,7 +95,6 @@ const IntegrationHub = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 2xl:grid-cols-4 gap-4 mt-5">
         {integrationList.map((item) => {
           const isVerified = item.id === 'zohocrm' ? integrationData?.crm?.zoho?.isVerfied : integrationData?.payment?.[item.id]?.isVerified;
-          const paymentData = item.id == 'zohocrm' ? integrationData.crm?.zoho : integrationData?.payment?.[item.id] || null;
           return (
             <div key={item.name} className="rounded-xl border border-primary p-4 flex flex-col gap-4">
               <div className="flex justify-between items-center">
@@ -92,7 +105,7 @@ const IntegrationHub = () => {
               <div className="flex gap-4 items-center ">
                 <button
                   className="w-fit border border-primary p-2 rounded-xl font-normal text-primary disabled:bg-grey disabled:text-secondary "
-                  onClick={() => navigate(`/apps/integration/${item.id}`, { state: { paymentData, siteId: id } })}
+                  onClick={() => navigate(`/apps/integration/${item.id}`, { state: { integrationData, siteId: id } })}
                   disabled={isVerified || isLoading}
                 >
                   {isVerified ? 'Configured' : 'Configure'}
@@ -100,7 +113,7 @@ const IntegrationHub = () => {
                 {isVerified && (
                   <button
                     className="w-fit border border-primary p-2 rounded-xl font-normal"
-                    onClick={() => navigate(`/apps/integration/${item.id}`, { state: { paymentData, siteId: id } })}
+                    onClick={() => navigate(`/apps/integration/${item.id}`, { state: { integrationData, siteId: id } })}
                     disabled={isLoading}
                   >
                     Re-configure
