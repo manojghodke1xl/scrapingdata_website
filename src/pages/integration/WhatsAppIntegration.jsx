@@ -20,7 +20,8 @@ const WhatsAppIntegration = () => {
         ccode: '',
         phoneNumberId: '',
         appId: '',
-        appSecret: ''
+        appSecret: '',
+        accessToken: ''
       }
     ]
   );
@@ -120,6 +121,7 @@ const WhatsAppIntegration = () => {
                   name="phoneNumber"
                   phoneError={errors[index]?.phoneNumber}
                   handlePhoneChange={(value, countryData) => handlePhoneChange(index, value, countryData)}
+                  value={`+${whatsapp.ccode}${whatsapp.phoneNumber}`}
                 />
                 <FormField
                   divClassName={'mt-5'}
@@ -150,6 +152,16 @@ const WhatsAppIntegration = () => {
                   value={whatsapp.appSecret}
                   onChange={(e) => handleVariableChange(index, 'appSecret', e.target.value)}
                   errorMessage={errors[index]?.appSecret}
+                />
+                <FormField
+                  divClassName={'mt-5'}
+                  label="Access Token"
+                  placeholder="Access Token"
+                  type="text"
+                  name="accessToken"
+                  value={whatsapp.accessToken}
+                  onChange={(e) => handleVariableChange(index, 'accessToken', e.target.value)}
+                  errorMessage={errors[index]?.accessToken}
                 />
                 <button type="button" onClick={() => removeVariable(index)} className="px-4 py-2 mt-5 bg-red text-white rounded-xl">
                   Remove
