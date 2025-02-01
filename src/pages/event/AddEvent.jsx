@@ -30,6 +30,7 @@ const AddEvent = () => {
     date: '',
     endDate: '',
     lastBookingDate: '',
+    mapLink: '',
     sendAdminEmails: false,
     adminEmails: [],
     site: ''
@@ -141,6 +142,7 @@ const AddEvent = () => {
                 errorMessage={errors.name}
               />
               <TextareaComponent
+                divClassName="mt-5"
                 label="Venue"
                 placeholder="Venue..."
                 id="info"
@@ -150,8 +152,17 @@ const AddEvent = () => {
                   setEventDetails((prev) => ({ ...prev, venue: e.target.value }));
                   if (errors.venue) setErrors((prev) => ({ ...prev, venue: '' }));
                 }}
-                charCount={false}
                 errorMessage={errors.venue}
+              />
+
+              <FormField
+                label={'Google Map link'}
+                type="url"
+                id="mapLink"
+                name="mapLink"
+                placeholder={'Google Map link'}
+                value={eventDetails.mapLink}
+                onChange={(e) => setEventDetails((prev) => ({ ...prev, mapLink: e.target.value }))}
               />
             </div>
           </div>
