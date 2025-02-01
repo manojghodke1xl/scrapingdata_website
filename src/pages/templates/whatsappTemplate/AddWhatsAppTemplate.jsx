@@ -29,6 +29,7 @@ const AddWhatsAppTemplate = () => {
     site: '',
     name: '',
     message: '',
+    whatsAppTemplateName: '',
     // category: '',
     files: []
   });
@@ -172,6 +173,19 @@ const AddWhatsAppTemplate = () => {
                   if (errors.name) setErrors((prev) => ({ ...prev, name: '' }));
                 }}
                 errorMessage={errors.name}
+              />
+              <FormField
+                divClassName={'mt-5'}
+                label="WhatsApp Template Name"
+                name="whatsAppTemplateName"
+                id="whatsAppTemplateName"
+                placeholder="WhatsApp Template Name"
+                value={whatsAppTemplate.whatsAppTemplateName}
+                onChange={(e) => {
+                  setWhatsAppTemplate((prev) => ({ ...prev, whatsAppTemplateName: e.target.value }));
+                  if (errors.whatsAppTemplateName) setErrors((prev) => ({ ...prev, whatsAppTemplateName: '' }));
+                }}
+                errorMessage={errors.whatsAppTemplateName}
               />
               <DropDown
                 mt="mt-5"
