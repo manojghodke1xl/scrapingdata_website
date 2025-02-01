@@ -44,7 +44,7 @@ const WhatsAppIntegration = () => {
     try {
       const { status, data } = await updatePaymentIntegrationApi(state.siteId, null, null, { whatsapp: whatsappDetails });
       // const { status: status2, data: data2 } = await whatsAppOauthoApi();
-      if (status) window.location.href = data.data.oauthUrl;
+      if (status) window.location.href = data.data.authUrl;
       // navigate(data.data.oauthUrl);
       // else showNotification('error', data.message);
     } catch (error) {
