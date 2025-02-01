@@ -14,6 +14,8 @@ import MultiSelectCheckbox from '../../../atoms/formFields/MultiSelectCheckBox';
 import { getFilesBySiteIdApi } from '../../../apis/file-apis';
 import { uploadMultipleCustomFiles } from '../../../utils/fileUploads';
 import { getAllTemplateCategoriesApi } from '../../../apis/templates/template-category';
+import TextareaComponent from '../../../atoms/formFields/TextareaComponent';
+import ToggleComponent from '../../../atoms/formFields/ToggleComponent';
 
 const AddEmailTemplate = () => {
   const navigate = useNavigate();
@@ -227,30 +229,36 @@ const AddEmailTemplate = () => {
                 errorMessage={errors.subject}
               />
 
-              <TextEditor
-                value={emailTemplate.body}
-                onChange={(e) => {
-                  setEmailTemplate((prev) => ({ ...prev, body: e }));
-                  if (errors.body) setErrors((prev) => ({ ...prev, body: '' }));
-                }}
-                label="Body"
-                placeholder="Body..."
-                errorMessage={errors.body}
+              <ToggleComponent
+                label={'Is Case Study Active?'}
+                isEnableState={emailTemplate.isActive}
+                setIsEnableState={(value) => setEmailTemplate((prev) => ({ ...prev, isActive: value }))}
               />
 
-              {/* <FormField
-                type="textarea"
-                label="HTML Text"
-                name="htmlText"
-                id="htmlText"
-                placeholder="HTML Text"
-                value={emailTemplate.htmlText}
-                onChange={(e) => {
-                  setEmailTemplate((prev) => ({ ...prev, htmlText: e.target.value }));
-                  if (errors.htmlText) setErrors((prev) => ({ ...prev, htmlText: '' }));
-                }}
-                errorMessage={errors.htmlText}
-              /> */}
+              {emailTemplate.isActive ? (
+                <TextareaComponent
+                  divClassName="mt-5"
+                  label="Body"
+                  placeholder="Body"
+                  id="mailBody"
+                  name="mailBody"
+                  value={emailTemplate.body}
+                  onChange={(e) => setEmailTemplate((prev) => ({ ...prev, body: e.target.value }))}
+                  errorMessage={errors.body}
+                  charCount={false}
+                />
+              ) : (
+                <TextEditor
+                  value={emailTemplate.body}
+                  onChange={(e) => {
+                    setEmailTemplate((prev) => ({ ...prev, body: e }));
+                    if (errors.body) setErrors((prev) => ({ ...prev, body: '' }));
+                  }}
+                  label="Body"
+                  placeholder="Body..."
+                  errorMessage={errors.body}
+                />
+              )}
             </div>
           </div>
         </div>
