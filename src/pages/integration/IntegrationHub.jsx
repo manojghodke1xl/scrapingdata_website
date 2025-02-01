@@ -2,7 +2,8 @@ import RazorPay from '../../assets/images/razorpay.png';
 import PayPal from '../../assets/images/paypal.png';
 import Stripe from '../../assets/images/stripe.png';
 import ZohoCRM from '../../assets/images/zohocrm.png';
-import whatsApp from '../../assets/images/whatsapp.png';
+import whatsApp from '../../assets/images/whatsApp.png';
+
 import sms from '../../assets/images/sms.png';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { IoMdCheckmark } from 'react-icons/io';
