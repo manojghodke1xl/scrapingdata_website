@@ -420,6 +420,7 @@ const AddPopup = () => {
 
               {popupDetails.contentType === 'basic' && (
                 <TextareaComponent
+                  divClassName={'mt-5'}
                   label="Description"
                   id="description"
                   name="description"

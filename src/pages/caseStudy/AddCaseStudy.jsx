@@ -134,6 +134,7 @@ const AddCaseStudy = () => {
                 errorMessage={errors.title}
               />
               <TextareaComponent
+                divClassName="mt-5"
                 label="Short Description"
                 placeholder="Enter a description..."
                 id="sdesc"
@@ -243,6 +244,7 @@ const AddCaseStudy = () => {
                 errorMessage={errors.mailSubject}
               />
               <TextareaComponent
+                divClassName="mt-5"
                 label="Body"
                 placeholder="Body"
                 id="mailBody"

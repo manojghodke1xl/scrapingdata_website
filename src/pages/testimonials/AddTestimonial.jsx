@@ -148,6 +148,7 @@ const AddTestimonial = () => {
                 errorMessage={errors.name}
               />
               <TextareaComponent
+                divClassName="mt-5"
                 label="Description"
                 placeholder="Enter a description..."
                 id="desg"
@@ -207,6 +208,7 @@ const AddTestimonial = () => {
             )}
             {testimonialDetails.type === 'text' && (
               <TextareaComponent
+                divClassName="mt-5"
                 label="Text"
                 placeholder="Enter a text..."
                 id="text"
