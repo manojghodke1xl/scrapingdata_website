@@ -4,7 +4,7 @@ import { useState } from 'react';
 import FormButtons from '../../atoms/formFields/FormButtons';
 import PhoneInputField from '../../atoms/formFields/PhoneInputField';
 import FormField from '../../atoms/formFields/InputField';
-import { updatePaymentIntegrationApi } from '../../apis/payment-integration-apis';
+import { updatePaymentIntegrationApi, whatsAppOauthoApi } from '../../apis/payment-integration-apis';
 import { showNotification } from '../../utils/showNotification';
 
 const WhatsAppIntegration = () => {
@@ -41,11 +41,11 @@ const WhatsAppIntegration = () => {
     if (!validate()) return;
     setLoading(true);
     try {
-      const { status, data } = await updatePaymentIntegrationApi(state.siteId, null, null, { whatsapp: whatsappDetails });
-      if (status) {
-        showNotification('success', data.message);
-        navigate('/apps/app');
-      } else showNotification('error', data.message);
+      // const { status, data } = await updatePaymentIntegrationApi(state.siteId, null, null, { whatsapp: whatsappDetails });
+      const { status: status2, data: data2 } = await whatsAppOauthoApi();
+      if (status2) window.location.href = data2.data.oauthUrl;
+      // navigate(data.data.oauthUrl);
+      // else showNotification('error', data.message);
     } catch (error) {
       showNotification('error', error.message);
     } finally {

@@ -14,3 +14,7 @@ export const getIntegrationBySite = async (siteId) => {
 export const getIntegrationByEvent = async (eventId) => {
   return await getMethodCall(`${import.meta.env.VITE_API_URL}/intigration-event/${eventId}`);
 };
+
+export const whatsAppOauthoApi = async () => {
+  return await postMethodCall(`${import.meta.env.VITE_API_URL}/wa-create-auth`);
+};
