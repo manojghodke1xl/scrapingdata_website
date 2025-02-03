@@ -4,7 +4,7 @@ import useGlobalContext from '../../../hooks/useGlobalContext';
 import DropDown from '../../../atoms/formFields/DropDown';
 import { useEffect, useState } from 'react';
 import FormField from '../../../atoms/formFields/InputField';
-import { addWhatsAppTemplateApi, getWhatsAppTemplateByIdApi, updateWhatsAppTemplateApi } from '../../../apis/templates/template-apis';
+import { addWhatsAppTemplateApi, getPhoneIdsApi, getWhatsAppTemplateByIdApi, updateWhatsAppTemplateApi } from '../../../apis/templates/template-apis';
 import { showNotification } from '../../../utils/showNotification';
 import DocumentFileUpload from '../../../atoms/formFields/DocumentFileUpload';
 import { acceptedExtensions, acceptedProductTypes } from '../../product/productStaticData';
@@ -30,12 +30,14 @@ const AddWhatsAppTemplate = () => {
     name: '',
     message: '',
     whatsAppTemplateName: '',
+    phoneNumberId: '',
     placeholders: {},
     // category: '',
     files: []
   });
 
   const [files, setFiles] = useState([]);
+  const [phoneNumbers, setPhoneNumbers] = useState([]);
   const [attachments, setAttachments] = useState([]);
   const [templateCategories, setTemplateCategories] = useState([]);
   const [placeholders, setPlaceholders] = useState([]);
@@ -63,10 +65,9 @@ const AddWhatsAppTemplate = () => {
   useEffect(() => {
     if (whatsAppTemplate.site) {
       (async () => {
-        const { status, data } = await getFilesBySiteIdApi(whatsAppTemplate.site);
-        if (status) {
-          setFiles(data.file);
-        } else showNotification('warn', data);
+        const { status, data } = await getPhoneIdsApi(whatsAppTemplate.site);
+        if (status) setPhoneNumbers(data.whatsapp);
+        else showNotification('warn', data);
       })().catch((error) => showNotification('error', error.message));
     }
   }, [whatsAppTemplate.site, setLoading]);
@@ -91,6 +92,10 @@ const AddWhatsAppTemplate = () => {
     if (!whatsAppTemplate.site) newErrors.site = 'Site is required';
     if (!whatsAppTemplate.name.trim()) newErrors.name = 'Name is required';
     if (!whatsAppTemplate.message) newErrors.message = 'Message is required';
+    if (!whatsAppTemplate.site) {
+      newErrors.phoneNumberId = 'Site is required';
+      if (!whatsAppTemplate.phoneNumberId) newErrors.phoneNumberId = 'Phone number is required';
+    }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -115,6 +120,7 @@ const AddWhatsAppTemplate = () => {
     }
   };
 
+  console.log('whatsAppTemplate', whatsAppTemplate);
   const checkScrollability = () => {
     const contentHeight = document.documentElement.scrollHeight;
     const windowHeight = window.innerHeight;
@@ -209,6 +215,21 @@ const AddWhatsAppTemplate = () => {
                 }}
                 error={errors.category}
               />
+
+              <DropDown
+                mt="mt-5"
+                name={'phoneNumberId'}
+                label={'Phone Number'}
+                SummaryChild={<h5 className="text-primary p-0 m-0">Phone Number</h5>}
+                dropdownList={phoneNumbers.map((phoneNumber) => ({ id: phoneNumber.phoneNumberId, showName: phoneNumber.phoneNumber, name: phoneNumber.phoneNumberId }))}
+                selected={whatsAppTemplate.phoneNumberId}
+                search={true}
+                commonFunction={(e) => {
+                  setWhatsAppTemplate((prev) => ({ ...prev, phoneNumberId: e.name }));
+                  if (errors.phoneNumberId) setErrors((prev) => ({ ...prev, phoneNumberId: '' }));
+                }}
+                error={errors.phoneNumberId}
+              />
             </div>
 
             {variables && variables.length > 0 && (
@@ -278,7 +299,7 @@ const AddWhatsAppTemplate = () => {
         </div>
       </div>
 
-      <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
+      {/* <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
         <div className="w-full flex flex-col gap-y-2 md:flex-row justify-evenly">
           <div className="sm:w-1/4 w-full flex flex-col">
             <span className="block text-primary">Attached Document</span>
@@ -307,7 +328,7 @@ const AddWhatsAppTemplate = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
 
       {!isScrollable && (
         <div className="w-full flex justify-end items-center gap-4 pt-4 border- border-primary">
