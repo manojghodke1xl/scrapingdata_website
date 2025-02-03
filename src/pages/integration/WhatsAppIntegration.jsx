@@ -1,13 +1,14 @@
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import useGlobalContext from '../../hooks/useGlobalContext';
 import { useState } from 'react';
 import FormButtons from '../../atoms/formFields/FormButtons';
 import PhoneInputField from '../../atoms/formFields/PhoneInputField';
 import FormField from '../../atoms/formFields/InputField';
-import { updatePaymentIntegrationApi, whatsAppOauthoApi } from '../../apis/payment-integration-apis';
+import { updatePaymentIntegrationApi } from '../../apis/payment-integration-apis';
 import { showNotification } from '../../utils/showNotification';
 
 const WhatsAppIntegration = () => {
+  const navigate = useNavigate();
   const { setLoading, isLoading } = useGlobalContext();
   const { state } = useLocation();
   console.log('state', state);
@@ -39,15 +40,14 @@ const WhatsAppIntegration = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('the details', whatsappDetails);
-    // if (!validate()) return;
+    if (!validate()) return;
     setLoading(true);
     try {
       const { status, data } = await updatePaymentIntegrationApi(state.siteId, null, null, { whatsapp: whatsappDetails });
-      // const { status: status2, data: data2 } = await whatsAppOauthoApi();
-      if (status) window.location.href = data.data.authUrl;
-      // navigate(data.data.oauthUrl);
-      // else showNotification('error', data.message);
+      if (status) {
+        showNotification('success', data.message);
+        navigate(`/apps/integration/${state?.siteId}`);
+      } else showNotification('error', data.message);
     } catch (error) {
       showNotification('error', error.message);
     } finally {

@@ -62,7 +62,7 @@ const RazorpayIntegration = () => {
       const { status, data } = await updatePaymentIntegrationApi(state.siteId, { razorpay: razorpayDetails });
       if (status) {
         showNotification('success', data.message);
-        navigate('/apps/app');
+        navigate(`/apps/integration/${state?.siteId}`);
       } else showNotification('warn', data);
     } catch (error) {
       showNotification('error', error.message);
