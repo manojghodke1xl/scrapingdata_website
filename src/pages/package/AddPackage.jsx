@@ -10,7 +10,7 @@ import { getAllEventsApi } from '../../apis/event-apis';
 import DropDown from '../../atoms/formFields/DropDown';
 import { getIntegrationByEvent } from '../../apis/payment-integration-apis';
 import MultiSelectCheckbox from '../../atoms/formFields/MultiSelectCheckBox';
-import { getTemplateByEventApi } from '../../apis/templates/template-apis';
+import { getTemplateByEventApi, getWhatsAppTemplateByEventApi } from '../../apis/templates/template-apis';
 import ToggleComponent from '../../atoms/formFields/ToggleComponent';
 import DateTimePicker from '../../atoms/formFields/DateTimePicker';
 import { formatDateTime } from '../../utils/dateFormats';
@@ -32,6 +32,7 @@ const AddPackage = () => {
     onSale: false,
     saleEndDate: '',
     ticket: '',
+    whatsAppTemplate: '',
     currencyNotes: {
       INR: false,
       AED: false,
@@ -56,6 +57,7 @@ const AddPackage = () => {
   const [paymentData, setPaymentData] = useState({});
   const [templates, setTemplates] = useState([]);
   const [tickets, setTickets] = useState([]);
+  const [whatsappTemplates, setWhatsAppTemplates] = useState([]);
 
   const validate = () => {
     const newErrors = {};
@@ -137,9 +139,16 @@ const AddPackage = () => {
     if (packageDetails.event) {
       (async () => {
         try {
-          const { status, data } = await getTemplateByEventApi(packageDetails.event);
-          if (status) setTemplates(data.emailTemplates);
-          else showNotification('warn', data);
+          const [templateResponse, whatsappTemplateResponse] = await Promise.all([
+            getTemplateByEventApi(packageDetails.event),
+            getWhatsAppTemplateByEventApi(packageDetails.event)
+          ]);
+
+          if (templateResponse.status) setTemplates(templateResponse.data.emailTemplates);
+          else showNotification('warn', templateResponse.data);
+
+          if (whatsappTemplateResponse.status) setWhatsAppTemplates(whatsappTemplateResponse.data.whatsAppTemplate);
+          else showNotification('warn', whatsappTemplateResponse.data);
         } catch (error) {
           showNotification('error', error.message);
         }
@@ -309,10 +318,10 @@ const AddPackage = () => {
               <div className="w-full">
                 <div>
                   <DropDown
-                    label={'Select Template'}
+                    label={'Select Email Template'}
                     name="Template"
                     dropdownList={templates?.map((template) => ({ name: template._id, showName: template.name, id: template._id }))}
-                    SummaryChild={<h5 className="p-0 m-0 text-primary">Templates</h5>}
+                    SummaryChild={<h5 className="p-0 m-0 text-primary">Email Templates</h5>}
                     search={true}
                     selected={packageDetails.template}
                     commonFunction={(e) => {
@@ -320,6 +329,21 @@ const AddPackage = () => {
                       if (errors.template) setErrors((prev) => ({ ...prev, template: '' }));
                     }}
                     error={errors.template}
+                  />
+
+                  <DropDown
+                    mt="mt-5"
+                    label={'Select WhatsApp Template'}
+                    name="whatsAppTemplate"
+                    dropdownList={whatsappTemplates?.map((template) => ({ name: template._id, showName: template.name, id: template._id }))}
+                    SummaryChild={<h5 className="p-0 m-0 text-primary">WhatsApp Templates</h5>}
+                    search={true}
+                    selected={packageDetails.whatsAppTemplate}
+                    commonFunction={(e) => {
+                      setPackageDetails((prev) => ({ ...prev, whatsAppTemplate: e.name }));
+                      if (errors.whatsAppTemplate) setErrors((prev) => ({ ...prev, whatsAppTemplate: '' }));
+                    }}
+                    error={errors.whatsAppTemplate}
                   />
                 </div>
               </div>
