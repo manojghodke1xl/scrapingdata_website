@@ -50,6 +50,8 @@ const AddPackage = () => {
     maxLimit: '',
     event: ''
   });
+  const [showTicket, setShowTicket] = useState(packageDetails.ticket ? true : false);
+
   const [events, setEvents] = useState([]);
   const [paymentData, setPaymentData] = useState({});
   const [templates, setTemplates] = useState([]);
@@ -65,6 +67,8 @@ const AddPackage = () => {
     if (!packageDetails.ticketIdPattern?.trim()) newErrors.ticketIdPattern = 'Ticket ID Pattern is required';
     // if (packageDetails.event && !packageDetails.template) newErrors.template = 'Template is required';
     if (packageDetails.onSale && !packageDetails.saleEndDate) newErrors.saleEndDate = 'Sale end date is required';
+
+    if (!showTicket) packageDetails.ticket = null;
 
     // const supportedCurrencies = ['INR', 'AED', 'USD'];
 
@@ -117,8 +121,10 @@ const AddPackage = () => {
       (async () => {
         try {
           const { status, data } = await getPackageByIdApi(id);
-          if (status) setPackageDetails(data.package);
-          else showNotification('warn', data);
+          if (status) {
+            setPackageDetails(data.package);
+            setShowTicket(data.package.ticket ? true : false);
+          } else showNotification('warn', data);
         } catch (error) {
           showNotification('error', error.message);
         } finally {
@@ -377,7 +383,6 @@ const AddPackage = () => {
                         .map(([key]) => key)}
                       error={errors?.currencyNotes}
                     />
-
                     {(paymentData?.razorpay?.supports?.INR || paymentData?.stripe?.supports?.INR || paymentData?.paypal?.supports?.INR) && packageDetails?.currencyNotes?.INR && (
                       <div className="flex flex-col md:flex-row items-center justify-between gap-4">
                         <FormField
@@ -447,7 +452,6 @@ const AddPackage = () => {
                         )}
                       </div>
                     )}
-
                     {(paymentData?.razorpay?.supports?.USD || paymentData?.stripe?.supports?.USD || paymentData?.paypal?.supports?.USD) && packageDetails?.currencyNotes?.USD && (
                       <div className="flex flex-col md:flex-row items-center justify-between gap-4">
                         <FormField
@@ -483,7 +487,6 @@ const AddPackage = () => {
                         )}
                       </div>
                     )}
-
                     {(packageDetails?.currencyNotes?.INR || packageDetails?.currencyNotes?.AED || packageDetails?.currencyNotes?.USD) && (
                       <FormField
                         divClassName={'mt-5'}
@@ -500,20 +503,23 @@ const AddPackage = () => {
                         errorMessage={errors.maxLimit}
                       />
                     )}
-                    <DropDown
-                      mt="mt-5"
-                      name="Tickets"
-                      label={'Select Ticket'}
-                      dropdownList={tickets?.map((event) => ({ name: event._id, showName: event.name, id: event._id }))}
-                      SummaryChild={<h5 className="p-0 m-0 text-primary">Ticket</h5>}
-                      search={true}
-                      selected={packageDetails.ticket}
-                      commonFunction={(e) => {
-                        setPackageDetails((prev) => ({ ...prev, ticket: e.name }));
-                        if (errors.ticket) setErrors((prev) => ({ ...prev, ticket: '' }));
-                      }}
-                      error={errors.ticket}
-                    />
+                    <ToggleComponent label={'Do you want to add ticket?'} isEnableState={showTicket} setIsEnableState={(e) => setShowTicket(e)} />
+                    {showTicket && (
+                      <DropDown
+                        mt="mt-5"
+                        name="Tickets"
+                        label={'Select Ticket'}
+                        dropdownList={tickets?.map((event) => ({ name: event._id, showName: event.name, id: event._id }))}
+                        SummaryChild={<h5 className="p-0 m-0 text-primary">Ticket</h5>}
+                        search={true}
+                        selected={packageDetails.ticket}
+                        commonFunction={(e) => {
+                          setPackageDetails((prev) => ({ ...prev, ticket: e.name }));
+                          if (errors.ticket) setErrors((prev) => ({ ...prev, ticket: '' }));
+                        }}
+                        error={errors.ticket}
+                      />
+                    )}
                   </>
                 </div>
               </div>
