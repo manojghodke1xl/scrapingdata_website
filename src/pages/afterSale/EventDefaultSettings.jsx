@@ -3,29 +3,67 @@ import FormButtons from '../../atoms/formFields/FormButtons';
 import useGlobalContext from '../../hooks/useGlobalContext';
 import MultiSelectCheckbox from '../../atoms/formFields/MultiSelectCheckBox';
 import DropDown from '../../atoms/formFields/DropDown';
+import { showNotification } from '../../utils/showNotification';
+import { AddAfterSaleApi } from '../../apis/after-sale-apis';
 
 const EventDefaultSettings = () => {
-  const { isLoading } = useGlobalContext();
+  const { isLoading, setLoading } = useGlobalContext();
 
   const [settings, setSettings] = useState([
     {
       channels: [],
-      schedule: ''
+      delay: { unit: 'Days', value: '', custom: '', ms: '' }
     }
   ]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setLoading(true);
+    try {
+      const { status, data } = AddAfterSaleApi(settings);
+      if (status) {
+        showNotification('success', data.message);
+      } else showNotification('error', data);
+    } catch (error) {
+      showNotification('error', error.message);
+    } finally {
+      setLoading(false);
+    }
   };
-
-  console.log('settings', settings);
 
   const handleVariableChange = (index, field, value) => {
     setSettings((prev) => {
       const updated = [...prev];
-      updated[index] = { ...updated[index], [field]: value };
+      if (field.includes('.')) {
+        const [parent, child] = field.split('.');
+        updated[index] = {
+          ...updated[index],
+          [parent]: {
+            ...updated[index][parent],
+            [child]: value
+          }
+        };
+      } else {
+        updated[index] = { ...updated[index], [field]: value };
+      }
       return updated;
     });
+  };
+
+  const handleTimeConversion = (value, unit) => {
+    const msConversions = {
+      Hours: 60 * 60 * 1000,
+      Days: 24 * 60 * 60 * 1000,
+      Weeks: 7 * 24 * 60 * 60 * 1000,
+      Months: 30 * 24 * 60 * 60 * 1000,
+      Years: 365 * 24 * 60 * 60 * 1000
+    };
+    return value * msConversions[unit];
+  };
+
+  const handleCustomScheduleChange = (value, unit, index) => {
+    const msValue = handleTimeConversion(value, unit);
+    handleVariableChange(index, 'delay.ms', msValue.toString());
   };
 
   return (
@@ -47,13 +85,13 @@ const EventDefaultSettings = () => {
               {settings.map((item, index) => (
                 <>
                   <MultiSelectCheckbox
-                    formLabel={'Channels Avaiable'}
+                    formLabel={'Channels Available'}
                     options={[
-                      { _id: 'Email', name: 'Email' },
-                      { _id: 'SMS', name: 'SMS' },
-                      { _id: 'WhatsApp', name: 'WhatsApp' }
+                      { _id: 'email', name: 'Email' },
+                      { _id: 'sms', name: 'SMS' },
+                      { _id: 'whatsapp', name: 'WhatsApp' }
                     ]}
-                    label="Channels Avaiable"
+                    label="Channels Available"
                     onChange={(selected) => handleVariableChange(index, 'channels', selected)}
                     selected={item.channels}
                   />
@@ -71,20 +109,52 @@ const EventDefaultSettings = () => {
                       { id: '172800000', name: '172800000', showName: '2 Days' },
                       { id: 'custom', name: 'custom', showName: 'Custom' }
                     ]}
-                    commonFunction={(e) => handleVariableChange(index, 'schedule', e.name)}
-                    selected={item.schedule}
+                    commonFunction={(e) => {
+                      if (e.name === 'custom') handleVariableChange(index, 'delay.custom', e.name);
+                      else {
+                        // Reset custom values when selecting a predefined time
+                        handleVariableChange(index, 'delay.custom', '');
+                        handleVariableChange(index, 'delay.value', '');
+                        handleVariableChange(index, 'delay.unit', 'Days');
+                        handleVariableChange(index, 'delay.ms', e.name);
+                      }
+                    }}
+                    selected={item.delay.custom === 'custom' ? 'custom' : item.delay.ms}
                     SummaryChild={<h5 className="p-0 m-0 text-primary">Custom</h5>}
                   />
-                  <DropDown
-                    mt="mt-5"
-                    name={'schedule'}
-                    label={'Schedule Follow - Up'}
-                    search={true}
-                    dropdownList={[{ showName: '7 Days', id: '604800000', name: '604800000' }]}
-                    commonFunction={(e) => handleVariableChange(index, 'schedule', e.name)}
-                    selected={item.schedule}
-                    SummaryChild={<h5 className="p-0 m-0 text-primary">Custom</h5>}
-                  />
+
+                  {item.delay.custom === 'custom' && (
+                    <div className="mt-5">
+                      <label className="block text-sm font-medium text-primary mb-2">Custom Duration</label>
+                      <div className="flex gap-2 items-center mt-1 rounded-xl border border-primary bg-white overflow-hidden">
+                        <input
+                          type="number"
+                          min="0"
+                          placeholder="Duration"
+                          value={item.delay.value}
+                          onChange={(e) => {
+                            handleVariableChange(index, 'delay.value', e.target.value);
+                            handleCustomScheduleChange(e.target.value, item.delay.unit, index);
+                          }}
+                          className="w-full border-0 focus:outline-none focus:ring-0 px-4 py-2.5 placeholder:text-secondary text-primary bg-transparent"
+                        />
+                        <select
+                          value={item.delay.unit}
+                          onChange={(e) => {
+                            handleVariableChange(index, 'delay.unit', e.target.value);
+                            handleCustomScheduleChange(item.delay.value, e.target.value, index);
+                          }}
+                          className="w-30 border-0 focus:outline-none focus:ring-0 py-2.5 bg-white mr-2 text-dark font-medium"
+                        >
+                          {['Days', 'Hours', 'Weeks', 'Months', 'Years'].map((unit) => (
+                            <option key={unit} value={unit}>
+                              {unit}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+                  )}
                 </>
               ))}
             </div>
