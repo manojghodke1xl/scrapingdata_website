@@ -39,7 +39,7 @@ export const getWhatsAppTemplateByIdApi = async (id) => {
   return await getMethodCall(`${import.meta.env.VITE_API_URL}/template/whatsapp/${id}?p=1`);
 };
 export const addWhatsAppTemplateApi = async (data) => {
-  return await postMethodCall(`${import.meta.env.VITE_API_URL}/template /whatsapp`, data);
+  return await postMethodCall(`${import.meta.env.VITE_API_URL}/template/whatsapp`, data);
 };
 
 export const updateWhatsAppTemplateApi = async (id, data) => {
