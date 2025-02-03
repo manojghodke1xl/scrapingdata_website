@@ -67,18 +67,18 @@ const AddPackage = () => {
     if (packageDetails.onSale && !packageDetails.saleEndDate) newErrors.saleEndDate = 'Sale end date is required';
     if (!packageDetails.ticket) newErrors.ticket = 'Ticket is required';
 
-    const supportedCurrencies = ['INR', 'AED', 'USD'];
+    // const supportedCurrencies = ['INR', 'AED', 'USD'];
 
-    supportedCurrencies.forEach((currency) => {
-      if (
-        (paymentData?.razorpay?.supports?.[currency] || paymentData?.stripe?.supports?.[currency] || paymentData?.paypal?.supports?.[currency]) &&
-        (!packageDetails.currencies[currency] || packageDetails.currencies[currency] < 0) &&
-        packageDetails.currencyNotes[currency]
-      ) {
-        newErrors.currencies = { ...newErrors.currencies, [currency]: `Price in (${currency}) is required` };
-        if (packageDetails.onSale && !packageDetails.salePrice[currency]) newErrors.salePrice = { ...newErrors.salePrice, [currency]: `Sale Price in (${currency}) is required` };
-      }
-    });
+    // supportedCurrencies.forEach((currency) => {
+    //   if (
+    //     (paymentData?.razorpay?.supports?.[currency] || paymentData?.stripe?.supports?.[currency] || paymentData?.paypal?.supports?.[currency]) &&
+    //     (!packageDetails.currencies[currency] || packageDetails.currencies[currency] <= 0) &&
+    //     packageDetails.currencyNotes[currency]
+    //   ) {
+    //     newErrors.currencies = { ...newErrors.currencies, [currency]: `Price in (${currency}) is required` };
+    //     if (packageDetails.onSale && !packageDetails.salePrice[currency]) newErrors.salePrice = { ...newErrors.salePrice, [currency]: `Sale Price in (${currency}) is required` };
+    //   }
+    // });
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
