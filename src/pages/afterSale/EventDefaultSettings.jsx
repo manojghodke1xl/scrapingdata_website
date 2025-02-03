@@ -64,6 +64,8 @@ const EventDefaultSettings = () => {
 
   const handleTimeConversion = (value, unit) => {
     const msConversions = {
+      Seconds: 1000,
+      Minutes: 60 * 1000,
       Hours: 60 * 60 * 1000,
       Days: 24 * 60 * 60 * 1000,
       Weeks: 7 * 24 * 60 * 60 * 1000,
@@ -167,7 +169,7 @@ const EventDefaultSettings = () => {
                         }}
                         className="w-30 border-0 focus:outline-none focus:ring-0 py-2.5 bg-white mr-2 text-dark font-medium"
                       >
-                        {['Days', 'Hours', 'Weeks', 'Months', 'Years'].map((unit) => (
+                        {['Days', 'Seconds', 'Hours', 'Weeks', 'Months', 'Years'].map((unit) => (
                           <option key={unit} value={unit}>
                             {unit}
                           </option>
