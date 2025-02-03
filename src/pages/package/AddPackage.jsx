@@ -58,6 +58,7 @@ const AddPackage = () => {
   const [templates, setTemplates] = useState([]);
   const [tickets, setTickets] = useState([]);
   const [whatsappTemplates, setWhatsAppTemplates] = useState([]);
+  console.log('whatsappTemplates', whatsappTemplates);
 
   const validate = () => {
     const newErrors = {};
@@ -147,7 +148,7 @@ const AddPackage = () => {
           if (templateResponse.status) setTemplates(templateResponse.data.emailTemplates);
           else showNotification('warn', templateResponse.data);
 
-          if (whatsappTemplateResponse.status) setWhatsAppTemplates(whatsappTemplateResponse.data.whatsAppTemplate);
+          if (whatsappTemplateResponse.status) setWhatsAppTemplates(whatsappTemplateResponse.data.whatsappTemplate);
           else showNotification('warn', whatsappTemplateResponse.data);
         } catch (error) {
           showNotification('error', error.message);
@@ -334,11 +335,11 @@ const AddPackage = () => {
                   <DropDown
                     mt="mt-5"
                     label={'Select WhatsApp Template'}
-                    name="whatsAppTemplate"
+                    name="whatsappTemplate"
                     dropdownList={whatsappTemplates?.map((template) => ({ name: template._id, showName: template.name, id: template._id }))}
                     SummaryChild={<h5 className="p-0 m-0 text-primary">WhatsApp Templates</h5>}
                     search={true}
-                    selected={packageDetails.whatsAppTemplate}
+                    selected={packageDetails.whatsAppTemplate }
                     commonFunction={(e) => {
                       setPackageDetails((prev) => ({ ...prev, whatsAppTemplate: e.name }));
                       if (errors.whatsAppTemplate) setErrors((prev) => ({ ...prev, whatsAppTemplate: '' }));
