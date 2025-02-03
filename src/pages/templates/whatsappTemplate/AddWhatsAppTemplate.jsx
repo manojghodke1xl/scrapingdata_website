@@ -30,7 +30,7 @@ const AddWhatsAppTemplate = () => {
     name: '',
     message: '',
     whatsAppTemplateName: '',
-    placeholders: [],
+    placeholders: {},
     // category: '',
     files: []
   });
@@ -256,14 +256,15 @@ const AddWhatsAppTemplate = () => {
                           name={placeholder}
                           id={placeholder}
                           placeholder={placeholder}
-                          value={whatsAppTemplate.placeholders.find((p) => Object.keys(p)[0] === placeholder)?.[placeholder] || ''}
+                          value={whatsAppTemplate.placeholders[placeholder] || ''}
                           onChange={(e) => {
                             const newValue = e.target.value;
                             setWhatsAppTemplate((prev) => ({
                               ...prev,
-                              placeholders: prev.placeholders.some((p) => Object.keys(p)[0] === placeholder)
-                                ? prev.placeholders.map((p) => (Object.keys(p)[0] === placeholder ? { [placeholder]: newValue } : p))
-                                : [...prev.placeholders, { [placeholder]: newValue }]
+                              placeholders: {
+                                ...prev.placeholders,
+                                [placeholder]: newValue
+                              }
                             }));
                           }}
                         />
