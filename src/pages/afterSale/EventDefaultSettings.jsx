@@ -1,10 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import FormButtons from '../../atoms/formFields/FormButtons';
 import useGlobalContext from '../../hooks/useGlobalContext';
 import MultiSelectCheckbox from '../../atoms/formFields/MultiSelectCheckBox';
 import DropDown from '../../atoms/formFields/DropDown';
 import { showNotification } from '../../utils/showNotification';
-import { AddAfterSaleApi } from '../../apis/after-sale-apis';
+import { AddAfterSaleApi, getAfterSaleTemplateApi } from '../../apis/after-sale-apis';
 import { IoCloseSharp } from 'react-icons/io5';
 
 const EventDefaultSettings = () => {
@@ -13,9 +13,24 @@ const EventDefaultSettings = () => {
   const [settings, setSettings] = useState([
     {
       channels: [],
+      emailTemplate: '',
+      smsTemplate: '',
+      whatsappTemplate: '',
       delay: { unit: 'Days', value: '', custom: '', ms: '' }
     }
   ]);
+  const [emailTemplate, setEmailTemplate] = useState([]);
+  const [whatsappTemplate, setWhatsappTemplate] = useState([]);
+
+  // useEffect(() => {
+  //   (async () => {
+  //     const { status, data } = await getAfterSaleTemplateApi({ site: '', event: '', type: 'event' });
+  //     if (status) {
+  //       setEmailTemplate(data.emailTemplates);
+  //       setWhatsappTemplate(data.waTemplates);
+  //     } else showNotification('error', data);
+  //   })();
+  // }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -159,6 +174,35 @@ const EventDefaultSettings = () => {
                         ))}
                       </select>
                     </div>
+                  </div>
+                )}
+
+                {item.channels.length > 0 && (
+                  <div>
+                    {item.channels.map((channel, channelIndex) => (
+                      <div key={channelIndex} className="mt-5">
+                        <DropDown
+                          mt="mt-5"
+                          name={`${channel}Template`}
+                          label={`Select ${channel.charAt(0).toUpperCase() + channel.slice(1)} Template`}
+                          dropdownList={
+                            channel === 'email'
+                              ? emailTemplate.map((template) => ({ id: template._id, name: template._id, showName: template.name }))
+                              : channel === 'sms'
+                              ? [
+                                  { id: 'sms1', name: 'sms1', showName: 'SMS Template 1' },
+                                  { id: 'sms2', name: 'sms2', showName: 'SMS Template 2' }
+                                ]
+                              : whatsappTemplate.map((template) => ({ id: template._id, name: template._id, showName: template.name }))
+                          }
+                          commonFunction={(e) => {
+                            handleVariableChange(index, `${channel}Template`, e.name);
+                          }}
+                          selected={item[`${channel}Template`]}
+                          SummaryChild={<h5 className="p-0 m-0 text-primary">Select Template</h5>}
+                        />
+                      </div>
+                    ))}
                   </div>
                 )}
               </div>

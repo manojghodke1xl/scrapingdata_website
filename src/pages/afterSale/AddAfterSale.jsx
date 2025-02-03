@@ -8,7 +8,7 @@ import { showNotification } from '../../utils/showNotification';
 import { getAllProductsApi } from '../../apis/product-apis';
 import { IoCloseSharp } from 'react-icons/io5';
 import MultiSelectCheckbox from '../../atoms/formFields/MultiSelectCheckBox';
-import { AddAfterSaleApi } from '../../apis/after-sale-apis';
+import { AddAfterSaleApi, getAfterSaleTemplateApi } from '../../apis/after-sale-apis';
 
 const AddAfterSale = () => {
   const { id = '' } = useParams();
@@ -24,16 +24,19 @@ const AddAfterSale = () => {
     site: '',
     target: '',
     refTo: undefined,
-    followUps: [{ channels: [], delay: { unit: 'Days', value: '', custom: '', ms: '' } }]
+    followUps: [
+      {
+        channels: [],
+        emailTemplate: '',
+        smsTemplate: '',
+        whatsappTemplate: '',
+        delay: { unit: 'Days', value: '', custom: '', ms: '' }
+      }
+    ]
   });
   const [lists, setLists] = useState([]);
-
-  const [settings, setSettings] = useState([
-    {
-      channels: [],
-      delay: { unit: 'Days', value: '', custom: '', ms: '' }
-    }
-  ]);
+  const [emailTemplate, setEmailTemplate] = useState([]);
+  const [whatsappTemplate, setWhatsappTemplate] = useState([]);
 
   useEffect(() => {
     const fetchData = async (apiFunction, key) => {
@@ -53,13 +56,24 @@ const AddAfterSale = () => {
     else if (afterSaleDetails.target === 'Product') fetchData(getAllProductsApi, 'products');
   }, [afterSaleDetails.target, setLoading]);
 
+  useEffect(() => {
+    if (afterSaleDetails.site && afterSaleDetails.refTo) {
+      (async () => {
+        const { status, data } = await getAfterSaleTemplateApi({ site: afterSaleDetails.site, event: afterSaleDetails.refTo });
+        if (status) {
+          setEmailTemplate(data.emailTemplates);
+          setWhatsappTemplate(data.waTemplates);
+        } else showNotification('error', data);
+      })();
+    }
+  }, [afterSaleDetails.refTo, afterSaleDetails.site]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     // if (!validate()) return;
     setLoading(true);
     try {
-      const payload = { ...afterSaleDetails, followUps: settings };
-      const { status, data } = AddAfterSaleApi(payload);
+      const { status, data } = AddAfterSaleApi(afterSaleDetails);
       if (status) {
         showNotification('success', data.message);
         navigate('/after-sale/after-sale-list');
@@ -84,17 +98,18 @@ const AddAfterSale = () => {
   }, []);
 
   const handleVariableChange = (index, field, value) => {
-    setSettings((prev) => {
-      const updated = [...prev];
+    setAfterSaleDetails((prev) => {
+      const updated = [...prev.followUps];
       if (field.includes('.')) {
         const [parent, child] = field.split('.');
         updated[index] = {
           ...updated[index],
           [parent]: { ...updated[index][parent], [child]: value }
         };
-      } else updated[index] = { ...updated[index], [field]: value };
-
-      return updated;
+      } else {
+        updated[index] = { ...updated[index], [field]: value };
+      }
+      return { ...prev, followUps: updated };
     });
   };
 
@@ -115,11 +130,17 @@ const AddAfterSale = () => {
   };
 
   const removeVariable = (index) => {
-    if (settings.length === 1) return;
-    setSettings((prev) => prev.filter((_, i) => i !== index));
+    if (afterSaleDetails.followUps.length === 1) return;
+    setAfterSaleDetails((prev) => ({
+      ...prev,
+      followUps: prev.followUps.filter((_, i) => i !== index)
+    }));
   };
   const addVariable = () => {
-    setSettings((prev) => [...prev, { channels: [], delay: { unit: 'Days', value: '', custom: '', ms: '' } }]);
+    setAfterSaleDetails((prev) => ({
+      ...prev,
+      followUps: [...prev.followUps, { channels: [], delay: { unit: 'Days', value: '', custom: '', ms: '' } }]
+    }));
   };
 
   return (
@@ -165,9 +186,9 @@ const AddAfterSale = () => {
               <DropDown
                 name="Events"
                 dropdownList={[
-                  { id: 'Event', name: 'Event', showName: 'Event' },
-                  { id: 'Product', name: 'Product', showName: 'Product' },
-                  { id: 'Service', name: 'Service', showName: 'Service' }
+                  { id: 'event', name: 'event', showName: 'Event' },
+                  { id: 'product', name: 'product', showName: 'Product' },
+                  { id: 'service', name: 'service', showName: 'Service' }
                 ]}
                 SummaryChild={<h5 className="p-0 m-0 text-primary">Target</h5>}
                 search={true}
@@ -203,7 +224,7 @@ const AddAfterSale = () => {
             <span className=" text-primary ">Follow - up</span>
           </div>
           <div className="w-full">
-            {settings.map((item, index) => (
+            {afterSaleDetails.followUps.map((item, index) => (
               <div key={index} className="flex flex-col border border-primary bg-grey p-4 rounded-xl mt-5">
                 <div className="flex justify-end items-center">
                   <IoCloseSharp className="cursor-pointer" onClick={() => removeVariable(index)} />
@@ -277,6 +298,35 @@ const AddAfterSale = () => {
                         ))}
                       </select>
                     </div>
+                  </div>
+                )}
+
+                {item.channels.length > 0 && (
+                  <div>
+                    {item.channels.map((channel, channelIndex) => (
+                      <div key={channelIndex} className="mt-5">
+                        <DropDown
+                          mt="mt-5"
+                          name={`${channel}Template`}
+                          label={`Select ${channel.charAt(0).toUpperCase() + channel.slice(1)} Template`}
+                          dropdownList={
+                            channel === 'email'
+                              ? emailTemplate.map((template) => ({ id: template._id, name: template._id, showName: template.name }))
+                              : channel === 'sms'
+                              ? [
+                                  { id: 'sms1', name: 'sms1', showName: 'SMS Template 1' },
+                                  { id: 'sms2', name: 'sms2', showName: 'SMS Template 2' }
+                                ]
+                              : whatsappTemplate.map((template) => ({ id: template._id, name: template._id, showName: template.name }))
+                          }
+                          commonFunction={(e) => {
+                            handleVariableChange(index, `${channel}Template`, e.name);
+                          }}
+                          selected={item[`${channel}Template`]}
+                          SummaryChild={<h5 className="p-0 m-0 text-primary">Select Template</h5>}
+                        />
+                      </div>
+                    ))}
                   </div>
                 )}
               </div>
