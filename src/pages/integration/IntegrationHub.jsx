@@ -74,6 +74,17 @@ const IntegrationHub = () => {
     }
   ];
 
+  const checkVerification = (id) => {
+    switch (id) {
+      case 'zohocrm':
+        return integrationData?.crm?.zoho?.isVerfied;
+      case 'whatsapp':
+        return integrationData?.social?.whatsApp?.some((whatsapp) => whatsapp.isVerified);
+      default:
+        return integrationData?.payment?.[id]?.isVerified;
+    }
+  };
+
   return (
     <div className="py-8 p-4 sm:p-8 overflow-x-hidden mb-20">
       <div className="w-full pb-8 border-b border-primary gap-y-4 gap-2 flex flex-col items-start md:flex-row lg:flex-col xl:flex-row justify-between lg:items-start md:items-end xl:items-end">
@@ -95,7 +106,7 @@ const IntegrationHub = () => {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 2xl:grid-cols-4 gap-4 mt-5">
         {integrationList.map((item) => {
-          const isVerified = item.id === 'zohocrm' ? integrationData?.crm?.zoho?.isVerfied : integrationData?.payment?.[item.id]?.isVerified;
+          const isVerified = checkVerification(item.id);
           return (
             <div key={item.name} className="rounded-xl border border-primary p-4 flex flex-col gap-4">
               <div className="flex justify-between items-center">
