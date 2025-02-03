@@ -59,7 +59,6 @@ const AddPackage = () => {
 
   const validate = () => {
     const newErrors = {};
-
     if (!packageDetails.title.trim()) newErrors.title = 'Name is required';
     if (packageDetails.maxLimit < 0 || !packageDetails.maxLimit) newErrors.maxLimit = 'Max limit should be greater than 0';
     if (!packageDetails.event) newErrors.event = 'Event is required';
