@@ -15,7 +15,7 @@ export const navLinks = [
 export const leadsPath = [
   { title: 'Enquiry', to: ['/enquiry/enquiry-list', '/enquiry/view-enquiry', '/enquiry/enquiry-integration'] },
   { title: 'Newsletter Subscribers', to: ['/subscriber/subscriber-list', '/subscriber/view-subscriber', '/subscriber/subscriber-integration'] },
-  { title: 'Feedback', to: ['/feedback/feedback-list', '/feedback/view-feedback', '/feedback/feedback-integration'] }
+  { title: 'Feedbacks', to: ['/feedback/feedback-list', '/feedback/view-feedback', '/feedback/feedback-integration'] }
 ];
 
 export const contentsPath = [
@@ -57,8 +57,8 @@ export const eventsPath = [
 ];
 
 export const faqsPath = [
-  { title: 'FAQ Categories', to: ['/faq-category/faq-category-list', '/faq-category/add-faq-category', '/faq-category/edit-faq-category'] },
-  { title: 'FAQ', to: ['/faq/faq-list', '/faq/add-faq', '/faq/edit-faq', '/faq/duplicate-faq'] }
+  { title: 'FAQs', to: ['/faq/faq-list', '/faq/add-faq', '/faq/edit-faq', '/faq/duplicate-faq'] },
+  { title: 'FAQ Categories', to: ['/faq-category/faq-category-list', '/faq-category/add-faq-category', '/faq-category/edit-faq-category'] }
 ];
 
 export const testimonialsPath = [
@@ -75,4 +75,4 @@ export const templatePath = [
   { title: 'WhatsApp Templates', to: ['/templates/whatsapp-template-list', '/templates/add-whatsapp-template', '/templates/edit-whatsapp-template'] }
 ];
 
-export const adminNavLinks = [{ title: 'Admin', to: ['/admin/admin-list', '/admin/add-admin', '/admin/edit-admin'], icon: <RiAdminLine /> }];
+export const adminNavLinks = [{ title: 'Admins', to: ['/admin/admin-list', '/admin/add-admin', '/admin/edit-admin'], icon: <RiAdminLine /> }];

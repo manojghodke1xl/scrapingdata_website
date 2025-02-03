@@ -72,7 +72,7 @@ const AddPackage = () => {
     supportedCurrencies.forEach((currency) => {
       if (
         (paymentData?.razorpay?.supports?.[currency] || paymentData?.stripe?.supports?.[currency] || paymentData?.paypal?.supports?.[currency]) &&
-        (!packageDetails.currencies[currency] || packageDetails.currencies[currency] <= 0) &&
+        (!packageDetails.currencies[currency] || packageDetails.currencies[currency] < 0) &&
         packageDetails.currencyNotes[currency]
       ) {
         newErrors.currencies = { ...newErrors.currencies, [currency]: `Price in (${currency}) is required` };
