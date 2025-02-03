@@ -52,8 +52,10 @@ const AddAfterSale = () => {
       }
     };
 
-    if (afterSaleDetails.target === 'Event') fetchData(getAllEventsApi, 'events');
-    else if (afterSaleDetails.target === 'Product') fetchData(getAllProductsApi, 'products');
+    console.log(afterSaleDetails.target);
+
+    if (afterSaleDetails.target === 'event') fetchData(getAllEventsApi, 'events');
+    else if (afterSaleDetails.target === 'product') fetchData(getAllProductsApi, 'products');
   }, [afterSaleDetails.target, setLoading]);
 
   useEffect(() => {
