@@ -22,7 +22,8 @@ const WhatsAppIntegration = () => {
         phoneNumberId: '',
         appId: '',
         appSecret: '',
-        accessToken: ''
+        accessToken: '',
+        waBusinessId: ''
       }
     ]
   );
@@ -132,6 +133,16 @@ const WhatsAppIntegration = () => {
                   value={whatsapp.phoneNumberId}
                   onChange={(e) => handleVariableChange(index, 'phoneNumberId', e.target.value)}
                   errorMessage={errors[index]?.phoneNumberId}
+                />
+                <FormField
+                  divClassName={'mt-5'}
+                  label="WhatsApp Business ID"
+                  placeholder="WhatsApp Business ID"
+                  type="text"
+                  name="businessId"
+                  value={whatsapp.waBusinessId}
+                  onChange={(e) => handleVariableChange(index, 'waBusinessId', e.target.value)}
+                  errorMessage={errors[index]?.waBusinessId}
                 />
                 <FormField
                   divClassName={'mt-5'}
