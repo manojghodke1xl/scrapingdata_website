@@ -7,13 +7,17 @@ import Login from '../pages/authentication/Login';
 import AuthComponent from '../components/authentication/AuthComponent';
 import StructuredLayout from '../layouts/StructuredLayout';
 import Dashboard from '../pages/common/Dashboard';
+import PageNotFound from '../pages/common/PageNotFound';
+
 import AdminRoutes from './private-routes/AdminRoutes';
 import SmtpRoutes from './private-routes/SmtpRoutes';
 import CaseStudyRoutes from './private-routes/CaseStudyRoutes';
 import GuidesRoutes from './private-routes/GuidesRoutes';
 import TestimonialRoutes from './private-routes/TestimonialRoutes';
+import TestimonialCategoryRoutes from './private-routes/TestimonialCategoryRoutes';
 import RecaptchaRoutes from './private-routes/RecaptchaRoutes';
 import FaqRoutes from './private-routes/FaqRoutes';
+import FaqCategoryRoutes from './private-routes/FaqCategoryRoutes';
 import EnquiryRoutes from './private-routes/EnquiryRoutes';
 import SubscribersRoutes from './private-routes/SubscribersRoutes';
 import FeedbackRoutes from './private-routes/FeedbackRoutes';
@@ -21,25 +25,57 @@ import SiteRoutes from './private-routes/SiteRoutes';
 import PopupRoutes from './private-routes/PopupRoutes';
 import ClientLogoRoutes from './private-routes/ClientLogoRoutes';
 import GalleryRoutes from './private-routes/GalleryRoutes';
-import PartnerLoogoRoutes from './private-routes/PartnerLogoRoutes';
-import PageNotFound from '../pages/common/PageNotFound';
+import PartnerLogoRoutes from './private-routes/PartnerLogoRoutes';
 import CouponRoutes from './private-routes/CouponRoutes';
 import ParticipantRoutes from './private-routes/ParticipantRoutes';
 import EventRoutes from './private-routes/EventRoutes';
+import BookingRoutes from './private-routes/BookingRoutes';
 import PaymentRoutes from './private-routes/PaymentRoutes';
 import IntegrationRoutes from './private-routes/IntegrationRoutes';
-import FaqCategoryRoutes from './private-routes/FaqCategoryRoutes';
 import PackageRoutes from './private-routes/PackageRoutes';
-import TestimonialCategoryRoutes from './private-routes/TestimonialCategoryRoutes';
-import ProductRoutes from './private-routes/productRoutes';
-import BookingRoutes from './private-routes/BookingRoutes';
+import ProductRoutes from './private-routes/ProductRoutes';
 import OrderRoutes from './private-routes/OrderRoutes';
 import TemplateRoutes from './private-routes/template/TemplateRoutes';
-import FilesRoutes from './private-routes/FilesRoutes';
-import EventTicketRoutes from './private-routes/eventTicketRoutes';
 import TemplateCategoryRoutes from './private-routes/template/TemplateCategoryRoutes';
+import FilesRoutes from './private-routes/FilesRoutes';
+import EventTicketRoutes from './private-routes/EventTicketRoutes';
+import AfterSalesRoutes from './private-routes/AfterSalesRoutes';
 
 const ZohoStatus = lazy(() => import('../pages/integration/ZohoStatus'));
+
+const privateRoutes = [
+  { path: 'admin/*', Component: AdminRoutes },
+  { path: 'smtp/*', Component: SmtpRoutes },
+  { path: 'case-study/*', Component: CaseStudyRoutes },
+  { path: 'guides/*', Component: GuidesRoutes },
+  { path: 'testimonials/*', Component: TestimonialRoutes },
+  { path: 'testimonial-category/*', Component: TestimonialCategoryRoutes },
+  { path: 'recaptcha/*', Component: RecaptchaRoutes },
+  { path: 'faq/*', Component: FaqRoutes },
+  { path: 'faq-category/*', Component: FaqCategoryRoutes },
+  { path: 'enquiry/*', Component: EnquiryRoutes },
+  { path: 'subscriber/*', Component: SubscribersRoutes },
+  { path: 'feedback/*', Component: FeedbackRoutes },
+  { path: 'site/*', Component: SiteRoutes },
+  { path: 'pop-up/*', Component: PopupRoutes },
+  { path: 'client-logo/*', Component: ClientLogoRoutes },
+  { path: 'gallery/*', Component: GalleryRoutes },
+  { path: 'partner-logo/*', Component: PartnerLogoRoutes },
+  { path: 'coupon/*', Component: CouponRoutes },
+  { path: 'participants/*', Component: ParticipantRoutes },
+  { path: 'events/*', Component: EventRoutes },
+  { path: 'bookings/*', Component: BookingRoutes },
+  { path: 'payments/*', Component: PaymentRoutes },
+  { path: 'apps/*', Component: IntegrationRoutes },
+  { path: 'packages/*', Component: PackageRoutes },
+  { path: 'products/*', Component: ProductRoutes },
+  { path: 'orders/*', Component: OrderRoutes },
+  { path: 'templates/*', Component: TemplateRoutes },
+  { path: 'template-category/*', Component: TemplateCategoryRoutes },
+  { path: 'files/*', Component: FilesRoutes },
+  { path: 'tickets/*', Component: EventTicketRoutes },
+  { path: 'after-sales/*', Component: AfterSalesRoutes }
+];
 
 const App = () => {
   return (
@@ -52,43 +88,14 @@ const App = () => {
               <Route path="/" element={<Login />} />
             </Route>
 
-            {/* Protected Routes */}
+            {/* Private Routes */}
             <Route element={<AuthComponent />}>
               <Route element={<StructuredLayout />}>
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/auth-status/:id" element={<ZohoStatus />} />
-
-                {/* Nested Private Routes */}
-                <Route path="/admin/*" element={<AdminRoutes />} />
-                <Route path="/smtp/*" element={<SmtpRoutes />} />
-                <Route path="/case-study/*" element={<CaseStudyRoutes />} />
-                <Route path="/guides/*" element={<GuidesRoutes />} />
-                <Route path="/testimonials/*" element={<TestimonialRoutes />} />
-                <Route path="/testimonial-category/*" element={<TestimonialCategoryRoutes />} />
-                <Route path="/recaptcha/*" element={<RecaptchaRoutes />} />
-                <Route path="/faq/*" element={<FaqRoutes />} />
-                <Route path="/faq-category/*" element={<FaqCategoryRoutes />} />
-                <Route path="/enquiry/*" element={<EnquiryRoutes />} />
-                <Route path="/subscriber/*" element={<SubscribersRoutes />} />
-                <Route path="/feedback/*" element={<FeedbackRoutes />} />
-                <Route path="/site/*" element={<SiteRoutes />} />
-                <Route path="/pop-up/*" element={<PopupRoutes />} />
-                <Route path="/client-logo/*" element={<ClientLogoRoutes />} />
-                <Route path="/gallery/*" element={<GalleryRoutes />} />
-                <Route path="/partner-logo/*" element={<PartnerLoogoRoutes />} />
-                <Route path="/coupon/*" element={<CouponRoutes />} />
-                <Route path="/participants/*" element={<ParticipantRoutes />} />
-                <Route path="/events/*" element={<EventRoutes />} />
-                <Route path="/bookings/*" element={<BookingRoutes />} />
-                <Route path="/payments/*" element={<PaymentRoutes />} />
-                <Route path="/apps/*" element={<IntegrationRoutes />} />
-                <Route path="/packages/*" element={<PackageRoutes />} />
-                <Route path="/products/*" element={<ProductRoutes />} />
-                <Route path="/orders/*" element={<OrderRoutes />} />
-                <Route path="/templates/*" element={<TemplateRoutes />} />
-                <Route path="/template-category/*" element={<TemplateCategoryRoutes />} />
-                <Route path="/files/*" element={<FilesRoutes />} />
-                <Route path="/tickets/*" element={<EventTicketRoutes />} />
+                {privateRoutes.map(({ path, Component }) => (
+                  <Route key={path} path={`/${path}`} element={<Component />} />
+                ))}
               </Route>
             </Route>
             <Route path="*" element={<PageNotFound />} />
