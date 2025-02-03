@@ -65,7 +65,6 @@ const AddPackage = () => {
     if (!packageDetails.ticketIdPattern?.trim()) newErrors.ticketIdPattern = 'Ticket ID Pattern is required';
     // if (packageDetails.event && !packageDetails.template) newErrors.template = 'Template is required';
     if (packageDetails.onSale && !packageDetails.saleEndDate) newErrors.saleEndDate = 'Sale end date is required';
-    if (!packageDetails.ticket) newErrors.ticket = 'Ticket is required';
 
     // const supportedCurrencies = ['INR', 'AED', 'USD'];
 
