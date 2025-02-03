@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { TbFileSearch, TbTemplate, TbUsersGroup } from 'react-icons/tb';
 import { IoSettingsOutline } from 'react-icons/io5';
 import { MdMessage } from 'react-icons/md';
-import { FaBullhorn, FaRegFile, FaRegImage, FaRegQuestionCircle } from 'react-icons/fa';
+import { FaBullhorn, FaChartLine, FaRegFile, FaRegImage, FaRegQuestionCircle } from 'react-icons/fa';
 import { FiCalendar } from 'react-icons/fi';
 import {
   adminNavLinks,
@@ -18,7 +18,8 @@ import {
   marketingPath,
   productsPath,
   templatePath,
-  filesPath
+  filesPath,
+  afterSalesPath
 } from './sidebarTabData';
 import ReusableAccordion from '../../../atoms/sidebar/ReusableAccordion';
 import useGlobalContext from '../../../hooks/useGlobalContext';
@@ -125,6 +126,15 @@ const MaterialSidebar = ({ handleToggleSidebar }) => {
             icon={<FiCalendar />}
             isOpen={openAccordion === 'Events'}
             onToggle={() => setOpenAccordion(openAccordion === 'Events' ? null : 'Events')}
+            handleToggleSidebar={handleToggleSidebar}
+          />
+
+          <ReusableAccordion
+            title="After Sales"
+            links={afterSalesPath}
+            icon={<FaChartLine />}
+            isOpen={openAccordion === 'Sales'}
+            onToggle={() => setOpenAccordion(openAccordion === 'Sales' ? null : 'Sales')}
             handleToggleSidebar={handleToggleSidebar}
           />
 

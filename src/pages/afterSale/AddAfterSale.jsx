@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import FormButtons from '../../atoms/formFields/FormButtons';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import useGlobalContext from '../../hooks/useGlobalContext';
 import DropDown from '../../atoms/formFields/DropDown';
 import { getAllEventsApi } from '../../apis/event-apis';
@@ -12,6 +12,7 @@ import { AddAfterSaleApi } from '../../apis/after-sale-apis';
 
 const AddAfterSale = () => {
   const { id = '' } = useParams();
+  const navigate = useNavigate();
   const {
     auth: { allSites: availableSites },
     setLoading,
@@ -61,7 +62,7 @@ const AddAfterSale = () => {
       const { status, data } = AddAfterSaleApi(payload);
       if (status) {
         showNotification('success', data.message);
-        // navigate('/after-sale/after-sale-list');
+        navigate('/after-sale/after-sale-list');
       } else showNotification('error', data);
     } catch (error) {
       showNotification('error', error.message);
@@ -127,7 +128,7 @@ const AddAfterSale = () => {
         <div>
           <span className="text-3xl font-semibold text-dark">{id ? 'Edit' : 'Add'} After Sales</span>
         </div>
-        <FormButtons to="/faq-category/faq-category-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} loading={isLoading} />
+        <FormButtons to="/after-sales/after-sales-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} loading={isLoading} />
       </div>
 
       <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
@@ -294,7 +295,7 @@ const AddAfterSale = () => {
       </div> */}
       {!isScrollable && (
         <div className="w-full flex justify-end items-center gap-4 pt-8  border- border-primary">
-          <FormButtons to="/faq/faq-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} loading={isLoading} />
+          <FormButtons to="/after-sales/after-sales-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} loading={isLoading} />
         </div>
       )}
     </div>

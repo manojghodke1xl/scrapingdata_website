@@ -56,6 +56,11 @@ export const eventsPath = [
   { title: 'Booking Payments', to: ['/payments/booking-payment-list'] }
 ];
 
+export const afterSalesPath = [
+  { title: 'Event Default Settings', to: ['/after-sales/event-default-settings'] },
+  { title: 'After Sales', to: ['/after-sales/after-sales-list', '/after-sales/add-after-sales', '/after-sales/edit-after-sales', '/after-sales/duplicate-after-sales'] }
+];
+
 export const faqsPath = [
   { title: 'FAQs', to: ['/faq/faq-list', '/faq/add-faq', '/faq/edit-faq', '/faq/duplicate-faq'] },
   { title: 'FAQ Categories', to: ['/faq-category/faq-category-list', '/faq-category/add-faq-category', '/faq-category/edit-faq-category'] }
