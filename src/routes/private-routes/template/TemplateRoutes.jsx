@@ -29,6 +29,7 @@ const TemplateRoutes = () => {
       <Route path="/whatsapp-template-list" element={<WhatsAppTemplateList />} />
       <Route path="/add-whatsapp-template" element={<AddWhatsAppTemplate />} />
       <Route path="/edit-whatsapp-template/:id" element={<AddWhatsAppTemplate />} />
+      <Route path='/duplicate-whatsapp-template/:id' element={<AddWhatsAppTemplate />} />
 
       <Route path="*" element={<PageNotFound />} />
     </Routes>

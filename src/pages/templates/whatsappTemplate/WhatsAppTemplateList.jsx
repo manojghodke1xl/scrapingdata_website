@@ -50,6 +50,8 @@ const WhatsAppTemplateList = () => {
                 actions={true}
                 edit={true}
                 editPath={'/templates/edit-whatsapp-template'}
+                copy={true}
+                copyPath={'/templates/duplicate-whatsapp-template'}
                 deleteBtn={true}
                 deleteApi={deleteWhatsAppTemplateApi}
                 deleteLabel={'Delete WhatsApp Template'}
