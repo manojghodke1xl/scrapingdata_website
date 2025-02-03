@@ -1,14 +1,31 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import FormButtons from '../../atoms/formFields/FormButtons';
+import { useParams } from 'react-router-dom';
 import useGlobalContext from '../../hooks/useGlobalContext';
-import MultiSelectCheckbox from '../../atoms/formFields/MultiSelectCheckBox';
 import DropDown from '../../atoms/formFields/DropDown';
+import { getAllEventsApi } from '../../apis/event-apis';
 import { showNotification } from '../../utils/showNotification';
-import { AddAfterSaleApi } from '../../apis/after-sale-apis';
+import { getAllProductsApi } from '../../apis/product-apis';
 import { IoCloseSharp } from 'react-icons/io5';
+import MultiSelectCheckbox from '../../atoms/formFields/MultiSelectCheckBox';
+import { AddAfterSaleApi } from '../../apis/after-sale-apis';
 
-const EventDefaultSettings = () => {
-  const { isLoading, setLoading } = useGlobalContext();
+const AddAfterSale = () => {
+  const { id = '' } = useParams();
+  const {
+    auth: { allSites: availableSites },
+    setLoading,
+    isLoading
+  } = useGlobalContext();
+  const [isScrollable, setIsScrollable] = useState(false);
+  const [errors, setErrors] = useState({});
+  const [afterSaleDetails, setAfterSaleDetails] = useState({
+    site: '',
+    target: '',
+    refTo: undefined,
+    followUps: [{ channels: [], delay: { unit: 'Days', value: '', custom: '', ms: '' } }]
+  });
+  const [lists, setLists] = useState([]);
 
   const [settings, setSettings] = useState([
     {
@@ -17,13 +34,34 @@ const EventDefaultSettings = () => {
     }
   ]);
 
+  useEffect(() => {
+    const fetchData = async (apiFunction, key) => {
+      setLoading(true);
+      try {
+        const { status, data } = await apiFunction();
+        if (status) setLists(data[key]);
+        else showNotification('error', data);
+      } catch (error) {
+        showNotification('error', error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (afterSaleDetails.target === 'Event') fetchData(getAllEventsApi, 'events');
+    else if (afterSaleDetails.target === 'Product') fetchData(getAllProductsApi, 'products');
+  }, [afterSaleDetails.target, setLoading]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    // if (!validate()) return;
     setLoading(true);
     try {
-      const { status, data } = AddAfterSaleApi({ followUps: settings });
+      const payload = { ...afterSaleDetails, followUps: settings };
+      const { status, data } = AddAfterSaleApi(payload);
       if (status) {
         showNotification('success', data.message);
+        // navigate('/after-sale/after-sale-list');
       } else showNotification('error', data);
     } catch (error) {
       showNotification('error', error.message);
@@ -31,6 +69,18 @@ const EventDefaultSettings = () => {
       setLoading(false);
     }
   };
+
+  const checkScrollability = () => {
+    const contentHeight = document.documentElement.scrollHeight;
+    const windowHeight = window.innerHeight;
+    setIsScrollable(contentHeight > windowHeight);
+  };
+
+  useEffect(() => {
+    checkScrollability();
+    window.addEventListener('resize', checkScrollability);
+    return () => window.removeEventListener('resize', checkScrollability);
+  }, []);
 
   const handleVariableChange = (index, field, value) => {
     setSettings((prev) => {
@@ -70,13 +120,80 @@ const EventDefaultSettings = () => {
   const addVariable = () => {
     setSettings((prev) => [...prev, { channels: [], delay: { unit: 'Days', value: '', custom: '', ms: '' } }]);
   };
+
   return (
     <div className="py-8 p-4 sm:p-8 overflow-x-hidden mb-20">
       <div className="w-full pb-8 border-b border-primary gap-y-4 gap-2 flex flex-col items-start md:flex-row lg:flex-col xl:flex-row justify-between lg:items-start md:items-end xl:items-end">
         <div>
-          <span className="text-3xl font-semibold text-dark"> Event Default Settings</span>
+          <span className="text-3xl font-semibold text-dark">{id ? 'Edit' : 'Add'} After Sales</span>
         </div>
-        <FormButtons to="" type="submit" onClick={handleSubmit} btnLebal={'Save Changes'} loading={isLoading} />
+        <FormButtons to="/faq-category/faq-category-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} loading={isLoading} />
+      </div>
+
+      <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
+        <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
+          <div className="sm:w-7/12 w-full flex flex-col">
+            <span className=" text-primary ">Site Details</span>
+          </div>
+          <div className="w-full">
+            <div>
+              <DropDown
+                name="sites"
+                dropdownList={availableSites?.map((site) => ({ name: site._id, showName: `${site.name} (${site.host})`, id: site._id }))}
+                SummaryChild={<h5 className="p-0 m-0 text-primary">Sites</h5>}
+                search={true}
+                selected={afterSaleDetails.site}
+                commonFunction={(e) => {
+                  setAfterSaleDetails((prev) => ({ ...prev, site: e.name }));
+                  if (errors.site) setErrors((prev) => ({ ...prev, site: '' }));
+                }}
+                error={errors.site}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
+        <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
+          <div className="sm:w-7/12 w-full flex flex-col">
+            <span className=" text-primary ">Select Target</span>
+          </div>
+          <div className="w-full">
+            <div>
+              <DropDown
+                name="Events"
+                dropdownList={[
+                  { id: 'Event', name: 'Event', showName: 'Event' },
+                  { id: 'Product', name: 'Product', showName: 'Product' },
+                  { id: 'Service', name: 'Service', showName: 'Service' }
+                ]}
+                SummaryChild={<h5 className="p-0 m-0 text-primary">Target</h5>}
+                search={true}
+                selected={afterSaleDetails.target}
+                commonFunction={(e) => {
+                  setAfterSaleDetails((prev) => ({ ...prev, target: e.name, refTo: undefined }));
+                  setLists([]);
+                  if (errors.target) setErrors((prev) => ({ ...prev, target: '' }));
+                }}
+                error={errors.target}
+              />
+              <DropDown
+                mt="mt-5"
+                name="refTo"
+                dropdownList={lists?.map((product) => ({ name: product._id, showName: product.name, id: product._id }))}
+                SummaryChild={<h5 className="p-0 m-0 text-primary">Select {afterSaleDetails.target}</h5>}
+                search={true}
+                selected={afterSaleDetails.refTo}
+                commonFunction={(e) => {
+                  setAfterSaleDetails((prev) => ({ ...prev, refTo: e.name }));
+                  if (errors.refTo) setErrors((prev) => ({ ...prev, refTo: '' }));
+                }}
+                error={errors.target}
+              />
+            </div>
+          </div>
+        </div>
       </div>
 
       <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
@@ -175,8 +292,13 @@ const EventDefaultSettings = () => {
       {/* <div className="w-full justify-center items-center border-b  border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end ">
         <NoteComponent note={id ? editFaqCategoryNote : addFaqCategoryNote} />
       </div> */}
+      {!isScrollable && (
+        <div className="w-full flex justify-end items-center gap-4 pt-8  border- border-primary">
+          <FormButtons to="/faq/faq-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} loading={isLoading} />
+        </div>
+      )}
     </div>
   );
 };
 
-export default EventDefaultSettings;
+export default AddAfterSale;
