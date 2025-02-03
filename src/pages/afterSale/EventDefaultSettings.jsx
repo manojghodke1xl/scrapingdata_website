@@ -20,7 +20,7 @@ const EventDefaultSettings = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const { status, data } = AddAfterSaleApi(settings);
+      const { status, data } = AddAfterSaleApi({ followUps: settings });
       if (status) {
         showNotification('success', data.message);
       } else showNotification('error', data);
