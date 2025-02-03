@@ -28,7 +28,7 @@ const AddAfterSale = () => {
       {
         channels: [],
         emailTemplate: '',
-        smsTemplate: '',
+        smsTemplate: null,
         whatsappTemplate: '',
         delay: { unit: 'Days', value: '', custom: '', ms: '' }
       }
@@ -54,8 +54,8 @@ const AddAfterSale = () => {
 
     console.log(afterSaleDetails.target);
 
-    if (afterSaleDetails.target === 'event') fetchData(getAllEventsApi, 'events');
-    else if (afterSaleDetails.target === 'product') fetchData(getAllProductsApi, 'products');
+    if (afterSaleDetails.target === 'Event') fetchData(getAllEventsApi, 'events');
+    else if (afterSaleDetails.target === 'Product') fetchData(getAllProductsApi, 'products');
   }, [afterSaleDetails.target, setLoading]);
 
   useEffect(() => {
@@ -190,9 +190,9 @@ const AddAfterSale = () => {
               <DropDown
                 name="Events"
                 dropdownList={[
-                  { id: 'event', name: 'event', showName: 'Event' },
-                  { id: 'product', name: 'product', showName: 'Product' },
-                  { id: 'service', name: 'service', showName: 'Service' }
+                  { id: 'event', name: 'Event', showName: 'Event' },
+                  { id: 'product', name: 'Product', showName: 'Product' },
+                  { id: 'service', name: 'Service', showName: 'Service' }
                 ]}
                 SummaryChild={<h5 className="p-0 m-0 text-primary">Target</h5>}
                 search={true}
