@@ -10,34 +10,20 @@ const FormField = ({ divClassName, label, type = 'text', name, id, placeholder, 
         {label}
       </label>
       <div className="relative flex justify-center items-center">
-        {type == 'textarea' ? (
-          <textarea
-            id={id}
-            onChange={onChange}
-            onWheel={(e) => e.target.blur()}
-            value={value}
-            name={name}
-            placeholder={placeholder}
-            className={`w-full mt-2 rounded-xl border bg-white ${
-              errorMessage ? 'border-fadered focus:border-fadered' : ' border-primary focus:border-blue'
-            } font-normal focus:outline-none focus:ring-0 px-4 py-2.5 focus:border  placeholder:text-gray-400 text-dark bg-transparent`}
-            disabled={disabled}
-          />
-        ) : (
-          <input
-            type={showPasswordToggle && showPassword ? 'text' : type}
-            id={id}
-            onChange={onChange}
-            onWheel={(e) => e.target.blur()}
-            value={value}
-            name={name}
-            placeholder={placeholder}
-            className={`w-full mt-2 rounded-xl border bg-white ${
-              errorMessage ? 'border-fadered focus:border-fadered' : ' border-primary focus:border-blue'
-            } font-normal focus:outline-none focus:ring-0 px-4 py-2.5 focus:border  placeholder:text-gray-400 text-dark bg-transparent ${showPasswordToggle ? 'pr-12' : ''}`}
-            disabled={disabled}
-          />
-        )}
+        <input
+          type={showPasswordToggle && showPassword ? 'text' : type}
+          id={id}
+          onChange={onChange}
+          onWheel={(e) => e.target.blur()}
+          value={value}
+          name={name}
+          placeholder={placeholder}
+          className={`w-full mt-2 rounded-xl border bg-white ${
+            errorMessage ? 'border-fadered focus:border-fadered' : ' border-primary focus:border-blue'
+          } font-normal focus:outline-none focus:ring-0 px-4 py-2.5 focus:border  placeholder:text-secondary text-dark bg-transparent ${showPasswordToggle ? 'pr-12' : ''}`}
+          disabled={disabled}
+        />
+
         {showPasswordToggle && (
           <button
             type="button"
