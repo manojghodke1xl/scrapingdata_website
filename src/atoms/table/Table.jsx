@@ -92,6 +92,63 @@ const TableComponent = ({
   });
   const [exportDropdownOpen, setExportDropdownOpen] = useState(false);
 
+  // Add new state for drag and drop
+  const [updatedHeaders, setUpdatedHeaders] = useState(headers);
+  const [isDragging, setIsDragging] = useState(false);
+
+  // Add drag and drop handlers
+  const handleDragStart = (e, columnKey) => {
+    e.dataTransfer.setData('columnKey', columnKey);
+    setIsDragging(true);
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+  };
+
+  const handleDrop = (e, dropColumnKey) => {
+    setIsDragging(false);
+    const dragColumnKey = e.dataTransfer.getData('columnKey');
+
+    const dragIndex = updatedHeaders.findIndex((col) => col.key === dragColumnKey);
+    const dropIndex = updatedHeaders.findIndex((col) => col.key === dropColumnKey);
+
+    if (dragIndex !== -1 && dropIndex !== -1) {
+      const newHeaders = [...updatedHeaders];
+      const [draggedColumn] = newHeaders.splice(dragIndex, 1);
+      newHeaders.splice(dropIndex, 0, draggedColumn);
+      setUpdatedHeaders(newHeaders);
+    }
+  };
+
+  const handleDragEnd = () => {
+    setIsDragging(false);
+  };
+
+  // Add sorting state
+  const [sortConfig, setSortConfig] = useState({
+    key: null,
+    direction: 'asc'
+  });
+
+  // Add sorting handler
+  const handleSort = (key) => {
+    let direction = 'asc';
+    if (sortConfig.key === key && sortConfig.direction === 'asc') {
+      direction = 'desc';
+    }
+    setSortConfig({ key, direction });
+
+    // Sort the data
+    const sortedData = [...rows].sort((a, b) => {
+      if (a[key] < b[key]) return direction === 'asc' ? -1 : 1;
+      if (a[key] > b[key]) return direction === 'asc' ? 1 : -1;
+      return 0;
+    });
+
+    tableData({ ...data, rows: sortedData });
+  };
+
   const isFilterActive = useMemo(() => {
     return (
       filterState.searchTerm !== '' ||
@@ -261,7 +318,7 @@ const TableComponent = ({
             setSelectionState={setSelectionState}
             handleMasterCheckboxChange={handleMasterCheckboxChange}
             handleRowCheckboxChange={handleRowCheckboxChange}
-            headers={headers}
+            headers={updatedHeaders}
             rows={rows}
             actions={actions}
             isLoading={isLoading}
@@ -281,6 +338,13 @@ const TableComponent = ({
             deleteMessage={deleteMessage}
             managePackage={managePackage}
             managePackagePath={managePackagePath}
+            handleDragStart={handleDragStart}
+            handleDragOver={handleDragOver}
+            handleDrop={handleDrop}
+            handleDragEnd={handleDragEnd}
+            isDragging={isDragging}
+            sortConfig={sortConfig}
+            onSort={handleSort}
           />
         </div>
         <div className="w-full mt-2">

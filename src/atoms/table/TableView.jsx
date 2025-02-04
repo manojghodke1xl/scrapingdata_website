@@ -23,7 +23,14 @@ const TableView = ({
   tableState,
   setModalState,
   managePackage,
-  managePackagePath
+  managePackagePath,
+  handleDragStart,
+  handleDragOver,
+  handleDrop,
+  handleDragEnd,
+  isDragging,
+  sortConfig,
+  onSort
 }) => {
   return (
     <>
@@ -42,11 +49,27 @@ const TableView = ({
                 </label>
               </th>
             )}
-            {headers?.map((header, index) => (
-              <th key={index} scope="col" className="px-2 text-left font-semibold text-primary">
+            {headers?.map((header) => (
+              <th
+                key={header.key}
+                draggable={true}
+                onDragStart={(e) => handleDragStart(e, header.key)}
+                onDragOver={handleDragOver}
+                onDrop={(e) => handleDrop(e, header.key)}
+                onDragEnd={handleDragEnd}
+                className={`px-2 text-left font-semibold text-primary ${isDragging ? 'opacity-50' : ''}`}
+              >
                 <div className="flex items-center gap-2">
                   <span className="whitespace-nowrap">{header.label}</span>
-                  {header.sortable !== false && <RxCaretSort size={20} strokeWidth="0.5" fill="none" />}
+                  {header.sortable !== false && (
+                    <RxCaretSort
+                      size={20}
+                      strokeWidth="0.5"
+                      fill="none"
+                      onClick={() => onSort(header.key)}
+                      className={`cursor-pointer ${sortConfig.key === header.key ? 'text-blue-500' : ''}`}
+                    />
+                  )}
                 </div>
               </th>
             ))}

@@ -117,7 +117,7 @@ const AddAfterSale = () => {
       const { status, data } = await (id ? (isDuplicate ? AddAfterSaleApi(afterSaleDetails) : updateAfterSaleApi(id, afterSaleDetails)) : AddAfterSaleApi(afterSaleDetails));
       if (status) {
         showNotification('success', data.message);
-        navigate('/after-sale/after-sale-list');
+        navigate('/after-sales/after-sales-list');
       } else showNotification('error', data);
     } catch (error) {
       showNotification('error', error.message);
@@ -395,6 +395,7 @@ const AddAfterSale = () => {
       <CommonModal
         isModalVisible={existingAfterSales.modelOpen}
         onConfirm={() => navigate(`/after-sales/edit-after-sale/${existingAfterSales.afterSaleId}`)}
+        onCancel={() => navigate(`/after-sales/after-sales-list`)}
         setModalVisibility={() => setExistingAfterSales({ ...existingAfterSales, modelOpen: false })}
         label={'Existing After Sale Present'}
         message={'You cannot create two same After Sales. Please edit the previous one instead. Click Confirm to proceed.'}
