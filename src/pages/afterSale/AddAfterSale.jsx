@@ -82,8 +82,17 @@ const AddAfterSale = () => {
       setLoading(true);
       (async () => {
         const { status, data } = await getAfterSalesByIdApi(id);
-        if (status) setAfterSaleDetails(data.afterSales);
-        else showNotification('error', data);
+        if (status) {
+          const { site, refTo, ...rest } = data.afterSales;
+          setAfterSaleDetails((prev) => ({
+            ...prev,
+            ...rest,
+            site: site._id,
+            siteData: site,
+            refTo: refTo._id,
+            refToData: refTo
+          }));
+        } else showNotification('error', data);
       })()
         .catch((error) => showNotification('error', error.message))
         .finally(() => setLoading(false));
@@ -202,18 +211,27 @@ const AddAfterSale = () => {
           </div>
           <div className="w-full">
             <div>
-              <DropDown
-                name="sites"
-                dropdownList={availableSites?.map((site) => ({ name: site._id, showName: `${site.name} (${site.host})`, id: site._id }))}
-                SummaryChild={<h5 className="p-0 m-0 text-primary">Sites</h5>}
-                search={true}
-                selected={afterSaleDetails.site}
-                commonFunction={(e) => {
-                  setAfterSaleDetails((prev) => ({ ...prev, site: e.name }));
-                  if (errors.site) setErrors((prev) => ({ ...prev, site: '' }));
-                }}
-                error={errors.site}
-              />
+              {id && !isDuplicate ? (
+                <h1 className="text-xl flex items-center justify-between gap-2 font-bold">
+                  <div className="flex items-center gap-2">
+                    <span className="text-primary">Site:</span>
+                    <span className="text-primary font-semibold">{`${afterSaleDetails?.siteData?.name} ( ${afterSaleDetails?.siteData?.host} )`}</span>
+                  </div>
+                </h1>
+              ) : (
+                <DropDown
+                  name="sites"
+                  dropdownList={availableSites?.map((site) => ({ name: site._id, showName: `${site.name} (${site.host})`, id: site._id }))}
+                  SummaryChild={<h5 className="p-0 m-0 text-primary">Sites</h5>}
+                  search={true}
+                  selected={afterSaleDetails.site}
+                  commonFunction={(e) => {
+                    setAfterSaleDetails((prev) => ({ ...prev, site: e.name }));
+                    if (errors.site) setErrors((prev) => ({ ...prev, site: '' }));
+                  }}
+                  error={errors.site}
+                />
+              )}
             </div>
           </div>
         </div>
@@ -222,40 +240,51 @@ const AddAfterSale = () => {
       <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
         <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
           <div className="sm:w-7/12 w-full flex flex-col">
-            <span className=" text-primary ">Select Target</span>
+            <span className=" text-primary ">Target</span>
           </div>
           <div className="w-full">
             <div>
-              <DropDown
-                name="Events"
-                dropdownList={[
-                  { id: 'event', name: 'Event', showName: 'Event' },
-                  { id: 'product', name: 'Product', showName: 'Product' },
-                  { id: 'service', name: 'Service', showName: 'Service' }
-                ]}
-                SummaryChild={<h5 className="p-0 m-0 text-primary">Target</h5>}
-                search={true}
-                selected={afterSaleDetails.target}
-                commonFunction={(e) => {
-                  setAfterSaleDetails((prev) => ({ ...prev, target: e.name, refTo: undefined }));
-                  setFormState((prev) => ({ ...prev, list: [] }));
-                  if (errors.target) setErrors((prev) => ({ ...prev, target: '' }));
-                }}
-                error={errors.target}
-              />
-              <DropDown
-                mt="mt-5"
-                name="refTo"
-                dropdownList={formState.list?.map((product) => ({ name: product._id, showName: product.name, id: product._id }))}
-                SummaryChild={<h5 className="p-0 m-0 text-primary">Select {afterSaleDetails.target}</h5>}
-                search={true}
-                selected={afterSaleDetails.refTo}
-                commonFunction={(e) => {
-                  setAfterSaleDetails((prev) => ({ ...prev, refTo: e.name }));
-                  if (errors.refTo) setErrors((prev) => ({ ...prev, refTo: '' }));
-                }}
-                error={errors.target}
-              />
+              {id && !isDuplicate ? (
+                <h1 className="text-xl flex items-center gap-2 font-bold ">
+                  <span className="text-primary">
+                    {afterSaleDetails?.target}: &nbsp; {afterSaleDetails?.refToData?.name}
+                  </span>
+                </h1>
+              ) : (
+                <>
+                  <DropDown
+                    name="Events"
+                    dropdownList={[
+                      { id: 'event', name: 'Event', showName: 'Event' },
+                      { id: 'product', name: 'Product', showName: 'Product' },
+                      { id: 'service', name: 'Service', showName: 'Service' }
+                    ]}
+                    SummaryChild={<h5 className="p-0 m-0 text-primary">Target</h5>}
+                    search={true}
+                    selected={afterSaleDetails.target}
+                    commonFunction={(e) => {
+                      setAfterSaleDetails((prev) => ({ ...prev, target: e.name, refTo: undefined }));
+                      setFormState((prev) => ({ ...prev, list: [] }));
+                      if (errors.target) setErrors((prev) => ({ ...prev, target: '' }));
+                    }}
+                    error={errors.target}
+                  />
+
+                  <DropDown
+                    mt="mt-5"
+                    name="refTo"
+                    dropdownList={formState.list?.map((product) => ({ name: product._id, showName: product.name, id: product._id }))}
+                    SummaryChild={<h5 className="p-0 m-0 text-primary">Select {afterSaleDetails.target}</h5>}
+                    search={true}
+                    selected={afterSaleDetails.refTo}
+                    commonFunction={(e) => {
+                      setAfterSaleDetails((prev) => ({ ...prev, refTo: e.name }));
+                      if (errors.refTo) setErrors((prev) => ({ ...prev, refTo: '' }));
+                    }}
+                    error={errors.target}
+                  />
+                </>
+              )}
             </div>
           </div>
         </div>

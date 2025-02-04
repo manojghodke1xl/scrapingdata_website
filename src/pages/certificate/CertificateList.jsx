@@ -23,7 +23,7 @@ const CertificateList = () => {
   return (
     <div className="py-5 px-8 overflow-x-hidden mb-10">
       <div className=" w-full">
-        <TableHeader heading={'Certificates'} btn1={true} href1={'/tickets/add-ticket'} icon1={<IoMdAdd size={22} />} btnLabel1={'Add Ticket'} />
+        <TableHeader heading={'Certificates'} btn1={true} href1={'/certificates/add-certificate'} icon1={<IoMdAdd size={22} />} btnLabel1={'Add Certificate'} />
         <div className="flex flex-col">
           <div className="-m-1.5 overflow-x-auto">
             <div className="p-1.5 min-w-full align-middle">
@@ -35,14 +35,16 @@ const CertificateList = () => {
                   { label: 'Created Date', key: 'createdAt' },
                   { label: 'Updated Date', key: 'updatedAt' }
                 ]}
-                tableData={(data) => setCertificates(data.tickets)}
+                tableData={(data) => setCertificates(data.certificates)}
                 rows={rows}
-                apiUrl={'ticket'}
+                apiUrl={'certificate'}
                 tableCountLabel={true}
                 pagination={true}
                 actions={true}
                 edit={true}
-                editPath={'/tickets/edit-ticket'}
+                editPath={'/certificates/edit-certificate'}
+                copy={true}
+                copyPath={'/certificates/duplicate-certificate'}
                 deleteBtn={true}
                 deleteAction={true}
                 deleteLabel={'Delete Certificate'}

@@ -218,7 +218,8 @@ const AddProduct = () => {
             <div>
               {id && !isDuplicate ? (
                 <h1 className="text-xl flex items-center gap-2 font-bold ">
-                  <span className="text-primary">Site: {`${productDetails?.siteData?.name} (${productDetails?.siteData?.host})`}</span>
+                  <span className="text-primary">Site:</span>
+                  <span className="text-primary font-semibold">{`${productDetails?.siteData?.name} ( ${productDetails?.siteData?.host} )`}</span>
                 </h1>
               ) : (
                 <DropDown

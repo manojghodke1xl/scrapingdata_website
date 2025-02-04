@@ -11,6 +11,7 @@ const CertificateRoutes = () => {
       <Route path="/certificate-list" element={<CertificateList />} />
       <Route path="/add-certificate" element={<AddCertificate />} />
       <Route path="/edit-certificate/:id" element={<AddCertificate />} />
+      <Route path="/duplicate-certificate/:id" element={<AddCertificate />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );

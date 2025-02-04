@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import FormButtons from '../../atoms/formFields/FormButtons';
 import FormField from '../../atoms/formFields/InputField';
 import useGlobalContext from '../../hooks/useGlobalContext';
@@ -7,12 +7,14 @@ import { showNotification } from '../../utils/showNotification';
 import TextareaComponent from '../../atoms/formFields/TextareaComponent';
 import FileUpload from '../../atoms/formFields/FileUpload';
 import { FaRegImage } from 'react-icons/fa';
-import { addCertificateApi, updateCertificateApi } from '../../apis/certificate-apis';
+import { addCertificateApi, getCertificateByIdApi, updateCertificateApi } from '../../apis/certificate-apis';
 
 const AddCertificate = () => {
   const navigate = useNavigate();
   const { id = '' } = useParams();
   const { setLoading, isLoading } = useGlobalContext();
+  const { pathname } = useLocation();
+  const isDuplicate = pathname.includes('duplicate');
 
   const [errors, setErrors] = useState({});
   const [certificate, setCertificate] = useState({
@@ -20,6 +22,25 @@ const AddCertificate = () => {
     description: '',
     image: ''
   });
+
+  useEffect(() => {
+    if (id) {
+      setLoading(true);
+      (async () => {
+        try {
+          const { status, data } = await getCertificateByIdApi(id);
+          if (status) {
+            const { image, ...rest } = data.certificate;
+            setCertificate((prev) => ({ ...prev, ...rest, image: image ? image._id : undefined, imageFile: image }));
+          } else showNotification('warn', data);
+        } catch (error) {
+          showNotification('error', error.message);
+        } finally {
+          setLoading(false);
+        }
+      })();
+    }
+  }, [id, setLoading]);
 
   const validate = () => {
     const newErrors = {};
@@ -34,10 +55,10 @@ const AddCertificate = () => {
     if (!validate()) return;
     setLoading(true);
     try {
-      const { status, data } = await (id ? updateCertificateApi(id, certificate) : addCertificateApi(certificate));
+      const { status, data } = await (id ? (isDuplicate ? addCertificateApi(certificate) : updateCertificateApi(id, certificate)) : addCertificateApi(certificate));
       if (status) {
         showNotification('success', data.message);
-        navigate('/tickets/ticket-list');
+        navigate('/certificates/certificate-list');
       } else showNotification('warn', data);
     } catch (error) {
       showNotification('error', error.message);
@@ -50,9 +71,9 @@ const AddCertificate = () => {
     <div className="py-8 p-4 sm:p-8 overflow-x-hidden mb-20">
       <div className="w-full pb-8 border-b border-primary gap-y-4 gap-2 flex flex-col items-start md:flex-row lg:flex-col xl:flex-row justify-between lg:items-start md:items-end xl:items-end">
         <div>
-          <span className="text-3xl font-semibold text-dark">{id ? 'Edit' : 'Add'} Ticket</span>
+          <span className="text-3xl font-semibold text-dark">{id ? (isDuplicate ? 'Add' : 'Edit') : 'Add'} Certificate</span>
         </div>
-        <FormButtons to="/tickets/ticket-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} loading={isLoading} />
+        <FormButtons to="/certificates/certificate-list" type="submit" onClick={handleSubmit} btnLebal={id ? (isDuplicate ? 'Add' : 'Save Changes') : 'Add'} loading={isLoading} />
       </div>
 
       <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
