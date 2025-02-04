@@ -113,6 +113,7 @@ const AddTemplateCategory = () => {
                 errorMessage={errors.name}
               />
               <FormField
+                divClassName={'mt-5'}
                 label="Module"
                 type="text"
                 id="fqaModule"
