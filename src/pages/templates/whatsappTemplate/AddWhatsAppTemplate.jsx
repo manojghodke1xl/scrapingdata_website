@@ -205,7 +205,11 @@ const AddWhatsAppTemplate = () => {
                 placeholder="WhatsApp Template Name"
                 value={whatsAppTemplate.whatsAppTemplateName}
                 onChange={(e) => {
-                  setWhatsAppTemplate((prev) => ({ ...prev, whatsAppTemplateName: e.target.value }));
+                  const value = e.target.value
+                    .replace(/\s/g, '') // Remove spaces
+                    .replace(/[A-Z]/g, (char) => char.toLowerCase()) // Convert uppercase to lowercase
+                    .replace(/[^a-z0-9_]/g, ''); // Allow only lowercase letters, numbers, and underscores
+                  setWhatsAppTemplate((prev) => ({ ...prev, whatsAppTemplateName: value }));
                   if (errors.whatsAppTemplateName) setErrors((prev) => ({ ...prev, whatsAppTemplateName: '' }));
                 }}
                 errorMessage={errors.whatsAppTemplateName}
