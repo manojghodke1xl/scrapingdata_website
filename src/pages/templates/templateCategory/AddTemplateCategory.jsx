@@ -112,6 +112,20 @@ const AddTemplateCategory = () => {
                 value={templateCategory.name}
                 errorMessage={errors.name}
               />
+              <FormField
+                divClassName={'mt-5'}
+                label="Module"
+                type="text"
+                id="fqaModule"
+                name="fqaModule"
+                placeholder="Module"
+                onChange={(e) => {
+                  setTemplateCategory((prev) => ({ ...prev, module: e.target.value }));
+                  if (errors.module) setErrors((prev) => ({ ...prev, module: '' }));
+                }}
+                value={templateCategory.module}
+                errorMessage={errors.module}
+              />
             </div>
           </div>
         </div>
