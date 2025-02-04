@@ -1,6 +1,6 @@
 import { RiAdminLine } from 'react-icons/ri';
 import { RxDashboard } from 'react-icons/rx';
-import { TbApps, TbWorld } from 'react-icons/tb';
+import { TbApps, TbCube, TbWorld } from 'react-icons/tb';
 
 export const navLinks = [
   { title: 'Dashboard', to: ['/dashboard'], icon: <RxDashboard /> },
@@ -9,7 +9,8 @@ export const navLinks = [
     to: ['/apps/app', '/apps/integration/razorpay', '/apps/integration/stripe', '/apps/integration/paypal'],
     icon: <TbApps />
   },
-  { title: 'All Sites', to: ['/site/site-list', '/site/add-site', '/site/edit-site'], icon: <TbWorld /> }
+  { title: 'All Sites', to: ['/site/site-list', '/site/add-site', '/site/edit-site'], icon: <TbWorld /> },
+  { title: 'All Segments', to: ['/segments/segment-list', '/segments/add-segment', '/segments/edit-segment'], icon: <TbCube /> }
 ];
 
 export const leadsPath = [
