@@ -38,18 +38,23 @@ const AddAfterSale = () => {
       }
     ]
   });
-  const [lists, setLists] = useState([]);
-  const [emailTemplate, setEmailTemplate] = useState([]);
-  const [whatsappTemplate, setWhatsappTemplate] = useState([]);
-  const [existingModelOpen, setExistingModelOpen] = useState(false);
-  const [existingAfterSalesId, setExistingAfterSalesId] = useState('');
+  const [formState, setFormState] = useState({
+    list: [],
+    emailTemplate: [],
+    whatsAppTemplate: []
+  });
+
+  const [existingAfterSales, setExistingAfterSales] = useState({
+    modelOpen: false,
+    afterSaleId: ''
+  });
 
   useEffect(() => {
     const fetchData = async (apiFunction, key) => {
       setLoading(true);
       try {
         const { status, data } = await apiFunction();
-        if (status) setLists(data[key]);
+        if (status) setFormState((prev) => ({ ...prev, list: data[key] }));
         else showNotification('error', data);
       } catch (error) {
         showNotification('error', error.message);
@@ -66,10 +71,8 @@ const AddAfterSale = () => {
     if (afterSaleDetails.site && afterSaleDetails.refTo) {
       (async () => {
         const { status, data } = await getAfterSaleTemplateApi({ site: afterSaleDetails.site, event: afterSaleDetails.refTo });
-        if (status) {
-          setEmailTemplate(data.emailTemplates);
-          setWhatsappTemplate(data.waTemplates);
-        } else showNotification('error', data);
+        if (status) setFormState((prev) => ({ ...prev, emailTemplate: data.emailTemplates, whatsAppTemplate: data.waTemplates }));
+        else showNotification('error', data);
       })();
     }
   }, [afterSaleDetails.refTo, afterSaleDetails.site]);
@@ -91,19 +94,24 @@ const AddAfterSale = () => {
     if (!id && !isDuplicate && afterSaleDetails.site && afterSaleDetails.refTo) {
       (async () => {
         const { status, data } = await getExistingAfterSalesApi(afterSaleDetails.site, afterSaleDetails.refTo);
-        if (status) {
-          if (data.afterSales) {
-            setExistingModelOpen(true);
-            setExistingAfterSalesId(data.afterSales._id);
-          }
-        }
+        if (status) if (data.afterSales) setExistingAfterSales((prev) => ({ ...prev, modelOpen: true, afterSaleId: data.afterSales._id }));
       })();
     }
   }, [afterSaleDetails.site, afterSaleDetails.refTo, id, isDuplicate]);
 
+  const validate = () => {
+    const newErrors = {};
+    if (!afterSaleDetails.site) newErrors.site = 'Site is required';
+    if (!afterSaleDetails.target) newErrors.target = 'Target is required';
+    if (afterSaleDetails.target === 'Event' && !afterSaleDetails.refTo) newErrors.refTo = 'Event is required';
+    if (afterSaleDetails.target === 'Product' && !afterSaleDetails.refTo) newErrors.refTo = 'Product is required';
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // if (!validate()) return;
+    if (!validate()) return;
     setLoading(true);
     try {
       const { status, data } = await (id ? (isDuplicate ? AddAfterSaleApi(afterSaleDetails) : updateAfterSaleApi(id, afterSaleDetails)) : AddAfterSaleApi(afterSaleDetails));
@@ -230,7 +238,7 @@ const AddAfterSale = () => {
                 selected={afterSaleDetails.target}
                 commonFunction={(e) => {
                   setAfterSaleDetails((prev) => ({ ...prev, target: e.name, refTo: undefined }));
-                  setLists([]);
+                  setFormState((prev) => ({ ...prev, list: [] }));
                   if (errors.target) setErrors((prev) => ({ ...prev, target: '' }));
                 }}
                 error={errors.target}
@@ -238,7 +246,7 @@ const AddAfterSale = () => {
               <DropDown
                 mt="mt-5"
                 name="refTo"
-                dropdownList={lists?.map((product) => ({ name: product._id, showName: product.name, id: product._id }))}
+                dropdownList={formState.list?.map((product) => ({ name: product._id, showName: product.name, id: product._id }))}
                 SummaryChild={<h5 className="p-0 m-0 text-primary">Select {afterSaleDetails.target}</h5>}
                 search={true}
                 selected={afterSaleDetails.refTo}
@@ -346,13 +354,13 @@ const AddAfterSale = () => {
                           label={`Select ${channel.charAt(0).toUpperCase() + channel.slice(1)} Template`}
                           dropdownList={
                             channel === 'email'
-                              ? emailTemplate.map((template) => ({ id: template._id, name: template._id, showName: template.name }))
+                              ? formState.emailTemplate.map((template) => ({ id: template._id, name: template._id, showName: template.name }))
                               : channel === 'sms'
                               ? [
                                   { id: 'sms1', name: 'sms1', showName: 'SMS Template 1' },
                                   { id: 'sms2', name: 'sms2', showName: 'SMS Template 2' }
                                 ]
-                              : whatsappTemplate.map((template) => ({ id: template._id, name: template._id, showName: template.name }))
+                              : formState.whatsAppTemplate.map((template) => ({ id: template._id, name: template._id, showName: template.name }))
                           }
                           commonFunction={(e) => {
                             handleVariableChange(index, `${channel}Template`, e.name);
@@ -385,9 +393,9 @@ const AddAfterSale = () => {
       )}
 
       <CommonModal
-        isModalVisible={existingModelOpen}
-        onConfirm={() => navigate(`/after-sales/edit-after-sale/${existingAfterSalesId}`)}
-        setModalVisibility={() => setExistingModelOpen(false)}
+        isModalVisible={existingAfterSales.modelOpen}
+        onConfirm={() => navigate(`/after-sales/edit-after-sale/${existingAfterSales.afterSaleId}`)}
+        setModalVisibility={() => setExistingAfterSales({ ...existingAfterSales, modelOpen: false })}
         label={'Existing After Sale Present'}
         message={'You cannot create two same After Sales. Please edit the previous one instead. Click Confirm to proceed.'}
       />
