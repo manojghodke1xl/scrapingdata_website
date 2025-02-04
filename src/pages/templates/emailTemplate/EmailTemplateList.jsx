@@ -55,7 +55,10 @@ const EmailTemplateList = () => {
                 actions={true}
                 edit={true}
                 editPath={'/templates/edit-email-template'}
+                copy={true}
+                copyPath={'/templates/duplicate-email-template'}
                 deleteBtn={true}
+                deleteAction={true}
                 deleteApi={deleteEmailTemplateApi}
                 deleteLabel={'Delete Email Template'}
                 deleteMessage={'Are you sure you want to delete this email template?'}

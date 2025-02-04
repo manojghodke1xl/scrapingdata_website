@@ -50,7 +50,10 @@ const SMSTemplateList = () => {
                 actions={true}
                 edit={true}
                 editPath={'/templates/edit-sms-template'}
+                copy={true}
+                copyPath={'/templates/duplicate-sms-template'}
                 deleteBtn={true}
+                deleteAction={true}
                 deleteApi={deleteSmsTemplateApi}
                 deleteLabel={'Delete SMS Template'}
                 deleteMessage={'Are you sure you want to delete this SMS template?'}
