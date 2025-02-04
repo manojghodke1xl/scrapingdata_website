@@ -75,6 +75,7 @@ const EventList = () => {
                 ]}
                 searchCategory={[{ id: 1, name: 'Name' }]}
                 deleteBtn={true}
+                deleteAction={true}
                 deleteApi={deleteEventApi}
                 deleteLabel={'Delete Event'}
                 deleteMessage={'Are you sure you want to delete this event?'}

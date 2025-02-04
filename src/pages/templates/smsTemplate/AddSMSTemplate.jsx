@@ -64,7 +64,7 @@ const AddSMSTemplate = () => {
 
   useEffect(() => {
     (async () => {
-      const { status, data } = await getAllTemplateCategoriesApi();
+      const { status, data } = await getAllTemplateCategoriesApi('SMS');
       if (status) {
         setTemplateCategories(data.templateCategories);
       } else showNotification('warn', data);

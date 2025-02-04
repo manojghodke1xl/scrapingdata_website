@@ -12,6 +12,6 @@ export const getTemplateCategoryByIdApi = async (id) => {
   return await getMethodCall(`${import.meta.env.VITE_API_URL}/template-category/${id}`);
 };
 
-export const getAllTemplateCategoriesApi = async () => {
-  return await getMethodCall(`${import.meta.env.VITE_API_URL}/template-category`);
+export const getAllTemplateCategoriesApi = async (type) => {
+  return await getMethodCall(`${import.meta.env.VITE_API_URL}/template-category?type=${type}`);
 };

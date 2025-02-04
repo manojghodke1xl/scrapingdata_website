@@ -14,7 +14,7 @@ const EventTicketList = () => {
     return {
       id: _id,
       exportData: eventTicket,
-      name: <TruncatableFieldToolTip title={'Name'} content={name} />,
+      name: <TruncatableFieldToolTip content={name} />,
       createdAt: formatDateTime(createdAt),
       updatedAt: formatDateTime(updatedAt)
     };
@@ -44,11 +44,11 @@ const EventTicketList = () => {
                 edit={true}
                 editPath={'/tickets/edit-ticket'}
                 deleteBtn={true}
+                deleteAction={true}
                 deleteLabel={'Delete Ticket'}
                 deleteMessage={'Are you sure you want to delete this ticket?'}
                 deleteApi={deleteEventTicketApi}
                 search={true}
-                searchCategory={[{ id: 1, name: 'Name' }]}
               />
             </div>
           </div>

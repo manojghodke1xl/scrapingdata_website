@@ -1,4 +1,4 @@
-import { getMethodCall, postMethodCall } from './api-handler';
+import { getMethodCall, postMethodCall, putMethodCall } from './api-handler';
 
 export const AddAfterSaleApi = async (data) => {
   return await postMethodCall(`${import.meta.env.VITE_API_URL}/after-sale`, data);
@@ -9,7 +9,7 @@ export const getAfterSaleTemplateApi = async ({ site, event, type }) => {
 };
 
 export const updateAfterSaleApi = async (id, data) => {
-  return await postMethodCall(`${import.meta.env.VITE_API_URL}/after-sale/${id}`, data);
+  return await putMethodCall(`${import.meta.env.VITE_API_URL}/after-sale/${id}`, data);
 };
 
 export const getAfterSalesByIdApi = async (id) => {

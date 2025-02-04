@@ -40,6 +40,7 @@ import TemplateCategoryRoutes from './private-routes/template/TemplateCategoryRo
 import FilesRoutes from './private-routes/FilesRoutes';
 import EventTicketRoutes from './private-routes/EventTicketRoutes';
 import AfterSalesRoutes from './private-routes/AfterSalesRoutes';
+import SegmentRoutes from './private-routes/SegmentRoutes';
 
 const ZohoStatus = lazy(() => import('../pages/integration/ZohoStatus'));
 
@@ -74,7 +75,8 @@ const privateRoutes = [
   { path: 'template-category/*', Component: TemplateCategoryRoutes },
   { path: 'files/*', Component: FilesRoutes },
   { path: 'tickets/*', Component: EventTicketRoutes },
-  { path: 'after-sales/*', Component: AfterSalesRoutes }
+  { path: 'after-sales/*', Component: AfterSalesRoutes },
+  { path: 'segments/*', Component: SegmentRoutes }
 ];
 
 const App = () => {

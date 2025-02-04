@@ -77,7 +77,7 @@ const AddWhatsAppTemplate = () => {
 
   useEffect(() => {
     (async () => {
-      const { status, data } = await getAllTemplateCategoriesApi();
+      const { status, data } = await getAllTemplateCategoriesApi('WhatsApp');
       if (status) {
         setTemplateCategories(data.templateCategories);
       } else showNotification('warn', data);
