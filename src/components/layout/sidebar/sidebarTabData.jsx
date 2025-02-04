@@ -53,7 +53,8 @@ export const eventsPath = [
   { title: 'Participants', to: ['/participants/participant-list'] },
   { title: 'Packages', to: ['/packages/package-list', '/packages/add-package', '/packages/edit-package', '/packages/duplicate-package'] },
   { title: 'Tickets', to: ['/tickets/ticket-list', '/tickets/add-ticket', '/tickets/edit-ticket'] },
-  { title: 'Booking Payments', to: ['/payments/booking-payment-list'] }
+  { title: 'Booking Payments', to: ['/payments/booking-payment-list'] },
+  { title: 'Certificates', to: ['/certificates/certificate-list', '/certificates/add-certificate', '/certificates/edit-certificate', '/certificates/duplicate-certificate'] }
 ];
 
 export const afterSalesPath = [

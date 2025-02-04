@@ -41,6 +41,7 @@ import FilesRoutes from './private-routes/FilesRoutes';
 import EventTicketRoutes from './private-routes/EventTicketRoutes';
 import AfterSalesRoutes from './private-routes/AfterSalesRoutes';
 import SegmentRoutes from './private-routes/SegmentRoutes';
+import CertificateRoutes from './private-routes/CertificateRoutes';
 
 const ZohoStatus = lazy(() => import('../pages/integration/ZohoStatus'));
 
@@ -76,7 +77,8 @@ const privateRoutes = [
   { path: 'files/*', Component: FilesRoutes },
   { path: 'tickets/*', Component: EventTicketRoutes },
   { path: 'after-sales/*', Component: AfterSalesRoutes },
-  { path: 'segments/*', Component: SegmentRoutes }
+  { path: 'segments/*', Component: SegmentRoutes },
+  { path: 'certificates/*', Component: CertificateRoutes }
 ];
 
 const App = () => {
