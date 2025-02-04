@@ -13,6 +13,7 @@ const AfterSalesRoutes = () => {
       <Route path="/after-sales-list" element={<AfterSalesList />} />
       <Route path="/add-after-sale" element={<AddAfterSale />} />
       <Route path="/edit-after-sale/:id" element={<AddAfterSale />} />
+      <Route path="/duplicate-after-sale/:id" element={<AddAfterSale />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );

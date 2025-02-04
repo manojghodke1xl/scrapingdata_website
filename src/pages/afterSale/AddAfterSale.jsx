@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import FormButtons from '../../atoms/formFields/FormButtons';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import useGlobalContext from '../../hooks/useGlobalContext';
 import DropDown from '../../atoms/formFields/DropDown';
 import { getAllEventsApi } from '../../apis/event-apis';
@@ -8,7 +8,8 @@ import { showNotification } from '../../utils/showNotification';
 import { getAllProductsApi } from '../../apis/product-apis';
 import { IoCloseSharp } from 'react-icons/io5';
 import MultiSelectCheckbox from '../../atoms/formFields/MultiSelectCheckBox';
-import { AddAfterSaleApi, getAfterSaleTemplateApi } from '../../apis/after-sale-apis';
+import { AddAfterSaleApi, getAfterSalesByIdApi, getAfterSaleTemplateApi, getExistingAfterSalesApi, updateAfterSaleApi } from '../../apis/after-sale-apis';
+import CommonModal from '../../atoms/modal/CommonModal';
 
 const AddAfterSale = () => {
   const { id = '' } = useParams();
@@ -18,6 +19,9 @@ const AddAfterSale = () => {
     setLoading,
     isLoading
   } = useGlobalContext();
+  const { pathname } = useLocation();
+  const isDuplicate = pathname.includes('duplicate');
+
   const [isScrollable, setIsScrollable] = useState(false);
   const [errors, setErrors] = useState({});
   const [afterSaleDetails, setAfterSaleDetails] = useState({
@@ -37,6 +41,8 @@ const AddAfterSale = () => {
   const [lists, setLists] = useState([]);
   const [emailTemplate, setEmailTemplate] = useState([]);
   const [whatsappTemplate, setWhatsappTemplate] = useState([]);
+  const [existingModelOpen, setExistingModelOpen] = useState(false);
+  const [existingAfterSalesId, setExistingAfterSalesId] = useState('');
 
   useEffect(() => {
     const fetchData = async (apiFunction, key) => {
@@ -51,8 +57,6 @@ const AddAfterSale = () => {
         setLoading(false);
       }
     };
-
-    console.log(afterSaleDetails.target);
 
     if (afterSaleDetails.target === 'Event') fetchData(getAllEventsApi, 'events');
     else if (afterSaleDetails.target === 'Product') fetchData(getAllProductsApi, 'products');
@@ -70,12 +74,39 @@ const AddAfterSale = () => {
     }
   }, [afterSaleDetails.refTo, afterSaleDetails.site]);
 
-  const handleSubmit = (e) => {
+  useEffect(() => {
+    if (id) {
+      setLoading(true);
+      (async () => {
+        const { status, data } = await getAfterSalesByIdApi(id);
+        if (status) setAfterSaleDetails(data.afterSales);
+        else showNotification('error', data);
+      })()
+        .catch((error) => showNotification('error', error.message))
+        .finally(() => setLoading(false));
+    }
+  }, [id, setLoading]);
+
+  useEffect(() => {
+    if (!id && !isDuplicate && afterSaleDetails.site && afterSaleDetails.refTo) {
+      (async () => {
+        const { status, data } = await getExistingAfterSalesApi(afterSaleDetails.site, afterSaleDetails.refTo);
+        if (status) {
+          if (data.afterSales) {
+            setExistingModelOpen(true);
+            setExistingAfterSalesId(data.afterSales._id);
+          }
+        }
+      })();
+    }
+  }, [afterSaleDetails.site, afterSaleDetails.refTo, id, isDuplicate]);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     // if (!validate()) return;
     setLoading(true);
     try {
-      const { status, data } = AddAfterSaleApi(afterSaleDetails);
+      const { status, data } = await (id ? (isDuplicate ? AddAfterSaleApi(afterSaleDetails) : updateAfterSaleApi(id, afterSaleDetails)) : AddAfterSaleApi(afterSaleDetails));
       if (status) {
         showNotification('success', data.message);
         navigate('/after-sale/after-sale-list');
@@ -151,9 +182,9 @@ const AddAfterSale = () => {
     <div className="py-8 p-4 sm:p-8 overflow-x-hidden mb-20">
       <div className="w-full pb-8 border-b border-primary gap-y-4 gap-2 flex flex-col items-start md:flex-row lg:flex-col xl:flex-row justify-between lg:items-start md:items-end xl:items-end">
         <div>
-          <span className="text-3xl font-semibold text-dark">{id ? 'Edit' : 'Add'} After Sales</span>
+          <span className="text-3xl font-semibold text-dark">{id ? (isDuplicate ? 'Add' : 'Edit') : 'Add'} After Sales</span>
         </div>
-        <FormButtons to="/after-sales/after-sales-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} loading={isLoading} />
+        <FormButtons to="/after-sales/after-sales-list" type="submit" onClick={handleSubmit} btnLebal={id ? (isDuplicate ? 'Add' : 'Save Changes') : 'Add'} loading={isLoading} />
       </div>
 
       <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
@@ -349,9 +380,17 @@ const AddAfterSale = () => {
       </div> */}
       {!isScrollable && (
         <div className="w-full flex justify-end items-center gap-4 pt-8  border- border-primary">
-          <FormButtons to="/after-sales/after-sales-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} loading={isLoading} />
+          <FormButtons to="/after-sales/after-sales-list" type="submit" onClick={handleSubmit} btnLebal={id ? (isDuplicate ? 'Add' : 'Save Changes') : 'Add'} loading={isLoading} />
         </div>
       )}
+
+      <CommonModal
+        isModalVisible={existingModelOpen}
+        onConfirm={() => navigate(`/after-sales/edit-after-sale/${existingAfterSalesId}`)}
+        setModalVisibility={() => setExistingModelOpen(false)}
+        label={'Existing After Sale Present'}
+        message={'You cannot create two same After Sales. Please edit the previous one instead. Click Confirm to proceed.'}
+      />
     </div>
   );
 };

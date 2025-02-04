@@ -28,8 +28,8 @@ const BookingList = () => {
       id: _id,
       exportData: booking,
       Keys: <TruncatableCopyFeild content={_id} />,
-      name: <TruncatableFieldToolTip title={'Customer Name'} content={name} />,
-      email: <TruncatableFieldToolTip title={'Email'} content={email} />,
+      name: <TruncatableFieldToolTip content={name} />,
+      email: <TruncatableFieldToolTip content={email} />,
       phoneCode: <CountryFlag dialingCode={phoneCode?.startsWith('+') ? phoneCode.slice(1) : phoneCode} />,
       phoneNumber: (
         <TruncatableFieldToolTip
