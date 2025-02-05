@@ -10,13 +10,26 @@ const WhatsAppTemplateList = () => {
   const [whatsAppTemplates, setWhatsAppTemplates] = useState([]);
 
   const rows = whatsAppTemplates.map((whatsAppTemplate) => {
-    const { _id, name, site, whatsAppTemplateId, createdAt, updatedAt } = whatsAppTemplate;
+    const { _id, name, site, whatsAppTemplateId, status, createdAt, updatedAt } = whatsAppTemplate;
+    console.log('status', status);
+
     return {
       id: _id,
       whatsAppTemplateId,
       exportData: whatsAppTemplate,
       name: <TruncatableFieldToolTip title={'Name'} content={name} />,
       site: <TruncatableFieldToolTip title={'Sites'} content={`${site?.name} (${site?.host})`} />,
+      status: (
+        <div
+          className={`rounded-xl ${
+            status === 'APPROVED' ? 'bg-lightgreen text-success' : status === 'REJECTED' ? 'bg-fadedred text-failed' : 'bg-fadeyellow text-pending'
+          } px-2 py-1 w-fit flex gap-2 items-center`}
+        >
+          <span className={`min-w-[8px] min-h-[8px] rounded-full ${status === 'APPROVED' ? 'bg-green' : 'bg-pending'}`}></span>
+          <span>{status === 'APPROVED' ? status : status === 'REJECTED' ? status : status || 'PENDING '}</span>
+        </div>
+      ),
+
       createdAt: formatDateTime(createdAt),
       updatedAt: formatDateTime(updatedAt)
     };
@@ -36,6 +49,7 @@ const WhatsAppTemplateList = () => {
                   { label: 'Sr. No.', key: 'srno' },
                   { label: 'Name', key: 'name' },
                   { label: 'Sites', key: 'site' },
+                  { label: 'Status', key: 'status' },
                   { label: 'Created Date', key: 'createdAt' },
                   { label: 'Updated Date', key: 'updatedAt' }
                 ]}
