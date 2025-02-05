@@ -2,7 +2,7 @@ import { IoMdAdd } from 'react-icons/io';
 import TableComponent from '../../../atoms/table/Table';
 import { useState } from 'react';
 import { formatDateTime } from '../../../utils/dateFormats';
-import { deleteWhatsAppTemplateApi } from '../../../apis/templates/template-apis';
+import { deleteWhatsAppTemplateApi, getWhatsAppTemplateApprovalApi } from '../../../apis/templates/template-apis';
 import TruncatableFieldToolTip from '../../../atoms/common/TruncatableFeildToolTip';
 import TableHeader from '../../../atoms/table/TableHeader';
 
@@ -59,7 +59,7 @@ const WhatsAppTemplateList = () => {
                 deleteLabel={'Delete WhatsApp Template'}
                 deleteMessage={'Are you sure you want to delete this WhatsApp template?'}
                 sendForApproval={true}
-                approvalApi={''}
+                approvalApi={getWhatsAppTemplateApprovalApi}
               />
             </div>
           </div>
