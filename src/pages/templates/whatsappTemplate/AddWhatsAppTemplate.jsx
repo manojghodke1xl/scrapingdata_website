@@ -198,7 +198,11 @@ const AddWhatsAppTemplate = () => {
                 placeholder="Template Name"
                 value={whatsAppTemplate.name}
                 onChange={(e) => {
-                  setWhatsAppTemplate((prev) => ({ ...prev, name: e.target.value }));
+                  const value = e.target.value
+                    .replace(/\s/g, '_')
+                    .replace(/[A-Z]/g, (char) => char.toLowerCase())
+                    .replace(/[^a-z0-9_]/g, '');
+                  setWhatsAppTemplate((prev) => ({ ...prev, name: e.target.value, whatsAppTemplateName: value }));
                   if (errors.name) setErrors((prev) => ({ ...prev, name: '' }));
                 }}
                 errorMessage={errors.name}
