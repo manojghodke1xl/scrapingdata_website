@@ -24,6 +24,8 @@ const TableView = ({
   setModalState,
   managePackage,
   managePackagePath,
+  sendForApproval,
+  approvalApi,
   handleDragStart,
   handleDragOver,
   handleDrop,
@@ -135,6 +137,8 @@ const TableView = ({
                       setModalState={setModalState}
                       managePackage={managePackage}
                       managePackagePath={managePackagePath}
+                      sendForApproval={sendForApproval}
+                      approvalApi={approvalApi}
                     />
                   )}
                 </tr>

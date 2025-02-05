@@ -10,9 +10,10 @@ const WhatsAppTemplateList = () => {
   const [whatsAppTemplates, setWhatsAppTemplates] = useState([]);
 
   const rows = whatsAppTemplates.map((whatsAppTemplate) => {
-    const { _id, name, site, createdAt, updatedAt } = whatsAppTemplate;
+    const { _id, name, site, whatsAppTemplateId, createdAt, updatedAt } = whatsAppTemplate;
     return {
       id: _id,
+      whatsAppTemplateId,
       exportData: whatsAppTemplate,
       name: <TruncatableFieldToolTip title={'Name'} content={name} />,
       site: <TruncatableFieldToolTip title={'Sites'} content={`${site?.name} (${site?.host})`} />,
@@ -57,6 +58,8 @@ const WhatsAppTemplateList = () => {
                 deleteApi={deleteWhatsAppTemplateApi}
                 deleteLabel={'Delete WhatsApp Template'}
                 deleteMessage={'Are you sure you want to delete this WhatsApp template?'}
+                sendForApproval={true}
+                approvalApi={''}
               />
             </div>
           </div>

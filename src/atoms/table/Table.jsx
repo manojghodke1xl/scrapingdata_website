@@ -31,6 +31,8 @@ const TableComponent = ({
   copyPath,
   managePackage,
   managePackagePath,
+  sendForApproval,
+  approvalApi,
   deleteAction,
   search,
   filter,
@@ -338,6 +340,8 @@ const TableComponent = ({
             deleteMessage={deleteMessage}
             managePackage={managePackage}
             managePackagePath={managePackagePath}
+            sendForApproval={sendForApproval}
+            approvalApi={approvalApi}
             handleDragStart={handleDragStart}
             handleDragOver={handleDragOver}
             handleDrop={handleDrop}

@@ -57,3 +57,7 @@ export const getWhatsAppTemplateByEventApi = async (id) => {
 export const getPhoneIdsApi = async (siteId) => {
   return await getMethodCall(`${import.meta.env.VITE_API_URL}/template/whatsapp/phones/${siteId}`);
 };
+
+export const getWhatsAppTemplateApprovalApi = async (id) => {
+    return await getMethodCall(`${import.meta.env.VITE_API_URL}/template//whatsapp/upload/${id}`);
+}
