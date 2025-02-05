@@ -55,10 +55,8 @@ const AddSMSTemplate = () => {
     if (SMSTemplate.site) {
       (async () => {
         const { status, data } = await getFilesBySiteIdApi(SMSTemplate.site);
-        if (status) {
-          setFiles(data.file);
-        } else showNotification('warn', data);
-      })().catch((error) => showNotification('error', error.message));
+        if (status) setFiles(data.file);
+      })();
     }
   }, [SMSTemplate.site, setLoading]);
 
@@ -234,13 +232,15 @@ const AddSMSTemplate = () => {
           </div>
           <div className="w-full">
             <div className="w-full sm:w-1/2">
-              <MultiSelectCheckbox
-                options={files.attachments || []}
-                formLabel={'Select File'}
-                label={'Invoice.pdf, Document.doc'}
-                selected={SMSTemplate.files}
-                onChange={(e) => setSMSTemplate((prev) => ({ ...prev, files: e }))}
-              />
+              {files && files.attachments && files.attachments.length > 0 && (
+                <MultiSelectCheckbox
+                  options={files.attachments || []}
+                  formLabel={'Select File'}
+                  label={'Invoice.pdf, Document.doc'}
+                  selected={SMSTemplate.files}
+                  onChange={(e) => setSMSTemplate((prev) => ({ ...prev, files: e }))}
+                />
+              )}
 
               <DocumentFileUpload
                 divClassName={'mt-5'}

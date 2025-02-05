@@ -31,7 +31,7 @@ const AddAfterSale = () => {
     followUps: [
       {
         channels: [],
-        emailTemplate: '',
+        emailTemplate: null,
         smsTemplate: null,
         whatsappTemplate: '',
         delay: { unit: 'Days', value: '', custom: '', ms: '' }
@@ -114,6 +114,7 @@ const AddAfterSale = () => {
     if (!afterSaleDetails.target) newErrors.target = 'Target is required';
     if (afterSaleDetails.target === 'Event' && !afterSaleDetails.refTo) newErrors.refTo = 'Event is required';
     if (afterSaleDetails.target === 'Product' && !afterSaleDetails.refTo) newErrors.refTo = 'Product is required';
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };

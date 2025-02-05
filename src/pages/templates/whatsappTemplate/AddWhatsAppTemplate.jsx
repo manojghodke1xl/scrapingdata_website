@@ -76,6 +76,15 @@ const AddWhatsAppTemplate = () => {
   }, [whatsAppTemplate.site, setLoading]);
 
   useEffect(() => {
+    if (whatsAppTemplate.site) {
+      (async () => {
+        const { status, data } = await getFilesBySiteIdApi(whatsAppTemplate.site);
+        if (status) setFiles(data.file);
+      })();
+    }
+  }, [whatsAppTemplate.site, setLoading]);
+
+  useEffect(() => {
     (async () => {
       const { status, data } = await getAllTemplateCategoriesApi('WhatsApp');
       if (status) {
@@ -312,20 +321,22 @@ const AddWhatsAppTemplate = () => {
         </div>
       </div>
 
-      {/* <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
+      <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
         <div className="w-full flex flex-col gap-y-2 md:flex-row justify-evenly">
           <div className="sm:w-1/4 w-full flex flex-col">
             <span className="block text-primary">Attached Document</span>
           </div>
           <div className="w-full">
             <div className="w-full sm:w-1/2">
-              <MultiSelectCheckbox
-                options={files.attachments || []}
-                formLabel={'Select File'}
-                label={'Invoice.pdf, Document.doc'}
-                selected={whatsAppTemplate.files}
-                onChange={(e) => setWhatsAppTemplate((prev) => ({ ...prev, files: e }))}
-              />
+              {files && files.attachments && files.attachments.length > 0 && (
+                <MultiSelectCheckbox
+                  options={files.attachments || []}
+                  formLabel={'Select File'}
+                  label={'Invoice.pdf, Document.doc'}
+                  selected={whatsAppTemplate.files}
+                  onChange={(e) => setWhatsAppTemplate((prev) => ({ ...prev, files: e }))}
+                />
+              )}
 
               <DocumentFileUpload
                 divClassName={'mt-5'}
@@ -341,7 +352,7 @@ const AddWhatsAppTemplate = () => {
             </div>
           </div>
         </div>
-      </div> */}
+      </div>
 
       {!isScrollable && (
         <div className="w-full flex justify-end items-center gap-4 pt-4 border- border-primary">
