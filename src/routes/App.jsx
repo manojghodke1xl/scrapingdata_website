@@ -1,4 +1,4 @@
-import { lazy } from 'react';
+import { lazy, Suspense } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import { GlobalProvider } from '../contexts/providers/GlobalProvider';
@@ -88,24 +88,26 @@ const App = () => {
     <GlobalProvider>
       <div className="w-screen inter-unique overflow-x-hidden">
         <BrowserRouter>
-          <Routes>
-            {/* Public Routes */}
-            <Route element={<DeAuthComponent />}>
-              <Route path="/" element={<Login />} />
-            </Route>
-
-            {/* Private Routes */}
-            <Route element={<AuthComponent />}>
-              <Route element={<StructuredLayout />}>
-                <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/auth-status/:id" element={<ZohoStatus />} />
-                {privateRoutes.map(({ path, Component }) => (
-                  <Route key={path} path={`/${path}`} element={<Component />} />
-                ))}
+          <Suspense fallback={<></>}>
+            <Routes>
+              {/* Public Routes */}
+              <Route element={<DeAuthComponent />}>
+                <Route path="/" element={<Login />} />
               </Route>
-            </Route>
-            <Route path="*" element={<PageNotFound />} />
-          </Routes>
+
+              {/* Private Routes */}
+              <Route element={<AuthComponent />}>
+                <Route element={<StructuredLayout />}>
+                  <Route path="/dashboard" element={<Dashboard />} />
+                  <Route path="/auth-status/:id" element={<ZohoStatus />} />
+                  {privateRoutes.map(({ path, Component }) => (
+                    <Route key={path} path={`/${path}`} element={<Component />} />
+                  ))}
+                </Route>
+              </Route>
+              <Route path="*" element={<PageNotFound />} />
+            </Routes>
+          </Suspense>
         </BrowserRouter>
         <ToastContainer />
       </div>

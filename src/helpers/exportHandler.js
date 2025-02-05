@@ -43,7 +43,9 @@ export const exportHandler = ({ type, apiUrl, rows, headers, selected }) => {
           'template-category/email': 'templateCategories',
           'template/email': 'emailTemplates',
           'template/sms': 'smsTemplates',
-          'template/whatsapp': 'whatsappTemplates'
+          'template/whatsapp': 'whatsappTemplates',
+          reminder: 'reminders',
+          'after-sale': 'afterSales'
         };
 
         const allData = data[apiUrlMapping[apiUrl] || apiUrl];

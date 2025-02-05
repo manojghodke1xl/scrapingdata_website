@@ -54,10 +54,6 @@ const AfterSalesList = () => {
                 search={true}
                 filter={true}
                 filterCategory={[{ id: 0, name: 'Sites' }]}
-                searchCategory={[
-                  { id: 1, name: 'Name' },
-                  { id: 2, name: 'Email' }
-                ]}
               />
             </div>
           </div>

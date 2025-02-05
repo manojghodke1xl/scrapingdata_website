@@ -8,7 +8,7 @@ import { showNotification } from '../../utils/showNotification';
 import { getAllProductsApi } from '../../apis/product-apis';
 import { IoCloseSharp } from 'react-icons/io5';
 import MultiSelectCheckbox from '../../atoms/formFields/MultiSelectCheckBox';
-import { AddAfterSaleApi, getAfterSalesByIdApi, getAfterSaleTemplateApi, getExistingAfterSalesApi, updateAfterSaleApi } from '../../apis/after-sale-apis';
+import { addAfterSaleApi, getAfterSalesByIdApi, getAfterSaleTemplateApi, getExistingAfterSalesApi, updateAfterSaleApi } from '../../apis/after-sale-apis';
 import CommonModal from '../../atoms/modal/CommonModal';
 
 const AddAfterSale = () => {
@@ -33,7 +33,7 @@ const AddAfterSale = () => {
         channels: [],
         emailTemplate: null,
         smsTemplate: null,
-        whatsappTemplate: '',
+        whatsappTemplate: null,
         delay: { unit: 'Days', value: '', custom: '', ms: '' }
       }
     ]
@@ -114,7 +114,6 @@ const AddAfterSale = () => {
     if (!afterSaleDetails.target) newErrors.target = 'Target is required';
     if (afterSaleDetails.target === 'Event' && !afterSaleDetails.refTo) newErrors.refTo = 'Event is required';
     if (afterSaleDetails.target === 'Product' && !afterSaleDetails.refTo) newErrors.refTo = 'Product is required';
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -124,7 +123,7 @@ const AddAfterSale = () => {
     if (!validate()) return;
     setLoading(true);
     try {
-      const { status, data } = await (id ? (isDuplicate ? AddAfterSaleApi(afterSaleDetails) : updateAfterSaleApi(id, afterSaleDetails)) : AddAfterSaleApi(afterSaleDetails));
+      const { status, data } = await (id ? (isDuplicate ? addAfterSaleApi(afterSaleDetails) : updateAfterSaleApi(id, afterSaleDetails)) : addAfterSaleApi(afterSaleDetails));
       if (status) {
         showNotification('success', data.message);
         navigate('/after-sales/after-sales-list');

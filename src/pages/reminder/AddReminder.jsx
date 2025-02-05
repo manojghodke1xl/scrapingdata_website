@@ -8,8 +8,9 @@ import { showNotification } from '../../utils/showNotification';
 import { getAllProductsApi } from '../../apis/product-apis';
 import { IoCloseSharp } from 'react-icons/io5';
 import MultiSelectCheckbox from '../../atoms/formFields/MultiSelectCheckBox';
-import { AddAfterSaleApi, getAfterSalesByIdApi, getAfterSaleTemplateApi, getExistingAfterSalesApi, updateAfterSaleApi } from '../../apis/after-sale-apis';
+import { getAfterSaleTemplateApi } from '../../apis/after-sale-apis';
 import CommonModal from '../../atoms/modal/CommonModal';
+import { addReminderApi, getExistingReminderApi, getReminderByIdApi, updateReminderApi } from '../../apis/reminder-apis';
 
 const AddReminder = () => {
   const { id = '' } = useParams();
@@ -35,7 +36,7 @@ const AddReminder = () => {
         when: 'beforeEvent',
         emailTemplate: null,
         smsTemplate: null,
-        whatsappTemplate: '',
+        whatsappTemplate: null,
         delay: { unit: 'Days', value: '', custom: '', ms: '' }
       }
     ]
@@ -45,6 +46,11 @@ const AddReminder = () => {
     list: [],
     emailTemplate: [],
     whatsAppTemplate: []
+  });
+
+  const [existingReminder, setExistingReminder] = useState({
+    modelOpen: false,
+    reminderId: ''
   });
 
   useEffect(() => {
@@ -79,9 +85,9 @@ const AddReminder = () => {
     if (id) {
       setLoading(true);
       (async () => {
-        const { status, data } = await getAfterSalesByIdApi(id);
+        const { status, data } = await getReminderByIdApi(id);
         if (status) {
-          const { site, refTo, ...rest } = data.afterSales;
+          const { site, refTo, ...rest } = data.reminder;
           setReminderDetails((prev) => ({
             ...prev,
             ...rest,
@@ -100,8 +106,8 @@ const AddReminder = () => {
   useEffect(() => {
     if (!id && !isDuplicate && reminderDetails.site && reminderDetails.refTo) {
       (async () => {
-        const { status, data } = await getMethodCall(`${import.meta.env.VITE_API_URL}/reminder/existing-reminder?site=${site}&refTo=${refTo}`);
-        if (status) if (data.afterSales) setReminderDetails(data.afterSales);
+        const { status, data } = await getExistingReminderApi(reminderDetails.site, reminderDetails.refTo);
+        if (status) if (data.reminder) setExistingReminder((prev) => ({ ...prev, modelOpen: true, reminderId: data.reminder._id }));
       })();
     }
   }, [reminderDetails.site, reminderDetails.refTo, id, isDuplicate]);
@@ -121,10 +127,10 @@ const AddReminder = () => {
     if (!validate()) return;
     setLoading(true);
     try {
-      const { status, data } = await (id ? (isDuplicate ? AddAfterSaleApi(reminderDetails) : updateAfterSaleApi(id, reminderDetails)) : AddAfterSaleApi(reminderDetails));
+      const { status, data } = await (id ? (isDuplicate ? addReminderApi(reminderDetails) : updateReminderApi(id, reminderDetails)) : addReminderApi(reminderDetails));
       if (status) {
         showNotification('success', data.message);
-        navigate('/after-sales/after-sales-list');
+        navigate('/reminder/reminder-list');
       } else showNotification('error', data);
     } catch (error) {
       showNotification('error', error.message);
@@ -199,7 +205,7 @@ const AddReminder = () => {
         <div>
           <span className="text-3xl font-semibold text-dark">{id ? (isDuplicate ? 'Add' : 'Edit') : 'Add'} Reminder </span>
         </div>
-        <FormButtons to="/after-sales/after-sales-list" type="submit" onClick={handleSubmit} btnLebal={id ? (isDuplicate ? 'Add' : 'Save Changes') : 'Add'} loading={isLoading} />
+        <FormButtons to="/reminder/reminder-list" type="submit" onClick={handleSubmit} btnLebal={id ? (isDuplicate ? 'Add' : 'Save Changes') : 'Add'} loading={isLoading} />
       </div>
 
       <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
@@ -337,7 +343,19 @@ const AddReminder = () => {
                   selected={item.delay.custom === 'custom' ? 'custom' : item.delay.ms}
                   SummaryChild={<h5 className="p-0 m-0 text-primary">Custom</h5>}
                 />
-
+                <DropDown
+                  mt="mt-5"
+                  name={'when'}
+                  label={'When to send follow - up'}
+                  SummaryChild={<h5 className="p-0 m-0 text-primary">When to send follow - up</h5>}
+                  search={true}
+                  dropdownList={[
+                    { id: 'beforeEvent', name: 'beforeEvent', showName: 'Before Event' },
+                    { id: 'afterEvent', name: 'afterEvent', showName: 'After Event' }
+                  ]}
+                  selected={item.when}
+                  commonFunction={(e) => handleVariableChange(index, 'when', e.name)}
+                />
                 {item.delay.custom === 'custom' && (
                   <div className="mt-5">
                     <label className="block text-sm font-medium text-primary mb-2">Custom Duration</label>
@@ -415,17 +433,17 @@ const AddReminder = () => {
       </div> */}
       {!isScrollable && (
         <div className="w-full flex justify-end items-center gap-4 pt-8  border- border-primary">
-          <FormButtons to="/after-sales/after-sales-list" type="submit" onClick={handleSubmit} btnLebal={id ? (isDuplicate ? 'Add' : 'Save Changes') : 'Add'} loading={isLoading} />
+          <FormButtons to="/reminder/reminder-list" type="submit" onClick={handleSubmit} btnLebal={id ? (isDuplicate ? 'Add' : 'Save Changes') : 'Add'} loading={isLoading} />
         </div>
       )}
 
       <CommonModal
-        // isModalVisible={existingAfterSales.modelOpen}
-        onConfirm={() => navigate(`/after-sales/edit-after-sale/${existingAfterSales.afterSaleId}`)}
-        onCancel={() => navigate(`/after-sales/after-sales-list`)}
-        // setModalVisibility={() => setExistingAfterSales({ ...existingAfterSales, modelOpen: false })}
-        label={'Existing After Sale Present'}
-        message={'You cannot create two same After Sales. Please edit the previous one instead. Click Confirm to proceed.'}
+        isModalVisible={existingReminder.modelOpen}
+        onConfirm={() => navigate(`/reminder/edit-reminder/${existingReminder.reminderId}`)}
+        onCancel={() => navigate(`/reminder/reminder-list`)}
+        setModalVisibility={() => setExistingReminder({ ...existingReminder, modelOpen: false })}
+        label={'Existing Reminder Present'}
+        message={'You cannot create two same Reminder. Please edit the previous one instead. Click Confirm to proceed.'}
       />
     </div>
   );

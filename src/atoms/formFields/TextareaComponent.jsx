@@ -19,7 +19,8 @@ const TextareaComponent = ({
   spellCheck = true,
   onChange,
   errorMessage = '',
-  hint = ''
+  hint = '',
+  showCharCount = false
 }) => {
   const [charCount, setCharCount] = useState(value.length);
 
@@ -46,7 +47,7 @@ const TextareaComponent = ({
           rows={rows}
           cols={cols}
           placeholder={placeholder}
-          maxLength={maxLength}
+          maxLength={showCharCount && maxLength}
           minLength={minLength}
           required={required}
           disabled={disabled}
@@ -62,10 +63,12 @@ const TextareaComponent = ({
         />
       </div>
       <div className="w-full flex flex-col-reverse md:flex-row gap-4 justify-between">
+        {showCharCount && (
+          <span className="font-normal text-primary">
+            {charCount}/{maxLength}
+          </span>
+        )}
         <p className="mt-1 text-primary text-sm">{hint}</p>
-        <span className="font-normal text-primary">
-          {charCount}/{maxLength}
-        </span>
       </div>
       {errorMessage && <p className="text-red-500 mt-1 text-sm">{errorMessage}</p>}
     </div>

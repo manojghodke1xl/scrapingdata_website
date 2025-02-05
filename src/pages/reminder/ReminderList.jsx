@@ -6,16 +6,16 @@ import { formatDateTime } from '../../utils/dateFormats';
 import TruncatableFieldToolTip from '../../atoms/common/TruncatableFeildToolTip';
 
 const ReminderList = () => {
-  const [afterSales, setAfterSales] = useState([]);
+  const [reminders, setReminders] = useState([]);
 
-  const rows = afterSales.map((afterSale) => {
-    const { _id, target, refTo, site, followUps, createdAt, updatedAt } = afterSale;
+  const rows = reminders.map((reminder) => {
+    const { _id, target, refTo, site, reminders, createdAt, updatedAt } = reminder;
     return {
       id: _id,
-      exportData: afterSale,
-      afterSale: <TruncatableFieldToolTip content={refTo.name} />,
+      exportData: reminder,
+      reminder: <TruncatableFieldToolTip content={refTo.name} />,
       target: <TruncatableFieldToolTip content={target} />,
-      followUps: <TruncatableFieldToolTip content={followUps.length} />,
+      followUps: <TruncatableFieldToolTip content={reminders.length} />,
       site: <TruncatableFieldToolTip content={`${site?.name} (${site?.host})`} />,
       createdAt: formatDateTime(createdAt),
       updatedAt: formatDateTime(updatedAt)
@@ -34,30 +34,26 @@ const ReminderList = () => {
                 selectable={true}
                 headers={[
                   { label: 'Sr. No.', key: 'srno' },
-                  { label: 'After Sales', key: 'afterSale' },
+                  { label: 'Reminder', key: 'reminder' },
                   { label: 'Category', key: 'target' },
                   { label: 'Follow Ups', key: 'followUps' },
                   { label: 'Sites', key: 'site' },
                   { label: 'Created Date', key: 'createdAt' },
                   { label: 'Updated Date', key: 'updatedAt' }
                 ]}
-                tableData={(data) => setAfterSales(data.afterSales)}
+                tableData={(data) => setReminders(data.reminders)}
                 rows={rows}
-                apiUrl={'after-sale'}
+                apiUrl={'reminder'}
                 tableCountLabel={true}
                 pagination={true}
                 actions={true}
                 edit={true}
-                editPath={'/after-sales/edit-after-sale'}
+                editPath={'/reminder/edit-reminder'}
                 copy={true}
-                copyPath={'/after-sales/duplicate-after-sale'}
+                copyPath={'/reminder/duplicate-reminder'}
                 search={true}
                 filter={true}
                 filterCategory={[{ id: 0, name: 'Sites' }]}
-                searchCategory={[
-                  { id: 1, name: 'Name' },
-                  { id: 2, name: 'Email' }
-                ]}
               />
             </div>
           </div>

@@ -164,7 +164,7 @@ const TableComponent = ({
     );
   }, [filterState, showFilter]);
 
-  const totalPages = useMemo(() => Math.ceil(tableState.totalCount / tableState.itemsPerPage), [tableState.totalCount, tableState.itemsPerPage]);
+  const totalPages = useMemo(() => Math.max(1, Math.ceil(tableState.totalCount / tableState.itemsPerPage)), [tableState.totalCount, tableState.itemsPerPage]);
 
   const [err, data, setRefresh] = useSetTimeout(
     apiUrl,

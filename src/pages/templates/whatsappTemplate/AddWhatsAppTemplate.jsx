@@ -72,11 +72,7 @@ const AddWhatsAppTemplate = () => {
         if (status) setPhoneNumbers(data.whatsapp);
         else showNotification('warn', data);
       })().catch((error) => showNotification('error', error.message));
-    }
-  }, [whatsAppTemplate.site, setLoading]);
 
-  useEffect(() => {
-    if (whatsAppTemplate.site) {
       (async () => {
         const { status, data } = await getFilesBySiteIdApi(whatsAppTemplate.site);
         if (status) setFiles(data.file);
@@ -87,12 +83,10 @@ const AddWhatsAppTemplate = () => {
   useEffect(() => {
     (async () => {
       const { status, data } = await getAllTemplateCategoriesApi('WhatsApp');
-      if (status) {
-        setTemplateCategories(data.templateCategories);
-      } else showNotification('warn', data);
+      if (status) setTemplateCategories(data.templateCategories);
+      else showNotification('warn', data);
     })().catch((error) => showNotification('error', error.message));
   }, []);
-
   const handleFileUpload = (e) => {
     e.preventDefault();
     const newFiles = Array.from(e.target.files).map((file) => ({ file, customName: file.name }));
