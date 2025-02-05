@@ -11,7 +11,6 @@ const WhatsAppTemplateList = () => {
 
   const rows = whatsAppTemplates.map((whatsAppTemplate) => {
     const { _id, name, site, whatsAppTemplateId, status, createdAt, updatedAt } = whatsAppTemplate;
-    console.log('status', status);
 
     return {
       id: _id,
@@ -19,15 +18,17 @@ const WhatsAppTemplateList = () => {
       exportData: whatsAppTemplate,
       name: <TruncatableFieldToolTip title={'Name'} content={name} />,
       site: <TruncatableFieldToolTip title={'Sites'} content={`${site?.name} (${site?.host})`} />,
-      status: (
+      status: status ? (
         <div
           className={`rounded-xl ${
             status === 'APPROVED' ? 'bg-lightgreen text-success' : status === 'REJECTED' ? 'bg-fadedred text-failed' : 'bg-fadeyellow text-pending'
           } px-2 py-1 w-fit flex gap-2 items-center`}
         >
           <span className={`min-w-[8px] min-h-[8px] rounded-full ${status === 'APPROVED' ? 'bg-green' : 'bg-pending'}`}></span>
-          <span>{status === 'APPROVED' ? status : status === 'REJECTED' ? status : status || 'UNDEFINED'}</span>
+          <span>{status}</span>
         </div>
+      ) : (
+        <span className="text-secondary font-normal items-center">--</span>
       ),
 
       createdAt: formatDateTime(createdAt),
