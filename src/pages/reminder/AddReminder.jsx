@@ -11,6 +11,7 @@ import MultiSelectCheckbox from '../../atoms/formFields/MultiSelectCheckBox';
 import { getAfterSaleTemplateApi } from '../../apis/after-sale-apis';
 import CommonModal from '../../atoms/modal/CommonModal';
 import { addReminderApi, getExistingReminderApi, getReminderByIdApi, updateReminderApi } from '../../apis/reminder-apis';
+import { formatDateTime } from '../../utils/dateFormats';
 
 const AddReminder = () => {
   const { id = '' } = useParams();
@@ -259,9 +260,9 @@ const AddReminder = () => {
                   <DropDown
                     name="Events"
                     dropdownList={[
-                      { id: 'event', name: 'Event', showName: 'Event' },
-                      { id: 'product', name: 'Product', showName: 'Product' },
-                      { id: 'service', name: 'Service', showName: 'Service' }
+                      { id: 'Event', name: 'Event', showName: 'Event' },
+                      { id: 'Product', name: 'Product', showName: 'Product' },
+                      { id: 'Service', name: 'Service', showName: 'Service' }
                     ]}
                     SummaryChild={<h5 className="p-0 m-0 text-primary">Target</h5>}
                     search={true}
@@ -277,7 +278,11 @@ const AddReminder = () => {
                   <DropDown
                     mt="mt-5"
                     name="refTo"
-                    dropdownList={formState.list?.map((product) => ({ name: product._id, showName: product.name, id: product._id }))}
+                    dropdownList={
+                      reminderDetails.target === 'Event'
+                        ? formState.list?.map((event) => ({ name: event._id, showName: `${event.name} (${formatDateTime(event.date)})`, id: event._id }))
+                        : formState.list?.map((product) => ({ name: product._id, showName: product.name, id: product._id }))
+                    }
                     SummaryChild={<h5 className="p-0 m-0 text-primary">Select {reminderDetails.target}</h5>}
                     search={true}
                     selected={reminderDetails.refTo}

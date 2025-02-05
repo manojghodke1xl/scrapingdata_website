@@ -10,6 +10,7 @@ import { IoCloseSharp } from 'react-icons/io5';
 import MultiSelectCheckbox from '../../atoms/formFields/MultiSelectCheckBox';
 import { addAfterSaleApi, getAfterSalesByIdApi, getAfterSaleTemplateApi, getExistingAfterSalesApi, updateAfterSaleApi } from '../../apis/after-sale-apis';
 import CommonModal from '../../atoms/modal/CommonModal';
+import { formatDateTime } from '../../utils/dateFormats';
 
 const AddAfterSale = () => {
   const { id = '' } = useParams();
@@ -255,9 +256,9 @@ const AddAfterSale = () => {
                   <DropDown
                     name="Events"
                     dropdownList={[
-                      { id: 'event', name: 'Event', showName: 'Event' },
-                      { id: 'product', name: 'Product', showName: 'Product' },
-                      { id: 'service', name: 'Service', showName: 'Service' }
+                      { id: 'Event', name: 'Event', showName: 'Event' },
+                      { id: 'Product', name: 'Product', showName: 'Product' },
+                      { id: 'Service', name: 'Service', showName: 'Service' }
                     ]}
                     SummaryChild={<h5 className="p-0 m-0 text-primary">Target</h5>}
                     search={true}
@@ -273,7 +274,11 @@ const AddAfterSale = () => {
                   <DropDown
                     mt="mt-5"
                     name="refTo"
-                    dropdownList={formState.list?.map((product) => ({ name: product._id, showName: product.name, id: product._id }))}
+                    dropdownList={
+                      afterSaleDetails.target === 'Event'
+                        ? formState.list?.map((event) => ({ name: event._id, showName: `${event.name} (${formatDateTime(event.date)})`, id: event._id }))
+                        : formState.list?.map((product) => ({ name: product._id, showName: product.name, id: product._id }))
+                    }
                     SummaryChild={<h5 className="p-0 m-0 text-primary">Select {afterSaleDetails.target}</h5>}
                     search={true}
                     selected={afterSaleDetails.refTo}
