@@ -26,7 +26,7 @@ const WhatsAppTemplateList = () => {
           } px-2 py-1 w-fit flex gap-2 items-center`}
         >
           <span className={`min-w-[8px] min-h-[8px] rounded-full ${status === 'APPROVED' ? 'bg-green' : 'bg-pending'}`}></span>
-          <span>{status === 'APPROVED' ? status : status === 'REJECTED' ? status : status || 'PENDING '}</span>
+          <span>{status === 'APPROVED' ? status : status === 'REJECTED' ? status : status || 'UNDEFINED'}</span>
         </div>
       ),
 
