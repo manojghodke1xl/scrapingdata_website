@@ -119,7 +119,10 @@ const AddWhatsAppTemplate = () => {
     try {
       let fileIds = [];
       if (attachments.length > 0) fileIds = await uploadMultipleCustomFiles(attachments);
-      const payload = { ...whatsAppTemplate, files: [...whatsAppTemplate.files, ...fileIds], fileId: files._id };
+
+      const newPlaceholders = Object.fromEntries(Object.entries(whatsAppTemplate.placeholders).filter(([key]) => placeholders.includes(key)));
+
+      const payload = { ...whatsAppTemplate, files: [...whatsAppTemplate.files, ...fileIds], fileId: files._id, placeholders: newPlaceholders };
       const { status, data } = await (id ? (isDuplicate ? addWhatsAppTemplateApi(payload) : updateWhatsAppTemplateApi(id, payload)) : addWhatsAppTemplateApi(payload));
       if (status) {
         showNotification('success', data.message);
@@ -288,6 +291,8 @@ const AddWhatsAppTemplate = () => {
                 onChange={(e) => setWhatsAppTemplate((prev) => ({ ...prev, message: e.target.value }))}
                 errorMessage={errors.message}
               />
+              {console.log('placeholders', placeholders)}
+              {console.log('whatsAppTemplate.placeholders', whatsAppTemplate.placeholders)}
               {placeholders.length > 0 && (
                 <div className="mt-5 w-full">
                   <label className="block text-sm font-medium text-primary">Placeholders</label>
@@ -321,7 +326,7 @@ const AddWhatsAppTemplate = () => {
         </div>
       </div>
 
-      <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
+      {/* <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
         <div className="w-full flex flex-col gap-y-2 md:flex-row justify-evenly">
           <div className="sm:w-1/4 w-full flex flex-col">
             <span className="block text-primary">Attached Document</span>
@@ -352,7 +357,7 @@ const AddWhatsAppTemplate = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
 
       {!isScrollable && (
         <div className="w-full flex justify-end items-center gap-4 pt-4 border- border-primary">
