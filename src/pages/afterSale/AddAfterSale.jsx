@@ -3,9 +3,9 @@ import FormButtons from '../../atoms/formFields/FormButtons';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import useGlobalContext from '../../hooks/useGlobalContext';
 import DropDown from '../../atoms/formFields/DropDown';
-import { getAllEventsApi } from '../../apis/event-apis';
+import { getEventBySiteIdApi } from '../../apis/event-apis';
 import { showNotification } from '../../utils/showNotification';
-import { getAllProductsApi } from '../../apis/product-apis';
+import { getProductsBySiteApi } from '../../apis/product-apis';
 import { IoCloseSharp } from 'react-icons/io5';
 import MultiSelectCheckbox from '../../atoms/formFields/MultiSelectCheckBox';
 import { addAfterSaleApi, getAfterSalesByIdApi, getAfterSaleTemplateApi, getExistingAfterSalesApi, updateAfterSaleApi } from '../../apis/after-sale-apis';
@@ -50,10 +50,10 @@ const AddAfterSale = () => {
   });
 
   useEffect(() => {
-    const fetchData = async (apiFunction, key) => {
+    const fetchData = async (apiFunction, site, key) => {
       setLoading(true);
       try {
-        const { status, data } = await apiFunction();
+        const { status, data } = await apiFunction(site);
         if (status) setFormState((prev) => ({ ...prev, list: data[key] }));
         else showNotification('error', data);
       } catch (error) {
@@ -63,9 +63,9 @@ const AddAfterSale = () => {
       }
     };
 
-    if (afterSaleDetails.target === 'Event') fetchData(getAllEventsApi, 'events');
-    else if (afterSaleDetails.target === 'Product') fetchData(getAllProductsApi, 'products');
-  }, [afterSaleDetails.target, setLoading]);
+    if (afterSaleDetails.target === 'Event') fetchData(getEventBySiteIdApi, afterSaleDetails.site, 'events');
+    else if (afterSaleDetails.target === 'Product') fetchData(getProductsBySiteApi, afterSaleDetails.site, 'products');
+  }, [afterSaleDetails.site, afterSaleDetails.target, setLoading]);
 
   useEffect(() => {
     if (afterSaleDetails.site && afterSaleDetails.refTo) {

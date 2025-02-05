@@ -3,9 +3,9 @@ import FormButtons from '../../atoms/formFields/FormButtons';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import useGlobalContext from '../../hooks/useGlobalContext';
 import DropDown from '../../atoms/formFields/DropDown';
-import { getAllEventsApi } from '../../apis/event-apis';
+import { getEventBySiteIdApi } from '../../apis/event-apis';
 import { showNotification } from '../../utils/showNotification';
-import { getAllProductsApi } from '../../apis/product-apis';
+import { getProductsBySiteApi } from '../../apis/product-apis';
 import { IoCloseSharp } from 'react-icons/io5';
 import MultiSelectCheckbox from '../../atoms/formFields/MultiSelectCheckBox';
 import { getAfterSaleTemplateApi } from '../../apis/after-sale-apis';
@@ -54,10 +54,10 @@ const AddReminder = () => {
   });
 
   useEffect(() => {
-    const fetchData = async (apiFunction, key) => {
+    const fetchData = async (apiFunction, site, key) => {
       setLoading(true);
       try {
-        const { status, data } = await apiFunction();
+        const { status, data } = await apiFunction(site);
         if (status) setFormState((prev) => ({ ...prev, list: data[key] }));
         else showNotification('error', data);
       } catch (error) {
@@ -67,9 +67,9 @@ const AddReminder = () => {
       }
     };
 
-    if (reminderDetails.target === 'Event') fetchData(getAllEventsApi, 'events');
-    else if (reminderDetails.target === 'Product') fetchData(getAllProductsApi, 'products');
-  }, [reminderDetails.target, setLoading]);
+    if (reminderDetails.target === 'Event') fetchData(getEventBySiteIdApi, reminderDetails.site, 'events');
+    else if (reminderDetails.target === 'Product') fetchData(getProductsBySiteApi, reminderDetails.site, 'products');
+  }, [reminderDetails.site, reminderDetails.target, setLoading]);
 
   useEffect(() => {
     if (reminderDetails.site && reminderDetails.refTo) {
