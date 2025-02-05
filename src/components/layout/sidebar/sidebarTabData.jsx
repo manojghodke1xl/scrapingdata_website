@@ -9,8 +9,8 @@ export const navLinks = [
     to: ['/apps/app', '/apps/integration/razorpay', '/apps/integration/stripe', '/apps/integration/paypal'],
     icon: <TbApps />
   },
-  { title: 'All Sites', to: ['/site/site-list', '/site/add-site', '/site/edit-site'], icon: <TbWorld /> },
-  { title: 'All Segments', to: ['/segments/segment-list', '/segments/add-segment', '/segments/edit-segment'], icon: <TbCube /> }
+  { title: 'All Sites', to: ['/site/site-list', '/site/add-site', '/site/edit-site'], icon: <TbWorld /> }
+  // { title: 'All Segments', to: ['/segments/segment-list', '/segments/add-segment', '/segments/edit-segment'], icon: <TbCube /> }
 ];
 
 export const leadsPath = [
@@ -60,7 +60,8 @@ export const eventsPath = [
 
 export const afterSalesPath = [
   { title: 'Event Default Settings', to: ['/after-sales/event-default-settings'] },
-  { title: 'After Sales', to: ['/after-sales/after-sales-list', '/after-sales/add-after-sales', '/after-sales/edit-after-sales', '/after-sales/duplicate-after-sales'] }
+  { title: 'After Sales', to: ['/after-sales/after-sales-list', '/after-sales/add-after-sales', '/after-sales/edit-after-sales', '/after-sales/duplicate-after-sales'] },
+  { title: 'Reminders', to: ['/reminder/reminder-list', '/reminder/add-reminder', '/after-sales/edit-after-sales', '/after-sales/duplicate-after-sales'] }
 ];
 
 export const faqsPath = [
