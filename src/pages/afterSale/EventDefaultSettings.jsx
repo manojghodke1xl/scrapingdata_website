@@ -4,7 +4,7 @@ import useGlobalContext from '../../hooks/useGlobalContext';
 import MultiSelectCheckbox from '../../atoms/formFields/MultiSelectCheckBox';
 import DropDown from '../../atoms/formFields/DropDown';
 import { showNotification } from '../../utils/showNotification';
-import { AddAfterSaleApi, getAfterSaleTemplateApi } from '../../apis/after-sale-apis';
+import { addAfterSaleApi, getAfterSaleTemplateApi } from '../../apis/after-sale-apis';
 import { IoCloseSharp } from 'react-icons/io5';
 
 const EventDefaultSettings = () => {
@@ -36,7 +36,7 @@ const EventDefaultSettings = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const { status, data } = AddAfterSaleApi({ followUps: settings });
+      const { status, data } = addAfterSaleApi({ followUps: settings });
       if (status) {
         showNotification('success', data.message);
       } else showNotification('error', data);
