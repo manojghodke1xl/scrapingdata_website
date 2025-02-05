@@ -5,8 +5,6 @@ import { Link } from 'react-router-dom';
 import TableComponent from '../../atoms/table/Table';
 import useGlobalContext from '../../hooks/useGlobalContext';
 import { updateSiteStatusApi } from '../../apis/site-apis';
-import NoteComponent from '../../atoms/common/NoteComponent';
-import { websiteListNote } from './SiteNotes';
 import TruncatableFieldToolTip from '../../atoms/common/TruncatableFeildToolTip';
 import TruncatableCopyFeild from '../../atoms/common/TruncatableCopyFeild';
 
@@ -88,7 +86,6 @@ const SegmentList = () => {
           </div>
         </div>
       </div>
-      <NoteComponent note={websiteListNote} />
     </div>
   );
 };
