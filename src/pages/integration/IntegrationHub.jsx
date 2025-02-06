@@ -3,6 +3,7 @@ import PayPal from '../../assets/images/paypal.png';
 import Stripe from '../../assets/images/stripe.png';
 import ZohoCRM from '../../assets/images/zohocrm.png';
 import whatsApp from '../../assets/images/whatsApp.png';
+import zoom from '../../assets/images/zoom-logo.png';
 
 import sms from '../../assets/images/sms.png';
 import { Link, useNavigate, useParams } from 'react-router-dom';
@@ -71,6 +72,12 @@ const IntegrationHub = () => {
       name: 'SMS Integration',
       description: 'Send transactional alerts, promotional messages, and customer updates via SMS for better engagement.',
       id: 'sms'
+    },
+    {
+      img: zoom,
+      name: 'Zoom',
+      description: 'Streamline your meeting and event experiences with Zoom integration. Set up events, invite attendees, and host webinars with a seamless experience.',
+      id: 'zoom'
     }
   ];
 
