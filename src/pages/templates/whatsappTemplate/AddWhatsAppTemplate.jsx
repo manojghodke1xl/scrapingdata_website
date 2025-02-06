@@ -236,7 +236,7 @@ const AddWhatsAppTemplate = () => {
                 ].map((category) => ({
                   id: category._id,
                   showName: category.showName,
-                  name: category._id
+                  name: category.name
                 }))}
                 selected={whatsAppTemplate.whatsAppCategory || ''}
                 search={true}
