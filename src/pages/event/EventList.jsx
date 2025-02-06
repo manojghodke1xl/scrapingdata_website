@@ -11,7 +11,7 @@ const EventList = () => {
   const [events, setEvents] = useState([]);
 
   const rows = events.map((event) => {
-    const { _id, name, date, endDate, lastBookingDate, venue, site, createdAt, updatedAt } = event;
+    const { _id, name, date, endDate, lastBookingDate, venue, site, createdAt, updatedAt, timeZone } = event;
     return {
       id: _id,
       exportData: event,
@@ -19,9 +19,9 @@ const EventList = () => {
       name: <TruncatableFieldToolTip title={'Event Name'} content={name} />,
       site: <TruncatableFieldToolTip title={'Sites'} content={`${site?.name} (${site?.host})`} />,
       venue: <TruncatableFieldToolTip title={'Venue'} content={venue} />,
-      date: formatDateTime(date),
-      endDate: formatDateTime(endDate),
-      lastBookingDate: formatDateTime(lastBookingDate),
+      date: formatDateTime(date, timeZone),
+      endDate: formatDateTime(endDate, timeZone),
+      lastBookingDate: formatDateTime(lastBookingDate, timeZone),
       createdAt: formatDateTime(createdAt),
       updatedAt: formatDateTime(updatedAt)
     };
