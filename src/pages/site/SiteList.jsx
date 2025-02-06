@@ -43,7 +43,7 @@ const SiteList = () => {
           {isSuperAdmin && (
             <div className="w-full flex justify-end sm:w-fit">
               <Link to="/site/add-site" className="flex gap-2 h-fit items-center px-2.5 md:px-2 sm:px-4 rounded-xl py-2.5 bg-primary hover:bg-hover text-white">
-                <IoMdAdd size={22} />
+                <IoMdAdd />
                 <span className="hidden md:block">Add Site</span>
               </Link>
             </div>

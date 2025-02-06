@@ -13,7 +13,7 @@ const FeedbackList = () => {
   const [feedbacks, setFeedbacks] = useState([]);
 
   const rows = feedbacks.map((feedback) => {
-    const { _id, name, email, service, subject, createdAt, updatedAt, site } = feedback;
+    const { _id, name, email, service, subject, createdAt, updatedAt, site, url, campaign, medium, source, content, term, campaignId } = feedback;
 
     return {
       id: _id,
@@ -23,6 +23,13 @@ const FeedbackList = () => {
       service: <TruncatableFieldToolTip title={'Feedback Service'} content={service} />,
       subject: <TruncatableFieldToolTip title={'Subject'} content={subject} />,
       site: <TruncatableFieldToolTip title={'Sites'} content={`${site?.name} (${site?.host})`} />,
+      url: <TruncatableFieldToolTip content={url} />,
+      campaign: <TruncatableFieldToolTip content={campaign} />,
+      medium: <TruncatableFieldToolTip content={medium} />,
+      source: <TruncatableFieldToolTip content={source} />,
+      content: <TruncatableFieldToolTip content={content} />,
+      term: <TruncatableFieldToolTip content={term} />,
+      campaignId: <TruncatableFieldToolTip content={campaignId} />,
       createdAt: formatDateTime(createdAt),
       updatedAt: formatDateTime(updatedAt)
     };
@@ -54,6 +61,13 @@ const FeedbackList = () => {
                   { label: 'Feedback Service', key: 'service' },
                   { label: 'Subject', key: 'subject' },
                   { label: 'Sites', key: 'site' },
+                  { label: 'URL', key: 'url' },
+                  { label: 'Campaign Name', key: 'campaign' },
+                  { label: 'Medium', key: 'medium' },
+                  { label: 'Source', key: 'source' },
+                  { label: 'Content', key: 'content' },
+                  { label: 'Term', key: 'term' },
+                  { label: 'Campaign ID', key: 'campaignId' },
                   { label: 'Created Date', key: 'createdAt' },
                   { label: 'Updated Date', key: 'updatedAt' }
                 ]}
@@ -77,9 +91,10 @@ const FeedbackList = () => {
                   { id: 5, name: 'Site' }
                 ]}
                 deleteBtn={true}
+                deleteAction={true}
                 deleteLabel={'Delete Feedback'}
                 deleteMessage={'Are you sure you want to delete this feedback?'}
-                deleteApiUrl={deleteFeedbackApi}
+                deleteApi={deleteFeedbackApi}
               />
             </div>
           </div>

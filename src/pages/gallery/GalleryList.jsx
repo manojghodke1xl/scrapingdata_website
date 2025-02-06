@@ -33,7 +33,7 @@ const GalleryList = () => {
   return (
     <div className="py-5 px-8 overflow-x-hidden mb-10">
       <div className=" w-full">
-        <TableHeader heading={'Gallery'} btn1={true} href1={'/gallery/add-gallery'} icon1={<IoMdAdd size={22} />} btnLabel1={'Add Gallery'} />
+        <TableHeader heading={'Gallery'} btn1={true} href1={'/gallery/add-gallery'} icon1={<IoMdAdd />} btnLabel1={'Add Gallery'} />
         <div className="flex flex-col">
           <div className="-m-1.5 overflow-x-auto">
             <div className="p-1.5 min-w-full align-middle">

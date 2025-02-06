@@ -13,15 +13,23 @@ const EnquiryList = () => {
   const [enquiries, setEnquiries] = useState([]);
 
   const rows = enquiries.map((enquiry) => {
-    const { _id, name, email, service, subject, createdAt, updatedAt, site } = enquiry;
+    const { _id, name, email, service, subject, createdAt, updatedAt, site, url, campaign, medium, source, content, term, campaignId } = enquiry;
+
     return {
       id: _id,
       exportData: enquiry,
-      name: <TruncatableFieldToolTip title={'Customer Name'} content={name} />,
-      email: <TruncatableFieldToolTip title={'Customer Email'} content={email} />,
-      service: <TruncatableFieldToolTip title={'Feedback Service'} content={service} />,
-      subject: <TruncatableFieldToolTip title={'Subject'} content={subject} />,
-      site: <TruncatableFieldToolTip title={'Sites'} content={`${site?.name} (${site?.host})`} />,
+      name: <TruncatableFieldToolTip content={name} />,
+      email: <TruncatableFieldToolTip content={email} />,
+      service: <TruncatableFieldToolTip content={service} />,
+      subject: <TruncatableFieldToolTip content={subject} />,
+      site: <TruncatableFieldToolTip content={`${site?.name} (${site?.host})`} />,
+      url: <TruncatableFieldToolTip content={url} />,
+      campaign: <TruncatableFieldToolTip content={campaign} />,
+      medium: <TruncatableFieldToolTip content={medium} />,
+      source: <TruncatableFieldToolTip content={source} />,
+      content: <TruncatableFieldToolTip content={content} />,
+      term: <TruncatableFieldToolTip content={term} />,
+      campaignId: <TruncatableFieldToolTip content={campaignId} />,
       createdAt: formatDateTime(createdAt),
       updatedAt: formatDateTime(updatedAt)
     };
@@ -36,8 +44,8 @@ const EnquiryList = () => {
           btn1={true}
           href1={'/enquiry/enquiry-integration'}
           href2={'/enquiry/add-enquiry'}
-          icon1={<AiOutlineApi size={22} />}
-          icon2={<IoMdAdd size={22} />}
+          icon1={<AiOutlineApi />}
+          icon2={<IoMdAdd />}
           btnLabel1={'API Integration'}
           btnLabel2={'Add Enquiry'}
         />
@@ -53,6 +61,13 @@ const EnquiryList = () => {
                   { label: 'Enquiry Service', key: 'service' },
                   { label: 'Subject', key: 'subject' },
                   { label: 'Sites', key: 'site' },
+                  { label: 'URL', key: 'url' },
+                  { label: 'Campaign Name', key: 'campaign' },
+                  { label: 'Medium', key: 'medium' },
+                  { label: 'Source', key: 'source' },
+                  { label: 'Content', key: 'content' },
+                  { label: 'Term', key: 'term' },
+                  { label: 'Campaign ID', key: 'campaignId' },
                   { label: 'Created Date', key: 'createdAt' },
                   { label: 'Updated Date', key: 'updatedAt' }
                 ]}
@@ -73,6 +88,7 @@ const EnquiryList = () => {
                   { id: 1, name: 'Email' }
                 ]}
                 deleteBtn={true}
+                deleteAction={true}
                 deleteLabel="Delete Enquiry"
                 deleteMessage="Are you sure you want to delete this enquiry?"
                 deleteApi={deleteEnquiryApi}

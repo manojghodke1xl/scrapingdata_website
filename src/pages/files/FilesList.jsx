@@ -23,7 +23,7 @@ const FilesList = () => {
   return (
     <div className="py-5 px-8 overflow-x-hidden mb-10">
       <div className=" w-full">
-        <TableHeader heading={'Files'} btn1={true} href1={'/files/add-file'} icon1={<IoMdAdd size={22} />} btnLabel1={'Add File'} />
+        <TableHeader heading={'Files'} btn1={true} href1={'/files/add-file'} icon1={<IoMdAdd />} btnLabel1={'Add File'} />
         <div className="flex flex-col">
           <div className="-m-1.5 overflow-x-auto">
             <div className="p-1.5 min-w-full align-middle">

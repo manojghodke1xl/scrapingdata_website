@@ -7,13 +7,14 @@ const TableHeader = ({ heading, btn1, href1, icon1, btnLabel1, btn2, href2, icon
       <div className="w-full flex justify-end sm:w-fit gap-2">
         {btn2 && (
           <Link to={href2} className="flex gap-2 h-fit items-center px-2.5 md:px-2 sm:px-4 rounded-xl py-2.5 border border-primary text-primary">
-            {icon2}
+            <span className="text-2xl">{icon2}</span>
             <span className="hidden md:block">{btnLabel2}</span>
           </Link>
         )}
         {btn1 && (
           <Link to={href1} className="flex gap-2 h-fit items-center px-2.5 md:px-2 sm:px-4 rounded-xl py-2.5 bg-primary hover:bg-hover text-white">
-            {icon1}
+            {/* {icon1} */}
+            <span className="text-2xl">{icon1}</span>
             <span className="hidden md:block">{btnLabel1}</span>
           </Link>
         )}

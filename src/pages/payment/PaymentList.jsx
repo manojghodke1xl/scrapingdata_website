@@ -37,7 +37,7 @@ const PaymentList = () => {
   return (
     <div className="py-5 px-8 overflow-x-hidden mb-10">
       <div className=" w-full">
-        <TableHeader heading="Payments" btn1={true} href1={'/payments/payment-integration'} icon1={<AiOutlineApi size={22} />} btnLabel1={'API Integration'} />
+        <TableHeader heading="Payments" btn1={true} href1={'/payments/payment-integration'} icon1={<AiOutlineApi />} btnLabel1={'API Integration'} />
         <div className="flex flex-col">
           <div className="-m-1.5 overflow-x-auto">
             <div className="p-1.5 min-w-full align-middle">
