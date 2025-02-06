@@ -1,36 +1,32 @@
 import { IoMdAdd } from 'react-icons/io';
-import TableComponent from '../../../atoms/table/Table';
+import TableComponent from '../../atoms/table/Table';
 import { useState } from 'react';
-import { formatDateTime } from '../../../utils/dateFormats';
-import { deleteWhatsAppTemplateApi, getWhatsAppTemplateApprovalApi } from '../../../apis/templates/template-apis';
-import TruncatableFieldToolTip from '../../../atoms/common/TruncatableFeildToolTip';
-import TableHeader from '../../../atoms/table/TableHeader';
+import { formatDateTime } from '../../utils/dateFormats';
+import { deleteWhatsAppTemplateApi, getWhatsAppTemplateApprovalApi } from '../../apis/templates/template-apis';
+import TruncatableFieldToolTip from '../../atoms/common/TruncatableFeildToolTip';
+import TableHeader from '../../atoms/table/TableHeader';
 
-const WhatsAppTemplateList = () => {
+const EmailLogList = () => {
   const [whatsAppTemplates, setWhatsAppTemplates] = useState([]);
 
-  const rows = whatsAppTemplates.map((whatsAppTemplate) => {
-    const { _id, name, site, whatsAppTemplateName, status, createdAt, updatedAt } = whatsAppTemplate;
+  const rows = whatsAppTemplates?.map((whatsAppTemplate) => {
+    const { _id, requestData, responseData, statusCode, error, createdAt, updatedAt } = whatsAppTemplate;
 
     return {
       id: _id,
-      whatsAppTemplateName,
-      exportData: whatsAppTemplate,
-      name: <TruncatableFieldToolTip title={'Name'} content={name} />,
-      site: <TruncatableFieldToolTip title={'Sites'} content={`${site?.name} (${site?.host})`} />,
-      status: status ? (
+      requestData: <TruncatableFieldToolTip title={'Request Data'} content={JSON.stringify(requestData)} />,
+      responseData: <TruncatableFieldToolTip title={'Response Data'} content={JSON.stringify(responseData)} />,
+      statusCode: (
         <div
           className={`rounded-xl ${
-            status === 'APPROVED' ? 'bg-lightgreen text-success' : status === 'REJECTED' ? 'bg-fadedred text-failed' : 'bg-fadeyellow text-pending'
+            statusCode === 200 ? 'bg-lightgreen text-success' : statusCode >= 400 ? 'bg-fadedred text-failed' : 'bg-fadeyellow text-pending'
           } px-2 py-1 w-fit flex gap-2 items-center`}
         >
-          <span className={`min-w-[8px] min-h-[8px] rounded-full ${status === 'APPROVED' ? 'bg-green' : 'bg-pending'}`}></span>
-          <span>{status}</span>
+          <span className={`min-w-[8px] min-h-[8px] rounded-full ${statusCode === 200 ? 'bg-green' : 'bg-pending'}`}></span>
+          <span>{statusCode}</span>
         </div>
-      ) : (
-        <span className="text-secondary font-normal items-center">--</span>
       ),
-
+      error: error ? <span className="text-failed">{error}</span> : <span className="text-secondary">No Error</span>,
       createdAt: formatDateTime(createdAt),
       updatedAt: formatDateTime(updatedAt)
     };
@@ -39,7 +35,7 @@ const WhatsAppTemplateList = () => {
   return (
     <div className="py-5 px-8 overflow-x-hidden mb-10">
       <div className=" w-full">
-        <TableHeader heading={'WhatsApp Templates'} btn1={true} href1={'/templates/add-whatsapp-template'} icon1={<IoMdAdd size={22} />} btnLabel1={'Add WhatsApp Template'} />
+        <TableHeader heading={'Email Logs'} />
         <div className="flex flex-col">
           <div className="-m-1.5 overflow-x-auto">
             <div className="p-1.5 min-w-full align-middle">
@@ -48,34 +44,25 @@ const WhatsAppTemplateList = () => {
                 siteModule={'whats-app-templates'}
                 headers={[
                   { label: 'Sr. No.', key: 'srno' },
-                  { label: 'Name', key: 'name' },
-                  { label: 'WhatsApp Template Name', key: 'whatsAppTemplateName' },
-                  { label: 'Sites', key: 'site' },
-                  { label: 'Status', key: 'status' },
+                  { label: 'Request Data', key: 'requestData' },
+                  { label: 'Response Data', key: 'responseData' },
+                  { label: 'Status', key: 'statusCode' },
+                  { label: 'Error', key: 'error' },
                   { label: 'Created Date', key: 'createdAt' },
                   { label: 'Updated Date', key: 'updatedAt' }
                 ]}
-                tableData={(data) => setWhatsAppTemplates(data.whatsappTemplates)}
+                tableData={(data) => setWhatsAppTemplates(data.logs)}
                 rows={rows}
-                apiUrl={'template/whatsapp'}
+                apiUrl={'logs/email'}
                 tableCountLabel={true}
                 pagination={true}
                 search={true}
                 searchCategory={[{ id: 0, name: 'Name' }]}
-                filter={true}
+                // filter={true}
                 filterCategory={[{ id: 0, name: 'Sites' }]}
-                actions={true}
-                edit={true}
-                editPath={'/templates/edit-whatsapp-template'}
-                copy={true}
-                copyPath={'/templates/duplicate-whatsapp-template'}
-                deleteBtn={true}
-                deleteAction={true}
-                deleteApi={deleteWhatsAppTemplateApi}
-                deleteLabel={'Delete WhatsApp Template'}
-                deleteMessage={'Are you sure you want to delete this WhatsApp template?'}
-                sendForApproval={true}
-                approvalApi={getWhatsAppTemplateApprovalApi}
+                // actions={true}
+                view={true}
+                viewPath={'/events/view-event'}
               />
             </div>
           </div>
@@ -85,4 +72,4 @@ const WhatsAppTemplateList = () => {
   );
 };
 
-export default WhatsAppTemplateList;
+export default EmailLogList;

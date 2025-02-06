@@ -20,9 +20,10 @@ const ParticipantList = () => {
       package: { title },
       site,
       status,
+      refUser,
       phoneNumber,
       phoneCode
-    } = booking;
+    } = booking || {};
 
     return {
       id: _id,
@@ -41,6 +42,7 @@ const ParticipantList = () => {
       event: <TruncatableFieldToolTip title={'Event Name'} content={`${event.name} (${event.venue})`} />,
       eventDate: formatDateTime(event.date),
       title: <TruncatableFieldToolTip title={'Package Name'} content={title ?? ''} />,
+      refUser: <TruncatableFieldToolTip title={'Referrer User'} content={refUser?.name ?? '--'} />,
       status: (
         <div
           className={`rounded-xl ${
@@ -85,6 +87,7 @@ const ParticipantList = () => {
                   { label: 'Event', key: 'event' },
                   { label: 'Event Date', key: 'eventDate' },
                   { label: 'Package', key: 'title' },
+                  { label: 'Referrer User', key: 'refUser' },
                   { label: 'Status', key: 'status' },
                   { label: 'Created Date', key: 'createdAt' },
                   { label: 'Updated Date', key: 'updatedAt' }

@@ -5,7 +5,7 @@ import FormButtons from '../../atoms/formFields/FormButtons';
 import FormField from '../../atoms/formFields/InputField';
 import TextareaComponent from '../../atoms/formFields/TextareaComponent';
 import DateTimePicker from '../../atoms/formFields/DateTimePicker';
-import { formatDateTime } from '../../utils/dateFormats';
+import { adjustDateForTimezone, formatDateTime } from '../../utils/dateFormats';
 import DropDown from '../../atoms/formFields/DropDown';
 import { showNotification } from '../../utils/showNotification';
 import { addEventApi, getEventByIdApi, updateEventApi } from '../../apis/event-apis';
@@ -304,14 +304,19 @@ const AddEvent = () => {
             <DateTimePicker
               id={'date'}
               label={'Start Date'}
-              placeholder={formatDateTime(new Date())}
-              selectedDateTime={eventDetails.date}
+              placeholder={adjustDateForTimezone(eventDetails.date, eventDetails.timezone)} // Pass timezone here
+              selectedDateTime={adjustDateForTimezone(eventDetails.date, eventDetails.timezone)}
               setSelectedDateTime={(e) => {
-                setEventDetails((prev) => ({ ...prev, date: e }));
+                console.log('eventDetails.timeZone', eventDetails.timeZone);
+                const adjustedDate = adjustDateForTimezone(e, eventDetails.timezone);
+
+                setEventDetails((prev) => ({ ...prev, date: adjustedDate }));
+
                 if (errors.date) setErrors((prev) => ({ ...prev, date: '' }));
               }}
               errorMessage={errors.date}
             />
+
             <DateTimePicker
               divClassName={'mt-5'}
               id={'endDate'}

@@ -23,3 +23,14 @@ export const formatDateTime = (date, tz = null) => {
 
   return new Date(date).toLocaleString('en-GB', options).replace(',', '').toUpperCase();
 };
+
+export const adjustDateForTimezone = (date, tz) => {
+  if (!tz || !tz.value) return date;
+
+  const offset = parseInt(tz.value, 10);
+  const adjustedDate = new Date(date);
+  adjustedDate.setMinutes(adjustedDate.getMinutes() - adjustedDate.getTimezoneOffset() - offset * 60);
+
+  console.log('adjustedDate', adjustedDate);
+  return adjustedDate;
+};
