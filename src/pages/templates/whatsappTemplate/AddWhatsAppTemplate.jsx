@@ -226,8 +226,8 @@ const AddWhatsAppTemplate = () => {
               />
               <DropDown
                 mt="mt-5"
-                name="category"
-                label="Category"
+                name="WhatsAppCategory"
+                label="WhatsApp Category"
                 SummaryChild={<h5 className="text-primary p-0 m-0">Category</h5>}
                 dropdownList={[
                   { _id: 1, name: 'UTILITY', showName: 'Utility' },
