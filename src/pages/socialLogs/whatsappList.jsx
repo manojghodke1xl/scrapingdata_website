@@ -14,8 +14,8 @@ const WhatsAppLogList = () => {
 
     return {
       id: _id,
-      fromNumber: whatsAppTemplate.fromNumber,
-      toNumber: whatsAppTemplate.toNumber,
+      fromNumber: whatsAppTemplate.fromNumber || '-',
+      toNumber: whatsAppTemplate.toNumber || '-',
       message: <TruncatableFieldToolTip title={'Message'} content={whatsAppTemplate.message} />,
       requestData: <TruncatableFieldToolTip title={'Request Data'} content={JSON.stringify(requestData)} />,
       responseData: <TruncatableFieldToolTip title={'Response Data'} content={JSON.stringify(responseData)} />,
