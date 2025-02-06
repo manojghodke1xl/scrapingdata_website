@@ -248,6 +248,17 @@ const AddEvent = () => {
                 value={eventDetails.mapLink}
                 onChange={(e) => setEventDetails((prev) => ({ ...prev, mapLink: e.target.value }))}
               />
+
+              <FormField
+                label={'Event Homepage link'}
+                divClassName={'mt-5'}
+                type="url"
+                id="landingPageUrl"
+                name="landingPageUrl"
+                placeholder={'Event Homepage link'}
+                value={eventDetails.landingPageUrl}
+                onChange={(e) => setEventDetails((prev) => ({ ...prev, landingPageUrl: e.target.value }))}
+              />
             </div>
           </div>
         </div>
