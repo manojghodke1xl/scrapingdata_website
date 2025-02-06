@@ -14,6 +14,9 @@ const WhatsAppLogList = () => {
 
     return {
       id: _id,
+      fromNumber: whatsAppTemplate.fromNumber,
+      toNumber: whatsAppTemplate.toNumber,
+      message: <TruncatableFieldToolTip title={'Message'} content={whatsAppTemplate.message} />,
       requestData: <TruncatableFieldToolTip title={'Request Data'} content={JSON.stringify(requestData)} />,
       responseData: <TruncatableFieldToolTip title={'Response Data'} content={JSON.stringify(responseData)} />,
       statusCode: (
@@ -44,6 +47,9 @@ const WhatsAppLogList = () => {
                 siteModule={'whats-app-templates'}
                 headers={[
                   { label: 'Sr. No.', key: 'srno' },
+                  { label: 'From Number', key: 'fromNumber' },
+                  { label: 'To Number', key: 'toNumber' },
+                  { label: 'Message', key: 'message' },
                   { label: 'Request Data', key: 'requestData' },
                   { label: 'Response Data', key: 'responseData' },
                   { label: 'Status', key: 'statusCode' },
