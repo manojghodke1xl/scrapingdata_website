@@ -339,7 +339,7 @@ const AddPackage = () => {
                     dropdownList={whatsappTemplates?.map((template) => ({ name: template._id, showName: template.name, id: template._id }))}
                     SummaryChild={<h5 className="p-0 m-0 text-primary">WhatsApp Templates</h5>}
                     search={true}
-                    selected={packageDetails.whatsAppTemplate }
+                    selected={packageDetails.whatsAppTemplate}
                     commonFunction={(e) => {
                       setPackageDetails((prev) => ({ ...prev, whatsAppTemplate: e.name }));
                       if (errors.whatsAppTemplate) setErrors((prev) => ({ ...prev, whatsAppTemplate: '' }));

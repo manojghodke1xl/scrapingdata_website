@@ -26,7 +26,6 @@ const EventDetails = () => {
     })();
   }, [id, setLoading]);
 
-
   const checkScrollability = () => {
     const contentHeight = document.documentElement.scrollHeight;
     const windowHeight = window.innerHeight;
@@ -80,6 +79,10 @@ const EventDetails = () => {
             <span className=" text-primary">Validity Period</span>
           </div>
           <div className="w-full gap-5">
+            <div className="mt-5">
+              <h1 className="font-semibold text-primary">Time Zone</h1>
+              <p className="text-secondary">{event?.timeZone?.label || 'No time zone available'} </p>
+            </div>
             <div className="mt-5">
               <h1 className="font-semibold text-primary">Start Date</h1>
               <p className="text-secondary">{formatDateTime(event?.date) || 'No start date available'} </p>

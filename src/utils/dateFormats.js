@@ -5,23 +5,21 @@ export const formatDate = (date) => {
 };
 
 export const formatDateTime = (date, tz = null) => {
-  let timeZone = 'UTC';
+  const options = {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    second: 'numeric',
+    hour12: true
+  };
 
-  if (tz && tz.value) {
+  if (tz?.value) {
     const offset = parseInt(tz.value, 10);
-    timeZone = `Etc/GMT${offset > 0 ? `-${offset}` : `+${Math.abs(offset)}`}`;
+    const timeZone = `Etc/GMT${offset > 0 ? `-${offset}` : `+${Math.abs(offset)}`}`;
+    options.timeZone = timeZone;
   }
 
-  return new Date(date)
-    .toLocaleString('en-GB', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-      hour: 'numeric',
-      minute: 'numeric',
-      second: 'numeric',
-      hour12: true
-    })
-    .replace(',', '')
-    .toUpperCase();
+  return new Date(date).toLocaleString('en-GB', options).replace(',', '').toUpperCase();
 };

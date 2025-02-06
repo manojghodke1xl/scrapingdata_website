@@ -19,9 +19,10 @@ const EventList = () => {
       name: <TruncatableFieldToolTip title={'Event Name'} content={name} />,
       site: <TruncatableFieldToolTip title={'Sites'} content={`${site?.name} (${site?.host})`} />,
       venue: <TruncatableFieldToolTip title={'Venue'} content={venue} />,
-      date: formatDateTime(date, timeZone),
-      endDate: formatDateTime(endDate, timeZone),
-      lastBookingDate: formatDateTime(lastBookingDate, timeZone),
+      timeZone: <TruncatableFieldToolTip title={'Timezone'} content={timeZone?.label} />,
+      date: formatDateTime(date, timeZone || null),
+      endDate: formatDateTime(endDate, timeZone || null),
+      lastBookingDate: formatDateTime(lastBookingDate, timeZone || null),
       createdAt: formatDateTime(createdAt),
       updatedAt: formatDateTime(updatedAt)
     };
@@ -43,6 +44,7 @@ const EventList = () => {
                   { label: 'Event Name', key: 'name' },
                   { label: 'Sites', key: 'site' },
                   { label: 'Venue', key: 'venue' },
+                  { label: 'Timezone', key: 'timeZone' },
                   { label: 'Start Date', key: 'date' },
                   { label: 'End Date', key: 'endDate' },
                   { label: 'Last Booking Date', key: 'lastBookingDate' },

@@ -4,6 +4,7 @@ import { TbFileSearch, TbTemplate, TbUsersGroup } from 'react-icons/tb';
 import { IoSettingsOutline } from 'react-icons/io5';
 import { MdMessage } from 'react-icons/md';
 import { FaBullhorn, FaChartLine, FaRegFile, FaRegImage, FaRegQuestionCircle } from 'react-icons/fa';
+import { LuLogs } from 'react-icons/lu';
 import { FiCalendar } from 'react-icons/fi';
 import {
   adminNavLinks,
@@ -19,7 +20,8 @@ import {
   productsPath,
   templatePath,
   filesPath,
-  afterSalesPath
+  afterSalesPath,
+  logsPath
 } from './sidebarTabData';
 import ReusableAccordion from '../../../atoms/sidebar/ReusableAccordion';
 import useGlobalContext from '../../../hooks/useGlobalContext';
@@ -162,6 +164,15 @@ const MaterialSidebar = ({ handleToggleSidebar }) => {
             icon={<TbTemplate />}
             isOpen={openAccordion === 'Templates'}
             onToggle={() => setOpenAccordion(openAccordion === 'Templates' ? null : 'Templates')}
+            handleToggleSidebar={handleToggleSidebar}
+          />
+
+          <ReusableAccordion
+            title="Logs"
+            links={logsPath}
+            icon={<LuLogs />}
+            isOpen={openAccordion === 'Logs'}
+            onToggle={() => setOpenAccordion(openAccordion === 'Logs' ? null : 'Logs')}
             handleToggleSidebar={handleToggleSidebar}
           />
 

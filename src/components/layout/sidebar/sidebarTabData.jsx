@@ -86,4 +86,10 @@ export const templatePath = [
   }
 ];
 
+export const logsPath = [
+  { title: 'Whatsapp Logs', to: ['/logs/whatsapp-log-list', '/logs/add-whatsapp-log', '/logs/edit-whatsapp-log', '/logs/duplicate-whatsapp-log'] },
+  { title: 'Email Logs', to: ['/logs/email-log-list', '/logs/add-email-log', '/logs/edit-email-log', '/logs/duplicate-email-log'] },
+  { title: 'SMS Logs', to: ['/logs/sms-log-list', '/logs/add-sms-log', '/logs/edit-sms-log', '/logs/duplicate-sms-log'] }
+];
+
 export const adminNavLinks = [{ title: 'Admins', to: ['/admin/admin-list', '/admin/add-admin', '/admin/edit-admin'], icon: <RiAdminLine /> }];
