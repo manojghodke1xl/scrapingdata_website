@@ -79,7 +79,7 @@ const IntegrationHub = () => {
       case 'zohocrm':
         return integrationData?.crm?.zoho?.isVerfied;
       case 'whatsapp':
-        return integrationData?.social?.whatsApp?.some((whatsapp) => whatsapp.isVerified);
+        return integrationData?.social?.whatsapp?.length;
       default:
         return integrationData?.payment?.[id]?.isVerified;
     }

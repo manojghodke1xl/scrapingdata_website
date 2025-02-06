@@ -26,7 +26,7 @@ const WhatsAppLogList = () => {
           <span>{statusCode}</span>
         </div>
       ),
-      error: error ? <span className="text-failed">{error}</span> : <span className="text-secondary">No Error</span>,
+      error: error ? <TruncatableFieldToolTip title={'Error'} content={JSON.stringify(error)} /> : <span className="text-secondary">No Error</span>,
       createdAt: formatDateTime(createdAt),
       updatedAt: formatDateTime(updatedAt)
     };
