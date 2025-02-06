@@ -59,7 +59,6 @@ const TextareaComponent = ({
           className={`w-full mt-2 rounded-xl border ${
             errorMessage ? 'border-fadered focus:border-fadered' : 'border-primary focus:border-blue'
           } font-normal focus:outline-none focus:ring-0 px-4 py-2.5 placeholder:text-gray-400 text-dark bg-transparent`}
-          style={{ resize: 'none' }}
         />
       </div>
       <div className="w-full flex flex-col-reverse md:flex-row gap-4 justify-between">
