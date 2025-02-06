@@ -23,7 +23,7 @@ const EventTicketList = () => {
   return (
     <div className="py-5 px-8 overflow-x-hidden mb-10">
       <div className=" w-full">
-        <TableHeader heading={'Tickets'} btn1={true} href1={'/tickets/add-ticket'} icon1={<IoMdAdd size={22} />} btnLabel1={'Add Ticket'} />
+        <TableHeader heading={'Tickets'} btn1={true} href1={'/tickets/add-ticket'} icon1={<IoMdAdd />} btnLabel1={'Add Ticket'} />
         <div className="flex flex-col">
           <div className="-m-1.5 overflow-x-auto">
             <div className="p-1.5 min-w-full align-middle">

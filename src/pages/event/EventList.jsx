@@ -30,7 +30,7 @@ const EventList = () => {
   return (
     <div className="py-5 px-8 overflow-x-hidden mb-10">
       <div className=" w-full">
-        <TableHeader heading={'Events'} btn1={'Add Event'} href1={'/events/add-event'} icon1={<IoMdAdd size={22} />} btnLabel1={'Add Event'} />
+        <TableHeader heading={'Events'} btn1={'Add Event'} href1={'/events/add-event'} icon1={<IoMdAdd />} btnLabel1={'Add Event'} />
         <div className="flex flex-col">
           <div className="-m-1.5 overflow-x-auto">
             <div className="min-w-full align-middle">

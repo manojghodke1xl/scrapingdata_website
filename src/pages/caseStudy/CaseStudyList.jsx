@@ -37,11 +37,11 @@ const CaseStudyList = () => {
           heading={'Case Studies'}
           btn2={true}
           href2={'/case-study/add-case-study'}
-          icon2={<IoMdAdd size={22} />}
+          icon2={<IoMdAdd />}
           btnLabel2={'Add Case Study'}
           btn1={true}
           href1={'/case-study/case-study-integration'}
-          icon1={<AiOutlineApi size={22} />}
+          icon1={<AiOutlineApi />}
           btnLabel1={'Integration Guide PDF'}
         />
         <div className="flex flex-col">

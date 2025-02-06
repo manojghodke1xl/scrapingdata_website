@@ -39,11 +39,11 @@ const PopupList = () => {
           heading={'Pop-ups'}
           btn1={true}
           href1={'/pop-up/pop-up-integration'}
-          icon1={<AiOutlineApi size={22} />}
+          icon1={<AiOutlineApi />}
           btnLabel1={'API Integration'}
           btn2={true}
           href2={'/pop-up/add-pop-up'}
-          icon2={<IoMdAdd size={22} />}
+          icon2={<IoMdAdd />}
           btnLabel2={'Add Pop-up'}
         />
         <div className="flex flex-col">

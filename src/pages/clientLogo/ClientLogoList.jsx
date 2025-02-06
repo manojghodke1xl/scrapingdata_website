@@ -33,7 +33,7 @@ const ClientLogoList = () => {
   return (
     <div className="py-5 px-8 overflow-x-hidden mb-10">
       <div className=" w-full">
-        <TableHeader heading={'Client Logos'} btn1={true} href1={'/client-logo/add-client-logo'} icon1={<IoMdAdd size={22} />} btnLabel1={'Add Client Logo'} />
+        <TableHeader heading={'Client Logos'} btn1={true} href1={'/client-logo/add-client-logo'} icon1={<IoMdAdd />} btnLabel1={'Add Client Logo'} />
         <div className="flex flex-col">
           <div className="-m-1.5 overflow-x-auto">
             <div className="p-1.5 min-w-full align-middle">

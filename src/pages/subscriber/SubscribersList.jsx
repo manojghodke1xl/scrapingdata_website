@@ -13,13 +13,20 @@ const SubscribersList = () => {
   const [lists, setLists] = useState([]);
 
   const rows = lists.map((list) => {
-    const { _id, email, createdAt, updatedAt, site, name } = list;
+    const { _id, email, createdAt, updatedAt, site, name, url, campaign, medium, source, content, term, campaignId } = list;
     return {
       id: _id,
       exportData: list,
       name: <TruncatableFieldToolTip title={'Name'} content={name} />,
       email: <TruncatableFieldToolTip title={'Email'} content={email} />,
       site: <TruncatableFieldToolTip title={'Sites'} content={`${site?.name} (${site?.host})`} />,
+      url: <TruncatableFieldToolTip content={url} />,
+      campaign: <TruncatableFieldToolTip content={campaign} />,
+      medium: <TruncatableFieldToolTip content={medium} />,
+      source: <TruncatableFieldToolTip content={source} />,
+      content: <TruncatableFieldToolTip content={content} />,
+      term: <TruncatableFieldToolTip content={term} />,
+      campaignId: <TruncatableFieldToolTip content={campaignId} />,
       createdAt: formatDateTime(createdAt),
       updatedAt: formatDateTime(updatedAt)
     };
@@ -32,11 +39,11 @@ const SubscribersList = () => {
           heading="Newsletter Subscribers"
           btn1={true}
           href1={'/subscriber/subscriber-integration'}
-          icon1={<AiOutlineApi size={22} />}
+          icon1={<AiOutlineApi />}
           btnLabel1={'API Integration'}
           btn2={true}
           href2={'/subscriber/add-subscriber'}
-          icon2={<IoMdAdd size={22} />}
+          icon2={<IoMdAdd />}
           btnLabel2={'Add Newsletter Subscriber'}
         />
         <div className="flex flex-col">
@@ -49,6 +56,13 @@ const SubscribersList = () => {
                   { label: 'Name', key: 'name' },
                   { label: 'Email', key: 'email' },
                   { label: 'Sites', key: 'site' },
+                  { label: 'URL', key: 'url' },
+                  { label: 'Campaign Name', key: 'campaign' },
+                  { label: 'Medium', key: 'medium' },
+                  { label: 'Source', key: 'source' },
+                  { label: 'Content', key: 'content' },
+                  { label: 'Term', key: 'term' },
+                  { label: 'Campaign ID', key: 'campaignId' },
                   { label: 'Created Date', key: 'createdAt' },
                   { label: 'Updated Date', key: 'updatedAt' }
                 ]}
@@ -68,9 +82,10 @@ const SubscribersList = () => {
                   { id: 1, name: 'Email' }
                 ]}
                 deleteBtn={true}
+                deleteAction={true}
                 deleteLabel={'Delete Mailing List'}
                 deleteMessage={'Are you sure you want to delete this subscriber list?'}
-                deleteApiUrl={deleteMailingListApi}
+                deleteApi={deleteMailingListApi}
               />
             </div>
           </div>

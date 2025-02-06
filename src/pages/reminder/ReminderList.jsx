@@ -25,7 +25,7 @@ const ReminderList = () => {
   return (
     <div className="py-5 px-8 overflow-x-hidden mb-10">
       <div className="w-full">
-        <TableHeader heading={'Reminders'} btn1={true} href1={'/reminder/add-reminder'} icon1={<IoMdAdd size={22} />} btnLabel1={'Add Reminders'} />
+        <TableHeader heading={'Reminders'} btn1={true} href1={'/reminder/add-reminder'} icon1={<IoMdAdd />} btnLabel1={'Add Reminders'} />
         <div className="flex flex-col">
           <div className="-m-1.5 overflow-x-auto">
             <div className="p-1.5 min-w-full align-middle">

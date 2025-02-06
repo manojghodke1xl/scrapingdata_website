@@ -27,7 +27,7 @@ const TestimonialCategoryList = () => {
           heading={'Testimonials Categories'}
           btn1={true}
           href1={'/testimonial-category/add-testimonial-category'}
-          icon1={<IoMdAdd size={22} />}
+          icon1={<IoMdAdd />}
           btnLabel1={'Add Testimonials Category'}
         />
         <div className="flex flex-col">
