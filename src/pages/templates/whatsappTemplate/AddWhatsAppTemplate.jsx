@@ -229,6 +229,29 @@ const AddWhatsAppTemplate = () => {
                 name="category"
                 label="Category"
                 SummaryChild={<h5 className="text-primary p-0 m-0">Category</h5>}
+                dropdownList={[
+                  { _id: 1, name: 'UTILITY', showName: 'Utility' },
+                  { _id: 2, name: 'MARKETING', showName: 'Marketing' },
+                  { _id: 3, name: 'AUTHENTICATION', showName: 'Authentication' }
+                ].map((category) => ({
+                  id: category._id,
+                  showName: category.showName,
+                  name: category._id
+                }))}
+                selected={whatsAppTemplate.whatsAppCategory || ''}
+                search={true}
+                commonFunction={(e) => {
+                  setWhatsAppTemplate((prev) => ({ ...prev, whatsAppCategory: e.name }));
+                  if (errors.whatsAppCategory) setErrors((prev) => ({ ...prev, whatsAppCategory: '' }));
+                }}
+                error={errors.whatsAppCategory}
+              />
+
+              <DropDown
+                mt="mt-5"
+                name="category"
+                label="Category"
+                SummaryChild={<h5 className="text-primary p-0 m-0">Category</h5>}
                 dropdownList={templateCategories.map((category) => ({ id: category._id, showName: category.name, name: category._id }))}
                 selected={whatsAppTemplate.category}
                 search={true}

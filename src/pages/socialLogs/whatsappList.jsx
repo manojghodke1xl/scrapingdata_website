@@ -57,7 +57,6 @@ const WhatsAppLogList = () => {
                 tableCountLabel={true}
                 pagination={true}
                 search={true}
-                searchCategory={[{ id: 0, name: 'Name' }]}
                 // filter={true}
                 filterCategory={[{ id: 0, name: 'Sites' }]}
                 // actions={true}
