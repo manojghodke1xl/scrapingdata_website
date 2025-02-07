@@ -32,11 +32,11 @@ export const ColorProvider = ({ children }) => {
   );
 
   const updateColors = (color, darkMode) => {
-    document.documentElement.style.setProperty('--bg-primary', darkMode ? color.bgColorDark : color.bgColor);
-    document.documentElement.style.setProperty('--text-brand', darkMode ? color.textColorDark : color.textColor);
-    document.documentElement.style.setProperty('--bg-primary-hover', darkMode ? color.brandHoverColorDark : color.brandHoverColor);
-    document.documentElement.style.setProperty('--border-secondary', darkMode ? color.borderColorDark : color.borderColor);
-    document.documentElement.style.setProperty('--bg-primary-faded', darkMode ? color.fadedColorDark : color.fadedColor);
+    document.documentElement.style.setProperty('--bg-primary', darkMode ? color?.bgColorDark : color?.bgColor);
+    document.documentElement.style.setProperty('--text-brand', darkMode ? color?.textColorDark : color?.textColor);
+    document.documentElement.style.setProperty('--bg-primary-hover', darkMode ? color?.brandHoverColorDark : color?.brandHoverColor);
+    document.documentElement.style.setProperty('--border-secondary', darkMode ? color?.borderColorDark : color?.borderColor);
+    document.documentElement.style.setProperty('--bg-primary-faded', darkMode ? color?.fadedColorDark : color?.fadedColor);
 
     document.documentElement.style.setProperty('--bg-main', darkMode ? '#0C0E12' : '#ffffff');
     document.documentElement.style.setProperty('--bg-hover', darkMode ? '#13161b' : '#f3f4f6');

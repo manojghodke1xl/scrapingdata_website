@@ -46,15 +46,15 @@ const ColorPalette = ({ title = 'Color Palette', onColorChange }) => {
       <div className="flex flex-row items-center justify-start flex-wrap gap-3 w-full pt-3">
         {colors.map((color) => (
           <button
-            key={color.name}
+            key={color?.name}
             style={{
-              backgroundColor: isDarkMode ? color.bgColorDark : color.bgColor
+              backgroundColor: isDarkMode ? color?.bgColorDark : color?.bgColor
             }}
             className="relative w-12 h-9 rounded-lg focus:outline-none"
             onClick={() => handleColorSelect(color)}
-            title={color.name}
+            title={color?.name}
           >
-            {selectedColor.bgColor === color.bgColor && (
+            {selectedColor?.bgColor === color?.bgColor && (
               <GrCheckmark strokeWidth={2} size={18} className="text-white absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
             )}
           </button>
