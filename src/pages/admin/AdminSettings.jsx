@@ -22,7 +22,7 @@ const AdminSettings = () => {
     try {
       const payload = { darkMode: isDarkMode, workspaceColors };
       const { status, data } = await updateAdminThemeApi(id, payload);
-      if (status) showNotification('success', data);
+      if (status) showNotification('success', data.message);
       else showNotification('warn', data);
     } catch (error) {
       showNotification('error', error.message);
