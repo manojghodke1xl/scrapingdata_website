@@ -3,6 +3,7 @@ import { FiCopy } from 'react-icons/fi';
 import { MdEdit, MdOutlineApps, MdRemoveRedEye, MdOutlineInventory2, MdSend } from 'react-icons/md';
 import { RiDeleteBinLine } from 'react-icons/ri';
 import { useNavigate } from 'react-router-dom';
+import { useColor } from '../../contexts/contexts/ColorContext';
 
 const TableRowActions = ({
   row,
@@ -22,6 +23,7 @@ const TableRowActions = ({
   sendForApproval,
   approvalApi
 }) => {
+  const { isDarkMode } = useColor();
   const navigate = useNavigate();
 
   // Function to count the available actions
@@ -44,14 +46,14 @@ const TableRowActions = ({
       {/* If there are more than 2 actions, show dropdown */}
       {availableActions.length > 0 ? (
         <details className="inline-block text-left">
-          <summary className="text-white p-1.5 rounded-xl hover:bg-white cursor-pointer focus:outline-none">
+          <summary className="text-white p-1.5 rounded-xl hover:bg-hover cursor-pointer focus:outline-none">
             <BsThreeDotsVertical size={20} className="text-secondary hover:text-primary" />
           </summary>
-          <ul className={`absolute mt-2 right-10 z-40 w-50 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5`}>
+          <ul className={`absolute mt-2 right-10 z-40 ${managePackage ? 'w-50' : 'w-40'} rounded-md ${isDarkMode ? 'bg-[#0c0e12]' : 'bg-white'} shadow-lg border border-primary`}>
             {availableActions.map((action, i) => (
               <button
                 key={i}
-                className="w-full flex gap-2 items-center px-4 py-2 text-secondary hover:bg-gray-100 hover:text-primary cursor-pointer focus:outline-none"
+                className="w-full flex gap-2 items-center px-4 py-2 text-secondary hover:bg-hover hover:text-primary cursor-pointer focus:outline-none"
                 onClick={async () => {
                   if (action.type === 'edit') navigate(editPath + '/' + row.id);
                   if (action.type === 'view') navigate(viewPath + '/' + row.id);

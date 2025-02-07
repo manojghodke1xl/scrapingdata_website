@@ -33,7 +33,7 @@ const FileTypesTooltip = () => {
       <div className="text-sm text-primary">
         <span className="block">
           Accepted File Types: PDF, PowerPoint, Images, Videos, Archives, Documents, Excel &nbsp;
-          <button onClick={toggleTooltip} className="mt-1 text-blue-500 underline hover:text-blue-700 text-left">
+          <button onClick={toggleTooltip} className="mt-1 text-brand-500 underline hover:text-brand-700 text-left">
             Click for full list
           </button>
         </span>

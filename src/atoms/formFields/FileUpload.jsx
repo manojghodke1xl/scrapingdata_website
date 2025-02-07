@@ -71,7 +71,7 @@ const FileUpload = ({
 
   return (
     <>
-      <div className={`${divClassName} w-full border ${error ? 'border-fadered focus:border-fadered' : ' border-primary focus:border-blue'} rounded-xl p-6 shadow-sm`}>
+      <div className={`${divClassName} w-full border ${error ? 'border-fadered focus:border-fadered' : ' border-primary focus:border-secondary'} rounded-xl p-6 shadow-sm`}>
         <h1 className="text-primary text-lg mb-3 text-left flex items-center gap-2">
           {logo || <MdOutlineUploadFile className="text-primary text-2xl" />}
           Upload {isImage ? label || 'Image' : isPdf ? label || 'PDF' : isVideo ? label || 'Video' : label || 'File'}
@@ -100,7 +100,7 @@ const FileUpload = ({
                 <div className="w-full flex justify-center">
                   <Link
                     to="#"
-                    className="text-primary font-medium cursor-pointer inline-block px-4 py-2 border hover:bg-gray-50 border-primary rounded-xl shadow-sm"
+                    className="text-primary font-medium cursor-pointer inline-block px-4 py-2 border hover:bg-hover border-primary rounded-xl shadow-sm"
                     onClick={() => fileInputRef.current.click()}
                   >
                     <span className="text-primary">Browse</span>
@@ -148,7 +148,7 @@ const FileUpload = ({
               </div>
 
               <div className="w-full mt-4 flex">
-                <button onClick={() => setShowPopup(false)} className="px-4 py-2 w-full text-center text-white font-medium rounded-xl whitespace-nowrap bg-primary hover:bg-hover">
+                <button onClick={() => setShowPopup(false)} className="px-4 py-2 w-full text-center text-white font-medium rounded-xl whitespace-nowrap bg-primary hover:bg-primary-hover">
                   Continue
                 </button>
               </div>

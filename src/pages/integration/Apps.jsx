@@ -25,7 +25,7 @@ const Apps = () => {
             <span className="text-3xl font-semibold text-dark">Apps</span>
           </div>
         </div>
-        <div className="flex flex-col items-center gap-2 border border-dashed border-blue p-4 rounded-xl">
+        <div className="flex flex-col items-center gap-2 border border-dashed border-secondary p-4 rounded-xl">
           <div>
             <img src={BGImg} alt="Site Selectioin for Integration" className="w-72" />
           </div>
@@ -49,7 +49,7 @@ const Apps = () => {
             />
           </div>
           <div className="flex justify-center gap-4 mt-5">
-            <button onClick={handleProceed} className="flex gap-2 h-fit items-center px-2.5 md:px-2 sm:px-4 rounded-xl py-2.5 bg-primary hover:bg-hover text-white">
+            <button onClick={handleProceed} className="flex gap-2 h-fit items-center px-2.5 md:px-2 sm:px-4 rounded-xl py-2.5 bg-primary hover:bg-primary-hover text-white">
               Proceed
             </button>
           </div>
@@ -60,4 +60,4 @@ const Apps = () => {
 };
 
 export default Apps;
-0
+0;

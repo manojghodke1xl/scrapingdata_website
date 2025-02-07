@@ -99,7 +99,7 @@ const IntegrationHub = () => {
           <span className="text-3xl font-semibold text-dark">Integration Hub</span>
         </div>
         <div className="w-full flex gap-4 justify-end items-end md:w-fit lg:w-full xl:w-fit">
-          <Link to={'/apps/app'} className="px-4 py-2 text-primary font-medium bg-white hover:bg-gray-50 rounded-xl border border-primary whitespace-nowrap">
+          <Link to={'/apps/app'} className="px-4 py-2 text-primary font-medium bg-inherit hover:bg-hover rounded-xl border border-primary whitespace-nowrap">
             Back
           </Link>
         </div>

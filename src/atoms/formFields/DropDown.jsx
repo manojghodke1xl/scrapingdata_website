@@ -3,8 +3,10 @@ import { IoAdd } from 'react-icons/io5';
 import SearchComponent from '../common/SearchComponent';
 import { IoIosArrowDown } from 'react-icons/io';
 import TruncatableFieldToolTip from '../common/TruncatableFeildToolTip';
+import { useColor } from '../../contexts/contexts/ColorContext';
 
 const DropDown = ({ mt = '', width = 'w-full', name, label, SummaryChild, dropdownList = [], commonFunction, search, selected, add = false, setIsNewSegment, error }) => {
+  const { isDarkMode } = useColor();
   const dropdownRef = useRef(null);
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -25,7 +27,7 @@ const DropDown = ({ mt = '', width = 'w-full', name, label, SummaryChild, dropdo
       <details
         ref={dropdownRef}
         name={name}
-        className={`relative ${width} cursor-default rounded-xl bg-white pl-3 pr-10 text-left text-primary shadow-sm border ${
+        className={`relative ${width} cursor-default rounded-xl bg-inherit pl-3 pr-10 text-left text-primary shadow-sm border ${
           error ? 'border-danger' : 'border-primary'
         } focus:outline-none focus:ring-0 sm:text-lg sm:leading-6 `}
       >
@@ -39,7 +41,11 @@ const DropDown = ({ mt = '', width = 'w-full', name, label, SummaryChild, dropdo
             <IoIosArrowDown />
           </span>
         </summary>
-        <ul className="absolute end-0 top-11 z-40 mt-1 max-h-48 w-full rounded-md bg-white text-[12px] md:text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm overflow-y-auto custom-scrollbar">
+        <ul
+          className={`absolute end-0 top-11 z-40 mt-1 max-h-48 w-full rounded-md ${
+            isDarkMode ? 'bg-[#0c0e12]' : 'bg-white'
+          } text-[12px] md:text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm overflow-y-auto custom-scrollbar`}
+        >
           {search && (
             <div className="w-full flex items-center rounded-t-lg border border-primary px-3">
               <SearchComponent value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
@@ -49,7 +55,7 @@ const DropDown = ({ mt = '', width = 'w-full', name, label, SummaryChild, dropdo
             {filteredList.map((item) => (
               <li
                 key={item.id || item.name}
-                className={`group relative cursor-default select-none py-2 pl-3 pr-9 text-primary ${item.name === selected ? 'bg-fadedblue' : 'hover:bg-gray-50'} ${
+                className={`group relative cursor-default select-none py-2 pl-3 pr-9 text-primary ${item.name === selected ? 'bg-primary-faded' : 'hover:bg-hover'} ${
                   item.disabled ? 'cursor-not-allowed' : ''
                 }`}
                 onClick={(e) => {
@@ -73,7 +79,7 @@ const DropDown = ({ mt = '', width = 'w-full', name, label, SummaryChild, dropdo
                   e.currentTarget.closest('details').removeAttribute('open');
                   setIsNewSegment(true);
                 }}
-                className="w-full py-2 z-10 px-2 pl-4 md:px-4 border-t border-primary mt-2 flex gap-2 items-center hover:bg-gray-50"
+                className="w-full py-2 z-10 px-2 pl-4 md:px-4 border-t border-primary mt-2 flex gap-2 items-center hover:bg-hover"
               >
                 <span>
                   <IoAdd className="text-3xl" />

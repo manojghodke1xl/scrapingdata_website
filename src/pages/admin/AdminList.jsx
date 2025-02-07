@@ -8,8 +8,10 @@ import { updateAdminStatusApi } from '../../apis/admin-apis';
 import NoteComponent from '../../atoms/common/NoteComponent';
 import { adminListNote } from './AdminNotes';
 import TableHeader from '../../atoms/table/TableHeader';
+import { useColor } from '../../contexts/contexts/ColorContext';
 
 const AdminList = () => {
+  const { isDarkMode } = useColor();
   const {
     auth: { allSites }
   } = useGlobalContext();
@@ -30,7 +32,11 @@ const AdminList = () => {
         />
       ),
       isBlocked: (
-        <div className={`rounded-xl ${isBlocked ? 'bg-[#FEF3F2] text-[#B32318]' : 'bg-[#ECFDF3] text-[#027948]'} px-2 py-1 w-fit flex gap-2 items-center`}>
+        <div
+          className={`rounded-xl ${
+            isBlocked ? `${isDarkMode ? 'border border-[#B32318]' : 'bg-[#FEF3F2]'} text-[#B32318]` : `${isDarkMode ? 'border border-[#027948]' : 'bg-[#ECFDF3]'} text-[#027948]`
+          } px-2 py-1 w-fit flex gap-2 items-center`}
+        >
           <span className={`min-w-[8px] min-h-[8px] rounded-full ${isBlocked ? 'bg-[#F04438]' : 'bg-[#12B76A]'}`}></span>
           <span>{isBlocked ? 'Blocked' : 'Active'}</span>
         </div>

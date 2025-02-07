@@ -30,7 +30,7 @@ const DocumentFileUpload = ({
         return <AiOutlineFilePdf className="text-danger text-2xl" />;
       case 'doc':
       case 'docx':
-        return <AiOutlineFileWord className="text-blue text-2xl" />;
+        return <AiOutlineFileWord className="text-brand text-2xl" />;
       case 'xls':
       case 'xlsx':
       case 'csv':
@@ -88,7 +88,7 @@ const DocumentFileUpload = ({
             <input type="file" onChange={(e) => handleFileUpload(e)} className="hidden" accept={`.${allowedTypes.join(', ')}`} ref={fileInputRef} multiple={isMultiple} />
             <div className="w-full flex justify-center">
               <button
-                className="text-primary font-medium cursor-pointer inline-block px-4 py-2 border hover:bg-gray-50 border-primary rounded-xl shadow-sm"
+                className="text-primary font-medium cursor-pointer inline-block px-4 py-2 border hover:bg-hover border-primary rounded-xl shadow-sm"
                 onClick={() => fileInputRef.current.click()}
               >
                 <span className="text-primary">Browse</span>
@@ -132,14 +132,14 @@ const DocumentFileUpload = ({
                     <FaEllipsisVertical className="text-gray-500 cursor-pointer text-xl" onClick={() => toggleDropdown(index)} />
                     {dropdownIndex === index && (
                       <div className="absolute right-0 mt-2 w-32 bg-white border border-gray-200 rounded-md shadow-lg z-10">
-                        <button className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onClick={() => console.log('View clicked for', file.name)}>
+                        <button className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-hover" onClick={() => console.log('View clicked for', file.name)}>
                           View
                         </button>
-                        <button className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onClick={() => handleRename(index)}>
+                        <button className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-hover" onClick={() => handleRename(index)}>
                           Rename
                         </button>
                         <button
-                          className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
+                          className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-hover"
                           onClick={() => setExistingFiles(existingFiles.filter(({ attachments }, fileIndex) => attachments[fileIndex] !== index))}
                         >
                           Delete
@@ -179,14 +179,14 @@ const DocumentFileUpload = ({
                     <FaEllipsisVertical className="text-gray-500 cursor-pointer text-xl" onClick={() => toggleDropdown(index)} />
                     {dropdownIndex === index && (
                       <div className="absolute right-0 mt-2 w-32 bg-white border border-gray-200 rounded-md shadow-lg z-10">
-                        {/* <button className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onClick={() => console.log('View clicked for', file.name)}>
+                        {/* <button className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-hover" onClick={() => console.log('View clicked for', file.name)}>
                           View
                         </button> */}
-                        <button className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onClick={() => handleRename(index)}>
+                        <button className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-hover" onClick={() => handleRename(index)}>
                           Rename
                         </button>
                         <button
-                          className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
+                          className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-hover"
                           onClick={() => setFiles(files.filter((_, fileIndex) => fileIndex !== index))}
                         >
                           Delete

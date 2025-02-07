@@ -77,13 +77,13 @@ const CustomColumnComponent = ({
         {/* Options List */}
         <div className="max-h-60 overflow-y-auto">
           {/* Select All Checkbox */}
-          <div className="flex items-center px-3 py-2 border-b border-primary hover:bg-fadedblue">
+          <div className="flex items-center px-3 py-2 border-b border-primary hover:bg-primary-faded">
             <input
               type="checkbox"
               id="select-all"
               checked={isSelectAllChecked}
               onChange={handleSelectAll}
-              className="h-4 w-4 rounded border-primary text-blue focus:ring-blue-500"
+              className="h-4 w-4 rounded border-primary text-brand focus:ring-blue-500"
             />
             <label htmlFor="select-all" className="ml-2 text-secondary cursor-pointer select-none font-medium">
               Select All
@@ -96,13 +96,13 @@ const CustomColumnComponent = ({
               mode === 'ids' ? (isSuperAdmin ? isSuperAdmin || selected.includes(option._id) : selected.includes(option._id)) : selected.some((item) => item[option._id] === true);
 
             return (
-              <div key={option._id} className={`flex items-center px-3 py-2 hover:bg-fadedblue ${isChecked ? 'bg-fadedblue ' : ''} `}>
+              <div key={option._id} className={`flex items-center px-3 py-2 hover:bg-primary-faded ${isChecked ? 'bg-primary-faded ' : ''} `}>
                 <input
                   type="checkbox"
                   id={option._id}
                   checked={isChecked}
                   onChange={() => handleChange(option._id)}
-                  className={`h-4 w-4 rounded border-primary text-blue focus:ring-blue-500 ${error ? 'border-red-500' : ''}`}
+                  className={`h-4 w-4 rounded border-primary text-brand focus:ring-blue-500 ${error ? 'border-red-500' : ''}`}
                   disabled={isSuperAdmin}
                 />
                 <label htmlFor={option._id} className="ml-2 text-secondary cursor-pointer select-none">

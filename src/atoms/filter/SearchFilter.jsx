@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { IoIosArrowDown } from 'react-icons/io';
+import { useColor } from '../../contexts/contexts/ColorContext';
 
 const SearchFilter = ({ searchCategory, setSearchKey, selectedCategory, setSelectedCategory }) => {
+  const { isDarkMode } = useColor();
   const [isOpen, setIsOpen] = useState(false);
 
   const handleCheckboxClick = (category) => {
@@ -16,7 +18,7 @@ const SearchFilter = ({ searchCategory, setSearchKey, selectedCategory, setSelec
       <details
         name="tone"
         open={isOpen}
-        className="relative w-fit cursor-default rounded-xl bg-white px-4 text-left text-primary shadow-sm border border-fadedblue focus:outline-none focus:ring-0 sm:text-lg sm:leading-6"
+        className="relative w-fit cursor-default rounded-xl bg-inherit px-4 text-left text-primary shadow-sm border border-primary focus:outline-none focus:ring-0 sm:text-lg sm:leading-6"
         onToggle={(e) => setIsOpen(e.target.open)}
       >
         <summary className="cursor-pointer py-2.5 text-left w-full pr-0 text-primary list-none focus:outline-none focus:ring-0 focus:border-0">
@@ -35,12 +37,16 @@ const SearchFilter = ({ searchCategory, setSearchKey, selectedCategory, setSelec
             </span>
           </span>
         </summary>
-        <ul className="absolute end-0 top-11 z-40 mt-1 min-w-fit max-w-[300px] max-h-[350px] rounded-xl bg-white text-[12px] md:text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm overflow-y-auto custom-scrollbar">
+        <ul
+          className={`absolute end-0 top-11 z-40 mt-1 min-w-fit max-w-[300px] max-h-[350px] rounded-xl ${
+            isDarkMode ? 'bg-[#0c0e12]' : 'bg-white'
+          } text-[12px] md:text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm overflow-y-auto custom-scrollbar`}
+        >
           <div className="relative py-2 border-b border-primary">
             {searchCategory?.map((category) => (
               <li
                 key={category.id}
-                className={`group relative cursor-default select-none py-2 pl-3 pr-14 text-primary hover:bg-gray-50 ${selectedCategory?.id === category.id ? 'bg-lightcyan' : ''}`}
+                className={`group relative cursor-default select-none py-2 pl-3 pr-14 text-primary hover:bg-hover ${selectedCategory?.id === category.id ? 'bg-lightcyan' : ''}`}
                 onClick={() => handleCheckboxClick(category)}
               >
                 <div className="flex items-center">

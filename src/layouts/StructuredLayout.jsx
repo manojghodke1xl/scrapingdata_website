@@ -8,7 +8,7 @@ const StructuredLayout = () => {
       <div className="w-screen h-screen overflow-hidden">
         <Navbar />
         <div className="w-screen h-full flex gap-0.5">
-          <div className="sidebaar-showww w-[320px] h-screen bg-white">
+          <div className="sidebaar-showww w-[320px] h-screen bg-inherit">
             <div className="sidebaar-showww fixed w-[320px] h-screen my-0.5 border-r border-primary">
               <MaterialSidebar />
             </div>

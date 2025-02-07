@@ -11,7 +11,7 @@ const DateTimePicker = ({ divClassName, label, id, placeholder, selectedDateTime
       <label htmlFor={id} className="block text-sm font-medium text-primary">
         {label}
       </label>
-      <div className={`w-full mt-2 rounded-xl border ${errorMessage ? 'border-fadered focus:border-fadered' : 'border-primary focus:border-blue'} relative`}>
+      <div className={`w-full mt-2 rounded-xl border ${errorMessage ? 'border-fadered focus:border-fadered' : 'border-primary focus:border-secondary'} relative`}>
         <DatePicker
           ref={datePickerRef}
           id={id}

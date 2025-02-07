@@ -1,6 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
 import { IoSearchOutline } from 'react-icons/io5';
 import { IoIosArrowDown } from 'react-icons/io';
+import { useColor } from '../../contexts/contexts/ColorContext';
+import Checkbox from './Checkbox';
 
 const MultiSelectCheckbox = ({
   options,
@@ -14,6 +16,7 @@ const MultiSelectCheckbox = ({
   divClassName,
   mode = 'ids' // 'ids' or 'objects'
 }) => {
+  const { isDarkMode } = useColor();
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const dropdownRef = useRef(null);
@@ -82,8 +85,8 @@ const MultiSelectCheckbox = ({
         type="button"
         onClick={() => setIsOpen(!isOpen)}
         className={`w-full flex items-center justify-between px-3 py-3 border rounded-xl ${
-          error ? 'border-fadered focus:border-fadered' : ' border-primary focus:border-blue'
-        } bg-white text-primary`}
+          error ? 'border-fadered focus:border-fadered' : ' border-primary focus:border-secondary'
+        } bg-inherit text-primary`}
       >
         <span className="font-medium text-primary">{label}</span>
 
@@ -92,7 +95,7 @@ const MultiSelectCheckbox = ({
 
       {/* Dropdown Menu */}
       {isOpen && (
-        <div className="absolute z-10 w-full mt-1 bg-white border border-primary rounded-lg shadow-md">
+        <div className={`absolute z-10 w-full mt-1 ${isDarkMode ? 'bg-[#0c0e12]' : 'bg-white'} border border-primary rounded-lg shadow-md`}>
           {/* Search Box */}
           <div className="p-2 border-b border-primary">
             <div className="relative">
@@ -102,7 +105,7 @@ const MultiSelectCheckbox = ({
                 placeholder="Search"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-3 py-2 border border-primary rounded-xl text-secondary placeholder-secondary focus:outline-none focus:border-secondary"
+                className="w-full pl-10 pr-3 py-2 border border-primary bg-grey rounded-xl text-secondary placeholder-secondary focus:outline-none focus:border-secondary"
               />
             </div>
           </div>
@@ -110,14 +113,15 @@ const MultiSelectCheckbox = ({
           {/* Options List */}
           <div className="max-h-60 overflow-y-auto">
             {/* Select All Checkbox */}
-            <div className="flex items-center px-3 py-2 border-b border-primary hover:bg-fadedblue">
-              <input
+            <div className="flex items-center px-3 py-2 border-b border-primary hover:bg-hover">
+              <Checkbox id="select-all" checked={isSelectAllChecked} onChange={handleSelectAll} />
+              {/* <input
                 type="checkbox"
                 id="select-all"
                 checked={isSelectAllChecked}
                 onChange={handleSelectAll}
-                className="h-4 w-4 rounded border-primary text-blue focus:ring-blue-500"
-              />
+                className="h-4 w-4 rounded border-primary text-brand focus:ring-blue-500"
+              /> */}
               <label htmlFor="select-all" className="ml-2 text-secondary cursor-pointer select-none font-medium">
                 Select All
               </label>
@@ -133,15 +137,16 @@ const MultiSelectCheckbox = ({
                   : selected.some((item) => item[option._id] === true);
 
               return (
-                <div key={option._id} className={`flex items-center px-3 py-2  ${isChecked ? 'bg-fadedblue ' : 'hover:bg-grey'} `}>
-                  <input
+                <div key={option._id} className={`flex items-center px-3 py-2  ${isChecked ? 'bg-primary-faded ' : 'hover:bg-hover'} `}>
+                  <Checkbox id={option._id} checked={isChecked} onChange={() => handleChange(option._id)} disabled={isSuperAdmin || disabled} />
+                  {/* <input
                     type="checkbox"
                     id={option._id}
                     checked={isChecked}
                     onChange={() => handleChange(option._id)}
-                    className={`h-4 w-4 rounded border-primary text-blue focus:ring-blue-500 ${error ? 'border-red-500' : ''}`}
+                    className={`h-4 w-4 rounded border-primary text-brand focus:ring-blue-500 ${error ? 'border-red-500' : ''}`}
                     disabled={isSuperAdmin || disabled}
-                  />
+                  /> */}
                   <label htmlFor={option._id} className="ml-2 text-secondary cursor-pointer select-none">
                     {option.name}
                   </label>

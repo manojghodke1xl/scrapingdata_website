@@ -195,7 +195,7 @@ const AddEmailTemplate = () => {
                   {variables.map((variable) => (
                     <div className="flex items-center justify-start" key={variable.key}>
                       <p className="text-primary">{variable.label} : </p> &nbsp;
-                      <p className="text-blue">{`{${variable.name}}`}</p>
+                      <p className="text-brand">{`{${variable.name}}`}</p>
                     </div>
                   ))}
                 </div>

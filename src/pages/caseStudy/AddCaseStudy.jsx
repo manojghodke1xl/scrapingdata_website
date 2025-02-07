@@ -113,7 +113,7 @@ const AddCaseStudy = () => {
         <FormButtons to="/case-study/case-study-list" type="submit" onClick={handleSubmit} btnLebal={id ? (isDuplicate ? 'Add' : 'Save Changes') : 'Add'} loading={isLoading} />
       </div>
 
-      <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
+      <div className="w-full  justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
         <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className=" text-primary">Case Study Information</span>
@@ -193,7 +193,7 @@ const AddCaseStudy = () => {
             <span className="block text-primary">Site & Global Settings</span>
           </div>
           <div className="w-full">
-            <div className="w-full">
+            <div className="w-full flex flex-col gap-5">
               <MultiSelectCheckbox
                 options={availableSites
                   .filter((site) => site.modules?.some((module) => module.casestudy === true))

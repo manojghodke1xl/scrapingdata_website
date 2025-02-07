@@ -27,8 +27,8 @@ const TextEditor = ({ value, onChange, label = 'Body', placeholder = '', errorMe
         value={value}
         onChange={onChange}
         placeholder={placeholder}
-        className={`rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 border ${
-          errorMessage ? 'border-fadered focus:border-fadered' : ' border-primary focus:border-blue'
+        className={`rounded-lg shadow-smb focus:outline-none focus:ring-2  border ${
+          errorMessage ? 'border-fadered focus:border-fadered' : ' border-primary focus:border-secondary'
         } `}
         modules={modules}
         formats={['header', 'bold', 'italic', 'underline', 'strike', 'blockquote', 'list', 'bullet', 'indent', 'color', 'link', 'image']}

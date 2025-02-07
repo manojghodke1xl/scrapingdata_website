@@ -3,8 +3,10 @@ import { formatDateTime } from '../../utils/dateFormats';
 import TableComponent from '../../atoms/table/Table';
 import TruncatableFieldToolTip from '../../atoms/common/TruncatableFeildToolTip';
 import TableHeader from '../../atoms/table/TableHeader';
+import { useColor } from '../../contexts/contexts/ColorContext';
 
 const OrderPaymentList = () => {
+  const { isDarkMode } = useColor();
   const [bookingPayments, setBookingPayments] = useState([]);
 
   const rows = bookingPayments.map((payment) => {
@@ -38,7 +40,11 @@ const OrderPaymentList = () => {
       status: (
         <div
           className={`rounded-xl ${
-            status === 'success' ? 'bg-lightgreen text-success' : status === 'pending' ? 'bg-fadeyellow text-pending' : 'bg-fadedred text-failed'
+            status === 'success'
+              ? `${isDarkMode ? 'border border-success' : 'bg-lightgreen'} text-success`
+              : status === 'pending'
+              ? `${isDarkMode ? 'border border-pending' : 'bg-fadeyellow'} text-pending`
+              : `${isDarkMode ? 'border border-failed ' : 'bg-fadedred'} text-failed`
           } px-2 py-1 w-fit flex gap-2 items-center`}
         >
           <span className={`min-w-[8px] min-h-[8px] rounded-full ${status === 'success' ? 'bg-green' : 'bg-pending'}`}></span>

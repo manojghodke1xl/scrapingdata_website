@@ -350,7 +350,7 @@ const AddSite = () => {
 
                   <button
                     type="button"
-                    className="px-4 py-2 text-white font-medium bg-primary hover:bg-hover rounded-xl whitespace-nowrap mt-5"
+                    className="px-4 py-2 text-white font-medium bg-primary hover:bg-primary-hover rounded-xl whitespace-nowrap mt-5"
                     onClick={(e) => validateAndAddInput(e, emailInput, setEmailInput, setSiteDetails, 'adminEnquiryEmails', emailRegex)}
                   >
                     Add Email
@@ -427,7 +427,7 @@ const AddSite = () => {
 
                   <button
                     type="button"
-                    className="px-4 py-2 text-white font-medium bg-primary hover:bg-hover rounded-xl whitespace-nowrap mt-5"
+                    className="px-4 py-2 text-white font-medium bg-primary hover:bg-primary-hover rounded-xl whitespace-nowrap mt-5"
                     onClick={(e) => validateAndAddInput(e, emailInput, setEmailInput, setSiteDetails, 'adminMailingListEmails', emailRegex)}
                   >
                     Add Email
@@ -512,7 +512,7 @@ const AddSite = () => {
                 onChange={(e) => setSiteDetails((prev) => ({ ...prev, enquiryWebhookUrl: e.target.value }))}
                 value={siteDetails.enquiryWebhookUrl}
               />
-              <button onClick={() => setEnquiryModalOpen(true)} className="w-fit whitespace-nowrap rounded-xl bg-darkblue text-white p-2 mt-2">
+              <button onClick={() => setEnquiryModalOpen(true)} className="w-fit whitespace-nowrap rounded-xl bg-primary hover:bg-primary-hover text-white p-2 mt-2">
                 Preview Data
               </button>
               <FormField
@@ -525,7 +525,7 @@ const AddSite = () => {
                 onChange={(e) => setSiteDetails((prev) => ({ ...prev, mailinglistWebhookUrl: e.target.value }))}
                 value={siteDetails.mailinglistWebhookUrl}
               />
-              <button onClick={() => setMailingListModalOpen(true)} className="w-fit whitespace-nowrap rounded-xl bg-darkblue text-white p-2 mt-2">
+              <button onClick={() => setMailingListModalOpen(true)} className="w-fit whitespace-nowrap rounded-xl bg-primary hover:bg-primary-hover text-white p-2 mt-2">
                 Preview Data
               </button>
             </div>

@@ -18,9 +18,11 @@ const FormField = ({ divClassName, label, type = 'text', name, id, placeholder, 
           value={value}
           name={name}
           placeholder={placeholder}
-          className={`w-full mt-2 rounded-xl border bg-white ${
-            errorMessage ? 'border-fadered focus:border-fadered' : ' border-primary focus:border-blue'
-          } font-normal focus:outline-none focus:ring-0 px-4 py-2.5 focus:border  placeholder:text-secondary text-dark bg-transparent ${showPasswordToggle ? 'pr-12' : ''}`}
+          className={`w-full mt-2 rounded-xl border bg-inherit ${
+            errorMessage ? 'border-fadered focus:border-fadered' : ' border-primary focus:border-secondary'
+          } font-normal focus:outline-none focus:ring-0 px-4 py-2.5 focus:border placeholder:opacity-50 placeholder:text-secondary text-dark bg-transparent ${
+            showPasswordToggle ? 'pr-12' : ''
+          }`}
           disabled={disabled}
         />
 

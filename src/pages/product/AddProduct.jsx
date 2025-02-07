@@ -598,7 +598,7 @@ const AddProduct = () => {
                           onClick={() => setIsOpen(isOpen === shipping.destination ? null : shipping.destination)}
                           className={`py-2.5 px-3 text-left text-base flex gap-2 items-center border ${
                             isOpen === shipping.destination ? 'rounded-t-xl' : 'rounded-xl'
-                          } border-primary shadow-none focus:outline-none bg-white text-primary`}
+                          } border-primary shadow-none focus:outline-none bg-inherit text-primary`}
                         >
                           <div className="flex gap-4 items-center">
                             <span>{capitalizeFirstLetter(shipping.destination === 'restOfTheWorld' ? 'Rest of the World' : shipping.destination)}</span>

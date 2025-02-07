@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { FaEye } from 'react-icons/fa';
+import { useColor } from '../../contexts/contexts/ColorContext';
 
 const TruncatableFieldToolTip = ({ content = '', maxLength = 20 }) => {
+  const { isDarkMode } = useColor();
   const [showTooltip, setShowTooltip] = useState(false);
 
   const isTruncated = content.length > maxLength;
@@ -24,7 +26,7 @@ const TruncatableFieldToolTip = ({ content = '', maxLength = 20 }) => {
       </span>
 
       {showTooltip && (
-        <div className="absolute z-10 bg-white border border-gray-300 rounded-xl shadow-lg p-2 whitespace-normal">
+        <div className={`absolute z-10 ${isDarkMode ? 'bg-[#0c0e12]' : 'bg-white'} border border-primary rounded-xl shadow-lg p-2 whitespace-normal`}>
           <p className="text-primary overflow-hidden text-ellipsis">{content}</p>
         </div>
       )}

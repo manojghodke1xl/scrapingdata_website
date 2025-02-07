@@ -389,7 +389,7 @@ const AddEvent = () => {
 
                 <button
                   type="button"
-                  className="px-4 py-2 text-white font-medium bg-primary hover:bg-hover rounded-xl whitespace-nowrap mt-5"
+                  className="px-4 py-2 text-white font-medium bg-primary hover:bg-primary-hover rounded-xl whitespace-nowrap mt-5"
                   onClick={(e) => validateAndAddInput(e, emailInput, setEmailInput, setEventDetails, 'adminEmails', emailRegex)}
                 >
                   Add Email

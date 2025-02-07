@@ -64,10 +64,7 @@ const Login = () => {
               />
             </div>
             <div className="w-full mt-6 flex justify-center">
-              <button
-                type="submit"
-                className={`w-full text-center text-white text-lg py-2 rounded-xl bg-custom-gradient hover:bg-custom-gradient-hover transition duration-300 ease-in-out`}
-              >
+              <button type="submit" className={`w-full text-center text-white text-lg py-2 rounded-xl bg-primary hover:bg-primary-hover `}>
                 Login
               </button>
             </div>

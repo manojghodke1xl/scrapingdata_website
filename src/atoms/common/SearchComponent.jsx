@@ -12,7 +12,7 @@ const SearchComponent = ({ onChange, disabled, value }) => {
         id="search"
         placeholder="Search"
         value={value}
-        className="placeholder:text-secondary w-full md:w-[160px] py-2.5 placeholder:font-medium focus:outline-none focus:ring-0 focus:border-0 border-0 text-primary disabled:bg-grey disabled:cursor-not-allowed"
+        className="bg-inherit placeholder:text-secondary w-full md:w-[160px] py-2.5 placeholder:font-medium focus:outline-none focus:ring-0 focus:border-0 border-0 text-primary disabled:bg-grey disabled:cursor-not-allowed"
         onChange={onChange}
         disabled={disabled}
       />

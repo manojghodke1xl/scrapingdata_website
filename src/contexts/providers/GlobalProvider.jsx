@@ -6,6 +6,7 @@ import { showNotification } from '../../utils/showNotification';
 const defaultState = {
   id: '',
   isSuperAdmin: false,
+
   exp: 0,
   iat: 0,
   allSites: []

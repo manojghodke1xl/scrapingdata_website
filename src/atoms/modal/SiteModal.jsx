@@ -1,8 +1,10 @@
 import { IoCloseSharp } from 'react-icons/io5';
 import MultiSelectCheckbox from '../formFields/MultiSelectCheckBox';
 import ToggleComponent from '../formFields/ToggleComponent';
+import { useColor } from '../../contexts/contexts/ColorContext';
 
 const SiteModal = ({ isOpen, label, duplicateBtn, setSitesModelOpen, selectedSites, setSelectedSites, availableSites, onConfirm, siteToggle }) => {
+  const { isDarkMode } = useColor();
   if (!isOpen) return null;
   const onCancel = () => {
     if (duplicateBtn) {
@@ -17,14 +19,18 @@ const SiteModal = ({ isOpen, label, duplicateBtn, setSitesModelOpen, selectedSit
   return (
     <div className="fixed inset-0 z-10 overflow-y-auto">
       <div
-        className="fixed inset-0 bg-gray-300 bg-opacity-75 transition-opacity"
+        className="fixed inset-0 bg-black bg-opacity-50 transition-opacity"
         onClick={() => {
           if (duplicateBtn) setSitesModelOpen((prev) => ({ ...prev, isDuplicateModelOpen: false }));
           else setSitesModelOpen((prev) => ({ ...prev, isSitesModelOpen: false }));
         }}
       ></div>
       <div className="flex items-start justify-center w-full min-h-screen px-2 text-center lg:absolute lg:top-[12%]">
-        <div className="bg-[#FFFFFF] rounded-2xl text-left overflow-hidden shadow-xl transform transition-all w-[95%] sm:w-[80%] md:w-[580px] px-6 2xl:px-8 py-6">
+        <div
+          className={`${
+            isDarkMode ? 'bg-[#0c0e12]' : 'bg-white'
+          } rounded-2xl text-left overflow-hidden shadow-xl transform transition-all w-[95%] sm:w-[80%] md:w-[580px] px-6 2xl:px-8 py-6`}
+        >
           <div className="w-full flex justify-end items-center">
             <div
               onClick={() => {
@@ -72,7 +78,7 @@ const SiteModal = ({ isOpen, label, duplicateBtn, setSitesModelOpen, selectedSit
               <button onClick={() => onCancel()} className=" w-1/4 rounded-xl border border-primary text-primary py-2 ">
                 Cancel
               </button>
-              <button onClick={() => onConfirm(siteToggle)} className="w-1/4 rounded-xl bg-darkblue text-white py-2">
+              <button onClick={() => onConfirm(siteToggle)} className="w-1/4 rounded-xl bg-primary hover:bg-primary-hover text-white py-2">
                 Confirm
               </button>
             </div>

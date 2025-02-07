@@ -9,8 +9,10 @@ import NoteComponent from '../../atoms/common/NoteComponent';
 import { websiteListNote } from './SiteNotes';
 import TruncatableFieldToolTip from '../../atoms/common/TruncatableFeildToolTip';
 import TruncatableCopyFeild from '../../atoms/common/TruncatableCopyFeild';
+import { useColor } from '../../contexts/contexts/ColorContext';
 
 const SiteList = () => {
+  const { isDarkMode } = useColor();
   const [sites, setSites] = useState([]);
   const {
     auth: { isSuperAdmin }
@@ -25,7 +27,11 @@ const SiteList = () => {
       name: <TruncatableFieldToolTip title={'Website Name'} content={name} />,
       host: <TruncatableFieldToolTip title={'Web Address'} content={host} />,
       isActive: (
-        <div className={`rounded-xl ${isActive ? 'bg-[#ECFDF3] text-[#027948]' : 'bg-[#F2F4F7] text-[#344054]'} px-2 py-1 w-fit flex gap-2 items-center`}>
+        <div
+          className={`rounded-xl ${
+            isActive ? `${isDarkMode ? 'border border-[#027948]' : 'bg-[#ECFDF3]'} text-[#027948]` : `${isDarkMode ? 'border border-[#344054]' : 'bg-[#F2F4F7]'} text-[#344054]`
+          } px-2 py-1 w-fit flex gap-2 items-center`}
+        >
           <span className={`min-w-[8px] min-h-[8px] rounded-full ${isActive ? 'bg-[#12B76A]' : 'bg-[#667085]'}`}></span>
           <span>{isActive ? 'Active' : 'Inactive'}</span>
         </div>
@@ -42,7 +48,7 @@ const SiteList = () => {
           <h4 className="text-3xl text-dark">All Sites</h4>
           {isSuperAdmin && (
             <div className="w-full flex justify-end sm:w-fit">
-              <Link to="/site/add-site" className="flex gap-2 h-fit items-center px-2.5 md:px-2 sm:px-4 rounded-xl py-2.5 bg-primary hover:bg-hover text-white">
+              <Link to="/site/add-site" className="flex gap-2 h-fit items-center px-2.5 md:px-2 sm:px-4 rounded-xl py-2.5 bg-primary hover:bg-primary-hover text-white">
                 <IoMdAdd />
                 <span className="hidden md:block">Add Site</span>
               </Link>

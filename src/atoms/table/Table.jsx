@@ -303,10 +303,10 @@ const TableComponent = ({
           </div>
         </div>
         {tableCountLabel && selectionState.selectedItems.length > 0 && (
-          <div className="w-full ptpb-4 text-center bg-grey border-b border-primary">
+          <div className="w-full ptpb-4 text-center bg-grey border-b border-primary ">
             <p className="text-secondary">
               {selectionState.selectedItems.length === tableState.totalCount && 'All'} {selectionState.selectedItems.length} record from this page is selected
-              <a href="#" className="text-blue pl-2">
+              <a href="#" className="text-brand pl-2">
                 Select all {tableState.totalCount} records from this table
               </a>
             </p>

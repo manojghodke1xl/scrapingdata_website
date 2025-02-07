@@ -62,7 +62,7 @@ const AdvancedFilter = () => {
       <div className="flex items-center justify-between border-b border-primary pb-2">
         <h2 className="text-lg font-semibold">Advanced Filters</h2>
         <button
-          className="px-4 py-2 text-primary font-medium bg-white hover:bg-gray-50 rounded-xl border border-primary whitespace-nowrap"
+          className="px-4 py-2 text-primary font-medium bg-white hover:bg-hover rounded-xl border border-primary whitespace-nowrap"
           onClick={() =>
             setFilterGroups([
               {

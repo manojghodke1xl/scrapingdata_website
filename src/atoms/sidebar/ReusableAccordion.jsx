@@ -11,7 +11,7 @@ const ReusableAccordion = ({ title, links, icon, isOpen, onToggle, handleToggleS
       <AccordionHeader
         onClick={onToggle}
         className={`py-2.5 px-3 text-left text-base rounded-xl flex gap-2 items-center border-0 shadow-none focus:outline-none ${
-          isOpen ? 'bg-fadedblue text-blue' : 'hover:bg-gray-100 bg-white text-primary'
+          isOpen ? 'bg-primary-faded text-brand' : 'hover:bg-hover bg-inherit text-primary'
         }`}
       >
         <div className="flex gap-4 items-center">
@@ -19,13 +19,14 @@ const ReusableAccordion = ({ title, links, icon, isOpen, onToggle, handleToggleS
           <span>{title}</span>
         </div>
       </AccordionHeader>
-      <AccordionBody className="space-y-1">
+
+      <AccordionBody className="space-y-1 mt-1">
         {links.map(({ to, title }) => (
           <Link
             key={title}
             to={to[0]}
             onClick={handleToggleSidebar}
-            className={`block text-primary text-base px-4 font-medium rounded-xl py-2.5 ${isActive(to) ? 'bg-fadedblue text-blue' : 'text-primary hover:bg-gray-100 bg-white'}`}
+            className={`block text-base px-4 font-medium rounded-xl py-2.5 ${isActive(to) ? 'bg-primary-faded text-brand' : 'text-primary hover:bg-hover bg-inherit'}`}
           >
             <span>{title}</span>
           </Link>

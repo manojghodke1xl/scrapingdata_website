@@ -8,8 +8,10 @@ import { listPopupNote } from './PopupNotes';
 import { AiOutlineApi } from 'react-icons/ai';
 import TruncatableFieldToolTip from '../../atoms/common/TruncatableFeildToolTip';
 import TableHeader from '../../atoms/table/TableHeader';
+import { useColor } from '../../contexts/contexts/ColorContext';
 
 const PopupList = () => {
+  const { isDarkMode } = useColor();
   const [popups, setPopups] = useState([]);
 
   const rows = popups.map((popup) => {
@@ -22,7 +24,11 @@ const PopupList = () => {
       showOnDeviceType: showOnDeviceType === 'mobile' ? 'Mobile' : showOnDeviceType === 'desktop' ? 'Desktop' : 'All',
       contentType: contentType === 'guide' ? 'Guide' : contentType === 'casestudy' ? 'Case Study' : 'Basic',
       isActive: (
-        <div className={`rounded-xl ${isActive ? 'bg-[#ECFDF3] text-[#027948]' : 'bg-[#F2F4F7] text-[#344054]'} px-2 py-1 w-fit flex gap-2 items-center`}>
+        <div
+          className={`rounded-xl ${
+            isActive ? `${isDarkMode ? 'border border-[#027948]' : 'bg-[#ECFDF3]'} text-[#027948]` : `${isDarkMode ? 'border border-[#344054]' : 'bg-[#F2F4F7]'} text-[#344054]`
+          } px-2 py-1 w-fit flex gap-2 items-center`}
+        >
           <span className={`min-w-[8px] min-h-[8px] rounded-full ${isActive ? 'bg-[#12B76A]' : 'bg-[#667085]'}`}></span>
           <span>{isActive ? 'Active' : 'Inactive'}</span>
         </div>

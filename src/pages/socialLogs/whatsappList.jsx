@@ -3,8 +3,10 @@ import { useState } from 'react';
 import { formatDateTime } from '../../utils/dateFormats';
 import TruncatableFieldToolTip from '../../atoms/common/TruncatableFeildToolTip';
 import TableHeader from '../../atoms/table/TableHeader';
+import { useColor } from '../../contexts/contexts/ColorContext';
 
 const WhatsAppLogList = () => {
+  const { isDarkMode } = useColor();
   const [whatsAppTemplates, setWhatsAppTemplates] = useState([]);
 
   const rows = whatsAppTemplates?.map((whatsAppTemplate) => {
@@ -20,7 +22,11 @@ const WhatsAppLogList = () => {
       statusCode: (
         <div
           className={`rounded-xl ${
-            statusCode === 200 ? 'bg-lightgreen text-success' : statusCode >= 400 ? 'bg-fadedred text-failed' : 'bg-fadeyellow text-pending'
+            statusCode === 200
+              ? `${isDarkMode ? 'border border-success' : 'bg-lightgreen'} text-success`
+              : statusCode >= 400
+              ? `${isDarkMode ? 'border border-failed' : 'bg-fadedred'} text-failed`
+              : `${isDarkMode ? 'border border-pending' : 'bg-fadeyellow'} text-pending`
           } px-2 py-1 w-fit flex gap-2 items-center`}
         >
           <span className={`min-w-[8px] min-h-[8px] rounded-full ${statusCode === 200 ? 'bg-green' : 'bg-pending'}`}></span>

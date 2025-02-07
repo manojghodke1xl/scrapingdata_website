@@ -1,5 +1,7 @@
 import { RxCaretSort } from 'react-icons/rx';
 import TableRowActions from './TableRowActions';
+import Checkbox from '../formFields/Checkbox';
+import { useColor } from '../../contexts/contexts/ColorContext';
 
 const TableView = ({
   selectable,
@@ -34,21 +36,15 @@ const TableView = ({
   sortConfig,
   onSort
 }) => {
+  const { isDarkMode } = useColor();
   return (
     <>
-      <table className="min-w-full divide-y divide-gray-200 text-sm">
+      <table className="min-w-full divide-y divide-primary text-sm">
         <thead>
           <tr>
             {selectable && (
               <th scope="col" className="px-4 py-2 text-left">
-                <label className="inline-flex items-center cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={selectionState.isAllSelected}
-                    onChange={handleMasterCheckboxChange}
-                    className="form-checkbox h-4 w-4 text-blue-600 focus:outline-none cursor-pointer"
-                  />
-                </label>
+                <Checkbox checked={selectionState.isAllSelected} onChange={handleMasterCheckboxChange} />
               </th>
             )}
             {headers?.map((header) => (
@@ -86,14 +82,14 @@ const TableView = ({
           {isLoading ? (
             <tr>
               <td colSpan={headers.length + (selectable ? 1 : 0) + (actions ? 1 : 0)}>
-                <div role="status" className="w-full border border-gray-200 divide-y divide-gray-200 rounded shadow animate-pulse dark:divide-gray-200 dark:border-gray-200">
+                <div role="status" className="w-full border border-primary divide-y divide-primary rounded shadow animate-pulse ">
                   {[...Array(10)].map((_, idx) => (
                     <div key={idx} className="flex items-center justify-between w-full px-4 py-1">
                       <div className="flex-1 flex-col items-center justify-center py-2 space-y-2">
-                        <div className="h-0.5 md:h-2.5 bg-gray-300 rounded-full w-1/4 dark:bg-gray-300" />
-                        <div className="h-0.5 md:h-2 bg-gray-200 rounded-full w-2/3 dark:bg-gray-200" />
+                        <div className={`h-0.5 md:h-2.5 ${isDarkMode ? 'bg-gray-700' : 'bg-gray-300'} rounded-full w-1/4  `} />
+                        <div className={`h-0.5 md:h-2 ${isDarkMode ? 'bg-gray-600' : 'bg-gray-200'} rounded-full w-2/3  `} />
                       </div>
-                      <div className="h-0.5 md:h-2.5 bg-gray-300 rounded-full self-center dark:bg-gray-200 w-1/6" />
+                      <div className={`h-0.5 md:h-2.5 ${isDarkMode ? 'bg-gray-700' : 'bg-gray-300'} rounded-full self-center  w-1/6 `} />
                     </div>
                   ))}
                 </div>
@@ -102,18 +98,18 @@ const TableView = ({
           ) : rows.length > 0 ? (
             rows?.map((row, index) => {
               return (
-                <tr key={row.id} className={`border-b border-primary ${selectionState.selectedItems.includes(row.id) ? 'bg-blue-50' : 'hover:bg-gray-50'}`}>
+                <tr
+                  key={row.id}
+                  className={`border-b border-primary ${
+                    selectionState.selectedItems.includes(row.id)
+                      ? // 'bg-blue-50'
+                        'bg-primary-faded'
+                      : 'hover:bg-hover'
+                  }`}
+                >
                   {selectable && (
                     <td className="px-4 py-2">
-                      <label className="inline-flex items-center cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={selectionState.selectedItems.includes(row.id)}
-                          onChange={() => handleRowCheckboxChange(row.id)}
-                          className="form-checkbox h-4 w-4 text-blue-600 cursor-pointer focus:outline-none"
-                          disabled={row.isSuperAdmin}
-                        />
-                      </label>
+                      <Checkbox checked={selectionState.selectedItems.includes(row.id)} onChange={() => handleRowCheckboxChange(row.id)} disabled={row.isSuperAdmin} />
                     </td>
                   )}
                   {headers.map((header, headerIndex) => (

@@ -7,8 +7,10 @@ import NoteComponent from '../../atoms/common/NoteComponent';
 import { couponListNote } from './CouponNotes';
 import TruncatableFieldToolTip from '../../atoms/common/TruncatableFeildToolTip';
 import TableHeader from '../../atoms/table/TableHeader';
+import { useColor } from '../../contexts/contexts/ColorContext';
 
 const CouponList = () => {
+  const { isDarkMode } = useColor();
   const [coupons, setCoupons] = useState([]);
 
   const rows = coupons.map((coupon) => {
@@ -22,7 +24,11 @@ const CouponList = () => {
       minAmount: <TruncatableFieldToolTip title={'Minimum purchase Amount'} content={minAmount} />,
       sites: <TruncatableFieldToolTip title={'Sites'} content={sites?.map((s) => `${s.name} (${s.host})`).join(', ')} />,
       isActive: (
-        <div className={`rounded-xl ${isActive ? 'bg-[#ECFDF3] text-[#027948]' : 'bg-[#F2F4F7] text-[#344054]'} px-2 py-1 w-fit flex gap-2 items-center`}>
+        <div
+          className={`rounded-xl ${
+            isActive ? `${isDarkMode ? 'border border-[#027948]' : 'bg-[#ECFDF3]'} text-[#027948]` : `${isDarkMode ? 'border border-[#344054]' : 'bg-[#F2F4F7]'} text-[#344054]`
+          } px-2 py-1 w-fit flex gap-2 items-center`}
+        >
           <span className={`min-w-[8px] min-h-[8px] rounded-full ${isActive ? 'bg-[#12B76A]' : 'bg-[#667085]'}`}></span>
           <span>{isActive ? 'Active' : 'Inactive'}</span>
         </div>

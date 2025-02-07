@@ -37,6 +37,7 @@ export const productsPath = [
 ];
 
 export const siteSettingsPath = [
+  { title: 'Admin Settings', to: ['/admin/admin-settings'] },
   { title: 'SMTP Settings', to: ['/smtp/smtp-list', '/smtp/add-smtp', '/smtp/edit-smtp'] },
   { title: 'reCAPTCHA Settings', to: ['/recaptcha/recaptcha-list', '/recaptcha/add-recaptcha', '/recaptcha/edit-recaptcha', '/recaptcha/duplicate-recaptcha'] }
 ];

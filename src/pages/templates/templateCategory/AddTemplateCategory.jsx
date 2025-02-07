@@ -224,7 +224,7 @@ const AddTemplateCategory = () => {
         <NoteComponent note={id ? editFaqCategoryNote : addFaqCategoryNote} />
       </div> */}
       {!isScrollable && (
-        <div className="w-full flex justify-end items-center gap-4 pt-8  border- border-primary">
+        <div className="w-full flex justify-end items-center gap-4 pt-8  border-t border-primary">
           <FormButtons to="/template-category/template-category-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} loading={isLoading} />
         </div>
       )}

@@ -1,0 +1,78 @@
+import ToggleComponent from '../../atoms/formFields/ToggleComponent';
+import ColorPalette from '../../atoms/common/ColorPalette';
+import { useColor } from '../../contexts/contexts/ColorContext';
+import { useState, useEffect } from 'react';
+import useGlobalContext from '../../hooks/useGlobalContext';
+
+const AdminSettings = () => {
+  const { toggleDarkMode, isDarkMode, setIsDarkMode } = useColor();
+  // const { auth } = useGlobalContext();
+
+
+  const [workspaceColors, setWorkspaceColors] = useState({});
+  const [isDark, setIsDark] = useState(false);
+  const [formData, setFormData] = useState({
+    darkMode: isDarkMode,
+    workspaceColors: {}
+  });
+
+  // Update formData whenever dark mode or workspace colors change
+  useEffect(() => {
+    setFormData({
+      darkMode: isDarkMode,
+      workspaceColors
+    });
+  }, [isDarkMode, workspaceColors]);
+
+  const handleSaveChanges = async () => {
+    console.log('formData', formData);
+  
+  };
+
+  return (
+    <div className="py-8 p-4 sm:p-8 overflow-x-hidden mb-20">
+      <div className="w-full flex md:flex-wrap gap-y-3 sm:flex-nowrap justify-between">
+        <h4 className="text-3xl text-dark">Admin Settings</h4>
+        <div className="w-full flex justify-end sm:w-fit gap-2">
+          <button
+            onClick={handleSaveChanges}
+            type="button"
+            className="flex gap-2 h-fit items-center px-2.5 md:px-2 sm:px-4 rounded-xl py-2.5 bg-primary hover:bg-primary-hover text-white"
+          >
+            Save Changes
+          </button>
+        </div>
+      </div>
+      <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
+        <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
+          <div className="sm:w-7/12 w-full flex flex-col">
+            <span className=" text-primary">Dark Mode</span>
+          </div>
+          <div className="w-full">
+            <ToggleComponent
+              label={'Toggle Dark Mode'}
+              isEnableState={isDarkMode}
+              setIsEnableState={setIsDarkMode}
+              onChange={() => {
+                toggleDarkMode();
+                setIsDark(!isDark);
+              }}
+            />
+          </div>
+        </div>
+      </div>
+      <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
+        <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
+          <div className="sm:w-7/12 w-full flex flex-col">
+            <span className=" text-primary">Change Theme Color</span>
+          </div>
+          <div className="w-full">
+            <ColorPalette onColorChange={setWorkspaceColors} />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default AdminSettings;

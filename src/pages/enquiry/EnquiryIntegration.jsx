@@ -84,7 +84,7 @@ const EnquiryIntegration = () => {
           <span className="text-3xl font-semibold text-dark">API Integration</span>
         </div>
         <div className=" w-full flex gap-4 justify-end items-end md:w-fit lg:w-full xl:w-fit">
-          <Link to={'/enquiry/enquiry-list'} className="px-4 py-2 text-primary font-medium bg-white hover:bg-gray-50 rounded-xl border border-primary whitespace-nowrap">
+          <Link to={'/enquiry/enquiry-list'} className="px-4 py-2 text-primary font-medium bg-inherit hover:bg-hover rounded-xl border border-primary whitespace-nowrap">
             Back
           </Link>
         </div>
@@ -99,7 +99,7 @@ const EnquiryIntegration = () => {
             {sections.map((section, index) => (
               <div key={index} className="mb-6">
                 <label className="font-medium text-primary mb-2 px-2 py-2.5 ">{section.title}</label>
-                <div className="relative bg-grey p-4 rounded-lg border border-gray-300">
+                <div className="relative bg-grey p-4 rounded-lg border border-primary">
                   <code className="block text-sm text-primary whitespace-pre-wrap">{section.content}</code>
                   <button className="absolute top-2 right-2 p-2 text-secondary  flex items-center" onClick={() => handleCopy(section.content)}>
                     <FiCopy className="h-5 w-5" />
@@ -113,7 +113,7 @@ const EnquiryIntegration = () => {
 
       {!isScrollable && (
         <div className="w-full flex justify-end items-center gap-4 pt-8  border- border-primary">
-          <Link to={'/enquiry/enquiry-list'} className="px-4 py-2 text-primary font-medium bg-white hover:bg-gray-50 rounded-xl border border-primary whitespace-nowrap">
+          <Link to={'/enquiry/enquiry-list'} className="px-4 py-2 text-primary font-medium bg-inherit hover:bg-hover rounded-xl border border-primary whitespace-nowrap">
             Back
           </Link>
         </div>

@@ -10,7 +10,7 @@ const PhoneInputField = ({ divClassName = '', label, name, value, handlePhoneCha
         value={value}
         onChange={(value, countryData) => handlePhoneChange(value, countryData)}
         className={`w-full mt-2 rounded-xl border bg-white ${
-          phoneError ? 'border-fadered focus:border-fadered' : ' border-primary focus:border-blue'
+          phoneError ? 'border-fadered focus:border-fadered' : ' border-primary focus:border-secondary'
         } font-normal focus:outline-none focus:ring-0 px-4 py-2.5 focus:border  placeholder:text-gray-400 text-dark bg-transparent`}
         placeholder={placeholder}
         disabled={disabled}

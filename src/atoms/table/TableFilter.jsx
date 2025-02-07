@@ -51,7 +51,7 @@ const TableFilter = ({
           {showFilter.status && (
             <div className="relative">
               <div
-                className="absolute -top-2 -right-2 bg-white rounded-full border border-fadedblue text-black font-bold cursor-pointer z-10 w-6 h-6 flex items-center justify-center"
+                className="absolute -top-2 -right-2 bg-white rounded-full border border-secondary text-black font-bold cursor-pointer z-10 w-6 h-6 flex items-center justify-center"
                 onClick={() => {
                   setShowFilter((prev) => ({ ...prev, status: false }));
                   setFilterState((prev) => ({ ...prev, statusFilter: '' }));
@@ -65,7 +65,7 @@ const TableFilter = ({
           {showFilter.sites && (
             <div className="relative">
               <div
-                className="absolute -top-2 -right-2 bg-white rounded-full border border-fadedblue text-black font-bold cursor-pointer z-10 w-6 h-6 flex items-center justify-center"
+                className="absolute -top-2 -right-2 bg-white rounded-full border border-secondary text-black font-bold cursor-pointer z-10 w-6 h-6 flex items-center justify-center"
                 onClick={() => {
                   setShowFilter((prev) => ({ ...prev, sites: false }));
                   setFilterState((prev) => ({ ...prev, siteId: '' }));
@@ -79,7 +79,7 @@ const TableFilter = ({
           {showFilter.event && (
             <div className="relative">
               <div
-                className="absolute -top-2 -right-2 bg-white rounded-full border border-fadedblue text-black font-bold cursor-pointer z-10 w-6 h-6 flex items-center justify-center"
+                className="absolute -top-2 -right-2 bg-white rounded-full border border-secondary text-black font-bold cursor-pointer z-10 w-6 h-6 flex items-center justify-center"
                 onClick={() => {
                   setShowFilter((prev) => ({ ...prev, event: false }));
                   setFilterState((prev) => ({ ...prev, eventId: '' }));

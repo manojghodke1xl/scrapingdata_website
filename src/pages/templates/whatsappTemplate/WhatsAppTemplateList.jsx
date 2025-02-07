@@ -21,7 +21,7 @@ const WhatsAppTemplateList = () => {
       status: status ? (
         <div
           className={`rounded-xl ${
-            status === 'APPROVED' ? 'bg-lightgreen text-success' : status === 'REJECTED' ? 'bg-fadedred text-failed' : 'bg-fadeyellow text-pending'
+            status === 'APPROVED' ? `bg-lightgreen text-success` : status === 'REJECTED' ? 'bg-fadedred text-failed' : 'bg-fadeyellow text-pending'
           } px-2 py-1 w-fit flex gap-2 items-center`}
         >
           <span className={`min-w-[8px] min-h-[8px] rounded-full ${status === 'APPROVED' ? 'bg-green' : 'bg-pending'}`}></span>

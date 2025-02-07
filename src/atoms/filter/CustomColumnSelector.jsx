@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import SearchComponent from '../common/SearchComponent';
+import Checkbox from '../formFields/Checkbox';
 
 const CustomColumnSelector = ({ customColumns, setSelectedColumns }) => {
   const [columns, setColumns] = useState(
@@ -54,8 +55,8 @@ const CustomColumnSelector = ({ customColumns, setSelectedColumns }) => {
           <SearchComponent onChange={(e) => setSearchQuery(e.target.value)} value={searchQuery} placeholder="Search" />
         </div>
         {/* Select All Checkbox */}
-        <label className="flex items-center text-primary px-3 py-2 border-b border-primary">
-          <input type="checkbox" checked={allFilteredSelected} onChange={toggleSelectAll} className="mr-2 h-4 w-4 border border-primary" />
+        <label className="flex items-center gap-3 text-primary px-3 py-2 border-b border-primary">
+          <Checkbox checked={allFilteredSelected} onChange={toggleSelectAll} />
           Select All
         </label>
         {filteredColumns.length > 0 ? (
@@ -68,8 +69,9 @@ const CustomColumnSelector = ({ customColumns, setSelectedColumns }) => {
               onDragOver={() => handleDragOver(index)}
               onDragEnd={handleDragEnd}
             >
-              <label className="flex items-center text-primary">
-                <input type="checkbox" checked={column.selected} onChange={() => toggleSelection(index)} className="mr-3 h-4 w-4 border border-primary" />
+              <label className="flex gap-3 items-center text-primary">
+                <Checkbox checked={column.selected} onChange={() => toggleSelection(index)} />
+
                 {column.label}
               </label>
               <span className="cursor-move text-secondary">☰</span>

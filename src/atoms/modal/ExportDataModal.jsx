@@ -5,8 +5,10 @@ import { useState } from 'react';
 import CustomColumnSelector from '../filter/CustomColumnSelector';
 import { exportHandler } from '../../helpers/exportHandler';
 import { showNotification } from '../../utils/showNotification';
+import { useColor } from '../../contexts/contexts/ColorContext';
 
 const ExportDataModal = ({ isExportModalOpen, setExportModalOpen, label, selectedData, apiUrl, rows, headers, customColumns }) => {
+  const { isDarkMode } = useColor();
   const [selectionState, setSelectionState] = useState({
     selectedRecords: 'currentPage',
     selectedColumns: 'visible',
@@ -61,14 +63,18 @@ const ExportDataModal = ({ isExportModalOpen, setExportModalOpen, label, selecte
   return (
     <div className="fixed inset-0 z-10 overflow-y-auto">
       <div
-        className="fixed inset-0 bg-gray-300 bg-opacity-75 transition-opacity"
+        className="fixed inset-0 bg-black bg-opacity-50 transition-opacity"
         onClick={() => {
           setExportModalOpen((prev) => ({ ...prev, isExportModelOpen: false }));
           handleDefaultState();
         }}
       />
       <div className="flex items-start justify-center w-full min-h-screen px-2 text-center lg:absolute lg:top-[12%]">
-        <div className="bg-white rounded-2xl text-left overflow-hidden shadow-xl transform transition-all w-[95%] sm:w-[80%] md:w-fit px-6 2xl:px-8 py-6">
+        <div
+          className={`${
+            isDarkMode ? 'bg-[#0c0e12]' : 'bg-white'
+          } rounded-2xl text-left overflow-hidden shadow-xl transform transition-all w-[95%] sm:w-[80%] md:w-fit px-6 2xl:px-8 py-6`}
+        >
           <div className="w-full flex justify-end items-center">
             <div className=" w-full border-b border-primary mb-4 pb-4 space-y-2">
               <h4 className="w-full sm:text-xl text-dark text-left ">{label || 'Export'}</h4>

@@ -34,6 +34,7 @@ const MaterialSidebar = ({ handleToggleSidebar }) => {
   const [openAccordion, setOpenAccordion] = useState(null);
 
   const isActive = (menuPaths) => menuPaths.some((path) => pathname.startsWith(path));
+
   const handleLinkClick = () => {
     setOpenAccordion(null);
     handleToggleSidebar();
@@ -52,7 +53,7 @@ const MaterialSidebar = ({ handleToggleSidebar }) => {
               key={title}
               to={to[0]}
               onClick={handleLinkClick}
-              className={`py-2.5 px-3 rounded-xl flex gap-3 items-center ${isActive(to) ? 'bg-fadedblue text-blue' : 'text-primary hover:bg-gray-100 bg-white'}`}
+              className={`py-2.5 px-3 rounded-xl flex gap-3 items-center ${isActive(to) ? 'bg-primary-faded text-brand' : 'text-primary hover:bg-hover bg-inherit'}`}
             >
               <span className="text-3xl">{icon}</span>
               <span>{title}</span>
@@ -183,7 +184,7 @@ const MaterialSidebar = ({ handleToggleSidebar }) => {
                 key={title}
                 to={to[0]}
                 onClick={handleLinkClick}
-                className={`py-2.5 px-3 rounded-xl flex gap-3 items-center ${isActive(to) ? 'bg-fadedblue text-blue' : 'text-primary hover:bg-gray-100 bg-white'}`}
+                className={`py-2.5 px-3 rounded-xl flex gap-3 items-center ${isActive(to) ? 'bg-primary-faded text-brand' : 'text-primary hover:bg-hover bg-inherit'}`}
               >
                 <span className="text-3xl">{icon}</span>
                 <span>{title}</span>

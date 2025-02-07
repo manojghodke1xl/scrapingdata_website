@@ -108,7 +108,7 @@ const MultipleFileUpload = ({
               <input type="file" onChange={handleFileChange} className="hidden" accept={`.${allowedTypes.join(', ')}`} ref={fileInputRef} multiple={isMultiple} />
               <div className="w-full flex justify-center">
                 <button
-                  className="text-primary font-medium cursor-pointer inline-block px-4 py-2 border hover:bg-gray-50 border-primary rounded-xl shadow-sm"
+                  className="text-primary font-medium cursor-pointer inline-block px-4 py-2 border hover:bg-hover border-primary rounded-xl shadow-sm"
                   onClick={() => fileInputRef.current.click()}
                 >
                   <span className="text-primary">Browse</span>

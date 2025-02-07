@@ -12,8 +12,8 @@ const Pagination = ({ currentPage, totalPages, totalRecords, itemsPerPage, setIt
     paginationArray.push(
       <span
         key={1}
-        className={`rounded-xl mx-1 items-center justify-center h-fit py-1.5 px-3.5 font-medium ${
-          1 === currentPage ? 'z-10 bg-[#EFF8FF] text-blue' : 'text-primary ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 cursor-pointer'
+        className={`rounded-xl mx-1 items-center justify-center h-fit py-1.5 px-3.5 border border-primary font-medium ${
+          1 === currentPage ? 'z-10 bg-primary-faded text-brand' : 'text-primary  hover:bg-hover focus:z-20 focus:outline-offset-0 cursor-pointer'
         }`}
         onClick={() => handlePageChange(1)}
       >
@@ -35,8 +35,8 @@ const Pagination = ({ currentPage, totalPages, totalRecords, itemsPerPage, setIt
       paginationArray.push(
         <span
           key={i}
-          className={`rounded-xl mx-1 items-center justify-center h-fit py-1.5 px-3.5 font-medium ${
-            i === currentPage ? 'z-10 bg-[#EFF8FF] text-blue' : 'text-primary ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 cursor-pointer'
+          className={`rounded-xl mx-1 items-center justify-center h-fit py-1.5 px-3.5 border border-primary font-medium ${
+            i === currentPage ? 'z-10 bg-primary-faded text-brand' : 'text-primary  hover:bg-hover focus:z-20 focus:outline-offset-0 cursor-pointer'
           }`}
           onClick={() => handlePageChange(i)}
         >
@@ -60,9 +60,7 @@ const Pagination = ({ currentPage, totalPages, totalRecords, itemsPerPage, setIt
         <span
           key={totalPages}
           className={`rounded-xl mx-1 items-center justify-center h-fit py-1.5 px-3.5 font-medium ${
-            totalPages === currentPage
-              ? 'z-10 bg-[#EFF8FF] text-blue'
-              : 'text-primary ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 cursor-pointer'
+            totalPages === currentPage ? 'z-10 bg-primary-faded text-brand border border-primary' : 'text-primary  hover:bg-hover focus:z-20 focus:outline-offset-0 cursor-pointer'
           }`}
           onClick={() => handlePageChange(totalPages)}
         >
@@ -75,7 +73,7 @@ const Pagination = ({ currentPage, totalPages, totalRecords, itemsPerPage, setIt
   };
 
   return (
-    <div className="flex items-center justify-between bg-white px-2 sm:px-6 gap-4">
+    <div className="flex items-center justify-between bg-inherit px-2 sm:px-6 gap-4">
       <div className="w-full flex flex-col sm:flex-row gap-y-5 justify-center xl:justify-between flex-wrap xl:flex-nowrap py-2 items-center gap-4">
         <div className="flex gap-3 items-start">
           <div className="dropdown-container w-full sm:min-w-[200px] sm:max-w-[260px] flex gap-3 items-center order-1 lg:order-1 xl:order-1">
@@ -88,7 +86,7 @@ const Pagination = ({ currentPage, totalPages, totalRecords, itemsPerPage, setIt
               onBlur={(e) => setItemsPerPage((prev) => ({ ...prev, itemsPerPage: parseInt(e.target.value, 10) || 1, currentPage: 1 }))}
               onChange={(e) => setItems(e.target.value)}
               value={items}
-              className={`h-8 min-w-[2.5rem] px-2 text-sm rounded-xl border text-center font-normal focus:outline-none focus:ring-0 focus:border-blue placeholder:text-gray-400 text-dark bg-transparent transition-all`}
+              className={`h-8 min-w-[2.5rem] px-2 text-sm rounded-xl border border-primary text-center font-normal focus:outline-none focus:ring-0 focus:border-secondary placeholder:text-gray-400 text-dark bg-transparent transition-all`}
               style={{ width: `${Math.max(2.5, items.toString().length * 0.7)}rem` }}
             />
           </div>
@@ -98,7 +96,7 @@ const Pagination = ({ currentPage, totalPages, totalRecords, itemsPerPage, setIt
           <div className="flex flex-col gap-3 items-center justify-center">
             <div className="flex gap-3 items-center justify-center">
               <span
-                className={`inline-flex items-center rounded-xl border border-gray-300 h-fit bg-white px-2 py-2 text-sm font-medium text-primary hover:bg-gray-50 ${
+                className={`inline-flex items-center rounded-xl border border-primary h-fit bg-inherit px-2 py-2 text-sm font-medium text-primary hover:bg-hover ${
                   currentPage === 1 ? 'cursor-not-allowed' : 'cursor-pointer'
                 }`}
                 onClick={() => currentPage > 1 && handlePageChange(currentPage - 1)}
@@ -111,7 +109,7 @@ const Pagination = ({ currentPage, totalPages, totalRecords, itemsPerPage, setIt
               </nav>
 
               <span
-                className={`inline-flex items-center rounded-xl border border-gray-300 h-fit bg-white px-2 py-2 text-sm font-medium text-primary hover:bg-gray-50 ${
+                className={`inline-flex items-center rounded-xl border border-primary h-fit bg-inherit px-2 py-2 text-sm font-medium text-primary hover:bg-hover ${
                   currentPage === totalPages ? 'cursor-not-allowed' : 'cursor-pointer'
                 }`}
                 onClick={() => currentPage < totalPages && handlePageChange(currentPage + 1)}
@@ -149,7 +147,7 @@ const Pagination = ({ currentPage, totalPages, totalRecords, itemsPerPage, setIt
               }}
               onChange={(e) => setPage(e.target.value)}
               value={page}
-              className={`h-8 min-w-[2.5rem] px-2 text-sm rounded-xl border text-center font-normal focus:outline-none focus:ring-0 focus:border-blue placeholder:text-gray-400 text-dark bg-transparent transition-all`}
+              className={`h-8 min-w-[2.5rem] px-2 text-sm rounded-xl border border-primary text-center font-normal focus:outline-none focus:ring-0 focus:border-secondary placeholder:text-placeholder text-dark bg-transparent transition-all`}
               style={{ width: `${Math.max(2.5, page.toString().length * 0.7)}rem` }}
             />
             &nbsp;of {totalPages}

@@ -1,11 +1,17 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import Person from '../../assets/images/person.png';
 import Logo from '../../assets/images/marsCMS-logo.png';
+import DarkLogo from '../../assets/images/dark-mode-logo.png';
+
 import MaterialSidebar from './sidebar/MaterialSidebar';
 import { IoIosMenu } from 'react-icons/io';
 import useGlobalContext from '../../hooks/useGlobalContext';
+import { useColor } from '../../contexts/contexts/ColorContext';
+import { GrSun } from 'react-icons/gr';
+import { PiMoonStarsLight } from 'react-icons/pi';
 
 const Navbar = () => {
+  const { isDarkMode, toggleDarkMode } = useColor();
   const { dispatch } = useGlobalContext();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -44,30 +50,40 @@ const Navbar = () => {
     <>
       <div className="w-screen py-2 px-4 sm:px-6 flex justify-between border-b border-primary">
         <div className="px-2 flex items-center font-bold">
-          <img src={Logo} width={160} alt="logo" />
+          <img src={isDarkMode ? DarkLogo : Logo} width={160} alt="logo" />
         </div>
 
-        <div className="flex gap-1 sm:gap-2 items-center pr-6">
+        <div className="flex gap-5  items-center pr-6">
+          <button type="button" onClick={toggleDarkMode} className="sm:p-1 hover:bg-hover rounded-full hidden sm:block">
+            {isDarkMode ? <GrSun size={28} strokeWidth={1.667} className="text-secondary" /> : <PiMoonStarsLight size={28} strokeWidth={1.667} className="text-secondary" />}
+          </button>
           <span className="hidden sm:block" onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
             <img src={Person} width={34} alt="Person" className="cursor-pointer" />
           </span>
 
           {/* Dropdown Menu */}
           {isDropdownOpen && (
-            <div ref={dropdownRef} className="absolute top-10 right-0 mt-2 w-48 bg-white border border-gray-300 rounded-lg shadow-lg z-50">
-              <button onClick={() => dispatch({ type: 'SIGNOUT' })} className="w-full text-left px-4 py-2 hover:bg-gray-100">
+            <div
+              ref={dropdownRef}
+              className={`absolute top-10 right-0 mt-2 w-48 ${isDarkMode ? 'bg-[#0c0e12]' : 'bg-white'} border border-primary overflow-hidden rounded-lg shadow-lg z-50`}
+            >
+              <button onClick={() => dispatch({ type: 'SIGNOUT' })} className="w-full text-left px-4 py-2 hover:bg-hover">
                 Logout
               </button>
             </div>
           )}
-          <div className="flex lg:hidden ml-3">
+          <div className="flex lg:hidden ml-3 flex-row gap-3">
+            <button type="button" onClick={toggleDarkMode} className="sm:p-1 hover:bg-hover rounded-full block md:hidden">
+              {isDarkMode ? <GrSun size={28} strokeWidth={1.667} className="text-secondary" /> : <PiMoonStarsLight size={28} strokeWidth={1.667} className="text-secondary" />}
+            </button>
+
             <button onClick={handleToggleSidebar}>
               <IoIosMenu className="text-4xl text-primary" />
             </button>
             {isSidebarOpen && (
-              <div className="absolute inset-0 w-screen bg-gray-200/45 z-40 overflow-y-auto scrollbar-hide">
+              <div className="absolute inset-0 w-screen bg-black bg-opacity-50 z-40 overflow-y-auto scrollbar-hide">
                 <div className="lg:hidden block w-[312px] sm:w-[330px] md:w-[340px] h-screen" ref={sidebarRef}>
-                  <div className="lg:hidden block fixed w-[312px] sm:w-[320px] md:w-[340px] h-screen border-r border-primary my-0.5 bg-white">
+                  <div className={`lg:hidden block fixed w-[312px] sm:w-[320px] md:w-[340px] h-screen border-r border-primary my-0.5 ${isDarkMode ? 'bg-[#0c0e12]' : 'bg-white'}`}>
                     <div className="relative">
                       <MaterialSidebar handleToggleSidebar={handleToggleSidebar} />
                     </div>
