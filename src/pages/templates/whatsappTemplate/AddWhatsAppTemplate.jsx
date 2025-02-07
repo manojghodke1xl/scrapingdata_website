@@ -298,13 +298,13 @@ const AddWhatsAppTemplate = () => {
       <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
         <div className="w-full flex flex-col gap-y-2 md:flex-row justify-evenly">
           <div className="sm:w-1/4 w-full flex flex-col">
-            <span className="text-primary">SMS Content</span>
+            <span className="text-primary">Message Content</span>
           </div>
           <div className="w-full">
             <div className="w-full sm:w-1/2">
               <TextareaComponent
                 divClassName="mt-5"
-                label="Message give variables in {{name}} format"
+                label="Message give variables in {name} format"
                 placeholder="Message..."
                 id="message"
                 name="message"
