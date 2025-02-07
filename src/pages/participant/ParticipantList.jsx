@@ -12,19 +12,22 @@ const ParticipantList = () => {
   const { isDarkMode } = useColor();
   const [participants, setParticipants] = useState([]);
   const [event, setEvent] = useState([]);
-
+  console.log('the participants', participants);
   const rows = participants.map((participant) => {
     const { _id, booking, createdAt, updatedAt, ticketId } = participant;
+
     const {
       name,
       email,
+      city,
       event,
       package: { title },
       site,
       status,
       refUser,
       phoneNumber,
-      phoneCode
+      phoneCode,
+      payment
     } = booking || {};
 
     return {
@@ -32,6 +35,7 @@ const ParticipantList = () => {
       exportData: participant,
       name: <TruncatableFieldToolTip title={'Name'} content={name ?? ''} />,
       email: <TruncatableFieldToolTip title={'Email'} content={email ?? ''} />,
+      city: <TruncatableFieldToolTip title={'City'} content={city ?? ''} />,
       country: <CountryFlag divClassName={'justify-center'} dialingCode={phoneCode?.startsWith('+') ? phoneCode.slice(1) : phoneCode} />,
       phoneNumber: (
         <TruncatableFieldToolTip
@@ -45,6 +49,7 @@ const ParticipantList = () => {
       eventDate: formatDateTime(event.date),
       title: <TruncatableFieldToolTip title={'Package Name'} content={title ?? ''} />,
       refUser: <TruncatableFieldToolTip title={'Referrer User'} content={refUser?.name ?? '--'} />,
+      couponCode: <TruncatableFieldToolTip title={'Coupon Code'} content={payment?.coupon?.code ?? '--'} />,
       status: (
         <div
           className={`rounded-xl ${
@@ -86,6 +91,7 @@ const ParticipantList = () => {
                   { label: 'Sr. No.', key: 'srno' },
                   { label: 'Name', key: 'name' },
                   { label: 'Email', key: 'email' },
+                  { label: 'City', key: 'city' },
                   { label: 'Country', key: 'country' },
                   { label: 'Mobile Number', key: 'phoneNumber' },
                   { label: 'Ticket ID', key: 'ticketId' },
@@ -93,6 +99,7 @@ const ParticipantList = () => {
                   { label: 'Event', key: 'event' },
                   { label: 'Event Date', key: 'eventDate' },
                   { label: 'Package', key: 'title' },
+                  { label: 'Coupon Code', key: 'couponCode' },
                   { label: 'Referrer User', key: 'refUser' },
                   { label: 'Status', key: 'status' },
                   { label: 'Created Date', key: 'createdAt' },
