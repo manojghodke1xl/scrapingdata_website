@@ -125,7 +125,7 @@ const AddSite = () => {
             <span className=" text-primary">Basic Information</span>
           </div>
           <div className="w-full">
-            <div>
+            <div className="flex flex-col gap-y-5">
               <FormField
                 label="Site Name"
                 type="text"
@@ -140,7 +140,6 @@ const AddSite = () => {
                 errorMessage={errors.name}
               />
               <FormField
-                divClassName={'mt-5'}
                 label="Site Host"
                 type="url"
                 id="host"
