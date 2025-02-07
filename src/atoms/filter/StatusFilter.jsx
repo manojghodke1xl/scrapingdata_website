@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { IoIosArrowDown } from 'react-icons/io';
 import { useColor } from '../../contexts/contexts/ColorContext';
+import Checkbox from '../formFields/Checkbox';
 
 const StatusFilter = ({ statuses, setStatusFilter }) => {
   const { isDarkMode } = useColor();
@@ -52,12 +53,8 @@ const StatusFilter = ({ statuses, setStatusFilter }) => {
               >
                 <div className="flex items-center">
                   <div className={`ml-1 whitespace-nowrap font-normal flex gap-4 items-center ${selectedCategory?.id === status.id ? 'font-semibold' : ''}`}>
-                    <input
-                      type="checkbox"
-                      checked={selectedCategory?.id === status.id}
-                      onChange={() => {}}
-                      className="form-checkbox h-4 w-4 text-brand-600 focus:outline-none border-primary"
-                    />
+                    <Checkbox checked={selectedCategory?.id === status.id} onChange={() => {}} />
+
                     <div className="px-2 py-1 rounded-lg flex gap-2 items-center" style={{ backgroundColor: status.bgColor, color: status.color }}>
                       <span className="w-[8px] h-[8px] rounded-full" style={{ backgroundColor: status.dotColor }}></span>
                       <span>{status.name}</span>

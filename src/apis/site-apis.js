@@ -19,3 +19,7 @@ export const updateSiteApi = async (id, userData) => {
 export const updateSiteStatusApi = async (ids, isActive) => {
   return await putMethodCall(`${import.meta.env.VITE_API_URL}/site-status`, { ids, isActive });
 };
+
+export const updateSiteNotificationsApi = async (userData) => {
+  return await putMethodCall(`${import.meta.env.VITE_API_URL}/site-notifications`, userData);
+};

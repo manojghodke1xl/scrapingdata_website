@@ -253,7 +253,19 @@ const TableComponent = ({
     setShowFilter({ status: false, sites: false, event: false });
   };
 
-  const modulesArray = ['participant', 'payment', 'products', 'booking-payments', 'order-payments', 'email-templates', 'sms-templates', 'whats-app-templates', 'after-sales'];
+  const modulesArray = [
+    'participant',
+    'payment',
+    'products',
+    'booking-payments',
+    'order-payments',
+    'email-templates',
+    'sms-templates',
+    'whats-app-templates',
+    'after-sales',
+    'advertisement',
+    'vendors'
+  ];
 
   const availableSites = modulesArray.includes(siteModule)
     ? allSites

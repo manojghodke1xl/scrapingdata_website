@@ -8,7 +8,6 @@ import FormButtons from '../../atoms/formFields/FormButtons';
 import FormField from '../../atoms/formFields/InputField';
 import ToggleComponent from '../../atoms/formFields/ToggleComponent';
 import DropDown from '../../atoms/formFields/DropDown';
-import TextareaComponent from '../../atoms/formFields/TextareaComponent';
 import ApiIntegrationModal from '../../atoms/modal/ApiIntegrationModal';
 import NoteComponent from '../../atoms/common/NoteComponent';
 import { addWebsiteNote, editWebsiteNote, enquiryIntegration, subscriberIntegration } from './SiteNotes';
@@ -37,7 +36,6 @@ const AddSite = () => {
   const [isScrollable, setIsScrollable] = useState(false);
   const [errors, setErrors] = useState({ forwardEmails: '' });
   const [smtpOptions, setSmtpOptions] = useState([]);
-  const [emailInput, setEmailInput] = useState('');
   const [isEnquiryModalOpen, setEnquiryModalOpen] = useState(false);
   const [isMailingListModalOpen, setMailingListModalOpen] = useState(false);
 
@@ -46,18 +44,6 @@ const AddSite = () => {
     host: '',
     isActive: true,
     smtp: '',
-    sendUserEnquiry: false,
-    // sendUserEnquiryData: { subject: "", body: "" },
-    sendUserMailingList: false,
-    // sendUserMailingListData: { subject: "", body: "" },
-    sendAdminEnquiry: false,
-    // sendAdminEnquiryData: { subject: "", body: "" },
-    adminEnquiryEmails: [],
-    sendAdminMailingList: false,
-    // sendAdminMailingListData: { subject: "", body: "" },
-    adminMailingListEmails: [],
-    sendCRM: false,
-    // sendCRMData: { clientId: "", clientSecret: "" },
     enquiryWebhookUrl: '',
     mailinglistWebhookUrl: '',
     modules: moduleOptions.map((option) => ({ [option._id]: true }))
@@ -102,44 +88,8 @@ const AddSite = () => {
     if (!siteDetails.host.trim()) newErrors.host = 'Host is required';
     if (!siteDetails.smtp) newErrors.smtp = 'SMTP is required';
 
-    if (siteDetails.sendUserEnquiry) {
-      if (!siteDetails.userEnquiryMailData?.subject.trim()) newErrors.subject = 'Subject is required';
-      if (!siteDetails.userEnquiryMailData?.body) newErrors.body = 'Body is required';
-    }
-
-    if (siteDetails.sendUserMailingList) {
-      if (!siteDetails.userMailingListMailData?.subject.trim()) newErrors.subject = 'Subject is required';
-      if (!siteDetails.userMailingListMailData?.body) newErrors.body = 'Body is required';
-    }
-
-    if (siteDetails.sendAdminEnquiry) {
-      if (!siteDetails.adminEnquiryMailData?.subject.trim()) newErrors.subject = 'Subject is required';
-      if (!siteDetails.adminEnquiryMailData?.body) newErrors.body = 'Body is required';
-      if (!siteDetails.adminEnquiryEmails.length) newErrors.adminEnquiryEmails = 'At least one email is required';
-    }
-
-    if (siteDetails.sendAdminMailingList) {
-      if (!siteDetails.adminMailingListMailData?.subject.trim()) newErrors.subject = 'Subject is required';
-      if (!siteDetails.adminMailingListMailData?.body) newErrors.body = 'Body is required';
-      if (!siteDetails.adminMailingListEmails.length) newErrors.adminMailingListEmails = 'At least one email is required';
-    }
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  };
-
-  const handleMailDataChange = (field, type, value) => setSiteDetails((prev) => ({ ...prev, [field]: { ...prev[field], [type]: value } }));
-
-  const removeItemAtIndex = (setDetails, key, indexToRemove) => setDetails((prev) => ({ ...prev, [key]: prev[key].filter((_, index) => index !== indexToRemove) }));
-
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  const validateAndAddInput = (e, inputValue, setInputValue, setStateDetails, key, regexPattern) => {
-    e.preventDefault();
-    if (inputValue && regexPattern.test(inputValue)) {
-      setStateDetails((prev) => ({ ...prev, [key]: [...(prev[key] || []), inputValue] }));
-      setInputValue('');
-      setErrors((prev) => ({ ...prev, forwardEmails: '' }));
-    } else setErrors((prev) => ({ ...prev, forwardEmails: 'Please enter a valid email address.' }));
   };
 
   const handleSubmit = async (e) => {
@@ -209,246 +159,6 @@ const AddSite = () => {
                 isEnableState={siteDetails.isActive}
                 setIsEnableState={(value) => setSiteDetails((prev) => ({ ...prev, isActive: value }))}
               />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
-        <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
-          <div className="sm:w-7/12 w-full flex flex-col">
-            <span className=" text-primary">Notification Preferences</span>
-          </div>
-          <div className="w-full">
-            <div>
-              <ToggleComponent
-                bgColor={'bg-grey'}
-                label={'Send User Enquiry Notification'}
-                isEnableState={siteDetails.sendUserEnquiry}
-                setIsEnableState={(value) => setSiteDetails((prev) => ({ ...prev, sendUserEnquiry: value, userEnquiryMailData: undefined }))}
-              />
-              {siteDetails.sendUserEnquiry && (
-                <div>
-                  <FormField
-                    divClassName={'mt-5'}
-                    label="Subject"
-                    type="text"
-                    id="subject"
-                    name="subject"
-                    placeholder="Subject"
-                    value={siteDetails.userEnquiryMailData?.subject ?? ''}
-                    onChange={(e) => {
-                      handleMailDataChange('userEnquiryMailData', 'subject', e.target.value);
-                      if (errors.subject) setErrors((prev) => ({ ...prev, subject: '' }));
-                    }}
-                    errorMessage={errors.subject}
-                  />
-                  <TextareaComponent
-                    divClassName={'mt-5'}
-                    label="Body"
-                    placeholder="Body"
-                    id="body"
-                    name="body"
-                    value={siteDetails.userEnquiryMailData?.body ?? ''}
-                    onChange={(e) => {
-                      handleMailDataChange('userEnquiryMailData', 'body', e.target.value);
-                      if (errors.body) setErrors((prev) => ({ ...prev, body: '' }));
-                    }}
-                    errorMessage={errors.body}
-                  />
-                </div>
-              )}
-
-              <ToggleComponent
-                bgColor={'bg-grey'}
-                label={'Send User Mailing Notification'}
-                isEnableState={siteDetails.sendUserMailingList}
-                setIsEnableState={(value) => setSiteDetails((prev) => ({ ...prev, sendUserMailingList: value, userMailingListMailData: undefined }))}
-              />
-              {siteDetails.sendUserMailingList && (
-                <div>
-                  <FormField
-                    divClassName={'mt-5'}
-                    label="Subject"
-                    type="text"
-                    id="subject"
-                    name="subject"
-                    placeholder="Subject"
-                    value={siteDetails.userMailingListMailData?.subject ?? ''}
-                    onChange={(e) => {
-                      handleMailDataChange('userMailingListMailData', 'subject', e.target.value);
-                      if (errors.subject) setErrors((prev) => ({ ...prev, subject: '' }));
-                    }}
-                    errorMessage={errors.subject}
-                  />
-                  <TextareaComponent
-                    divClassName={'mt-5'}
-                    label="Body"
-                    placeholder="Body"
-                    id="body"
-                    name="body"
-                    value={siteDetails.userMailingListMailData?.body ?? ''}
-                    onChange={(e) => {
-                      handleMailDataChange('userMailingListMailData', 'body', e.target.value);
-                      if (errors.body) setErrors((prev) => ({ ...prev, body: '' }));
-                    }}
-                    errorMessage={errors.body}
-                  />
-                </div>
-              )}
-
-              <ToggleComponent
-                bgColor={'bg-grey'}
-                label={'Send Admin Enquiry'}
-                isEnableState={siteDetails.sendAdminEnquiry}
-                setIsEnableState={(value) => setSiteDetails((prev) => ({ ...prev, sendAdminEnquiry: value, adminEnquiryEmails: [], adminEnquiryMailData: undefined }))}
-              />
-              {siteDetails.sendAdminEnquiry && (
-                <div>
-                  <FormField
-                    divClassName={'mt-5'}
-                    label="Subject"
-                    type="text"
-                    id="subject"
-                    name="subject"
-                    placeholder="Subject"
-                    value={siteDetails.adminEnquiryMailData?.subject ?? ''}
-                    onChange={(e) => {
-                      handleMailDataChange('adminEnquiryMailData', 'subject', e.target.value);
-                      if (errors.subject) setErrors((prev) => ({ ...prev, subject: '' }));
-                    }}
-                    errorMessage={errors.subject}
-                  />
-                  <TextareaComponent
-                    divClassName={'mt-5'}
-                    label="Body"
-                    placeholder="Body"
-                    id="body"
-                    name="body"
-                    value={siteDetails.adminEnquiryMailData?.body ?? ''}
-                    onChange={(e) => {
-                      handleMailDataChange('adminEnquiryMailData', 'body', e.target.value);
-                      if (errors.body) setErrors((prev) => ({ ...prev, body: '' }));
-                    }}
-                    errorMessage={errors.body}
-                  />
-
-                  <FormField
-                    label="Email ID"
-                    type="email"
-                    id="email"
-                    name="email"
-                    placeholder="Email ID"
-                    value={emailInput}
-                    onChange={(e) => {
-                      if (errors.forwardEmails) setErrors((prev) => ({ ...prev, forwardEmails: '' }));
-                      if (errors.adminEnquiryEmails) setErrors((prev) => ({ ...prev, adminEnquiryEmails: '' }));
-                      setEmailInput(e.target.value);
-                    }}
-                    errorMessage={errors.forwardEmails || errors.adminEnquiryEmails}
-                  />
-
-                  <button
-                    type="button"
-                    className="px-4 py-2 text-white font-medium bg-primary hover:bg-primary-hover rounded-xl whitespace-nowrap mt-5"
-                    onClick={(e) => validateAndAddInput(e, emailInput, setEmailInput, setSiteDetails, 'adminEnquiryEmails', emailRegex)}
-                  >
-                    Add Email
-                  </button>
-
-                  <ul className="space-y-2 mt-5">
-                    {siteDetails.adminEnquiryEmails.map((email, index) => (
-                      <li key={index} className="flex justify-between items-center p-2 bg-white shadow rounded-md">
-                        {email}
-                        <button
-                          type="button"
-                          className="px-2 py-1 text-white bg-red hover:bg-red rounded"
-                          onClick={() => removeItemAtIndex(setSiteDetails, 'adminEnquiryEmails', index)}
-                        >
-                          Remove
-                        </button>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-
-              <ToggleComponent
-                bgColor={'bg-grey'}
-                label={'Send Admin Mailing List'}
-                isEnableState={siteDetails.sendAdminMailingList}
-                setIsEnableState={(value) => setSiteDetails((prev) => ({ ...prev, sendAdminMailingList: value, adminMailingListEmails: [], adminMailingListMailData: undefined }))}
-              />
-
-              {siteDetails.sendAdminMailingList && (
-                <div>
-                  <FormField
-                    divClassName={'mt-5'}
-                    label="Subject"
-                    type="text"
-                    id="subject"
-                    name="subject"
-                    placeholder="Subject"
-                    value={siteDetails.adminMailingListMailData?.subject}
-                    onChange={(e) => {
-                      handleMailDataChange('adminMailingListMailData', 'subject', e.target.value);
-                      if (errors.subject) setErrors((prev) => ({ ...prev, subject: '' }));
-                    }}
-                    errorMessage={errors.subject}
-                  />
-                  <TextareaComponent
-                    divClassName={'mt-5'}
-                    label="Body"
-                    placeholder="Body"
-                    id="body"
-                    name="body"
-                    value={siteDetails.adminMailingListMailData?.body ?? ''}
-                    onChange={(e) => {
-                      handleMailDataChange('adminMailingListMailData', 'body', e.target.value);
-                      if (errors.body) setErrors((prev) => ({ ...prev, body: '' }));
-                    }}
-                    errorMessage={errors.body}
-                  />
-
-                  <FormField
-                    label="Email ID"
-                    type="email"
-                    id="email"
-                    name="email"
-                    placeholder="Email ID"
-                    value={emailInput}
-                    onChange={(e) => {
-                      if (errors.forwardEmails) setErrors((prev) => ({ ...prev, forwardEmails: '' }));
-                      if (errors.adminMailingListEmails) setErrors((prev) => ({ ...prev, adminMailingListEmails: '' }));
-                      setEmailInput(e.target.value);
-                    }}
-                    errorMessage={errors.forwardEmails || errors.adminMailingListEmails}
-                  />
-
-                  <button
-                    type="button"
-                    className="px-4 py-2 text-white font-medium bg-primary hover:bg-primary-hover rounded-xl whitespace-nowrap mt-5"
-                    onClick={(e) => validateAndAddInput(e, emailInput, setEmailInput, setSiteDetails, 'adminMailingListEmails', emailRegex)}
-                  >
-                    Add Email
-                  </button>
-
-                  <ul className="space-y-2 mt-5">
-                    {siteDetails.adminMailingListEmails.map((email, index) => (
-                      <li key={index} className="flex justify-between items-center p-2 bg-white shadow rounded-md">
-                        {email}
-                        <button
-                          type="button"
-                          className="px-2 py-1 text-white bg-red hover:bg-red rounded"
-                          onClick={() => removeItemAtIndex(setSiteDetails, 'adminMailingListEmails', index)}
-                        >
-                          Remove
-                        </button>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
             </div>
           </div>
         </div>

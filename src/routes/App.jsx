@@ -45,6 +45,8 @@ import SegmentRoutes from './private-routes/SegmentRoutes';
 import CertificateRoutes from './private-routes/CertificateRoutes';
 import ReminderRoutes from './private-routes/ReminderRoutes';
 import LogRoutes from './private-routes/LogRoutes';
+import AdvertisementRoutes from './private-routes/leads/AdvertisementRoutes';
+import VendorRoutes from './private-routes/leads/VendorRoutes';
 
 const ZohoStatus = lazy(() => import('../pages/integration/ZohoStatus'));
 
@@ -83,7 +85,9 @@ const privateRoutes = [
   { path: 'segments/*', Component: SegmentRoutes },
   { path: 'certificates/*', Component: CertificateRoutes },
   { path: 'reminder/*', Component: ReminderRoutes },
-  { path: 'logs/*', Component: LogRoutes }
+  { path: 'logs/*', Component: LogRoutes },
+  { path: 'advertisement/*', Component: AdvertisementRoutes },
+  { path: '/vendor/*', Component: VendorRoutes }
 ];
 
 const App = () => {
