@@ -46,7 +46,7 @@ const AddWhatsAppTemplate = () => {
   const [placeholders, setPlaceholders] = useState([]);
 
   useEffect(() => {
-    const matches = [...whatsAppTemplate.message.matchAll(/\{\{(\w+)\}\}/g)].map((match) => match[1]);
+    const matches = [...whatsAppTemplate.message.matchAll(/\{(\w+)\}/g)].map((match) => match[1]);
     setPlaceholders([...new Set(matches)]);
   }, [whatsAppTemplate.message]);
 
@@ -312,15 +312,14 @@ const AddWhatsAppTemplate = () => {
                 onChange={(e) => setWhatsAppTemplate((prev) => ({ ...prev, message: e.target.value }))}
                 errorMessage={errors.message}
               />
-              {console.log('placeholders', placeholders)}
-              {console.log('whatsAppTemplate.placeholders', whatsAppTemplate.placeholders)}
+
               {placeholders.length > 0 && (
                 <div className="mt-5 w-full">
                   <label className="block text-sm font-medium text-primary">Placeholders</label>
                   <div className="space-y-2">
                     {placeholders.map((placeholder) => (
                       <div className="flex items-center space-x-2" key={placeholder}>
-                        <span className="text-primary whitespace-nowrap">{`{{${placeholder}}}`}:</span>
+                        <span className="text-primary whitespace-nowrap">{`{${placeholder}}`}:</span>
                         <FormField
                           name={placeholder}
                           id={placeholder}

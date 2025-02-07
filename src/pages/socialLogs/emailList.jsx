@@ -1,8 +1,6 @@
-import { IoMdAdd } from 'react-icons/io';
 import TableComponent from '../../atoms/table/Table';
 import { useState } from 'react';
 import { formatDateTime } from '../../utils/dateFormats';
-import { deleteWhatsAppTemplateApi, getWhatsAppTemplateApprovalApi } from '../../apis/templates/template-apis';
 import TruncatableFieldToolTip from '../../atoms/common/TruncatableFeildToolTip';
 import TableHeader from '../../atoms/table/TableHeader';
 
