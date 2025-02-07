@@ -20,8 +20,6 @@ const ZoomIntegration = () => {
   const [errors, setErrors] = useState({});
   const [siteData, setSiteData] = useState({ id: state?.siteId, name: state?.siteId, showName: '' });
 
-  console.log('the site data', state);
-
   const validate = () => {
     const newErrors = {};
     if (!zoomDetails.clientId) newErrors.clientId = 'Client Id is required';

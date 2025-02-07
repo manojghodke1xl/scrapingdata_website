@@ -3,7 +3,7 @@ import DropDown from '../../atoms/formFields/DropDown';
 import FormButtons from '../../atoms/formFields/FormButtons';
 import useGlobalContext from '../../hooks/useGlobalContext';
 import { useEffect, useState } from 'react';
-import { addSubscriberApi } from '../../apis/mailing-apis';
+import { addSubscriberApi } from '../../apis/leads/subscriber-apis';
 import { showNotification } from '../../utils/showNotification';
 import FormField from '../../atoms/formFields/InputField';
 

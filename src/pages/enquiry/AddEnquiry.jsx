@@ -6,8 +6,8 @@ import FormField from '../../atoms/formFields/InputField';
 import PhoneInputField from '../../atoms/formFields/PhoneInputField';
 import TextareaComponent from '../../atoms/formFields/TextareaComponent';
 import DropDown from '../../atoms/formFields/DropDown';
-import { addEnquiryApi } from '../../apis/enquiry-apis';
 import { showNotification } from '../../utils/showNotification';
+import { addEnquiryApi } from '../../apis/leads/enquiry-apis';
 
 const AddEnquiry = () => {
   const navigate = useNavigate();

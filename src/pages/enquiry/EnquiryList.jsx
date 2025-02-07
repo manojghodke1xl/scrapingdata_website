@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { formatDateTime } from '../../utils/dateFormats';
 import TableComponent from '../../atoms/table/Table';
-import { deleteEnquiryApi } from '../../apis/enquiry-apis';
 import NoteComponent from '../../atoms/common/NoteComponent';
 import { enquiryListNote } from './EnquiryNotes';
 import { AiOutlineApi } from 'react-icons/ai';
 import { IoMdAdd } from 'react-icons/io';
 import TruncatableFieldToolTip from '../../atoms/common/TruncatableFeildToolTip';
 import TableHeader from '../../atoms/table/TableHeader';
+import { deleteEnquiryApi } from '../../apis/leads/enquiry-apis';
 
 const EnquiryList = () => {
   const [enquiries, setEnquiries] = useState([]);

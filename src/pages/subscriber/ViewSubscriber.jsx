@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import useGlobalContext from '../../hooks/useGlobalContext';
 import { showNotification } from '../../utils/showNotification';
-import { getMailingListById } from '../../apis/mailing-apis';
+import { getSubscriberById } from '../../apis/leads/subscriber-apis';
 import { formatDateTime } from '../../utils/dateFormats';
 import { CiCircleInfo } from 'react-icons/ci';
 import NoteComponent from '../../atoms/common/NoteComponent';
@@ -17,7 +17,7 @@ const ViewSubscriber = () => {
   useEffect(() => {
     setLoading(true);
     (async () => {
-      const { status, data } = await getMailingListById(id);
+      const { status, data } = await getSubscriberById(id);
       if (status) setMailingList(data.list);
       else showNotification('warn', data);
     })()

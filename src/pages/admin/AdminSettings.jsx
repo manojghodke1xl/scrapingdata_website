@@ -1,32 +1,34 @@
 import ToggleComponent from '../../atoms/formFields/ToggleComponent';
 import ColorPalette from '../../atoms/common/ColorPalette';
 import { useColor } from '../../contexts/contexts/ColorContext';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import useGlobalContext from '../../hooks/useGlobalContext';
+import { showNotification } from '../../utils/showNotification';
+import { updateAdminThemeApi } from '../../apis/admin-apis';
 
 const AdminSettings = () => {
   const { toggleDarkMode, isDarkMode, setIsDarkMode } = useColor();
-  // const { auth } = useGlobalContext();
 
+  const {
+    auth: { id },
+    setLoading
+  } = useGlobalContext();
 
   const [workspaceColors, setWorkspaceColors] = useState({});
-  const [isDark, setIsDark] = useState(false);
-  const [formData, setFormData] = useState({
-    darkMode: isDarkMode,
-    workspaceColors: {}
-  });
 
-  // Update formData whenever dark mode or workspace colors change
-  useEffect(() => {
-    setFormData({
-      darkMode: isDarkMode,
-      workspaceColors
-    });
-  }, [isDarkMode, workspaceColors]);
-
-  const handleSaveChanges = async () => {
-    console.log('formData', formData);
-  
+  const handleSaveChanges = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const payload = { darkMode: isDarkMode, workspaceColors };
+      const { status, data } = await updateAdminThemeApi(id, payload);
+      if (status) showNotification('success', data);
+      else showNotification('warn', data);
+    } catch (error) {
+      showNotification('error', error.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -49,15 +51,7 @@ const AdminSettings = () => {
             <span className=" text-primary">Dark Mode</span>
           </div>
           <div className="w-full">
-            <ToggleComponent
-              label={'Toggle Dark Mode'}
-              isEnableState={isDarkMode}
-              setIsEnableState={setIsDarkMode}
-              onChange={() => {
-                toggleDarkMode();
-                setIsDark(!isDark);
-              }}
-            />
+            <ToggleComponent label={'Toggle Dark Mode'} isEnableState={isDarkMode} setIsEnableState={setIsDarkMode} onChange={() => toggleDarkMode()} />
           </div>
         </div>
       </div>

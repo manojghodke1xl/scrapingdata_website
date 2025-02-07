@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useGlobalContext from '../../hooks/useGlobalContext';
-import { addFeedbackApi } from '../../apis/feedback-apis';
+import { addFeedbackApi } from '../../apis/leads/feedback-apis';
 import { showNotification } from '../../utils/showNotification';
 import FormButtons from '../../atoms/formFields/FormButtons';
 import FormField from '../../atoms/formFields/InputField';

@@ -1,4 +1,4 @@
-import { deleteMethodCall, getMethodCall, postMethodCall } from './api-handler';
+import { deleteMethodCall, getMethodCall, postMethodCall } from '../api-handler';
 
 export const getFeedbackByIdApi = async (fid) => {
   return await getMethodCall(`${import.meta.env.VITE_API_URL}/feedback/${fid}?p=1`);

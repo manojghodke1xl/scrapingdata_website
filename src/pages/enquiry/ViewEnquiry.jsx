@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import useGlobalContext from '../../hooks/useGlobalContext';
-import { getEnquiryById } from '../../apis/enquiry-apis';
 import { showNotification } from '../../utils/showNotification';
 import { CiCircleInfo } from 'react-icons/ci';
 import { formatDateTime } from '../../utils/dateFormats';
 import { viewEnquiryNote } from './EnquiryNotes';
 import NoteComponent from '../../atoms/common/NoteComponent';
 import CountryFlag from '../../atoms/common/CountryFlag';
+import { getEnquiryById } from '../../apis/leads/enquiry-apis';
 
 const ViewEnquiry = () => {
   const { id } = useParams();

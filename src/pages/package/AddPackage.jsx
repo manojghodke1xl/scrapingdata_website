@@ -58,7 +58,6 @@ const AddPackage = () => {
   const [templates, setTemplates] = useState([]);
   const [tickets, setTickets] = useState([]);
   const [whatsappTemplates, setWhatsAppTemplates] = useState([]);
-  console.log('whatsappTemplates', whatsappTemplates);
 
   const validate = () => {
     const newErrors = {};

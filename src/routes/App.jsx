@@ -2,6 +2,7 @@ import { lazy, Suspense } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import { GlobalProvider } from '../contexts/providers/GlobalProvider';
+import { ColorProvider } from '../contexts/contexts/ColorContext';
 import DeAuthComponent from '../components/authentication/DeAuthComponent';
 import Login from '../pages/authentication/Login';
 import AuthComponent from '../components/authentication/AuthComponent';
@@ -88,31 +89,33 @@ const privateRoutes = [
 const App = () => {
   return (
     <GlobalProvider>
-      <div className="w-screen inter-unique overflow-x-hidden">
-        <BrowserRouter>
-          <Suspense fallback={<></>}>
-            <Routes>
-              {/* Public Routes */}
-              <Route element={<DeAuthComponent />}>
-                <Route path="/" element={<Login />} />
-              </Route>
-
-              {/* Private Routes */}
-              <Route element={<AuthComponent />}>
-                <Route element={<StructuredLayout />}>
-                  <Route path="/dashboard" element={<Dashboard />} />
-                  <Route path="/auth-status/:id" element={<ZohoStatus />} />
-                  {privateRoutes.map(({ path, Component }) => (
-                    <Route key={path} path={`/${path}`} element={<Component />} />
-                  ))}
+      <ColorProvider>
+        <div className="w-screen inter-unique overflow-x-hidden">
+          <BrowserRouter>
+            <Suspense fallback={<></>}>
+              <Routes>
+                {/* Public Routes */}
+                <Route element={<DeAuthComponent />}>
+                  <Route path="/" element={<Login />} />
                 </Route>
-              </Route>
-              <Route path="*" element={<PageNotFound />} />
-            </Routes>
-          </Suspense>
-        </BrowserRouter>
-        <ToastContainer />
-      </div>
+
+                {/* Private Routes */}
+                <Route element={<AuthComponent />}>
+                  <Route element={<StructuredLayout />}>
+                    <Route path="/dashboard" element={<Dashboard />} />
+                    <Route path="/auth-status/:id" element={<ZohoStatus />} />
+                    {privateRoutes.map(({ path, Component }) => (
+                      <Route key={path} path={`/${path}`} element={<Component />} />
+                    ))}
+                  </Route>
+                </Route>
+                <Route path="*" element={<PageNotFound />} />
+              </Routes>
+            </Suspense>
+          </BrowserRouter>
+          <ToastContainer />
+        </div>
+      </ColorProvider>
     </GlobalProvider>
   );
 };

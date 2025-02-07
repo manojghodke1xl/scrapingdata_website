@@ -15,3 +15,7 @@ export const updateAdminApi = async (id, userData) => {
 export const updateAdminStatusApi = async (ids, isBlocked) => {
   return await putMethodCall(`${import.meta.env.VITE_API_URL}/admin-status`, { ids, isBlocked });
 };
+
+export const updateAdminThemeApi = async (id, theme) => {
+  return await putMethodCall(`${import.meta.env.VITE_API_URL}/admin-theme/${id}`, theme);
+};

@@ -28,7 +28,7 @@ import useGlobalContext from '../../../hooks/useGlobalContext';
 import { AiOutlineProduct } from 'react-icons/ai';
 // import SearchComponent from '../../../atoms/common/SearchComponent';
 
-const MaterialSidebar = ({ handleToggleSidebar }) => {
+const MaterialSidebar = ({ handleToggleSidebar = () => {} }) => {
   const { pathname } = useLocation();
   const { auth } = useGlobalContext();
   const [openAccordion, setOpenAccordion] = useState(null);

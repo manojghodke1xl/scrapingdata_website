@@ -11,7 +11,6 @@ const WhatsAppIntegration = () => {
   const navigate = useNavigate();
   const { setLoading, isLoading } = useGlobalContext();
   const { state } = useLocation();
-  console.log('state', state);
 
   const [errors, setErrors] = useState([{}]);
   const [whatsappDetails, setWhatsappDetails] = useState(
@@ -93,8 +92,6 @@ const WhatsAppIntegration = () => {
   const addVariable = () => {
     setWhatsappDetails((prev) => [...prev, { number: '', ccode: '', mobileId: '', token: '' }]);
   };
-
-  console.log('whatsappDetails', whatsappDetails);
 
   return (
     <div className="py-8 p-4 sm:p-8 overflow-x-hidden mb-20">

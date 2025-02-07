@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { formatDateTime } from '../../utils/dateFormats';
 import TableComponent from '../../atoms/table/Table';
-import { deleteMailingListApi } from '../../apis/mailing-apis';
+import { deleteSubscriberApi } from '../../apis/leads/subscriber-apis';
 import { mailingListNote } from './MailingNotes';
 import NoteComponent from '../../atoms/common/NoteComponent';
 import { AiOutlineApi } from 'react-icons/ai';
@@ -85,7 +85,7 @@ const SubscribersList = () => {
                 deleteAction={true}
                 deleteLabel={'Delete Mailing List'}
                 deleteMessage={'Are you sure you want to delete this subscriber list?'}
-                deleteApi={deleteMailingListApi}
+                deleteApi={deleteSubscriberApi}
               />
             </div>
           </div>

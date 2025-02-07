@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { formatDateTime } from '../../utils/dateFormats';
 import TableComponent from '../../atoms/table/Table';
-import { deleteFeedbackApi } from '../../apis/feedback-apis';
+import { deleteFeedbackApi } from '../../apis/leads/feedback-apis';
 import NoteComponent from '../../atoms/common/NoteComponent';
 import { feedbackListNote } from './FeedbackNote';
 import { AiOutlineApi } from 'react-icons/ai';

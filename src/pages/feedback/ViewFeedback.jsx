@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import useGlobalContext from '../../hooks/useGlobalContext';
-import { getFeedbackByIdApi } from '../../apis/feedback-apis';
+import { getFeedbackByIdApi } from '../../apis/leads/feedback-apis';
 import { showNotification } from '../../utils/showNotification';
 import { CiCircleInfo } from 'react-icons/ci';
 import { formatDateTime } from '../../utils/dateFormats';

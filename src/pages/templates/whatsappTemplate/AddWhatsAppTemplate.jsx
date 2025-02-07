@@ -129,7 +129,6 @@ const AddWhatsAppTemplate = () => {
     }
   };
 
-  console.log('whatsAppTemplate', whatsAppTemplate);
   const checkScrollability = () => {
     const contentHeight = document.documentElement.scrollHeight;
     const windowHeight = window.innerHeight;

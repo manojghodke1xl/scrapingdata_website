@@ -23,8 +23,6 @@ const OrderPaymentList = () => {
     const totalPrice = products?.reduce((sum, p) => sum + p?.product?.price?.[currency], 0);
     const totalSalePrice = products?.reduce((sum, p) => sum + p?.product?.salePrice?.[currency], 0);
 
-    console.log('product', product);
-
     return {
       id: _id,
       exportData: payment,

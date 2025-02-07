@@ -1,10 +1,10 @@
-import { deleteMethodCall, getMethodCall, postMethodCall } from './api-handler';
+import { deleteMethodCall, getMethodCall, postMethodCall } from '../api-handler';
 
-export const deleteMailingListApi = async (ids) => {
+export const deleteSubscriberApi = async (ids) => {
   return await deleteMethodCall(`${import.meta.env.VITE_API_URL}/list`, ids);
 };
 
-export const getMailingListById = async (id) => {
+export const getSubscriberById = async (id) => {
   return await getMethodCall(`${import.meta.env.VITE_API_URL}/list/${id}?p=1`);
 };
 

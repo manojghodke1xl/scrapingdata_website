@@ -1,33 +1,35 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { VscSymbolColor } from 'react-icons/vsc';
 import { GrCheckmark } from 'react-icons/gr';
 import { colors } from '../../utils/themeColors.js';
 import { useColor } from '../../contexts/contexts/ColorContext.jsx';
+import useGlobalContext from '../../hooks/useGlobalContext.jsx';
 
 const ColorPalette = ({ title = 'Color Palette', onColorChange }) => {
+  const { auth } = useGlobalContext();
   const { handleColorChange, isDarkMode } = useColor();
-  const [selectedColor, setSelectedColor] = useState({
-    name: 'Blue',
-    // Light mode colors
-    bgColor: '#2563EB',
-    fadedColor: '#eff8ff',
-    textColor: '#2563EB',
-    brandHoverColor: '#1E4DB7',
-    borderColor: '#2563EB',
-    // Dark mode colors
-    bgColorDark: '#2E90FA',
-    fadedColorDark: '#19418566',
-    textColorDark: '#53B1FD',
-    brandHoverColorDark: '#1E4DB7',
-    borderColorDark: '#2E90FA'
-  });
+  const [selectedColor, setSelectedColor] = useState(
+    auth.theme?.primaryColor || {
+      name: 'Blue',
+      // Light mode colors
+      bgColor: '#2563EB',
+      fadedColor: '#eff8ff',
+      textColor: '#2563EB',
+      brandHoverColor: '#1E4DB7',
+      borderColor: '#2563EB',
+      // Dark mode colors
+      bgColorDark: '#2E90FA',
+      fadedColorDark: '#19418566',
+      textColorDark: '#53B1FD',
+      brandHoverColorDark: '#1E4DB7',
+      borderColorDark: '#2E90FA'
+    }
+  );
 
   // Send default color to parent on mount
   useEffect(() => {
-    if (onColorChange) {
-      onColorChange(selectedColor);
-    }
-  }, []); // Empty dependency array ensures this runs only once on mount
+    if (onColorChange) onColorChange(selectedColor);
+  }, [onColorChange, selectedColor]); 
 
   const handleColorSelect = (color) => {
     setSelectedColor(color);
