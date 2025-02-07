@@ -308,6 +308,7 @@ const AddWhatsAppTemplate = () => {
                 placeholder="Message..."
                 id="message"
                 name="message"
+                rows={35}
                 value={whatsAppTemplate.message}
                 onChange={(e) => setWhatsAppTemplate((prev) => ({ ...prev, message: e.target.value }))}
                 errorMessage={errors.message}
