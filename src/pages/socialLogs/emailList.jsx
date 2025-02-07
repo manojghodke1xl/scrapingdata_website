@@ -10,12 +10,14 @@ const EmailLogList = () => {
   const [whatsAppTemplates, setWhatsAppTemplates] = useState([]);
 
   const rows = whatsAppTemplates?.map((whatsAppTemplate) => {
-    const { _id, requestData, responseData, statusCode, error, createdAt, updatedAt } = whatsAppTemplate;
+    const { _id, from, to, subject, message, statusCode, error, createdAt, updatedAt } = whatsAppTemplate;
 
     return {
       id: _id,
-      requestData: <TruncatableFieldToolTip title={'Request Data'} content={JSON.stringify(requestData)} />,
-      responseData: <TruncatableFieldToolTip title={'Response Data'} content={JSON.stringify(responseData)} />,
+      from: <TruncatableFieldToolTip title={'From'} content={from} />,
+      to: <TruncatableFieldToolTip title={'To'} content={to} />,
+      subject: <TruncatableFieldToolTip title={'Subject'} content={subject} />,
+      message: <TruncatableFieldToolTip title={'Message'} content={message} />,
       statusCode: (
         <div
           className={`rounded-xl ${
@@ -48,8 +50,10 @@ const EmailLogList = () => {
                 siteModule={'whats-app-templates'}
                 headers={[
                   { label: 'Sr. No.', key: 'srno' },
-                  { label: 'Request Data', key: 'requestData' },
-                  { label: 'Response Data', key: 'responseData' },
+                  { label: 'From', key: 'from' },
+                  { label: 'To', key: 'to' },
+                  { label: 'Subject', key: 'subject' },
+                  { label: 'Message', key: 'message' },
                   { label: 'Status', key: 'statusCode' },
                   { label: 'Error', key: 'error' },
                   { label: 'Created Date', key: 'createdAt' },

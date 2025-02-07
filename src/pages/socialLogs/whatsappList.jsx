@@ -17,8 +17,6 @@ const WhatsAppLogList = () => {
       fromNumber: whatsAppTemplate.fromNumber || '-',
       toNumber: whatsAppTemplate.toNumber || '-',
       message: <TruncatableFieldToolTip title={'Message'} content={whatsAppTemplate.message} />,
-      requestData: <TruncatableFieldToolTip title={'Request Data'} content={JSON.stringify(requestData)} />,
-      responseData: <TruncatableFieldToolTip title={'Response Data'} content={JSON.stringify(responseData)} />,
       statusCode: (
         <div
           className={`rounded-xl ${
@@ -54,8 +52,6 @@ const WhatsAppLogList = () => {
                   { label: 'From Number', key: 'fromNumber' },
                   { label: 'To Number', key: 'toNumber' },
                   { label: 'Message', key: 'message' },
-                  { label: 'Request Data', key: 'requestData' },
-                  { label: 'Response Data', key: 'responseData' },
                   { label: 'Status', key: 'statusCode' },
                   { label: 'Error', key: 'error' },
                   { label: 'Created Date', key: 'createdAt' },
