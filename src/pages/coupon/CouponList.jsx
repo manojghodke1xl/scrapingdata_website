@@ -18,11 +18,11 @@ const CouponList = () => {
     return {
       id: _id,
       exportData: coupon,
-      code: <TruncatableFieldToolTip title={'Coupon Code'} content={code} />,
-      type: <TruncatableFieldToolTip title={'Discount Type'} content={type} />,
-      value: <TruncatableFieldToolTip title={'Discount Value'} content={value} />,
-      minAmount: <TruncatableFieldToolTip title={'Minimum purchase Amount'} content={minAmount} />,
-      sites: <TruncatableFieldToolTip title={'Sites'} content={sites?.map((s) => `${s.name} (${s.host})`).join(', ')} />,
+      code: <TruncatableFieldToolTip title={'Coupon Code'} content={code ?? ''} />,
+      type: <TruncatableFieldToolTip title={'Discount Type'} content={type ?? ''} />,
+      value: <TruncatableFieldToolTip title={'Discount Value'} content={value ?? ''} />,
+      minAmount: <TruncatableFieldToolTip title={'Minimum purchase Amount'} content={minAmount ?? ''} />,
+      sites: <TruncatableFieldToolTip title={'Sites'} content={sites?.map((s) => `${s.name} (${s.host})`).join(', ') ?? ''} />,
       isActive: (
         <div
           className={`rounded-xl ${
