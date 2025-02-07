@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import FormField from '../../../atoms/formFields/InputField';
 import { addTemplateCategoryApi, getTemplateCategoryByIdApi, updateTemplateCategoryApi } from '../../../apis/templates/template-category';
 import { showNotification } from '../../../utils/showNotification';
+import DropDown from '../../../atoms/formFields/DropDown';
 
 const AddTemplateCategory = () => {
   const navigate = useNavigate();
@@ -191,6 +192,21 @@ const AddTemplateCategory = () => {
                     onChange={(e) => handleVariableChange(index, 'dataType', e.target.value)}
                     value={variable.dataType}
                   />
+
+                  {/* <DropDown
+                    mt="mt-5"
+                    name={'variableDataType'}
+                    label={'Variable Data Type'}
+                    SummaryChild={<h5 className="text-primary p-0 m-0">Phone Number</h5>}
+                    dropdownList={phoneNumbers.map((phoneNumber) => ({ id: phoneNumber.phoneNumberId, showName: phoneNumber.phoneNumber, name: phoneNumber.phoneNumberId }))}
+                    selected={whatsAppTemplate.phoneNumberId}
+                    search={true}
+                    commonFunction={(e) => {
+                      setWhatsAppTemplate((prev) => ({ ...prev, phoneNumberId: e.name }));
+                      if (errors.phoneNumberId) setErrors((prev) => ({ ...prev, phoneNumberId: '' }));
+                    }}
+                    error={errors.phoneNumberId}
+                  /> */}
                   <button type="button" onClick={() => removeVariable(index)} className="px-4 py-2 mt-5 text-white bg-red text-sm rounded-xl">
                     Remove
                   </button>
