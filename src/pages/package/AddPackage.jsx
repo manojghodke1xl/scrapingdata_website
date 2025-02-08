@@ -531,7 +531,7 @@ const AddPackage = () => {
                     error={errors.certificate}
                   />
 
-                  <DropDown
+                  {packageDetails.certificate && <DropDown
                     label={'Select Certificate Email Template'}
                     name="CertificateTemplate"
                     dropdownList={templates?.map((template) => ({ name: template._id, showName: template.name, id: template._id }))}
@@ -543,7 +543,7 @@ const AddPackage = () => {
                       if (errors.certificateTemplate) setErrors((prev) => ({ ...prev, certificateTemplate: '' }));
                     }}
                     error={errors.certificateTemplate}
-                  />
+                  />}
 
                   <ToggleComponent label={'Do you want to add ticket?'} isEnableState={showTicket} setIsEnableState={(e) => setShowTicket(e)} />
                   {showTicket && (
