@@ -3,11 +3,10 @@ import FormButtons from '../../atoms/formFields/FormButtons';
 import useGlobalContext from '../../hooks/useGlobalContext';
 import DropDown from '../../atoms/formFields/DropDown';
 import ToggleComponent from '../../atoms/formFields/ToggleComponent';
-import FormField from '../../atoms/formFields/InputField';
-import TextareaComponent from '../../atoms/formFields/TextareaComponent';
-import { RiDeleteBinLine } from 'react-icons/ri';
 import { showNotification } from '../../utils/showNotification';
 import { updateSiteNotificationsApi } from '../../apis/site-apis';
+import { getTemplateBySiteApi, getWhatsAppTemplateBySiteApi } from '../../apis/templates/template-apis';
+import EmailListManager from '../../atoms/formFields/EmailListManager';
 
 const SitesNotificationSettings = () => {
   const {
@@ -21,46 +20,34 @@ const SitesNotificationSettings = () => {
   const [siteNotification, setSiteNotification] = useState({
     site: '',
     sendUserEnquiry: false,
-    // userEnquiryMailData: { subject: "", body: "" },
+    userEnquiryEmailTemplate: null,
+    userEnquriyWhatsAppTemplate: null,
 
-    sendUserMailingList: false,
-    // userMailingListMailData: { subject: "", body: "" },
+    sendUserSubscriber: false,
+    userSubscriberEmailTemplate: null,
+    userSubscriberWhatsAppTemplate: null,
 
     sendAdminEnquiry: false,
-    // adminEnquiryMailData: { subject: "", body: "" },
     adminEnquiryEmails: [],
+    adminEnquiryEmailTemplate: null,
+    adminEnquiryWhatsAppTemplate: null,
 
-    sendAdminMailingList: false,
-    // adminMailingListMailData: { subject: "", body: "" },
-    adminMailingListEmails: []
+    sendAdminSubscriber: false,
+    adminSubscriberEmails: [],
+    adminSubscriberEmailTemplate: null,
+    adminSubscriberWhatsAppTemplate: null
   });
 
-  const [emailInput, setEmailInput] = useState('');
+  const [templateState, setTemplateState] = useState({
+    emailTemplate: [],
+    whatsAppTemplate: []
+  });
+
+  console.log('siteNotification', siteNotification);
 
   const validate = () => {
     const newErrors = {};
-    if (siteNotification.sendUserEnquiry) {
-      if (!siteNotification.userEnquiryMailData?.subject.trim()) newErrors.subject = 'Subject is required';
-      if (!siteNotification.userEnquiryMailData?.body) newErrors.body = 'Body is required';
-    }
-
-    if (siteNotification.sendUserMailingList) {
-      if (!siteNotification.userMailingListMailData?.subject.trim()) newErrors.subject = 'Subject is required';
-      if (!siteNotification.userMailingListMailData?.body) newErrors.body = 'Body is required';
-    }
-
-    if (siteNotification.sendAdminEnquiry) {
-      if (!siteNotification.adminEnquiryMailData?.subject.trim()) newErrors.subject = 'Subject is required';
-      if (!siteNotification.adminEnquiryMailData?.body) newErrors.body = 'Body is required';
-      if (!siteNotification.adminEnquiryEmails.length) newErrors.adminEnquiryEmails = 'At least one email is required';
-    }
-
-    if (siteNotification.sendAdminMailingList) {
-      if (!siteNotification.adminMailingListMailData?.subject.trim()) newErrors.subject = 'Subject is required';
-      if (!siteNotification.adminMailingListMailData?.body) newErrors.body = 'Body is required';
-      if (!siteNotification.adminMailingListEmails.length) newErrors.adminMailingListEmails = 'At least one email is required';
-    }
-
+    if (!siteNotification.site) newErrors.site = 'Please select a site.';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -79,8 +66,8 @@ const SitesNotificationSettings = () => {
           sendUserMailingList: false,
           sendAdminEnquiry: false,
           adminEnquiryEmails: [],
-          sendAdminMailingList: false,
-          adminMailingListEmails: []
+          sendAdminSubscriber: false,
+          adminSubscriberEmails: []
         });
       } else showNotification('error', data);
     } catch (error) {
@@ -90,19 +77,25 @@ const SitesNotificationSettings = () => {
     }
   };
 
-  const handleMailDataChange = (field, type, value) => setSiteNotification((prev) => ({ ...prev, [field]: { ...prev[field], [type]: value } }));
+  useEffect(() => {
+    if (siteNotification.site) {
+      (async () => {
+        try {
+          const [emailTemplateResponse, whatsAppTemplateResponse] = await Promise.all([
+            getTemplateBySiteApi(siteNotification.site),
+            getWhatsAppTemplateBySiteApi(siteNotification.site)
+          ]);
 
-  const removeItemAtIndex = (setDetails, key, indexToRemove) => setDetails((prev) => ({ ...prev, [key]: prev[key].filter((_, index) => index !== indexToRemove) }));
-
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  const validateAndAddInput = (e, inputValue, setInputValue, setStateDetails, key, regexPattern) => {
-    e.preventDefault();
-    if (inputValue && regexPattern.test(inputValue)) {
-      setStateDetails((prev) => ({ ...prev, [key]: [...(prev[key] || []), inputValue] }));
-      setInputValue('');
-      setErrors((prev) => ({ ...prev, forwardEmails: '' }));
-    } else setErrors((prev) => ({ ...prev, forwardEmails: 'Please enter a valid email address.' }));
-  };
+          if (emailTemplateResponse.status) setTemplateState((prev) => ({ ...prev, emailTemplate: emailTemplateResponse?.data?.emailTemplates }));
+          else showNotification('error', emailTemplateResponse.data);
+          if (whatsAppTemplateResponse.status) setTemplateState((prev) => ({ ...prev, whatsAppTemplate: whatsAppTemplateResponse?.data?.whatsAppTemplates }));
+          else showNotification('error', whatsAppTemplateResponse.data);
+        } catch (error) {
+          showNotification('error', error.message);
+        }
+      })();
+    }
+  }, [siteNotification.site]);
 
   const checkScrollability = () => {
     const contentHeight = document.documentElement.scrollHeight;
@@ -149,247 +142,225 @@ const SitesNotificationSettings = () => {
         </div>
       </div>
 
-      <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
-        <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
-          <div className="sm:w-7/12 w-full flex flex-col">
-            <span className=" text-primary ">User Preferences</span>
-          </div>
-          <div className="w-full">
-            <div className="flex flex-col gap-y-5">
-              <ToggleComponent
-                bgColor={'bg-grey'}
-                label={'Send User Enquiry Notification'}
-                isEnableState={siteNotification.sendUserEnquiry}
-                setIsEnableState={(value) => setSiteNotification((prev) => ({ ...prev, sendUserEnquiry: value, userEnquiryMailData: undefined }))}
-              />
-              {siteNotification.sendUserEnquiry && (
-                <div>
-                  <FormField
-                    divClassName={'mt-5'}
-                    label="Subject"
-                    type="text"
-                    id="subject"
-                    name="subject"
-                    placeholder="Subject"
-                    value={siteNotification.userEnquiryMailData?.subject ?? ''}
-                    onChange={(e) => {
-                      handleMailDataChange('userEnquiryMailData', 'subject', e.target.value);
-                      if (errors.subject) setErrors((prev) => ({ ...prev, subject: '' }));
-                    }}
-                    errorMessage={errors.subject}
+      {siteNotification.site && (
+        <>
+          <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
+            <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
+              <div className="sm:w-7/12 w-full flex flex-col">
+                <span className=" text-primary ">User Preferences</span>
+              </div>
+              <div className="w-full">
+                <div className="flex flex-col gap-y-5">
+                  <ToggleComponent
+                    bgColor={'bg-grey'}
+                    label={'Send User Enquiry Notification'}
+                    isEnableState={siteNotification.sendUserEnquiry}
+                    setIsEnableState={(value) =>
+                      setSiteNotification((prev) => ({ ...prev, sendUserEnquiry: value, userEnquiryEmailTemplate: null, userEnquriyWhatsAppTemplate: null }))
+                    }
                   />
-                  <TextareaComponent
-                    divClassName={'mt-5'}
-                    label="Body"
-                    placeholder="Body"
-                    id="body"
-                    name="body"
-                    value={siteNotification.userEnquiryMailData?.body ?? ''}
-                    onChange={(e) => {
-                      handleMailDataChange('userEnquiryMailData', 'body', e.target.value);
-                      if (errors.body) setErrors((prev) => ({ ...prev, body: '' }));
-                    }}
-                    errorMessage={errors.body}
-                  />
-                </div>
-              )}
+                  {siteNotification.sendUserEnquiry && (
+                    <>
+                      <DropDown
+                        label={'Select Email Template'}
+                        name="Template"
+                        dropdownList={templateState.emailTemplate?.map((template) => ({ name: template._id, showName: template.name, id: template._id }))}
+                        SummaryChild={<h5 className="p-0 m-0 text-primary">Email Templates</h5>}
+                        search={true}
+                        selected={siteNotification.userEnquiryEmailTemplate}
+                        commonFunction={(e) => {
+                          setSiteNotification((prev) => ({ ...prev, userEnquiryEmailTemplate: e.name }));
+                          if (errors.userEnquiryEmailTemplate) setErrors((prev) => ({ ...prev, userEnquiryEmailTemplate: '' }));
+                        }}
+                        error={errors.userEnquiryEmailTemplate}
+                      />
 
-              <ToggleComponent
-                bgColor={'bg-grey'}
-                label={'Send User Subscriber Notification'}
-                isEnableState={siteNotification.sendUserMailingList}
-                setIsEnableState={(value) => setSiteNotification((prev) => ({ ...prev, sendUserMailingList: value, userMailingListMailData: undefined }))}
-              />
-              {siteNotification.sendUserMailingList && (
-                <div>
-                  <FormField
-                    divClassName={'mt-5'}
-                    label="Subject"
-                    type="text"
-                    id="subject"
-                    name="subject"
-                    placeholder="Subject"
-                    value={siteNotification.userMailingListMailData?.subject ?? ''}
-                    onChange={(e) => {
-                      handleMailDataChange('userMailingListMailData', 'subject', e.target.value);
-                      if (errors.subject) setErrors((prev) => ({ ...prev, subject: '' }));
-                    }}
-                    errorMessage={errors.subject}
+                      <DropDown
+                        label={'Select WhatsApp Template'}
+                        name="whatsappTemplate"
+                        dropdownList={templateState.whatsAppTemplate?.map((template) => ({ name: template._id, showName: template.name, id: template._id }))}
+                        SummaryChild={<h5 className="p-0 m-0 text-primary">WhatsApp Templates</h5>}
+                        search={true}
+                        selected={siteNotification.userEnquriyWhatsAppTemplate}
+                        commonFunction={(e) => {
+                          setSiteNotification((prev) => ({ ...prev, userEnquriyWhatsAppTemplate: e.name }));
+                          if (errors.userEnquriyWhatsAppTemplate) setErrors((prev) => ({ ...prev, userEnquriyWhatsAppTemplate: '' }));
+                        }}
+                        error={errors.userEnquriyWhatsAppTemplate}
+                      />
+                    </>
+                  )}
+
+                  <ToggleComponent
+                    bgColor={'bg-grey'}
+                    label={'Send User Subscriber Notification'}
+                    isEnableState={siteNotification.sendUserSubscriber}
+                    setIsEnableState={(value) =>
+                      setSiteNotification((prev) => ({ ...prev, sendUserSubscriber: value, userSubscriberEmailTemplate: null, userSubscriberWhatsAppTemplate: null }))
+                    }
                   />
-                  <TextareaComponent
-                    divClassName={'mt-5'}
-                    label="Body"
-                    placeholder="Body"
-                    id="body"
-                    name="body"
-                    value={siteNotification.userMailingListMailData?.body ?? ''}
-                    onChange={(e) => {
-                      handleMailDataChange('userMailingListMailData', 'body', e.target.value);
-                      if (errors.body) setErrors((prev) => ({ ...prev, body: '' }));
-                    }}
-                    errorMessage={errors.body}
-                  />
+                  {siteNotification.sendUserSubscriber && (
+                    <>
+                      <DropDown
+                        label={'Select Email Template'}
+                        name="Template"
+                        dropdownList={templateState.emailTemplate?.map((template) => ({ name: template._id, showName: template.name, id: template._id }))}
+                        SummaryChild={<h5 className="p-0 m-0 text-primary">Email Templates</h5>}
+                        search={true}
+                        selected={siteNotification.userSubscriberEmailTemplate}
+                        commonFunction={(e) => {
+                          setSiteNotification((prev) => ({ ...prev, userSubscriberEmailTemplate: e.name }));
+                          if (errors.userSubscriberEmailTemplate) setErrors((prev) => ({ ...prev, userSubscriberEmailTemplate: '' }));
+                        }}
+                        error={errors.userSubscriberEmailTemplate}
+                      />
+
+                      <DropDown
+                        label={'Select WhatsApp Template'}
+                        name="whatsappTemplate"
+                        dropdownList={templateState.whatsAppTemplate?.map((template) => ({ name: template._id, showName: template.name, id: template._id }))}
+                        SummaryChild={<h5 className="p-0 m-0 text-primary">WhatsApp Templates</h5>}
+                        search={true}
+                        selected={siteNotification.userSubscriberWhatsAppTemplate}
+                        commonFunction={(e) => {
+                          setSiteNotification((prev) => ({ ...prev, userSubscriberWhatsAppTemplate: e.name }));
+                          if (errors.userSubscriberWhatsAppTemplate) setErrors((prev) => ({ ...prev, userSubscriberWhatsAppTemplate: '' }));
+                        }}
+                        error={errors.userSubscriberWhatsAppTemplate}
+                      />
+                    </>
+                  )}
                 </div>
-              )}
+              </div>
             </div>
           </div>
-        </div>
-      </div>
 
-      <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
-        <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
-          <div className="sm:w-7/12 w-full flex flex-col">
-            <span className=" text-primary ">Admin Preferences</span>
-          </div>
-          <div className="w-full">
-            <div className="flex flex-col gap-y-5">
-              <ToggleComponent
-                bgColor={'bg-grey'}
-                label={'Send Admin Enquiry'}
-                isEnableState={siteNotification.sendAdminEnquiry}
-                setIsEnableState={(value) => setSiteNotification((prev) => ({ ...prev, sendAdminEnquiry: value, adminEnquiryEmails: [], adminEnquiryMailData: undefined }))}
-              />
-              {siteNotification.sendAdminEnquiry && (
-                <div>
-                  <FormField
-                    divClassName={'mt-5'}
-                    label="Subject"
-                    type="text"
-                    id="subject"
-                    name="subject"
-                    placeholder="Subject"
-                    value={siteNotification.adminEnquiryMailData?.subject ?? ''}
-                    onChange={(e) => {
-                      handleMailDataChange('adminEnquiryMailData', 'subject', e.target.value);
-                      if (errors.subject) setErrors((prev) => ({ ...prev, subject: '' }));
-                    }}
-                    errorMessage={errors.subject}
-                  />
-                  <TextareaComponent
-                    divClassName={'mt-5'}
-                    label="Body"
-                    placeholder="Body"
-                    id="body"
-                    name="body"
-                    value={siteNotification.adminEnquiryMailData?.body ?? ''}
-                    onChange={(e) => {
-                      handleMailDataChange('adminEnquiryMailData', 'body', e.target.value);
-                      if (errors.body) setErrors((prev) => ({ ...prev, body: '' }));
-                    }}
-                    errorMessage={errors.body}
+          <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
+            <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
+              <div className="sm:w-7/12 w-full flex flex-col">
+                <span className=" text-primary ">Admin Preferences</span>
+              </div>
+              <div className="w-full">
+                <div className="flex flex-col gap-y-5">
+                  <ToggleComponent
+                    bgColor={'bg-grey'}
+                    label={'Send Admin Enquiry'}
+                    isEnableState={siteNotification.sendAdminEnquiry}
+                    setIsEnableState={(value) =>
+                      setSiteNotification((prev) => ({
+                        ...prev,
+                        sendAdminEnquiry: value,
+                        adminEnquiryEmails: [],
+                        adminEnquiryEmailTemplate: null,
+                        adminEnquiryWhatsAppTemplate: null
+                      }))
+                    }
                   />
 
-                  <FormField
-                    label="Email ID"
-                    type="email"
-                    id="email"
-                    name="email"
-                    placeholder="Email ID"
-                    value={emailInput}
-                    onChange={(e) => {
-                      if (errors.forwardEmails) setErrors((prev) => ({ ...prev, forwardEmails: '' }));
-                      if (errors.adminEnquiryEmails) setErrors((prev) => ({ ...prev, adminEnquiryEmails: '' }));
-                      setEmailInput(e.target.value);
-                    }}
-                    errorMessage={errors.forwardEmails || errors.adminEnquiryEmails}
+                  {siteNotification.sendAdminEnquiry && (
+                    <>
+                      <DropDown
+                        label={'Select Email Template'}
+                        name="Template"
+                        dropdownList={templateState.emailTemplate?.map((template) => ({ name: template._id, showName: template.name, id: template._id }))}
+                        SummaryChild={<h5 className="p-0 m-0 text-primary">Email Templates</h5>}
+                        search={true}
+                        selected={siteNotification.adminEnquiryEmailTemplate}
+                        commonFunction={(e) => {
+                          setSiteNotification((prev) => ({ ...prev, adminEnquiryEmailTemplate: e.name }));
+                          if (errors.adminEnquiryEmailTemplate) setErrors((prev) => ({ ...prev, adminEnquiryEmailTemplate: '' }));
+                        }}
+                        error={errors.adminEnquiryEmailTemplate}
+                      />
+
+                      <EmailListManager
+                        label="Admin Enquiry Emails"
+                        state={siteNotification}
+                        setState={setSiteNotification}
+                        keyName="adminEnquiryEmails"
+                        errorKey="forwardEmails"
+                        errors={errors}
+                        setErrors={setErrors}
+                      />
+
+                      <DropDown
+                        label={'Select WhatsApp Template'}
+                        name="whatsappTemplate"
+                        dropdownList={templateState.whatsAppTemplate?.map((template) => ({ name: template._id, showName: template.name, id: template._id }))}
+                        SummaryChild={<h5 className="p-0 m-0 text-primary">WhatsApp Templates</h5>}
+                        search={true}
+                        selected={siteNotification.adminEnquiryWhatsAppTemplate}
+                        commonFunction={(e) => {
+                          setSiteNotification((prev) => ({ ...prev, adminEnquiryWhatsAppTemplate: e.name }));
+                          if (errors.adminEnquiryWhatsAppTemplate) setErrors((prev) => ({ ...prev, adminEnquiryWhatsAppTemplate: '' }));
+                        }}
+                        error={errors.adminEnquiryWhatsAppTemplate}
+                      />
+                    </>
+                  )}
+
+                  <ToggleComponent
+                    bgColor={'bg-grey'}
+                    label={'Send Admin Mailing List'}
+                    isEnableState={siteNotification.sendAdminSubscriber}
+                    setIsEnableState={(value) =>
+                      setSiteNotification((prev) => ({
+                        ...prev,
+                        sendAdminSubscriber: value,
+                        adminSubscriberEmails: [],
+                        adminSubscriberEmailTemplate: null,
+                        adminSubscriberWhatsAppTemplate: null
+                      }))
+                    }
                   />
 
-                  <button
-                    type="button"
-                    className="px-4 py-2 text-white font-medium bg-primary hover:bg-primary-hover rounded-xl whitespace-nowrap mt-5"
-                    onClick={(e) => validateAndAddInput(e, emailInput, setEmailInput, setSiteNotification, 'adminEnquiryEmails', emailRegex)}
-                  >
-                    Add Email
-                  </button>
+                  {siteNotification.sendAdminSubscriber && (
+                    <>
+                      <DropDown
+                        label={'Select Email Template'}
+                        name="Template"
+                        dropdownList={templateState.emailTemplate?.map((template) => ({ name: template._id, showName: template.name, id: template._id }))}
+                        SummaryChild={<h5 className="p-0 m-0 text-primary">Email Templates</h5>}
+                        search={true}
+                        selected={siteNotification.adminSubscriberEmailTemplate}
+                        commonFunction={(e) => {
+                          setSiteNotification((prev) => ({ ...prev, adminSubscriberEmailTemplate: e.name }));
+                          if (errors.adminSubscriberEmailTemplate) setErrors((prev) => ({ ...prev, adminSubscriberEmailTemplate: '' }));
+                        }}
+                        error={errors.adminSubscriberEmailTemplate}
+                      />
 
-                  <ul className="space-y-2 my-5">
-                    {siteNotification.adminEnquiryEmails.map((email, index) => (
-                      <li key={index} className="flex justify-between items-center p-2 bg-inherit border border-primary text-primary shadow rounded-xl">
-                        {email}
-                        <RiDeleteBinLine size={20} className="text-failed" onClick={() => removeItemAtIndex(setSiteNotification, 'adminEnquiryEmails', index)} />
-                      </li>
-                    ))}
-                  </ul>
+                      <EmailListManager
+                        label="Admin Enquiry Emails"
+                        state={siteNotification}
+                        setState={setSiteNotification}
+                        keyName="adminSubscriberEmails"
+                        errorKey="forwardEmails"
+                        errors={errors}
+                        setErrors={setErrors}
+                      />
+
+                      <DropDown
+                        label={'Select WhatsApp Template'}
+                        name="whatsappTemplate"
+                        dropdownList={templateState.whatsAppTemplate?.map((template) => ({ name: template._id, showName: template.name, id: template._id }))}
+                        SummaryChild={<h5 className="p-0 m-0 text-primary">WhatsApp Templates</h5>}
+                        search={true}
+                        selected={siteNotification.adminSubscriberWhatsAppTemplate}
+                        commonFunction={(e) => {
+                          setSiteNotification((prev) => ({ ...prev, adminSubscriberWhatsAppTemplate: e.name }));
+                          if (errors.adminSubscriberWhatsAppTemplate) setErrors((prev) => ({ ...prev, adminSubscriberWhatsAppTemplate: '' }));
+                        }}
+                        error={errors.adminSubscriberWhatsAppTemplate}
+                      />
+                    </>
+                  )}
                 </div>
-              )}
-
-              <ToggleComponent
-                bgColor={'bg-grey'}
-                label={'Send Admin Mailing List'}
-                isEnableState={siteNotification.sendAdminMailingList}
-                setIsEnableState={(value) =>
-                  setSiteNotification((prev) => ({ ...prev, sendAdminMailingList: value, adminMailingListEmails: [], adminMailingListMailData: undefined }))
-                }
-              />
-
-              {siteNotification.sendAdminMailingList && (
-                <div>
-                  <FormField
-                    divClassName={'mt-5'}
-                    label="Subject"
-                    type="text"
-                    id="subject"
-                    name="subject"
-                    placeholder="Subject"
-                    value={siteNotification.adminMailingListMailData?.subject}
-                    onChange={(e) => {
-                      handleMailDataChange('adminMailingListMailData', 'subject', e.target.value);
-                      if (errors.subject) setErrors((prev) => ({ ...prev, subject: '' }));
-                    }}
-                    errorMessage={errors.subject}
-                  />
-                  <TextareaComponent
-                    divClassName={'mt-5'}
-                    label="Body"
-                    placeholder="Body"
-                    id="body"
-                    name="body"
-                    value={siteNotification.adminMailingListMailData?.body ?? ''}
-                    onChange={(e) => {
-                      handleMailDataChange('adminMailingListMailData', 'body', e.target.value);
-                      if (errors.body) setErrors((prev) => ({ ...prev, body: '' }));
-                    }}
-                    errorMessage={errors.body}
-                  />
-
-                  <FormField
-                    label="Email ID"
-                    type="email"
-                    id="email"
-                    name="email"
-                    placeholder="Email ID"
-                    value={emailInput}
-                    onChange={(e) => {
-                      if (errors.forwardEmails) setErrors((prev) => ({ ...prev, forwardEmails: '' }));
-                      if (errors.adminMailingListEmails) setErrors((prev) => ({ ...prev, adminMailingListEmails: '' }));
-                      setEmailInput(e.target.value);
-                    }}
-                    errorMessage={errors.forwardEmails || errors.adminMailingListEmails}
-                  />
-
-                  <button
-                    type="button"
-                    className="px-4 py-2 text-white font-medium bg-primary hover:bg-primary-hover rounded-xl whitespace-nowrap mt-5"
-                    onClick={(e) => validateAndAddInput(e, emailInput, setEmailInput, setSiteNotification, 'adminMailingListEmails', emailRegex)}
-                  >
-                    Add Email
-                  </button>
-
-                  <ul className="space-y-2 mt-5">
-                    {siteNotification.adminMailingListEmails.map((email, index) => (
-                      <li key={index} className="flex justify-between items-center p-2 bg-inherit border border-primary text-primary shadow rounded-xl">
-                        {email}
-                        <RiDeleteBinLine size={20} className="text-failed" onClick={() => removeItemAtIndex(setSiteNotification, 'adminMailingListEmails', index)} />
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
+              </div>
             </div>
           </div>
-        </div>
-      </div>
-
+        </>
+      )}
       {!isScrollable && (
         <div className="w-full flex justify-end items-center gap-4 pt-8  border- border-primary">
           <FormButtons to="/site/site-list" type="submit" onClick={handleSubmit} btnLebal={'Save Changes'} loading={isLoading} />

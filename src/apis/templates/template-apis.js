@@ -16,6 +16,9 @@ export const deleteEmailTemplateApi = async (ids) => {
 export const getTemplateByEventApi = async (id) => {
   return await getMethodCall(`${import.meta.env.VITE_API_URL}/template/email/event/${id}`);
 };
+export const getTemplateBySiteApi = async (id) => {
+  return await getMethodCall(`${import.meta.env.VITE_API_URL}/template/email/site/${id}`);
+};
 
 // sms templates apis
 export const getSmsTemplateByIdApi = async (id) => {
@@ -32,6 +35,9 @@ export const deleteSmsTemplateApi = async (ids) => {
 };
 export const getSmsTemplateByEventApi = async (id) => {
   return await getMethodCall(`${import.meta.env.VITE_API_URL}/template/sms/event/${id}`);
+};
+export const getSmsTemplateBySiteApi = async (id) => {
+  return await getMethodCall(`${import.meta.env.VITE_API_URL}/template/sms/site/${id}`);
 };
 
 // whatsapp templates apis
@@ -60,4 +66,7 @@ export const getPhoneIdsApi = async (siteId) => {
 
 export const getWhatsAppTemplateApprovalApi = async (id) => {
   return await getMethodCall(`${import.meta.env.VITE_API_URL}/template/whatsapp/upload/${id}`);
+};
+export const getWhatsAppTemplateBySiteApi = async (id) => {
+  return await getMethodCall(`${import.meta.env.VITE_API_URL}/template/whatsapp/site/${id}`);
 };

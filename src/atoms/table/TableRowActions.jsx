@@ -1,7 +1,6 @@
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { FiCopy } from 'react-icons/fi';
-import { MdEdit, MdOutlineApps, MdRemoveRedEye, MdOutlineInventory2, MdSend } from 'react-icons/md';
-import { RiDeleteBinLine } from 'react-icons/ri';
+import { MdEdit, MdOutlineApps, MdRemoveRedEye, MdOutlineInventory2, MdSend, MdDeleteForever } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import { useColor } from '../../contexts/contexts/ColorContext';
 
@@ -21,6 +20,7 @@ const TableRowActions = ({
   managePackage,
   managePackagePath,
   sendForApproval,
+  sendCertificate,
   approvalApi
 }) => {
   const { isDarkMode } = useColor();
@@ -35,7 +35,8 @@ const TableRowActions = ({
       { type: 'copy', show: copy && !row.isSuperAdmin },
       { type: 'delete', show: deleteAction && !row.isSuperAdmin && !row.hasBooking },
       { type: 'managePackage', show: managePackage },
-      { type: 'sendForApproval', show: sendForApproval && !row.whatsAppTemplateId }
+      { type: 'sendForApproval', show: sendForApproval },
+      { type: 'sendCertificate', show: sendCertificate && row.certificate }
     ].filter((action) => action.show);
   };
 
@@ -49,7 +50,7 @@ const TableRowActions = ({
           <summary className="text-white p-1.5 rounded-xl hover:bg-hover cursor-pointer focus:outline-none">
             <BsThreeDotsVertical size={20} className="text-secondary hover:text-primary" />
           </summary>
-          <ul className={`absolute mt-2 right-10 z-40 ${managePackage ? 'w-50' : 'w-40'} rounded-md ${isDarkMode ? 'bg-[#0c0e12]' : 'bg-white'} shadow-lg border border-primary`}>
+          <ul className={`absolute mt-2 right-10 z-40 w-50 rounded-md ${isDarkMode ? 'bg-[#0c0e12]' : 'bg-white'} shadow-lg border border-primary`}>
             {availableActions.map((action, i) => (
               <button
                 key={i}
@@ -65,21 +66,27 @@ const TableRowActions = ({
                   }
                   if (action.type === 'managePackage') navigate(`${managePackagePath}?eventId=${row.id}`);
                   if (action.type === 'sendForApproval') await approvalApi(row.id);
+                  if (action.type === 'sendCertificate') {
+                    console.log('row', row);
+                    await approvalApi(row.bookingId);
+                  }
                 }}
               >
                 {action.type === 'edit' && <MdEdit size={20} />}
                 {action.type === 'view' && <MdRemoveRedEye size={20} />}
                 {action.type === 'apps' && <MdOutlineApps size={20} />}
                 {action.type === 'copy' && <FiCopy size={20} />}
-                {action.type === 'delete' && <RiDeleteBinLine size={20} />}
+                {action.type === 'delete' && <MdDeleteForever size={20} />}
                 {action.type === 'managePackage' && <MdOutlineInventory2 size={20} />}
-                {action.type === 'sendForApproval' && <MdSend size={20} />}
+                {(action.type === 'sendForApproval' || action.type === 'sendCertificate') && <MdSend size={20} />}
+
                 {action.type === 'managePackage'
                   ? 'Manage Package'
                   : action.type === 'sendForApproval'
                   ? 'Send For Approval'
+                  : action.type === 'sendCertificate'
+                  ? 'Send Certificate'
                   : action.type.charAt(0).toUpperCase() + action.type.slice(1)}
-                {}
               </button>
             ))}
           </ul>
