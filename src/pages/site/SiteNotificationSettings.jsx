@@ -46,8 +46,6 @@ const SitesNotificationSettings = () => {
     whatsAppTemplate: []
   });
 
-  console.log('siteNotification', siteNotification);
-
   useEffect(() => {
     if (siteNotification.site) {
       (async () => {
@@ -60,6 +58,11 @@ const SitesNotificationSettings = () => {
   const validate = () => {
     const newErrors = {};
     if (!siteNotification.site) newErrors.site = 'Please select a site.';
+    if (siteNotification.adminEnquiryEmailTemplate && siteNotification.adminEnquiryEmails.length === 0) newErrors.forwardEmails = 'Please enter at least one email.';
+    if (siteNotification.adminEnquiryWhatsAppTemplate && siteNotification.adminEnquiryPhoneNumber.length === 0) newErrors.phoneError = 'Please enter at least one phone number.';
+    if (siteNotification.adminSubscriberEmailTemplate && siteNotification.adminSubscriberEmails.length === 0) newErrors.forwardEmails = 'Please enter at least one email.';
+    if (siteNotification.adminSubscriberWhatsAppTemplate && siteNotification.adminSubscriberPhoneNumber.length === 0)
+      newErrors.phoneError = 'Please enter at least one phone number.';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -117,7 +120,7 @@ const SitesNotificationSettings = () => {
         <div>
           <span className="text-3xl font-semibold text-dark">Site Notifications</span>
         </div>
-        <FormButtons to="/site/site-list" type="submit" onClick={handleSubmit} btnLebal={'Save Changes'} loading={isLoading} />
+        <FormButtons type="submit" onClick={handleSubmit} btnLebal={'Save Changes'} loading={isLoading} />
       </div>
 
       <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
@@ -401,7 +404,7 @@ const SitesNotificationSettings = () => {
       )}
       {!isScrollable && (
         <div className="w-full flex justify-end items-center gap-4 pt-8  border- border-primary">
-          <FormButtons to="/site/site-list" type="submit" onClick={handleSubmit} btnLebal={'Save Changes'} loading={isLoading} />
+          <FormButtons type="submit" onClick={handleSubmit} btnLebal={'Save Changes'} loading={isLoading} />
         </div>
       )}
     </div>
