@@ -15,3 +15,7 @@ export const deleteCertificatesApi = async (ids) => {
 export const getCertificateByIdApi = async (id) => {
   return await getMethodCall(`${import.meta.env.VITE_API_URL}/certificate/${id}?p=1`);
 };
+
+export const getAllCertificatesApi = async () => {
+  return await getMethodCall(`${import.meta.env.VITE_API_URL}/all-certificates`);
+};

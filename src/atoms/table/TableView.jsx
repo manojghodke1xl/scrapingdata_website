@@ -27,6 +27,7 @@ const TableView = ({
   managePackage,
   managePackagePath,
   sendForApproval,
+  sendCertificate,
   approvalApi,
   handleDragStart,
   handleDragOver,
@@ -134,6 +135,7 @@ const TableView = ({
                       managePackage={managePackage}
                       managePackagePath={managePackagePath}
                       sendForApproval={sendForApproval}
+                      sendCertificate={sendCertificate}
                       approvalApi={approvalApi}
                     />
                   )}

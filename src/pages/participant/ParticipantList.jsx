@@ -7,32 +7,23 @@ import TruncatableFieldToolTip from '../../atoms/common/TruncatableFeildToolTip'
 import CountryFlag from '../../atoms/common/CountryFlag';
 import TableHeader from '../../atoms/table/TableHeader';
 import { useColor } from '../../contexts/contexts/ColorContext';
+import { sendCertificateApi } from '../../apis/participant-apis';
 
 const ParticipantList = () => {
   const { isDarkMode } = useColor();
   const [participants, setParticipants] = useState([]);
   const [event, setEvent] = useState([]);
-  console.log('the participants', participants);
+
   const rows = participants.map((participant) => {
     const { _id, booking, createdAt, updatedAt, ticketId } = participant;
 
-    const {
-      name,
-      email,
-      city,
-      event,
-      package: { title },
-      site,
-      status,
-      refUser,
-      phoneNumber,
-      phoneCode,
-      payment
-    } = booking || {};
+    const { _id: bookingId, name, email, city, event, package: userPackage, site, status, refUser, phoneNumber, phoneCode, payment } = booking || {};
 
     return {
       id: _id,
       exportData: participant,
+      bookingId,
+      certificate: userPackage?.certificate,
       name: <TruncatableFieldToolTip title={'Name'} content={name ?? ''} />,
       email: <TruncatableFieldToolTip title={'Email'} content={email ?? ''} />,
       city: <TruncatableFieldToolTip title={'City'} content={city ?? ''} />,
@@ -47,7 +38,7 @@ const ParticipantList = () => {
       site: <TruncatableFieldToolTip title={'Sites'} content={`${site?.name} (${site?.host})`} />,
       event: <TruncatableFieldToolTip title={'Event Name'} content={`${event.name} (${event.venue})`} />,
       eventDate: formatDateTime(event.date),
-      title: <TruncatableFieldToolTip title={'Package Name'} content={title ?? ''} />,
+      title: <TruncatableFieldToolTip title={'Package Name'} content={userPackage?.title ?? ''} />,
       refUser: <TruncatableFieldToolTip title={'Referrer User'} content={refUser?.name ?? '--'} />,
       couponCode: <TruncatableFieldToolTip title={'Coupon Code'} content={payment?.coupon?.code ?? '--'} />,
       status: (
@@ -87,6 +78,7 @@ const ParticipantList = () => {
               <TableComponent
                 selectable={true}
                 siteModule={'participant'}
+                actions={true}
                 headers={[
                   { label: 'Sr. No.', key: 'srno' },
                   { label: 'Name', key: 'name' },
@@ -116,17 +108,14 @@ const ParticipantList = () => {
                 filterCategory={[
                   { id: 0, name: 'Sites' },
                   { id: 1, name: 'Event' }
-                  //   { id: 2, name: 'Status' }
                 ]}
-                // statuses={[
-                //   { id: 0, name: 'Active', bgColor: '#ECFDF3', color: '#027948', dotColor: '#12B76A' },
-                //   { id: 2, name: 'Inactive', bgColor: '#F2F4F7', color: '#344054', dotColor: '#667085' }
-                // ]}
                 events={event}
                 searchCategory={[
                   { id: 1, name: 'Name' },
                   { id: 2, name: 'Email' }
                 ]}
+                sendCertificate={true}
+                approvalApi={sendCertificateApi}
               />
             </div>
           </div>

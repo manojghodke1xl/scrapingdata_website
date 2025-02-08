@@ -1,4 +1,4 @@
-import { RiDeleteBinLine } from 'react-icons/ri';
+import { MdDeleteForever } from 'react-icons/md';
 import StatusFilter from '../filter/StatusFilter';
 import { CiExport } from 'react-icons/ci';
 
@@ -23,7 +23,7 @@ const TableFilterActions = ({
           onClick={() => setModalState((prev) => ({ ...prev, isDeleteModelOpen: true }))}
           className="sm:w-fit text-primary font-normal hover:bg-hover rounded-xl border border-primary py-2 px-3 sm:px-2 sm:py-2 md:px-3 whitespace-nowrap flex gap-1 sm:gap-2"
         >
-          <RiDeleteBinLine size={20} />
+          <MdDeleteForever size={20} />
           <span className="sm:text-base text-sm">Delete</span>
         </button>
       )}
