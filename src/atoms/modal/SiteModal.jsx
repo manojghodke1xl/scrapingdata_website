@@ -28,7 +28,7 @@ const SiteModal = ({ isOpen, label, duplicateBtn, setSitesModelOpen, selectedSit
       <div className="flex items-start justify-center w-full min-h-screen px-2 text-center lg:absolute lg:top-[12%]">
         <div
           className={`${
-            isDarkMode ? 'bg-[#0c0e12]' : 'bg-white'
+            isDarkMode ? 'bg-main' : 'bg-white'
           } rounded-2xl text-left overflow-hidden shadow-xl transform transition-all w-[95%] sm:w-[80%] md:w-[580px] px-6 2xl:px-8 py-6`}
         >
           <div className="w-full flex justify-end items-center">

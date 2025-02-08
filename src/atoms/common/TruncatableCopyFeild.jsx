@@ -33,7 +33,7 @@ const TruncatableCopyFeild = ({ content }) => {
         </button>
       </span>
       {showTooltip && (
-        <div className={`absolute z-10  ${isDarkMode ? 'bg-[#0c0e12]' : 'bg-[#E5E7EB]'}  border border-primary rounded-xl shadow-lg p-2 whitespace-normal`}>
+        <div className={`absolute z-10  ${isDarkMode ? 'bg-main' : 'bg-[#E5E7EB]'}  border border-primary rounded-xl shadow-lg p-2 whitespace-normal`}>
           <p className="text-primary overflow-hidden text-ellipsis">{content}</p>
         </div>
       )}

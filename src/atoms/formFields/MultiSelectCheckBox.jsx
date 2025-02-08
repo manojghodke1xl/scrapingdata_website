@@ -95,7 +95,7 @@ const MultiSelectCheckbox = ({
 
       {/* Dropdown Menu */}
       {isOpen && (
-        <div className={`absolute z-10 w-full mt-1 ${isDarkMode ? 'bg-[#0c0e12]' : 'bg-white'} border border-primary rounded-lg shadow-md`}>
+        <div className={`absolute z-10 w-full mt-1 ${isDarkMode ? 'bg-main' : 'bg-white'} border border-primary rounded-lg shadow-md`}>
           {/* Search Box */}
           <div className="p-2 border-b border-primary">
             <div className="relative">

@@ -33,6 +33,7 @@ const TableComponent = ({
   managePackagePath,
   sendForApproval,
   sendCertificate,
+  sendCertificateUnique,
   approvalApi,
   deleteAction,
   search,
@@ -355,6 +356,7 @@ const TableComponent = ({
             managePackagePath={managePackagePath}
             sendForApproval={sendForApproval}
             sendCertificate={sendCertificate}
+            sendCertificateUnique={sendCertificateUnique}
             approvalApi={approvalApi}
             handleDragStart={handleDragStart}
             handleDragOver={handleDragOver}

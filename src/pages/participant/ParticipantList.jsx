@@ -115,6 +115,7 @@ const ParticipantList = () => {
                   { id: 2, name: 'Email' }
                 ]}
                 sendCertificate={true}
+                sendCertificateUnique={true}
                 approvalApi={sendCertificateApi}
               />
             </div>

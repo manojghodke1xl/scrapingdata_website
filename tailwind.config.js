@@ -78,7 +78,8 @@ export default {
         pending: 'var(--bg-pending)',
         fadeyellow: 'var(--bg-fadeyellow)',
         darkgray: 'var(--bg-darkgray)',
-        grey: 'var(--bg-grey)'
+        grey: 'var(--bg-grey)',
+        main: 'var(--bg-main)'
       },
       backgroundImage: {
         'custom-gradient': 'radial-gradient(#095fe3,#175CD3)',

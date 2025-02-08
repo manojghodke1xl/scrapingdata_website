@@ -28,6 +28,7 @@ const TableView = ({
   managePackagePath,
   sendForApproval,
   sendCertificate,
+  sendCertificateUnique,
   approvalApi,
   handleDragStart,
   handleDragOver,
@@ -109,7 +110,7 @@ const TableView = ({
                   }`}
                 >
                   {selectable && (
-                    <td className="px-4 py-2">
+                    <td className="px-4 py-1">
                       <Checkbox checked={selectionState.selectedItems.includes(row.id)} onChange={() => handleRowCheckboxChange(row.id)} disabled={row.isSuperAdmin} />
                     </td>
                   )}
@@ -136,6 +137,7 @@ const TableView = ({
                       managePackagePath={managePackagePath}
                       sendForApproval={sendForApproval}
                       sendCertificate={sendCertificate}
+                      sendCertificateUnique={sendCertificateUnique}
                       approvalApi={approvalApi}
                     />
                   )}

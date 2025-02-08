@@ -65,7 +65,7 @@ const Navbar = () => {
           {isDropdownOpen && (
             <div
               ref={dropdownRef}
-              className={`absolute top-10 right-0 mt-2 w-48 ${isDarkMode ? 'bg-[#0c0e12]' : 'bg-white'} border border-primary overflow-hidden rounded-lg shadow-lg z-50`}
+              className={`absolute top-10 right-0 mt-2 w-48 ${isDarkMode ? 'bg-main' : 'bg-white'} border border-primary overflow-hidden rounded-lg shadow-lg z-50`}
             >
               <button onClick={() => dispatch({ type: 'SIGNOUT' })} className="w-full text-left px-4 py-2 hover:bg-hover">
                 Logout
@@ -83,7 +83,7 @@ const Navbar = () => {
             {isSidebarOpen && (
               <div className="absolute inset-0 w-screen bg-black bg-opacity-50 z-40 overflow-y-auto scrollbar-hide">
                 <div className="lg:hidden block w-[312px] sm:w-[330px] md:w-[340px] h-screen" ref={sidebarRef}>
-                  <div className={`lg:hidden block fixed w-[312px] sm:w-[320px] md:w-[340px] h-screen border-r border-primary my-0.5 ${isDarkMode ? 'bg-[#0c0e12]' : 'bg-white'}`}>
+                  <div className={`lg:hidden block fixed w-[312px] sm:w-[320px] md:w-[340px] h-screen border-r border-primary my-0.5 ${isDarkMode ? 'bg-main' : 'bg-white'}`}>
                     <div className="relative">
                       <MaterialSidebar handleToggleSidebar={handleToggleSidebar} />
                     </div>

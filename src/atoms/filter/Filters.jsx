@@ -32,7 +32,7 @@ const Filters = ({ categories, onCategorySelect, setSelectedCategory, selectedCa
 
           <ul
             className={`absolute end-0 top-11 z-40 mt-1 max-w-[300px] max-h-[350px] rounded-xl ${
-              isDarkMode ? 'bg-[#0c0e12]' : 'bg-white'
+              isDarkMode ? 'bg-main' : 'bg-white'
             } text-[12px] md:text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm overflow-y-auto custom-scrollbar`}
           >
             <div className="w-full flex items-center rounded-xl border border-primary px-3">

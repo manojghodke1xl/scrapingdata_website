@@ -43,7 +43,7 @@ const DropDown = ({ mt = '', width = 'w-full', name, label, SummaryChild, dropdo
         </summary>
         <ul
           className={`absolute end-0 top-11 z-40 mt-1 max-h-48 w-full rounded-md ${
-            isDarkMode ? 'bg-[#0c0e12]' : 'bg-white'
+            isDarkMode ? 'bg-main' : 'bg-white'
           } text-[12px] md:text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm overflow-y-auto custom-scrollbar`}
         >
           {search && (
