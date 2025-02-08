@@ -82,11 +82,11 @@ const AddPackage = () => {
     supportedCurrencies.forEach((currency) => {
       if (
         (paymentData?.razorpay?.supports?.[currency] || paymentData?.stripe?.supports?.[currency] || paymentData?.paypal?.supports?.[currency]) &&
-        (!packageDetails.currencies[currency] || packageDetails.currencies[currency] <= 0) &&
-        packageDetails.currencyNotes[currency]
+        packageDetails.currencyNotes[currency] &&
+        packageDetails.currencies[currency] < 0
       ) {
-        newErrors.currencies = { ...newErrors.currencies, [currency]: `Price in (${currency}) is required` };
-        if (packageDetails.onSale && !packageDetails.salePrice[currency]) newErrors.salePrice = { ...newErrors.salePrice, [currency]: `Sale Price in (${currency}) is required` };
+        newErrors.currencies = { ...newErrors.currencies, [currency]: `Price in (${currency}) cannot be negative` };
+        if (packageDetails.onSale && packageDetails.salePrice[currency] < 0) newErrors.salePrice = { ...newErrors.salePrice, [currency]: `Sale Price in (${currency}) cannot be negative` };
       }
     });
 
