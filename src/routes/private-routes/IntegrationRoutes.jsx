@@ -1,6 +1,7 @@
 import { lazy } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import ZoomIntegration from '../../pages/integration/ZoomIntegration';
+import MailerMagixIntegration from '../../pages/integration/MailerMagixIntegration';
 
 const Apps = lazy(() => import('../../pages/integration/Apps'));
 const IntegrationHub = lazy(() => import('../../pages/integration/IntegrationHub'));
@@ -24,6 +25,7 @@ const IntegrationRoutes = () => {
       <Route path="/integration/whatsapp" element={<WhatsAppIntegration />} />
       <Route path="/integration/sms" element={<SMSIntegration />} />
       <Route path="/integration/zoom" element={<ZoomIntegration />} />
+      <Route path="/integration/mailerMagix" element={<MailerMagixIntegration />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
