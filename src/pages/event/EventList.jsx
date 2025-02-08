@@ -6,15 +6,17 @@ import { deleteEventApi } from '../../apis/event-apis';
 import TruncatableFieldToolTip from '../../atoms/common/TruncatableFeildToolTip';
 import TruncatableCopyFeild from '../../atoms/common/TruncatableCopyFeild';
 import TableHeader from '../../atoms/table/TableHeader';
+import { sendCertificateApi } from '../../apis/participant-apis';
 
 const EventList = () => {
   const [events, setEvents] = useState([]);
 
   const rows = events.map((event) => {
-    const { _id, name, date, endDate, lastBookingDate, venue, site, createdAt, updatedAt, timeZone } = event;
+    const { _id, name, date, endDate, lastBookingDate, venue, site, createdAt, updatedAt, timeZone, certificate } = event;
     return {
       id: _id,
       exportData: event,
+      bookingId: _id,
       Keys: <TruncatableCopyFeild content={_id} />,
       name: <TruncatableFieldToolTip title={'Event Name'} content={name} />,
       site: <TruncatableFieldToolTip title={'Sites'} content={`${site?.name} (${site?.host})`} />,
@@ -24,7 +26,8 @@ const EventList = () => {
       endDate: formatDateTime(endDate, timeZone || null),
       lastBookingDate: formatDateTime(lastBookingDate, timeZone || null),
       createdAt: formatDateTime(createdAt),
-      updatedAt: formatDateTime(updatedAt)
+      updatedAt: formatDateTime(updatedAt),
+      certificate
     };
   });
 
@@ -81,6 +84,8 @@ const EventList = () => {
                 deleteApi={deleteEventApi}
                 deleteLabel={'Delete Event'}
                 deleteMessage={'Are you sure you want to delete this event?'}
+                sendCertificate={true}
+                approvalApi={sendCertificateApi}
               />
             </div>
           </div>
