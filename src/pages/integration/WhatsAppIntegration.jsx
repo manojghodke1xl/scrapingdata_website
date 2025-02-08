@@ -112,6 +112,7 @@ const WhatsAppIntegration = () => {
           <div className="w-full">
             {whatsappDetails.map((whatsapp, index) => (
               <div key={index}>
+                
                 <PhoneInputField
                   divClassName="mt-5"
                   label="Mobile Number"
