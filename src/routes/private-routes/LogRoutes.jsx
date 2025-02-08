@@ -1,7 +1,7 @@
 import { lazy } from 'react';
 import { Route, Routes } from 'react-router-dom';
-// import WhatsAppLogList from '../../pages/socialLogs/whatsappList';
-// import EmailLogList from '../../pages/socialLogs/emailList';
+import EmailLogPreview from '../../pages/socialLogs/emailLogPreview';
+import WhatsappLogPreview from '../../pages/socialLogs/whatsappLogPreview';
 
 const WhatsAppLogList = lazy(() => import('../../pages/socialLogs/whatsappList'));
 const EmailLogList = lazy(() => import('../../pages/socialLogs/emailList'));
@@ -12,6 +12,8 @@ const LogRoutes = () => {
     <Routes>
       <Route path="/whatsapp-log-list" element={<WhatsAppLogList />} />
       <Route path="/email-log-list" element={<EmailLogList />} />
+      <Route path="/whatsapp-log-preview/:id" element={<WhatsappLogPreview />} />
+      <Route path="/email-log-preview/:id" element={<EmailLogPreview />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );

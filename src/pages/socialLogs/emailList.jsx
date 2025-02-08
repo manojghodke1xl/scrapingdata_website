@@ -67,9 +67,9 @@ const EmailLogList = () => {
                 search={true}
                 // filter={true}
                 filterCategory={[{ id: 0, name: 'Sites' }]}
-                // actions={true}
+                actions={true}
                 view={true}
-                viewPath={'/events/view-event'}
+                viewPath={'/logs/email-log-preview'}
               />
             </div>
           </div>

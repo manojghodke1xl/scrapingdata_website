@@ -65,9 +65,9 @@ const WhatsAppLogList = () => {
                 search={true}
                 // filter={true}
                 filterCategory={[{ id: 0, name: 'Sites' }]}
-                // actions={true}
+                actions={true}
                 view={true}
-                viewPath={'/events/view-event'}
+                viewPath={'/logs/whatsapp-log-preview'}
               />
             </div>
           </div>

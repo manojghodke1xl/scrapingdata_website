@@ -65,8 +65,6 @@ const AddPackage = () => {
     const newErrors = {};
     if (!packageDetails.title.trim()) newErrors.title = 'Name is required';
     if (!packageDetails.event) newErrors.event = 'Event is required';
-    if (!packageDetails.ticketIdPattern) newErrors.ticketIdPattern = 'Ticket ID Pattern is required';
-    if (!packageDetails.ticketIdPattern?.trim()) newErrors.ticketIdPattern = 'Ticket ID Pattern is required';
     if (packageDetails.onSale && !packageDetails.saleEndDate) newErrors.saleEndDate = 'Sale end date is required';
 
     if (!showTicket) packageDetails.ticket = null;
