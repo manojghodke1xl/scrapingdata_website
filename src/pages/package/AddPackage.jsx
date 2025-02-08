@@ -32,7 +32,8 @@ const AddPackage = () => {
     onSale: false,
     saleEndDate: '',
     ticket: '',
-    whatsAppTemplate: '',
+    template: null,
+    whatsAppTemplate: null,
     currencyNotes: {
       INR: false,
       AED: false,
@@ -51,6 +52,7 @@ const AddPackage = () => {
     maxLimit: '',
     event: ''
   });
+
   const [showTicket, setShowTicket] = useState(packageDetails.ticket ? true : false);
 
   const [events, setEvents] = useState([]);
@@ -62,44 +64,57 @@ const AddPackage = () => {
   const validate = () => {
     const newErrors = {};
     if (!packageDetails.title.trim()) newErrors.title = 'Name is required';
-    if (packageDetails.maxLimit < 0 || !packageDetails.maxLimit) newErrors.maxLimit = 'Max limit should be greater than 0';
     if (!packageDetails.event) newErrors.event = 'Event is required';
     if (!packageDetails.ticketIdPattern) newErrors.ticketIdPattern = 'Ticket ID Pattern is required';
     if (!packageDetails.ticketIdPattern?.trim()) newErrors.ticketIdPattern = 'Ticket ID Pattern is required';
-    // if (packageDetails.event && !packageDetails.template) newErrors.template = 'Template is required';
     if (packageDetails.onSale && !packageDetails.saleEndDate) newErrors.saleEndDate = 'Sale end date is required';
 
     if (!showTicket) packageDetails.ticket = null;
 
-    // const supportedCurrencies = ['INR', 'AED', 'USD'];
+    if (Object.values(packageDetails.currencyNotes).filter(Boolean).length === 0) newErrors.currencyNotes = 'Please select at least one currency';
 
-    // supportedCurrencies.forEach((currency) => {
-    //   if (
-    //     (paymentData?.razorpay?.supports?.[currency] || paymentData?.stripe?.supports?.[currency] || paymentData?.paypal?.supports?.[currency]) &&
-    //     (!packageDetails.currencies[currency] || packageDetails.currencies[currency] <= 0) &&
-    //     packageDetails.currencyNotes[currency]
-    //   ) {
-    //     newErrors.currencies = { ...newErrors.currencies, [currency]: `Price in (${currency}) is required` };
-    //     if (packageDetails.onSale && !packageDetails.salePrice[currency]) newErrors.salePrice = { ...newErrors.salePrice, [currency]: `Sale Price in (${currency}) is required` };
-    //   }
-    // });
+    if (Object.values(packageDetails.currencyNotes).some(Boolean) && (packageDetails.maxLimit < 0 || !packageDetails.maxLimit))
+      newErrors.maxLimit = 'Max limit should be greater than 0';
+
+    const supportedCurrencies = ['INR', 'AED', 'USD'];
+
+    supportedCurrencies.forEach((currency) => {
+      if (
+        (paymentData?.razorpay?.supports?.[currency] || paymentData?.stripe?.supports?.[currency] || paymentData?.paypal?.supports?.[currency]) &&
+        (!packageDetails.currencies[currency] || packageDetails.currencies[currency] <= 0) &&
+        packageDetails.currencyNotes[currency]
+      ) {
+        newErrors.currencies = { ...newErrors.currencies, [currency]: `Price in (${currency}) is required` };
+        if (packageDetails.onSale && !packageDetails.salePrice[currency]) newErrors.salePrice = { ...newErrors.salePrice, [currency]: `Sale Price in (${currency}) is required` };
+      }
+    });
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  useEffect(() => {
-    if (packageDetails.event) {
-      (async () => {
-        try {
-          const { status, data } = await getAllTicketsApi();
-          if (status) setTickets(data.tickets);
-          else showNotification('warn', data);
-        } catch (error) {
-          showNotification('error', error.message);
-        }
-      })();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!validate()) return;
+    setLoading(true);
+    try {
+      const { status, data } = await (id ? (isDuplicate ? addPackageApi(packageDetails) : updatePackageApi(id, packageDetails)) : addPackageApi(packageDetails));
+      if (status) {
+        showNotification('success', data.message);
+        navigate('/packages/package-list');
+      } else showNotification('warn', data);
+    } catch (error) {
+      showNotification('error', error.message);
+    } finally {
+      setLoading(false);
     }
-  }, [packageDetails.event]);
+  };
+
+  const checkScrollability = () => {
+    const contentHeight = document.documentElement.scrollHeight;
+    const windowHeight = window.innerHeight;
+    setIsScrollable(contentHeight > windowHeight);
+  };
 
   useEffect(() => {
     setLoading(true);
@@ -139,10 +154,14 @@ const AddPackage = () => {
     if (packageDetails.event) {
       (async () => {
         try {
-          const [templateResponse, whatsappTemplateResponse] = await Promise.all([
+          const [templateResponse, whatsappTemplateResponse, ticketsResponse] = await Promise.all([
             getTemplateByEventApi(packageDetails.event),
-            getWhatsAppTemplateByEventApi(packageDetails.event)
+            getWhatsAppTemplateByEventApi(packageDetails.event),
+            getAllTicketsApi()
           ]);
+
+          if (ticketsResponse.status) setTickets(ticketsResponse.data.tickets);
+          else showNotification('warn', ticketsResponse.data);
 
           if (templateResponse.status) setTemplates(templateResponse.data.emailTemplates);
           else showNotification('warn', templateResponse.data);
@@ -155,29 +174,6 @@ const AddPackage = () => {
       })();
     }
   }, [packageDetails.event]);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!validate()) return;
-    setLoading(true);
-    try {
-      const { status, data } = await (id ? (isDuplicate ? addPackageApi(packageDetails) : updatePackageApi(id, packageDetails)) : addPackageApi(packageDetails));
-      if (status) {
-        showNotification('success', data.message);
-        navigate('/packages/package-list');
-      } else showNotification('warn', data);
-    } catch (error) {
-      showNotification('error', error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const checkScrollability = () => {
-    const contentHeight = document.documentElement.scrollHeight;
-    const windowHeight = window.innerHeight;
-    setIsScrollable(contentHeight > windowHeight);
-  };
 
   useEffect(() => {
     checkScrollability();
@@ -241,7 +237,7 @@ const AddPackage = () => {
             <span className=" text-primary">Package Details</span>
           </div>
           <div className="w-full">
-            <div>
+            <div className="flex flex-col gap-5">
               <FormField
                 label="Title"
                 type="text"
@@ -256,7 +252,6 @@ const AddPackage = () => {
                 errorMessage={errors.title}
               />
               <TextareaComponent
-                divClassName="mt-5"
                 label="Description"
                 placeholder="Enter a description..."
                 id="description"
@@ -266,7 +261,6 @@ const AddPackage = () => {
               />
 
               <FormField
-                divClassName={'mt-5'}
                 label="Ticket ID Pattern"
                 type="text"
                 id="ticketIdPattern"
@@ -316,7 +310,7 @@ const AddPackage = () => {
                 <span className=" text-primary">Template Details</span>
               </div>
               <div className="w-full">
-                <div>
+                <div className="flex flex-col gap-5">
                   <DropDown
                     label={'Select Email Template'}
                     name="Template"
@@ -332,7 +326,6 @@ const AddPackage = () => {
                   />
 
                   <DropDown
-                    mt="mt-5"
                     label={'Select WhatsApp Template'}
                     name="whatsappTemplate"
                     dropdownList={whatsappTemplates?.map((template) => ({ name: template._id, showName: template.name, id: template._id }))}
@@ -356,10 +349,9 @@ const AddPackage = () => {
                 <span className=" text-primary">Additional Details</span>
               </div>
               <div className="w-full">
-                <div>
+                <div className="flex flex-col gap-5">
                   <>
                     <MultiSelectCheckbox
-                      divClassName={'mt-5'}
                       options={[
                         { _id: 'INR', name: 'INR' },
                         { _id: 'AED', name: 'AED' },
@@ -409,7 +401,6 @@ const AddPackage = () => {
                     {(paymentData?.razorpay?.supports?.INR || paymentData?.stripe?.supports?.INR || paymentData?.paypal?.supports?.INR) && packageDetails?.currencyNotes?.INR && (
                       <div className="flex flex-col md:flex-row items-center justify-between gap-4">
                         <FormField
-                          divClassName={'mt-5'}
                           label="Price (in INR) is inclusive of tax"
                           type="number"
                           id="currencies-INR"
@@ -424,7 +415,6 @@ const AddPackage = () => {
                         />
                         {packageDetails.onSale && (
                           <FormField
-                            divClassName={'mt-5'}
                             label={`Sale Price (in INR)`}
                             type="number"
                             id={`salePrice-INR`}
@@ -443,7 +433,6 @@ const AddPackage = () => {
                     {(paymentData?.razorpay?.supports?.AED || paymentData?.stripe?.supports?.AED || paymentData?.paypal?.supports?.AED) && packageDetails?.currencyNotes?.AED && (
                       <div className="flex flex-col md:flex-row items-center justify-between gap-4">
                         <FormField
-                          divClassName={'mt-5'}
                           label="Price (in AED) is inclusive of tax"
                           type="number"
                           id="currencies-AED"
@@ -459,7 +448,6 @@ const AddPackage = () => {
 
                         {packageDetails.onSale && (
                           <FormField
-                            divClassName={'mt-5'}
                             label={`Sale Price (in AED)`}
                             type="number"
                             id={`salePrice-AED`}
@@ -478,7 +466,6 @@ const AddPackage = () => {
                     {(paymentData?.razorpay?.supports?.USD || paymentData?.stripe?.supports?.USD || paymentData?.paypal?.supports?.USD) && packageDetails?.currencyNotes?.USD && (
                       <div className="flex flex-col md:flex-row items-center justify-between gap-4">
                         <FormField
-                          divClassName={'mt-5'}
                           label="Price (in USD) is inclusive of tax"
                           type="number"
                           id="currencies-USD"
@@ -494,7 +481,6 @@ const AddPackage = () => {
 
                         {packageDetails.onSale && (
                           <FormField
-                            divClassName={'mt-5'}
                             label={`Sale Price (in USD)`}
                             type="number"
                             id={`salePrice-USD`}
@@ -512,7 +498,6 @@ const AddPackage = () => {
                     )}
                     {(packageDetails?.currencyNotes?.INR || packageDetails?.currencyNotes?.AED || packageDetails?.currencyNotes?.USD) && (
                       <FormField
-                        divClassName={'mt-5'}
                         label="Max Limit"
                         type="number"
                         id="maxLimit"
@@ -529,7 +514,6 @@ const AddPackage = () => {
                     <ToggleComponent label={'Do you want to add ticket?'} isEnableState={showTicket} setIsEnableState={(e) => setShowTicket(e)} />
                     {showTicket && (
                       <DropDown
-                        mt="mt-5"
                         name="Tickets"
                         label={'Select Ticket'}
                         dropdownList={tickets?.map((event) => ({ name: event._id, showName: event.name, id: event._id }))}
@@ -551,9 +535,6 @@ const AddPackage = () => {
         </>
       )}
 
-      {/* <div className="w-full justify-center items-center border-b  border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end ">
-<NoteComponent note={id ? editAdminNote : addAdminNote} />
-</div> */}
       {!isScrollable && (
         <div className="w-full flex justify-end items-center gap-4 pt-8  border- border-primary">
           <FormButtons to="/packages/package-list" type="submit" onClick={handleSubmit} btnLebal={id ? (isDuplicate ? 'Add' : 'Save Changes') : 'Add'} loading={isLoading} />
