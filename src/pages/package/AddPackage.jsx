@@ -36,6 +36,7 @@ const AddPackage = () => {
     template: null,
     whatsAppTemplate: null,
     certificate: null,
+    certificateTemplate: null,
     currencyNotes: {
       INR: false,
       AED: false,
@@ -528,6 +529,20 @@ const AddPackage = () => {
                       if (errors.certificate) setErrors((prev) => ({ ...prev, certificate: '' }));
                     }}
                     error={errors.certificate}
+                  />
+
+                  <DropDown
+                    label={'Select Certificate Email Template'}
+                    name="CertificateTemplate"
+                    dropdownList={templates?.map((template) => ({ name: template._id, showName: template.name, id: template._id }))}
+                    SummaryChild={<h5 className="p-0 m-0 text-primary">Email Templates</h5>}
+                    search={true}
+                    selected={packageDetails.certificateTemplate}
+                    commonFunction={(e) => {
+                      setPackageDetails((prev) => ({ ...prev, certificateTemplate: e.name }));
+                      if (errors.certificateTemplate) setErrors((prev) => ({ ...prev, certificateTemplate: '' }));
+                    }}
+                    error={errors.certificateTemplate}
                   />
 
                   <ToggleComponent label={'Do you want to add ticket?'} isEnableState={showTicket} setIsEnableState={(e) => setShowTicket(e)} />
