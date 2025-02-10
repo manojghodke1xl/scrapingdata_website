@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import phoneData from '../../utils/phoneInput.json';
 import { useColor } from '../../contexts/contexts/ColorContext';
 import SearchComponent from '../common/SearchComponent';
