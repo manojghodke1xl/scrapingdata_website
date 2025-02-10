@@ -4,7 +4,7 @@ import ToggleComponent from '../formFields/ToggleComponent';
 import { useColor } from '../../contexts/contexts/ColorContext';
 
 const SiteModal = ({ isOpen, label, duplicateBtn, setSitesModelOpen, selectedSites, setSelectedSites, availableSites, onConfirm, siteToggle }) => {
-  const { isDarkMode } = useColor();
+ 
   if (!isOpen) return null;
   const onCancel = () => {
     if (duplicateBtn) {
@@ -26,11 +26,7 @@ const SiteModal = ({ isOpen, label, duplicateBtn, setSitesModelOpen, selectedSit
         }}
       ></div>
       <div className="flex items-start justify-center w-full min-h-screen px-2 text-center lg:absolute lg:top-[12%]">
-        <div
-          className={`${
-            isDarkMode ? 'bg-main' : 'bg-white'
-          } rounded-2xl text-left overflow-hidden shadow-xl transform transition-all w-[95%] sm:w-[80%] md:w-[580px] px-6 2xl:px-8 py-6`}
-        >
+        <div className={`bg-main rounded-2xl text-left overflow-hidden shadow-xl transform transition-all w-[95%] sm:w-[80%] md:w-[580px] px-6 2xl:px-8 py-6`}>
           <div className="w-full flex justify-end items-center">
             <div
               onClick={() => {

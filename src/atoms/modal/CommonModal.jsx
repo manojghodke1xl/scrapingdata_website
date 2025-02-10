@@ -2,7 +2,6 @@ import { IoCloseSharp } from 'react-icons/io5';
 import { useColor } from '../../contexts/contexts/ColorContext';
 
 const CommonModal = ({ isModalVisible, onConfirm, onCancel, setModalVisibility, label, message }) => {
-  const { isDarkMode } = useColor();
   if (!isModalVisible) return null;
 
   return (
@@ -16,9 +15,7 @@ const CommonModal = ({ isModalVisible, onConfirm, onCancel, setModalVisibility, 
       ></div>
       <div className="flex items-start justify-center w-full min-h-screen px-2 text-center lg:absolute lg:top-[12%]">
         <div
-          className={`${
-            isDarkMode ? 'bg-main' : 'bg-white'
-          } rounded-2xl text-left overflow-hidden shadow-xl transform transition-all w-[95%] sm:w-[80%] md:w-[580px] px-6 2xl:px-8 py-6 border border-primary`}
+          className={`bg-main rounded-2xl text-left overflow-hidden shadow-xl transform transition-all w-[95%] sm:w-[80%] md:w-[580px] px-6 2xl:px-8 py-6 border border-primary`}
         >
           <div className="w-full flex justify-end items-center">
             <div

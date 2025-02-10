@@ -6,7 +6,6 @@ import TruncatableFieldToolTip from '../common/TruncatableFeildToolTip';
 import { useColor } from '../../contexts/contexts/ColorContext';
 
 const DropDown = ({ mt = '', width = 'w-full', name, label, SummaryChild, dropdownList = [], commonFunction, search, selected, add = false, setIsNewSegment, error }) => {
-  const { isDarkMode } = useColor();
   const dropdownRef = useRef(null);
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -42,9 +41,7 @@ const DropDown = ({ mt = '', width = 'w-full', name, label, SummaryChild, dropdo
           </span>
         </summary>
         <ul
-          className={`absolute end-0 top-11 z-40 mt-1 max-h-48 w-full rounded-md ${
-            isDarkMode ? 'bg-main' : 'bg-white'
-          } text-[12px] md:text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm overflow-y-auto custom-scrollbar`}
+          className={`absolute end-0 top-11 z-40 mt-1 max-h-48 w-full rounded-md bg-main text-[12px] md:text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm overflow-y-auto custom-scrollbar`}
         >
           {search && (
             <div className="w-full flex items-center rounded-t-lg border border-primary px-3">

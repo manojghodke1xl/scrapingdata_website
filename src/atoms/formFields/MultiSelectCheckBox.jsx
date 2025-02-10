@@ -16,7 +16,7 @@ const MultiSelectCheckbox = ({
   divClassName,
   mode = 'ids' // 'ids' or 'objects'
 }) => {
-  const { isDarkMode } = useColor();
+ 
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const dropdownRef = useRef(null);
@@ -95,7 +95,7 @@ const MultiSelectCheckbox = ({
 
       {/* Dropdown Menu */}
       {isOpen && (
-        <div className={`absolute z-10 w-full mt-1 ${isDarkMode ? 'bg-main' : 'bg-white'} border border-primary rounded-lg shadow-md`}>
+        <div className={`absolute z-10 w-full mt-1 bg-main border border-primary rounded-lg shadow-md`}>
           {/* Search Box */}
           <div className="p-2 border-b border-primary">
             <div className="relative">

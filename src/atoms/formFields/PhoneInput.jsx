@@ -9,6 +9,7 @@ const PhoneInput = ({ phoneDataState, handlePhoneDataChange, label, id, divClass
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
   const [selectedCountryData, setSelectedCountryData] = useState(null);
+  console.log('selectedCountryData', selectedCountryData);
 
   const flagDivRef = useRef(null);
   const dropdownRef = useRef(null);
@@ -25,23 +26,30 @@ const PhoneInput = ({ phoneDataState, handlePhoneDataChange, label, id, divClass
   // Set the default country based on existing phone data
   useEffect(() => {
     if (!selectedCountryData) {
-      let detectedCountry = null;
+      // let detectedCountry = null;
 
-      if (phoneDataState?.phoneNumber && phoneDataState?.dialingCode) {
-        detectedCountry = phoneData.find((country) => country.dialingCode === phoneDataState.dialingCode);
-      }
+      // if (phoneDataState?.phoneNumber && phoneDataState?.dialingCode) {
+      //   detectedCountry = phoneData.find((country) => country.dialingCode === phoneDataState.dialingCode);
+      // }
 
-      if (!detectedCountry) {
-        detectedCountry = phoneData.find((country) => country.code === 'IN'); // Default to India
-      }
+      // if (!detectedCountry) {
+      //   detectedCountry = phoneData.find((country) => country.code === 'uk'); // Default to India
+      // }
 
-      if (detectedCountry) {
-        setSelectedCountryData(detectedCountry);
-        handlePhoneDataChange({
-          phoneNumber: phoneDataState?.phoneNumber || '',
-          dialingCode: detectedCountry.dialingCode
-        });
-      }
+      // if (detectedCountry) {
+      //   setSelectedCountryData(detectedCountry);
+      //   handlePhoneDataChange({
+      //     phoneNumber: phoneDataState?.phoneNumber || '',
+      //     dialingCode: detectedCountry.dialingCode
+      //   });
+      // }
+
+      const defaultCountry = phoneData.find((country) => country.code === 'in');
+      setSelectedCountryData(defaultCountry);
+      handlePhoneDataChange({
+        phoneNumber: phoneDataState?.phoneNumber || '',
+        dialingCode: defaultCountry.dialingCode
+      });
     }
   }, [phoneDataState, handlePhoneDataChange, selectedCountryData]);
 
@@ -136,7 +144,7 @@ const PhoneInput = ({ phoneDataState, handlePhoneDataChange, label, id, divClass
         </div>
 
         <div className="relative w-full">
-          <span className="absolute left-2 top-3">+{selectedCountryData?.dialingCode || '91'}</span>
+          <span className="absolute left-2 top-3">+{selectedCountryData?.dialingCode}</span>
           <input
             id={id}
             name={name}

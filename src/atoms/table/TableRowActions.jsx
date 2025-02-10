@@ -24,7 +24,7 @@ const TableRowActions = ({
   sendCertificateUnique,
   approvalApi
 }) => {
-  const { isDarkMode } = useColor();
+ 
   const navigate = useNavigate();
 
   // Function to count the available actions
@@ -52,7 +52,7 @@ const TableRowActions = ({
           <summary className="text-white p-1.5 rounded-xl hover:bg-hover cursor-pointer focus:outline-none">
             <BsThreeDotsVertical size={20} className="text-secondary hover:text-primary" />
           </summary>
-          <ul className={`absolute mt-2 right-10 z-40 w-fit rounded-md ${isDarkMode ? 'bg-main' : 'bg-white'} shadow-lg border border-primary`}>
+          <ul className={`absolute mt-2 right-10 z-40 w-fit rounded-md bg-main shadow-lg border border-primary`}>
             {availableActions.map((action, i) => (
               <button
                 key={i}

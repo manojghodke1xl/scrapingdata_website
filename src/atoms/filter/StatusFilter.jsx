@@ -4,7 +4,7 @@ import { useColor } from '../../contexts/contexts/ColorContext';
 import Checkbox from '../formFields/Checkbox';
 
 const StatusFilter = ({ statuses, setStatusFilter }) => {
-  const { isDarkMode } = useColor();
+  
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -40,9 +40,7 @@ const StatusFilter = ({ statuses, setStatusFilter }) => {
         </summary>
 
         <ul
-          className={`absolute left-0 top-11 z-40 mt-1 min-w-[100px] max-w-[300px] max-h-[200px] rounded-xl ${
-            isDarkMode ? 'bg-main' : 'bg-white'
-          } text-[12px] md:text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm overflow-y-auto custom-scrollbar`}
+          className={`absolute left-0 top-11 z-40 mt-1 min-w-[100px] max-w-[300px] max-h-[200px] rounded-xl bg-main text-[12px] md:text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm overflow-y-auto custom-scrollbar`}
         >
           <div className="relative py-2 border-b border-primary">
             {statuses.map((status) => (

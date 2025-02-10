@@ -63,10 +63,7 @@ const Navbar = () => {
 
           {/* Dropdown Menu */}
           {isDropdownOpen && (
-            <div
-              ref={dropdownRef}
-              className={`absolute top-10 right-0 mt-2 w-48 ${isDarkMode ? 'bg-main' : 'bg-white'} border border-primary overflow-hidden rounded-lg shadow-lg z-50`}
-            >
+            <div ref={dropdownRef} className={`absolute top-10 right-0 mt-2 w-48 bg-main border border-primary overflow-hidden rounded-lg shadow-lg z-50`}>
               <button onClick={() => dispatch({ type: 'SIGNOUT' })} className="w-full text-left px-4 py-2 hover:bg-hover">
                 Logout
               </button>

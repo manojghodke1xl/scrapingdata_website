@@ -5,7 +5,7 @@ import { FaEye } from 'react-icons/fa';
 import { useColor } from '../../contexts/contexts/ColorContext';
 
 const TruncatableCopyFeild = ({ content }) => {
-  const { isDarkMode } = useColor();
+ 
   const [showTooltip, setShowTooltip] = useState(false);
 
   return (
@@ -33,7 +33,7 @@ const TruncatableCopyFeild = ({ content }) => {
         </button>
       </span>
       {showTooltip && (
-        <div className={`absolute z-10  ${isDarkMode ? 'bg-main' : 'bg-[#E5E7EB]'}  border border-primary rounded-xl shadow-lg p-2 whitespace-normal`}>
+        <div className={`absolute z-10  bg-main  border border-primary rounded-xl shadow-lg p-2 whitespace-normal`}>
           <p className="text-primary overflow-hidden text-ellipsis">{content}</p>
         </div>
       )}
