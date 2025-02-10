@@ -61,7 +61,8 @@ const PhoneInput = ({ phoneDataState, handlePhoneDataChange, label, divClassName
   }, []);
 
   const handleCountryCodeChange = (e) => {
-    const inputCode = e.target.value;
+    let inputCode = e.target.value;
+    inputCode = inputCode.replace(/[^0-9\+\-\(\)\s]/g, '');
     setCountryCode(inputCode);
     const matchedCountry = phoneData.find((country) => country.dialingCode === inputCode);
     if (matchedCountry) {
@@ -101,6 +102,12 @@ const PhoneInput = ({ phoneDataState, handlePhoneDataChange, label, divClassName
       const length = format?.match(/#/g)?.length;
       return [`Please enter a valid ${length || 10}-digit phone number`, length];
     }
+  };
+
+  const handleInputChange = (e) => {
+    let value = e.target.value;
+    value = value.replace(/[^0-9\+\-\(\)\s]/g, '');
+    handlePhoneDataChange({ ...phoneDataState, phoneNumber: value });
   };
 
   return (
@@ -158,6 +165,7 @@ const PhoneInput = ({ phoneDataState, handlePhoneDataChange, label, divClassName
             className="absolute left-5  w-10 bg-transparent py-3 border-r border-primary focus:outline-none"
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
+            inputMode="numeric"
           />
           <input
             id="phoneNumber"
@@ -170,13 +178,15 @@ const PhoneInput = ({ phoneDataState, handlePhoneDataChange, label, divClassName
                 : getPhoneNumberLengthMessage(selectedCountryData?.phoneNumberFormat)[1]
             }
             value={phoneDataState?.phoneNumber || ''}
-            onChange={(e) => handlePhoneDataChange({ ...phoneDataState, phoneNumber: e.target.value })}
+            // onChange={(e) => handlePhoneDataChange({ ...phoneDataState, phoneNumber: e.target.value })}
+            onChange={handleInputChange}
             pattern={`^${selectedCountryData ? convertFormatToRegex(selectedCountryData?.phoneNumberFormat) : '\\d{10}'}$`}
             className="w-full border-0 bg-transparent placeholder:font-normal placeholder:text-sm focus:outline-none focus:ring-0 ml-1 focus:border-0 ps-16 py-3"
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
             title={getPhoneNumberLengthMessage(selectedCountryData?.phoneNumberFormat)[0]}
             required={required}
+            inputMode="numeric"
           />
         </div>
       </div>
