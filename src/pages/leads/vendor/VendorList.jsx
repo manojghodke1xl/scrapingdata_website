@@ -73,7 +73,7 @@ const VendorList = () => {
                 tableData={(data) => setVendors(data.vendors)}
                 exportData={vendors}
                 rows={rows}
-                apiUrl={'vendors'}
+                apiUrl={'vendor'}
                 tableCountLabel={true}
                 pagination={true}
                 actions={true}

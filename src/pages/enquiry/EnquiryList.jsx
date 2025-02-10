@@ -74,7 +74,7 @@ const EnquiryList = () => {
                 tableData={(data) => setEnquiries(data.enquiries)}
                 exportData={enquiries}
                 rows={rows}
-                apiUrl={'enquiries'}
+                apiUrl={'enquiry'}
                 tableCountLabel={true}
                 pagination={true}
                 actions={true}

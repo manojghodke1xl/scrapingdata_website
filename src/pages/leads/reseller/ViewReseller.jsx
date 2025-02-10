@@ -1,25 +1,23 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import useGlobalContext from '../../hooks/useGlobalContext';
-import { getFeedbackByIdApi } from '../../apis/leads/feedback-apis';
-import { showNotification } from '../../utils/showNotification';
+import useGlobalContext from '../../../hooks/useGlobalContext';
+import { getResellerById } from '../../../apis/leads/reseller-apis';
+import { showNotification } from '../../../utils/showNotification';
+import CountryFlag from '../../../atoms/common/CountryFlag';
 import { CiCircleInfo } from 'react-icons/ci';
-import { formatDateTime } from '../../utils/dateFormats';
-import NoteComponent from '../../atoms/common/NoteComponent';
-import { viewFeedbackNote } from './FeedbackNote';
-import CountryFlag from '../../atoms/common/CountryFlag';
+import { formatDateTime } from '../../../utils/dateFormats';
 
-const ViewFeedback = () => {
+const ViewReseller = () => {
   const { id } = useParams();
   const { setLoading } = useGlobalContext();
+  const [advertisement, setAdvertisement] = useState({});
   const [isScrollable, setIsScrollable] = useState(false);
-  const [feedback, setFeedback] = useState(null);
 
   useEffect(() => {
     setLoading(true);
     (async () => {
-      const { status, data } = await getFeedbackByIdApi(id);
-      if (status) setFeedback(data.feedback);
+      const { status, data } = await getResellerById(id);
+      if (status) setAdvertisement(data.reseller);
       else showNotification('warn', data);
     })()
       .catch((error) => showNotification('error', error.message))
@@ -42,10 +40,10 @@ const ViewFeedback = () => {
     <div className="py-8 p-4 sm:p-8 overflow-x-hidden mb-20">
       <div className="w-full pb-8 border-b border-primary gap-y-4 gap-2 flex flex-col items-start md:flex-row lg:flex-col xl:flex-row justify-between lg:items-start md:items-end xl:items-end">
         <div>
-          <span className="text-3xl font-semibold text-dark">Feedback Details</span>
+          <span className="text-3xl font-semibold text-dark">Reseller Details</span>
         </div>
         <div className=" w-full flex gap-4 justify-end items-end md:w-fit lg:w-full xl:w-fit">
-          <Link to={'/feedback/feedback-list'} className="px-4 py-2 text-primary font-medium bg-inherit hover:bg-hover rounded-xl border border-primary whitespace-nowrap">
+          <Link to={'/reseller/reseller-list'} className="px-4 py-2 text-primary font-medium bg-inherit hover:bg-hover rounded-xl border border-primary whitespace-nowrap">
             Back
           </Link>
         </div>
@@ -59,13 +57,13 @@ const ViewFeedback = () => {
           <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div className="mt-5">
               <h1 className="font-semibold text-primary">Customer Name</h1>
-              <p className="text-secondary"> {feedback?.name || 'No name available'}</p>
+              <p className="text-secondary"> {advertisement?.name || 'No name available'}</p>
             </div>
             <div className="mt-5">
               <h1 className="font-semibold text-primary">Email ID</h1>
-              {feedback?.email ? (
-                <a className="text-secondary" href={`mailto:${feedback.email}`}>
-                  {feedback.email}
+              {advertisement?.email ? (
+                <a className="text-secondary" href={`mailto:${advertisement.email}`}>
+                  {advertisement.email}
                 </a>
               ) : (
                 <p className="text-secondary">No email available</p>
@@ -74,17 +72,21 @@ const ViewFeedback = () => {
             <div className="mt-5">
               <h1 className="font-semibold text-primary">Country</h1>
               <p className="text-secondary flex items-center ">
-                <CountryFlag dialingCode={feedback?.ccode?.startsWith('+') ? feedback?.ccode.slice(1) : feedback?.ccode} showName={true} />
+                <CountryFlag dialingCode={advertisement?.ccode?.startsWith('+') ? advertisement?.ccode.slice(1) : advertisement?.ccode} showName={true} />
               </p>
             </div>
             <div className="mt-5">
               <h1 className="font-semibold text-primary">Phone Number</h1>
-              {feedback?.mobile || feedback?.ccode ? (
+              {advertisement?.mobile || advertisement?.ccode ? (
                 <a
                   className="text-secondary"
-                  href={`tel:${(feedback.ccode ? (feedback.ccode.startsWith('+') ? feedback.ccode : '+' + feedback.ccode) : '') + feedback.mobile.replace(/\s+/g, '')}`}
+                  href={`tel:${
+                    (advertisement.ccode ? (advertisement.ccode.startsWith('+') ? advertisement.ccode : '+' + advertisement.ccode) : '') + advertisement.mobile.replace(/\s+/g, '')
+                  }`}
                 >
-                  {(feedback.ccode ? (feedback.ccode.startsWith('+') ? feedback.ccode : '+' + feedback.ccode) : '') + ' ' + feedback.mobile.replace(/\s+/g, '')}
+                  {(advertisement.ccode ? (advertisement.ccode.startsWith('+') ? advertisement.ccode : '+' + advertisement.ccode) : '') +
+                    ' ' +
+                    advertisement.mobile.replace(/\s+/g, '')}
                 </a>
               ) : (
                 <p className="text-secondary">No phone number available</p>
@@ -92,15 +94,15 @@ const ViewFeedback = () => {
             </div>
             <div className="mt-5">
               <h1 className="font-semibold text-primary">Service</h1>
-              <p className="text-secondary"> {feedback?.service || 'No service available'}</p>
+              <p className="text-secondary"> {advertisement?.service || 'No service available'}</p>
             </div>
             <div className="mt-5">
               <h1 className="font-semibold text-primary">Subject</h1>
-              <p className="text-secondary"> {feedback?.suject || 'No subject available'}</p>
+              <p className="text-secondary"> {advertisement?.suject || 'No subject available'}</p>
             </div>
             <div className="mt-5">
               <h1 className="font-semibold text-primary">IP Address</h1>
-              <p className="text-secondary"> {feedback?.ipaddress || 'Not Present'}</p>
+              <p className="text-secondary"> {advertisement?.ipaddress || 'Not Present'}</p>
             </div>
           </div>
         </div>
@@ -119,11 +121,11 @@ const ViewFeedback = () => {
             <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div className="mt-5">
                 <h1 className="font-semibold text-primary">Site Name</h1>
-                <p className="text-secondary"> {feedback?.site?.name || 'No Site Name available'}</p>
+                <p className="text-secondary"> {advertisement?.site?.name || 'No Site Name available'}</p>
               </div>
               <div className="mt-5">
                 <h1 className="font-semibold text-primary">Date & Time</h1>
-                <p className="text-secondary"> {formatDateTime(feedback?.createdAt) || 'No Date & Time available'}</p>
+                <p className="text-secondary"> {formatDateTime(advertisement?.createdAt) || 'No Date & Time available'}</p>
               </div>
             </div>
           </div>
@@ -133,11 +135,11 @@ const ViewFeedback = () => {
       <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
         <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
           <div className="sm:w-7/12 w-full flex flex-col">
-            <span className=" text-primary">Feedback Message</span>
+            <span className=" text-primary">Reseller Message</span>
           </div>
           <div className="w-full mt-5">
             <h1 className="font-semibold text-primary">Message</h1>
-            <p className="text-secondary"> {feedback?.feedbackMessage || 'Not Present'}</p>
+            <p className="text-secondary"> {advertisement?.resellerMessage || 'Not Present'}</p>
           </div>
         </div>
       </div>
@@ -154,22 +156,19 @@ const ViewFeedback = () => {
           <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div className="mt-5">
               <h1 className="font-semibold text-primary">Request Header</h1>
-              <p className="text-secondary"> {feedback?.header || 'No header available'}</p>
+              <p className="text-secondary"> {advertisement?.header || 'No header available'}</p>
             </div>
             <div className="mt-5">
               <h1 className="font-semibold text-primary">User Agent String</h1>
-              <p className="text-secondary"> {feedback?.uastring || 'No User Agent String available'}</p>
+              <p className="text-secondary"> {advertisement?.uastring || 'No User Agent String available'}</p>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="w-full justify-center items-center border-b  border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end ">
-        <NoteComponent note={viewFeedbackNote} />
-      </div>
       {!isScrollable && (
         <div className="w-full flex justify-end items-center gap-4 pt-8  border- border-primary">
-          <Link to={'/feedback/feedback-list'} className="px-4 py-2 text-primary font-medium bg-inherit hover:bg-hover rounded-xl border border-primary whitespace-nowrap">
+          <Link to={'/reseller/reseller-list'} className="px-4 py-2 text-primary font-medium bg-inherit hover:bg-hover rounded-xl border border-primary whitespace-nowrap">
             Back
           </Link>
         </div>
@@ -178,4 +177,4 @@ const ViewFeedback = () => {
   );
 };
 
-export default ViewFeedback;
+export default ViewReseller;

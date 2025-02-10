@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import { showNotification } from '../../../utils/showNotification';
 import FormButtons from '../../../atoms/formFields/FormButtons';
 import FormField from '../../../atoms/formFields/InputField';
-import PhoneInputField from '../../../atoms/formFields/PhoneInputField';
 import TextareaComponent from '../../../atoms/formFields/TextareaComponent';
 import DropDown from '../../../atoms/formFields/DropDown';
 import { addAdvertisementApi } from '../../../apis/leads/advertisement-apis';
@@ -29,11 +28,6 @@ const AddAdvertisement = () => {
     subject: '',
     site: ''
   });
-
-  const handlePhoneDataChange = (updatedPhoneData) => {
-    console.log(updatedPhoneData);
-    setAdvertisementDetails((prevDetails) => ({ ...prevDetails, mobile: updatedPhoneData.phoneNumber, ccode: updatedPhoneData.dialingCode }));
-  };
 
   const validate = () => {
     const newErrors = {};
@@ -68,17 +62,6 @@ const AddAdvertisement = () => {
     setIsScrollable(contentHeight > windowHeight);
   };
 
-  const handlePhoneChange = (value, countryData) => {
-    const numericValue = value.replace(/\D/g, '');
-    const requiredLength = countryData.format.replace(/[^.]/g, '').length;
-    if (numericValue.length < requiredLength)
-      setErrors((prevErrors) => ({ ...prevErrors, mobile: `Mobile number must be at least ${requiredLength - countryData.dialCode.length} digits` }));
-    else setErrors((prevErrors) => ({ ...prevErrors, mobile: '' }));
-
-    const mobile = numericValue.slice(countryData.dialCode.length);
-    setAdvertisementDetails((prevDetails) => ({ ...prevDetails, mobile, ccode: countryData.dialCode }));
-  };
-
   useEffect(() => {
     checkScrollability();
     window.addEventListener('resize', checkScrollability);
@@ -100,7 +83,7 @@ const AddAdvertisement = () => {
             <span className=" text-primary">Customer Details</span>
           </div>
           <div className="w-full">
-            <div>
+            <div className="flex flex-col gap-y-5">
               <FormField
                 label="Name"
                 type="text"
@@ -116,7 +99,6 @@ const AddAdvertisement = () => {
               />
 
               <FormField
-                divClassName={'mt-5'}
                 label="Email ID"
                 type="email"
                 id="email"
@@ -132,11 +114,12 @@ const AddAdvertisement = () => {
 
               <PhoneInput
                 phoneDataState={{ phoneNumber: advertisementDetails.mobile, dialingCode: advertisementDetails.ccode }}
-                handlePhoneDataChange={handlePhoneDataChange}
+                handlePhoneDataChange={(updatedPhoneData) =>
+                  setAdvertisementDetails((prevDetails) => ({ ...prevDetails, mobile: updatedPhoneData.phoneNumber, ccode: updatedPhoneData.dialingCode }))
+                }
                 id={'mobile'}
                 label={'Mobile Number'}
                 name={'mobile'}
-                divClassName={'mt-5'}
               />
 
               <FormField
@@ -151,11 +134,9 @@ const AddAdvertisement = () => {
                 }}
                 value={advertisementDetails.subject}
                 errorMessage={errors.subject}
-                divClassName={'mt-5'}
               />
 
               <TextareaComponent
-                divClassName="mt-5"
                 label="Service"
                 placeholder="Enter a service..."
                 id="service"

@@ -73,7 +73,7 @@ const AdvertisementList = () => {
                 tableData={(data) => setAdvertisements(data.advertisements)}
                 exportData={advertisements}
                 rows={rows}
-                apiUrl={'advertisements'}
+                apiUrl={'advertisement'}
                 tableCountLabel={true}
                 pagination={true}
                 actions={true}

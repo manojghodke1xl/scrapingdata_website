@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import FormButtons from '../../atoms/formFields/FormButtons';
-import useGlobalContext from '../../hooks/useGlobalContext';
-import FormField from '../../atoms/formFields/InputField';
-import TextareaComponent from '../../atoms/formFields/TextareaComponent';
-import DropDown from '../../atoms/formFields/DropDown';
-import { showNotification } from '../../utils/showNotification';
-import { addEnquiryApi } from '../../apis/leads/enquiry-apis';
-import PhoneInput from '../../atoms/formFields/PhoneInput';
+import useGlobalContext from '../../../hooks/useGlobalContext';
+import { addCareerApi } from '../../../apis/leads/career-apis';
+import { showNotification } from '../../../utils/showNotification';
+import FormButtons from '../../../atoms/formFields/FormButtons';
+import FormField from '../../../atoms/formFields/InputField';
+import PhoneInput from '../../../atoms/formFields/PhoneInput';
+import TextareaComponent from '../../../atoms/formFields/TextareaComponent';
+import DropDown from '../../../atoms/formFields/DropDown';
 
-const AddEnquiry = () => {
+const AddCareer = () => {
   const navigate = useNavigate();
   const {
     auth: { allSites: availableSites },
@@ -18,30 +18,23 @@ const AddEnquiry = () => {
   } = useGlobalContext();
   const [isScrollable, setIsScrollable] = useState(false);
   const [errors, setErrors] = useState({});
-  const [enquiryDetails, setEnquiryDetails] = useState({
+  const [careerDetails, setCareerDetails] = useState({
     name: '',
     email: '',
     mobile: '',
     ccode: '',
-    message: '',
+    careerMessage: '',
     service: '',
     subject: '',
     site: ''
   });
 
-  console.log('enquiryDetails', enquiryDetails);
-
-  // Function to handle changes in phone data state (phone number and dialing code)
-  const handlePhoneDataChange = (updatedPhoneData) => {
-    setEnquiryDetails((prevDetails) => ({ ...prevDetails, mobile: updatedPhoneData.phoneNumber, ccode: updatedPhoneData.dialingCode }));
-  };
-
   const validate = () => {
     const newErrors = {};
-    if (!enquiryDetails.name.trim()) newErrors.name = 'Name is required';
-    if (!enquiryDetails.email.trim()) newErrors.email = 'Email is required';
-    if (!enquiryDetails.mobile.trim()) newErrors.mobile = 'Mobile is required';
-    if (!enquiryDetails.site) newErrors.site = 'Site is required';
+    if (!careerDetails.name.trim()) newErrors.name = 'Name is required';
+    if (!careerDetails.email.trim()) newErrors.email = 'Email is required';
+    if (!careerDetails.mobile.trim()) newErrors.mobile = 'Mobile is required';
+    if (!careerDetails.site) newErrors.site = 'Site is required';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -51,10 +44,10 @@ const AddEnquiry = () => {
     if (!validate()) return;
     setLoading(true);
     try {
-      const { status, data } = await addEnquiryApi(enquiryDetails);
+      const { status, data } = await addCareerApi(careerDetails);
       if (status) {
         showNotification('success', data.message);
-        navigate('/enquiry/enquiry-list');
+        navigate('/career/career-list');
       } else showNotification('warn', data);
     } catch (error) {
       showNotification('error', error.message);
@@ -79,9 +72,9 @@ const AddEnquiry = () => {
     <div className="py-8 p-4 sm:p-8 overflow-x-hidden mb-20">
       <div className="w-full pb-8 border-b border-primary gap-y-4 gap-2 flex flex-col items-start md:flex-row lg:flex-col xl:flex-row justify-between lg:items-start md:items-end xl:items-end">
         <div>
-          <span className="text-3xl font-semibold text-dark">{'Add'} Enquiry</span>
+          <span className="text-3xl font-semibold text-dark">{'Add'} Advertisement</span>
         </div>
-        <FormButtons to="/enquiry/enquiry-list" type="submit" onClick={handleSubmit} btnLebal={'Add'} loading={isLoading} />
+        <FormButtons to="/career/career-list" type="submit" onClick={handleSubmit} btnLebal={'Add'} loading={isLoading} />
       </div>
 
       <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
@@ -98,10 +91,10 @@ const AddEnquiry = () => {
                 name="name"
                 placeholder="Name"
                 onChange={(e) => {
-                  setEnquiryDetails((prev) => ({ ...prev, name: e.target.value }));
+                  setCareerDetails((prev) => ({ ...prev, name: e.target.value }));
                   if (errors.name) setErrors((prev) => ({ ...prev, name: '' }));
                 }}
-                value={enquiryDetails.name}
+                value={careerDetails.name}
                 errorMessage={errors.name}
               />
 
@@ -112,16 +105,21 @@ const AddEnquiry = () => {
                 name="email"
                 placeholder="Email ID"
                 onChange={(e) => {
-                  setEnquiryDetails((prev) => ({ ...prev, email: e.target.value }));
+                  setCareerDetails((prev) => ({ ...prev, email: e.target.value }));
                   if (errors.email) setErrors((prev) => ({ ...prev, email: '' }));
                 }}
-                value={enquiryDetails.email}
+                value={careerDetails.email}
                 errorMessage={errors.email}
               />
+
               <PhoneInput
-                phoneDataState={{ phoneNumber: enquiryDetails.mobile, dialingCode: enquiryDetails.ccode }}
-                handlePhoneDataChange={handlePhoneDataChange}
+                phoneDataState={{ phoneNumber: careerDetails.mobile, dialingCode: careerDetails.ccode }}
+                handlePhoneDataChange={(updatedPhoneData) =>
+                  setCareerDetails((prevDetails) => ({ ...prevDetails, mobile: updatedPhoneData.phoneNumber, ccode: updatedPhoneData.dialingCode }))
+                }
+                id={'mobile'}
                 label={'Mobile Number'}
+                name={'mobile'}
               />
 
               <FormField
@@ -131,10 +129,10 @@ const AddEnquiry = () => {
                 name="subject"
                 placeholder="Subject"
                 onChange={(e) => {
-                  setEnquiryDetails((prev) => ({ ...prev, subject: e.target.value }));
+                  setCareerDetails((prev) => ({ ...prev, subject: e.target.value }));
                   if (errors.subject) setErrors((prev) => ({ ...prev, subject: '' }));
                 }}
-                value={enquiryDetails.subject}
+                value={careerDetails.subject}
                 errorMessage={errors.subject}
               />
 
@@ -143,8 +141,8 @@ const AddEnquiry = () => {
                 placeholder="Enter a service..."
                 id="service"
                 name="service"
-                value={enquiryDetails.service}
-                onChange={(e) => setEnquiryDetails((prev) => ({ ...prev, service: e.target.value }))}
+                value={careerDetails.service}
+                onChange={(e) => setCareerDetails((prev) => ({ ...prev, service: e.target.value }))}
               />
             </div>
           </div>
@@ -166,9 +164,9 @@ const AddEnquiry = () => {
                   .map((site) => ({ id: site._id, showName: `${site.name} (${site.host})`, name: site._id }))}
                 SummaryChild={<h5 className="p-0 m-0 text-primary">Sites</h5>}
                 search={true}
-                selected={enquiryDetails.site}
+                selected={careerDetails.site}
                 commonFunction={(e) => {
-                  setEnquiryDetails((prev) => ({ ...prev, site: e.name }));
+                  setCareerDetails((prev) => ({ ...prev, site: e.name }));
                   if (errors.site) setErrors((prev) => ({ ...prev, site: '' }));
                 }}
                 error={errors.site}
@@ -181,7 +179,7 @@ const AddEnquiry = () => {
       <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
         <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
           <div className="sm:w-7/12 w-full flex flex-col">
-            <span className=" text-primary">Enquiry Message</span>
+            <span className=" text-primary">Career Message</span>
           </div>
           <div className="w-full">
             <div>
@@ -190,26 +188,23 @@ const AddEnquiry = () => {
                 label="Message"
                 maxLength={100}
                 placeholder="Enter a message..."
-                id="message"
-                name="message"
-                value={enquiryDetails.message}
-                onChange={(e) => setEnquiryDetails((prev) => ({ ...prev, message: e.target.value }))}
+                id="careerMessage"
+                name="careerMessage"
+                value={careerDetails.careerMessage}
+                onChange={(e) => setCareerDetails((prev) => ({ ...prev, careerMessage: e.target.value }))}
               />
             </div>
           </div>
         </div>
       </div>
 
-      {/* <div className="w-full justify-center items-center border-b  border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end ">
-        <NoteComponent note={id ? editCouponNote : addCouponNote} />
-      </div> */}
       {!isScrollable && (
         <div className="w-full flex justify-end items-center gap-4 pt-8  border- border-primary">
-          <FormButtons to="/enquiry/enquiry-list" type="submit" onClick={handleSubmit} btnLebal={'Add'} loading={isLoading} />
+          <FormButtons to="/career/career-list" type="submit" onClick={handleSubmit} btnLebal={'Add'} loading={isLoading} />
         </div>
       )}
     </div>
   );
 };
 
-export default AddEnquiry;
+export default AddCareer;

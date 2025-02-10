@@ -47,6 +47,11 @@ import ReminderRoutes from './private-routes/ReminderRoutes';
 import LogRoutes from './private-routes/LogRoutes';
 import AdvertisementRoutes from './private-routes/leads/AdvertisementRoutes';
 import VendorRoutes from './private-routes/leads/VendorRoutes';
+import DistributorRoutes from './private-routes/leads/DistributorRoutes';
+import ResellerRoutes from './private-routes/leads/ResellerRoutes';
+import AffiliateRoutes from './private-routes/leads/AffiliateRoutes';
+import FanClubRoutes from './private-routes/leads/FanClubRoutes';
+import CareerRoutes from './private-routes/leads/CareerRoutes';
 
 const ZohoStatus = lazy(() => import('../pages/integration/ZohoStatus'));
 
@@ -87,7 +92,12 @@ const privateRoutes = [
   { path: 'reminder/*', Component: ReminderRoutes },
   { path: 'logs/*', Component: LogRoutes },
   { path: 'advertisement/*', Component: AdvertisementRoutes },
-  { path: '/vendor/*', Component: VendorRoutes }
+  { path: '/vendor/*', Component: VendorRoutes },
+  { path: '/distributor/*', Component: DistributorRoutes },
+  { path: '/reseller/*', Component: ResellerRoutes },
+  { path: 'affiliate/*', Component: AffiliateRoutes },
+  { path: 'fan-club/*', Component: FanClubRoutes },
+  { path: 'career/*', Component: CareerRoutes }
 ];
 
 const App = () => {

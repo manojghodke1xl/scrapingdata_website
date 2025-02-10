@@ -1,11 +1,11 @@
 import { deleteMethodCall, getMethodCall, postMethodCall } from '../api-handler';
 
 export const deleteSubscriberApi = async (ids) => {
-  return await deleteMethodCall(`${import.meta.env.VITE_API_URL}/list`, ids);
+  return await deleteMethodCall(`${import.meta.env.VITE_API_URL}/newsletter`, ids);
 };
 
 export const getSubscriberById = async (id) => {
-  return await getMethodCall(`${import.meta.env.VITE_API_URL}/list/${id}?p=1`);
+  return await getMethodCall(`${import.meta.env.VITE_API_URL}/newsletter/${id}?p=1`);
 };
 
 export const addSubscriberApi = async (data) => {

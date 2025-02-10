@@ -33,7 +33,6 @@ export const exportHandler = ({ type, apiUrl, rows, headers, selected }) => {
       const { status, data } = await getMethodCall(`${import.meta.env.VITE_API_URL}/${apiUrl}`);
       if (status) {
         const apiUrlMapping = {
-          feedback: 'feedbacks',
           recaptcha: 'recaptchas',
           'faq-category': 'faqCategories',
           faq: 'faqs',
@@ -45,7 +44,17 @@ export const exportHandler = ({ type, apiUrl, rows, headers, selected }) => {
           'template/sms': 'smsTemplates',
           'template/whatsapp': 'whatsappTemplates',
           reminder: 'reminders',
-          'after-sale': 'afterSales'
+          'after-sale': 'afterSales',
+          enquiry: 'enquiries',
+          feedback: 'feedbacks',
+          newsletter: 'lists',
+          advertisement: 'advertisements',
+          vendor: 'vendors',
+          distributor: 'distributors',
+          reseller: 'resellers',
+          affiliate: 'affiliates',
+          'fan-club': 'fanClubs',
+          career: 'careers'
         };
 
         const allData = data[apiUrlMapping[apiUrl] || apiUrl];

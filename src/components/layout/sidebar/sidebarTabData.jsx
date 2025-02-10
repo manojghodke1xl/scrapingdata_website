@@ -1,6 +1,6 @@
 import { RiAdminLine } from 'react-icons/ri';
 import { RxDashboard } from 'react-icons/rx';
-import { TbApps, TbCube, TbWorld } from 'react-icons/tb';
+import { TbApps, TbWorld } from 'react-icons/tb';
 
 export const navLinks = [
   { title: 'Dashboard', to: ['/dashboard'], icon: <RxDashboard /> },
@@ -21,7 +21,12 @@ export const leadsPath = [
     title: 'Advertisements',
     to: ['/advertisement/advertisement-list', '/advertisement/add-advertisement', '/advertisement/advertisement-integration', 'advertisement/view-advertisement']
   },
-  { title: 'Vendors', to: ['/vendor/vendor-list', '/vendor/add-vendor', '/vendor/view-vendor', '/vendor/vendor-integration'] }
+  { title: 'Vendors', to: ['/vendor/vendor-list', '/vendor/add-vendor', '/vendor/view-vendor', '/vendor/vendor-integration'] },
+  { title: 'Distributors', to: ['/distributor/distributor-list', '/distributor/add-distributor', '/distributor/view-distributor', '/distributor/distributor-integration'] },
+  { title: 'Resellers', to: ['/reseller/reseller-list', '/reseller/add-reseller', '/reseller/view-reseller', '/reseller/reseller-integration'] },
+  { title: 'Affiliates', to: ['/affiliate/affiliate-list', '/affiliate/add-affiliate', '/affiliate/view-affiliate', '/affiliate/affiliate-integration'] },
+  { title: 'Fan Clubs', to: ['/fan-club/fan-club-list', '/fan-club/add-fan-club', '/fan-club/view-fan-club', '/fan-club/fan-club-integration'] },
+  { title: 'Career', to: ['/career/career-list', '/career/add-career', '/career/view-career', '/career/career-integration'] }
 ];
 
 export const contentsPath = [
