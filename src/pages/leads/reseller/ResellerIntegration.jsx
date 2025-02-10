@@ -36,27 +36,27 @@ const ResellerIntegration = () => {
     "content": "Content Name",
     "term": "Search Term",
     "campaignId": "Campaign ID"
-  }`
+}`
     },
     {
       title: 'Mandatory Parameters',
       content: `{
-    "email": "john.doe@example.com",
-    "site": "site key"
-  }`
+  "email": "john.doe@example.com",
+  "site": "site key"
+}`
     },
     {
       title: 'Request Headers',
       content: `{
-    "Content-Type": "application/json"
-  }`
+  "Content-Type": "application/json"
+}`
     },
     {
       title: 'Response Details',
       content: `{
-    "statusCode": 200,
-    "message": "Reseller enquiry Added Successfully"
-  }`
+  "statusCode": 200,
+  "message": "Reseller enquiry Added Successfully"
+}`
     }
   ];
 

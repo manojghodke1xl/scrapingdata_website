@@ -18,45 +18,45 @@ const VendorIntegration = () => {
     {
       title: 'Request Body Parameters',
       content: `{
-    "name": "John Doe",
-    "email": "john.doe@example.com",
-    "mobile": "+1234567890",
-    "ccode": "91",
-    "vendorMessage": "This is a sample message.",
-    "service": "Web Development",
-    "subject": "Vendor about services",
-    "header": "Content-Type: application/json",
-    "uastring": "userAgent",
-    "ipaddress": "192.168.1.1",
-    "site": "site key",
-    "url": "https://example.com",
-    "campaign": "Campaign Name",
-    "medium": "Medium Name",
-    "source": "Source Name",
-    "content": "Content Name",
-    "term": "Search Term",
-    "campaignId": "Campaign ID"
-  }`
+  "name": "John Doe",
+  "email": "john.doe@example.com",
+  "mobile": "+1234567890",
+  "ccode": "91",
+  "vendorMessage": "This is a sample message.",
+  "service": "Web Development",
+  "subject": "Vendor about services",
+  "header": "Content-Type: application/json",
+  "uastring": "userAgent",
+  "ipaddress": "192.168.1.1",
+  "site": "site key",
+  "url": "https://example.com",
+  "campaign": "Campaign Name",
+  "medium": "Medium Name",
+  "source": "Source Name",
+  "content": "Content Name",
+  "term": "Search Term",
+  "campaignId": "Campaign ID"
+}`
     },
     {
       title: 'Mandatory Parameters',
       content: `{
-    "email": "john.doe@example.com",
-    "site": "site key"
-  }`
+  "email": "john.doe@example.com",
+  "site": "site key"
+}`
     },
     {
       title: 'Request Headers',
       content: `{
-    "Content-Type": "application/json"
-  }`
+  "Content-Type": "application/json"
+}`
     },
     {
       title: 'Response Details',
       content: `{
-    "statusCode": 200,
-    "message": "Vendor enquiry Added Successfully"
-  }`
+  "statusCode": 200,
+  "message": "Vendor enquiry Added Successfully"
+}`
     }
   ];
 
