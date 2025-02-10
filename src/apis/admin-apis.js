@@ -19,3 +19,7 @@ export const updateAdminStatusApi = async (ids, isBlocked) => {
 export const updateAdminThemeApi = async (id, theme) => {
   return await putMethodCall(`${import.meta.env.VITE_API_URL}/admin-theme/${id}`, theme);
 };
+
+export const getAdminThemeApi = async (id) => {
+  return await getMethodCall(`${import.meta.env.VITE_API_URL}/admin-theme/${id}`);
+};

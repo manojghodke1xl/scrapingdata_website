@@ -13,6 +13,7 @@ const AdminSettings = () => {
   const {
     auth: { id },
     isLoading,
+    dispatch,
     setLoading
   } = useGlobalContext();
 
@@ -24,8 +25,10 @@ const AdminSettings = () => {
     try {
       const payload = { darkMode: isDarkMode, workspaceColors };
       const { status, data } = await updateAdminThemeApi(id, payload);
-      if (status) showNotification('success', data.message);
-      else showNotification('warn', data);
+      if (status) {
+        showNotification('success', data.message);
+        dispatch({ type: 'SET_THEME', payload: { isDarkMode, primaryColor: workspaceColors } });
+      } else showNotification('warn', data);
     } catch (error) {
       showNotification('error', error.message);
     } finally {

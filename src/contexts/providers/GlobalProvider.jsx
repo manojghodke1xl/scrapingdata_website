@@ -2,6 +2,7 @@ import { useCallback, useEffect, useReducer, useState } from 'react';
 import { GlobalContext } from '../contexts/GlobalContext';
 import { getAllSitesApi } from '../../apis/site-apis';
 import { showNotification } from '../../utils/showNotification';
+import { getAdminThemeApi } from '../../apis/admin-apis';
 
 const defaultState = {
   id: '',
@@ -51,6 +52,10 @@ const authReducer = (state, action) => {
       return { ...state, allSites: payload };
     }
 
+    case 'SET_THEME': {
+      return { ...state, theme: payload };
+    }
+
     default:
       return state;
   }
@@ -60,26 +65,36 @@ export const GlobalProvider = ({ children }) => {
   const [auth, dispatch] = useReducer(authReducer, authState);
   const [isLoading, setLoading] = useState(false);
 
-  const fetchSites = useCallback(async () => {
-    if (auth.id && auth.allSites.length === 0) {
+  const fetchData = useCallback(
+    async (apiCall, successAction, id) => {
       setLoading(true);
-
       try {
-        const { status, data } = await getAllSitesApi();
-        if (status) dispatch({ type: 'SET_ALL_SITES', payload: data.sites });
-        else if (status === false || data === 'jwt expired') dispatch({ type: 'SIGNOUT' });
+        const { status, data } = await apiCall(id);
+        if (status) dispatch(successAction(data));
         else showNotification('warn', data);
       } catch (error) {
         showNotification('error', error.message);
       } finally {
         setLoading(false);
       }
-    }
-  }, [auth.allSites.length, dispatch, setLoading, auth.id]);
+    },
+    [dispatch, setLoading]
+  );
+
+  const fetchSites = useCallback(() => {
+    if (auth.id && auth.allSites.length === 0) fetchData(getAllSitesApi, (data) => ({ type: 'SET_ALL_SITES', payload: data.sites }), null);
+  }, [auth.allSites.length, auth.id, fetchData]);
+
+  const fetchTheme = useCallback(() => {
+    if (auth.id) fetchData(getAdminThemeApi, (data) => ({ type: 'SET_THEME', payload: data.theme }), auth.id);
+  }, [auth.id, fetchData]);
 
   useEffect(() => {
-    if (auth.id) fetchSites();
-  }, [auth.id, fetchSites]);
+    if (auth.id) {
+      fetchSites();
+      fetchTheme();
+    }
+  }, [auth.id, fetchSites, fetchTheme]);
 
   return <GlobalContext.Provider value={{ auth, dispatch, setLoading, isLoading }}>{children}</GlobalContext.Provider>;
 };
