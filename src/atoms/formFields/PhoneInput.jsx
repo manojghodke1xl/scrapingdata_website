@@ -3,13 +3,13 @@ import phoneData from '../../utils/phoneInput.json';
 import { useColor } from '../../contexts/contexts/ColorContext';
 import SearchComponent from '../common/SearchComponent';
 
-const PhoneInput = ({ phoneDataState, handlePhoneDataChange, label, id, divClassName, name, errorMessage, required }) => {
+const PhoneInput = ({ phoneDataState, handlePhoneDataChange, label, divClassName, errorMessage, required }) => {
   const { isDarkMode } = useColor();
   const [searchTerm, setSearchTerm] = useState('');
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
   const [selectedCountryData, setSelectedCountryData] = useState(null);
-  console.log('selectedCountryData', selectedCountryData);
+  const [countryCode, setCountryCode] = useState('');
 
   const flagDivRef = useRef(null);
   const dropdownRef = useRef(null);
@@ -26,26 +26,9 @@ const PhoneInput = ({ phoneDataState, handlePhoneDataChange, label, id, divClass
   // Set the default country based on existing phone data
   useEffect(() => {
     if (!selectedCountryData) {
-      // let detectedCountry = null;
-
-      // if (phoneDataState?.phoneNumber && phoneDataState?.dialingCode) {
-      //   detectedCountry = phoneData.find((country) => country.dialingCode === phoneDataState.dialingCode);
-      // }
-
-      // if (!detectedCountry) {
-      //   detectedCountry = phoneData.find((country) => country.code === 'uk'); // Default to India
-      // }
-
-      // if (detectedCountry) {
-      //   setSelectedCountryData(detectedCountry);
-      //   handlePhoneDataChange({
-      //     phoneNumber: phoneDataState?.phoneNumber || '',
-      //     dialingCode: detectedCountry.dialingCode
-      //   });
-      // }
-
       const defaultCountry = phoneData.find((country) => country.code === 'in');
       setSelectedCountryData(defaultCountry);
+      setCountryCode(defaultCountry.dialingCode);
       handlePhoneDataChange({
         phoneNumber: phoneDataState?.phoneNumber || '',
         dialingCode: defaultCountry.dialingCode
@@ -58,6 +41,7 @@ const PhoneInput = ({ phoneDataState, handlePhoneDataChange, label, id, divClass
   const handleCountrySelect = (countryCode, dialingCode) => {
     const selectedCountry = phoneData.find((country) => country.code === countryCode);
     setSelectedCountryData(selectedCountry);
+    setCountryCode(dialingCode);
     handlePhoneDataChange({
       phoneNumber: phoneDataState.phoneNumber,
       dialingCode
@@ -75,6 +59,19 @@ const PhoneInput = ({ phoneDataState, handlePhoneDataChange, label, id, divClass
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  const handleCountryCodeChange = (e) => {
+    const inputCode = e.target.value;
+    setCountryCode(inputCode);
+    const matchedCountry = phoneData.find((country) => country.dialingCode === inputCode);
+    if (matchedCountry) {
+      setSelectedCountryData(matchedCountry);
+      handlePhoneDataChange({
+        phoneNumber: phoneDataState.phoneNumber,
+        dialingCode: inputCode
+      });
+    }
+  };
 
   function convertFormatToRegex(format) {
     if (!format) return ''; // If format is undefined or null, return an empty string.
@@ -96,9 +93,19 @@ const PhoneInput = ({ phoneDataState, handlePhoneDataChange, label, id, divClass
       .join('');
   }
 
+  const getPhoneNumberLengthMessage = (format) => {
+    if (Array.isArray(format)) {
+      const lengths = format.map((range) => range?.match(/#/g)?.length);
+      return [`Please enter a valid phone number with length(s): ${lengths.join(', ')}}`, lengths];
+    } else {
+      const length = format?.match(/#/g)?.length;
+      return [`Please enter a valid ${length || 10}-digit phone number`, length];
+    }
+  };
+
   return (
     <div className={`${divClassName} w-full`}>
-      <label htmlFor={id} className="block text-sm mb-2 font-medium text-primary">
+      <label htmlFor="phoneNumber" className="block text-sm mb-2 font-medium text-primary">
         {label} {required && <span className="text-danger">*</span>}
       </label>
       <div className={`flex relative border border-primary text-dark rounded-xl h-[50px] ${isFocused ? 'border-secondary' : 'border-primary'}`}>
@@ -112,23 +119,21 @@ const PhoneInput = ({ phoneDataState, handlePhoneDataChange, label, id, divClass
             )}
           </button>
           {dropdownOpen && (
-            <div
-              ref={dropdownRef}
-              className={`absolute top-[51px] start-0 end-0 ${
-                isDarkMode ? 'bg-[#0c0e12]' : 'bg-white'
-              } mt-1 border border-primary px-2 z-30 max-h-[250px] overflow-y-auto shadow-custom custom-scrollbar rounded-xl`}
-            >
-              <SearchComponent value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} disabled={false} placeholder="Search by country name or code" />
-              {/* <input
-                type="search"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder="Search by country name or code"
-                className="px-4 py-3 border border-primary rounded-lg mx-4 my-3 w-[92.5%] focus:ring-0 focus:outline-none focus:border-secondary bg-grey"
-                onClick={(e) => e.stopPropagation()}
-              /> */}
-              <ul>
-                {filteredCountries.map((country) => (
+            <div ref={dropdownRef} className={`absolute top-[51px] start-0 end-0 ${isDarkMode ? 'bg-[#0c0e12]' : 'bg-white'} mt-1 border border-primary px-2 z-30  rounded-xl`}>
+              <ul className="max-h-[250px] overflow-y-auto shadow-custom custom-scrollbar">
+                <SearchComponent
+                  divClassName={'sticky top-0'}
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  disabled={false}
+                  placeholder="Search by country name or code"
+                />
+
+                <li className="flex gap-2 px-2 py-1.5 cursor-pointer items-center text-white bg-primary-hover sticky top-11">
+                  <div title={`${selectedCountryData?.name} flag`} className={`country-flag flag ${selectedCountryData?.code ? selectedCountryData.code : 'in'}`} />
+                  {selectedCountryData?.name} ({selectedCountryData?.dialingCode})
+                </li>
+                {filteredCountries.map((country, index) => (
                   <li
                     key={country.code}
                     onClick={() => handleCountrySelect(country.code, country.dialingCode)}
@@ -144,17 +149,33 @@ const PhoneInput = ({ phoneDataState, handlePhoneDataChange, label, id, divClass
         </div>
 
         <div className="relative w-full">
-          <span className="absolute left-2 top-3">+{selectedCountryData?.dialingCode}</span>
+          <span className="absolute left-2 top-3">+</span>
           <input
-            id={id}
-            name={name}
             type="tel"
+            value={countryCode}
+            maxLength={3}
+            onChange={handleCountryCodeChange}
+            className="absolute left-5  w-10 bg-transparent py-3 border-r border-primary focus:outline-none"
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
+          />
+          <input
+            id="phoneNumber"
+            name="phoneNumber"
+            type="tel"
+            placeholder="Enter your phone number"
+            maxLength={
+              Array.isArray(getPhoneNumberLengthMessage(selectedCountryData?.phoneNumberFormat)[1])
+                ? Math.max(...getPhoneNumberLengthMessage(selectedCountryData?.phoneNumberFormat)[1])
+                : getPhoneNumberLengthMessage(selectedCountryData?.phoneNumberFormat)[1]
+            }
             value={phoneDataState?.phoneNumber || ''}
             onChange={(e) => handlePhoneDataChange({ ...phoneDataState, phoneNumber: e.target.value })}
             pattern={`^${selectedCountryData ? convertFormatToRegex(selectedCountryData?.phoneNumberFormat) : '\\d{10}'}$`}
-            className="w-full border-0 bg-transparent focus:outline-none focus:ring-0 focus:border-0 ps-12 py-3"
+            className="w-full border-0 bg-transparent placeholder:font-normal placeholder:text-sm focus:outline-none focus:ring-0 ml-1 focus:border-0 ps-16 py-3"
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
+            title={getPhoneNumberLengthMessage(selectedCountryData?.phoneNumberFormat)[0]}
             required={required}
           />
         </div>

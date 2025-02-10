@@ -9,6 +9,7 @@ import useGlobalContext from '../../hooks/useGlobalContext';
 import { useColor } from '../../contexts/contexts/ColorContext';
 import { GrSun } from 'react-icons/gr';
 import { PiMoonStarsLight } from 'react-icons/pi';
+import { Link } from 'react-router-dom';
 
 const Navbar = () => {
   const { isDarkMode, toggleDarkMode } = useColor();
@@ -49,9 +50,9 @@ const Navbar = () => {
   return (
     <>
       <div className="w-screen py-2 px-4 sm:px-6 flex justify-between border-b border-primary">
-        <div className="px-2 flex items-center font-bold">
+        <Link to={'/dashboard'} className="px-2 flex items-center font-bold">
           <img src={isDarkMode ? DarkLogo : Logo} width={160} alt="logo" />
-        </div>
+        </Link>
 
         <div className="flex gap-5  items-center pr-6">
           <button type="button" onClick={toggleDarkMode} className="sm:p-1 hover:bg-hover rounded-full hidden sm:block">

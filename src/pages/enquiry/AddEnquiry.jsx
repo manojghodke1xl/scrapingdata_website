@@ -25,12 +25,13 @@ const AddEnquiry = () => {
     email: '',
     mobile: '',
     ccode: '',
-
     message: '',
     service: '',
     subject: '',
     site: ''
   });
+
+  console.log('enquiryDetails', enquiryDetails);
 
   // Function to handle changes in phone data state (phone number and dialing code)
   const handlePhoneDataChange = (updatedPhoneData) => {
@@ -134,9 +135,7 @@ const AddEnquiry = () => {
               <PhoneInput
                 phoneDataState={{ phoneNumber: enquiryDetails.mobile, dialingCode: enquiryDetails.ccode }}
                 handlePhoneDataChange={handlePhoneDataChange}
-                id={'mobile'}
                 label={'Mobile Number'}
-                name={'mobile'}
                 divClassName={'mt-5'}
               />
 
