@@ -78,6 +78,12 @@ const IntegrationHub = () => {
       name: 'Zoom',
       description: 'Streamline your meeting and event experiences with Zoom integration. Set up events, invite attendees, and host webinars with a seamless experience.',
       id: 'zoom'
+    },
+    {
+      img: zoom,
+      name: 'Mailer Magix',
+      description: 'Streamline your meeting and event experiences with Zoom integration. Set up events, invite attendees, and host webinars with a seamless experience.',
+      id: 'mailerMagix'
     }
   ];
 

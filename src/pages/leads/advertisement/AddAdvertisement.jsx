@@ -8,6 +8,7 @@ import PhoneInputField from '../../../atoms/formFields/PhoneInputField';
 import TextareaComponent from '../../../atoms/formFields/TextareaComponent';
 import DropDown from '../../../atoms/formFields/DropDown';
 import { addAdvertisementApi } from '../../../apis/leads/advertisement-apis';
+import PhoneInput from '../../../atoms/formFields/PhoneInput';
 
 const AddAdvertisement = () => {
   const navigate = useNavigate();
@@ -28,6 +29,11 @@ const AddAdvertisement = () => {
     subject: '',
     site: ''
   });
+
+  const handlePhoneDataChange = (updatedPhoneData) => {
+    console.log(updatedPhoneData);
+    setAdvertisementDetails((prevDetails) => ({ ...prevDetails, mobile: updatedPhoneData.phoneNumber, ccode: updatedPhoneData.dialingCode }));
+  };
 
   const validate = () => {
     const newErrors = {};
@@ -124,14 +130,13 @@ const AddAdvertisement = () => {
                 errorMessage={errors.email}
               />
 
-              <PhoneInputField
-                divClassName="mt-5"
-                label="Mobile Number"
-                placeholder="Mobile Number"
-                name="mobile"
-                value={advertisementDetails.ccode + advertisementDetails.mobile}
-                handlePhoneChange={handlePhoneChange}
-                phoneError={errors.mobile}
+              <PhoneInput
+                phoneDataState={{ phoneNumber: advertisementDetails.mobile, dialingCode: advertisementDetails.ccode }}
+                handlePhoneDataChange={handlePhoneDataChange}
+                id={'mobile'}
+                label={'Mobile Number'}
+                name={'mobile'}
+                divClassName={'mt-5'}
               />
 
               <FormField
@@ -146,6 +151,7 @@ const AddAdvertisement = () => {
                 }}
                 value={advertisementDetails.subject}
                 errorMessage={errors.subject}
+                divClassName={'mt-5'}
               />
 
               <TextareaComponent

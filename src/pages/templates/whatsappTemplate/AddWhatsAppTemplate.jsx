@@ -87,6 +87,7 @@ const AddWhatsAppTemplate = () => {
       else showNotification('warn', data);
     })().catch((error) => showNotification('error', error.message));
   }, []);
+
   const handleFileUpload = (e) => {
     e.preventDefault();
     const newFiles = Array.from(e.target.files).map((file) => ({ file, customName: file.name }));

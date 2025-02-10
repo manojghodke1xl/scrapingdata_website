@@ -4,9 +4,9 @@ import useGlobalContext from '../../hooks/useGlobalContext';
 import DropDown from '../../atoms/formFields/DropDown';
 import ToggleComponent from '../../atoms/formFields/ToggleComponent';
 import { showNotification } from '../../utils/showNotification';
-import { updateSiteNotificationsApi } from '../../apis/site-apis';
 import { getTemplateBySiteApi, getWhatsAppTemplateBySiteApi } from '../../apis/templates/template-apis';
-import EmailListManager from '../../atoms/formFields/EmailListManager';
+import ListManager from '../../atoms/formFields/ListManager';
+import { addAndUpdateSiteNotificationApi, getSiteNotificationByIdApi } from '../../apis/site-notification-apis';
 
 const SitesNotificationSettings = () => {
   const {
@@ -19,6 +19,7 @@ const SitesNotificationSettings = () => {
   const [isScrollable, setIsScrollable] = useState(false);
   const [siteNotification, setSiteNotification] = useState({
     site: '',
+
     sendUserEnquiry: false,
     userEnquiryEmailTemplate: null,
     userEnquriyWhatsAppTemplate: null,
@@ -30,11 +31,13 @@ const SitesNotificationSettings = () => {
     sendAdminEnquiry: false,
     adminEnquiryEmails: [],
     adminEnquiryEmailTemplate: null,
+    adminEnquiryPhoneNumber: [],
     adminEnquiryWhatsAppTemplate: null,
 
     sendAdminSubscriber: false,
     adminSubscriberEmails: [],
     adminSubscriberEmailTemplate: null,
+    adminSubscriberPhoneNumber: [],
     adminSubscriberWhatsAppTemplate: null
   });
 
@@ -43,11 +46,23 @@ const SitesNotificationSettings = () => {
     whatsAppTemplate: []
   });
 
-  console.log('siteNotification', siteNotification);
+  useEffect(() => {
+    if (siteNotification.site) {
+      (async () => {
+        const { status, data } = await getSiteNotificationByIdApi(siteNotification.site);
+        if (status) setSiteNotification(data.siteNotification);
+      })().catch((error) => showNotification('error', error.message));
+    }
+  }, [siteNotification.site]);
 
   const validate = () => {
     const newErrors = {};
     if (!siteNotification.site) newErrors.site = 'Please select a site.';
+    if (siteNotification.adminEnquiryEmailTemplate && siteNotification.adminEnquiryEmails.length === 0) newErrors.forwardEmails = 'Please enter at least one email.';
+    if (siteNotification.adminEnquiryWhatsAppTemplate && siteNotification.adminEnquiryPhoneNumber.length === 0) newErrors.phoneError = 'Please enter at least one phone number.';
+    if (siteNotification.adminSubscriberEmailTemplate && siteNotification.adminSubscriberEmails.length === 0) newErrors.forwardEmails = 'Please enter at least one email.';
+    if (siteNotification.adminSubscriberWhatsAppTemplate && siteNotification.adminSubscriberPhoneNumber.length === 0)
+      newErrors.phoneError = 'Please enter at least one phone number.';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -57,19 +72,9 @@ const SitesNotificationSettings = () => {
     if (!validate()) return;
     setLoading(true);
     try {
-      const { status, data } = await updateSiteNotificationsApi(siteNotification);
-      if (status) {
-        showNotification('success', data.message);
-        setSiteNotification({
-          site: '',
-          sendUserEnquiry: false,
-          sendUserMailingList: false,
-          sendAdminEnquiry: false,
-          adminEnquiryEmails: [],
-          sendAdminSubscriber: false,
-          adminSubscriberEmails: []
-        });
-      } else showNotification('error', data);
+      const { status, data } = await addAndUpdateSiteNotificationApi(siteNotification);
+      if (status) showNotification('success', data.message);
+      else showNotification('error', data);
     } catch (error) {
       showNotification('error', error.message);
     } finally {
@@ -115,7 +120,7 @@ const SitesNotificationSettings = () => {
         <div>
           <span className="text-3xl font-semibold text-dark">Site Notifications</span>
         </div>
-        <FormButtons to="/site/site-list" type="submit" onClick={handleSubmit} btnLebal={'Save Changes'} loading={isLoading} />
+        <FormButtons type="submit" onClick={handleSubmit} btnLebal={'Save Changes'} loading={isLoading} />
       </div>
 
       <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
@@ -244,7 +249,7 @@ const SitesNotificationSettings = () => {
                 <div className="flex flex-col gap-y-5">
                   <ToggleComponent
                     bgColor={'bg-grey'}
-                    label={'Send Admin Enquiry'}
+                    label={'Send Admin Enquiry Notification'}
                     isEnableState={siteNotification.sendAdminEnquiry}
                     setIsEnableState={(value) =>
                       setSiteNotification((prev) => ({
@@ -267,21 +272,25 @@ const SitesNotificationSettings = () => {
                         search={true}
                         selected={siteNotification.adminEnquiryEmailTemplate}
                         commonFunction={(e) => {
-                          setSiteNotification((prev) => ({ ...prev, adminEnquiryEmailTemplate: e.name }));
+                          setSiteNotification((prev) => ({ ...prev, adminEnquiryEmailTemplate: e.name, adminEnquiryEmails: [] }));
                           if (errors.adminEnquiryEmailTemplate) setErrors((prev) => ({ ...prev, adminEnquiryEmailTemplate: '' }));
                         }}
                         error={errors.adminEnquiryEmailTemplate}
                       />
 
-                      <EmailListManager
-                        label="Admin Enquiry Emails"
-                        state={siteNotification}
-                        setState={setSiteNotification}
-                        keyName="adminEnquiryEmails"
-                        errorKey="forwardEmails"
-                        errors={errors}
-                        setErrors={setErrors}
-                      />
+                      {siteNotification.adminEnquiryEmailTemplate && (
+                        <ListManager
+                          label="Admin Enquiry Emails"
+                          state={siteNotification}
+                          setState={setSiteNotification}
+                          keyName="adminEnquiryEmails"
+                          errorKey="forwardEmails"
+                          errors={errors}
+                          setErrors={setErrors}
+                          placeholder="Enter Email ID"
+                          type="email"
+                        />
+                      )}
 
                       <DropDown
                         label={'Select WhatsApp Template'}
@@ -296,12 +305,26 @@ const SitesNotificationSettings = () => {
                         }}
                         error={errors.adminEnquiryWhatsAppTemplate}
                       />
+
+                      {siteNotification.adminEnquiryWhatsAppTemplate && (
+                        <ListManager
+                          label="Admin Enquiry Phones"
+                          state={siteNotification}
+                          setState={setSiteNotification}
+                          keyName="adminEnquiryPhoneNumber"
+                          errorKey="phoneError"
+                          errors={errors}
+                          setErrors={setErrors}
+                          placeholder="Enter Phone Number"
+                          type="tel"
+                        />
+                      )}
                     </>
                   )}
 
                   <ToggleComponent
                     bgColor={'bg-grey'}
-                    label={'Send Admin Mailing List'}
+                    label={'Send Admin Subscriber Notification'}
                     isEnableState={siteNotification.sendAdminSubscriber}
                     setIsEnableState={(value) =>
                       setSiteNotification((prev) => ({
@@ -324,21 +347,25 @@ const SitesNotificationSettings = () => {
                         search={true}
                         selected={siteNotification.adminSubscriberEmailTemplate}
                         commonFunction={(e) => {
-                          setSiteNotification((prev) => ({ ...prev, adminSubscriberEmailTemplate: e.name }));
+                          setSiteNotification((prev) => ({ ...prev, adminSubscriberEmailTemplate: e.name, adminSubscriberEmails: [] }));
                           if (errors.adminSubscriberEmailTemplate) setErrors((prev) => ({ ...prev, adminSubscriberEmailTemplate: '' }));
                         }}
                         error={errors.adminSubscriberEmailTemplate}
                       />
 
-                      <EmailListManager
-                        label="Admin Enquiry Emails"
-                        state={siteNotification}
-                        setState={setSiteNotification}
-                        keyName="adminSubscriberEmails"
-                        errorKey="forwardEmails"
-                        errors={errors}
-                        setErrors={setErrors}
-                      />
+                      {siteNotification.adminSubscriberEmailTemplate && (
+                        <ListManager
+                          label="Admin Enquiry Emails"
+                          state={siteNotification}
+                          setState={setSiteNotification}
+                          keyName="adminSubscriberEmails"
+                          errorKey="forwardEmails"
+                          errors={errors}
+                          setErrors={setErrors}
+                          placeholder="Enter Email ID"
+                          type="email"
+                        />
+                      )}
 
                       <DropDown
                         label={'Select WhatsApp Template'}
@@ -353,6 +380,20 @@ const SitesNotificationSettings = () => {
                         }}
                         error={errors.adminSubscriberWhatsAppTemplate}
                       />
+
+                      {siteNotification.adminSubscriberWhatsAppTemplate && (
+                        <ListManager
+                          label="Admin Subscriber Phones"
+                          state={siteNotification}
+                          setState={setSiteNotification}
+                          keyName="adminSubscriberPhoneNumber"
+                          errorKey="phoneError"
+                          errors={errors}
+                          setErrors={setErrors}
+                          placeholder="Enter Phone Number"
+                          type="tel"
+                        />
+                      )}
                     </>
                   )}
                 </div>
@@ -363,7 +404,7 @@ const SitesNotificationSettings = () => {
       )}
       {!isScrollable && (
         <div className="w-full flex justify-end items-center gap-4 pt-8  border- border-primary">
-          <FormButtons to="/site/site-list" type="submit" onClick={handleSubmit} btnLebal={'Save Changes'} loading={isLoading} />
+          <FormButtons type="submit" onClick={handleSubmit} btnLebal={'Save Changes'} loading={isLoading} />
         </div>
       )}
     </div>

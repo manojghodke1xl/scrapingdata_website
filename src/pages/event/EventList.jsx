@@ -85,6 +85,7 @@ const EventList = () => {
                 deleteLabel={'Delete Event'}
                 deleteMessage={'Are you sure you want to delete this event?'}
                 sendCertificate={true}
+                sendCertificateUnique={true}
                 approvalApi={sendCertificateApi}
               />
             </div>

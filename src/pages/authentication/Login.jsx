@@ -3,9 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import FormField from '../../atoms/formFields/InputField';
 import { showNotification } from '../../utils/showNotification';
 import Logo from '../../assets/images/marsCMS-logo.png';
+import DarkLogo from '../../assets/images/dark-mode-logo.png';
 import useGlobalContext from '../../hooks/useGlobalContext';
+import { useColor } from '../../contexts/contexts/ColorContext';
 
 const Login = () => {
+  const { isDarkMode } = useColor();
   const navigate = useNavigate();
   const { dispatch, setLoading } = useGlobalContext();
   const [email, setEmail] = useState(import.meta.env.DEV ? 'vishwajeet.patil@dreamsinternational.in' : '');
@@ -36,7 +39,7 @@ const Login = () => {
     <div className="w-full h-full py-8 px-3 sm:p-8">
       <div className="w-full flex gap-2 items-center">
         <span>
-          <img src={Logo} width={160} alt="logo" />
+          <img src={isDarkMode ? DarkLogo : Logo} width={160} alt="logo" />
         </span>
       </div>
 

@@ -5,12 +5,14 @@ import { useState } from 'react';
 import useGlobalContext from '../../hooks/useGlobalContext';
 import { showNotification } from '../../utils/showNotification';
 import { updateAdminThemeApi } from '../../apis/admin-apis';
+import FormButtons from '../../atoms/formFields/FormButtons';
 
 const AdminSettings = () => {
   const { toggleDarkMode, isDarkMode, setIsDarkMode } = useColor();
 
   const {
     auth: { id },
+    isLoading,
     setLoading
   } = useGlobalContext();
 
@@ -36,13 +38,7 @@ const AdminSettings = () => {
       <div className="w-full flex md:flex-wrap gap-y-3 sm:flex-nowrap justify-between">
         <h4 className="text-3xl text-dark">Admin Settings</h4>
         <div className="w-full flex justify-end sm:w-fit gap-2">
-          <button
-            onClick={handleSaveChanges}
-            type="button"
-            className="flex gap-2 h-fit items-center px-2.5 md:px-2 sm:px-4 rounded-xl py-2.5 bg-primary hover:bg-primary-hover text-white"
-          >
-            Save Changes
-          </button>
+          <FormButtons type="submit" onClick={handleSaveChanges} btnLebal={'Save Changes'} loading={isLoading} />
         </div>
       </div>
       <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">

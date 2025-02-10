@@ -8,6 +8,8 @@ import TextareaComponent from '../../atoms/formFields/TextareaComponent';
 import DropDown from '../../atoms/formFields/DropDown';
 import { showNotification } from '../../utils/showNotification';
 import { addEnquiryApi } from '../../apis/leads/enquiry-apis';
+import PhoneInput from '../../atoms/formFields/PhoneInput';
+import phoneData from '../../utils/phoneInput.json';
 
 const AddEnquiry = () => {
   const navigate = useNavigate();
@@ -23,11 +25,17 @@ const AddEnquiry = () => {
     email: '',
     mobile: '',
     ccode: '',
+
     message: '',
     service: '',
     subject: '',
     site: ''
   });
+
+  // Function to handle changes in phone data state (phone number and dialing code)
+  const handlePhoneDataChange = (updatedPhoneData) => {
+    setEnquiryDetails((prevDetails) => ({ ...prevDetails, mobile: updatedPhoneData.phoneNumber, ccode: updatedPhoneData.dialingCode }));
+  };
 
   const validate = () => {
     const newErrors = {};
@@ -62,16 +70,16 @@ const AddEnquiry = () => {
     setIsScrollable(contentHeight > windowHeight);
   };
 
-  const handlePhoneChange = (value, countryData) => {
-    const numericValue = value.replace(/\D/g, '');
-    const requiredLength = countryData.format.replace(/[^.]/g, '').length;
-    if (numericValue.length < requiredLength)
-      setErrors((prevErrors) => ({ ...prevErrors, mobile: `Mobile number must be at least ${requiredLength - countryData.dialCode.length} digits` }));
-    else setErrors((prevErrors) => ({ ...prevErrors, mobile: '' }));
+  // const handlePhoneChange = (value, countryData) => {
+  //   const numericValue = value.replace(/\D/g, '');
+  //   const requiredLength = countryData.format.replace(/[^.]/g, '').length;
+  //   if (numericValue.length < requiredLength)
+  //     setErrors((prevErrors) => ({ ...prevErrors, mobile: `Mobile number must be at least ${requiredLength - countryData.dialCode.length} digits` }));
+  //   else setErrors((prevErrors) => ({ ...prevErrors, mobile: '' }));
 
-    const mobile = numericValue.slice(countryData.dialCode.length);
-    setEnquiryDetails((prevDetails) => ({ ...prevDetails, mobile, ccode: countryData.dialCode }));
-  };
+  //   const mobile = numericValue.slice(countryData.dialCode.length);
+  //   setEnquiryDetails((prevDetails) => ({ ...prevDetails, mobile, ccode: countryData.dialCode }));
+  // };
 
   useEffect(() => {
     checkScrollability();
@@ -123,18 +131,17 @@ const AddEnquiry = () => {
                 value={enquiryDetails.email}
                 errorMessage={errors.email}
               />
-
-              <PhoneInputField
-                divClassName="mt-5"
-                label="Mobile Number"
-                placeholder="Mobile Number"
-                name="mobile"
-                value={enquiryDetails.ccode + enquiryDetails.mobile}
-                handlePhoneChange={handlePhoneChange}
-                phoneError={errors.mobile}
+              <PhoneInput
+                phoneDataState={{ phoneNumber: enquiryDetails.mobile, dialingCode: enquiryDetails.ccode }}
+                handlePhoneDataChange={handlePhoneDataChange}
+                id={'mobile'}
+                label={'Mobile Number'}
+                name={'mobile'}
+                divClassName={'mt-5'}
               />
 
               <FormField
+                divClassName={'mt-5'}
                 label="Subject"
                 type="text"
                 id="subject"

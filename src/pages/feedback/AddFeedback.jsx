@@ -8,6 +8,7 @@ import FormField from '../../atoms/formFields/InputField';
 import PhoneInputField from '../../atoms/formFields/PhoneInputField';
 import TextareaComponent from '../../atoms/formFields/TextareaComponent';
 import DropDown from '../../atoms/formFields/DropDown';
+import PhoneInput from '../../atoms/formFields/PhoneInput';
 
 const AddFeedback = () => {
   const navigate = useNavigate();
@@ -28,6 +29,10 @@ const AddFeedback = () => {
     subject: '',
     site: ''
   });
+
+  const handlePhoneDataChange = (updatedPhoneData) => {
+    setEnquiryDetails((prevDetails) => ({ ...prevDetails, mobile: updatedPhoneData.phoneNumber, ccode: updatedPhoneData.dialingCode }));
+  };
 
   const validate = () => {
     const newErrors = {};
@@ -60,17 +65,6 @@ const AddFeedback = () => {
     const contentHeight = document.documentElement.scrollHeight;
     const windowHeight = window.innerHeight;
     setIsScrollable(contentHeight > windowHeight);
-  };
-
-  const handlePhoneChange = (value, countryData) => {
-    const numericValue = value.replace(/\D/g, '');
-    const requiredLength = countryData.format.replace(/[^.]/g, '').length;
-    if (numericValue.length < requiredLength)
-      setErrors((prevErrors) => ({ ...prevErrors, mobile: `Mobile number must be at least ${requiredLength - countryData.dialCode.length} digits` }));
-    else setErrors((prevErrors) => ({ ...prevErrors, mobile: '' }));
-
-    const mobile = numericValue.slice(countryData.dialCode.length);
-    setEnquiryDetails((prevDetails) => ({ ...prevDetails, mobile, ccode: countryData.dialCode }));
   };
 
   useEffect(() => {
@@ -124,15 +118,13 @@ const AddFeedback = () => {
                 errorMessage={errors.email}
               />
 
-              <PhoneInputField
-                divClassName="mt-5"
-                label="Mobile Number"
-                placeholder="Mobile Number"
-                id="mobile"
-                name="mobile"
-                value={enquiryDetails.ccode + enquiryDetails.mobile}
-                handlePhoneChange={handlePhoneChange}
-                phoneError={errors.mobile}
+              <PhoneInput
+                phoneDataState={{ phoneNumber: enquiryDetails.mobile, dialingCode: enquiryDetails.ccode }}
+                handlePhoneDataChange={handlePhoneDataChange}
+                id={'mobile'}
+                label={'Mobile Number'}
+                name={'mobile'}
+                divClassName={'mt-5'}
               />
 
               <FormField
