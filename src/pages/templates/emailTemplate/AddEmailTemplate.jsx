@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import FormButtons from '../../../atoms/formFields/FormButtons';
 import useGlobalContext from '../../../hooks/useGlobalContext';
 import DropDown from '../../../atoms/formFields/DropDown';
@@ -23,6 +23,9 @@ const AddEmailTemplate = () => {
     setLoading,
     isLoading
   } = useGlobalContext();
+  const { pathname } = useLocation();
+  const isDuplicate = pathname.includes('duplicate');
+
   const [isScrollable, setIsScrollable] = useState(false);
   const [errors, setErrors] = useState({});
   const [emailTemplate, setEmailTemplate] = useState({
@@ -93,7 +96,7 @@ const AddEmailTemplate = () => {
       let fileIds = [];
       if (attachments.length > 0) fileIds = await uploadMultipleCustomFiles(attachments);
       const payload = { ...emailTemplate, files: [...emailTemplate.files, ...fileIds], fileId: files._id };
-      const { status, data } = await (id ? updateEmailTemplateApi(id, payload) : addEmailTemplateApi(payload));
+      const { status, data } = await (id ? (isDuplicate ? addEmailTemplateApi(payload) : updateEmailTemplateApi(id, payload)) : addEmailTemplateApi(payload));
       if (status) {
         showNotification('success', data.message);
         navigate('/templates/email-template-list');
