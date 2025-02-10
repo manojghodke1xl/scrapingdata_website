@@ -274,7 +274,7 @@ const TableComponent = ({
     : allSites.filter((site) => site.modules?.some((module) => module[siteModule] === true)).map((site) => ({ name: site.name, _id: site._id }));
 
   return (
-    <div className="overflow-hidden">
+    <div className="overflow-hidden relative">
       <div className="my-4 rounded-xl border border-primary overflow-hidden">
         <div className="w-full flex flex-row sm:flex-row flex-wrap gap-y-4 justify-between items-center px-3 sm:px-6 ptpb-4 border-b border-primary">
           <TableFilter
