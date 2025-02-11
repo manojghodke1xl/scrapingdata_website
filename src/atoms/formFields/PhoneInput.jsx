@@ -140,7 +140,7 @@ const PhoneInput = ({ phoneDataState, handlePhoneDataChange, label, divClassName
                   <div title={`${selectedCountryData?.name} flag`} className={`country-flag flag ${selectedCountryData?.code ? selectedCountryData.code : 'in'}`} />
                   {selectedCountryData?.name} ({selectedCountryData?.dialingCode})
                 </li>
-                {filteredCountries.map((country, index) => (
+                {filteredCountries.map((country) => (
                   <li
                     key={country.code}
                     onClick={() => handleCountrySelect(country.code, country.dialingCode)}

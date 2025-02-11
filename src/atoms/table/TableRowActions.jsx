@@ -2,7 +2,6 @@ import { BsThreeDotsVertical } from 'react-icons/bs';
 import { FiCopy } from 'react-icons/fi';
 import { MdEdit, MdOutlineApps, MdRemoveRedEye, MdOutlineInventory2, MdSend, MdDeleteForever } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
-import { useColor } from '../../contexts/contexts/ColorContext';
 
 const TableRowActions = ({
   row,
@@ -24,7 +23,6 @@ const TableRowActions = ({
   sendCertificateUnique,
   approvalApi
 }) => {
- 
   const navigate = useNavigate();
 
   // Function to count the available actions
@@ -36,7 +34,7 @@ const TableRowActions = ({
       { type: 'copy', show: copy && !row.isSuperAdmin },
       { type: 'delete', show: deleteAction && !row.isSuperAdmin && !row.hasBooking },
       { type: 'managePackage', show: managePackage },
-      { type: 'sendForApproval', show: sendForApproval },
+      { type: 'sendForApproval', show: sendForApproval && !row.approvedTemplate },
       { type: 'sendCertificate', show: sendCertificate && row.certificate },
       { type: 'sendCertificateUnique', show: sendCertificateUnique && row.certificate }
     ].filter((action) => action.show);

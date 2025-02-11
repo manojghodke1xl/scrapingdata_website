@@ -15,6 +15,7 @@ const WhatsAppTemplateList = () => {
     return {
       id: _id,
       whatsAppTemplateName,
+      approvedTemplate: status === 'APPROVED',
       exportData: whatsAppTemplate,
       name: <TruncatableFieldToolTip title={'Name'} content={name} />,
       site: <TruncatableFieldToolTip title={'Sites'} content={`${site?.name} (${site?.host})`} />,
