@@ -45,7 +45,7 @@ const AffiliateList = () => {
           icon1={<AiOutlineApi />}
           icon2={<IoMdAdd />}
           btnLabel1={'API Integration'}
-          btnLabel2={'Add Advertisement'}
+          btnLabel2={'Add Affiliate'}
         />
         <div className="flex flex-col">
           <div className="-m-1.5 overflow-x-auto">
