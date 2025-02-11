@@ -7,7 +7,8 @@ import TextareaComponent from '../../atoms/formFields/TextareaComponent';
 import DropDown from '../../atoms/formFields/DropDown';
 import { showNotification } from '../../utils/showNotification';
 import { addEnquiryApi } from '../../apis/leads/enquiry-apis';
-import PhoneInput from '../../atoms/formFields/PhoneInput';
+
+import PhoneInputField from '../../atoms/formFields/PhoneInputField';
 
 const AddEnquiry = () => {
   const navigate = useNavigate();
@@ -28,8 +29,6 @@ const AddEnquiry = () => {
     subject: '',
     site: ''
   });
-
-  console.log('enquiryDetails', enquiryDetails);
 
   // Function to handle changes in phone data state (phone number and dialing code)
   const handlePhoneDataChange = (updatedPhoneData) => {
@@ -75,6 +74,17 @@ const AddEnquiry = () => {
     return () => window.removeEventListener('resize', checkScrollability);
   }, []);
 
+  const handlePhoneChange = (value, countryData) => {
+    const numericValue = value.replace(/\D/g, '');
+    const requiredLength = countryData.format.replace(/[^.]/g, '').length;
+    if (numericValue.length < requiredLength)
+      setErrors((prevErrors) => ({ ...prevErrors, mobile: `Mobile number must be at least ${requiredLength - countryData.dialCode.length} digits` }));
+    else setErrors((prevErrors) => ({ ...prevErrors, mobile: '' }));
+
+    const mobile = numericValue.slice(countryData.dialCode.length);
+    setEnquiryDetails((prevDetails) => ({ ...prevDetails, mobile, ccode: countryData.dialCode }));
+  };
+
   return (
     <div className="py-8 p-4 sm:p-8 overflow-x-hidden mb-20">
       <div className="w-full pb-8 border-b border-primary gap-y-4 gap-2 flex flex-col items-start md:flex-row lg:flex-col xl:flex-row justify-between lg:items-start md:items-end xl:items-end">
@@ -118,10 +128,15 @@ const AddEnquiry = () => {
                 value={enquiryDetails.email}
                 errorMessage={errors.email}
               />
-              <PhoneInput
-                phoneDataState={{ phoneNumber: enquiryDetails.mobile, dialingCode: enquiryDetails.ccode }}
-                handlePhoneDataChange={handlePhoneDataChange}
-                label={'Mobile Number'}
+
+              <PhoneInputField
+                divClassName="mt-5"
+                label="Mobile Number"
+                placeholder="Mobile Number"
+                name="mobile"
+                value={enquiryDetails.ccode + enquiryDetails.mobile}
+                handlePhoneChange={handlePhoneChange}
+                phoneError={errors.mobile}
               />
 
               <FormField

@@ -5,9 +5,10 @@ import { addCareerApi } from '../../../apis/leads/career-apis';
 import { showNotification } from '../../../utils/showNotification';
 import FormButtons from '../../../atoms/formFields/FormButtons';
 import FormField from '../../../atoms/formFields/InputField';
-import PhoneInput from '../../../atoms/formFields/PhoneInput';
+
 import TextareaComponent from '../../../atoms/formFields/TextareaComponent';
 import DropDown from '../../../atoms/formFields/DropDown';
+import PhoneInputField from '../../../atoms/formFields/PhoneInputField';
 
 const AddCareer = () => {
   const navigate = useNavigate();
@@ -28,6 +29,8 @@ const AddCareer = () => {
     subject: '',
     site: ''
   });
+
+ 
 
   const validate = () => {
     const newErrors = {};
@@ -60,6 +63,17 @@ const AddCareer = () => {
     const contentHeight = document.documentElement.scrollHeight;
     const windowHeight = window.innerHeight;
     setIsScrollable(contentHeight > windowHeight);
+  };
+
+  const handlePhoneChange = (value, countryData) => {
+    const numericValue = value.replace(/\D/g, '');
+    const requiredLength = countryData.format.replace(/[^.]/g, '').length;
+    if (numericValue.length < requiredLength)
+      setErrors((prevErrors) => ({ ...prevErrors, mobile: `Mobile number must be at least ${requiredLength - countryData.dialCode.length} digits` }));
+    else setErrors((prevErrors) => ({ ...prevErrors, mobile: '' }));
+
+    const mobile = numericValue.slice(countryData.dialCode.length);
+    setCareerDetails((prevDetails) => ({ ...prevDetails, mobile, ccode: countryData.dialCode }));
   };
 
   useEffect(() => {
@@ -112,15 +126,16 @@ const AddCareer = () => {
                 errorMessage={errors.email}
               />
 
-              <PhoneInput
-                phoneDataState={{ phoneNumber: careerDetails.mobile, dialingCode: careerDetails.ccode }}
-                handlePhoneDataChange={(updatedPhoneData) =>
-                  setCareerDetails((prevDetails) => ({ ...prevDetails, mobile: updatedPhoneData.phoneNumber, ccode: updatedPhoneData.dialingCode }))
-                }
-                id={'mobile'}
-                label={'Mobile Number'}
-                name={'mobile'}
+              <PhoneInputField
+                divClassName="mt-5"
+                label="Mobile Number"
+                placeholder="Mobile Number"
+                name="mobile"
+                value={careerDetails.ccode + careerDetails.mobile}
+                handlePhoneChange={handlePhoneChange}
+                phoneError={errors.mobile}
               />
+
 
               <FormField
                 label="Subject"

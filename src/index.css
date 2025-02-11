@@ -667,3 +667,93 @@ details[open] .icon-open {
   position: absolute;
   white-space: nowrap;
 }
+
+/* REACT PHONE INPUT 2 CUSTOM STYLES */
+
+.react-tel-input .form-control {
+  position: relative;
+  font-size: 18px;
+  letter-spacing: 0.01rem;
+  z-index: 0;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  padding-left: 60px;
+  margin-left: 0;
+  color: var(--text-main) !important;
+  background: var(--bg-main) !important;
+  font-weight: 600 !important;
+  border-radius: 5px;
+  line-height: 25px;
+  height: 35px;
+  width: 300px;
+  outline: none;
+}
+
+.react-tel-input .flag-dropdown {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  padding: 0;
+  background-color: var(--bg-main) !important;
+  border-right: 1px solid var(--border-primary) !important;
+}
+
+.react-tel-input .flag-dropdown.open {
+  z-index: 2;
+  background: var(--bg-main) !important;
+  border-radius: 0.75rem 0 0 0.75rem !important;
+}
+
+.react-tel-input .country-list {
+  outline: none;
+  z-index: 1;
+  list-style: none;
+  position: absolute;
+  padding: 0;
+  margin: 10px 0 10px -1px;
+  box-shadow: 1px 2px 10px rgba(0, 0, 0, 0.35);
+  background-color: var(--bg-main) !important;
+  width: 300px;
+  max-height: 224px;
+  overflow-y: scroll;
+  border-radius: 0.75rem !important;
+  border: 1px solid var(--border-primary) !important;
+}
+
+.react-tel-input .country-list .country:hover {
+  background-color: var(--bg-hover) !important;
+}
+.react-tel-input .country-list .country.highlight {
+  background-color: var(--bg-primary-faded) !important;
+}
+
+.react-tel-input .country-list .search {
+  z-index: 2;
+  position: sticky;
+  top: 0;
+  background-color: var(--bg-main) !important;
+  padding: 10px 0 6px 10px;
+}
+
+.react-tel-input .country-list .country .dial-code {
+  color: var(--text-placeholder) !important;
+}
+
+.react-tel-input .selected-flag:focus:before,
+.react-tel-input .selected-flag.open:before {
+  box-shadow: none !important;
+  border: 1px solid var(--border-secondary) !important;
+  border-radius: 0.75rem 0 0 0.75rem !important;
+  display: block;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+}
+
+.react-tel-input .selected-flag:before {
+  display: block;
+  position: absolute;
+  top: 0 !important;
+  bottom: 0 !important;
+  border-radius: 0.75rem 0 0 0.75rem !important;
+}

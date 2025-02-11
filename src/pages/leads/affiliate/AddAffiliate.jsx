@@ -7,7 +7,8 @@ import FormButtons from '../../../atoms/formFields/FormButtons';
 import FormField from '../../../atoms/formFields/InputField';
 import TextareaComponent from '../../../atoms/formFields/TextareaComponent';
 import DropDown from '../../../atoms/formFields/DropDown';
-import PhoneInput from '../../../atoms/formFields/PhoneInput';
+
+import PhoneInputField from '../../../atoms/formFields/PhoneInputField';
 
 const AddAffiliate = () => {
   const navigate = useNavigate();
@@ -28,6 +29,8 @@ const AddAffiliate = () => {
     subject: '',
     site: ''
   });
+
+  
 
   const validate = () => {
     const newErrors = {};
@@ -60,6 +63,17 @@ const AddAffiliate = () => {
     const contentHeight = document.documentElement.scrollHeight;
     const windowHeight = window.innerHeight;
     setIsScrollable(contentHeight > windowHeight);
+  };
+
+  const handlePhoneChange = (value, countryData) => {
+    const numericValue = value.replace(/\D/g, '');
+    const requiredLength = countryData.format.replace(/[^.]/g, '').length;
+    if (numericValue.length < requiredLength)
+      setErrors((prevErrors) => ({ ...prevErrors, mobile: `Mobile number must be at least ${requiredLength - countryData.dialCode.length} digits` }));
+    else setErrors((prevErrors) => ({ ...prevErrors, mobile: '' }));
+
+    const mobile = numericValue.slice(countryData.dialCode.length);
+    setAffiliateDetails((prevDetails) => ({ ...prevDetails, mobile, ccode: countryData.dialCode }));
   };
 
   useEffect(() => {
@@ -112,15 +126,17 @@ const AddAffiliate = () => {
                 errorMessage={errors.email}
               />
 
-              <PhoneInput
-                phoneDataState={{ phoneNumber: affiliateDetails.mobile, dialingCode: affiliateDetails.ccode }}
-                handlePhoneDataChange={(updatedPhoneData) =>
-                  setAffiliateDetails((prevDetails) => ({ ...prevDetails, mobile: updatedPhoneData.phoneNumber, ccode: updatedPhoneData.dialingCode }))
-                }
-                id={'mobile'}
-                label={'Mobile Number'}
-                name={'mobile'}
+              <PhoneInputField
+                divClassName="mt-5"
+                label="Mobile Number"
+                placeholder="Mobile Number"
+                name="mobile"
+                value={affiliateDetails.ccode + affiliateDetails.mobile}
+                handlePhoneChange={handlePhoneChange}
+                phoneError={errors.mobile}
               />
+
+             
 
               <FormField
                 label="Subject"

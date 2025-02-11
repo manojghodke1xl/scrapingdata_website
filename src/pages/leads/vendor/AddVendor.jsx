@@ -8,7 +8,7 @@ import FormField from '../../../atoms/formFields/InputField';
 import PhoneInputField from '../../../atoms/formFields/PhoneInputField';
 import TextareaComponent from '../../../atoms/formFields/TextareaComponent';
 import DropDown from '../../../atoms/formFields/DropDown';
-import PhoneInput from '../../../atoms/formFields/PhoneInput';
+
 
 const AddVendor = () => {
   const navigate = useNavigate();
@@ -129,13 +129,14 @@ const AddVendor = () => {
                 errorMessage={errors.email}
               />
 
-              <PhoneInput
-                phoneDataState={{ phoneNumber: vendorDetails.mobile, dialingCode: vendorDetails.ccode }}
-                handlePhoneDataChange={handlePhoneDataChange}
-                id={'mobile'}
-                label={'Mobile Number'}
-                name={'mobile'}
-                divClassName={'mt-5'}
+              <PhoneInputField
+                divClassName="mt-5"
+                label="Mobile Number"
+                placeholder="Mobile Number"
+                name="mobile"
+                value={vendorDetails.ccode + vendorDetails.mobile}
+                handlePhoneChange={handlePhoneChange}
+                phoneError={errors.mobile}
               />
 
               <FormField
