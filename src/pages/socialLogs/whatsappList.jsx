@@ -27,7 +27,7 @@ const WhatsAppLogList = () => {
               : `${isDarkMode ? 'border border-pending' : 'bg-fadeyellow'} text-pending`
           } px-2 py-1 w-fit flex gap-2 items-center`}
         >
-          <span className={`min-w-[8px] min-h-[8px] rounded-full ${statusCode === 200 ? 'bg-green' : 'bg-pending'}`}></span>
+          <span className={`min-w-[8px] min-h-[8px] rounded-full ${statusCode === 200 ? 'bg-green' : statusCode >= 400 ? 'bg-red' : 'bg-pending'}`}></span>
           <span>{statusCode}</span>
         </div>
       ),

@@ -25,24 +25,25 @@ const WhatsappLogPreview = () => {
         <h2 className="text-xl font-semibold text-gray-800 mb-4">WhatsApp Message Details</h2>
         <div className="text-gray-600">
           <p>
-            <strong>From:</strong> {whatsappData.fromNumber}
+            <strong>From:</strong> {whatsappData?.fromNumber}
           </p>
           <p>
-            <strong>To:</strong> {whatsappData.toNumber}
+            <strong>To:</strong> {whatsappData?.toNumber}
           </p>
           <p>
-            <strong>Status Code:</strong> {whatsappData.statusCode}
+            <strong>Status Code:</strong> {whatsappData?.statusCode}
           </p>
           <p>
-            <strong>Created At:</strong> {new Date(whatsappData.createdAt).toLocaleString()}
+            <strong>Created At:</strong> {new Date(whatsappData?.createdAt).toLocaleString()}
           </p>
           <p>
-            <strong>Updated At:</strong> {new Date(whatsappData.updatedAt).toLocaleString()}
+            <strong>Updated At:</strong> {new Date(whatsappData?.updatedAt).toLocaleString()}
           </p>
           <p>
             <strong>Message:</strong>
           </p>
-          <pre className="whitespace-pre-wrap bg-gray-100 p-3 rounded-md text-sm">{whatsappData.message}</pre>
+          <pre className="whitespace-pre-wrap bg-gray-100 p-3 rounded-md text-sm">{whatsappData?.message}</pre>
+          {whatsappData?.error && <p className="text-red-500 font-semibold">{whatsappData.error}</p>}
         </div>
       </div>
     </div>
