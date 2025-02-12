@@ -36,7 +36,7 @@ const ParticipantList = () => {
       ),
       ticketId: <TruncatableFieldToolTip title={'Ticket ID'} content={ticketId ?? ''} />,
       site: <TruncatableFieldToolTip title={'Sites'} content={`${site?.name} (${site?.host})`} />,
-      event: <TruncatableFieldToolTip title={'Event Name'} content={`${event?.name} (${event.venue})`} />,
+      event: <TruncatableFieldToolTip title={'Event Name'} content={`${event?.name} (${event?.venue})`} />,
       eventDate: formatDateTime(event?.date),
       title: <TruncatableFieldToolTip title={'Package Name'} content={userPackage?.title ?? ''} />,
       refUser: <TruncatableFieldToolTip title={'Referrer User'} content={refUser?.name ?? '--'} />,
