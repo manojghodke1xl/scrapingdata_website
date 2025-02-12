@@ -10,12 +10,13 @@ const EmailTemplateList = () => {
   const [emailTemplates, setEmailTemplates] = useState([]);
 
   const rows = emailTemplates.map((emailTemplate) => {
-    const { _id, name, subject, site, createdAt, updatedAt } = emailTemplate;
+    const { _id, name, subject, body, site, createdAt, updatedAt } = emailTemplate;
     return {
       id: _id,
       exportData: emailTemplate,
       name: <TruncatableFieldToolTip title={'Name'} content={name} />,
       subject: <TruncatableFieldToolTip title={'Subject'} content={subject} />,
+      body: <TruncatableFieldToolTip title={'Body'} content={body} />,
       site: <TruncatableFieldToolTip title={'Sites'} content={`${site?.name} (${site?.host})`} />,
       createdAt: formatDateTime(createdAt),
       updatedAt: formatDateTime(updatedAt)
