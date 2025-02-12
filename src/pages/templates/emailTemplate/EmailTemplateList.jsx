@@ -37,6 +37,7 @@ const EmailTemplateList = () => {
                   { label: 'Sr. No.', key: 'srno' },
                   { label: 'Name', key: 'name' },
                   { label: 'Subject', key: 'subject' },
+                  { label: 'Body', key: 'body' },
                   { label: 'Sites', key: 'site' },
                   { label: 'Created Date', key: 'createdAt' },
                   { label: 'Updated Date', key: 'updatedAt' }

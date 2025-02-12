@@ -10,7 +10,7 @@ const WhatsAppTemplateList = () => {
   const [whatsAppTemplates, setWhatsAppTemplates] = useState([]);
 
   const rows = whatsAppTemplates.map((whatsAppTemplate) => {
-    const { _id, name, site, whatsAppTemplateName, status, createdAt, updatedAt } = whatsAppTemplate;
+    const { _id, name, site, whatsAppTemplateName, message, status, createdAt, updatedAt } = whatsAppTemplate;
 
     return {
       id: _id,
@@ -18,6 +18,7 @@ const WhatsAppTemplateList = () => {
       approvedTemplate: status === 'APPROVED',
       exportData: whatsAppTemplate,
       name: <TruncatableFieldToolTip title={'Name'} content={name} />,
+      message: <TruncatableFieldToolTip title={'Message'} content={message} />,
       site: <TruncatableFieldToolTip title={'Sites'} content={`${site?.name} (${site?.host})`} />,
       status: status ? (
         <div
@@ -51,6 +52,7 @@ const WhatsAppTemplateList = () => {
                   { label: 'Sr. No.', key: 'srno' },
                   { label: 'Name', key: 'name' },
                   { label: 'WhatsApp Template Name', key: 'whatsAppTemplateName' },
+                  { label: 'Message', key: 'message' },
                   { label: 'Sites', key: 'site' },
                   { label: 'Status', key: 'status' },
                   { label: 'Created Date', key: 'createdAt' },
