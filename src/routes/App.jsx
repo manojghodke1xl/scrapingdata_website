@@ -1,4 +1,4 @@
-import { lazy, Suspense } from 'react';
+import { Component, lazy, Suspense } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import { GlobalProvider } from '../contexts/providers/GlobalProvider';
@@ -52,6 +52,7 @@ import ResellerRoutes from './private-routes/leads/ResellerRoutes';
 import AffiliateRoutes from './private-routes/leads/AffiliateRoutes';
 import FanClubRoutes from './private-routes/leads/FanClubRoutes';
 import CareerRoutes from './private-routes/leads/CareerRoutes';
+import WebinarRoutes from './private-routes/WebinarRoutes';
 
 const ZohoStatus = lazy(() => import('../pages/integration/ZohoStatus'));
 
@@ -97,7 +98,8 @@ const privateRoutes = [
   { path: '/reseller/*', Component: ResellerRoutes },
   { path: 'affiliate/*', Component: AffiliateRoutes },
   { path: 'fan-club/*', Component: FanClubRoutes },
-  { path: 'career/*', Component: CareerRoutes }
+  { path: 'career/*', Component: CareerRoutes },
+  { path: 'webinar/*', Component: WebinarRoutes }
 ];
 
 const App = () => {
