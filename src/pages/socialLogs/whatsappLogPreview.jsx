@@ -43,7 +43,7 @@ const WhatsappLogPreview = () => {
             <strong>Message:</strong>
           </p>
           <pre className="whitespace-pre-wrap bg-gray-100 p-3 rounded-md text-sm">{whatsappData?.message}</pre>
-          {whatsappData?.error && <p className="text-red-500 font-semibold">{whatsappData.error}</p>}
+          {whatsappData?.error && <p className="text-red-500 font-semibold">{JSON.stringify(whatsappData?.error, null, 2)}</p>}
         </div>
       </div>
     </div>
