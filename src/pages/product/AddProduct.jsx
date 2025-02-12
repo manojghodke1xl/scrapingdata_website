@@ -129,9 +129,13 @@ const AddProduct = () => {
 
         if (productDetails.shippingDetails.length > 0) {
           productDetails.shippingDetails.forEach((shipping) => {
-            if (!shipping.charges?.[currency]) {
-              newErrors.charges = newErrors.charges || {};
-              newErrors.charges[currency] = `Charges for ${currency} currency is required`;
+            if (shipping.charges) {
+              Object.keys(shipping.charges).forEach((currency) => {
+                if (shipping.charges[currency] === undefined || shipping.charges[currency] === '') {
+                  newErrors.charges = newErrors.charges || {};
+                  newErrors.charges[currency] = `Charges for ${currency} currency is required`;
+                }
+              });
             }
           });
         }
@@ -619,14 +623,22 @@ const AddProduct = () => {
                                     const chargeValue = e.target.value;
                                     setProductDetails((prev) => {
                                       const updatedShippingDetails = prev.shippingDetails.map((detail) => {
-                                        if (detail.destination === shipping.destination) return { ...detail, charges: { ...detail.charges, [currency]: chargeValue } };
+                                        if (detail.destination === shipping.destination) {
+                                          return {
+                                            ...detail,
+                                            charges: {
+                                              ...detail.charges,
+                                              [currency]: chargeValue
+                                            }
+                                          };
+                                        }
                                         return detail;
                                       });
                                       return { ...prev, shippingDetails: updatedShippingDetails };
                                     });
                                     if (errors.charges?.[currency]) setErrors((prev) => ({ ...prev, charges: { ...prev.charges, [currency]: '' } }));
                                   }}
-                                  value={productDetails.shippingDetails.find((detail) => detail.destination === shipping.destination)?.charges?.[currency] || ''}
+                                  value={productDetails.shippingDetails.find((detail) => detail.destination === shipping.destination)?.charges?.[currency] ?? 0}
                                   errorMessage={errors.charges?.[currency]}
                                 />
                               </div>
@@ -682,7 +694,7 @@ const AddProduct = () => {
       </div> */}
       {!isScrollable && (
         <div className="w-full flex justify-end items-center gap-4 pt-8  border- border-primary">
-          <FormButtons to="/faq-category/faq-category-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} loading={isLoading} />
+          <FormButtons to="/products/product-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} loading={isLoading} />
         </div>
       )}
     </div>
