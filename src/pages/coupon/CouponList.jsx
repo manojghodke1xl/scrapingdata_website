@@ -61,7 +61,7 @@ const CouponList = () => {
                 ]}
                 tableData={(data) => setCoupons(data.coupons)}
                 rows={rows}
-                apiUrl={'coupons'}
+                apiUrl={'coupon'}
                 tableCountLabel={true}
                 pagination={true}
                 actions={true}

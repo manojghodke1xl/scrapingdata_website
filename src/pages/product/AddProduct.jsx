@@ -250,7 +250,7 @@ const AddProduct = () => {
             <span className=" text-primary">Product Information</span>
           </div>
           <div className="w-full">
-            <div>
+            <div className="flex flex-col gap-y-5">
               <FormField
                 label="Product Name"
                 type="text"
@@ -266,7 +266,6 @@ const AddProduct = () => {
               />
 
               <TextareaComponent
-                divClassName="mt-5"
                 label="Short Description"
                 placeholder="Enter a description..."
                 id="shortDescription"
@@ -310,7 +309,7 @@ const AddProduct = () => {
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className="block text-primary">Media Upload</span>
           </div>
-          <div className="dropdown-container relative w-full mt-2">
+          <div className="dropdown-container relative w-full mt-2 flex flex-col gap-y-5">
             <FileUpload
               logo={<FaRegImage className="text-primary text-2xl" />}
               error={errors.image}
@@ -323,7 +322,6 @@ const AddProduct = () => {
             />
 
             <MultipleFileUpload
-              divClassName={'mt-5'}
               onUploadSuccess={(files) => {
                 setProductDetails((prev) => ({ ...prev, gallery: [...(prev.gallery || []), ...files] }));
                 if (errors.gallery) setErrors((prev) => ({ ...prev, gallery: '' }));
@@ -339,7 +337,6 @@ const AddProduct = () => {
             />
             {productDetails.type === 'Digital' && (
               <MultipleFileUpload
-                divClassName={'mt-5'}
                 label={'Upload Digital Products'}
                 onUploadSuccess={(files) => {
                   setProductDetails((prev) => ({ ...prev, digitalProducts: [...(prev.digitalProducts || []), ...files] }));
@@ -363,7 +360,7 @@ const AddProduct = () => {
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className="block text-primary">Related Products</span>
           </div>
-          <div className="dropdown-container relative w-full mt-2">
+          <div className="dropdown-container relative w-full mt-2 flex flex-col gap-y-5">
             <ToggleComponent
               label={'Product up-sell ?'}
               isEnableState={productDetails.upsell}
@@ -373,7 +370,6 @@ const AddProduct = () => {
 
             {productDetails.upsell && (
               <MultiSelectCheckbox
-                divClassName={'mt-5'}
                 label={'Select up-sell Products'}
                 options={relatedProducts}
                 selected={productDetails.upsellProducts}
@@ -423,7 +419,7 @@ const AddProduct = () => {
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className="block text-primary">Product Type</span>
           </div>
-          <div className="dropdown-container relative w-full mt-2">
+          <div className="dropdown-container relative w-full mt-2 flex flex-col gap-y-5">
             <DropDown
               name="type"
               label="Product Type"
@@ -461,7 +457,6 @@ const AddProduct = () => {
 
             {(productDetails.type === 'Physical' || productDetails.type === 'Digital') && (
               <MultiSelectCheckbox
-                divClassName={'mt-5'}
                 formLabel={'Select the currencies you want to sell in your product'}
                 label={'Select Currencies'}
                 options={[
@@ -497,7 +492,6 @@ const AddProduct = () => {
 
             {productDetails.type === 'Physical' && (
               <MultiSelectCheckbox
-                divClassName={'mt-5'}
                 formLabel={'Select the Shipping Destinations you want to sell in your product'}
                 label={'Select Shipping Destinations'}
                 options={[
@@ -520,7 +514,6 @@ const AddProduct = () => {
 
             {productDetails.onSale && (
               <DateTimePicker
-                divClassName={'mt-5'}
                 id={'saleEndDate'}
                 label="Sale End Date"
                 placeholder={formatDateTime(new Date())}
@@ -542,11 +535,10 @@ const AddProduct = () => {
             <div className="sm:w-7/12 w-full flex flex-col">
               <span className="block text-primary">Pricing</span>
             </div>
-            <div className="dropdown-container relative w-full mt-2">
+            <div className="dropdown-container relative w-full mt-2 flex flex-col gap-y-5">
               {productDetails.currencies.map((currency) => (
                 <div key={currency} className="flex md:flex-row flex-col items-center justify-between md:gap-5">
                   <FormField
-                    divClassName={'mt-5'}
                     label={`Price (${currency}) is inclusive of tax`}
                     type="number"
                     id={`price-${currency}`}
@@ -561,7 +553,6 @@ const AddProduct = () => {
                   />
                   {productDetails.onSale && (
                     <FormField
-                      divClassName={'mt-5'}
                       label={`Sale Price (${currency})`}
                       type="number"
                       id={`salePrice-${currency}`}

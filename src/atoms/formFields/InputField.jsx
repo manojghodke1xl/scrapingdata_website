@@ -1,7 +1,22 @@
 import { useState } from 'react';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
-const FormField = ({ divClassName, label, type = 'text', name, id, placeholder, showPasswordToggle = false, disabled, errorMessage = '', onChange, value, preview = false }) => {
+const FormField = ({
+  divClassName,
+  label,
+  type = 'text',
+  name,
+  id,
+  placeholder,
+  min,
+  max,
+  showPasswordToggle = false,
+  disabled,
+  errorMessage = '',
+  onChange,
+  value,
+  preview = false
+}) => {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
@@ -17,6 +32,8 @@ const FormField = ({ divClassName, label, type = 'text', name, id, placeholder, 
           onWheel={(e) => e.target.blur()}
           value={value}
           name={name}
+          max={max}
+          min={min}
           placeholder={placeholder}
           className={`w-full mt-2 rounded-xl border bg-inherit ${
             errorMessage ? 'border-danger focus:border-fadered' : ' border-primary focus:border-secondary'

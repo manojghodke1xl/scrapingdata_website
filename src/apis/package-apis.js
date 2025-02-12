@@ -16,6 +16,10 @@ export const getPackagesApi = async (ids) => {
   return await getMethodCall(`${import.meta.env.VITE_API_URL}/package`, ids);
 };
 
+export const getPackageByEventIdApi = async (eventId) => {
+  return await getMethodCall(`${import.meta.env.VITE_API_URL}/package-event/${eventId}`);
+};
+
 export const deletePackageApi = async (ids) => {
   return await deleteMethodCall(`${import.meta.env.VITE_API_URL}/package`, ids);
 };
