@@ -126,9 +126,9 @@ const AddEmailTemplate = () => {
     <div className="py-8 p-4 sm:p-8 overflow-x-hidden mb-20">
       <div className="w-ful pb-8 border-b border-primary gap-y-4 gap-2 flex flex-col items-start md:flex-row lg:flex-col xl:flex-row justify-between lg:items-start md:items-end xl:items-end">
         <div>
-          <span className="text-3xl font-semibold text-dark">{id ? 'Edit' : 'Add'} Email Template</span>
+          <span className="text-3xl font-semibold text-dark">{id ? (isDuplicate ? 'Add' : 'Edit') : 'Add'} Email Template</span>
         </div>
-        <FormButtons to="/templates/email-template-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} loading={isLoading} />
+        <FormButtons to="/templates/email-template-list" type="submit" onClick={handleSubmit} btnLebal={id ? (isDuplicate ? 'Add' : 'Save Changes') : 'Add'} loading={isLoading} />
       </div>
 
       <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
@@ -278,7 +278,13 @@ const AddEmailTemplate = () => {
 
       {!isScrollable && (
         <div className="w-full flex justify-end items-center gap-4 pt-4 border- border-primary">
-          <FormButtons to="/templates/email-template-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} loading={isLoading} />
+          <FormButtons
+            to="/templates/email-template-list"
+            type="submit"
+            onClick={handleSubmit}
+            btnLebal={id ? (isDuplicate ? 'Add' : 'Save Changes') : 'Add'}
+            loading={isLoading}
+          />
         </div>
       )}
     </div>

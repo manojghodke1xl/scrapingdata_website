@@ -10,8 +10,8 @@ const WebinarRoutes = () => {
     <Routes>
       <Route path="/webinar-list" element={<WebinarList />} />
       <Route path="/add-webinar" element={<AddWebinar />} />
-      <Route path="/edit-testimonial/:id" element={<AddWebinar />} />
-      <Route path="/duplicate-testimonial/:id" element={<AddWebinar />} />
+      <Route path="/edit-webinar/:id" element={<AddWebinar />} />
+      <Route path="/duplicate-webinar/:id" element={<AddWebinar />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
