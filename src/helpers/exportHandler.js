@@ -54,7 +54,9 @@ export const exportHandler = ({ type, apiUrl, rows, headers, selected }) => {
           reseller: 'resellers',
           affiliate: 'affiliates',
           'fan-club': 'fanClubs',
-          career: 'careers'
+          career: 'careers',
+          participant: 'participants',
+          coupon: 'coupons'
         };
 
         const allData = data[apiUrlMapping[apiUrl] || apiUrl];

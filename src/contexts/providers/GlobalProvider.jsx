@@ -71,6 +71,7 @@ export const GlobalProvider = ({ children }) => {
       try {
         const { status, data } = await apiCall(id);
         if (status) dispatch(successAction(data));
+        else if (status === false || data === 'jwt expired') dispatch({ type: 'SIGNOUT' });
         else showNotification('warn', data);
       } catch (error) {
         showNotification('error', error.message);

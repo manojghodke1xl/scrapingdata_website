@@ -8,6 +8,7 @@ import CountryFlag from '../../atoms/common/CountryFlag';
 import TableHeader from '../../atoms/table/TableHeader';
 import { useColor } from '../../contexts/contexts/ColorContext';
 import { sendCertificateApi } from '../../apis/participant-apis';
+import { IoMdAdd } from 'react-icons/io';
 
 const ParticipantList = () => {
   const { isDarkMode } = useColor();
@@ -71,7 +72,7 @@ const ParticipantList = () => {
   return (
     <div className="py-5 px-8 overflow-x-hidden mb-10">
       <div className=" w-full">
-        <TableHeader heading={'Participants'} />
+        <TableHeader heading={'Participants'} btn1={true} href1={'/participants/add-participant'} icon1={<IoMdAdd />} btnLabel1={'Add Participant'} />
         <div className="flex flex-col">
           <div className="-m-1.5 overflow-x-auto">
             <div className="p-1.5 min-w-full align-middle">
@@ -99,10 +100,9 @@ const ParticipantList = () => {
                 ]}
                 tableData={(data) => setParticipants(data.participants)}
                 rows={rows}
-                apiUrl={'participants'}
+                apiUrl={'participant'}
                 tableCountLabel={true}
                 pagination={true}
-                // actions={true}
                 search={true}
                 filter={true}
                 filterCategory={[
