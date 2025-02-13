@@ -41,8 +41,6 @@ const AddEmailTemplate = () => {
   const [attachments, setAttachments] = useState([]);
   const [templateCategories, setTemplateCategories] = useState([]);
 
-  const [emailContent, setEmailContent] = useState();
-
   useEffect(() => {
     if (id) {
       setLoading(true);
@@ -249,7 +247,6 @@ const AddEmailTemplate = () => {
           <div className="w-1/2">
             <EmailPreview emailTemplate={emailTemplate} />
           </div>
-       
         </div>
       </div>
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { showNotification } from '../../utils/showNotification';
 import { getMethodCall } from '../../apis/api-handler';

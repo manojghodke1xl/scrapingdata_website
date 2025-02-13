@@ -2,7 +2,6 @@ import { FiCopy } from 'react-icons/fi';
 import { showNotification } from '../../utils/showNotification';
 import { useState } from 'react';
 import { FaEye } from 'react-icons/fa';
-import { useColor } from '../../contexts/contexts/ColorContext';
 
 const TruncatableCopyFeild = ({ content }) => {
  

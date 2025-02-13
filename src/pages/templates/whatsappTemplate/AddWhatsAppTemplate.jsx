@@ -50,7 +50,6 @@ const AddWhatsAppTemplate = () => {
     const matches = [...whatsAppTemplate.message.matchAll(/\{(\w+)\}/g)].map((match) => match[1]);
     setPlaceholders([...new Set(matches)]);
   }, [whatsAppTemplate.message]);
-  console.log('whatsAppTemplate', whatsAppTemplate);
 
   useEffect(() => {
     if (id) {
@@ -299,7 +298,6 @@ const AddWhatsAppTemplate = () => {
           </div>
         </div>
       </div>
-
 
       <div className="w-full  justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
         <div className="w-full flex flex-col gap-y-2 md:flex-row justify-evenly">

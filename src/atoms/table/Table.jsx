@@ -204,7 +204,6 @@ const TableComponent = ({
     }));
   };
 
-  console.log('selectionState', selectionState);
   const handleRowCheckboxChange = (id) => {
     setSelectionState((prev) => {
       const updatedSelected = prev.selectedItems.includes(id) ? prev.selectedItems.filter((itemId) => itemId !== id) : [...prev.selectedItems, id];

@@ -1,8 +1,6 @@
-import React from 'react';
 import { IoMdCheckmark } from 'react-icons/io';
 
-const Checkbox = ({ id, checked, onChange, labelText, labelProps = {}, checkboxProps = {}, svgProps = {}, className, onClick, disabled }) => {
-  // console.log("id-custom", id);
+const Checkbox = ({ id, checked, onChange, labelText, labelProps = {}, checkboxProps = {}, className, onClick, disabled }) => {
   return (
     <div className={`inline-flex gap-3 items-center ${className}`} onClick={onClick ? onClick : null}>
       <label className={`relative flex items-center  rounded-full cursor-pointer focus:outline-none ${labelProps.className || ''}`} htmlFor={id} {...labelProps}>

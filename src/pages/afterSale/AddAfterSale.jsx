@@ -13,7 +13,7 @@ import CommonModal from '../../atoms/modal/CommonModal';
 import { formatDateTime } from '../../utils/dateFormats';
 import WhatsAppPreview from '../../atoms/templatePreview/WhatsAppPreview';
 import EmailPreview from '../../atoms/templatePreview/EmailPreview';
-import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import { FaEye } from 'react-icons/fa';
 
 const AddAfterSale = () => {
   const { id = '' } = useParams();
@@ -338,7 +338,6 @@ const AddAfterSale = () => {
                   onChange={(selected) => handleVariableChange(index, 'channels', selected)}
                   selected={item.channels}
                 />
-                {console.log('afterSaleDetails', item.delay.custom)}
                 <DropDown
                   mt="mt-5"
                   name={'schedule'}
@@ -438,7 +437,6 @@ const AddAfterSale = () => {
               </button>
             </div>
           </div>
-          {console.log('displayTemplate?.template.message', displayTemplate?.template.message)}
           <div className="w-full ">
             {displayTemplate?.type === 'email' ? (
               <EmailPreview emailTemplate={displayTemplate?.template} />

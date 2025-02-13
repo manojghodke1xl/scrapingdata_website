@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { IoIosArrowDown } from 'react-icons/io';
 import TruncatableFieldToolTip from '../common/TruncatableFeildToolTip';
-import { useColor } from '../../contexts/contexts/ColorContext';
 
 const FilterDropDown = ({ name, data, selected, setDataId }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -21,7 +20,6 @@ const FilterDropDown = ({ name, data, selected, setDataId }) => {
     setDataId(site._id);
     setIsOpen(false);
   };
-  console.log('selected,data', selected, data);
 
   return (
     <div className="dropdown-container relative">

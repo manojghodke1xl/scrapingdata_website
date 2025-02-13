@@ -5,8 +5,6 @@ import { MdDeleteForever } from 'react-icons/md';
 const ListManager = ({ label, state, setState, keyName, errorKey, errors, setErrors, placeholder, type = 'text' }) => {
   const [inputValue, setInputValue] = useState('');
 
-  console.log(state);
-
   const removeItemAtIndex = (indexToRemove) => {
     setState((prev) => ({ ...prev, [keyName]: prev[keyName].filter((_, index) => index !== indexToRemove) }));
   };
