@@ -11,6 +11,9 @@ import MultiSelectCheckbox from '../../atoms/formFields/MultiSelectCheckBox';
 import { addAfterSaleApi, getAfterSalesByIdApi, getAfterSaleTemplateApi, getExistingAfterSalesApi, updateAfterSaleApi } from '../../apis/after-sale-apis';
 import CommonModal from '../../atoms/modal/CommonModal';
 import { formatDateTime } from '../../utils/dateFormats';
+import WhatsAppPreview from '../../atoms/templatePreview/WhatsAppPreview';
+import EmailPreview from '../../atoms/templatePreview/EmailPreview';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 const AddAfterSale = () => {
   const { id = '' } = useParams();
@@ -53,13 +56,17 @@ const AddAfterSale = () => {
 
   const [displayTemplate, setDisplayTemplate] = useState(null);
 
-  console.log('displayTemplate', displayTemplate);
-
   const handleFindTemplate = (type, id) => {
-    let template;
-    if (type === 'email') template = formState.emailTemplate.find((template) => template._id === id);
-    if (type === 'whatsapp') template = formState.whatsAppTemplate.find((template) => template._id === id);
-    setDisplayTemplate(template);
+    if (displayTemplate && displayTemplate.type === type && displayTemplate.template._id === id) {
+      // If the template is already displayed, reset it to null
+      setDisplayTemplate(null);
+    } else {
+      // Otherwise, find and set the template
+      let template;
+      if (type === 'email') template = formState.emailTemplate.find((template) => template._id === id);
+      if (type === 'whatsapp') template = formState.whatsAppTemplate.find((template) => template._id === id);
+      setDisplayTemplate({ type: type, template });
+    }
   };
 
   useEffect(() => {
@@ -310,7 +317,7 @@ const AddAfterSale = () => {
       </div>
 
       <div className="w-full  justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
-        <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
+        <div className="w-full  flex flex-col gap-y-2 md:flex-row gap-4 justify-evenly">
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className=" text-primary ">Follow - up</span>
           </div>
@@ -396,8 +403,8 @@ const AddAfterSale = () => {
                   <div>
                     {item.channels.map((channel, channelIndex) => (
                       <div key={channelIndex} className="mt-5 relative">
-                        <button type="button" className="absolute -top-1.5 right-0" onClick={() => handleFindTemplate(channel, item[`${channel}Template`])}>
-                          Show Preview
+                        <button type="button" className="absolute  right-2" onClick={() => handleFindTemplate(channel, item[`${channel}Template`])}>
+                          <FaEye size={20} />
                         </button>
                         <DropDown
                           mt="mt-5"
@@ -430,6 +437,16 @@ const AddAfterSale = () => {
                 + Add More Follow - Up
               </button>
             </div>
+          </div>
+          {console.log('displayTemplate?.template.message', displayTemplate?.template.message)}
+          <div className="w-full ">
+            {displayTemplate?.type === 'email' ? (
+              <EmailPreview emailTemplate={displayTemplate?.template} />
+            ) : displayTemplate?.type === 'whatsapp' ? (
+              <WhatsAppPreview message={displayTemplate?.template.message} placeholders={displayTemplate?.template.placeholders} />
+            ) : (
+              ''
+            )}
           </div>
         </div>
       </div>

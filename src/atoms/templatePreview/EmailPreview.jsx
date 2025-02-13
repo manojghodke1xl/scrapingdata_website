@@ -2,7 +2,7 @@ import React from 'react';
 
 const EmailPreview = ({ emailTemplate }) => {
   return (
-    <div className="w-full flex flex-col items-start justify-start gap-5 ml-7">
+    <div className="w-full flex flex-col items-start justify-start ">
       <p>Email Template Preview:</p>
       {emailTemplate.subject && (
         <h2 className="text-lg font-semibold text-dark mb-4">

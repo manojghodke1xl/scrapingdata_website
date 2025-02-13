@@ -15,7 +15,7 @@ const WhatsAppPreview = ({ message, placeholders, className = '' }) => {
   };
 
   return (
-    <div className={`w-full flex flex-col items-start justify-start gap-5 ml-7 ${className}`}>
+    <div className={`w-full flex flex-col items-start justify-start gap-5  ${className}`}>
       <p>WhatsApp Template Preview:</p>
 
       {message ? (
