@@ -105,3 +105,12 @@ export const logsPath = [
 ];
 
 export const adminNavLinks = [{ title: 'Admins', to: ['/admin/admin-list', '/admin/add-admin', '/admin/edit-admin'], icon: <RiAdminLine /> }];
+
+export const webinarsPath = [
+  { title: 'Webinars', to: ['/webinar/webinar-list', '/webinar/add-webinar', '/webinar/edit-webinar', '/webinar/duplicate-webinar'] },
+  { title: 'Webinar Links', to: ['/webinar/webinar-link'] }
+];
+
+export const utilitiesPath = [
+  { title: 'UTM Builder', to: ['/utm-builder/utm-builder-list', '/utm-builder/add-utm-builder', '/utm-builder/edit-utm-builder', '/utm-builder/duplicate-utm-builder'] }
+];

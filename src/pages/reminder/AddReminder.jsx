@@ -12,6 +12,9 @@ import { getAfterSaleTemplateApi } from '../../apis/after-sale-apis';
 import CommonModal from '../../atoms/modal/CommonModal';
 import { addReminderApi, getExistingReminderApi, getReminderByIdApi, updateReminderApi } from '../../apis/reminder-apis';
 import { formatDateTime } from '../../utils/dateFormats';
+import { FaEye } from 'react-icons/fa';
+import EmailPreview from '../../atoms/templatePreview/EmailPreview';
+import WhatsAppPreview from '../../atoms/templatePreview/WhatsAppPreview';
 
 const AddReminder = () => {
   const { id = '' } = useParams();
@@ -53,6 +56,7 @@ const AddReminder = () => {
     modelOpen: false,
     reminderId: ''
   });
+  const [displayTemplate, setDisplayTemplate] = useState(null);
 
   useEffect(() => {
     const fetchData = async (apiFunction, site, key) => {
@@ -200,6 +204,19 @@ const AddReminder = () => {
     }));
   };
 
+  const handleFindTemplate = (type, id) => {
+    if (displayTemplate && displayTemplate.type === type && displayTemplate.template._id === id) {
+      // If the template is already displayed, reset it to null
+      setDisplayTemplate(null);
+    } else {
+      // Otherwise, find and set the template
+      let template;
+      if (type === 'email') template = formState.emailTemplate.find((template) => template._id === id);
+      if (type === 'whatsapp') template = formState.whatsAppTemplate.find((template) => template._id === id);
+      setDisplayTemplate({ type: type, template });
+    }
+  };
+
   return (
     <div className="py-8 p-4 sm:p-8 overflow-x-hidden mb-20">
       <div className="w-full pb-8 border-b border-primary gap-y-4 gap-2 flex flex-col items-start md:flex-row lg:flex-col xl:flex-row justify-between lg:items-start md:items-end xl:items-end">
@@ -299,8 +316,8 @@ const AddReminder = () => {
         </div>
       </div>
 
-      <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
-        <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
+      <div className="w-full  justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
+        <div className="w-full  flex flex-col gap-y-2 md:flex-row gap-4 justify-evenly">
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className=" text-primary ">Follow - up</span>
           </div>
@@ -321,7 +338,6 @@ const AddReminder = () => {
                   onChange={(selected) => handleVariableChange(index, 'channels', selected)}
                   selected={item.channels}
                 />
-
                 <DropDown
                   mt="mt-5"
                   name={'schedule'}
@@ -345,26 +361,14 @@ const AddReminder = () => {
                       handleVariableChange(index, 'delay.ms', e.name);
                     }
                   }}
-                  selected={item.delay.custom === 'custom' ? 'custom' : item.delay.ms}
+                  selected={item.delay.custom === 'custom' || item.delay.value ? 'custom' : item.delay.ms}
                   SummaryChild={<h5 className="p-0 m-0 text-primary">Custom</h5>}
                 />
-                <DropDown
-                  mt="mt-5"
-                  name={'when'}
-                  label={'When to send follow - up'}
-                  SummaryChild={<h5 className="p-0 m-0 text-primary">When to send follow - up</h5>}
-                  search={true}
-                  dropdownList={[
-                    { id: 'beforeEvent', name: 'beforeEvent', showName: 'Before Event' },
-                    { id: 'afterEvent', name: 'afterEvent', showName: 'After Event' }
-                  ]}
-                  selected={item.when}
-                  commonFunction={(e) => handleVariableChange(index, 'when', e.name)}
-                />
-                {item.delay.custom === 'custom' && (
+
+                {(item.delay.custom === 'custom' || item.delay.value) && (
                   <div className="mt-5">
                     <label className="block text-sm font-medium text-primary mb-2">Custom Duration</label>
-                    <div className="flex gap-2 items-center mt-1 rounded-xl border border-primary bg-white overflow-hidden">
+                    <div className="flex gap-2 items-center mt-1 rounded-xl border border-primary bg-inherit overflow-hidden">
                       <input
                         type="number"
                         min="0"
@@ -382,7 +386,7 @@ const AddReminder = () => {
                           handleVariableChange(index, 'delay.unit', e.target.value);
                           handleCustomScheduleChange(item.delay.value, e.target.value, index);
                         }}
-                        className="w-30 border-0 focus:outline-none focus:ring-0 py-2.5 bg-white mr-2 text-dark font-medium"
+                        className="w-30 border-0 focus:outline-none focus:ring-0 py-2.5 bg-grey mr-2 text-primary  "
                       >
                         {['Days', 'Seconds', 'Hours', 'Weeks', 'Months', 'Years'].map((unit) => (
                           <option key={unit} value={unit}>
@@ -397,7 +401,12 @@ const AddReminder = () => {
                 {item.channels.length > 0 && (
                   <div>
                     {item.channels.map((channel, channelIndex) => (
-                      <div key={channelIndex} className="mt-5">
+                      <div key={channelIndex} className="mt-5 relative">
+                        {item[`${channel}Template`] && (
+                          <button type="button" className="absolute  right-2" onClick={() => handleFindTemplate(channel, item[`${channel}Template`])}>
+                            <FaEye size={20} />
+                          </button>
+                        )}
                         <DropDown
                           mt="mt-5"
                           name={`${channel}Template`}
@@ -429,6 +438,15 @@ const AddReminder = () => {
                 + Add More Follow - Up
               </button>
             </div>
+          </div>
+          <div className="w-full ">
+            {displayTemplate?.type === 'email' ? (
+              <EmailPreview emailTemplate={displayTemplate?.template} />
+            ) : displayTemplate?.type === 'whatsapp' ? (
+              <WhatsAppPreview message={displayTemplate?.template.message} placeholders={displayTemplate?.template.placeholders} />
+            ) : (
+              ''
+            )}
           </div>
         </div>
       </div>

@@ -7,8 +7,6 @@ import DropDown from '../../atoms/formFields/DropDown';
 import { getEventBySiteIdApi } from '../../apis/event-apis';
 import { showNotification } from '../../utils/showNotification';
 import { formatDateTime } from '../../utils/dateFormats';
-import ToggleComponent from '../../atoms/formFields/ToggleComponent';
-import { getTemplateBySiteApi, getWhatsAppTemplateBySiteApi } from '../../apis/templates/template-apis';
 import { addWebinarApi, updateWebinarApi } from '../../apis/webinar-apis';
 
 const AddWebinar = () => {
@@ -30,6 +28,7 @@ const AddWebinar = () => {
     link: '',
     event: '',
     site: '',
+    limit: 1,
     notification: false,
     emailTemplate: null,
     whatsAppTemplate: null
@@ -70,17 +69,17 @@ const AddWebinar = () => {
     if (webinarDetials.site) {
       (async () => {
         const [eventsResponse, emailTemplateResponse, whatsAppTemplateResponse] = await Promise.all([
-          getEventBySiteIdApi(webinarDetials.site),
-          getTemplateBySiteApi(webinarDetials.site),
-          getWhatsAppTemplateBySiteApi(webinarDetials.site)
+          getEventBySiteIdApi(webinarDetials.site)
+          // getTemplateBySiteApi(webinarDetials.site),
+          // getWhatsAppTemplateBySiteApi(webinarDetials.site)
         ]);
 
         if (eventsResponse.status) setFormState((prev) => ({ ...prev, events: eventsResponse.data.events }));
         else showNotification('warn', eventsResponse.data);
-        if (emailTemplateResponse.status) setFormState((prev) => ({ ...prev, emailTemplate: emailTemplateResponse?.data?.emailTemplates }));
-        else showNotification('error', emailTemplateResponse.data);
-        if (whatsAppTemplateResponse.status) setFormState((prev) => ({ ...prev, whatsAppTemplate: whatsAppTemplateResponse?.data?.whatsAppTemplates }));
-        else showNotification('error', whatsAppTemplateResponse.data);
+        // if (emailTemplateResponse.status) setFormState((prev) => ({ ...prev, emailTemplate: emailTemplateResponse?.data?.emailTemplates }));
+        // else showNotification('error', emailTemplateResponse.data);
+        // if (whatsAppTemplateResponse.status) setFormState((prev) => ({ ...prev, whatsAppTemplate: whatsAppTemplateResponse?.data?.whatsAppTemplates }));
+        // else showNotification('error', whatsAppTemplateResponse.data);
       })();
     }
   }, [webinarDetials.site]);
@@ -208,12 +207,23 @@ const AddWebinar = () => {
                 value={webinarDetials.link}
                 errorMessage={errors.link}
               />
+              <FormField
+                label={'Limit'}
+                type="number"
+                id="limit"
+                name="limit"
+                min={1}
+                placeholder="Limit"
+                onChange={(e) => setWebinarDetials((prev) => ({ ...prev, limit: e.target.value }))}
+                value={webinarDetials.limit}
+                errorMessage={errors.limit}
+              />
             </div>
           </div>
         </div>
       </div>
 
-      <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
+      {/* <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
         <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className=" text-primary ">Notification Preferences</span>
@@ -260,7 +270,7 @@ const AddWebinar = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
 
       {!isScrollable && (
         <div className="w-full flex justify-end items-center gap-4 pt-4 border- border-primary">

@@ -1,21 +1,18 @@
-import { IoMdAdd } from 'react-icons/io';
-import TableComponent from '../../atoms/table/Table';
 import { useState } from 'react';
-import { formatDateTime } from '../../utils/dateFormats';
-import TruncatableFieldToolTip from '../../atoms/common/TruncatableFeildToolTip';
-import TableHeader from '../../atoms/table/TableHeader';
 import TruncatableCopyFeild from '../../atoms/common/TruncatableCopyFeild';
+import { formatDateTime } from '../../utils/dateFormats';
+import TableHeader from '../../atoms/table/TableHeader';
+import TableComponent from '../../atoms/table/Table';
 
-const WebinarList = () => {
-  const [webinars, setWebinars] = useState([]);
+const WebinarLinkList = () => {
+  const [webinarLinks, setWebinarLinks] = useState([]);
 
-  const rows = webinars.map((webinar) => {
-    const { _id, name, createdAt, updatedAt } = webinar;
+  const rows = webinarLinks.map((webinarLink) => {
+    const { _id, link, createdAt, updatedAt } = webinarLink;
     return {
       id: _id,
-      exportData: webinar,
-      key: <TruncatableCopyFeild content={_id} />,
-      name: <TruncatableFieldToolTip title={'Name'} content={name} />,
+      exportData: webinarLink,
+      link: <TruncatableCopyFeild content={link} />,
       createdAt: formatDateTime(createdAt),
       updatedAt: formatDateTime(updatedAt)
     };
@@ -24,7 +21,7 @@ const WebinarList = () => {
   return (
     <div className="py-5 px-8 overflow-x-hidden mb-10">
       <div className=" w-full">
-        <TableHeader heading={'Webinars'} btn1={true} href1={'/webinar/add-webinar'} icon1={<IoMdAdd />} btnLabel1={'Add Webinar'} />
+        <TableHeader heading={'Webinar Links'} />
         <div className="flex flex-col">
           <div className="-m-1.5 overflow-x-auto">
             <div className="p-1.5 min-w-full align-middle">
@@ -32,19 +29,15 @@ const WebinarList = () => {
                 selectable={true}
                 headers={[
                   { label: 'Sr. No.', key: 'srno' },
-                  { label: 'Key', key: 'key' },
-                  { label: 'Name', key: 'name' },
+                  { label: 'Link', key: 'link' },
                   { label: 'Created Date', key: 'createdAt' },
                   { label: 'Updated Date', key: 'updatedAt' }
                 ]}
-                tableData={(data) => setWebinars(data.webinars)}
+                tableData={(data) => setWebinarLinks(data.webinarLinks)}
                 rows={rows}
-                apiUrl={'webinar'}
+                apiUrl={'webinar/links'}
                 tableCountLabel={true}
                 pagination={true}
-                actions={true}
-                edit={true}
-                editPath={'/webinar/edit-webinar'}
                 search={true}
               />
             </div>
@@ -55,4 +48,4 @@ const WebinarList = () => {
   );
 };
 
-export default WebinarList;
+export default WebinarLinkList;
