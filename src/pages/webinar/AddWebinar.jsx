@@ -101,7 +101,7 @@ const AddWebinar = () => {
       setLoading(true);
       (async () => {
         const { status, data } = await getWebinarByIdApi(id);
-        if (status) setWebinarDetials(data.webinar);
+        if (status) setWebinarDetials(data.webinarDetails);
         else showNotification('warn', data);
       })()
         .catch((error) => showNotification('error', error.message))
