@@ -11,7 +11,7 @@ import ToggleComponent from '../../atoms/formFields/ToggleComponent';
 import { getTemplateBySiteApi, getWhatsAppTemplateBySiteApi } from '../../apis/templates/template-apis';
 
 const AddWebinar = () => {
-  const navigate = useNavigate;
+  const navigate = useNavigate();
   const { id = '' } = useParams();
   const {
     auth: { allSites: availableSites },
@@ -136,7 +136,6 @@ const AddWebinar = () => {
                 placeholder="Name"
                 onChange={(e) => {
                   setWebinarDetials((prev) => ({ ...prev, name: e.target.value }));
-                  setWebinarDetials(e.target.value);
                   if (errors.name) setErrors((prev) => ({ ...prev, name: '' }));
                 }}
                 value={webinarDetials.name}
@@ -167,7 +166,6 @@ const AddWebinar = () => {
                 placeholder="Link"
                 onChange={(e) => {
                   setWebinarDetials((prev) => ({ ...prev, link: e.target.value }));
-                  setWebinarDetials(e.target.value);
                   if (errors.link) setErrors((prev) => ({ ...prev, link: '' }));
                 }}
                 value={webinarDetials.link}
