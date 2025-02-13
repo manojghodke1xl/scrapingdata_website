@@ -7,13 +7,13 @@ import TableHeader from '../../atoms/table/TableHeader';
 import TruncatableCopyFeild from '../../atoms/common/TruncatableCopyFeild';
 
 const WebinarList = () => {
-  const [templateCategory, setTemplateCategory] = useState([]);
+  const [webinars, setWebinars] = useState([]);
 
-  const rows = templateCategory.map((templateCategory) => {
-    const { _id, name, createdAt, updatedAt } = templateCategory;
+  const rows = webinars.map((webinar) => {
+    const { _id, name, createdAt, updatedAt } = webinar;
     return {
       id: _id,
-      exportData: templateCategory,
+      exportData: webinar,
       key: <TruncatableCopyFeild content={_id} />,
       name: <TruncatableFieldToolTip title={'Name'} content={name} />,
       createdAt: formatDateTime(createdAt),
@@ -37,7 +37,7 @@ const WebinarList = () => {
                   { label: 'Created Date', key: 'createdAt' },
                   { label: 'Updated Date', key: 'updatedAt' }
                 ]}
-                tableData={(data) => setTemplateCategory(data.webinars)}
+                tableData={(data) => setWebinars(data.webinars)}
                 rows={rows}
                 apiUrl={'webinar'}
                 tableCountLabel={true}

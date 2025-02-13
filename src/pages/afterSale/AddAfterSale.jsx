@@ -402,9 +402,11 @@ const AddAfterSale = () => {
                   <div>
                     {item.channels.map((channel, channelIndex) => (
                       <div key={channelIndex} className="mt-5 relative">
-                        <button type="button" className="absolute  right-2" onClick={() => handleFindTemplate(channel, item[`${channel}Template`])}>
-                          <FaEye size={20} />
-                        </button>
+                        {item[`${channel}Template`] && (
+                          <button type="button" className="absolute  right-2" onClick={() => handleFindTemplate(channel, item[`${channel}Template`])}>
+                            <FaEye size={20} />
+                          </button>
+                        )}
                         <DropDown
                           mt="mt-5"
                           name={`${channel}Template`}

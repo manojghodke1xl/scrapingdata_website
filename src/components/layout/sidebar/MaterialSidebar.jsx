@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { TbFileSearch, TbTemplate, TbUsersGroup } from 'react-icons/tb';
 import { IoSettingsOutline } from 'react-icons/io5';
 import { MdMessage } from 'react-icons/md';
+import { PiVideoConferenceLight } from 'react-icons/pi';
 import { FaBullhorn, FaChartLine, FaRegFile, FaRegImage, FaRegQuestionCircle } from 'react-icons/fa';
 import { LuLogs } from 'react-icons/lu';
 import { FiCalendar } from 'react-icons/fi';
@@ -21,7 +22,8 @@ import {
   templatePath,
   filesPath,
   afterSalesPath,
-  logsPath
+  logsPath,
+  webinarsPath
 } from './sidebarTabData';
 import ReusableAccordion from '../../../atoms/sidebar/ReusableAccordion';
 import useGlobalContext from '../../../hooks/useGlobalContext';
@@ -156,6 +158,14 @@ const MaterialSidebar = ({ handleToggleSidebar = () => {} }) => {
             icon={<MdMessage />}
             isOpen={openAccordion === 'Testimonials'}
             onToggle={() => setOpenAccordion(openAccordion === 'Testimonials' ? null : 'Testimonials')}
+            handleToggleSidebar={handleToggleSidebar}
+          />
+          <ReusableAccordion
+            title="Webinars"
+            links={webinarsPath}
+            icon={<PiVideoConferenceLight />}
+            isOpen={openAccordion === 'Webinars'}
+            onToggle={() => setOpenAccordion(openAccordion === 'Webinars' ? null : 'Webinars')}
             handleToggleSidebar={handleToggleSidebar}
           />
 
