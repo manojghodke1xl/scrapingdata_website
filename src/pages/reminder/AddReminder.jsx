@@ -365,6 +365,20 @@ const AddReminder = () => {
                   SummaryChild={<h5 className="p-0 m-0 text-primary">Custom</h5>}
                 />
 
+                <DropDown
+                  mt="mt-5"
+                  name={'when'}
+                  label={'When to send follow - up'}
+                  SummaryChild={<h5 className="p-0 m-0 text-primary">When to send follow - up</h5>}
+                  search={true}
+                  dropdownList={[
+                    { id: 'beforeEvent', name: 'beforeEvent', showName: 'Before Event' },
+                    { id: 'afterEvent', name: 'afterEvent', showName: 'After Event' }
+                  ]}
+                  selected={item.when}
+                  commonFunction={(e) => handleVariableChange(index, 'when', e.name)}
+                />
+
                 {(item.delay.custom === 'custom' || item.delay.value) && (
                   <div className="mt-5">
                     <label className="block text-sm font-medium text-primary mb-2">Custom Duration</label>
