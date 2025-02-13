@@ -9,6 +9,7 @@ import { showNotification } from '../../utils/showNotification';
 import { formatDateTime } from '../../utils/dateFormats';
 import ToggleComponent from '../../atoms/formFields/ToggleComponent';
 import { getTemplateBySiteApi, getWhatsAppTemplateBySiteApi } from '../../apis/templates/template-apis';
+import { addWebinarApi, updateWebinarApi } from '../../apis/webinar-apis';
 
 const AddWebinar = () => {
   const navigate = useNavigate();
@@ -40,8 +41,31 @@ const AddWebinar = () => {
     whatsAppTemplate: []
   });
 
-  const handleSubmit = async () => {};
+  const validate = () => {
+    const newErrors = {};
+    if (!webinarDetials.name.trim()) newErrors.name = 'Name is required';
+    if (!webinarDetials.type) newErrors.type = 'Type is required';
+    if (!webinarDetials.event) newErrors.event = 'Event is required';
+    if (!webinarDetials.site) newErrors.site = 'Site is required';
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!validate()) return;
+    setLoading(true);
+
+    try {
+      const { status, data } = await (id ? (isDuplicate ? addWebinarApi(webinarDetials) : updateWebinarApi(id, webinarDetials)) : addWebinarApi(webinarDetials));
+      if (status) {
+        showNotification('success', data.message);
+        navigate('/webinar/webinar-list');
+      } else showNotification('warn', data);
+    } catch (error) {
+      showNotification('error', error.message);
+    }
+  };
   useEffect(() => {
     if (webinarDetials.site) {
       (async () => {
@@ -189,7 +213,7 @@ const AddWebinar = () => {
                 setIsEnableState={(value) => setWebinarDetials((prev) => ({ ...prev, notification: value }))}
               />
 
-              {webinarDetials.notification && (
+              {(webinarDetials.notification || webinarDetials.emailTemplate || webinarDetials.whatsAppTemplate) && (
                 <>
                   <DropDown
                     label={'Select Email Template'}

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useReducer, useState } from 'react';
+import { useCallback, useEffect, useReducer, useRef, useState } from 'react';
 import { GlobalContext } from '../contexts/GlobalContext';
 import { getAllSitesApi } from '../../apis/site-apis';
 import { showNotification } from '../../utils/showNotification';
@@ -64,6 +64,7 @@ const authReducer = (state, action) => {
 export const GlobalProvider = ({ children }) => {
   const [auth, dispatch] = useReducer(authReducer, authState);
   const [isLoading, setLoading] = useState(false);
+  const themeFetched = useRef(false);
 
   const fetchData = useCallback(
     async (apiCall, successAction, id) => {
@@ -87,9 +88,11 @@ export const GlobalProvider = ({ children }) => {
   }, [auth.allSites.length, auth.id, fetchData]);
 
   const fetchTheme = useCallback(() => {
-    if (auth.id) fetchData(getAdminThemeApi, (data) => ({ type: 'SET_THEME', payload: data.theme }), auth.id);
+    if (auth.id && !themeFetched.current) {
+      fetchData(getAdminThemeApi, (data) => ({ type: 'SET_THEME', payload: data.theme }), auth.id);
+      themeFetched.current = true;
+    }
   }, [auth.id, fetchData]);
-
   useEffect(() => {
     if (auth.id) {
       fetchSites();
