@@ -317,7 +317,7 @@ const AddAfterSale = () => {
                   onChange={(selected) => handleVariableChange(index, 'channels', selected)}
                   selected={item.channels}
                 />
-
+                {console.log('afterSaleDetails', item.delay.custom)}
                 <DropDown
                   mt="mt-5"
                   name={'schedule'}
@@ -341,11 +341,11 @@ const AddAfterSale = () => {
                       handleVariableChange(index, 'delay.ms', e.name);
                     }
                   }}
-                  selected={item.delay.custom === 'custom' ? 'custom' : item.delay.ms}
+                  selected={item.delay.custom === 'custom' || item.delay.value ? 'custom' : item.delay.ms}
                   SummaryChild={<h5 className="p-0 m-0 text-primary">Custom</h5>}
                 />
 
-                {item.delay.custom === 'custom' && (
+                {(item.delay.custom === 'custom' || item.delay.value) && (
                   <div className="mt-5">
                     <label className="block text-sm font-medium text-primary mb-2">Custom Duration</label>
                     <div className="flex gap-2 items-center mt-1 rounded-xl border border-primary bg-white overflow-hidden">
