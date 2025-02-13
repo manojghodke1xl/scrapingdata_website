@@ -97,6 +97,19 @@ const AddWebinar = () => {
     return () => window.removeEventListener('resize', checkScrollability);
   }, [isScrollable]);
 
+  useEffect(() => {
+    if (id) {
+      setLoading(true);
+      (async () => {
+        const { status, data } = await getWebinarByIdApi(id);
+        if (status) setWebinarDetials(data.webinar);
+        else showNotification('warn', data);
+      })()
+        .catch((error) => showNotification('error', error.message))
+        .finally(() => setLoading(false));
+    }
+  }, [id, setLoading]);
+
   return (
     <div className="py-8 p-4 sm:p-8 overflow-x-hidden mb-20">
       <div className="w-full pb-8 border-b border-primary gap-y-4 gap-2 flex flex-col items-start md:flex-row lg:flex-col xl:flex-row justify-between lg:items-start md:items-end xl:items-end">
