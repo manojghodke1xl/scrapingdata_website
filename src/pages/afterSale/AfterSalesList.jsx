@@ -13,7 +13,7 @@ const AfterSalesList = () => {
     return {
       id: _id,
       exportData: afterSale,
-      afterSale: <TruncatableFieldToolTip content={refTo.name} />,
+      afterSale: <TruncatableFieldToolTip content={refTo?.name ?? ''} />,
       target: <TruncatableFieldToolTip content={target} />,
       followUps: <TruncatableFieldToolTip content={followUps.length} />,
       site: <TruncatableFieldToolTip content={`${site?.name} (${site?.host})`} />,
