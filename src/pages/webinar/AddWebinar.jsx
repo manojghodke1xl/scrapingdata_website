@@ -7,7 +7,7 @@ import DropDown from '../../atoms/formFields/DropDown';
 import { getEventBySiteIdApi } from '../../apis/event-apis';
 import { showNotification } from '../../utils/showNotification';
 import { formatDateTime } from '../../utils/dateFormats';
-import { addWebinarApi, updateWebinarApi } from '../../apis/webinar-apis';
+import { addWebinarApi, getWebinarByIdApi, updateWebinarApi } from '../../apis/webinar-apis';
 
 const AddWebinar = () => {
   const navigate = useNavigate();
