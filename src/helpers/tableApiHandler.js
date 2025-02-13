@@ -1,7 +1,7 @@
 import { showNotification } from '../utils/showNotification';
 
 export const handleDeleteConfirm = async (selectedItems, deleteApi, setLoading, setSelectionState, setRefresh, setModalState, setTableState) => {
-  if (!selectedItems.length) return showNotification('warn', 'Please select at least one item.');
+  if (selectedItems.length === 0) return showNotification('warn', 'Please select at least one item.');
   setLoading(true);
   try {
     const { status, data } = await deleteApi(selectedItems);
@@ -31,7 +31,7 @@ export const handleStatusUpdate = async (
   setModalState,
   setTableState
 ) => {
-  if (!selectedItems.length) return showNotification('warn', 'Please select at least one item.');
+  if (selectedItems.length === 0) return showNotification('warn', 'Please select at least one item.');
   setLoading(true);
   try {
     const isActive = adminStatus ? statusUpdate !== 'active' : statusUpdate === 'active';
@@ -53,7 +53,7 @@ export const handleStatusUpdate = async (
 };
 
 export const handleSitesUpdate = async (selectedItems, selectedSites, action, modifySiteApi, setLoading, setSelectionState, setRefresh, setModalState, setTableState) => {
-  if (!selectedItems.length && !selectedSites.length && !action.length) return showNotification('warn', 'Please select at least one item.');
+  if (selectedItems.length === 0 || selectedSites.length === 0) return showNotification('warn', 'Please select at least one item.');
   setLoading(true);
   try {
     const { status, data } = await modifySiteApi(selectedItems, selectedSites, action);
@@ -73,7 +73,7 @@ export const handleSitesUpdate = async (selectedItems, selectedSites, action, mo
 };
 
 export const handleDuplicateConfirm = async (selectedItems, selectedSites, duplicateApi, setLoading, setSelectionState, setRefresh, setModalState, setTableState) => {
-  if (!selectedItems.length && !selectedSites.length) return showNotification('warn', 'Please select at least one item.');
+  if (selectedItems.length === 0 || selectedSites.length === 0) return showNotification('warn', 'Please select at least one item.');
   setLoading(true);
   try {
     const { status, data } = await duplicateApi(selectedItems, selectedSites);

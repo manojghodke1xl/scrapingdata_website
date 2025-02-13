@@ -199,17 +199,20 @@ const TableComponent = ({
     setSelectionState((prev) => ({
       ...prev,
       isAllSelected: newChecked,
-      selectedItems: newChecked ? nonSuperAdminIds : []
+      selectedItems: newChecked ? nonSuperAdminIds : [],
+      status: ''
     }));
   };
 
+  console.log('selectionState', selectionState);
   const handleRowCheckboxChange = (id) => {
     setSelectionState((prev) => {
       const updatedSelected = prev.selectedItems.includes(id) ? prev.selectedItems.filter((itemId) => itemId !== id) : [...prev.selectedItems, id];
       return {
         ...prev,
         selectedItems: updatedSelected,
-        isAllSelected: updatedSelected.length === rows.length
+        isAllSelected: updatedSelected.length === rows.length,
+        status: ''
       };
     });
   };
@@ -233,8 +236,10 @@ const TableComponent = ({
       setModalState,
       setTableState
     );
+
   const handleSitesChange = (action) =>
     handleSitesUpdate(selectionState.selectedItems, selectionState.selectedSites, action, modifySiteApi, setLoading, setSelectionState, setRefresh, setModalState, setTableState);
+
   const handleDuplicate = () =>
     handleDuplicateConfirm(selectionState.selectedItems, selectionState.selectedSites, duplicateApi, setLoading, setSelectionState, setRefresh, setModalState, setTableState);
 

@@ -1,10 +1,8 @@
 import { IoCloseSharp } from 'react-icons/io5';
 import MultiSelectCheckbox from '../formFields/MultiSelectCheckBox';
 import ToggleComponent from '../formFields/ToggleComponent';
-import { useColor } from '../../contexts/contexts/ColorContext';
 
 const SiteModal = ({ isOpen, label, duplicateBtn, setSitesModelOpen, selectedSites, setSelectedSites, availableSites, onConfirm, siteToggle }) => {
- 
   if (!isOpen) return null;
   const onCancel = () => {
     if (duplicateBtn) {
@@ -41,7 +39,7 @@ const SiteModal = ({ isOpen, label, duplicateBtn, setSitesModelOpen, selectedSit
           </div>
 
           <div className="w-full flex flex-col justify-center items-center ">
-            <div className="border-b border-primary w-full">
+            <div className="border-b border-primary w-full flex flex-col gap-y-5">
               <MultiSelectCheckbox
                 options={availableSites}
                 label="Select Sites"

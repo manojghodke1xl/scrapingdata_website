@@ -30,6 +30,7 @@ const TableFilterActions = ({
       {modifyStatus && selectionState.selectedItems.length > 0 && (
         <>
           <StatusFilter statuses={statuses} setStatusFilter={(e) => setSelectionState((prev) => ({ ...prev, status: e }))} />
+          {console.log('selectionState.status', selectionState.status)}
           {selectionState.status !== '' && selectionState.selectedItems.length > 0 && (
             <button
               onClick={() => handleStatusChange(selectionState.status)}
