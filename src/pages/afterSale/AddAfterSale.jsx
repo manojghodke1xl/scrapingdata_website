@@ -39,6 +39,7 @@ const AddAfterSale = () => {
       }
     ]
   });
+
   const [formState, setFormState] = useState({
     list: [],
     emailTemplate: [],
@@ -50,11 +51,23 @@ const AddAfterSale = () => {
     afterSaleId: ''
   });
 
+  const [displayTemplate, setDisplayTemplate] = useState(null);
+
+  console.log('displayTemplate', displayTemplate);
+
+  const handleFindTemplate = (type, id) => {
+    let template;
+    if (type === 'email') template = formState.emailTemplate.find((template) => template._id === id);
+    if (type === 'whatsapp') template = formState.whatsAppTemplate.find((template) => template._id === id);
+    setDisplayTemplate(template);
+  };
+
   useEffect(() => {
     const fetchData = async (apiFunction, site, key) => {
       setLoading(true);
       try {
         const { status, data } = await apiFunction(site);
+
         if (status) setFormState((prev) => ({ ...prev, list: data[key] }));
         else showNotification('error', data);
       } catch (error) {
@@ -72,6 +85,7 @@ const AddAfterSale = () => {
     if (afterSaleDetails.site && afterSaleDetails.refTo) {
       (async () => {
         const { status, data } = await getAfterSaleTemplateApi({ site: afterSaleDetails.site, event: afterSaleDetails.refTo });
+
         if (status) setFormState((prev) => ({ ...prev, emailTemplate: data.emailTemplates, whatsAppTemplate: data.waTemplates }));
         else showNotification('error', data);
       })();
@@ -295,7 +309,7 @@ const AddAfterSale = () => {
         </div>
       </div>
 
-      <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
+      <div className="w-full  justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
         <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className=" text-primary ">Follow - up</span>
@@ -381,7 +395,10 @@ const AddAfterSale = () => {
                 {item.channels.length > 0 && (
                   <div>
                     {item.channels.map((channel, channelIndex) => (
-                      <div key={channelIndex} className="mt-5">
+                      <div key={channelIndex} className="mt-5 relative">
+                        <button type="button" className="absolute -top-1.5 right-0" onClick={() => handleFindTemplate(channel, item[`${channel}Template`])}>
+                          Show Preview
+                        </button>
                         <DropDown
                           mt="mt-5"
                           name={`${channel}Template`}

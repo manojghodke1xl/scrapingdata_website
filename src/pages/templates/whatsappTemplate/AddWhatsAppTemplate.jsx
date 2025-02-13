@@ -14,6 +14,7 @@ import { getFilesBySiteIdApi } from '../../../apis/file-apis';
 import { uploadMultipleCustomFiles } from '../../../utils/fileUploads';
 import { getAllTemplateCategoriesApi } from '../../../apis/templates/template-category';
 import TextareaComponent from '../../../atoms/formFields/TextareaComponent';
+import WhatsAppPreview from '../../../atoms/templatePreview/WhatsAppPreview';
 
 const AddWhatsAppTemplate = () => {
   const navigate = useNavigate();
@@ -49,12 +50,14 @@ const AddWhatsAppTemplate = () => {
     const matches = [...whatsAppTemplate.message.matchAll(/\{(\w+)\}/g)].map((match) => match[1]);
     setPlaceholders([...new Set(matches)]);
   }, [whatsAppTemplate.message]);
+  console.log('whatsAppTemplate', whatsAppTemplate);
 
   useEffect(() => {
     if (id) {
       setLoading(true);
       (async () => {
         const { status, data } = await getWhatsAppTemplateByIdApi(id);
+
         if (status) {
           const { site, ...rest } = data.whatsappTemplate;
           setWhatsAppTemplate((prev) => ({ ...prev, ...rest, site: site._id }));
@@ -143,6 +146,8 @@ const AddWhatsAppTemplate = () => {
   }, [isScrollable]);
 
   const variables = templateCategories.filter((item) => item._id === whatsAppTemplate.category)[0]?.variableMap;
+
+  useEffect(() => {}, []);
 
   return (
     <div className="py-8 p-4 sm:p-8 overflow-x-hidden mb-20">
@@ -295,13 +300,14 @@ const AddWhatsAppTemplate = () => {
         </div>
       </div>
 
-      <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
+
+      <div className="w-full  justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
         <div className="w-full flex flex-col gap-y-2 md:flex-row justify-evenly">
           <div className="sm:w-1/4 w-full flex flex-col">
             <span className="text-primary">Message Content</span>
           </div>
-          <div className="w-full">
-            <div className="w-full sm:w-1/2">
+          <div className="w-1/2">
+            <div className="w-full ">
               <TextareaComponent
                 divClassName="mt-5"
                 label="Message give variables in {name} format"
@@ -343,6 +349,9 @@ const AddWhatsAppTemplate = () => {
                 </div>
               )}
             </div>
+          </div>
+          <div className="w-1/2 sticky top-20">
+            <WhatsAppPreview message={whatsAppTemplate.message} placeholders={whatsAppTemplate.placeholders} />
           </div>
         </div>
       </div>

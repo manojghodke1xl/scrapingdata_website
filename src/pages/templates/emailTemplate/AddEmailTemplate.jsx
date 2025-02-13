@@ -14,6 +14,7 @@ import { getFilesBySiteIdApi } from '../../../apis/file-apis';
 import { uploadMultipleCustomFiles } from '../../../utils/fileUploads';
 import { getAllTemplateCategoriesApi } from '../../../apis/templates/template-category';
 import TextareaComponent from '../../../atoms/formFields/TextareaComponent';
+import EmailPreview from '../../../atoms/templatePreview/EmailPreview';
 
 const AddEmailTemplate = () => {
   const navigate = useNavigate();
@@ -39,6 +40,8 @@ const AddEmailTemplate = () => {
   const [files, setFiles] = useState([]);
   const [attachments, setAttachments] = useState([]);
   const [templateCategories, setTemplateCategories] = useState([]);
+
+  const [emailContent, setEmailContent] = useState();
 
   useEffect(() => {
     if (id) {
@@ -213,8 +216,8 @@ const AddEmailTemplate = () => {
           <div className="sm:w-1/4 w-full flex flex-col">
             <span className="text-primary">Email Content</span>
           </div>
-          <div className="w-full">
-            <div className="w-full sm:w-1/2">
+          <div className="w-1/2">
+            <div className="w-full ">
               <FormField
                 label="Subject"
                 name="subject"
@@ -229,7 +232,7 @@ const AddEmailTemplate = () => {
               />
 
               <TextareaComponent
-                rows={35}
+                rows={15}
                 divClassName="mt-5"
                 label="Body"
                 placeholder="Body"
@@ -237,10 +240,16 @@ const AddEmailTemplate = () => {
                 name="mailBody"
                 value={emailTemplate.body}
                 onChange={(e) => setEmailTemplate((prev) => ({ ...prev, body: e.target.value }))}
+                // value={emailContent}
+                // onChange={(e) => setEmailContent(e.target.value)}
                 errorMessage={errors.body}
               />
             </div>
           </div>
+          <div className="w-1/2">
+            <EmailPreview emailTemplate={emailTemplate} />
+          </div>
+       
         </div>
       </div>
 
