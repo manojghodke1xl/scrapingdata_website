@@ -4,7 +4,7 @@ import { TbFileSearch, TbTemplate, TbUsersGroup } from 'react-icons/tb';
 import { IoSettingsOutline } from 'react-icons/io5';
 import { MdMessage } from 'react-icons/md';
 import { PiVideoConferenceLight } from 'react-icons/pi';
-import { FaBullhorn, FaChartLine, FaRegFile, FaRegImage, FaRegQuestionCircle } from 'react-icons/fa';
+import { FaBullhorn, FaChartLine, FaLink, FaRegFile, FaRegImage, FaRegQuestionCircle } from 'react-icons/fa';
 import { LuLogs } from 'react-icons/lu';
 import { FiCalendar } from 'react-icons/fi';
 import {
@@ -23,7 +23,8 @@ import {
   filesPath,
   afterSalesPath,
   logsPath,
-  webinarsPath
+  webinarsPath,
+  utilitiesPath
 } from './sidebarTabData';
 import ReusableAccordion from '../../../atoms/sidebar/ReusableAccordion';
 import useGlobalContext from '../../../hooks/useGlobalContext';
@@ -175,6 +176,14 @@ const MaterialSidebar = ({ handleToggleSidebar = () => {} }) => {
             icon={<TbTemplate />}
             isOpen={openAccordion === 'Templates'}
             onToggle={() => setOpenAccordion(openAccordion === 'Templates' ? null : 'Templates')}
+            handleToggleSidebar={handleToggleSidebar}
+          />
+          <ReusableAccordion
+            title="Utilities"
+            links={utilitiesPath}
+            icon={<FaLink />}
+            isOpen={openAccordion === 'Utilities"'}
+            onToggle={() => setOpenAccordion(openAccordion === 'Utilities"' ? null : 'Utilities"')}
             handleToggleSidebar={handleToggleSidebar}
           />
 
