@@ -348,7 +348,7 @@ const AddAfterSale = () => {
                 {(item.delay.custom === 'custom' || item.delay.value) && (
                   <div className="mt-5">
                     <label className="block text-sm font-medium text-primary mb-2">Custom Duration</label>
-                    <div className="flex gap-2 items-center mt-1 rounded-xl border border-primary bg-white overflow-hidden">
+                    <div className="flex gap-2 items-center mt-1 rounded-xl border border-primary bg-inherit overflow-hidden">
                       <input
                         type="number"
                         min="0"
@@ -366,7 +366,7 @@ const AddAfterSale = () => {
                           handleVariableChange(index, 'delay.unit', e.target.value);
                           handleCustomScheduleChange(item.delay.value, e.target.value, index);
                         }}
-                        className="w-30 border-0 focus:outline-none focus:ring-0 py-2.5 bg-white mr-2 text-dark font-medium"
+                        className="w-30 border-0 focus:outline-none focus:ring-0 py-2.5 bg-grey mr-2 text-primary  "
                       >
                         {['Days', 'Seconds', 'Hours', 'Weeks', 'Months', 'Years'].map((unit) => (
                           <option key={unit} value={unit}>
