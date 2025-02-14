@@ -141,7 +141,15 @@ const AddWebinar = () => {
     setWebinarDetials((prev) => {
       const updatedLinkDetails = [...prev.links];
       updatedLinkDetails[index] = { ...updatedLinkDetails[index], [field]: value };
-      return { ...prev, links: updatedLinkDetails };
+
+      if (value.trim() !== '') {
+        const isDuplicate = updatedLinkDetails.some((detail, i) => i !== index && detail[field] === value);
+        if (isDuplicate) {
+          showNotification('warn', `${field} value already exists in another entry.`);
+        }
+      }
+
+      return { ...prev, linkDetails: updatedLinkDetails };
     });
   };
 
