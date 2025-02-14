@@ -306,7 +306,7 @@ const AddWebinar = () => {
                       { id: 'zoom', showName: 'Zoom', name: 'zoom' },
                       { id: 'youtubeLive', showName: 'Youtube Live', name: 'youtubeLive' }
                     ]}
-                    selected={webinarDetials.links[index].type}
+                    selected={item.type}
                     search={true}
                     // commonFunction={(e) => {
                     //   setWebinarDetials((prev) => ({ ...prev, type: e.name }));
@@ -326,7 +326,7 @@ const AddWebinar = () => {
                     //   if (errors.link) setErrors((prev) => ({ ...prev, link: '' }));
                     // }}
                     onChange={(e) => handleInputChange(index, 'link', e.target.value)}
-                    value={webinarDetials.link}
+                    value={item.link}
                     // errorMessage={errors.link}
                   />
                   <FormField
@@ -338,7 +338,7 @@ const AddWebinar = () => {
                     placeholder="Limit"
                     // onChange={(e) => setWebinarDetials((prev) => ({ ...prev, limit: e.target.value }))}
                     onChange={(e) => handleInputChange(index, 'limit', e.target.value)}
-                    value={webinarDetials.limit}
+                    value={item.limit}
                     // errorMessage={errors.limit}
                   />
                 </div>
