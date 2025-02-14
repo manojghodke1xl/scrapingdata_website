@@ -122,7 +122,7 @@ const AddWebinar = () => {
   };
 
   const removeVariable = (index) => {
-    if (webinarDetials.length === 1) return;
+    if (webinarDetials.linkDetails.length === 1) return;
     setWebinarDetials((prev) => ({
       ...prev,
       links: prev.links.filter((_, i) => i !== index)
