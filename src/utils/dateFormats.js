@@ -5,23 +5,28 @@ export const formatDate = (date) => {
 };
 
 export const formatDateTime = (date, tz = null) => {
-  const options = {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-    hour: 'numeric',
-    minute: 'numeric',
-    second: 'numeric',
-    hour12: true
-  };
+  let d = new Date(date);
 
   if (tz?.value) {
-    const offset = parseInt(tz.value, 10);
-    const timeZone = `Etc/GMT${offset > 0 ? `-${offset}` : `+${Math.abs(offset)}`}`;
-    options.timeZone = timeZone;
+    const offset = parseFloat(tz.value); // Convert offset to float (handles 5.5, -3.75, etc.)
+    const utcTime = d.getTime() + d.getTimezoneOffset() * 60 * 1000; // Convert to UTC
+    const adjustedTime = utcTime + offset * 60 * 60 * 1000; // Apply custom offset
+
+    d = new Date(adjustedTime);
   }
 
-  return new Date(date).toLocaleString('en-GB', options).replace(',', '').toUpperCase();
+  return d
+    .toLocaleString('en-GB', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+      second: 'numeric',
+      hour12: true
+    })
+    .replace(',', '')
+    .toUpperCase();
 };
 
 export const adjustDateForTimezone = (date, tz) => {
