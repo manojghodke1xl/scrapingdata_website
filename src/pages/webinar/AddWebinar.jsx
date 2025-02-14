@@ -160,8 +160,6 @@ const AddWebinar = () => {
     });
   };
 
-  console.log('webinarDetials', webinarDetials);
-
   const handleTimeConversion = (value, unit) => {
     const msConversions = {
       Seconds: 1000,
@@ -185,7 +183,9 @@ const AddWebinar = () => {
   const addVariable = () => {
     setWebinarDetials((prev) => ({
       ...prev,
-      followUps: [...prev.followUps, { channels: [], delay: { unit: 'Days', value: '', custom: '', ms: '' } }]
+      followUps: prev.followUps
+        ? [...prev.followUps, { channels: [], delay: { unit: 'Days', value: '', custom: '', ms: '' } }]
+        : [{ channels: [], delay: { unit: 'Days', value: '', custom: '', ms: '' } }]
     }));
   };
 
@@ -306,7 +306,7 @@ const AddWebinar = () => {
                       { id: 'zoom', showName: 'Zoom', name: 'zoom' },
                       { id: 'youtubeLive', showName: 'Youtube Live', name: 'youtubeLive' }
                     ]}
-                    selected={webinarDetials.links[index].type}
+                    selected={item.type}
                     search={true}
                     // commonFunction={(e) => {
                     //   setWebinarDetials((prev) => ({ ...prev, type: e.name }));
@@ -326,7 +326,7 @@ const AddWebinar = () => {
                     //   if (errors.link) setErrors((prev) => ({ ...prev, link: '' }));
                     // }}
                     onChange={(e) => handleInputChange(index, 'link', e.target.value)}
-                    value={webinarDetials.link}
+                    value={item.link}
                     // errorMessage={errors.link}
                   />
                   <FormField
@@ -338,7 +338,7 @@ const AddWebinar = () => {
                     placeholder="Limit"
                     // onChange={(e) => setWebinarDetials((prev) => ({ ...prev, limit: e.target.value }))}
                     onChange={(e) => handleInputChange(index, 'limit', e.target.value)}
-                    value={webinarDetials.limit}
+                    value={item.limit}
                     // errorMessage={errors.limit}
                   />
                 </div>
@@ -360,7 +360,7 @@ const AddWebinar = () => {
           </div>
           <div className="w-full">
             <div className="flex flex-col gap-y-5">
-              {webinarDetials.followUps.map((item, index) => (
+              {webinarDetials.followUps?.map((item, index) => (
                 <div key={index} className="flex flex-col border border-primary bg-grey p-4 rounded-xl mt-5">
                   <div className="flex justify-end items-center">
                     <IoCloseSharp className="cursor-pointer" onClick={() => removeVariable(index)} />
