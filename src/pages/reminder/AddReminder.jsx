@@ -15,6 +15,7 @@ import { formatDateTime } from '../../utils/dateFormats';
 import { FaEye } from 'react-icons/fa';
 import EmailPreview from '../../atoms/templatePreview/EmailPreview';
 import WhatsAppPreview from '../../atoms/templatePreview/WhatsAppPreview';
+import { MdEdit } from 'react-icons/md';
 
 const AddReminder = () => {
   const { id = '' } = useParams();
@@ -217,6 +218,11 @@ const AddReminder = () => {
     }
   };
 
+  const handleRedirectEdit = (channel, index) => {
+    const template = formState.emailTemplate.find((template) => template._id === reminderDetails.reminders[index].emailTemplate);
+    if (template) navigate(`/templates/edit-email-template/${template._id}`);
+  };
+
   return (
     <div className="py-8 p-4 sm:p-8 overflow-x-hidden mb-20">
       <div className="w-full pb-8 border-b border-primary gap-y-4 gap-2 flex flex-col items-start md:flex-row lg:flex-col xl:flex-row justify-between lg:items-start md:items-end xl:items-end">
@@ -417,9 +423,14 @@ const AddReminder = () => {
                     {item.channels.map((channel, channelIndex) => (
                       <div key={channelIndex} className="mt-5 relative">
                         {item[`${channel}Template`] && (
-                          <button type="button" className="absolute  right-2" onClick={() => handleFindTemplate(channel, item[`${channel}Template`])}>
-                            <FaEye size={20} />
-                          </button>
+                          <div className="absolute flex items-center justify-center gap-3 right-2">
+                            <button onClick={() => handleRedirectEdit(channel, index)} className="hover:bg-hover" type="button">
+                              {channel === 'email' && <MdEdit size={20} />}
+                            </button>
+                            <button type="button" onClick={() => handleFindTemplate(channel, item[`${channel}Template`])}>
+                              <FaEye size={20} />
+                            </button>
+                          </div>
                         )}
                         <DropDown
                           mt="mt-5"
