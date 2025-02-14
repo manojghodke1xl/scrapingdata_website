@@ -9,9 +9,10 @@ import { IoMdRefresh } from 'react-icons/io';
 const WhatsAppTemplateList = () => {
   const [whatsAppTemplates, setWhatsAppTemplates] = useState([]);
   const [fetchRefresh, setFetchRefresh] = useState(false);
-  const whatsappRefresh = (id) => {
+  const whatsappRefresh = async (id) => {
     console.log('id is', id);
-    getWhatsAppTemplateRefreshApi(id);
+    await getWhatsAppTemplateRefreshApi(id);
+    setFetchRefresh((r) => !r);
   };
   const rows = whatsAppTemplates.map((whatsAppTemplate) => {
     const { _id, name, site, whatsAppTemplateName, message, status, createdAt, updatedAt } = whatsAppTemplate;
@@ -36,7 +37,6 @@ const WhatsAppTemplateList = () => {
             <span
               onClick={() => {
                 whatsappRefresh(_id);
-                setFetchRefresh((r) => !r);
               }}
               className=""
             >
