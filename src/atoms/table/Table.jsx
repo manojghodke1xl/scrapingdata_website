@@ -55,7 +55,7 @@ const TableComponent = ({
   modifySite,
   modifySiteApi,
   eventId: packageEvent,
-  whatsappRefresh,
+
   fetchRefresh
 }) => {
   const {
@@ -337,10 +337,6 @@ const TableComponent = ({
 
         <div className="overflow-x-auto custom-scrollbar">
           <TableView
-            whatsappRefresh={(e) => {
-              whatsappRefresh(e);
-              setRefresh((r) => !r);
-            }}
             selectable={selectable}
             selectionState={selectionState}
             setSelectionState={setSelectionState}

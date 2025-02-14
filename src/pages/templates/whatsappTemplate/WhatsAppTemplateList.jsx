@@ -73,7 +73,6 @@ const WhatsAppTemplateList = () => {
                   { label: 'Created Date', key: 'createdAt' },
                   { label: 'Updated Date', key: 'updatedAt' }
                 ]}
-                whatsappRefresh={whatsappRefresh}
                 tableData={(data) => setWhatsAppTemplates(data.whatsappTemplates)}
                 rows={rows}
                 apiUrl={'template/whatsapp'}
