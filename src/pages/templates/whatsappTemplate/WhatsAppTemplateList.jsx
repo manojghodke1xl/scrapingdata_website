@@ -45,7 +45,14 @@ const WhatsAppTemplateList = () => {
           )}
         </div>
       ) : (
-        <span className="text-secondary font-normal items-center">--</span>
+        <span
+          onClick={() => {
+            whatsappRefresh(_id);
+          }}
+          className=""
+        >
+          <IoMdRefresh />
+        </span>
       ),
 
       createdAt: formatDateTime(createdAt),
