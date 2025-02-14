@@ -32,7 +32,7 @@ const WhatsAppTemplateList = () => {
         >
           <span className={`min-w-[8px] min-h-[8px] rounded-full ${status === 'APPROVED' ? 'bg-green' : 'bg-pending'}`}></span>
           <span>{status}</span>
-          {(status !== 'APPROVED' || status !== 'REJECTED') && (
+          {status !== 'APPROVED' && status !== 'REJECTED' && (
             <span
               onClick={() => {
                 whatsappRefresh(_id);
