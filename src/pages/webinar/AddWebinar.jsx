@@ -160,8 +160,6 @@ const AddWebinar = () => {
     });
   };
 
-  console.log('webinarDetials', webinarDetials);
-
   const handleTimeConversion = (value, unit) => {
     const msConversions = {
       Seconds: 1000,
@@ -185,7 +183,9 @@ const AddWebinar = () => {
   const addVariable = () => {
     setWebinarDetials((prev) => ({
       ...prev,
-      followUps: [...prev.followUps, { channels: [], delay: { unit: 'Days', value: '', custom: '', ms: '' } }]
+      followUps: prev.followUps
+        ? [...prev.followUps, { channels: [], delay: { unit: 'Days', value: '', custom: '', ms: '' } }]
+        : [{ channels: [], delay: { unit: 'Days', value: '', custom: '', ms: '' } }]
     }));
   };
 
