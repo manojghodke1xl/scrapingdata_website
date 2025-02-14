@@ -360,7 +360,7 @@ const AddWebinar = () => {
           </div>
           <div className="w-full">
             <div className="flex flex-col gap-y-5">
-              {webinarDetials.followUps.map((item, index) => (
+              {webinarDetials.followUps?.map((item, index) => (
                 <div key={index} className="flex flex-col border border-primary bg-grey p-4 rounded-xl mt-5">
                   <div className="flex justify-end items-center">
                     <IoCloseSharp className="cursor-pointer" onClick={() => removeVariable(index)} />
