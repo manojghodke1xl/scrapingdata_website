@@ -36,7 +36,8 @@ const TableView = ({
   handleDragEnd,
   isDragging,
   sortConfig,
-  onSort
+  onSort,
+  whatsappRefresh
 }) => {
   const { isDarkMode } = useColor();
   return (
@@ -139,6 +140,7 @@ const TableView = ({
                       sendCertificate={sendCertificate}
                       sendCertificateUnique={sendCertificateUnique}
                       approvalApi={approvalApi}
+                      whatsappRefresh={whatsappRefresh}
                     />
                   )}
                 </tr>

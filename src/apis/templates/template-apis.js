@@ -67,6 +67,11 @@ export const getPhoneIdsApi = async (siteId) => {
 export const getWhatsAppTemplateApprovalApi = async (id) => {
   return await getMethodCall(`${import.meta.env.VITE_API_URL}/template/whatsapp/upload/${id}`);
 };
+
 export const getWhatsAppTemplateBySiteApi = async (id) => {
   return await getMethodCall(`${import.meta.env.VITE_API_URL}/template/whatsapp/site/${id}`);
+};
+
+export const getWhatsAppTemplateRefreshApi = async (id) => {
+  return await getMethodCall(`${import.meta.env.VITE_API_URL}/template/whatsapp/refresh?${id ? `id=${id}` : ''}`);
 };

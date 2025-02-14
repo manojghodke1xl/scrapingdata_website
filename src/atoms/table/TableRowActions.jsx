@@ -1,5 +1,6 @@
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { FiCopy } from 'react-icons/fi';
+import { IoMdRefresh } from 'react-icons/io';
 import { MdEdit, MdOutlineApps, MdRemoveRedEye, MdOutlineInventory2, MdSend, MdDeleteForever } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 
@@ -21,7 +22,8 @@ const TableRowActions = ({
   sendForApproval,
   sendCertificate,
   sendCertificateUnique,
-  approvalApi
+  approvalApi,
+  whatsappRefresh
 }) => {
   const navigate = useNavigate();
 
@@ -36,7 +38,8 @@ const TableRowActions = ({
       { type: 'managePackage', show: managePackage },
       { type: 'sendForApproval', show: sendForApproval && !row.approvedTemplate },
       { type: 'sendCertificate', show: sendCertificate && row.certificate },
-      { type: 'sendCertificateUnique', show: sendCertificateUnique && row.certificate }
+      { type: 'sendCertificateUnique', show: sendCertificateUnique && row.certificate },
+      { type: 'whatsappRefresh', show: whatsappRefresh }
     ].filter((action) => action.show);
   };
 
@@ -68,6 +71,7 @@ const TableRowActions = ({
                   if (action.type === 'sendForApproval') await approvalApi(row.id);
                   if (action.type === 'sendCertificate') await approvalApi(row.bookingId, false);
                   if (action.type === 'sendCertificateUnique') await approvalApi(row.bookingId, true);
+                  if (action.type === 'whatsappRefresh') await whatsappRefresh(row.id);
                 }}
               >
                 {action.type === 'edit' && <MdEdit size={20} />}
@@ -76,6 +80,7 @@ const TableRowActions = ({
                 {action.type === 'copy' && <FiCopy size={20} />}
                 {action.type === 'delete' && <MdDeleteForever size={20} />}
                 {action.type === 'managePackage' && <MdOutlineInventory2 size={20} />}
+                {action.type === 'whatsappRefresh' && <IoMdRefresh size={20} />}
                 {(action.type === 'sendForApproval' || action.type === 'sendCertificate' || action.type === 'sendCertificateUnique') && <MdSend size={20} />}
 
                 {action.type === 'managePackage'
@@ -86,6 +91,8 @@ const TableRowActions = ({
                   ? 'Send All Certificates'
                   : action.type === 'sendCertificateUnique'
                   ? 'Send Unique Certificates'
+                  : action?.type == 'whatsappRefresh'
+                  ? 'WhatsApp Refresh'
                   : action.type.charAt(0).toUpperCase() + action.type.slice(1)}
               </button>
             ))}

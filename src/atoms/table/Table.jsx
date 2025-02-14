@@ -54,7 +54,9 @@ const TableComponent = ({
   modifyStatusApi,
   modifySite,
   modifySiteApi,
-  eventId: packageEvent
+  eventId: packageEvent,
+  whatsappRefresh,
+  fetchRefresh
 }) => {
   const {
     auth: { allSites },
@@ -167,7 +169,9 @@ const TableComponent = ({
   }, [filterState, showFilter]);
 
   const totalPages = useMemo(() => Math.max(1, Math.ceil(tableState.totalCount / tableState.itemsPerPage)), [tableState.totalCount, tableState.itemsPerPage]);
-
+  useEffect(() => {
+    setRefresh((r) => !r);
+  }, [fetchRefresh]);
   const [err, data, setRefresh] = useSetTimeout(
     apiUrl,
     tableState.currentPage - 1,
@@ -333,6 +337,10 @@ const TableComponent = ({
 
         <div className="overflow-x-auto custom-scrollbar">
           <TableView
+            whatsappRefresh={(e) => {
+              whatsappRefresh(e);
+              setRefresh((r) => !r);
+            }}
             selectable={selectable}
             selectionState={selectionState}
             setSelectionState={setSelectionState}
