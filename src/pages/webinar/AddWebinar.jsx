@@ -27,7 +27,7 @@ const AddWebinar = () => {
     name: '',
     type: '',
     event: '',
-    linkDetails: [
+    links: [
       {
         link: '',
         site: '',
@@ -117,7 +117,7 @@ const AddWebinar = () => {
   const handleAddLink = () => {
     setWebinarDetials((prev) => ({
       ...prev,
-      linkDetails: [...prev.linkDetails, { link: '', site: '', limit: 1 }]
+      links: [...prev.links, { link: '', site: '', limit: 1 }]
     }));
   };
 
@@ -125,27 +125,27 @@ const AddWebinar = () => {
     if (webinarDetials.length === 1) return;
     setWebinarDetials((prev) => ({
       ...prev,
-      linkDetails: prev.linkDetails.filter((_, i) => i !== index)
+      links: prev.links.filter((_, i) => i !== index)
     }));
   };
 
   const handleDropdownChange = (index, selected) => {
-  setWebinarDetials((prev) => {
-    const updatedLinkDetails = [...prev.linkDetails];
-    updatedLinkDetails[index] = { ...updatedLinkDetails[index], type: selected.name };
-    return { ...prev, linkDetails: updatedLinkDetails };
-  });
+    setWebinarDetials((prev) => {
+      const updatedLinkDetails = [...prev.links];
+      updatedLinkDetails[index] = { ...updatedLinkDetails[index], type: selected.name };
+      return { ...prev, links: updatedLinkDetails };
+    });
   };
 
   const handleInputChange = (index, field, value) => {
     setWebinarDetials((prev) => {
-      const updatedLinkDetails = [...prev.linkDetails];
+      const updatedLinkDetails = [...prev.links];
       updatedLinkDetails[index] = { ...updatedLinkDetails[index], [field]: value };
-      return { ...prev, linkDetails: updatedLinkDetails };
+      return { ...prev, links: updatedLinkDetails };
     });
   };
 
-  console.log('webinarDetials', webinarDetials);
+  console.log('webinarDetials', JSON.stringify(webinarDetials, null, 2));
 
   return (
     <div className="py-8 p-4 sm:p-8 overflow-x-hidden mb-20">
@@ -215,10 +215,10 @@ const AddWebinar = () => {
           </div>
           <div className="w-full">
             <div className="flex flex-col gap-y-5">
-              {webinarDetials.linkDetails.map((item, index) => (
+              {webinarDetials.links?.map((item, index) => (
                 <div key={index} className="flex flex-col border border-primary bg-grey p-4 rounded-xl ">
                   <div className="flex justify-end items-center">
-                    {webinarDetials.linkDetails.length > 1 && <IoCloseSharp className="cursor-pointer" onClick={() => removeVariable(index)} />}
+                    {webinarDetials.links.length > 1 && <IoCloseSharp className="cursor-pointer" onClick={() => removeVariable(index)} />}
                   </div>
                   <DropDown
                     name="type"
@@ -228,7 +228,7 @@ const AddWebinar = () => {
                       { id: 'zoom', showName: 'Zoom', name: 'zoom' },
                       { id: 'youtubeLive', showName: 'Youtube Live', name: 'youtubeLive' }
                     ]}
-                    selected={webinarDetials.linkDetails[index].type}
+                    selected={item.type}
                     search={true}
                     // commonFunction={(e) => {
                     //   setWebinarDetials((prev) => ({ ...prev, type: e.name }));
@@ -248,7 +248,7 @@ const AddWebinar = () => {
                     //   if (errors.link) setErrors((prev) => ({ ...prev, link: '' }));
                     // }}
                     onChange={(e) => handleInputChange(index, 'link', e.target.value)}
-                    value={webinarDetials.link}
+                    value={item.link}
                     // errorMessage={errors.link}
                   />
                   <FormField
@@ -260,7 +260,7 @@ const AddWebinar = () => {
                     placeholder="Limit"
                     // onChange={(e) => setWebinarDetials((prev) => ({ ...prev, limit: e.target.value }))}
                     onChange={(e) => handleInputChange(index, 'limit', e.target.value)}
-                    value={webinarDetials.limit}
+                    value={item.limit}
                     // errorMessage={errors.limit}
                   />
                 </div>
