@@ -46,7 +46,7 @@ export const ColorProvider = ({ children }) => {
     document.documentElement.style.setProperty('--text-secondary', darkMode ? '#d0d5dd' : '#344054');
     document.documentElement.style.setProperty('--bg-secondary', darkMode ? '#1e1e1e' : '#f8f9fa');
     document.documentElement.style.setProperty('--border-primary', darkMode ? '#1D2939' : '#D0D5DD');
-    document.documentElement.style.setProperty('--bg-grey', darkMode ? '#0e131a' : '#F9FAFB');
+    document.documentElement.style.setProperty('--bg-grey', darkMode ? '#101318' : '#f3f4f6');
   };
 
   useEffect(() => {

@@ -439,11 +439,16 @@ const AddAfterSale = () => {
               </button>
             </div>
           </div>
+          {/* Template Preview */}
           <div className="w-full ">
             {displayTemplate?.type === 'email' ? (
-              <EmailPreview emailTemplate={displayTemplate?.template} />
+              <EmailPreview emailTemplate={displayTemplate?.template} handleClosePreview={() => setDisplayTemplate(null)} />
             ) : displayTemplate?.type === 'whatsapp' ? (
-              <WhatsAppPreview message={displayTemplate?.template.message} placeholders={displayTemplate?.template.placeholders} />
+              <WhatsAppPreview
+                message={displayTemplate?.template.message}
+                placeholders={displayTemplate?.template.placeholders}
+                handleClosePreview={() => setDisplayTemplate(null)}
+              />
             ) : (
               ''
             )}

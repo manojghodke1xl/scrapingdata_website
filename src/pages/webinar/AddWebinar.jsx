@@ -8,6 +8,7 @@ import { getEventBySiteIdApi } from '../../apis/event-apis';
 import { showNotification } from '../../utils/showNotification';
 import { formatDateTime } from '../../utils/dateFormats';
 import { addWebinarApi, getWebinarByIdApi, updateWebinarApi } from '../../apis/webinar-apis';
+import { IoCloseSharp } from 'react-icons/io5';
 
 const AddWebinar = () => {
   const navigate = useNavigate();
@@ -25,10 +26,14 @@ const AddWebinar = () => {
   const [webinarDetials, setWebinarDetials] = useState({
     name: '',
     type: '',
-    link: '',
     event: '',
-    site: '',
-    limit: 1,
+    linkDetails: [
+      {
+        link: '',
+        site: '',
+        limit: 1
+      }
+    ],
     notification: false,
     emailTemplate: null,
     whatsAppTemplate: null
@@ -109,6 +114,39 @@ const AddWebinar = () => {
     }
   }, [id, setLoading]);
 
+  const handleAddLink = () => {
+    setWebinarDetials((prev) => ({
+      ...prev,
+      linkDetails: [...prev.linkDetails, { link: '', site: '', limit: 1 }]
+    }));
+  };
+
+  const removeVariable = (index) => {
+    if (webinarDetials.length === 1) return;
+    setWebinarDetials((prev) => ({
+      ...prev,
+      linkDetails: prev.linkDetails.filter((_, i) => i !== index)
+    }));
+  };
+
+  const handleDropdownChange = (index, selected) => {
+  setWebinarDetials((prev) => {
+    const updatedLinkDetails = [...prev.linkDetails];
+    updatedLinkDetails[index] = { ...updatedLinkDetails[index], type: selected.name };
+    return { ...prev, linkDetails: updatedLinkDetails };
+  });
+  };
+
+  const handleInputChange = (index, field, value) => {
+    setWebinarDetials((prev) => {
+      const updatedLinkDetails = [...prev.linkDetails];
+      updatedLinkDetails[index] = { ...updatedLinkDetails[index], [field]: value };
+      return { ...prev, linkDetails: updatedLinkDetails };
+    });
+  };
+
+  console.log('webinarDetials', webinarDetials);
+
   return (
     <div className="py-8 p-4 sm:p-8 overflow-x-hidden mb-20">
       <div className="w-full pb-8 border-b border-primary gap-y-4 gap-2 flex flex-col items-start md:flex-row lg:flex-col xl:flex-row justify-between lg:items-start md:items-end xl:items-end">
@@ -152,18 +190,6 @@ const AddWebinar = () => {
                 }}
                 error={errors.event}
               />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
-        <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
-          <div className="sm:w-7/12 w-full flex flex-col">
-            <span className=" text-primary ">Webinar Details</span>
-          </div>
-          <div className="w-full">
-            <div className="flex flex-col gap-y-5">
               <FormField
                 label="Name"
                 type="text"
@@ -177,47 +203,73 @@ const AddWebinar = () => {
                 value={webinarDetials.name}
                 errorMessage={errors.name}
               />
+            </div>
+          </div>
+        </div>
+      </div>
 
-              <DropDown
-                name="type"
-                label={'Select Type'}
-                SummaryChild={<h5 className="text-primary p-0 m-0">Type</h5>}
-                dropdownList={[
-                  { id: 'zoom', showName: 'Zoom', name: 'zoom' },
-                  { id: 'youtubeLive', showName: 'Youtube Live', name: 'youtubeLive' }
-                ]}
-                selected={webinarDetials.type}
-                search={true}
-                commonFunction={(e) => {
-                  setWebinarDetials((prev) => ({ ...prev, type: e.name }));
-                  if (errors.type) setErrors((prev) => ({ ...prev, type: '' }));
-                }}
-                error={errors.type}
-              />
-              <FormField
-                label="Link"
-                type="url"
-                id="link"
-                name="link"
-                placeholder="Link"
-                onChange={(e) => {
-                  setWebinarDetials((prev) => ({ ...prev, link: e.target.value }));
-                  if (errors.link) setErrors((prev) => ({ ...prev, link: '' }));
-                }}
-                value={webinarDetials.link}
-                errorMessage={errors.link}
-              />
-              <FormField
-                label={'Limit'}
-                type="number"
-                id="limit"
-                name="limit"
-                min={1}
-                placeholder="Limit"
-                onChange={(e) => setWebinarDetials((prev) => ({ ...prev, limit: e.target.value }))}
-                value={webinarDetials.limit}
-                errorMessage={errors.limit}
-              />
+      <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
+        <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
+          <div className="sm:w-7/12 w-full flex flex-col">
+            <span className=" text-primary ">Webinar Details</span>
+          </div>
+          <div className="w-full">
+            <div className="flex flex-col gap-y-5">
+              {webinarDetials.linkDetails.map((item, index) => (
+                <div key={index} className="flex flex-col border border-primary bg-grey p-4 rounded-xl ">
+                  <div className="flex justify-end items-center">
+                    {webinarDetials.linkDetails.length > 1 && <IoCloseSharp className="cursor-pointer" onClick={() => removeVariable(index)} />}
+                  </div>
+                  <DropDown
+                    name="type"
+                    label={'Select Type'}
+                    SummaryChild={<h5 className="text-primary p-0 m-0">Type</h5>}
+                    dropdownList={[
+                      { id: 'zoom', showName: 'Zoom', name: 'zoom' },
+                      { id: 'youtubeLive', showName: 'Youtube Live', name: 'youtubeLive' }
+                    ]}
+                    selected={webinarDetials.linkDetails[index].type}
+                    search={true}
+                    // commonFunction={(e) => {
+                    //   setWebinarDetials((prev) => ({ ...prev, type: e.name }));
+                    //   if (errors.type) setErrors((prev) => ({ ...prev, type: '' }));
+                    // }}
+                    commonFunction={(e) => handleDropdownChange(index, e)}
+                    // error={errors.type}
+                  />
+                  <FormField
+                    label="Link"
+                    type="url"
+                    id="link"
+                    name="link"
+                    placeholder="Link"
+                    // onChange={(e) => {
+                    //   setWebinarDetials((prev) => ({ ...prev, link: e.target.value }));
+                    //   if (errors.link) setErrors((prev) => ({ ...prev, link: '' }));
+                    // }}
+                    onChange={(e) => handleInputChange(index, 'link', e.target.value)}
+                    value={webinarDetials.link}
+                    // errorMessage={errors.link}
+                  />
+                  <FormField
+                    label={'Limit'}
+                    type="number"
+                    id="limit"
+                    name="limit"
+                    min={1}
+                    placeholder="Limit"
+                    // onChange={(e) => setWebinarDetials((prev) => ({ ...prev, limit: e.target.value }))}
+                    onChange={(e) => handleInputChange(index, 'limit', e.target.value)}
+                    value={webinarDetials.limit}
+                    // errorMessage={errors.limit}
+                  />
+                </div>
+              ))}
+              <div className="mt-5 flex justify-center">
+                <button className="flex items-center justify-center w-full border border-primary rounded-xl p-2" onClick={handleAddLink}>
+                  + Add More Follow - Up
+                </button>
+              </div>
             </div>
           </div>
         </div>
