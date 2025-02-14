@@ -122,7 +122,7 @@ const AddWebinar = () => {
   };
 
   const removeVariable = (index) => {
-    if (webinarDetials.length === 1) return;
+    if (webinarDetials.linkDetails.length === 1) return;
     setWebinarDetials((prev) => ({
       ...prev,
       linkDetails: prev.linkDetails.filter((_, i) => i !== index)
@@ -248,7 +248,7 @@ const AddWebinar = () => {
                     //   if (errors.link) setErrors((prev) => ({ ...prev, link: '' }));
                     // }}
                     onChange={(e) => handleInputChange(index, 'link', e.target.value)}
-                    value={webinarDetials.link}
+                    value={webinarDetials.linkDetails[index].link}
                     // errorMessage={errors.link}
                   />
                   <FormField
@@ -260,7 +260,7 @@ const AddWebinar = () => {
                     placeholder="Limit"
                     // onChange={(e) => setWebinarDetials((prev) => ({ ...prev, limit: e.target.value }))}
                     onChange={(e) => handleInputChange(index, 'limit', e.target.value)}
-                    value={webinarDetials.limit}
+                    value={webinarDetials.linkDetails[index].limit}
                     // errorMessage={errors.limit}
                   />
                 </div>
