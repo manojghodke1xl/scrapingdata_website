@@ -122,7 +122,7 @@ const AddWebinar = () => {
   };
 
   const removeVariable = (index) => {
-    if (webinarDetials.linkDetails.length === 1) return;
+    if (webinarDetials.length === 1) return;
     setWebinarDetials((prev) => ({
       ...prev,
       links: prev.links.filter((_, i) => i !== index)
@@ -141,19 +141,11 @@ const AddWebinar = () => {
     setWebinarDetials((prev) => {
       const updatedLinkDetails = [...prev.links];
       updatedLinkDetails[index] = { ...updatedLinkDetails[index], [field]: value };
-
-      if (value.trim() !== '') {
-        const isDuplicate = updatedLinkDetails.some((detail, i) => i !== index && detail[field] === value);
-        if (isDuplicate) {
-          showNotification('warn', `${field} value already exists in another entry.`);
-        }
-      }
-
-      return { ...prev, linkDetails: updatedLinkDetails };
+      return { ...prev, links: updatedLinkDetails };
     });
   };
 
-  console.log('webinarDetials', JSON.stringify(webinarDetials, null, 2));
+  console.log('webinarDetials', webinarDetials);
 
   return (
     <div className="py-8 p-4 sm:p-8 overflow-x-hidden mb-20">
@@ -223,7 +215,7 @@ const AddWebinar = () => {
           </div>
           <div className="w-full">
             <div className="flex flex-col gap-y-5">
-              {webinarDetials.links?.map((item, index) => (
+              {webinarDetials.links.map((item, index) => (
                 <div key={index} className="flex flex-col border border-primary bg-grey p-4 rounded-xl ">
                   <div className="flex justify-end items-center">
                     {webinarDetials.links.length > 1 && <IoCloseSharp className="cursor-pointer" onClick={() => removeVariable(index)} />}
@@ -236,7 +228,7 @@ const AddWebinar = () => {
                       { id: 'zoom', showName: 'Zoom', name: 'zoom' },
                       { id: 'youtubeLive', showName: 'Youtube Live', name: 'youtubeLive' }
                     ]}
-                    selected={item.type}
+                    selected={webinarDetials.links[index].type}
                     search={true}
                     // commonFunction={(e) => {
                     //   setWebinarDetials((prev) => ({ ...prev, type: e.name }));
@@ -256,7 +248,7 @@ const AddWebinar = () => {
                     //   if (errors.link) setErrors((prev) => ({ ...prev, link: '' }));
                     // }}
                     onChange={(e) => handleInputChange(index, 'link', e.target.value)}
-                    value={item.link}
+                    value={webinarDetials.link}
                     // errorMessage={errors.link}
                   />
                   <FormField
@@ -268,7 +260,7 @@ const AddWebinar = () => {
                     placeholder="Limit"
                     // onChange={(e) => setWebinarDetials((prev) => ({ ...prev, limit: e.target.value }))}
                     onChange={(e) => handleInputChange(index, 'limit', e.target.value)}
-                    value={item.limit}
+                    value={webinarDetials.limit}
                     // errorMessage={errors.limit}
                   />
                 </div>
