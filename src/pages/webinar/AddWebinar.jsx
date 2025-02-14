@@ -130,17 +130,25 @@ const AddWebinar = () => {
   };
 
   const handleDropdownChange = (index, selected) => {
-  setWebinarDetials((prev) => {
-    const updatedLinkDetails = [...prev.linkDetails];
-    updatedLinkDetails[index] = { ...updatedLinkDetails[index], type: selected.name };
-    return { ...prev, linkDetails: updatedLinkDetails };
-  });
+    setWebinarDetials((prev) => {
+      const updatedLinkDetails = [...prev.linkDetails];
+      updatedLinkDetails[index] = { ...updatedLinkDetails[index], type: selected.name };
+      return { ...prev, linkDetails: updatedLinkDetails };
+    });
   };
 
   const handleInputChange = (index, field, value) => {
     setWebinarDetials((prev) => {
       const updatedLinkDetails = [...prev.linkDetails];
       updatedLinkDetails[index] = { ...updatedLinkDetails[index], [field]: value };
+
+      if (value.trim() !== '') {
+        const isDuplicate = updatedLinkDetails.some((detail, i) => i !== index && detail[field] === value);
+        if (isDuplicate) {
+          showNotification('warn', `${field} value already exists in another entry.`);
+        }
+      }
+
       return { ...prev, linkDetails: updatedLinkDetails };
     });
   };
