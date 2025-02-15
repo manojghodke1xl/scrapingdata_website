@@ -32,7 +32,13 @@ const EmailLogList = () => {
           <span>{statusCode}</span>
         </div>
       ),
-      error: error ? <span className="text-failed">{error}</span> : <span className="text-secondary">No Error</span>,
+      error: error ? (
+        <span className="text-failed">
+          <TruncatableFieldToolTip title={'Error'} content={JSON.stringify(error)} />
+        </span>
+      ) : (
+        <span className="text-secondary">No Error</span>
+      ),
       createdAt: formatDateTime(createdAt),
       updatedAt: formatDateTime(updatedAt)
     };
