@@ -67,8 +67,8 @@ const TableRowActions = ({
                   }
                   if (action.type === 'managePackage') navigate(`${managePackagePath}?eventId=${row.id}`);
                   if (action.type === 'sendForApproval') await approvalApi(row.id);
-                  if (action.type === 'sendCertificate') await approvalApi(row.bookingId, false);
-                  if (action.type === 'sendCertificateUnique') await approvalApi(row.bookingId, true);
+                  if (action.type === 'sendCertificate') await approvalApi(row.bookingId, false, sendCertificate !== 'ID');
+                  if (action.type === 'sendCertificateUnique') await approvalApi(row.bookingId, true, sendCertificate !== 'ID');
                 }}
               >
                 {action.type === 'edit' && <MdEdit size={20} />}

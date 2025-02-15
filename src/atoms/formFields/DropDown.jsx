@@ -19,7 +19,14 @@ const DropDown = ({ mt = '', width = 'w-full', name, label, SummaryChild, dropdo
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [handleClickOutside]);
-
+  useEffect(() => {
+    window.addEventListener('resize', () => {
+      const { height } = dropdownRef.current.getBoundingClientRect();
+      const remainingSpaceBelow = window.innerHeight - height - dropdownRef.current.getBoundingClientRect().top;
+      setPlacement(remainingSpaceBelow > 192 ? 'below' : 'above');
+    });
+  }, []);
+  const [placement, setPlacement] = useState('below'); // Placement state
   return (
     <div className={`w-full ${mt}`}>
       <label className="block text-sm font-medium text-primary mb-2">{label}</label>
@@ -41,7 +48,9 @@ const DropDown = ({ mt = '', width = 'w-full', name, label, SummaryChild, dropdo
           </span>
         </summary>
         <ul
-          className={`absolute end-0 top-11 z-40 mt-1 max-h-48 w-full rounded-md bg-main text-[12px] md:text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm overflow-y-auto custom-scrollbar`}
+          className={`absolute ${
+            placement === 'above' ? 'bottom-full mb-1' : 'top-full mt-1'
+          } end-0 top-11 z-40 mt-1 max-h-48 w-full rounded-md bg-main text-[12px] md:text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm overflow-y-auto custom-scrollbar`}
         >
           {search && (
             <div className="w-full flex items-center rounded-t-lg border border-primary px-3">
