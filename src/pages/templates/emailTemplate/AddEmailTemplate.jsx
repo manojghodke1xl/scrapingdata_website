@@ -210,7 +210,7 @@ const AddEmailTemplate = () => {
       </div>
 
       <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
-        <div className="w-full flex flex-col gap-y-2 md:flex-row justify-evenly">
+        <div className="w-full flex flex-col gap-3  md:flex-row justify-evenly">
           <div className="sm:w-1/4 w-full flex flex-col">
             <span className="text-primary">Email Content</span>
           </div>

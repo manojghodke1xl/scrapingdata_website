@@ -73,7 +73,8 @@ export const eventsPath = [
 export const afterSalesPath = [
   { title: 'Event Default Settings', to: ['/after-sales/event-default-settings'] },
   { title: 'After Sales', to: ['/after-sales/after-sales-list', '/after-sales/add-after-sales', '/after-sales/edit-after-sales', '/after-sales/duplicate-after-sales'] },
-  { title: 'Reminders', to: ['/reminder/reminder-list', '/reminder/add-reminder', '/after-sales/edit-after-sales', '/after-sales/duplicate-after-sales'] }
+  { title: 'Reminders', to: ['/reminder/reminder-list', '/reminder/add-reminder', '/after-sales/edit-after-sales', '/after-sales/duplicate-after-sales'] },
+  { title: 'Broadcast', to: ['/broadcast/broadcast-list', '/broadcast/add-broadcast', '/after-sales/edit-after-sales', '/after-sales/duplicate-after-sales'] }
 ];
 
 export const faqsPath = [

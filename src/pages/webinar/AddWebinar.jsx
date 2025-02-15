@@ -11,6 +11,7 @@ import { addWebinarApi, getWebinarByIdApi, updateWebinarApi } from '../../apis/w
 import { IoCloseSharp } from 'react-icons/io5';
 
 import MultiSelectCheckbox from '../../atoms/formFields/MultiSelectCheckBox';
+import FollowUpSettings from '../../atoms/common/FollowUpItem';
 
 const AddWebinar = () => {
   const navigate = useNavigate();
@@ -360,6 +361,7 @@ const AddWebinar = () => {
           </div>
           <div className="w-full">
             <div className="flex flex-col gap-y-5">
+
               {webinarDetials.followUps?.map((item, index) => (
                 <div key={index} className="flex flex-col border border-primary bg-grey p-4 rounded-xl mt-5">
                   <div className="flex justify-end items-center">
