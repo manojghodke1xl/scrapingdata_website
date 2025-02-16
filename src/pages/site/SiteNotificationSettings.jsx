@@ -38,7 +38,11 @@ const SitesNotificationSettings = () => {
     adminSubscriberEmails: [],
     adminSubscriberEmailTemplate: null,
     adminSubscriberPhoneNumber: [],
-    adminSubscriberWhatsAppTemplate: null
+    adminSubscriberWhatsAppTemplate: null,
+
+    sendUserDonation: false,
+    userDonationEmailTemplate: null,
+    userDonationWhatsAppTemplate: null
   });
 
   const [templateState, setTemplateState] = useState({
@@ -75,6 +79,7 @@ const SitesNotificationSettings = () => {
       const { status, data } = await addAndUpdateSiteNotificationApi(siteNotification);
       if (status) showNotification('success', data.message);
       else showNotification('error', data);
+      setSiteNotification({});
     } catch (error) {
       showNotification('error', error.message);
     } finally {
@@ -232,6 +237,46 @@ const SitesNotificationSettings = () => {
                           if (errors.userSubscriberWhatsAppTemplate) setErrors((prev) => ({ ...prev, userSubscriberWhatsAppTemplate: '' }));
                         }}
                         error={errors.userSubscriberWhatsAppTemplate}
+                      />
+                    </>
+                  )}
+
+                  <ToggleComponent
+                    bgColor={'bg-grey'}
+                    label={'Send User Donation Notification'}
+                    isEnableState={siteNotification.sendUserDonation || siteNotification.userDonationEmailTemplate || siteNotification.userDonationWhatsAppTemplate}
+                    setIsEnableState={(value) =>
+                      setSiteNotification((prev) => ({ ...prev, sendUserDonation: value, userDonationEmailTemplate: null, userDonationWhatsAppTemplate: null }))
+                    }
+                  />
+                  {(siteNotification.sendUserDonation || siteNotification.userDonationEmailTemplate || siteNotification.userDonationWhatsAppTemplate) && (
+                    <>
+                      <DropDown
+                        label={'Select Email Template'}
+                        name="Template"
+                        dropdownList={templateState.emailTemplate?.map((template) => ({ name: template._id, showName: template.name, id: template._id }))}
+                        SummaryChild={<h5 className="p-0 m-0 text-primary">Email Templates</h5>}
+                        search={true}
+                        selected={siteNotification.userDonationEmailTemplate}
+                        commonFunction={(e) => {
+                          setSiteNotification((prev) => ({ ...prev, userDonationEmailTemplate: e.name }));
+                          if (errors.userDonationEmailTemplate) setErrors((prev) => ({ ...prev, userDonationEmailTemplate: '' }));
+                        }}
+                        error={errors.userDonationEmailTemplate}
+                      />
+
+                      <DropDown
+                        label={'Select WhatsApp Template'}
+                        name="whatsappTemplate"
+                        dropdownList={templateState.whatsAppTemplate?.map((template) => ({ name: template._id, showName: template.name, id: template._id }))}
+                        SummaryChild={<h5 className="p-0 m-0 text-primary">WhatsApp Templates</h5>}
+                        search={true}
+                        selected={siteNotification.userDonationWhatsAppTemplate}
+                        commonFunction={(e) => {
+                          setSiteNotification((prev) => ({ ...prev, userDonationWhatsAppTemplate: e.name }));
+                          if (errors.userDonationWhatsAppTemplate) setErrors((prev) => ({ ...prev, userDonationWhatsAppTemplate: '' }));
+                        }}
+                        error={errors.userDonationWhatsAppTemplate}
                       />
                     </>
                   )}
