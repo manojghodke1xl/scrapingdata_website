@@ -107,6 +107,28 @@ const WhatsAppIntegration = () => {
       <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
         <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
           <div className="sm:w-7/12 w-full flex flex-col">
+            <span className=" text-primary">Webhook Information</span>
+          </div>
+          <div className="w-full">
+            <span className="text-lg font-semibold">Callback URL:</span>
+            <div className="bg-gray-100 p-2 rounded-md">
+              <span className="text-primary">
+                {import.meta.env.VITE_API_URL}/whatsapp/webhook/{state?.siteId}
+              </span>
+            </div>
+            <div className="mt-2">
+              <span className="text-lg font-semibold">Verify Token:</span>
+              <div className="bg-gray-100 p-2 rounded-md">
+                <span className="text-primary">{state?.integrationData?.webhook?.whatsapp?.verify_token}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
+        <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
+          <div className="sm:w-7/12 w-full flex flex-col">
             <span className=" text-primary">Basic Information</span>
           </div>
           <div className="w-full">
