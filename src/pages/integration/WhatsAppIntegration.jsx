@@ -112,14 +112,14 @@ const WhatsAppIntegration = () => {
             </div>
             <div className="w-full">
               <span className="text-lg font-semibold">Callback URL:</span>
-              <div className="bg-gray-100 p-2 rounded-md">
+              <div className="bg-gray-100 dark:bg-gray-800 p-2 rounded-md mb-5">
                 <span className="text-primary">
                   {import.meta.env.VITE_API_URL}/whatsapp/webhook/{state?.siteId}
                 </span>
               </div>
               <div className="mt-2">
                 <span className="text-lg font-semibold">Verify Token:</span>
-                <div className="bg-gray-100 p-2 rounded-md">
+                <div className="bg-gray-100 dark:bg-gray-800 p-2 rounded-md">
                   <span className="text-primary">{state?.integrationData?.webhook?.whatsapp?.verify_token}</span>
                 </div>
               </div>
