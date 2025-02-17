@@ -8,6 +8,32 @@ import { showNotification } from '../../../utils/showNotification';
 import DropDown from '../../../atoms/formFields/DropDown';
 
 const AddTemplateCategory = () => {
+  const dataTypes = [
+    {
+      id: 1,
+      name: 'String'
+    },
+    {
+      id: 2,
+      name: 'Number'
+    },
+    {
+      id: 3,
+      name: 'Date'
+    },
+    {
+      id: 4,
+      name: 'Boolean'
+    },
+    {
+      id: 5,
+      name: 'Array'
+    },
+    {
+      id: 6,
+      name: 'Time'
+    }
+  ];
   const navigate = useNavigate();
   const { id = '' } = useParams();
   const { setLoading, isLoading } = useGlobalContext();
@@ -17,6 +43,30 @@ const AddTemplateCategory = () => {
     variableMap: [{ label: '', model: '', key: '', name: '', dataType: '' }]
   });
   const [errors, setErrors] = useState({});
+  const [draggingIndex, setDraggingIndex] = useState(null);
+
+  const handleDragStart = (index) => {
+    setDraggingIndex(index);
+  };
+
+  const handleDragOver = (event, index) => {
+    event.preventDefault();
+    if (draggingIndex === index) return;
+
+    const items = [...templateCategory.variableMap];
+    const item = items.splice(draggingIndex, 1)[0];
+    items.splice(index, 0, item);
+
+    setDraggingIndex(index);
+    setTemplateCategory((prev) => ({
+      ...prev,
+      variableMap: items
+    }));
+  };
+
+  const handleDragEnd = () => {
+    setDraggingIndex(null);
+  };
 
   useEffect(() => {
     if (id) {
@@ -132,89 +182,97 @@ const AddTemplateCategory = () => {
         </div>
       </div>
 
-      <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
-        <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
-          <div className="sm:w-7/12 w-full flex flex-col">
-            <span className=" text-primary ">Variable Details</span>
+      <div className="flex overflow-x-auto space-x-4 p-4 border border-gray-400 rounded-lg mt-5">
+        {templateCategory.variableMap.map((variable, index) => (
+          <div
+            key={index}
+            draggable
+            onDragStart={() => handleDragStart(index)}
+            onDragOver={(e) => handleDragOver(e, index)}
+            onDragEnd={handleDragEnd}
+            className="p-2 rounded-lg shadow-sm border border-gray-400 min-w-[100px] flex-shrink-0 cursor-grab"
+          >
+            {variable.name}
           </div>
+        ))}
+      </div>
+
+      <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 lg:items-start md:items-end xl:items-end">
+        <div className="w-full flex flex-col flex-wrap gap-y-4 md:flex-row justify-evenly">
           <div className="w-full">
-            <div>
-              {templateCategory?.variableMap?.map((variable, index) => (
-                <div key={index}>
-                  <FormField
-                    divClassName={'mt-5'}
-                    label="Variable Label"
-                    type="text"
-                    id="variableLabel"
-                    name="variableLabel"
-                    placeholder="Variable Label"
-                    onChange={(e) => handleVariableChange(index, 'label', e.target.value)}
-                    value={variable.label}
-                  />
-                  <FormField
-                    divClassName={'mt-5'}
-                    label="Variable Model"
-                    type="text"
-                    id="variableModel"
-                    name="variableModel"
-                    placeholder="Variable Model"
-                    onChange={(e) => handleVariableChange(index, 'model', e.target.value)}
-                    value={variable.model}
-                  />
-                  <FormField
-                    divClassName={'mt-5'}
-                    label="Variable Key"
-                    type="text"
-                    id="variableKey"
-                    name="variableKey"
-                    placeholder="Variable Key"
-                    onChange={(e) => handleVariableChange(index, 'key', e.target.value)}
-                    value={variable.key}
-                  />
-                  <FormField
-                    divClassName={'mt-5'}
-                    label="Variable Name"
-                    type="text"
-                    id="variableName"
-                    name="variableName"
-                    placeholder="Variable Name"
-                    onChange={(e) => handleVariableChange(index, 'name', e.target.value)}
-                    value={variable.name}
-                  />
-
-                  <FormField
-                    divClassName={'mt-5'}
-                    label="Variable Data Type"
-                    type="text"
-                    id="variableType"
-                    name="variableType"
-                    placeholder="Variable Data Type"
-                    onChange={(e) => handleVariableChange(index, 'dataType', e.target.value)}
-                    value={variable.dataType}
-                  />
-
-                  {/* <DropDown
-                    mt="mt-5"
-                    name={'variableDataType'}
-                    label={'Variable Data Type'}
-                    SummaryChild={<h5 className="text-primary p-0 m-0">Phone Number</h5>}
-                    dropdownList={phoneNumbers.map((phoneNumber) => ({ id: phoneNumber.phoneNumberId, showName: phoneNumber.phoneNumber, name: phoneNumber.phoneNumberId }))}
-                    selected={whatsAppTemplate.phoneNumberId}
-                    search={true}
-                    commonFunction={(e) => {
-                      setWhatsAppTemplate((prev) => ({ ...prev, phoneNumberId: e.name }));
-                      if (errors.phoneNumberId) setErrors((prev) => ({ ...prev, phoneNumberId: '' }));
-                    }}
-                    error={errors.phoneNumberId}
-                  /> */}
-                  <button type="button" onClick={() => removeVariable(index)} className="px-4 py-2 mt-5 text-white bg-red text-sm rounded-xl">
-                    Remove
-                  </button>
-                </div>
-              ))}
-              <button type="button" onClick={addVariable} className="px-4 py-2 mt-5 bg-primary text-white rounded-xl hover:bg-blue">
-                Add Variable
-              </button>
+            <div className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {templateCategory?.variableMap?.map((variable, index) => (
+                  <div key={index} className="p-4 rounded-lg shadow-sm border border-gray-400">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <FormField
+                        divClassName="w-full"
+                        label="Variable Label"
+                        type="text"
+                        id="variableLabel"
+                        name="variableLabel"
+                        placeholder="Enter Variable Label"
+                        onChange={(e) => handleVariableChange(index, 'label', e.target.value)}
+                        value={variable.label}
+                      />
+                      <FormField
+                        divClassName="w-full"
+                        label="Variable Model"
+                        type="text"
+                        id="variableModel"
+                        name="variableModel"
+                        placeholder="Enter Variable Model"
+                        onChange={(e) => handleVariableChange(index, 'model', e.target.value)}
+                        value={variable.model}
+                      />
+                      <FormField
+                        divClassName="w-full"
+                        label="Variable Key"
+                        type="text"
+                        id="variableKey"
+                        name="variableKey"
+                        placeholder="Enter Variable Key"
+                        onChange={(e) => handleVariableChange(index, 'key', e.target.value)}
+                        value={variable.key}
+                      />
+                      <FormField
+                        divClassName="w-full"
+                        label="Variable Name"
+                        type="text"
+                        id="variableName"
+                        name="variableName"
+                        placeholder="Enter Variable Name"
+                        onChange={(e) => handleVariableChange(index, 'name', e.target.value)}
+                        value={variable.name}
+                      />
+                      <DropDown
+                        mt="w-full"
+                        name="variableDataType"
+                        label="Variable Data Type"
+                        SummaryChild={<h5 className="text-primary p-0 m-0">{variable.dataType || 'Select Data Type'}</h5>}
+                        dropdownList={dataTypes.map((d) => ({ id: d.name, showName: d.name, name: d.name }))}
+                        selected={variable.dataType}
+                        search={true}
+                        commonFunction={(e) => handleVariableChange(index, 'dataType', e.name)}
+                      />
+                      <div className="flex items-end">
+                        <button
+                          type="button"
+                          onClick={() => removeVariable(index)}
+                          className="px-4 py-2 text-white bg-red hover:bg-red-700 text-sm rounded-lg shadow-md transition"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="flex justify-center">
+                <button type="button" onClick={addVariable} className="px-5 py-2 bg-primary text-white rounded-lg shadow-md hover:bg-blue-600 transition">
+                  Add Variable
+                </button>
+              </div>
             </div>
           </div>
         </div>
