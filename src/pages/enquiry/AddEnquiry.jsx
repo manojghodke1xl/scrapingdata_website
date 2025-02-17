@@ -30,11 +30,6 @@ const AddEnquiry = () => {
     site: ''
   });
 
-  // Function to handle changes in phone data state (phone number and dialing code)
-  const handlePhoneDataChange = (updatedPhoneData) => {
-    setEnquiryDetails((prevDetails) => ({ ...prevDetails, mobile: updatedPhoneData.phoneNumber, ccode: updatedPhoneData.dialingCode }));
-  };
-
   const validate = () => {
     const newErrors = {};
     if (!enquiryDetails.name.trim()) newErrors.name = 'Name is required';

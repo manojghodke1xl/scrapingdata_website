@@ -53,7 +53,7 @@ const BookingPaymentList = () => {
               : `${isDarkMode ? 'border border-failed ' : 'bg-fadedred'} text-failed`
           } px-2 py-1 w-fit flex gap-2 items-center`}
         >
-          <span className={`min-w-[8px] min-h-[8px] rounded-full ${status === 'success' ? 'bg-green' : 'bg-pending'}`}></span>
+          <span className={`min-w-[8px] min-h-[8px] rounded-full ${status === 'success' ? 'bg-green' : status === 'pending' ? 'bg-pending' : 'bg-red'}`}></span>
           <span>{status === 'success' ? 'Success' : status === 'pending' ? 'Pending' : 'Failed'}</span>
         </div>
       ),

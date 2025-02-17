@@ -172,6 +172,7 @@ const TableComponent = ({
   useEffect(() => {
     setRefresh((r) => !r);
   }, [fetchRefresh]);
+
   const [err, data, setRefresh] = useSetTimeout(
     apiUrl,
     tableState.currentPage - 1,
@@ -274,7 +275,8 @@ const TableComponent = ({
     'whats-app-templates',
     'after-sales',
     'advertisement',
-    'vendors'
+    'vendors',
+    'NotifAgent'
   ];
 
   const availableSites = modulesArray.includes(siteModule)

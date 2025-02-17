@@ -58,7 +58,8 @@ export const exportHandler = ({ type, apiUrl, rows, headers, selected }) => {
           participant: 'participants',
           coupon: 'coupons',
           webinar: 'webinars',
-          'webinar/links': 'webinarLinks'
+          'webinar/links': 'webinarLinks',
+          'notif-agent': 'notifAgents'
         };
 
         const allData = data[apiUrlMapping[apiUrl] || apiUrl];

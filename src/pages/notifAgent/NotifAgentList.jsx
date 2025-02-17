@@ -1,36 +1,25 @@
-import { IoMdAdd } from 'react-icons/io';
-import TableComponent from '../../atoms/table/Table';
 import { useState } from 'react';
+import { useColor } from '../../contexts/contexts/ColorContext';
 import TruncatableFieldToolTip from '../../atoms/common/TruncatableFeildToolTip';
 import { formatDateTime } from '../../utils/dateFormats';
-import useGlobalContext from '../../hooks/useGlobalContext';
-import { updateAdminStatusApi } from '../../apis/admin-apis';
-import NoteComponent from '../../atoms/common/NoteComponent';
-import { adminListNote } from './AdminNotes';
 import TableHeader from '../../atoms/table/TableHeader';
-import { useColor } from '../../contexts/contexts/ColorContext';
+import { IoMdAdd } from 'react-icons/io';
+import TableComponent from '../../atoms/table/Table';
+import { deleteNotifAgentApi, updateNotifAgentStatusApi } from '../../apis/notif-agent-apis';
 
-const AdminList = () => {
+const NotifAgentList = () => {
   const { isDarkMode } = useColor();
-  const {
-    auth: { allSites }
-  } = useGlobalContext();
-  const [admins, setAdmins] = useState([]);
 
-  const rows = admins.map((admin) => {
-    const { _id, name, email, isBlocked, isSuperAdmin, sites, createdAt, updatedAt } = admin;
+  const [notifAgents, setNotifAgents] = useState([]);
+
+  const rows = notifAgents.map((agent) => {
+    const { _id, name, email, isBlocked, sites, createdAt, updatedAt } = agent;
     return {
       id: _id,
-      isSuperAdmin,
-      exportData: admin,
+      exportData: agent,
       name: <TruncatableFieldToolTip content={name} />,
       email: <TruncatableFieldToolTip content={email} />,
-      sites: (
-        <TruncatableFieldToolTip
-          title={'Sites'}
-          content={isSuperAdmin ? allSites.map((s) => `${s.name} (${s.host})`).join(', ') : sites.map((s) => `${s.name} (${s.host})`).join(', ')}
-        />
-      ),
+      sites: <TruncatableFieldToolTip title={'Sites'} content={sites.map((s) => `${s.name} (${s.host})`).join(', ')} />,
       isBlocked: (
         <div
           className={`rounded-xl ${
@@ -49,29 +38,32 @@ const AdminList = () => {
   return (
     <div className="py-5 px-8 overflow-x-hidden mb-10">
       <div className="w-full">
-        <TableHeader heading={'Admins'} btn1={true} href1={'/admin/add-admin'} icon1={<IoMdAdd />} btnLabel1={'Add Admin'} />
+        <TableHeader heading={'Notification Agents'} btn1={true} href1={'/notification-agent/add-notification-agent'} icon1={<IoMdAdd />} btnLabel1={'Add Notification Agent'} />
         <div className="flex flex-col">
           <div className="-m-1.5 overflow-x-auto">
             <div className="p-1.5 min-w-full align-middle">
               <TableComponent
                 selectable={true}
+                siteModule={'NotifAgent'}
                 headers={[
                   { label: 'Sr. No.', key: 'srno' },
-                  { label: 'Admin Name', key: 'name' },
-                  { label: 'Admin Email', key: 'email' },
+                  { label: 'Name', key: 'name' },
+                  { label: 'Email', key: 'email' },
                   { label: 'Sites', key: 'sites' },
                   { label: 'Status', key: 'isBlocked' },
                   { label: 'Created Date', key: 'createdAt' },
                   { label: 'Updated Date', key: 'updatedAt' }
                 ]}
-                tableData={(data) => setAdmins(data.admins)}
+                tableData={(data) => setNotifAgents(data.notifAgents)}
                 rows={rows}
-                apiUrl={'admins'}
+                apiUrl={'notif-agent'}
                 tableCountLabel={true}
                 pagination={true}
                 actions={true}
                 edit={true}
-                editPath={'/admin/edit-admin'}
+                editPath={'/notification-agent/edit-notification-agent'}
+                copy={true}
+                copyPath={'/notification-agent/duplicate-notification-agent'}
                 search={true}
                 filter={true}
                 filterCategory={[
@@ -88,15 +80,19 @@ const AdminList = () => {
                 ]}
                 adminStatus={true}
                 modifyStatus={true}
-                modifyStatusApi={updateAdminStatusApi}
+                modifyStatusApi={updateNotifAgentStatusApi}
+                deleteBtn={true}
+                deleteAction={true}
+                deleteApi={deleteNotifAgentApi}
+                deleteLabel={'Delete Notification Agent'}
+                deleteMessage={'Are you sure you want to delete this Notification Agent?'}
               />
             </div>
           </div>
         </div>
       </div>
-      <NoteComponent note={adminListNote} />
     </div>
   );
 };
 
-export default AdminList;
+export default NotifAgentList;

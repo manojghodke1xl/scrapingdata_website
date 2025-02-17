@@ -197,7 +197,7 @@ const MaterialSidebar = ({ handleToggleSidebar = () => {} }) => {
           />
 
           {adminNavLinks
-            .filter(({ title }) => auth.isSuperAdmin || title !== 'Admin')
+            .filter(({ title }) => auth.isSuperAdmin || title !== 'Admins')
             .map(({ to, title, icon }) => (
               <Link
                 key={title}

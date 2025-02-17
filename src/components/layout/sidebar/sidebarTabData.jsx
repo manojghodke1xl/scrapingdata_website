@@ -1,4 +1,4 @@
-import { RiAdminLine } from 'react-icons/ri';
+import { RiAdminLine, RiNotificationBadgeLine } from 'react-icons/ri';
 import { RxDashboard } from 'react-icons/rx';
 import { TbApps, TbWorld } from 'react-icons/tb';
 
@@ -105,7 +105,19 @@ export const logsPath = [
   { title: 'SMS Logs', to: ['/logs/sms-log-list', '/logs/add-sms-log', '/logs/edit-sms-log', '/logs/duplicate-sms-log'] }
 ];
 
-export const adminNavLinks = [{ title: 'Admins', to: ['/admin/admin-list', '/admin/add-admin', '/admin/edit-admin'], icon: <RiAdminLine /> }];
+export const adminNavLinks = [
+  { title: 'Admins', to: ['/admin/admin-list', '/admin/add-admin', '/admin/edit-admin'], icon: <RiAdminLine /> },
+  {
+    title: 'Notification Agent',
+    to: [
+      '/notification-agent/notification-agent-list',
+      '/notification-agent/add-notification-agent',
+      '/notification-agent/edit-notification-agent',
+      '/notification-agent/duplicate-notification-agent'
+    ],
+    icon: <RiNotificationBadgeLine />
+  }
+];
 
 export const webinarsPath = [
   { title: 'Webinars', to: ['/webinar/webinar-list', '/webinar/add-webinar', '/webinar/edit-webinar', '/webinar/duplicate-webinar'] },
