@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { IoSearchOutline } from 'react-icons/io5';
 import { IoIosArrowDown } from 'react-icons/io';
-import { useColor } from '../../contexts/contexts/ColorContext';
 import Checkbox from './Checkbox';
 
 const MultiSelectCheckbox = ({
@@ -16,7 +15,6 @@ const MultiSelectCheckbox = ({
   divClassName,
   mode = 'ids' // 'ids' or 'objects'
 }) => {
- 
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const dropdownRef = useRef(null);
@@ -115,13 +113,6 @@ const MultiSelectCheckbox = ({
             {/* Select All Checkbox */}
             <div className="flex items-center px-3 py-2 border-b border-primary hover:bg-hover">
               <Checkbox id="select-all" checked={isSelectAllChecked} onChange={handleSelectAll} />
-              {/* <input
-                type="checkbox"
-                id="select-all"
-                checked={isSelectAllChecked}
-                onChange={handleSelectAll}
-                className="h-4 w-4 rounded border-primary text-brand focus:ring-blue-500"
-              /> */}
               <label htmlFor="select-all" className="ml-2 text-secondary cursor-pointer select-none font-medium">
                 Select All
               </label>
@@ -139,14 +130,6 @@ const MultiSelectCheckbox = ({
               return (
                 <div key={option._id} className={`flex items-center px-3 py-2  ${isChecked ? 'bg-primary-faded ' : 'hover:bg-hover'} `}>
                   <Checkbox id={option._id} checked={isChecked} onChange={() => handleChange(option._id)} disabled={isSuperAdmin || disabled} />
-                  {/* <input
-                    type="checkbox"
-                    id={option._id}
-                    checked={isChecked}
-                    onChange={() => handleChange(option._id)}
-                    className={`h-4 w-4 rounded border-primary text-brand focus:ring-blue-500 ${error ? 'border-red-500' : ''}`}
-                    disabled={isSuperAdmin || disabled}
-                  /> */}
                   <label htmlFor={option._id} className="ml-2 text-secondary cursor-pointer select-none">
                     {option.name}
                   </label>

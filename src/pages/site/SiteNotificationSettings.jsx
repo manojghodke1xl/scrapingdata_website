@@ -5,8 +5,9 @@ import DropDown from '../../atoms/formFields/DropDown';
 import ToggleComponent from '../../atoms/formFields/ToggleComponent';
 import { showNotification } from '../../utils/showNotification';
 import { getTemplateBySiteApi, getWhatsAppTemplateBySiteApi } from '../../apis/templates/template-apis';
-import ListManager from '../../atoms/formFields/ListManager';
 import { addAndUpdateSiteNotificationApi, getSiteNotificationByIdApi } from '../../apis/site-notification-apis';
+import MultiSelectCheckbox from '../../atoms/formFields/MultiSelectCheckBox';
+import { getNotifAgentBySiteApi } from '../../apis/notif-agent-apis';
 
 const SitesNotificationSettings = () => {
   const {
@@ -47,8 +48,11 @@ const SitesNotificationSettings = () => {
 
   const [templateState, setTemplateState] = useState({
     emailTemplate: [],
-    whatsAppTemplate: []
+    whatsAppTemplate: [],
+    notificationAgent: []
   });
+
+  console.log('siteNotification', siteNotification);
 
   useEffect(() => {
     if (siteNotification.site) {
@@ -91,15 +95,18 @@ const SitesNotificationSettings = () => {
     if (siteNotification.site) {
       (async () => {
         try {
-          const [emailTemplateResponse, whatsAppTemplateResponse] = await Promise.all([
+          const [emailTemplateResponse, whatsAppTemplateResponse, notifAgentResponse] = await Promise.all([
             getTemplateBySiteApi(siteNotification.site),
-            getWhatsAppTemplateBySiteApi(siteNotification.site)
+            getWhatsAppTemplateBySiteApi(siteNotification.site),
+            getNotifAgentBySiteApi(siteNotification.site)
           ]);
 
           if (emailTemplateResponse.status) setTemplateState((prev) => ({ ...prev, emailTemplate: emailTemplateResponse?.data?.emailTemplates }));
           else showNotification('error', emailTemplateResponse.data);
           if (whatsAppTemplateResponse.status) setTemplateState((prev) => ({ ...prev, whatsAppTemplate: whatsAppTemplateResponse?.data?.whatsAppTemplates }));
           else showNotification('error', whatsAppTemplateResponse.data);
+          if (notifAgentResponse.status) setTemplateState((prev) => ({ ...prev, notificationAgent: notifAgentResponse?.data?.notifAgents }));
+          else showNotification('error', notifAgentResponse.data);
         } catch (error) {
           showNotification('error', error.message);
         }
@@ -323,19 +330,18 @@ const SitesNotificationSettings = () => {
                         error={errors.adminEnquiryEmailTemplate}
                       />
 
-                      {siteNotification.adminEnquiryEmailTemplate && (
-                        <ListManager
-                          label="Admin Enquiry Emails"
-                          state={siteNotification}
-                          setState={setSiteNotification}
-                          keyName="adminEnquiryEmails"
-                          errorKey="forwardEmails"
-                          errors={errors}
-                          setErrors={setErrors}
-                          placeholder="Enter Email ID"
-                          type="email"
-                        />
-                      )}
+                      <MultiSelectCheckbox
+                        formLabel={'Select Admin Enquiry Emails'}
+                        options={templateState.notificationAgent?.map((agent) => ({ name: `${agent.name} (${agent.email})`, _id: agent._id }))}
+                        label="Select Email IDs"
+                        onChange={(selected) => {
+                          console.log('selected', selected);
+                          setSiteNotification((prev) => ({ ...prev, adminEnquiryEmails: selected }));
+                          if (errors.adminEnquiryEmails) setErrors((prev) => ({ ...prev, adminEnquiryEmails: '' }));
+                        }}
+                        selected={siteNotification.adminEnquiryEmails}
+                        error={errors.adminEnquiryEmails}
+                      />
 
                       <DropDown
                         label={'Select WhatsApp Template'}
@@ -351,19 +357,22 @@ const SitesNotificationSettings = () => {
                         error={errors.adminEnquiryWhatsAppTemplate}
                       />
 
-                      {siteNotification.adminEnquiryWhatsAppTemplate && (
-                        <ListManager
-                          label="Admin Enquiry Phones"
-                          state={siteNotification}
-                          setState={setSiteNotification}
-                          keyName="adminEnquiryPhoneNumber"
-                          errorKey="phoneError"
-                          errors={errors}
-                          setErrors={setErrors}
-                          placeholder="Enter Phone Number"
-                          type="tel"
-                        />
-                      )}
+                      <MultiSelectCheckbox
+                        formLabel={'Select Admin Enquiry Mobile Numbers'}
+                        options={templateState.notificationAgent?.map((agent) => ({
+                          name: `${agent.name} (${agent.phoneCode ? (agent.phoneCode?.startsWith('+') ? agent.phoneCode : `+${agent.phoneCode}`) : ''} ${
+                            agent.phoneNumber ? agent.phoneNumber : '-'
+                          })`,
+                          _id: agent._id
+                        }))}
+                        label="Select Mobile Number"
+                        onChange={(selected) => {
+                          setSiteNotification((prev) => ({ ...prev, adminEnquiryPhoneNumber: selected }));
+                          if (errors.adminEnquiryPhoneNumber) setErrors((prev) => ({ ...prev, adminEnquiryPhoneNumber: '' }));
+                        }}
+                        selected={siteNotification.adminEnquiryPhoneNumber}
+                        error={errors.adminEnquiryPhoneNumber}
+                      />
                     </>
                   )}
 
@@ -398,19 +407,17 @@ const SitesNotificationSettings = () => {
                         error={errors.adminSubscriberEmailTemplate}
                       />
 
-                      {siteNotification.adminSubscriberEmailTemplate && (
-                        <ListManager
-                          label="Admin Enquiry Emails"
-                          state={siteNotification}
-                          setState={setSiteNotification}
-                          keyName="adminSubscriberEmails"
-                          errorKey="forwardEmails"
-                          errors={errors}
-                          setErrors={setErrors}
-                          placeholder="Enter Email ID"
-                          type="email"
-                        />
-                      )}
+                      <MultiSelectCheckbox
+                        formLabel={'Select Admin Subscriber Emails'}
+                        options={templateState.notificationAgent?.map((agent) => ({ name: `${agent.name} (${agent.email})`, _id: agent._id }))}
+                        label="Select Email IDs"
+                        onChange={(selected) => {
+                          setSiteNotification((prev) => ({ ...prev, adminSubscriberEmails: selected }));
+                          if (errors.adminSubscriberEmails) setErrors((prev) => ({ ...prev, adminSubscriberEmails: '' }));
+                        }}
+                        selected={siteNotification.adminSubscriberEmails}
+                        error={errors.adminSubscriberEmails}
+                      />
 
                       <DropDown
                         label={'Select WhatsApp Template'}
@@ -426,19 +433,22 @@ const SitesNotificationSettings = () => {
                         error={errors.adminSubscriberWhatsAppTemplate}
                       />
 
-                      {siteNotification.adminSubscriberWhatsAppTemplate && (
-                        <ListManager
-                          label="Admin Subscriber Phones"
-                          state={siteNotification}
-                          setState={setSiteNotification}
-                          keyName="adminSubscriberPhoneNumber"
-                          errorKey="phoneError"
-                          errors={errors}
-                          setErrors={setErrors}
-                          placeholder="Enter Phone Number"
-                          type="tel"
-                        />
-                      )}
+                      <MultiSelectCheckbox
+                        formLabel={'Select Admin Subscriber Mobile Numbers'}
+                        options={templateState.notificationAgent?.map((agent) => ({
+                          name: `${agent.name} (${agent.phoneCode ? (agent.phoneCode?.startsWith('+') ? agent.phoneCode : `+${agent.phoneCode}`) : ''} ${
+                            agent.phoneNumber ? agent.phoneNumber : '-'
+                          })`,
+                          _id: agent._id
+                        }))}
+                        label="Select Mobile Number"
+                        onChange={(selected) => {
+                          setSiteNotification((prev) => ({ ...prev, adminSubscriberPhoneNumber: selected }));
+                          if (errors.adminSubscriberPhoneNumber) setErrors((prev) => ({ ...prev, adminSubscriberPhoneNumber: '' }));
+                        }}
+                        selected={siteNotification.adminSubscriberPhoneNumber}
+                        error={errors.adminSubscriberPhoneNumber}
+                      />
                     </>
                   )}
                 </div>

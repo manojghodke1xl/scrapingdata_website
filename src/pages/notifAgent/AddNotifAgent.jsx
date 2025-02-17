@@ -166,7 +166,6 @@ const AddNotifAgent = () => {
                   setNotifAgentDetails((prev) => ({ ...prev, sites: selected }));
                   if (errors.sites) setErrors((prev) => ({ ...prev, sites: '' }));
                 }}
-                isSuperAdmin={notifAgentDetials.isSuperAdmin}
                 selected={notifAgentDetials.sites}
                 error={errors.sites}
               />

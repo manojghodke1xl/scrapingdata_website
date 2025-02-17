@@ -31,7 +31,7 @@ const ParticipantList = () => {
       country: <CountryFlag divClassName={'justify-center'} dialingCode={phoneCode?.startsWith('+') ? phoneCode?.slice(1) : phoneCode} />,
       phoneNumber: (
         <TruncatableFieldToolTip
-          title={'Mobile Number'}
+         
           content={`${phoneCode ? (phoneCode?.startsWith('+') ? phoneCode : `+${phoneCode}`) : ''} ${phoneNumber ? phoneNumber : '-'}`}
         />
       ),

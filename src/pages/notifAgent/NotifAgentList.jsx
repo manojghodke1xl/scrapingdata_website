@@ -13,12 +13,14 @@ const NotifAgentList = () => {
   const [notifAgents, setNotifAgents] = useState([]);
 
   const rows = notifAgents.map((agent) => {
-    const { _id, name, email, isBlocked, sites, createdAt, updatedAt } = agent;
+    const { _id, name, email, isBlocked, sites, phoneCode, phoneNumber, createdAt, updatedAt } = agent;
+    console.log('phoneCode,phoneNumber', phoneCode, phoneNumber);
     return {
       id: _id,
       exportData: agent,
       name: <TruncatableFieldToolTip content={name} />,
       email: <TruncatableFieldToolTip content={email} />,
+      phoneNumber: <TruncatableFieldToolTip content={`${phoneCode ? (phoneCode?.startsWith('+') ? phoneCode : `+${phoneCode}`) : ''} ${phoneNumber ? phoneNumber : '-'}`} />,
       sites: <TruncatableFieldToolTip title={'Sites'} content={sites.map((s) => `${s.name} (${s.host})`).join(', ')} />,
       isBlocked: (
         <div
@@ -49,6 +51,7 @@ const NotifAgentList = () => {
                   { label: 'Sr. No.', key: 'srno' },
                   { label: 'Name', key: 'name' },
                   { label: 'Email', key: 'email' },
+                  { label: 'Mobile Number', key: 'phoneNumber' },
                   { label: 'Sites', key: 'sites' },
                   { label: 'Status', key: 'isBlocked' },
                   { label: 'Created Date', key: 'createdAt' },
