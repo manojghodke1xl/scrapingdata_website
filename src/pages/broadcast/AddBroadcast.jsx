@@ -36,13 +36,13 @@ const AddBroadcast = () => {
     site: '',
     target: '',
     refTo: undefined,
-    isSendInstantly: true,
     broadcasts: [
       {
         channels: [],
         emailTemplate: null,
         smsTemplate: null,
         whatsappTemplate: null,
+        isSendInstantly: true,
         delay: { unit: 'Days', value: '', ms: '' }
       }
     ]
@@ -218,7 +218,7 @@ const AddBroadcast = () => {
   const addVariable = () => {
     setBroadcastDetails((prev) => ({
       ...prev,
-      broadcasts: [...prev.broadcasts, { channels: [], delay: { unit: 'Days', value: '', custom: '', ms: '' } }]
+      broadcasts: [...prev.broadcasts, { channels: [], isSendInstantly: true, delay: { unit: 'Days', value: '', custom: '', ms: '' } }]
     }));
   };
 
@@ -405,10 +405,10 @@ const AddBroadcast = () => {
 
                 <ToggleComponent
                   label={'Send Instantly?'}
-                  isEnableState={broadcastDetails.isSendInstantly}
-                  setIsEnableState={(value) => setBroadcastDetails((prev) => ({ ...prev, isSendInstantly: value }))}
+                  isEnableState={item.isSendInstantly}
+                  setIsEnableState={(value) => handleVariableChange(index, 'isSendInstantly', value)}
                 />
-                {!broadcastDetails.isSendInstantly && (
+                {!item.isSendInstantly && (
                   <div>
                     <label className="block text-sm font-medium text-primary mb-2">Custom Duration</label>
                     <div className="flex gap-2 items-center mt-1 rounded-xl border border-primary bg-inherit overflow-hidden">
@@ -416,7 +416,7 @@ const AddBroadcast = () => {
                         type="number"
                         min="0"
                         placeholder="Duration"
-                        value={item.delay.value}
+                        value={item?.delay?.value}
                         onChange={(e) => {
                           handleVariableChange(index, 'delay.value', e.target.value);
                           handleCustomScheduleChange(e.target.value, item.delay.unit, index);
@@ -424,7 +424,7 @@ const AddBroadcast = () => {
                         className="w-full border-0 focus:outline-none focus:ring-0 px-4 py-2.5 placeholder:text-secondary text-primary bg-transparent"
                       />
                       <select
-                        value={item.delay.unit}
+                        value={item?.delay?.unit}
                         onChange={(e) => {
                           handleVariableChange(index, 'delay.unit', e.target.value);
                           handleCustomScheduleChange(item.delay.value, e.target.value, index);
