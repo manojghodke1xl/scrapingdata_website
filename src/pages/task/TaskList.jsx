@@ -7,13 +7,15 @@ const TaskList = () => {
   const [tasks, setTasks] = useState([]);
 
   const rows = tasks.map((task) => {
-    const { _id, createdAt, updatedAt } = task;
+    const { _id, createdAt, updatedAt, name } = task;
     return {
       id: _id,
       createdAt: formatDateTime(createdAt),
-      updatedAt: formatDateTime(updatedAt)
+      updatedAt: formatDateTime(updatedAt),
+      name
     };
   });
+
   return (
     <div className="py-5 px-8 overflow-x-hidden mb-10">
       <div className=" w-full">
@@ -25,6 +27,7 @@ const TaskList = () => {
                 selectable={true}
                 headers={[
                   { label: 'Sr. No.', key: 'srno' },
+                  { label: 'Name', key: 'name' },
                   { label: 'Created Date', key: 'createdAt' },
                   { label: 'Updated Date', key: 'updatedAt' }
                 ]}
