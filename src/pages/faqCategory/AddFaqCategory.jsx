@@ -17,7 +17,7 @@ const AddFaqCategory = () => {
 
   const validate = () => {
     const newErrors = {};
-    if (!fqaCategoryName) newErrors.name = 'Name is required';
+    if (!fqaCategoryName) newErrors.name = 'Faq Category Name is required';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };

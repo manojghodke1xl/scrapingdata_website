@@ -40,7 +40,8 @@ const AddBroadcast = () => {
         channels: [],
         emailTemplate: null,
         smsTemplate: null,
-        whatsappTemplate: null
+        whatsappTemplate: null,
+        delay: { unit: 'Days', value: '', ms: '' }
       }
     ]
   });
@@ -142,6 +143,24 @@ const AddBroadcast = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleTimeConversion = (value, unit) => {
+    const msConversions = {
+      Seconds: 1000,
+      Minutes: 60 * 1000,
+      Hours: 60 * 60 * 1000,
+      Days: 24 * 60 * 60 * 1000,
+      Weeks: 7 * 24 * 60 * 60 * 1000,
+      Months: 30 * 24 * 60 * 60 * 1000,
+      Years: 365 * 24 * 60 * 60 * 1000
+    };
+    return value * msConversions[unit];
+  };
+
+  const handleCustomScheduleChange = (value, unit, index) => {
+    const msValue = handleTimeConversion(value, unit);
+    handleVariableChange(index, 'delay.ms', msValue.toString());
   };
 
   const checkScrollability = () => {
@@ -342,6 +361,37 @@ const AddBroadcast = () => {
                   }}
                   selected={item.channels}
                 />
+
+                <div className="mt-5">
+                  <label className="block text-sm font-medium text-primary mb-2">Custom Duration</label>
+                  <div className="flex gap-2 items-center mt-1 rounded-xl border border-primary bg-inherit overflow-hidden">
+                    <input
+                      type="number"
+                      min="0"
+                      placeholder="Duration"
+                      value={item.delay.value}
+                      onChange={(e) => {
+                        handleVariableChange(index, 'delay.value', e.target.value);
+                        handleCustomScheduleChange(e.target.value, item.delay.unit, index);
+                      }}
+                      className="w-full border-0 focus:outline-none focus:ring-0 px-4 py-2.5 placeholder:text-secondary text-primary bg-transparent"
+                    />
+                    <select
+                      value={item.delay.unit}
+                      onChange={(e) => {
+                        handleVariableChange(index, 'delay.unit', e.target.value);
+                        handleCustomScheduleChange(item.delay.value, e.target.value, index);
+                      }}
+                      className="w-30 border-0 focus:outline-none focus:ring-0 py-2.5 bg-grey mr-2 text-primary  "
+                    >
+                      {['Days', 'Seconds', 'Hours', 'Weeks', 'Months', 'Years'].map((unit) => (
+                        <option key={unit} value={unit}>
+                          {unit}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
 
                 {item.channels.length > 0 && (
                   <div>
