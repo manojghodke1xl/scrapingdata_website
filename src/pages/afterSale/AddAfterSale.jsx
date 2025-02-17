@@ -170,10 +170,25 @@ const AddAfterSale = () => {
     return () => window.removeEventListener('resize', checkScrollability);
   }, []);
 
+  console.log('afterSaleDetails', afterSaleDetails);
   const handleVariableChange = (index, field, value) => {
     setAfterSaleDetails((prev) => {
       const updated = [...prev.followUps];
-      if (field.includes('.')) {
+
+      if (field === 'channels') {
+        const prevChannels = updated[index].channels;
+
+        const removedChannels = prevChannels.filter((channel) => !value.includes(channel));
+
+        const newAfterSale = { ...updated[index], channels: value };
+        removedChannels.forEach((channel) => {
+          if (channel === 'email') newAfterSale.emailTemplate = null;
+          if (channel === 'sms') newAfterSale.smsTemplate = null;
+          if (channel === 'whatsapp') newAfterSale.whatsappTemplate = null;
+        });
+
+        updated[index] = newAfterSale;
+      } else if (field.includes('.')) {
         const [parent, child] = field.split('.');
         updated[index] = {
           ...updated[index],
