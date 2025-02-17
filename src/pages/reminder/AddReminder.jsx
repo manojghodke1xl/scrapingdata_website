@@ -160,7 +160,20 @@ const AddReminder = () => {
   const handleVariableChange = (index, field, value) => {
     setReminderDetails((prev) => {
       const updated = [...prev.reminders];
-      if (field.includes('.')) {
+      if (field === 'channels') {
+        const prevChannels = updated[index].channels;
+
+        const removedChannels = prevChannels.filter((channel) => !value.includes(channel));
+
+        const newReminder = { ...updated[index], channels: value };
+        removedChannels.forEach((channel) => {
+          if (channel === 'email') newReminder.emailTemplate = null;
+          if (channel === 'sms') newReminder.smsTemplate = null;
+          if (channel === 'whatsapp') newReminder.whatsappTemplate = null;
+        });
+
+        updated[index] = newReminder;
+      } else if (field.includes('.')) {
         const [parent, child] = field.split('.');
         updated[index] = {
           ...updated[index],

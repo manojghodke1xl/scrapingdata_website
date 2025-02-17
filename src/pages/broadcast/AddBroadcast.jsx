@@ -10,14 +10,14 @@ import { IoCloseSharp } from 'react-icons/io5';
 import MultiSelectCheckbox from '../../atoms/formFields/MultiSelectCheckBox';
 import { getAfterSaleTemplateApi } from '../../apis/after-sale-apis';
 import CommonModal from '../../atoms/modal/CommonModal';
-import { addReminderApi, getExistingReminderApi, getReminderByIdApi, updateReminderApi } from '../../apis/reminder-apis';
+import { addBroadcastApi, getBroadcastByIdApi, getExistingBroadcastApi, updateBroadcastApi } from '../../apis/broadcast-apis';
 import { formatDateTime } from '../../utils/dateFormats';
 import { FaEye } from 'react-icons/fa';
 import EmailPreview from '../../atoms/templatePreview/EmailPreview';
 import WhatsAppPreview from '../../atoms/templatePreview/WhatsAppPreview';
 import { MdEdit } from 'react-icons/md';
 
-const AddReminder = () => {
+const AddBroadcast = () => {
   const { id = '' } = useParams();
   const navigate = useNavigate();
   const {
@@ -35,14 +35,12 @@ const AddReminder = () => {
     site: '',
     target: '',
     refTo: undefined,
-    reminders: [
+    broadcasts: [
       {
         channels: [],
-        when: 'beforeEvent',
         emailTemplate: null,
         smsTemplate: null,
-        whatsappTemplate: null,
-        delay: { unit: 'Days', value: '', custom: '', ms: '' }
+        whatsappTemplate: null
       }
     ]
   });
@@ -53,10 +51,11 @@ const AddReminder = () => {
     whatsAppTemplate: []
   });
 
-  const [existingReminder, setExistingReminder] = useState({
+  const [existingBroadcast, setExistingBroadcast] = useState({
     modelOpen: false,
-    reminderId: ''
+    broadcastId: ''
   });
+
   const [displayTemplate, setDisplayTemplate] = useState(null);
 
   useEffect(() => {
@@ -91,9 +90,9 @@ const AddReminder = () => {
     if (id) {
       setLoading(true);
       (async () => {
-        const { status, data } = await getReminderByIdApi(id);
+        const { status, data } = await getBroadcastByIdApi(id);
         if (status) {
-          const { site, refTo, ...rest } = data.reminder;
+          const { site, refTo, ...rest } = data.broadcast;
           setBroadcastDetails((prev) => ({
             ...prev,
             ...rest,
@@ -112,8 +111,8 @@ const AddReminder = () => {
   useEffect(() => {
     if (!id && !isDuplicate && broadcastDetails.site && broadcastDetails.refTo) {
       (async () => {
-        const { status, data } = await getExistingReminderApi(broadcastDetails.site, broadcastDetails.refTo);
-        if (status) if (data.reminder) setExistingReminder((prev) => ({ ...prev, modelOpen: true, reminderId: data.reminder._id }));
+        const { status, data } = await getExistingBroadcastApi(broadcastDetails.site, broadcastDetails.refTo);
+        if (status) if (data.broadcast) setExistingBroadcast((prev) => ({ ...prev, modelOpen: true, broadcastId: data.broadcast._id }));
       })();
     }
   }, [broadcastDetails.site, broadcastDetails.refTo, id, isDuplicate]);
@@ -133,7 +132,7 @@ const AddReminder = () => {
     if (!validate()) return;
     setLoading(true);
     try {
-      const { status, data } = await (id ? (isDuplicate ? addReminderApi(broadcastDetails) : updateReminderApi(id, broadcastDetails)) : addReminderApi(broadcastDetails));
+      const { status, data } = await (id ? (isDuplicate ? addBroadcastApi(broadcastDetails) : updateBroadcastApi(id, broadcastDetails)) : addBroadcastApi(broadcastDetails));
       if (status) {
         showNotification('success', data.message);
         navigate('/broadcast/broadcast-list');
@@ -159,8 +158,22 @@ const AddReminder = () => {
 
   const handleVariableChange = (index, field, value) => {
     setBroadcastDetails((prev) => {
-      const updated = [...prev.reminders];
-      if (field.includes('.')) {
+      const updated = [...prev.broadcasts];
+
+      if (field === 'channels') {
+        const prevChannels = updated[index].channels;
+
+        const removedChannels = prevChannels.filter((channel) => !value.includes(channel));
+
+        const newBroadcast = { ...updated[index], channels: value };
+        removedChannels.forEach((channel) => {
+          if (channel === 'email') newBroadcast.emailTemplate = null;
+          if (channel === 'sms') newBroadcast.smsTemplate = null;
+          if (channel === 'whatsapp') newBroadcast.whatsappTemplate = null;
+        });
+
+        updated[index] = newBroadcast;
+      } else if (field.includes('.')) {
         const [parent, child] = field.split('.');
         updated[index] = {
           ...updated[index],
@@ -169,39 +182,22 @@ const AddReminder = () => {
       } else {
         updated[index] = { ...updated[index], [field]: value };
       }
-      return { ...prev, reminders: updated };
+
+      return { ...prev, broadcasts: updated };
     });
   };
 
-  const handleTimeConversion = (value, unit) => {
-    const msConversions = {
-      Seconds: 1000,
-      Minutes: 60 * 1000,
-      Hours: 60 * 60 * 1000,
-      Days: 24 * 60 * 60 * 1000,
-      Weeks: 7 * 24 * 60 * 60 * 1000,
-      Months: 30 * 24 * 60 * 60 * 1000,
-      Years: 365 * 24 * 60 * 60 * 1000
-    };
-    return value * msConversions[unit];
-  };
-
-  const handleCustomScheduleChange = (value, unit, index) => {
-    const msValue = handleTimeConversion(value, unit);
-    handleVariableChange(index, 'delay.ms', msValue.toString());
-  };
-
   const removeVariable = (index) => {
-    if (broadcastDetails.reminders.length === 1) return;
+    if (broadcastDetails.broadcasts.length === 1) return;
     setBroadcastDetails((prev) => ({
       ...prev,
-      reminders: prev.reminders.filter((_, i) => i !== index)
+      broadcasts: prev.broadcasts.filter((_, i) => i !== index)
     }));
   };
   const addVariable = () => {
     setBroadcastDetails((prev) => ({
       ...prev,
-      reminders: [...prev.reminders, { channels: [], delay: { unit: 'Days', value: '', custom: '', ms: '' } }]
+      broadcasts: [...prev.broadcasts, { channels: [], delay: { unit: 'Days', value: '', custom: '', ms: '' } }]
     }));
   };
 
@@ -219,7 +215,7 @@ const AddReminder = () => {
   };
 
   const handleRedirectEdit = (channel, index) => {
-    const template = formState.emailTemplate.find((template) => template._id === broadcastDetails.reminders[index].emailTemplate);
+    const template = formState.emailTemplate.find((template) => template._id === broadcastDetails.broadcasts[index].emailTemplate);
     if (template) navigate(`/templates/edit-email-template/${template._id}`);
   };
 
@@ -328,7 +324,7 @@ const AddReminder = () => {
             <span className=" text-primary ">Follow - up</span>
           </div>
           <div className="w-full">
-            {broadcastDetails.reminders.map((item, index) => (
+            {broadcastDetails.broadcasts.map((item, index) => (
               <div key={index} className="flex flex-col border border-primary bg-grey p-4 rounded-xl mt-5">
                 <div className="flex justify-end items-center">
                   <IoCloseSharp className="cursor-pointer" onClick={() => removeVariable(index)} />
@@ -341,42 +337,11 @@ const AddReminder = () => {
                     { _id: 'whatsapp', name: 'WhatsApp' }
                   ]}
                   label="Channels Available"
-                  onChange={(selected) => handleVariableChange(index, 'channels', selected)}
+                  onChange={(selected) => {
+                    handleVariableChange(index, 'channels', selected);
+                  }}
                   selected={item.channels}
                 />
-
-                {(item.delay.custom === 'custom' || item.delay.value) && (
-                  <div className="mt-5">
-                    <label className="block text-sm font-medium text-primary mb-2">Custom Duration</label>
-                    <div className="flex gap-2 items-center mt-1 rounded-xl border border-primary bg-inherit overflow-hidden">
-                      <input
-                        type="number"
-                        min="0"
-                        placeholder="Duration"
-                        value={item.delay.value}
-                        onChange={(e) => {
-                          handleVariableChange(index, 'delay.value', e.target.value);
-                          handleCustomScheduleChange(e.target.value, item.delay.unit, index);
-                        }}
-                        className="w-full border-0 focus:outline-none focus:ring-0 px-4 py-2.5 placeholder:text-secondary text-primary bg-transparent"
-                      />
-                      <select
-                        value={item.delay.unit}
-                        onChange={(e) => {
-                          handleVariableChange(index, 'delay.unit', e.target.value);
-                          handleCustomScheduleChange(item.delay.value, e.target.value, index);
-                        }}
-                        className="w-30 border-0 focus:outline-none focus:ring-0 py-2.5 bg-grey mr-2 text-primary  "
-                      >
-                        {['Days', 'Seconds', 'Hours', 'Weeks', 'Months', 'Years'].map((unit) => (
-                          <option key={unit} value={unit}>
-                            {unit}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                  </div>
-                )}
 
                 {item.channels.length > 0 && (
                   <div>
@@ -436,9 +401,6 @@ const AddReminder = () => {
         </div>
       </div>
 
-      {/* <div className="w-full justify-center items-center border-b  border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end ">
-        <NoteComponent note={id ? editFaqCategoryNote : addFaqCategoryNote} />
-      </div> */}
       {!isScrollable && (
         <div className="w-full flex justify-end items-center gap-4 pt-8  border- border-primary">
           <FormButtons to="/reminder/reminder-list" type="submit" onClick={handleSubmit} btnLebal={id ? (isDuplicate ? 'Add' : 'Save Changes') : 'Add'} loading={isLoading} />
@@ -446,15 +408,15 @@ const AddReminder = () => {
       )}
 
       <CommonModal
-        isModalVisible={existingReminder.modelOpen}
-        onConfirm={() => navigate(`/reminder/edit-reminder/${existingReminder.reminderId}`)}
-        onCancel={() => navigate(`/reminder/reminder-list`)}
-        setModalVisibility={() => setExistingReminder({ ...existingReminder, modelOpen: false })}
-        label={'Existing Reminder Present'}
-        message={'You cannot create two same Reminder. Please edit the previous one instead. Click Confirm to proceed.'}
+        isModalVisible={existingBroadcast.modelOpen}
+        onConfirm={() => navigate(`/broadcast/edit-broadcast/${existingBroadcast.broadcastId}`)}
+        onCancel={() => navigate(`/broadcast/broadcast-list`)}
+        setModalVisibility={() => setExistingBroadcast({ ...existingBroadcast, modelOpen: false })}
+        label={'Existing Broadcast Present'}
+        message={'You cannot create two same Broadcast. Please edit the previous one instead. Click Confirm to proceed.'}
       />
     </div>
   );
 };
 
-export default AddReminder;
+export default AddBroadcast;
