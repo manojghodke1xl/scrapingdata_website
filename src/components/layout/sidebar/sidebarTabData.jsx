@@ -1,4 +1,4 @@
-import { RiAdminLine, RiNotificationBadgeLine } from 'react-icons/ri';
+import { RiAdminLine, RiNotificationBadgeLine, RiTaskLine } from 'react-icons/ri';
 import { RxDashboard } from 'react-icons/rx';
 import { TbApps, TbWorld } from 'react-icons/tb';
 
@@ -116,6 +116,11 @@ export const adminNavLinks = [
       '/notification-agent/duplicate-notification-agent'
     ],
     icon: <RiNotificationBadgeLine />
+  },
+  {
+    title: 'Tasks',
+    to: ['/task/task-list'],
+    icon: <RiTaskLine />
   }
 ];
 

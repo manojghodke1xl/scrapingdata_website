@@ -56,6 +56,7 @@ import WebinarRoutes from './private-routes/WebinarRoutes';
 import UTMBuilderRoutes from './private-routes/UTMBuilderRoutes';
 import BroadcastRoutes from './private-routes/BroadcastRoutes';
 import NotifAgentRoutes from './private-routes/NotifAgentRoutes';
+import TaskRoutes from './private-routes/taskRoutes';
 
 const ZohoStatus = lazy(() => import('../pages/integration/ZohoStatus'));
 
@@ -105,7 +106,8 @@ const privateRoutes = [
   { path: 'career/*', Component: CareerRoutes },
   { path: 'webinar/*', Component: WebinarRoutes },
   { path: 'utm-builder/*', Component: UTMBuilderRoutes },
-  { path: 'notification-agent/*', Component: NotifAgentRoutes }
+  { path: 'notification-agent/*', Component: NotifAgentRoutes },
+  { path: 'task/*', Component: TaskRoutes }
 ];
 
 const App = () => {
