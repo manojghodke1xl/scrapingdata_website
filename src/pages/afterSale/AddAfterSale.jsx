@@ -170,7 +170,6 @@ const AddAfterSale = () => {
     return () => window.removeEventListener('resize', checkScrollability);
   }, []);
 
-  console.log('afterSaleDetails', afterSaleDetails);
   const handleVariableChange = (index, field, value) => {
     setAfterSaleDetails((prev) => {
       const updated = [...prev.followUps];

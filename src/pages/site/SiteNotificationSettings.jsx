@@ -162,7 +162,7 @@ const SitesNotificationSettings = () => {
           <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
             <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
               <div className="sm:w-7/12 w-full flex flex-col">
-                <span className=" text-primary ">User Preferences</span>
+                <span className=" text-primary ">User Enquiry Preferences</span>
               </div>
               <div className="w-full">
                 <div className="flex flex-col gap-y-5">
@@ -205,7 +205,18 @@ const SitesNotificationSettings = () => {
                       />
                     </>
                   )}
+                </div>
+              </div>
+            </div>
+          </div>
 
+          <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
+            <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
+              <div className="sm:w-7/12 w-full flex flex-col">
+                <span className=" text-primary ">User Subscriber Preferences</span>
+              </div>
+              <div className="w-full">
+                <div className="flex flex-col gap-y-5">
                   <ToggleComponent
                     bgColor={'bg-grey'}
                     label={'Send User Subscriber Notification'}
@@ -245,7 +256,18 @@ const SitesNotificationSettings = () => {
                       />
                     </>
                   )}
+                </div>
+              </div>
+            </div>
+          </div>
 
+          <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
+            <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
+              <div className="sm:w-7/12 w-full flex flex-col">
+                <span className=" text-primary ">User Donation Preferences</span>
+              </div>
+              <div className="w-full">
+                <div className="flex flex-col gap-y-5">
                   <ToggleComponent
                     bgColor={'bg-grey'}
                     label={'Send User Donation Notification'}
@@ -293,7 +315,7 @@ const SitesNotificationSettings = () => {
           <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
             <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
               <div className="sm:w-7/12 w-full flex flex-col">
-                <span className=" text-primary ">Admin Preferences</span>
+                <span className=" text-primary ">Admin Enquiry Preferences</span>
               </div>
               <div className="w-full">
                 <div className="flex flex-col gap-y-5">
@@ -372,7 +394,18 @@ const SitesNotificationSettings = () => {
                       />
                     </>
                   )}
+                </div>
+              </div>
+            </div>
+          </div>
 
+          <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
+            <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
+              <div className="sm:w-7/12 w-full flex flex-col">
+                <span className=" text-primary ">Admin Subscriber Preferences</span>
+              </div>
+              <div className="w-full">
+                <div className="flex flex-col gap-y-5">
                   <ToggleComponent
                     bgColor={'bg-grey'}
                     label={'Send Admin Subscriber Notification'}

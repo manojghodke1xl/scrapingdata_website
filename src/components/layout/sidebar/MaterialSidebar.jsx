@@ -4,8 +4,8 @@ import { TbFileSearch, TbTemplate, TbUsersGroup } from 'react-icons/tb';
 import { IoSettingsOutline } from 'react-icons/io5';
 import { MdMessage } from 'react-icons/md';
 import { PiVideoConferenceLight } from 'react-icons/pi';
-import { FaBullhorn, FaChartLine, FaLink, FaRegFile, FaRegImage, FaRegQuestionCircle } from 'react-icons/fa';
-import { LuLogs } from 'react-icons/lu';
+import { FaBullhorn, FaChartLine, FaRegFile, FaRegImage, FaRegQuestionCircle } from 'react-icons/fa';
+import { LuLink, LuLogs } from 'react-icons/lu';
 import { FiCalendar } from 'react-icons/fi';
 import {
   adminNavLinks,
@@ -181,7 +181,7 @@ const MaterialSidebar = ({ handleToggleSidebar = () => {} }) => {
           <ReusableAccordion
             title="Utilities"
             links={utilitiesPath}
-            icon={<FaLink />}
+            icon={<LuLink />}
             isOpen={openAccordion === 'Utilities"'}
             onToggle={() => setOpenAccordion(openAccordion === 'Utilities"' ? null : 'Utilities"')}
             handleToggleSidebar={handleToggleSidebar}
