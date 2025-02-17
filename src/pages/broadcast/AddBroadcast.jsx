@@ -16,6 +16,7 @@ import { FaEye } from 'react-icons/fa';
 import EmailPreview from '../../atoms/templatePreview/EmailPreview';
 import WhatsAppPreview from '../../atoms/templatePreview/WhatsAppPreview';
 import { MdEdit } from 'react-icons/md';
+import ToggleComponent from '../../atoms/formFields/ToggleComponent';
 
 const AddBroadcast = () => {
   const { id = '' } = useParams();
@@ -35,6 +36,7 @@ const AddBroadcast = () => {
     site: '',
     target: '',
     refTo: undefined,
+    isSendInstantly: true,
     broadcasts: [
       {
         channels: [],
@@ -342,9 +344,9 @@ const AddBroadcast = () => {
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className=" text-primary ">Follow - up</span>
           </div>
-          <div className="w-full">
+          <div className="w-full flex flex-col gap-y-5">
             {broadcastDetails.broadcasts.map((item, index) => (
-              <div key={index} className="flex flex-col border border-primary bg-grey p-4 rounded-xl mt-5">
+              <div key={index} className="flex flex-col border border-primary bg-grey p-4 rounded-xl gap-y-5">
                 <div className="flex justify-end items-center">
                   <IoCloseSharp className="cursor-pointer" onClick={() => removeVariable(index)} />
                 </div>
@@ -362,41 +364,10 @@ const AddBroadcast = () => {
                   selected={item.channels}
                 />
 
-                <div className="mt-5">
-                  <label className="block text-sm font-medium text-primary mb-2">Custom Duration</label>
-                  <div className="flex gap-2 items-center mt-1 rounded-xl border border-primary bg-inherit overflow-hidden">
-                    <input
-                      type="number"
-                      min="0"
-                      placeholder="Duration"
-                      value={item.delay.value}
-                      onChange={(e) => {
-                        handleVariableChange(index, 'delay.value', e.target.value);
-                        handleCustomScheduleChange(e.target.value, item.delay.unit, index);
-                      }}
-                      className="w-full border-0 focus:outline-none focus:ring-0 px-4 py-2.5 placeholder:text-secondary text-primary bg-transparent"
-                    />
-                    <select
-                      value={item.delay.unit}
-                      onChange={(e) => {
-                        handleVariableChange(index, 'delay.unit', e.target.value);
-                        handleCustomScheduleChange(item.delay.value, e.target.value, index);
-                      }}
-                      className="w-30 border-0 focus:outline-none focus:ring-0 py-2.5 bg-grey mr-2 text-primary  "
-                    >
-                      {['Days', 'Seconds', 'Hours', 'Weeks', 'Months', 'Years'].map((unit) => (
-                        <option key={unit} value={unit}>
-                          {unit}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-
                 {item.channels.length > 0 && (
                   <div>
                     {item.channels.map((channel, channelIndex) => (
-                      <div key={channelIndex} className="mt-5 relative">
+                      <div key={channelIndex} className="relative">
                         {item[`${channel}Template`] && (
                           <div className="absolute flex items-center justify-center gap-3 right-2">
                             <button onClick={() => handleRedirectEdit(channel, index)} className="hover:bg-hover" type="button">
@@ -431,15 +402,54 @@ const AddBroadcast = () => {
                     ))}
                   </div>
                 )}
+
+                <ToggleComponent
+                  label={'Send Instantly?'}
+                  isEnableState={broadcastDetails.isSendInstantly}
+                  setIsEnableState={(value) => setBroadcastDetails((prev) => ({ ...prev, isSendInstantly: value }))}
+                />
+                {!broadcastDetails.isSendInstantly && (
+                  <div>
+                    <label className="block text-sm font-medium text-primary mb-2">Custom Duration</label>
+                    <div className="flex gap-2 items-center mt-1 rounded-xl border border-primary bg-inherit overflow-hidden">
+                      <input
+                        type="number"
+                        min="0"
+                        placeholder="Duration"
+                        value={item.delay.value}
+                        onChange={(e) => {
+                          handleVariableChange(index, 'delay.value', e.target.value);
+                          handleCustomScheduleChange(e.target.value, item.delay.unit, index);
+                        }}
+                        className="w-full border-0 focus:outline-none focus:ring-0 px-4 py-2.5 placeholder:text-secondary text-primary bg-transparent"
+                      />
+                      <select
+                        value={item.delay.unit}
+                        onChange={(e) => {
+                          handleVariableChange(index, 'delay.unit', e.target.value);
+                          handleCustomScheduleChange(item.delay.value, e.target.value, index);
+                        }}
+                        className="w-30 border-0 focus:outline-none focus:ring-0 py-2.5 bg-grey mr-2 text-primary  "
+                      >
+                        {['Days', 'Seconds', 'Hours', 'Weeks', 'Months', 'Years'].map((unit) => (
+                          <option key={unit} value={unit}>
+                            {unit}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                )}
               </div>
             ))}
-            <div className="mt-5 flex justify-center">
+
+            <div className="flex justify-center">
               <button className="flex items-center justify-center w-full border border-primary rounded-xl p-2" onClick={addVariable}>
                 + Add More Follow - Up
               </button>
             </div>
           </div>
-          <div className="w-full ">
+          <div className="w-full">
             {displayTemplate?.type === 'email' ? (
               <EmailPreview emailTemplate={displayTemplate?.template} />
             ) : displayTemplate?.type === 'whatsapp' ? (
