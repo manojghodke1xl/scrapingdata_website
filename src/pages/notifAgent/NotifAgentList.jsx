@@ -14,7 +14,6 @@ const NotifAgentList = () => {
 
   const rows = notifAgents.map((agent) => {
     const { _id, name, email, isBlocked, sites, phoneCode, phoneNumber, createdAt, updatedAt } = agent;
-    console.log('phoneCode,phoneNumber', phoneCode, phoneNumber);
     return {
       id: _id,
       exportData: agent,

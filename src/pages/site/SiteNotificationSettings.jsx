@@ -52,8 +52,6 @@ const SitesNotificationSettings = () => {
     notificationAgent: []
   });
 
-  console.log('siteNotification', siteNotification);
-
   useEffect(() => {
     if (siteNotification.site) {
       (async () => {
@@ -335,7 +333,6 @@ const SitesNotificationSettings = () => {
                         options={templateState.notificationAgent?.map((agent) => ({ name: `${agent.name} (${agent.email})`, _id: agent._id }))}
                         label="Select Email IDs"
                         onChange={(selected) => {
-                          console.log('selected', selected);
                           setSiteNotification((prev) => ({ ...prev, adminEnquiryEmails: selected }));
                           if (errors.adminEnquiryEmails) setErrors((prev) => ({ ...prev, adminEnquiryEmails: '' }));
                         }}
