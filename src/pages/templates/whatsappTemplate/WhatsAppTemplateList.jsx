@@ -9,11 +9,12 @@ import { IoMdRefresh } from 'react-icons/io';
 const WhatsAppTemplateList = () => {
   const [whatsAppTemplates, setWhatsAppTemplates] = useState([]);
   const [fetchRefresh, setFetchRefresh] = useState(false);
+
   const whatsappRefresh = async (id) => {
-    console.log('id is', id);
     await getWhatsAppTemplateRefreshApi(id);
     setFetchRefresh((r) => !r);
   };
+
   const rows = whatsAppTemplates.map((whatsAppTemplate) => {
     const { _id, name, site, whatsAppTemplateName, message, status, createdAt, updatedAt } = whatsAppTemplate;
 

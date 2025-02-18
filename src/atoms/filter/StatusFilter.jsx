@@ -1,10 +1,8 @@
 import { useState } from 'react';
 import { IoIosArrowDown } from 'react-icons/io';
-import { useColor } from '../../contexts/contexts/ColorContext';
 import Checkbox from '../formFields/Checkbox';
 
 const StatusFilter = ({ statuses, setStatusFilter }) => {
-  
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
 

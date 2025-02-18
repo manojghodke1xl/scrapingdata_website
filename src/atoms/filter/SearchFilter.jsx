@@ -1,9 +1,7 @@
 import { useState } from 'react';
 import { IoIosArrowDown } from 'react-icons/io';
-import { useColor } from '../../contexts/contexts/ColorContext';
 
 const SearchFilter = ({ searchCategory, setSearchKey, selectedCategory, setSelectedCategory }) => {
- 
   const [isOpen, setIsOpen] = useState(false);
 
   const handleCheckboxClick = (category) => {

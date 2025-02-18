@@ -1,8 +1,6 @@
 import { IoCloseSharp } from 'react-icons/io5';
-import { useColor } from '../../contexts/contexts/ColorContext';
 
 const DeleteModal = ({ isDeleteModalOpen, onConfirm, setDeleteModalOpen, label, message }) => {
-  
   if (!isDeleteModalOpen) return null;
 
   return (

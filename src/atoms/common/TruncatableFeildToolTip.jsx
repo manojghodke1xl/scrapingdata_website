@@ -1,9 +1,7 @@
 import { useState } from 'react';
 import { FaEye } from 'react-icons/fa';
-import { useColor } from '../../contexts/contexts/ColorContext';
 
 const TruncatableFieldToolTip = ({ content = '', maxLength = 20 }) => {
- 
   const [showTooltip, setShowTooltip] = useState(false);
 
   const isTruncated = content.length > maxLength;

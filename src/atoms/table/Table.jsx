@@ -55,8 +55,13 @@ const TableComponent = ({
   modifySite,
   modifySiteApi,
   eventId: packageEvent,
-
-  fetchRefresh
+  fetchRefresh,
+  shouldFetchData = true,
+  currentPage,
+  itemsPerPage,
+  totalCount,
+  onPageChange,
+  onItemsPerPageChange
 }) => {
   const {
     auth: { allSites },
@@ -71,9 +76,9 @@ const TableComponent = ({
     isExportModelOpen: false
   });
   const [tableState, setTableState] = useState({
-    currentPage: 1,
-    itemsPerPage: 25,
-    totalCount: 0
+    currentPage: currentPage || 1,
+    itemsPerPage: itemsPerPage || 25,
+    totalCount: totalCount || 0
   });
   const [selectionState, setSelectionState] = useState({
     selectedItems: [],
@@ -168,21 +173,28 @@ const TableComponent = ({
     );
   }, [filterState, showFilter]);
 
-  const totalPages = useMemo(() => Math.max(1, Math.ceil(tableState.totalCount / tableState.itemsPerPage)), [tableState.totalCount, tableState.itemsPerPage]);
-  useEffect(() => {
-    setRefresh((r) => !r);
-  }, [fetchRefresh]);
+  const activePage = currentPage || tableState.currentPage;
+  const activeItemsPerPage = itemsPerPage || tableState.itemsPerPage;
+  const activeTotalCount = totalCount || tableState.totalCount;
+
+  const totalPages = useMemo(() => Math.max(1, Math.ceil(activeTotalCount / activeItemsPerPage)), [activeTotalCount, activeItemsPerPage]);
+
+  const shouldFetchFromApi = !currentPage && !itemsPerPage && shouldFetchData && apiUrl;
 
   const [err, data, setRefresh] = useSetTimeout(
-    apiUrl,
-    tableState.currentPage - 1,
-    tableState.itemsPerPage,
+    shouldFetchFromApi ? apiUrl : null,
+    activePage - 1,
+    activeItemsPerPage,
     filterState.searchTerm,
     filterState.searchKey,
     filterState.statusFilter,
     filterState.siteId,
     filterState.eventId
   );
+
+  useEffect(() => {
+    setRefresh((r) => !r);
+  }, [fetchRefresh, setRefresh]);
 
   useEffect(() => {
     if (packageEvent) {
@@ -375,20 +387,38 @@ const TableComponent = ({
             isDragging={isDragging}
             sortConfig={sortConfig}
             onSort={handleSort}
+            currentPage={currentPage}
+            itemsPerPage={itemsPerPage}
           />
         </div>
         <div className="w-full mt-2">
           <div className="w-full py-3">
             {pagination && (
               <Pagination
-                currentPage={tableState.currentPage}
+                currentPage={activePage}
                 totalPages={totalPages}
-                itemsPerPage={tableState.itemsPerPage}
-                setItemsPerPage={setTableState}
-                handlePageChange={(pageNumber) => {
-                  if (pageNumber > 0 && pageNumber <= totalPages) setTableState((prev) => ({ ...prev, currentPage: pageNumber }));
+                itemsPerPage={activeItemsPerPage}
+                setItemsPerPage={(newState) => {
+                  if (onItemsPerPageChange) {
+                    onItemsPerPageChange(newState);
+                  } else {
+                    setTableState((prev) => ({
+                      ...prev,
+                      itemsPerPage: typeof newState === 'number' ? newState : newState.itemsPerPage,
+                      currentPage: 1
+                    }));
+                  }
                 }}
-                totalRecords={tableState.totalCount}
+                handlePageChange={(pageNumber) => {
+                  if (pageNumber > 0 && pageNumber <= totalPages) {
+                    if (onPageChange) {
+                      onPageChange(pageNumber);
+                    } else {
+                      setTableState((prev) => ({ ...prev, currentPage: pageNumber }));
+                    }
+                  }
+                }}
+                totalRecords={activeTotalCount}
               />
             )}
           </div>

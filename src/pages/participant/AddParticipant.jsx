@@ -29,7 +29,6 @@ const AddParticipant = () => {
 
   const [isScrollable, setIsScrollable] = useState(false);
   const [participantDetails, setParticipantDetails] = useState({
-    code: '',
     event: '',
     package: '',
     currency: '',

@@ -1,9 +1,43 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa';
 
 const Pagination = ({ currentPage, totalPages, totalRecords, itemsPerPage, setItemsPerPage, handlePageChange }) => {
   const [page, setPage] = useState(currentPage);
   const [items, setItems] = useState(itemsPerPage);
+
+  // Update local state when props change
+  useEffect(() => {
+    setPage(currentPage);
+  }, [currentPage]);
+
+  useEffect(() => {
+    setItems(itemsPerPage);
+  }, [itemsPerPage]);
+
+  const handleItemsPerPageChange = (value) => {
+    const newValue = parseInt(value, 10) || 1;
+    setItems(newValue);
+
+    // Handle both API and client-side pagination
+    if (typeof setItemsPerPage === 'function') {
+      setItemsPerPage(newValue);
+    } else if (setItemsPerPage && typeof setItemsPerPage === 'object') {
+      setItemsPerPage({ itemsPerPage: newValue, currentPage: 1 });
+    }
+  };
+
+  const handlePageInputChange = (value) => {
+    const newPage = Math.min(Math.max(1, parseInt(value, 10) || 1), totalPages);
+    setPage(newPage);
+
+    // Handle both API and client-side pagination
+    if (typeof setItemsPerPage === 'function') {
+      handlePageChange(newPage);
+    } else {
+      setItemsPerPage((prev) => ({ ...prev, currentPage: newPage }));
+      handlePageChange(newPage);
+    }
+  };
 
   const renderPaginationLinks = () => {
     const paginationArray = [];
@@ -13,7 +47,7 @@ const Pagination = ({ currentPage, totalPages, totalRecords, itemsPerPage, setIt
       <span
         key={1}
         className={`rounded-xl mx-1 items-center justify-center h-fit py-1.5 px-3.5 border border-primary font-medium ${
-          1 === currentPage ? 'z-10 bg-primary-faded text-brand' : 'text-primary  hover:bg-hover focus:z-20 focus:outline-offset-0 cursor-pointer'
+          1 === currentPage ? 'z-10 bg-primary-faded text-brand' : 'text-primary hover:bg-hover focus:z-20 focus:outline-offset-0 cursor-pointer'
         }`}
         onClick={() => handlePageChange(1)}
       >
@@ -36,7 +70,7 @@ const Pagination = ({ currentPage, totalPages, totalRecords, itemsPerPage, setIt
         <span
           key={i}
           className={`rounded-xl mx-1 items-center justify-center h-fit py-1.5 px-3.5 border border-primary font-medium ${
-            i === currentPage ? 'z-10 bg-primary-faded text-brand' : 'text-primary  hover:bg-hover focus:z-20 focus:outline-offset-0 cursor-pointer'
+            i === currentPage ? 'z-10 bg-primary-faded text-brand' : 'text-primary hover:bg-hover focus:z-20 focus:outline-offset-0 cursor-pointer'
           }`}
           onClick={() => handlePageChange(i)}
         >
@@ -60,7 +94,7 @@ const Pagination = ({ currentPage, totalPages, totalRecords, itemsPerPage, setIt
         <span
           key={totalPages}
           className={`rounded-xl mx-1 items-center justify-center h-fit py-1.5 px-3.5 font-medium ${
-            totalPages === currentPage ? 'z-10 bg-primary-faded text-brand border border-primary' : 'text-primary  hover:bg-hover focus:z-20 focus:outline-offset-0 cursor-pointer'
+            totalPages === currentPage ? 'z-10 bg-primary-faded text-brand border border-primary' : 'text-primary hover:bg-hover focus:z-20 focus:outline-offset-0 cursor-pointer'
           }`}
           onClick={() => handlePageChange(totalPages)}
         >
@@ -82,8 +116,8 @@ const Pagination = ({ currentPage, totalPages, totalRecords, itemsPerPage, setIt
               type="number"
               min="1"
               onWheel={(e) => e.target.blur()}
-              onKeyDown={(e) => e.key === 'Enter' && setItemsPerPage({ ...itemsPerPage, itemsPerPage: parseInt(e.target.value, 10) || 1, currentPage: 1 })}
-              onBlur={(e) => setItemsPerPage((prev) => ({ ...prev, itemsPerPage: parseInt(e.target.value, 10) || 1, currentPage: 1 }))}
+              onKeyDown={(e) => e.key === 'Enter' && handleItemsPerPageChange(e.target.value)}
+              onBlur={(e) => handleItemsPerPageChange(e.target.value)}
               onChange={(e) => setItems(e.target.value)}
               value={items}
               className={`h-8 min-w-[2.5rem] px-2 text-sm rounded-xl border border-primary text-center font-normal focus:outline-none focus:ring-0 focus:border-secondary placeholder:text-gray-400 text-dark bg-transparent transition-all`}
@@ -97,7 +131,7 @@ const Pagination = ({ currentPage, totalPages, totalRecords, itemsPerPage, setIt
             <div className="flex gap-3 items-center justify-center">
               <span
                 className={`inline-flex items-center rounded-xl border border-primary h-fit bg-inherit px-2 py-2 text-sm font-medium text-primary hover:bg-hover ${
-                  currentPage === 1 ? 'cursor-not-allowed' : 'cursor-pointer'
+                  currentPage === 1 ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'
                 }`}
                 onClick={() => currentPage > 1 && handlePageChange(currentPage - 1)}
               >
@@ -110,7 +144,7 @@ const Pagination = ({ currentPage, totalPages, totalRecords, itemsPerPage, setIt
 
               <span
                 className={`inline-flex items-center rounded-xl border border-primary h-fit bg-inherit px-2 py-2 text-sm font-medium text-primary hover:bg-hover ${
-                  currentPage === totalPages ? 'cursor-not-allowed' : 'cursor-pointer'
+                  currentPage === totalPages ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'
                 }`}
                 onClick={() => currentPage < totalPages && handlePageChange(currentPage + 1)}
               >
@@ -131,20 +165,8 @@ const Pagination = ({ currentPage, totalPages, totalRecords, itemsPerPage, setIt
               min="1"
               max={totalPages}
               onWheel={(e) => e.target.blur()}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  const newPage = Math.min(Math.max(1, parseInt(e.target.value, 10)), totalPages);
-                  setItemsPerPage((prev) => ({ ...prev, currentPage: newPage }));
-                  handlePageChange(newPage);
-                  setPage(newPage);
-                }
-              }}
-              onBlur={(e) => {
-                const newPage = Math.min(Math.max(1, parseInt(e.target.value, 10)), totalPages);
-                setItemsPerPage((prev) => ({ ...prev, currentPage: newPage }));
-                handlePageChange(newPage);
-                setPage(newPage);
-              }}
+              onKeyDown={(e) => e.key === 'Enter' && handlePageInputChange(e.target.value)}
+              onBlur={(e) => handlePageInputChange(e.target.value)}
               onChange={(e) => setPage(e.target.value)}
               value={page}
               className={`h-8 min-w-[2.5rem] px-2 text-sm rounded-xl border border-primary text-center font-normal focus:outline-none focus:ring-0 focus:border-secondary placeholder:text-placeholder text-dark bg-transparent transition-all`}

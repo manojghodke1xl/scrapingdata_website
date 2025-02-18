@@ -3,7 +3,6 @@ import { IoAdd } from 'react-icons/io5';
 import SearchComponent from '../common/SearchComponent';
 import { IoIosArrowDown } from 'react-icons/io';
 import TruncatableFieldToolTip from '../common/TruncatableFeildToolTip';
-import { useColor } from '../../contexts/contexts/ColorContext';
 
 const DropDown = ({ mt = '', width = 'w-full', name, label, SummaryChild, dropdownList = [], commonFunction, search, selected, add = false, setIsNewSegment, error }) => {
   const dropdownRef = useRef(null);

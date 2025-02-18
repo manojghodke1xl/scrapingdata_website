@@ -9,6 +9,12 @@ const useSetTimeout = (apiUrl, page, limit, val, key, a, site, event, delay = 50
   const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
+    // If apiUrl is null, don't make the API call
+    if (!apiUrl) {
+      setLoading(false);
+      return;
+    }
+
     setLoading(true);
     timeOutRef.current = setTimeout(async () => {
       try {
@@ -26,8 +32,20 @@ const useSetTimeout = (apiUrl, page, limit, val, key, a, site, event, delay = 50
         setLoading(false);
       }
     }, delay);
-    return () => clearTimeout(timeOutRef.current);
+
+    return () => {
+      clearTimeout(timeOutRef.current);
+      setLoading(false);
+    };
   }, [val, delay, apiUrl, page, limit, key, setLoading, a, site, refresh, dispatch, event]);
+
+  // Reset states when apiUrl is null
+  useEffect(() => {
+    if (!apiUrl) {
+      setError(null);
+      setData(null);
+    }
+  }, [apiUrl]);
 
   return [error, data, setRefresh];
 };

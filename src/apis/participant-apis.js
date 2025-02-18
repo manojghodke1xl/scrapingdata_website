@@ -7,3 +7,7 @@ export const sendCertificateApi = async (id, unique, bookingId) => {
 export const addParticipantApi = async (data) => {
   return await postMethodCall(`${import.meta.env.VITE_API_URL}/participant`, data);
 };
+
+export const bulkUploadParticipantsApi = async (data) => {
+  return await postMethodCall(`${import.meta.env.VITE_API_URL}/participant/import`, data);
+};

@@ -5,10 +5,8 @@ import { useState } from 'react';
 import CustomColumnSelector from '../filter/CustomColumnSelector';
 import { exportHandler } from '../../helpers/exportHandler';
 import { showNotification } from '../../utils/showNotification';
-import { useColor } from '../../contexts/contexts/ColorContext';
 
 const ExportDataModal = ({ isExportModalOpen, setExportModalOpen, label, selectedData, apiUrl, rows, headers, customColumns }) => {
-
   const [selectionState, setSelectionState] = useState({
     selectedRecords: 'currentPage',
     selectedColumns: 'visible',

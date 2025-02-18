@@ -36,9 +36,18 @@ const TableView = ({
   handleDragEnd,
   isDragging,
   sortConfig,
-  onSort
+  onSort,
+  currentPage,
+  itemsPerPage
 }) => {
   const { isDarkMode } = useColor();
+
+  const getSerialNumber = (index) => {
+    const activePage = currentPage || tableState.currentPage;
+    const activeItemsPerPage = itemsPerPage || tableState.itemsPerPage;
+    return ((activePage - 1) * activeItemsPerPage + (index + 1)).toString().padStart(3, '0');
+  };
+
   return (
     <>
       <table className="min-w-full divide-y divide-primary text-sm">
@@ -100,15 +109,7 @@ const TableView = ({
           ) : rows.length > 0 ? (
             rows?.map((row, index) => {
               return (
-                <tr
-                  key={row.id}
-                  className={`border-b border-primary ${
-                    selectionState.selectedItems.includes(row.id)
-                      ? // 'bg-blue-50'
-                        'bg-primary-faded'
-                      : 'hover:bg-hover'
-                  }`}
-                >
+                <tr key={row.id} className={`border-b border-primary ${selectionState.selectedItems.includes(row.id) ? 'bg-primary-faded' : 'hover:bg-hover'}`}>
                   {selectable && (
                     <td className="px-4 py-1">
                       <Checkbox checked={selectionState.selectedItems.includes(row.id)} onChange={() => handleRowCheckboxChange(row.id)} disabled={row.isSuperAdmin} />
@@ -116,7 +117,7 @@ const TableView = ({
                   )}
                   {headers.map((header, headerIndex) => (
                     <td key={`${row.id}-${headerIndex}`} className="px-2 text-secondary whitespace-nowrap font-medium">
-                      {header.key === 'srno' ? ((tableState.currentPage - 1) * tableState.itemsPerPage + (index + 1)).toString().padStart(3, '0') : row[header.key]}
+                      {header.key === 'srno' ? getSerialNumber(index) : row[header.key]}
                     </td>
                   ))}
                   {actions && (
