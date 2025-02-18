@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
-import { IoSearchOutline } from 'react-icons/io5';
 import { IoIosArrowDown } from 'react-icons/io';
 import Checkbox from './Checkbox';
+import SearchComponent from '../common/SearchComponent';
 
 const MultiSelectCheckbox = ({
   options,
@@ -95,17 +95,8 @@ const MultiSelectCheckbox = ({
       {isOpen && (
         <div className={`absolute z-10 w-full mt-1 bg-main border border-primary rounded-lg shadow-md`}>
           {/* Search Box */}
-          <div className="p-2 border-b border-primary">
-            <div className="relative">
-              <IoSearchOutline className="absolute left-3 top-1/2 transform -translate-y-1/2 text-secondary" />
-              <input
-                type="text"
-                placeholder="Search"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-3 py-2 border border-primary bg-grey rounded-xl text-secondary placeholder-secondary focus:outline-none focus:border-secondary"
-              />
-            </div>
+          <div className="px-2 border-b border-primary">
+            <SearchComponent value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
           </div>
 
           {/* Options List */}

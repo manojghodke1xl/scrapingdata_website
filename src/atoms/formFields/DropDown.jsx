@@ -27,7 +27,7 @@ const DropDown = ({ mt = '', width = 'w-full', name, label, SummaryChild, dropdo
   }, []);
   const [placement, setPlacement] = useState('below'); // Placement state
   return (
-    <div className={`w-full ${mt}`}>
+    <div className={`w-full relative ${mt}`}>
       <label className="block text-sm font-medium text-primary mb-2">{label}</label>
       <details
         ref={dropdownRef}
@@ -49,14 +49,14 @@ const DropDown = ({ mt = '', width = 'w-full', name, label, SummaryChild, dropdo
         <ul
           className={`absolute ${
             placement === 'above' ? 'bottom-full mb-1' : 'top-full mt-1'
-          } end-0 top-11 z-40 mt-1 max-h-48 w-full rounded-md bg-main text-[12px] md:text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm overflow-y-auto custom-scrollbar`}
+          } end-0 top-11 z-40 mt-1 max-h-[192px] w-full overflow-hidden rounded-md bg-main text-[12px] md:text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm`}
         >
           {search && (
-            <div className="w-full flex items-center rounded-t-lg border border-primary px-3">
+            <div className="w-full flex items-center rounded-t-lg border border-primary px-3 bg-main sticky top-0 z-10">
               <SearchComponent value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
             </div>
           )}
-          <div className="w-full relative">
+          <div className="w-full relative overflow-y-auto custom-scrollbar" style={{ maxHeight: 'calc(192px - 40px)' }}>
             {filteredList.map((item) => (
               <li
                 key={item.id || item.name}
