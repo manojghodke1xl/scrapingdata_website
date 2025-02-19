@@ -51,16 +51,14 @@ const Navbar = () => {
     <>
       <div className="w-screen py-2 px-4 sm:px-6 flex justify-between border-b border-primary">
         <Link to={'/dashboard'} className="px-2 flex items-center font-bold">
-          <img src={isDarkMode ? DarkLogo : Logo} width={160} alt="logo" />
+          <img src={isDarkMode ? DarkLogo : Logo} className='w-fit' alt="logo" />
         </Link>
 
         <div className="flex gap-5  items-center pr-6">
-          <button type="button" onClick={toggleDarkMode} className="sm:p-1 hover:bg-hover rounded-full hidden sm:block">
+          <button type="button" onClick={toggleDarkMode} className="sm:p-1 hover:bg-hover rounded-full">
             {isDarkMode ? <GrSun size={28} strokeWidth={1.667} className="text-secondary" /> : <PiMoonStarsLight size={28} strokeWidth={1.667} className="text-secondary" />}
           </button>
-          <span className="hidden sm:block" onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
-            <img src={Person} width={34} alt="Person" className="cursor-pointer" />
-          </span>
+          <img src={Person} alt="Person" className="cursor-pointer w-8 h-8 " onClick={() => setIsDropdownOpen(!isDropdownOpen)} />
 
           {/* Dropdown Menu */}
           {isDropdownOpen && (
@@ -71,10 +69,6 @@ const Navbar = () => {
             </div>
           )}
           <div className="flex lg:hidden ml-3 flex-row gap-3">
-            <button type="button" onClick={toggleDarkMode} className="sm:p-1 hover:bg-hover rounded-full block md:hidden">
-              {isDarkMode ? <GrSun size={28} strokeWidth={1.667} className="text-secondary" /> : <PiMoonStarsLight size={28} strokeWidth={1.667} className="text-secondary" />}
-            </button>
-
             <button onClick={handleToggleSidebar}>
               <IoIosMenu className="text-4xl text-primary" />
             </button>
