@@ -1,7 +1,7 @@
 import { deleteMethodCall, getMethodCall, postMethodCall } from '../api-handler';
 
 export const deleteSubscriberApi = async (ids) => {
-  return await deleteMethodCall(`${import.meta.env.VITE_API_URL}/newsletter`, ids);
+  return await deleteMethodCall(`${import.meta.env.VITE_API_URL}/newsletter`, { ids });
 };
 
 export const getSubscriberById = async (id) => {

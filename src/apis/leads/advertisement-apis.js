@@ -9,5 +9,5 @@ export const getAdvertisementById = async (id) => {
 };
 
 export const deleteAdvertisementApi = async (ids) => {
-  return await deleteMethodCall(`${import.meta.env.VITE_API_URL}/advertisement`, ids);
+  return await deleteMethodCall(`${import.meta.env.VITE_API_URL}/advertisement`, { ids });
 };

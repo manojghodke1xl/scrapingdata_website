@@ -9,5 +9,5 @@ export const getVendorById = async (id) => {
 };
 
 export const deleteVendorApi = async (ids) => {
-  return await deleteMethodCall(`${import.meta.env.VITE_API_URL}/vendor`, ids);
+  return await deleteMethodCall(`${import.meta.env.VITE_API_URL}/vendor`, { ids });
 };

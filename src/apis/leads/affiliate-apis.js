@@ -9,5 +9,5 @@ export const getAffiliateById = async (id) => {
 };
 
 export const deleteAffiliateApi = async (ids) => {
-  return await deleteMethodCall(`${import.meta.env.VITE_API_URL}/affiliate`, ids);
+  return await deleteMethodCall(`${import.meta.env.VITE_API_URL}/affiliate`, {ids});
 };

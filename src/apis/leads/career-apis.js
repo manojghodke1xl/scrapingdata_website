@@ -9,5 +9,5 @@ export const getCareerById = async (id) => {
 };
 
 export const deleteCareerApi = async (ids) => {
-  return await deleteMethodCall(`${import.meta.env.VITE_API_URL}/career`, ids);
+  return await deleteMethodCall(`${import.meta.env.VITE_API_URL}/career`, { ids });
 };

@@ -59,7 +59,7 @@ export const putMethodCall = async (url, userData, contentType = 'application/js
   }
 };
 
-export const deleteMethodCall = async (url, ids, contentType = 'application/json') => {
+export const deleteMethodCall = async (url, body, contentType = 'application/json') => {
   try {
     const response = await fetch(url, {
       method: 'DELETE',
@@ -67,7 +67,7 @@ export const deleteMethodCall = async (url, ids, contentType = 'application/json
         Authorization: localStorage.getItem('auth'),
         'Content-Type': contentType
       },
-      body: JSON.stringify({ ids })
+      body: JSON.stringify(body)
     });
 
     const data = await response.json();

@@ -17,7 +17,7 @@ export const updateEventApi = async (id, data) => {
 };
 
 export const deleteEventApi = async (ids) => {
-  return await deleteMethodCall(`${import.meta.env.VITE_API_URL}/event`, ids);
+  return await deleteMethodCall(`${import.meta.env.VITE_API_URL}/event`, { ids });
 };
 
 export const getEventBySiteIdApi = async (siteId) => {

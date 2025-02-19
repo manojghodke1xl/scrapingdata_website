@@ -1,6 +1,5 @@
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { FiCopy } from 'react-icons/fi';
-import { IoMdRefresh } from 'react-icons/io';
 import { MdEdit, MdOutlineApps, MdRemoveRedEye, MdOutlineInventory2, MdSend, MdDeleteForever } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 
@@ -56,7 +55,8 @@ const TableRowActions = ({
               <button
                 key={i}
                 className="w-full flex gap-2 items-center px-4 py-2 text-secondary hover:bg-hover hover:text-primary cursor-pointer focus:outline-none"
-                onClick={async () => {
+                onClick={async (e) => {
+                  e.stopPropagation();
                   if (action.type === 'edit') navigate(editPath + '/' + row.id);
                   if (action.type === 'view') navigate(viewPath + '/' + row.id);
                   if (action.type === 'apps') navigate(appsPath + '/' + row.id);

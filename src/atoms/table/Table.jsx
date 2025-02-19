@@ -10,6 +10,7 @@ import TableView from './TableView';
 import TableFilter from './TableFilter';
 import TableFilterActions from './TableFilterActions';
 import ExportDataModal from '../modal/ExportDataModal';
+import Checkbox from '../formFields/Checkbox';
 
 const TableComponent = ({
   selectable,
@@ -57,6 +58,7 @@ const TableComponent = ({
   eventId: packageEvent,
   fetchRefresh,
   shouldFetchData = true,
+  isWhatsAppTemplate = false,
   currentPage,
   itemsPerPage,
   totalCount,
@@ -87,6 +89,7 @@ const TableComponent = ({
     siteToggle: false,
     status: '',
     deleteId: '',
+    deleteBoolean: false,
     selectedCategory: null
   });
   const [filterState, setFilterState] = useState({
@@ -233,10 +236,11 @@ const TableComponent = ({
     });
   };
 
-  const handleDelete = () => handleDeleteConfirm(selectionState.selectedItems, deleteApi, setLoading, setSelectionState, setRefresh, setModalState, setTableState);
+  const handleDelete = () =>
+    handleDeleteConfirm(selectionState.selectedItems, deleteApi, setLoading, setSelectionState, setRefresh, setModalState, setTableState, selectionState.deleteBoolean);
 
   const handleRowDelete = () => {
-    handleDeleteConfirm([selectionState.deleteId], deleteApi, setLoading, setSelectionState, setRefresh, setModalState, setTableState);
+    handleDeleteConfirm([selectionState.deleteId], deleteApi, setLoading, setSelectionState, setRefresh, setModalState, setTableState, selectionState.deleteBoolean);
   };
 
   const handleStatusChange = (statusUpdate) =>
@@ -438,7 +442,20 @@ const TableComponent = ({
           setDeleteModalOpen={setModalState}
           label={deleteLabel}
           message={deleteMessage}
-        />
+        >
+          {isWhatsAppTemplate && (
+            <Checkbox
+              className="pb-4"
+              id="deleteFromWhatsApp"
+              labelText="Delete WhatsApp Template from dev.facebook.com?"
+              checked={selectionState.deleteBoolean}
+              onChange={(e) => {
+                e.stopPropagation();
+                setSelectionState((prev) => ({ ...prev, deleteBoolean: e.target.checked }));
+              }}
+            />
+          )}
+        </DeleteModal>
         <SiteModal
           label={'Duplicate Popups'}
           isOpen={modalState.isDuplicateModelOpen}

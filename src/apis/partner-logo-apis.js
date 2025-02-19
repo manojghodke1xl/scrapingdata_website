@@ -28,5 +28,5 @@ export const updatePartnerLogoSitesApi = async (pids, sids, action) => {
 };
 
 export const deletePartnerLogoApi = async (ids) => {
-  return await deleteMethodCall(`${import.meta.env.VITE_API_URL}/partner-logo`, ids);
+  return await deleteMethodCall(`${import.meta.env.VITE_API_URL}/partner-logo`, { ids });
 };

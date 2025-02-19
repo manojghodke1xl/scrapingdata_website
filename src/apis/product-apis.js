@@ -13,7 +13,7 @@ export const getProductByIdApi = async (id) => {
 };
 
 export const deleteProductApi = async (ids) => {
-  return await deleteMethodCall(`${import.meta.env.VITE_API_URL}/product`, ids);
+  return await deleteMethodCall(`${import.meta.env.VITE_API_URL}/product`, {ids});
 };
 
 export const getAllProductsApi = async () => {

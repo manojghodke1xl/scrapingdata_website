@@ -21,5 +21,5 @@ export const getPackageByEventIdApi = async (eventId) => {
 };
 
 export const deletePackageApi = async (ids) => {
-  return await deleteMethodCall(`${import.meta.env.VITE_API_URL}/package`, ids);
+  return await deleteMethodCall(`${import.meta.env.VITE_API_URL}/package`, {ids});
 };

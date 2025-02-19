@@ -13,5 +13,5 @@ export const updateCouponApi = async (id, data) => {
 };
 
 export const deleteCouponApi = async (ids) => {
-  return await deleteMethodCall(`${import.meta.env.VITE_API_URL}/coupon`, ids);
+  return await deleteMethodCall(`${import.meta.env.VITE_API_URL}/coupon`, { ids });
 };

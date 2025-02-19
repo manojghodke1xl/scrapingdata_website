@@ -9,7 +9,7 @@ export const updateEventTicketApi = async (id, userData) => {
 };
 
 export const deleteEventTicketApi = async (ids) => {
-  return await deleteMethodCall(`${import.meta.env.VITE_API_URL}/ticket`, ids);
+  return await deleteMethodCall(`${import.meta.env.VITE_API_URL}/ticket`, { ids });
 };
 
 export const getEventTicketByIdApi = async (id) => {

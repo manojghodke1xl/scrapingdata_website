@@ -17,7 +17,7 @@ export const updateNotifAgentStatusApi = async (ids, isBlocked) => {
 };
 
 export const deleteNotifAgentApi = async (ids) => {
-  return await deleteMethodCall(`${import.meta.env.VITE_API_URL}/notif-agent`, ids);
+  return await deleteMethodCall(`${import.meta.env.VITE_API_URL}/notif-agent`, { ids });
 };
 
 export const getNotifAgentBySiteApi = async (siteId) => {

@@ -13,7 +13,7 @@ export const updatePopupStatusApi = async (ids, isActive) => {
 };
 
 export const deletePopupApi = async (ids) => {
-  return await deleteMethodCall(`${import.meta.env.VITE_API_URL}/popup`, ids);
+  return await deleteMethodCall(`${import.meta.env.VITE_API_URL}/popup`, {ids});
 };
 
 export const addPopupApi = async (userData) => {

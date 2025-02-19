@@ -11,7 +11,7 @@ export const updateEmailTemplateApi = async (id, data) => {
   return await putMethodCall(`${import.meta.env.VITE_API_URL}/template/email/${id}`, data);
 };
 export const deleteEmailTemplateApi = async (ids) => {
-  return await deleteMethodCall(`${import.meta.env.VITE_API_URL}/template/email`, ids);
+  return await deleteMethodCall(`${import.meta.env.VITE_API_URL}/template/email`, { ids });
 };
 export const getTemplateByEventApi = async (id) => {
   return await getMethodCall(`${import.meta.env.VITE_API_URL}/template/email/event/${id}`);
@@ -31,7 +31,7 @@ export const updateSmsTemplateApi = async (id, data) => {
   return await putMethodCall(`${import.meta.env.VITE_API_URL}/template/sms/${id}`, data);
 };
 export const deleteSmsTemplateApi = async (ids) => {
-  return await deleteMethodCall(`${import.meta.env.VITE_API_URL}/template/sms`, ids);
+  return await deleteMethodCall(`${import.meta.env.VITE_API_URL}/template/sms`, { ids });
 };
 export const getSmsTemplateByEventApi = async (id) => {
   return await getMethodCall(`${import.meta.env.VITE_API_URL}/template/sms/event/${id}`);
@@ -52,8 +52,8 @@ export const updateWhatsAppTemplateApi = async (id, data) => {
   return await putMethodCall(`${import.meta.env.VITE_API_URL}/template/whatsapp/${id}`, data);
 };
 
-export const deleteWhatsAppTemplateApi = async (ids) => {
-  return await deleteMethodCall(`${import.meta.env.VITE_API_URL}/template/whatsapp`, ids);
+export const deleteWhatsAppTemplateApi = async (ids, deleteFromWhatsApp) => {
+  return await deleteMethodCall(`${import.meta.env.VITE_API_URL}/template/whatsapp`, { ids, deleteFromWhatsApp });
 };
 
 export const getWhatsAppTemplateByEventApi = async (id) => {

@@ -20,5 +20,5 @@ export const updateFaqSitesApi = async (ids, sids, action) => {
 };
 
 export const deleteFaqApi = async (ids) => {
-  return await deleteMethodCall(`${import.meta.env.VITE_API_URL}/faq`, ids);
+  return await deleteMethodCall(`${import.meta.env.VITE_API_URL}/faq`, { ids });
 };

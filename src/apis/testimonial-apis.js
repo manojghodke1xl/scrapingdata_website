@@ -20,5 +20,5 @@ export const updateTestimonialSitesApi = async (tids, sids, action) => {
 };
 
 export const deleteTestimonialApi = async (ids) => {
-  return await deleteMethodCall(`${import.meta.env.VITE_API_URL}/testimonial`, ids);
+  return await deleteMethodCall(`${import.meta.env.VITE_API_URL}/testimonial`, { ids });
 };

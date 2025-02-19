@@ -13,7 +13,7 @@ export const updateRecaptchaApi = async (id, userData) => {
 };
 
 export const deleteRecaptchaApi = async (ids) => {
-  return await deleteMethodCall(`${import.meta.env.VITE_API_URL}/recaptcha/`, ids);
+  return await deleteMethodCall(`${import.meta.env.VITE_API_URL}/recaptcha/`, {ids});
 };
 
 export const updateRecaptchaStatusApi = async (ids, isActive) => {

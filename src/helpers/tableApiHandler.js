@@ -1,13 +1,14 @@
 import { showNotification } from '../utils/showNotification';
 
-export const handleDeleteConfirm = async (selectedItems, deleteApi, setLoading, setSelectionState, setRefresh, setModalState, setTableState) => {
+export const handleDeleteConfirm = async (selectedItems, deleteApi, setLoading, setSelectionState, setRefresh, setModalState, setTableState, deleteBoolean) => {
   if (selectedItems.length === 0) return showNotification('warn', 'Please select at least one item.');
   setLoading(true);
+
   try {
-    const { status, data } = await deleteApi(selectedItems);
+    const { status, data } = await deleteApi(selectedItems, deleteBoolean);
     if (status) {
       showNotification('success', data.message);
-      setSelectionState({ selectedItems: [], isAllSelected: false, deleteId: '' });
+      setSelectionState({ selectedItems: [], isAllSelected: false, deleteId: '', deleteBoolean: false });
       setRefresh((r) => !r);
     } else showNotification('warn', data);
   } catch (error) {

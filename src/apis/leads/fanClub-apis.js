@@ -9,5 +9,5 @@ export const getFanClubById = async (id) => {
 };
 
 export const deleteFanClubApi = async (ids) => {
-  return await deleteMethodCall(`${import.meta.env.VITE_API_URL}/fan-club`, ids);
+  return await deleteMethodCall(`${import.meta.env.VITE_API_URL}/fan-club`, { ids });
 };
