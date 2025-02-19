@@ -77,7 +77,6 @@ const DistributorList = () => {
                 tableCountLabel={true}
                 pagination={true}
                 actions={true}
-                view={true}
                 viewPath={'/distributor/view-distributor'}
                 search={true}
                 filter={true}

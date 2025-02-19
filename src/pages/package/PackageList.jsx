@@ -71,9 +71,7 @@ const PackageList = () => {
                 tableCountLabel={true}
                 pagination={true}
                 actions={true}
-                edit={true}
                 editPath={'/packages/edit-package'}
-                copy={true}
                 copyPath={'/packages/duplicate-package'}
                 deleteAction={true}
                 search={true}

@@ -62,7 +62,6 @@ const PaymentList = () => {
                 tableCountLabel={true}
                 pagination={true}
                 actions={true}
-                view={true}
                 viewPath={'/payments/payment'}
                 search={true}
                 filter={true}

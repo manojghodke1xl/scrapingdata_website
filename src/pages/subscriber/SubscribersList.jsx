@@ -72,7 +72,6 @@ const SubscribersList = () => {
                 tableCountLabel={true}
                 pagination={true}
                 actions={true}
-                view={true}
                 viewPath={'/subscriber/view-subscriber'}
                 search={true}
                 filter={true}

@@ -13,13 +13,9 @@ const TableView = ({
   rows,
   actions,
   isLoading,
-  edit,
   editPath,
-  view,
   viewPath,
-  apps,
   appsPath,
-  copy,
   copyPath,
   deleteAction,
   tableState,
@@ -123,13 +119,9 @@ const TableView = ({
                   {actions && (
                     <TableRowActions
                       row={row}
-                      edit={edit}
                       editPath={editPath}
-                      view={view}
                       viewPath={viewPath}
-                      apps={apps}
                       appsPath={appsPath}
-                      copy={copy}
                       copyPath={copyPath}
                       deleteAction={deleteAction}
                       setSelectionState={setSelectionState}

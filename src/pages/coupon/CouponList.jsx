@@ -65,9 +65,7 @@ const CouponList = () => {
                 tableCountLabel={true}
                 pagination={true}
                 actions={true}
-                edit={true}
                 editPath={'/coupon/edit-coupon'}
-                copy={true}
                 copyPath={'/coupon/duplicate-coupon'}
                 search={true}
                 filter={true}

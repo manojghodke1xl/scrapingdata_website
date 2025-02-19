@@ -70,7 +70,6 @@ const AdminList = () => {
                 tableCountLabel={true}
                 pagination={true}
                 actions={true}
-                edit={true}
                 editPath={'/admin/edit-admin'}
                 search={true}
                 filter={true}

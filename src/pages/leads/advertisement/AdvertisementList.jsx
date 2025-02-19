@@ -77,7 +77,6 @@ const AdvertisementList = () => {
                 tableCountLabel={true}
                 pagination={true}
                 actions={true}
-                view={true}
                 viewPath={'/advertisement/view-advertisement'}
                 search={true}
                 filter={true}

@@ -77,7 +77,6 @@ const FanClubList = () => {
                 tableCountLabel={true}
                 pagination={true}
                 actions={true}
-                view={true}
                 viewPath={'/fan-club/view-fan-club'}
                 search={true}
                 filter={true}

@@ -43,7 +43,6 @@ const TemplateCategoryList = () => {
                 tableCountLabel={true}
                 pagination={true}
                 actions={true}
-                edit={true}
                 editPath={'/template-category/edit-template-category'}
                 search={true}
               />

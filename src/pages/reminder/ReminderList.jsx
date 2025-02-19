@@ -47,9 +47,7 @@ const ReminderList = () => {
                 tableCountLabel={true}
                 pagination={true}
                 actions={true}
-                edit={true}
                 editPath={'/reminder/edit-reminder'}
-                copy={true}
                 copyPath={'/reminder/duplicate-reminder'}
                 search={true}
                 filter={true}

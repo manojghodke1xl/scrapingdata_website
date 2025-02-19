@@ -70,9 +70,7 @@ const GuidesList = () => {
                 tableCountLabel={true}
                 pagination={true}
                 actions={true}
-                edit={true}
                 editPath={'/guides/edit-guide'}
-                copy={true}
                 copyPath={'/guides/duplicate-guide'}
                 search={true}
                 filter={true}

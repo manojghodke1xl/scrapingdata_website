@@ -77,7 +77,6 @@ const AffiliateList = () => {
                 tableCountLabel={true}
                 pagination={true}
                 actions={true}
-                view={true}
                 viewPath={'/affiliate/view-affiliate'}
                 search={true}
                 filter={true}

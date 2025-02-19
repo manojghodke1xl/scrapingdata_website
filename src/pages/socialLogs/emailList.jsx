@@ -74,7 +74,6 @@ const EmailLogList = () => {
                 // filter={true}
                 filterCategory={[{ id: 0, name: 'Sites' }]}
                 actions={true}
-                view={true}
                 viewPath={'/logs/email-log-preview'}
               />
             </div>

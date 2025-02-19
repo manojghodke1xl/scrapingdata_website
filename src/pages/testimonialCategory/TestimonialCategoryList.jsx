@@ -47,7 +47,6 @@ const TestimonialCategoryList = () => {
                 tableCountLabel={true}
                 pagination={true}
                 actions={true}
-                edit={true}
                 editPath={'/testimonial-category/edit-testimonial-category'}
                 search={true}
                 searchCategory={[{ id: 1, name: 'Name' }]}

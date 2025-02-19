@@ -81,9 +81,7 @@ const WhatsAppTemplateList = () => {
                 filter={true}
                 filterCategory={[{ id: 0, name: 'Sites' }]}
                 actions={true}
-                edit={true}
                 editPath={'/templates/edit-whatsapp-template'}
-                copy={true}
                 copyPath={'/templates/duplicate-whatsapp-template'}
                 deleteBtn={true}
                 deleteAction={true}

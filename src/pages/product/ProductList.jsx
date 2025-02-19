@@ -48,9 +48,8 @@ const ProductList = () => {
                 tableCountLabel={true}
                 pagination={true}
                 actions={true}
-                edit={true}
                 editPath={'/products/edit-product'}
-                // copy={true}
+                //
                 // copyPath={'/coupon/duplicate-coupon'}
                 search={true}
                 filter={true}

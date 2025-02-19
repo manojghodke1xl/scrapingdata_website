@@ -47,9 +47,7 @@ const AfterSalesList = () => {
                 tableCountLabel={true}
                 pagination={true}
                 actions={true}
-                edit={true}
                 editPath={'/after-sales/edit-after-sale'}
-                copy={true}
                 copyPath={'/after-sales/duplicate-after-sale'}
                 search={true}
                 filter={true}

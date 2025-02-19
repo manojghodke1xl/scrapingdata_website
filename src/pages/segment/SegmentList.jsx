@@ -67,9 +67,7 @@ const SegmentList = () => {
                 tableCountLabel={true}
                 pagination={true}
                 actions={true}
-                edit={true}
                 editPath={'/site/edit-site'}
-                apps={true}
                 appsPath={'/apps/integration'}
                 search={true}
                 filter={true}

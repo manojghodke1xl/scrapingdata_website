@@ -77,7 +77,6 @@ const VendorList = () => {
                 tableCountLabel={true}
                 pagination={true}
                 actions={true}
-                view={true}
                 viewPath={'/vendor/view-vendor'}
                 search={true}
                 filter={true}

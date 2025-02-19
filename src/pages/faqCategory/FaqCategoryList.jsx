@@ -42,7 +42,6 @@ const FaqCategoryList = () => {
                 tableCountLabel={true}
                 pagination={true}
                 actions={true}
-                edit={true}
                 editPath={'/faq-category/edit-faq-category'}
                 search={true}
                 searchCategory={[{ id: 1, name: 'Name' }]}

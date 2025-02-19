@@ -77,7 +77,6 @@ const ResellerList = () => {
                 tableCountLabel={true}
                 pagination={true}
                 actions={true}
-                view={true}
                 viewPath={'/reseller/view-reseller'}
                 search={true}
                 filter={true}

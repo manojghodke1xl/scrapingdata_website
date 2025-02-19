@@ -60,11 +60,8 @@ const EventList = () => {
                 tableCountLabel={true}
                 pagination={true}
                 actions={true}
-                edit={true}
                 editPath={'/events/edit-event'}
-                view={true}
                 viewPath={'/events/view-event'}
-                copy={true}
                 copyPath={'/events/duplicate-event'}
                 managePackage={true}
                 managePackagePath={'/packages/package-list'}

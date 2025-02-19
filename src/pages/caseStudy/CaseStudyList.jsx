@@ -70,9 +70,7 @@ const CaseStudyList = () => {
                 tableCountLabel={true}
                 pagination={true}
                 actions={true}
-                edit={true}
                 editPath={'/case-study/edit-case-study'}
-                copy={true}
                 copyPath={'/case-study/duplicate-case-study'}
                 search={true}
                 filter={true}

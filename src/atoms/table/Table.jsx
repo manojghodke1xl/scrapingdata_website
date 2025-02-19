@@ -22,13 +22,9 @@ const TableComponent = ({
   rows,
   actions,
   pagination,
-  edit,
   editPath,
-  view,
   viewPath,
-  apps,
   appsPath,
-  copy,
   copyPath,
   managePackage,
   managePackagePath,
@@ -364,13 +360,9 @@ const TableComponent = ({
             rows={rows}
             actions={actions}
             isLoading={isLoading}
-            edit={edit}
             editPath={editPath}
-            view={view}
             viewPath={viewPath}
-            apps={apps}
             appsPath={appsPath}
-            copy={copy}
             copyPath={copyPath}
             deleteAction={deleteAction}
             tableState={tableState}
@@ -447,7 +439,7 @@ const TableComponent = ({
             <Checkbox
               className="pb-4"
               id="deleteFromWhatsApp"
-              labelText="Delete WhatsApp Template from dev.facebook.com?"
+              labelText="Delete WhatsApp Template from developers.facebook.com?"
               checked={selectionState.deleteBoolean}
               onChange={(e) => {
                 e.stopPropagation();

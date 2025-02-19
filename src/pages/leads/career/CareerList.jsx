@@ -77,7 +77,6 @@ const CareerList = () => {
                 tableCountLabel={true}
                 pagination={true}
                 actions={true}
-                view={true}
                 viewPath={'/career/view-career'}
                 search={true}
                 filter={true}

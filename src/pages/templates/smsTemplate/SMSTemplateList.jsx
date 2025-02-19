@@ -48,9 +48,7 @@ const SMSTemplateList = () => {
                 filter={true}
                 filterCategory={[{ id: 0, name: 'Sites' }]}
                 actions={true}
-                edit={true}
                 editPath={'/templates/edit-sms-template'}
-                copy={true}
                 copyPath={'/templates/duplicate-sms-template'}
                 deleteBtn={true}
                 deleteAction={true}

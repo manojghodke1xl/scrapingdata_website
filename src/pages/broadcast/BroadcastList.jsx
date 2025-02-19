@@ -47,9 +47,7 @@ const BroadcastList = () => {
                 tableCountLabel={true}
                 pagination={true}
                 actions={true}
-                edit={true}
                 editPath={'/broadcast/edit-broadcast'}
-                copy={true}
                 copyPath={'/broadcast/duplicate-broadcast'}
                 search={true}
                 filter={true}

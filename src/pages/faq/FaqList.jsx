@@ -61,9 +61,7 @@ const FaqList = () => {
                 tableCountLabel={true}
                 pagination={true}
                 actions={true}
-                edit={true}
                 editPath={'/faq/edit-faq'}
-                copy={true}
                 copyPath={'/faq/duplicate-faq'}
                 search={true}
                 filter={true}

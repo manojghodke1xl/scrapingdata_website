@@ -41,7 +41,6 @@ const EventTicketList = () => {
                 tableCountLabel={true}
                 pagination={true}
                 actions={true}
-                edit={true}
                 editPath={'/tickets/edit-ticket'}
                 deleteBtn={true}
                 deleteAction={true}

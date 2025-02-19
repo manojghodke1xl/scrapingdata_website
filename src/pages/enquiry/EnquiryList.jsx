@@ -78,7 +78,6 @@ const EnquiryList = () => {
                 tableCountLabel={true}
                 pagination={true}
                 actions={true}
-                view={true}
                 viewPath={'/enquiry/view-enquiry'}
                 search={true}
                 filter={true}

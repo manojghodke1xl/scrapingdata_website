@@ -74,9 +74,7 @@ const PopupList = () => {
                 tableCountLabel={true}
                 pagination={true}
                 actions={true}
-                edit={true}
                 editPath={'/pop-up/edit-pop-up'}
-                copy={true}
                 copyPath={'/pop-up/duplicate-pop-up'}
                 search={true}
                 filter={true}

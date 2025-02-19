@@ -61,9 +61,7 @@ const GalleryList = () => {
                 tableCountLabel={true}
                 pagination={true}
                 actions={true}
-                edit={true}
                 editPath={'/gallery/edit-gallery'}
-                copy={true}
                 copyPath={'/gallery/duplicate-gallery'}
                 filter={true}
                 filterCategory={[

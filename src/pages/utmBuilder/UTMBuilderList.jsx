@@ -67,9 +67,7 @@ const UTMBuilderList = () => {
                 tableCountLabel={true}
                 pagination={true}
                 actions={true}
-                edit={true}
                 editPath={'/utm-builder/edit-utm-builder'}
-                copy={true}
                 copyPath={'/utm-builder/duplicate-utm-builder'}
                 search={true}
                 deleteBtn={true}

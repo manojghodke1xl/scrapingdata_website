@@ -58,9 +58,7 @@ const TestimonialList = () => {
                 tableCountLabel={true}
                 pagination={true}
                 actions={true}
-                edit={true}
                 editPath={'/testimonials/edit-testimonial'}
-                copy={true}
                 copyPath={'/testimonials/duplicate-testimonial'}
                 search={true}
                 filter={true}

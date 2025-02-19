@@ -62,9 +62,7 @@ const NotifAgentList = () => {
                 tableCountLabel={true}
                 pagination={true}
                 actions={true}
-                edit={true}
                 editPath={'/notification-agent/edit-notification-agent'}
-                copy={true}
                 copyPath={'/notification-agent/duplicate-notification-agent'}
                 search={true}
                 filter={true}

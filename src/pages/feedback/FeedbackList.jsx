@@ -77,7 +77,6 @@ const FeedbackList = () => {
                 tableCountLabel={true}
                 pagination={true}
                 actions={true}
-                view={true}
                 viewPath={'/feedback/view-feedback'}
                 search={true}
                 filter={true}

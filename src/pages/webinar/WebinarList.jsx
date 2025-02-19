@@ -43,7 +43,6 @@ const WebinarList = () => {
                 tableCountLabel={true}
                 pagination={true}
                 actions={true}
-                edit={true}
                 editPath={'/webinar/edit-webinar'}
                 search={true}
               />

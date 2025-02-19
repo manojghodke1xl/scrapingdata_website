@@ -42,7 +42,6 @@ const SmtpList = () => {
                 tableCountLabel={true}
                 pagination={true}
                 actions={true}
-                edit={true}
                 editPath={'/smtp/edit-smtp'}
                 search={true}
                 searchCategory={[

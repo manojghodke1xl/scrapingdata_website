@@ -55,9 +55,7 @@ const EmailTemplateList = () => {
                 filter={true}
                 filterCategory={[{ id: 0, name: 'Sites' }]}
                 actions={true}
-                edit={true}
                 editPath={'/templates/edit-email-template'}
-                copy={true}
                 copyPath={'/templates/duplicate-email-template'}
                 deleteBtn={true}
                 deleteAction={true}

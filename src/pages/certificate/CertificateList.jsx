@@ -23,7 +23,7 @@ const CertificateList = () => {
   return (
     <div className="py-5 px-8 overflow-x-hidden mb-10">
       <div className=" w-full">
-        <TableHeader heading={'Certificates'} btn1={true} href1={'/certificates/add-certificate'} icon1={<IoMdAdd  />} btnLabel1={'Add Certificate'} />
+        <TableHeader heading={'Certificates'} btn1={true} href1={'/certificates/add-certificate'} icon1={<IoMdAdd />} btnLabel1={'Add Certificate'} />
         <div className="flex flex-col">
           <div className="-m-1.5 overflow-x-auto">
             <div className="p-1.5 min-w-full align-middle">
@@ -41,9 +41,7 @@ const CertificateList = () => {
                 tableCountLabel={true}
                 pagination={true}
                 actions={true}
-                edit={true}
                 editPath={'/certificates/edit-certificate'}
-                copy={true}
                 copyPath={'/certificates/duplicate-certificate'}
                 deleteBtn={true}
                 deleteAction={true}

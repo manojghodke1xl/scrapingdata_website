@@ -5,13 +5,9 @@ import { useNavigate } from 'react-router-dom';
 
 const TableRowActions = ({
   row,
-  edit,
   editPath,
-  view,
   viewPath,
-  apps,
   appsPath,
-  copy,
   copyPath,
   deleteAction,
   setSelectionState,
@@ -28,10 +24,10 @@ const TableRowActions = ({
   // Function to count the available actions
   const getActions = (row) => {
     return [
-      { type: 'edit', show: edit && !row.isSuperAdmin },
-      { type: 'view', show: view && !row.isSuperAdmin },
-      { type: 'apps', show: apps && !row.isSuperAdmin },
-      { type: 'copy', show: copy && !row.isSuperAdmin },
+      { type: 'edit', show: editPath && !row.isSuperAdmin },
+      { type: 'view', show: viewPath && !row.isSuperAdmin },
+      { type: 'apps', show: appsPath && !row.isSuperAdmin },
+      { type: 'copy', show: copyPath && !row.isSuperAdmin },
       { type: 'delete', show: deleteAction && !row.isSuperAdmin && !row.hasBooking },
       { type: 'managePackage', show: managePackage },
       { type: 'sendForApproval', show: sendForApproval && !row.approvedTemplate },
