@@ -1,6 +1,6 @@
 import { MdDeleteForever } from 'react-icons/md';
 import StatusFilter from '../filter/StatusFilter';
-import { CiExport } from 'react-icons/ci';
+import { CiImport } from 'react-icons/ci';
 
 const TableFilterActions = ({
   deleteBtn,
@@ -62,7 +62,7 @@ const TableFilterActions = ({
             onClick={() => setModalState((prev) => ({ ...prev, isExportModelOpen: true }))}
             className="sm:w-fit text-primary font-normal hover:bg-hover rounded-xl border border-primary py-2 px-3 sm:px-2 sm:py-2 md:px-3 whitespace-nowrap flex gap-1 sm:gap-2"
           >
-            <CiExport size={20} strokeWidth="1.2" fill="none" />
+            <CiImport size={20} strokeWidth="1.2" fill="none" />
             <span className="sm:text-base text-sm">Export</span>
           </button>
         </>

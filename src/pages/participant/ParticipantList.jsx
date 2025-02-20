@@ -10,7 +10,7 @@ import { useColor } from '../../contexts/contexts/ColorContext';
 import { bulkUploadParticipantsApi, sendCertificateApi } from '../../apis/participant-apis';
 import { IoMdAdd } from 'react-icons/io';
 import ImportModal from '../../atoms/modal/ImportModal';
-import { CiImport } from 'react-icons/ci';
+import { CiExport } from 'react-icons/ci';
 import useGlobalContext from '../../hooks/useGlobalContext';
 
 const ParticipantList = () => {
@@ -119,7 +119,7 @@ const ParticipantList = () => {
             icon1={<IoMdAdd />}
             btnLabel1={'Add Participant'}
             btn3={true}
-            icon3={<CiImport strokeWidth={0.5} />}
+            icon3={<CiExport strokeWidth={0.5} />}
             btnLabel3={'Import Participants'}
             onClick3={() => setShowImportModal(true)}
           />
