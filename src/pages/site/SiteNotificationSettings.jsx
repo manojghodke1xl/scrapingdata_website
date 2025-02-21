@@ -43,7 +43,13 @@ const SitesNotificationSettings = () => {
 
     sendUserDonation: false,
     userDonationEmailTemplate: null,
-    userDonationWhatsAppTemplate: null
+    userDonationWhatsAppTemplate: null,
+
+    sendAdminProduct: false,
+    adminProductEmailTemplate: null,
+    adminProductEmails: [],
+    adminProductWhatsAppTemplate: null,
+    adminProductPhoneNumber: []
   });
 
   const [templateState, setTemplateState] = useState({
@@ -225,7 +231,7 @@ const SitesNotificationSettings = () => {
                       setSiteNotification((prev) => ({ ...prev, sendUserSubscriber: value, userSubscriberEmailTemplate: null, userSubscriberWhatsAppTemplate: null }))
                     }
                   />
-                  {siteNotification.sendUserSubscriber && (
+                  {(siteNotification.sendUserSubscriber || siteNotification.userSubscriberEmailTemplate || siteNotification.userSubscriberWhatsAppTemplate) && (
                     <>
                       <DropDown
                         label={'Select Email Template'}
@@ -329,7 +335,8 @@ const SitesNotificationSettings = () => {
                         sendAdminEnquiry: value,
                         adminEnquiryEmails: [],
                         adminEnquiryEmailTemplate: null,
-                        adminEnquiryWhatsAppTemplate: null
+                        adminEnquiryWhatsAppTemplate: null,
+                        adminEnquiryPhoneNumber: []
                       }))
                     }
                   />
@@ -416,7 +423,8 @@ const SitesNotificationSettings = () => {
                         sendAdminSubscriber: value,
                         adminSubscriberEmails: [],
                         adminSubscriberEmailTemplate: null,
-                        adminSubscriberWhatsAppTemplate: null
+                        adminSubscriberWhatsAppTemplate: null,
+                        adminSubscriberPhoneNumber: []
                       }))
                     }
                   />
@@ -478,6 +486,94 @@ const SitesNotificationSettings = () => {
                         }}
                         selected={siteNotification.adminSubscriberPhoneNumber}
                         error={errors.adminSubscriberPhoneNumber}
+                      />
+                    </>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
+            <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
+              <div className="sm:w-7/12 w-full flex flex-col">
+                <span className=" text-primary ">Admin Product Preferences</span>
+              </div>
+              <div className="w-full">
+                <div className="flex flex-col gap-y-5">
+                  <ToggleComponent
+                    bgColor={'bg-grey'}
+                    label={'Send Admin Product Notification'}
+                    isEnableState={siteNotification.sendAdminProduct || siteNotification.adminProductEmailTemplate || siteNotification.adminProductWhatsAppTemplate}
+                    setIsEnableState={(value) =>
+                      setSiteNotification((prev) => ({
+                        ...prev,
+                        sendAdminProduct: value,
+                        adminProductEmails: [],
+                        adminProductEmailTemplate: null,
+                        adminProductWhatsAppTemplate: null,
+                        adminProductPhoneNumber: []
+                      }))
+                    }
+                  />
+
+                  {(siteNotification.sendAdminProduct || siteNotification.adminProductEmailTemplate || siteNotification.adminProductWhatsAppTemplate) && (
+                    <>
+                      <DropDown
+                        label={'Select Email Template'}
+                        name="Template"
+                        dropdownList={templateState.emailTemplate?.map((template) => ({ name: template._id, showName: template.name, id: template._id }))}
+                        SummaryChild={<h5 className="p-0 m-0 text-primary">Email Templates</h5>}
+                        search={true}
+                        selected={siteNotification.adminProductEmailTemplate}
+                        commonFunction={(e) => {
+                          setSiteNotification((prev) => ({ ...prev, adminProductEmailTemplate: e.name, adminSubscriberEmails: [] }));
+                          if (errors.adminProductEmailTemplate) setErrors((prev) => ({ ...prev, adminProductEmailTemplate: '' }));
+                        }}
+                        error={errors.adminProductEmailTemplate}
+                      />
+
+                      <MultiSelectCheckbox
+                        formLabel={'Select Admin Product Emails'}
+                        options={templateState.notificationAgent?.map((agent) => ({ name: `${agent.name} (${agent.email})`, _id: agent._id }))}
+                        label="Select Email IDs"
+                        onChange={(selected) => {
+                          setSiteNotification((prev) => ({ ...prev, adminProductEmails: selected }));
+                          if (errors.adminProductEmails) setErrors((prev) => ({ ...prev, adminProductEmails: '' }));
+                        }}
+                        selected={siteNotification.adminProductEmails}
+                        error={errors.adminProductEmails}
+                      />
+
+                      <DropDown
+                        label={'Select WhatsApp Template'}
+                        name="whatsappTemplate"
+                        dropdownList={templateState.whatsAppTemplate?.map((template) => ({ name: template._id, showName: template.name, id: template._id }))}
+                        SummaryChild={<h5 className="p-0 m-0 text-primary">WhatsApp Templates</h5>}
+                        search={true}
+                        selected={siteNotification.adminProductWhatsAppTemplate}
+                        commonFunction={(e) => {
+                          setSiteNotification((prev) => ({ ...prev, adminProductWhatsAppTemplate: e.name }));
+                          if (errors.adminProductWhatsAppTemplate) setErrors((prev) => ({ ...prev, adminProductWhatsAppTemplate: '' }));
+                        }}
+                        error={errors.adminProductWhatsAppTemplate}
+                      />
+
+                      <MultiSelectCheckbox
+                        formLabel={'Select Admin Subscriber Mobile Numbers'}
+                        options={templateState.notificationAgent?.map((agent) => ({
+                          name: `${agent.name} (${agent.phoneCode ? (agent.phoneCode?.startsWith('+') ? agent.phoneCode : `+${agent.phoneCode}`) : ''} ${
+                            agent.phoneNumber ? agent.phoneNumber : '-'
+                          })`,
+                          _id: agent._id
+                        }))}
+                        label="Select Mobile Number"
+                        onChange={(selected) => {
+                          setSiteNotification((prev) => ({ ...prev, adminProductPhoneNumber: selected }));
+                          if (errors.adminProductPhoneNumber) setErrors((prev) => ({ ...prev, adminProductPhoneNumber: '' }));
+                        }}
+                        selected={siteNotification.adminProductPhoneNumber}
+                        error={errors.adminProductPhoneNumber}
                       />
                     </>
                   )}

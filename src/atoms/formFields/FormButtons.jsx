@@ -10,7 +10,7 @@ const FormButtons = ({ loading = false, to = '', type = 'submit', onClick, btnLe
       )}
       <button
         type={type}
-        className="px-4 py-2 text-white font-medium bg-primary hover:bg-primary-hover rounded-xl whitespace-nowrap disabled:bg-primary-faded"
+        className="px-4 py-2 text-white font-medium bg-primary hover:bg-primary-hover rounded-xl whitespace-nowrap disabled:bg-primary-faded disabled:cursor-not-allowed"
         disabled={loading}
         onClick={onClick}
       >

@@ -22,6 +22,8 @@ const DocumentFileUpload = ({
   const [renameValue, setRenameValue] = useState('');
   const fileInputRef = useRef(null);
   const dropdownRefs = useRef([]);
+  const [isDragging, setIsDragging] = useState(false);
+  const dropZoneRef = useRef(null);
 
   const getFileIcon = (fileName) => {
     const extension = fileName?.split('.').pop().toLowerCase();
@@ -73,6 +75,37 @@ const DocumentFileUpload = ({
     };
   }, [dropdownIndex]);
 
+  const handleDragEnter = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.currentTarget === dropZoneRef.current) {
+      setIsDragging(false);
+    }
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+
+    const droppedFiles = e.dataTransfer.files;
+    if (droppedFiles?.length > 0) {
+      const event = { target: { files: droppedFiles } };
+      handleFileUpload(event);
+    }
+  };
+
   return (
     <>
       <div className={`${divClassName} w-full border border-primary rounded-xl p-6 shadow-sm`}>
@@ -81,8 +114,18 @@ const DocumentFileUpload = ({
           {label || 'Upload'}
         </h1>
 
-        <div className="border-2 border-primary rounded-xl text-center border-dashed p-3 w-auto">
-          <p className="font-normal text-sm text-primary w-5/12 text-center m-auto">Choose {isMultiple ? 'files' : 'a file'} or drag and drop here to upload</p>
+        <div
+          ref={dropZoneRef}
+          className={`border-2 border-primary rounded-xl text-center border-dashed p-3 w-auto transition-colors duration-200 
+            ${isDragging ? 'bg-primary/10 border-primary' : ''}`}
+          onDragEnter={handleDragEnter}
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onDrop={handleDrop}
+        >
+          <p className="font-normal text-sm text-primary w-5/12 text-center m-auto">
+            {isDragging ? 'Drop files here' : `Choose ${isMultiple ? 'files' : 'a file'} or drag and drop here to upload`}
+          </p>
 
           <div className="flex items-center m-auto justify-center my-4">
             <input type="file" onChange={(e) => handleFileUpload(e)} className="hidden" accept={`.${allowedTypes.join(', ')}`} ref={fileInputRef} multiple={isMultiple} />

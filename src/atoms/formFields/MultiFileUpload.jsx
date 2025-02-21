@@ -20,7 +20,9 @@ const MultipleFileUpload = ({
   error
 }) => {
   const [selectedFiles, setSelectedFiles] = useState([]);
+  const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef(null);
+  const dropZoneRef = useRef(null);
 
   // Memoize the imagePreviews calculation
   const imagePreviews = useMemo(() => {
@@ -37,13 +39,15 @@ const MultipleFileUpload = ({
     };
   }, [imagePreviews]);
 
-  const handleFileChange = async (event) => {
-    const files = Array.from(event.target.files);
+  const handleFiles = async (files) => {
+    const fileArray = Array.from(files);
+    const validFiles = fileArray.filter((file) => allowedTypes.includes(file.type));
+    const invalidFiles = fileArray.filter((file) => !allowedTypes.includes(file.type));
 
-    const validFiles = files.filter((file) => allowedTypes.includes(file.type));
-    const invalidFiles = files.filter((file) => !allowedTypes.includes(file.type));
+    if (invalidFiles.length > 0) {
+      showNotification('warn', `Some files were skipped. Accepted file types: ${allowedFileTypes.join(', ')}`);
+    }
 
-    if (invalidFiles.length > 0) showNotification('warn', `Some files were skipped. Accepted file types: ${allowedFileTypes.join(', ')}`);
     if (validFiles.length > 0) {
       setLoading(true);
       try {
@@ -62,6 +66,40 @@ const MultipleFileUpload = ({
     }
   };
 
+  const handleFileChange = (event) => {
+    handleFiles(event.target.files);
+  };
+
+  const handleDragEnter = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.currentTarget === dropZoneRef.current) {
+      setIsDragging(false);
+    }
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+
+    const droppedFiles = e.dataTransfer.files;
+    if (droppedFiles?.length > 0) {
+      handleFiles(droppedFiles);
+    }
+  };
+
   const handleDelete = (indexToRemove) => {
     setSelectedFiles((prev) => prev.filter((_, index) => index !== indexToRemove));
   };
@@ -73,7 +111,14 @@ const MultipleFileUpload = ({
         {label || 'Upload'}
       </h1>
 
-      <div className="border-2 border-primary rounded-xl text-center border-dashed p-3 w-auto">
+      <div
+        ref={dropZoneRef}
+        className={`border-2 border-primary rounded-xl text-center border-dashed p-3 w-auto transition-colors duration-200 ${isDragging ? 'bg-primary/10 border-primary' : ''}`}
+        onDragEnter={handleDragEnter}
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+        onDrop={handleDrop}
+      >
         {imagePreviews.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             {imagePreviews.map((preview, index) => (
@@ -102,7 +147,9 @@ const MultipleFileUpload = ({
           </div>
         ) : (
           <div>
-            <p className="font-normal text-sm text-primary w-5/12 text-center m-auto">Choose {isMultiple ? 'files' : 'a file'} or drag and drop here to upload</p>
+            <p className="font-normal text-sm text-primary w-5/12 text-center m-auto">
+              {isDragging ? 'Drop files here' : `Choose ${isMultiple ? 'files' : 'a file'} or drag and drop here to upload`}
+            </p>
 
             <div className="flex items-center m-auto justify-center my-4">
               <input type="file" onChange={handleFileChange} className="hidden" accept={`.${allowedTypes.join(', ')}`} ref={fileInputRef} multiple={isMultiple} />

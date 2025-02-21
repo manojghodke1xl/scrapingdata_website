@@ -22,7 +22,7 @@ const FileUpload = ({
   fieldName = 'image'
 }) => {
   const [selectedFile, setSelectedFile] = useState(null);
-
+  const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef(null);
 
   // Use the external `imagePreviewUrl` if passed, else fallback to selectedFile preview.
@@ -43,6 +43,38 @@ const FileUpload = ({
     } else {
       showNotification('warn', `Accepted file types: ${acceptedTypes.join(', ')}`);
       setSelectedFile(null);
+    }
+  };
+
+  const handleDragEnter = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+
+    const file = e.dataTransfer.files[0];
+    if (file && acceptedTypes.some((type) => file.type.includes(type.replace('*', '')) || file.name.endsWith(type.replace('*', '')))) {
+      setSelectedFile(file);
+      uploadFile({ file, isImage, isPdf, isVideo, setDetails, fieldName });
+      setErrors((prev) => ({ ...prev, [fieldName]: '' }));
+    } else {
+      showNotification('warn', `Accepted file types: ${acceptedTypes.join(', ')}`);
     }
   };
 
@@ -77,7 +109,13 @@ const FileUpload = ({
           Upload {isImage ? label || 'Image' : isPdf ? label || 'PDF' : isVideo ? label || 'Video' : label || 'File'}
         </h1>
 
-        <div className="border-2 border-primary rounded-xl text-center border-dashed p-3 w-auto">
+        <div
+          className={`border-2 ${isDragging ? 'border-secondary bg-gray-50' : 'border-primary'} rounded-xl text-center border-dashed p-3 w-auto`}
+          onDragEnter={handleDragEnter}
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onDrop={handleDrop}
+        >
           {imagePreview ? (
             <div className="flex gap-1 justify-between relative p-2">
               {renderPreview()}
@@ -93,7 +131,7 @@ const FileUpload = ({
             </div>
           ) : (
             <div>
-              <p className="font-normal text-sm text-primary w-5/12 text-center m-auto">Choose a file or drag and drop here to upload</p>
+              <p className="font-normal text-sm text-primary w-5/12 text-center m-auto">{isDragging ? 'Drop your file here' : 'Choose a file or drag and drop here to upload'}</p>
 
               <div className="flex items-center m-auto justify-center  my-4 ">
                 <input type="file" onChange={handleFileChange} className="hidden" accept={acceptedTypes.join(', ')} ref={fileInputRef} />

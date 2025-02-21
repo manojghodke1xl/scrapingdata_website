@@ -403,7 +403,6 @@ const AddProduct = () => {
 
             {productDetails.postPurchase && (
               <MultiSelectCheckbox
-                divClassName={'mt-5'}
                 label={'Select post-purchase Products'}
                 options={relatedProducts}
                 selected={productDetails.postPurchaseProducts}
