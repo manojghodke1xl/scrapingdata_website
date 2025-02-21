@@ -45,6 +45,11 @@ const SitesNotificationSettings = () => {
     userDonationEmailTemplate: null,
     userDonationWhatsAppTemplate: null,
 
+    sendUserProduct: false,
+    userProductEmailTemplate: null,
+    userProductEmails: [],
+    userProductWhatsAppTemplate: null,
+
     sendAdminProduct: false,
     adminProductEmailTemplate: null,
     adminProductEmails: [],
@@ -310,6 +315,57 @@ const SitesNotificationSettings = () => {
                           if (errors.userDonationWhatsAppTemplate) setErrors((prev) => ({ ...prev, userDonationWhatsAppTemplate: '' }));
                         }}
                         error={errors.userDonationWhatsAppTemplate}
+                      />
+                    </>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
+            <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
+              <div className="sm:w-7/12 w-full flex flex-col">
+                <span className=" text-primary ">User Product Preferences</span>
+              </div>
+              <div className="w-full">
+                <div className="flex flex-col gap-y-5">
+                  <ToggleComponent
+                    bgColor={'bg-grey'}
+                    label={'Send User Product Notification'}
+                    isEnableState={siteNotification.sendUserProduct || siteNotification.userProductEmailTemplate || siteNotification.userProductWhatsAppTemplate}
+                    setIsEnableState={(value) =>
+                      setSiteNotification((prev) => ({ ...prev, sendUserProduct: value, userProductEmailTemplate: null, userProductWhatsAppTemplate: null }))
+                    }
+                  />
+                  {(siteNotification.sendUserProduct || siteNotification.userProductEmailTemplate || siteNotification.userProductWhatsAppTemplate) && (
+                    <>
+                      <DropDown
+                        label={'Select Email Template'}
+                        name="Template"
+                        dropdownList={templateState.emailTemplate?.map((template) => ({ name: template._id, showName: template.name, id: template._id }))}
+                        SummaryChild={<h5 className="p-0 m-0 text-primary">Email Templates</h5>}
+                        search={true}
+                        selected={siteNotification.userProductEmailTemplate}
+                        commonFunction={(e) => {
+                          setSiteNotification((prev) => ({ ...prev, userProductEmailTemplate: e.name }));
+                          if (errors.userProductEmailTemplate) setErrors((prev) => ({ ...prev, userProductEmailTemplate: '' }));
+                        }}
+                        error={errors.userProductEmailTemplate}
+                      />
+
+                      <DropDown
+                        label={'Select WhatsApp Template'}
+                        name="whatsappTemplate"
+                        dropdownList={templateState.whatsAppTemplate?.map((template) => ({ name: template._id, showName: template.name, id: template._id }))}
+                        SummaryChild={<h5 className="p-0 m-0 text-primary">WhatsApp Templates</h5>}
+                        search={true}
+                        selected={siteNotification.userProductWhatsAppTemplate}
+                        commonFunction={(e) => {
+                          setSiteNotification((prev) => ({ ...prev, userProductWhatsAppTemplate: e.name }));
+                          if (errors.userProductWhatsAppTemplate) setErrors((prev) => ({ ...prev, userProductWhatsAppTemplate: '' }));
+                        }}
+                        error={errors.userProductWhatsAppTemplate}
                       />
                     </>
                   )}
