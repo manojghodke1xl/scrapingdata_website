@@ -55,6 +55,7 @@ const AdminList = () => {
             <div className="p-1.5 min-w-full align-middle">
               <TableComponent
                 selectable={true}
+                siteModule={'admins'}
                 headers={[
                   { label: 'Sr. No.', key: 'srno' },
                   { label: 'Admin Name', key: 'name' },

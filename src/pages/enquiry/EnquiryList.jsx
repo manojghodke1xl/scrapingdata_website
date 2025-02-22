@@ -54,6 +54,7 @@ const EnquiryList = () => {
             <div className="p-1.5 min-w-full align-middle">
               <TableComponent
                 selectable={true}
+                siteModule={'enquiry'}
                 headers={[
                   { label: 'Sr. No.', key: 'srno' },
                   { label: 'Customer Name', key: 'name' },

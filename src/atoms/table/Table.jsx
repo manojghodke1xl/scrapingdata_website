@@ -277,6 +277,7 @@ const TableComponent = ({
   };
 
   const modulesArray = [
+    'admins',
     'participant',
     'payment',
     'products',
@@ -288,7 +289,15 @@ const TableComponent = ({
     'after-sales',
     'advertisement',
     'vendors',
-    'NotifAgent'
+    'NotifAgent',
+    'enquiry',
+    'subscriber',
+    'feedback',
+    'affiliates',
+    'career',
+    'distributors',
+    'fan-club',
+    'resellers'
   ];
 
   const availableSites = modulesArray.includes(siteModule)
