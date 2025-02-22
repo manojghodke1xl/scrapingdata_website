@@ -62,7 +62,7 @@ const TableView = ({
                 onDragOver={handleDragOver}
                 onDrop={(e) => handleDrop(e, header.key)}
                 onDragEnd={handleDragEnd}
-                className={`px-2 text-left font-semibold text-primary ${isDragging ? 'opacity-50' : ''}`}
+                className={`px-2 text-left font-semibold text-primary cursor-move ${isDragging ? 'opacity-50' : ''}`}
               >
                 <div className="flex items-center gap-2">
                   <span className="whitespace-nowrap">{header.label}</span>
@@ -72,7 +72,7 @@ const TableView = ({
                       strokeWidth="0.5"
                       fill="none"
                       onClick={() => onSort(header.key)}
-                      className={`cursor-pointer ${sortConfig.key === header.key ? 'text-blue-500' : ''}`}
+                      className={`cursor-pointer ${sortConfig.key === header.key ? 'text-brand' : ''}`}
                     />
                   )}
                 </div>

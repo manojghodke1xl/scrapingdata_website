@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import useGlobalContext from './useGlobalContext';
 
-const useSetTimeout = (apiUrl, page, limit, val, key, a, site, event, delay = 500) => {
+const useSetTimeout = (apiUrl, page, limit, sortBy, sortOrder, val, key, a, site, event, delay = 500) => {
   const { setLoading, dispatch } = useGlobalContext();
   const timeOutRef = useRef(0);
   const [error, setError] = useState(null);
@@ -18,10 +18,13 @@ const useSetTimeout = (apiUrl, page, limit, val, key, a, site, event, delay = 50
     setLoading(true);
     timeOutRef.current = setTimeout(async () => {
       try {
-        const res = await fetch(`${import.meta.env.VITE_API_URL}/${apiUrl}?p=${page}&n=${limit}&s=${val}&k=${key}&a=${a}&ws=${site}&event=${event}`, {
-          method: 'GET',
-          headers: { Authorization: localStorage.getItem('auth') }
-        });
+        const res = await fetch(
+          `${import.meta.env.VITE_API_URL}/${apiUrl}?p=${page}&n=${limit}&sortBy=${sortBy}&sortOrder=${sortOrder}&s=${val}&k=${key}&a=${a}&ws=${site}&event=${event}`,
+          {
+            method: 'GET',
+            headers: { Authorization: localStorage.getItem('auth') }
+          }
+        );
         const { data, error } = await res.json();
         if (res.status === 403 || res.status === 401 || error === 'jwt expired') dispatch({ type: 'SIGNOUT' });
         if (!res.ok) throw new Error(`HTTP error! status: ${res.status} - ${error}`);
@@ -37,7 +40,7 @@ const useSetTimeout = (apiUrl, page, limit, val, key, a, site, event, delay = 50
       clearTimeout(timeOutRef.current);
       setLoading(false);
     };
-  }, [val, delay, apiUrl, page, limit, key, setLoading, a, site, refresh, dispatch, event]);
+  }, [val, delay, apiUrl, page, limit, key, setLoading, a, site, refresh, dispatch, event, sortBy, sortOrder]);
 
   // Reset states when apiUrl is null
   useEffect(() => {

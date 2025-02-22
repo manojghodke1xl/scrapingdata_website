@@ -47,7 +47,6 @@ const SitesNotificationSettings = () => {
 
     sendUserProduct: false,
     userProductEmailTemplate: null,
-    userProductEmails: [],
     userProductWhatsAppTemplate: null,
 
     sendAdminProduct: false,

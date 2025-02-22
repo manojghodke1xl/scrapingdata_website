@@ -102,11 +102,17 @@ const TableComponent = ({
   });
   const [exportDropdownOpen, setExportDropdownOpen] = useState(false);
 
-  // Add new state for drag and drop
+  // State for drag and drop
   const [updatedHeaders, setUpdatedHeaders] = useState(headers);
   const [isDragging, setIsDragging] = useState(false);
 
-  // Add drag and drop handlers
+  // Sorting state
+  const [sortConfig, setSortConfig] = useState({
+    sortBy: null,
+    sortOrder: 'asc'
+  });
+
+  // Drag and drop handlers
   const handleDragStart = (e, columnKey) => {
     e.dataTransfer.setData('columnKey', columnKey);
     setIsDragging(true);
@@ -135,24 +141,16 @@ const TableComponent = ({
     setIsDragging(false);
   };
 
-  // Add sorting state
-  const [sortConfig, setSortConfig] = useState({
-    key: null,
-    direction: 'asc'
-  });
-
-  // Add sorting handler
-  const handleSort = (key) => {
-    let direction = 'asc';
-    if (sortConfig.key === key && sortConfig.direction === 'asc') {
-      direction = 'desc';
-    }
-    setSortConfig({ key, direction });
+  // Sorting handler
+  const handleSort = (sortBy) => {
+    let sortOrder = 'asc';
+    if (sortConfig.sortBy === sortBy && sortConfig.sortOrder === 'asc') sortOrder = 'desc';
+    setSortConfig({ sortBy, sortOrder });
 
     // Sort the data
     const sortedData = [...rows].sort((a, b) => {
-      if (a[key] < b[key]) return direction === 'asc' ? -1 : 1;
-      if (a[key] > b[key]) return direction === 'asc' ? 1 : -1;
+      if (a[sortBy] < b[sortBy]) return sortOrder === 'asc' ? -1 : 1;
+      if (a[sortBy] > b[sortBy]) return sortOrder === 'asc' ? 1 : -1;
       return 0;
     });
 
@@ -184,6 +182,8 @@ const TableComponent = ({
     shouldFetchFromApi ? apiUrl : null,
     activePage - 1,
     activeItemsPerPage,
+    sortConfig.sortBy,
+    sortConfig.sortOrder,
     filterState.searchTerm,
     filterState.searchKey,
     filterState.statusFilter,
@@ -298,7 +298,7 @@ const TableComponent = ({
   return (
     <div className="overflow-hidden relative">
       <div className="my-4 rounded-xl border border-primary overflow-hidden">
-        <div className="w-full flex flex-row sm:flex-row flex-wrap gap-y-4 justify-between items-center px-3 sm:px-6 ptpb-4 border-b border-primary">
+        <div className="w-full flex flex-row sm:flex-row flex-wrap gap-y-4 justify-between items-center px-3 sm:px-6 py-4 border-b border-primary">
           <TableFilter
             search={search}
             filterState={filterState}
@@ -339,7 +339,7 @@ const TableComponent = ({
           </div>
         </div>
         {tableCountLabel && selectionState.selectedItems.length > 0 && (
-          <div className="w-full ptpb-4 text-center bg-grey border-b border-primary ">
+          <div className="w-full py-2 text-center bg-grey border-b border-primary ">
             <p className="text-secondary">
               {selectionState.selectedItems.length === tableState.totalCount && 'All'} {selectionState.selectedItems.length} record from this page is selected
               <a href="#" className="text-brand pl-2">
@@ -395,9 +395,8 @@ const TableComponent = ({
                 totalPages={totalPages}
                 itemsPerPage={activeItemsPerPage}
                 setItemsPerPage={(newState) => {
-                  if (onItemsPerPageChange) {
-                    onItemsPerPageChange(newState);
-                  } else {
+                  if (onItemsPerPageChange) onItemsPerPageChange(newState);
+                  else {
                     setTableState((prev) => ({
                       ...prev,
                       itemsPerPage: typeof newState === 'number' ? newState : newState.itemsPerPage,
@@ -407,11 +406,8 @@ const TableComponent = ({
                 }}
                 handlePageChange={(pageNumber) => {
                   if (pageNumber > 0 && pageNumber <= totalPages) {
-                    if (onPageChange) {
-                      onPageChange(pageNumber);
-                    } else {
-                      setTableState((prev) => ({ ...prev, currentPage: pageNumber }));
-                    }
+                    if (onPageChange) onPageChange(pageNumber);
+                    else setTableState((prev) => ({ ...prev, currentPage: pageNumber }));
                   }
                 }}
                 totalRecords={activeTotalCount}

@@ -9,7 +9,7 @@ const Dashboard = () => {
           <h4 className="text-3xl text-dark">Dashboard</h4>
         </div>
       </div>
-      <div className="grid sm:grid-cols-2 xl:grid-cols-4 gap-6 ptpb-4 w-full">
+      <div className="grid sm:grid-cols-2 xl:grid-cols-4 gap-6 py-4 w-full">
         <StatsList list={dashBoardStats} />
       </div>
     </div>

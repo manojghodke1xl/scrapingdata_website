@@ -246,11 +246,6 @@ details[open] .icon-open {
   display: inline;
 }
 
-.ptpb-4 {
-  padding-top: 1rem !important;
-  padding-bottom: 1rem !important;
-}
-
 @media screen and (max-width: 419px) {
   .responsive-paginationnn {
     flex-wrap: wrap;
