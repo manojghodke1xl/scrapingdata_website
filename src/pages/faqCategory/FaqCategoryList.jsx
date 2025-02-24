@@ -44,7 +44,6 @@ const FaqCategoryList = () => {
                 actions={true}
                 editPath={'/faq-category/edit-faq-category'}
                 search={true}
-                searchCategory={[{ id: 1, name: 'Name' }]}
               />
             </div>
           </div>

@@ -132,7 +132,7 @@ const AddGallery = () => {
             <span className="block text-primary">Site and Visibility Settings</span>
           </div>
           <div className="w-full">
-            <div className="w-full">
+            <div className="w-full flex flex-col gap-y-5">
               <MultiSelectCheckbox
                 options={availableSites
                   .filter((site) => site.modules?.some((module) => module.gallery === true))

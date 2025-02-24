@@ -85,10 +85,9 @@ const FeedbackList = () => {
                 searchCategory={[
                   { id: 0, name: 'Name' },
                   { id: 1, name: 'Email' },
-                  { id: 2, name: 'Phone Number' },
-                  { id: 3, name: 'Feedback Service' },
-                  { id: 4, name: 'Subject' },
-                  { id: 5, name: 'Site' }
+                  { id: 2, name: 'Service' },
+                  { id: 3, name: 'Subject' },
+                  { id: 4, name: 'Site' }
                 ]}
                 deleteBtn={true}
                 deleteAction={true}

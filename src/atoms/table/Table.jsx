@@ -297,7 +297,8 @@ const TableComponent = ({
     'career',
     'distributors',
     'fan-club',
-    'resellers'
+    'resellers',
+    'broadcast'
   ];
 
   const availableSites = modulesArray.includes(siteModule)
@@ -396,8 +397,8 @@ const TableComponent = ({
             itemsPerPage={itemsPerPage}
           />
         </div>
-        <div className="w-full mt-2">
-          <div className="w-full py-3">
+        <div className="w-full">
+          <div className="w-full py-1">
             {pagination && (
               <Pagination
                 currentPage={activePage}

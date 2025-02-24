@@ -70,12 +70,14 @@ const CouponList = () => {
                 search={true}
                 filter={true}
                 deleteBtn={true}
-                filterCategory={[{ id: 0, name: 'Status' }]}
+                filterCategory={[
+                  { id: 0, name: 'Status' },
+                  { id: 1, name: 'Sites' }
+                ]}
                 statuses={[
                   { id: 0, name: 'Active', bgColor: '#ECFDF3', color: '#027948', dotColor: '#12B76A' },
                   { id: 2, name: 'Inactive', bgColor: '#F2F4F7', color: '#344054', dotColor: '#667085' }
                 ]}
-                searchCategory={[{ id: 1, name: 'Code' }]}
                 deleteLabel={'Delete Coupon'}
                 deleteMessage={'Are you sure you want to delete this coupon?'}
                 deleteApi={deleteCouponApi}

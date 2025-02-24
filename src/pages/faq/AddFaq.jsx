@@ -117,7 +117,7 @@ const AddFaq = () => {
             <span className=" text-primary ">FAQ Details</span>
           </div>
           <div className="w-full">
-            <div>
+            <div className="flex flex-col gap-y-5">
               <FormField
                 label="Question"
                 type="text"
@@ -138,7 +138,10 @@ const AddFaq = () => {
                 id="answer"
                 name="answer"
                 value={faqDetails.answer}
-                onChange={(e) => setFaqDetails((prev) => ({ ...prev, answer: e.target.value }))}
+                onChange={(e) => {
+                  setFaqDetails((prev) => ({ ...prev, answer: e.target.value }));
+                  if (errors.answer) setErrors((prev) => ({ ...prev, answer: '' }));
+                }}
                 errorMessage={errors.answer}
               />
             </div>
@@ -152,7 +155,7 @@ const AddFaq = () => {
             <span className="block text-primary">Category and Site Settings</span>
           </div>
           <div className="w-full">
-            <div className="w-full">
+            <div className="w-full flex flex-col gap-y-5">
               <MultiSelectCheckbox
                 options={availableSites
                   .filter((site) => site.modules?.some((module) => module.faq === true))
@@ -166,7 +169,6 @@ const AddFaq = () => {
                 error={errors.sites}
               />
               <MultiSelectCheckbox
-                divClassName={'mt-5'}
                 options={availableFaqCategories}
                 label="Select Faq Categories"
                 onChange={(selected) => {
@@ -186,7 +188,7 @@ const AddFaq = () => {
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className="block text-primary">FAQ Status and Visibility</span>
           </div>
-          <div className="dropdown-container relative w-full mt-2">
+          <div className="dropdown-container relative w-full mt-2 flex flex-col gap-y-5">
             <ToggleComponent
               divClassName={''}
               label={'Is FAQ Active?'}

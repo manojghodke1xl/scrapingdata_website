@@ -3,6 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 
 const ParticipantList = lazy(() => import('../../pages/participant/ParticipantList'));
 const AddParticipant = lazy(() => import('../../pages/participant/AddParticipant'));
+const ParticipantBulkImport = lazy(() => import('../../pages/participant/ParticipantBulkImport'));
 const PageNotFound = lazy(() => import('../../pages/common/PageNotFound'));
 
 const ParticipantRoutes = () => {
@@ -10,6 +11,7 @@ const ParticipantRoutes = () => {
     <Routes>
       <Route path="/participant-list" element={<ParticipantList />} />
       <Route path="/add-participant" element={<AddParticipant />} />
+      <Route path="/bulk-import" element={<ParticipantBulkImport />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );

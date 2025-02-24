@@ -57,7 +57,7 @@ const TextareaComponent = ({
           spellCheck={spellCheck}
           onChange={handleChange}
           className={`w-full mt-2 rounded-xl border ${
-            errorMessage ? 'border-fadered focus:border-fadered' : 'border-primary focus:border-secondary'
+            errorMessage ? 'border-danger focus:border-fadered' : 'border-primary focus:border-secondary'
           } font-normal focus:outline-none focus:ring-0 px-4 py-2.5 placeholder:text-gray-400 text-dark bg-transparent`}
         />
       </div>
@@ -69,7 +69,7 @@ const TextareaComponent = ({
         )}
         <p className="mt-1 text-primary text-sm">{hint}</p>
       </div>
-      {errorMessage && <p className="text-red-500 mt-1 text-sm">{errorMessage}</p>}
+      {errorMessage && <p className="text-danger mt-1 text-sm">{errorMessage}</p>}
     </div>
   );
 };
