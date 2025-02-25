@@ -7,7 +7,7 @@ const Filters = ({ categories, onCategorySelect, setSelectedCategory }) => {
 
   return (
     <>
-      <div className="dropdown-container relative w-full">
+      <div className="relative w-full">
         <details
           name="tone"
           open={isOpenCategories}

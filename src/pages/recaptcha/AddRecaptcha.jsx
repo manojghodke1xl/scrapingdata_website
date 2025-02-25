@@ -104,7 +104,7 @@ const AddRecaptcha = () => {
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className="block text-primary">General Configuration</span>
           </div>
-          <div className="dropdown-container relative w-full mt-2 ">
+          <div className="w-full flex flex-col gap-y-5">
             <DropDown
               name="Version"
               label={'Select Version'}
@@ -136,22 +136,20 @@ const AddRecaptcha = () => {
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className="block text-primary">Site-Specific Settings</span>
           </div>
-          <div className="w-full">
-            <div className="w-full">
-              <MultiSelectCheckbox
-                options={availableSites
-                  .filter((site) => site.modules?.some((module) => module.recaptcha === true))
-                  .map((site) => ({ name: `${site.name} (${site.host})`, _id: site._id }))}
-                label="Select Sites"
-                formLabel="Select Sites"
-                onChange={(selected) => {
-                  setRecaptcha((prev) => ({ ...prev, sites: selected }));
-                  if (errors.sites) setErrors((prev) => ({ ...prev, sites: '' }));
-                }}
-                selected={recaptcha.sites}
-                error={errors.sites}
-              />
-            </div>
+          <div className="w-full flex flex-col gap-y-5">
+            <MultiSelectCheckbox
+              options={availableSites
+                .filter((site) => site.modules?.some((module) => module.recaptcha === true))
+                .map((site) => ({ name: `${site.name} (${site.host})`, _id: site._id }))}
+              label="Select Sites"
+              formLabel="Select Sites"
+              onChange={(selected) => {
+                setRecaptcha((prev) => ({ ...prev, sites: selected }));
+                if (errors.sites) setErrors((prev) => ({ ...prev, sites: '' }));
+              }}
+              selected={recaptcha.sites}
+              error={errors.sites}
+            />
           </div>
         </div>
       </div>
@@ -161,36 +159,33 @@ const AddRecaptcha = () => {
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className=" text-primary ">Keys Configuration</span>
           </div>
-          <div className="w-full">
-            <div>
-              <FormField
-                label="Site key"
-                type="text"
-                id="name"
-                name="name"
-                placeholder="Site key"
-                onChange={(e) => {
-                  setRecaptcha((prev) => ({ ...prev, sitekey: e.target.value }));
-                  if (errors.sitekey) setErrors((prev) => ({ ...prev, sitekey: '' }));
-                }}
-                value={recaptcha.sitekey}
-                errorMessage={errors.sitekey}
-              />
-              <FormField
-                divClassName={'mt-5'}
-                label="Secret key"
-                type="text"
-                id="secretkey"
-                name="secretkey"
-                placeholder="Secret key"
-                onChange={(e) => {
-                  setRecaptcha((prev) => ({ ...prev, secretkey: e.target.value }));
-                  if (errors.secretkey) setErrors((prev) => ({ ...prev, secretkey: '' }));
-                }}
-                value={recaptcha.secretkey}
-                errorMessage={errors.secretkey}
-              />
-            </div>
+          <div className="w-full flex flex-col gap-y-5">
+            <FormField
+              label="Site key"
+              type="text"
+              id="name"
+              name="name"
+              placeholder="Site key"
+              onChange={(e) => {
+                setRecaptcha((prev) => ({ ...prev, sitekey: e.target.value }));
+                if (errors.sitekey) setErrors((prev) => ({ ...prev, sitekey: '' }));
+              }}
+              value={recaptcha.sitekey}
+              errorMessage={errors.sitekey}
+            />
+            <FormField
+              label="Secret key"
+              type="text"
+              id="secretkey"
+              name="secretkey"
+              placeholder="Secret key"
+              onChange={(e) => {
+                setRecaptcha((prev) => ({ ...prev, secretkey: e.target.value }));
+                if (errors.secretkey) setErrors((prev) => ({ ...prev, secretkey: '' }));
+              }}
+              value={recaptcha.secretkey}
+              errorMessage={errors.secretkey}
+            />
           </div>
         </div>
       </div>

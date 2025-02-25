@@ -13,7 +13,7 @@ const StatusFilter = ({ statuses, setStatusFilter }) => {
   };
 
   return (
-    <div className="dropdown-container relative">
+    <div className="relative">
       <details
         name="tone"
         open={isOpen}

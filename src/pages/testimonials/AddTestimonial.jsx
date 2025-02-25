@@ -132,31 +132,28 @@ const AddTestimonial = () => {
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className=" text-primary">Testimonial Details</span>
           </div>
-          <div className="w-full">
-            <div>
-              <FormField
-                label="Name"
-                type="text"
-                id="name"
-                name="name"
-                placeholder="Name"
-                onChange={(e) => {
-                  setTestimonialDetails((prev) => ({ ...prev, name: e.target.value }));
-                  if (errors.name) setErrors((prev) => ({ ...prev, name: '' }));
-                }}
-                value={testimonialDetails.name}
-                errorMessage={errors.name}
-              />
-              <TextareaComponent
-                divClassName="mt-5"
-                label="Description"
-                placeholder="Enter a description..."
-                id="desg"
-                name="desg"
-                value={testimonialDetails.desg}
-                onChange={(e) => setTestimonialDetails((prev) => ({ ...prev, desg: e.target.value }))}
-              />
-            </div>
+          <div className="w-full flex flex-col gap-y-5">
+            <FormField
+              label="Name"
+              type="text"
+              id="name"
+              name="name"
+              placeholder="Name"
+              onChange={(e) => {
+                setTestimonialDetails((prev) => ({ ...prev, name: e.target.value }));
+                if (errors.name) setErrors((prev) => ({ ...prev, name: '' }));
+              }}
+              value={testimonialDetails.name}
+              errorMessage={errors.name}
+            />
+            <TextareaComponent
+              label="Description"
+              placeholder="Enter a description..."
+              id="desg"
+              name="desg"
+              value={testimonialDetails.desg}
+              onChange={(e) => setTestimonialDetails((prev) => ({ ...prev, desg: e.target.value }))}
+            />
           </div>
         </div>
       </div>
@@ -166,7 +163,7 @@ const AddTestimonial = () => {
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className="block text-primary">Testimonial Type & Content</span>
           </div>
-          <div className="dropdown-container relative w-full mt-2">
+          <div className="w-full flex flex-col gap-y-5">
             <DropDown
               name="type"
               label={'Content Type'}
@@ -194,7 +191,6 @@ const AddTestimonial = () => {
 
             {testimonialDetails.type === 'image' && (
               <FileUpload
-                divClassName={'mt-5'}
                 logo={<FaRegImage className="text-primary text-2xl" />}
                 error={errors.image}
                 setErrors={setErrors}
@@ -207,7 +203,6 @@ const AddTestimonial = () => {
             )}
             {testimonialDetails.type === 'text' && (
               <TextareaComponent
-                divClassName="mt-5"
                 label="Text"
                 placeholder="Enter a text..."
                 id="text"
@@ -232,7 +227,6 @@ const AddTestimonial = () => {
                 {testimonialDetails.videoBolean ? (
                   <div className="w-full flex flex-col gap-y-2">
                     <FormField
-                      divClassName={'mt-5'}
                       label="Video URL"
                       type="text"
                       id="videoUrl"
@@ -244,7 +238,6 @@ const AddTestimonial = () => {
                   </div>
                 ) : (
                   <FileUpload
-                    divClassName={'mt-5'}
                     logo={<RiVideoUploadLine className="text-primary text-2xl" />}
                     error={errors.video}
                     setErrors={setErrors}
@@ -266,35 +259,33 @@ const AddTestimonial = () => {
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className="block text-primary">Site & Category</span>
           </div>
-          <div className="w-full">
-            <div className="w-full">
-              <MultiSelectCheckbox
-                options={availableSites
-                  .filter((site) => site.modules?.some((module) => module.testimonial === true))
-                  .map((site) => ({ name: `${site.name} (${site.host})`, _id: site._id }))}
-                label="Select Sites"
-                formLabel={'Select Sites'}
-                onChange={(selected) => {
-                  setTestimonialDetails((prev) => ({ ...prev, sites: selected }));
-                  if (errors.sites) setErrors((prev) => ({ ...prev, sites: '' }));
-                }}
-                selected={testimonialDetails.sites}
-                error={errors.sites}
-              />
+          <div className="w-full flex flex-col gap-y-5">
+            <MultiSelectCheckbox
+              options={availableSites
+                .filter((site) => site.modules?.some((module) => module.testimonial === true))
+                .map((site) => ({ name: `${site.name} (${site.host})`, _id: site._id }))}
+              label="Select Sites"
+              formLabel={'Select Sites'}
+              onChange={(selected) => {
+                setTestimonialDetails((prev) => ({ ...prev, sites: selected }));
+                if (errors.sites) setErrors((prev) => ({ ...prev, sites: '' }));
+              }}
+              selected={testimonialDetails.sites}
+              error={errors.sites}
+            />
 
-              <MultiSelectCheckbox
-                divClassName={'mt-5'}
-                options={availableCategories}
-                label="Select Categories"
-                formLabel={'Select Categories'}
-                onChange={(selected) => {
-                  setTestimonialDetails((prev) => ({ ...prev, categories: selected }));
-                  if (errors.categories) setErrors((prev) => ({ ...prev, categories: '' }));
-                }}
-                selected={testimonialDetails.categories}
-                error={errors.categories}
-              />
-            </div>
+            <MultiSelectCheckbox
+              divClassName={'mt-5'}
+              options={availableCategories}
+              label="Select Categories"
+              formLabel={'Select Categories'}
+              onChange={(selected) => {
+                setTestimonialDetails((prev) => ({ ...prev, categories: selected }));
+                if (errors.categories) setErrors((prev) => ({ ...prev, categories: '' }));
+              }}
+              selected={testimonialDetails.categories}
+              error={errors.categories}
+            />
           </div>
         </div>
       </div>

@@ -118,40 +118,37 @@ const AddCaseStudy = () => {
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className=" text-primary">Case Study Information</span>
           </div>
-          <div className="w-full">
-            <div>
-              <FormField
-                label="Title"
-                type="text"
-                id="title"
-                name="title"
-                placeholder="Title"
-                onChange={(e) => {
-                  setCaseStudyDetails((prev) => ({ ...prev, title: e.target.value }));
-                  if (errors.title) setErrors((prev) => ({ ...prev, title: '' }));
-                }}
-                value={caseStudyDetails.title}
-                errorMessage={errors.title}
-              />
-              <TextareaComponent
-                divClassName="mt-5"
-                label="Short Description"
-                placeholder="Enter a description..."
-                id="sdesc"
-                name="sdesc"
-                value={caseStudyDetails.sdesc}
-                onChange={(e) => setCaseStudyDetails((prev) => ({ ...prev, sdesc: e.target.value }))}
-              />
-              <TextareaComponent
-                label="Long Description"
-                placeholder="Enter a description..."
-                id="ldesc"
-                name="ldesc"
-                value={caseStudyDetails.ldesc}
-                onChange={(e) => setCaseStudyDetails((prev) => ({ ...prev, ldesc: e.target.value }))}
-                maxLength={1000}
-              />
-            </div>
+          <div className="w-full flex flex-col gap-y-5">
+            <FormField
+              label="Title"
+              type="text"
+              id="title"
+              name="title"
+              placeholder="Title"
+              onChange={(e) => {
+                setCaseStudyDetails((prev) => ({ ...prev, title: e.target.value }));
+                if (errors.title) setErrors((prev) => ({ ...prev, title: '' }));
+              }}
+              value={caseStudyDetails.title}
+              errorMessage={errors.title}
+            />
+            <TextareaComponent
+              label="Short Description"
+              placeholder="Enter a description..."
+              id="sdesc"
+              name="sdesc"
+              value={caseStudyDetails.sdesc}
+              onChange={(e) => setCaseStudyDetails((prev) => ({ ...prev, sdesc: e.target.value }))}
+            />
+            <TextareaComponent
+              label="Long Description"
+              placeholder="Enter a description..."
+              id="ldesc"
+              name="ldesc"
+              value={caseStudyDetails.ldesc}
+              onChange={(e) => setCaseStudyDetails((prev) => ({ ...prev, ldesc: e.target.value }))}
+              maxLength={1000}
+            />
           </div>
         </div>
       </div>
@@ -161,7 +158,7 @@ const AddCaseStudy = () => {
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className="block text-primary">Media Upload</span>
           </div>
-          <div className="dropdown-container relative w-full mt-2">
+          <div className="w-full flex flex-col gap-y-5">
             <FileUpload
               logo={<FaRegImage className="text-primary text-2xl" />}
               error={errors.image}
@@ -173,7 +170,6 @@ const AddCaseStudy = () => {
               imagePreviewUrl={caseStudyDetails.imageFile?.url}
             />
             <FileUpload
-              divClassName={'mt-5'}
               logo={<BsFilePdf className="text-primary text-2xl" />}
               error={errors.image}
               setErrors={setErrors}
@@ -192,31 +188,29 @@ const AddCaseStudy = () => {
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className="block text-primary">Site & Global Settings</span>
           </div>
-          <div className="w-full">
-            <div className="w-full flex flex-col gap-5">
-              <MultiSelectCheckbox
-                options={availableSites
-                  .filter((site) => site.modules?.some((module) => module.casestudy === true))
-                  .map((site) => ({ name: `${site.name} (${site.host})`, _id: site._id }))}
-                label="Select Sites"
-                onChange={(selected) => {
-                  setCaseStudyDetails((prev) => ({ ...prev, sites: selected }));
-                  if (errors.sites) setErrors((prev) => ({ ...prev, sites: '' }));
-                }}
-                selected={caseStudyDetails.sites}
-                error={errors.sites}
-              />
-              <ToggleComponent
-                label={'Is Case Study Active?'}
-                isEnableState={caseStudyDetails.isActive}
-                setIsEnableState={(value) => setCaseStudyDetails((prev) => ({ ...prev, isActive: value }))}
-              />
-              <ToggleComponent
-                label={'Is Case Study Global?'}
-                isEnableState={caseStudyDetails.isGlobal}
-                setIsEnableState={(value) => setCaseStudyDetails((prev) => ({ ...prev, isGlobal: value }))}
-              />
-            </div>
+          <div className="w-full flex flex-col gap-y-5">
+            <MultiSelectCheckbox
+              options={availableSites
+                .filter((site) => site.modules?.some((module) => module.casestudy === true))
+                .map((site) => ({ name: `${site.name} (${site.host})`, _id: site._id }))}
+              label="Select Sites"
+              onChange={(selected) => {
+                setCaseStudyDetails((prev) => ({ ...prev, sites: selected }));
+                if (errors.sites) setErrors((prev) => ({ ...prev, sites: '' }));
+              }}
+              selected={caseStudyDetails.sites}
+              error={errors.sites}
+            />
+            <ToggleComponent
+              label={'Is Case Study Active?'}
+              isEnableState={caseStudyDetails.isActive}
+              setIsEnableState={(value) => setCaseStudyDetails((prev) => ({ ...prev, isActive: value }))}
+            />
+            <ToggleComponent
+              label={'Is Case Study Global?'}
+              isEnableState={caseStudyDetails.isGlobal}
+              setIsEnableState={(value) => setCaseStudyDetails((prev) => ({ ...prev, isGlobal: value }))}
+            />
           </div>
         </div>
       </div>
@@ -226,32 +220,29 @@ const AddCaseStudy = () => {
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className=" text-primary">Email Notification Settings</span>
           </div>
-          <div className="w-full">
-            <div>
-              <FormField
-                label="Subject"
-                type="text"
-                id="mailSubject"
-                name="mailSubject"
-                placeholder="Subject"
-                value={caseStudyDetails.mailSubject}
-                onChange={(e) => {
-                  setCaseStudyDetails((prev) => ({ ...prev, mailSubject: e.target.value }));
-                  if (errors.mailSubject) setErrors((prev) => ({ ...prev, mailSubject: '' }));
-                }}
-                errorMessage={errors.mailSubject}
-              />
-              <TextareaComponent
-                divClassName="mt-5"
-                label="Body"
-                placeholder="Body"
-                id="mailBody"
-                name="mailBody"
-                value={caseStudyDetails.mailBody}
-                onChange={(e) => setCaseStudyDetails((prev) => ({ ...prev, mailBody: e.target.value }))}
-                errorMessage={errors.mailBody}
-              />
-            </div>
+          <div className="w-full flex flex-col gap-y-5">
+            <FormField
+              label="Subject"
+              type="text"
+              id="mailSubject"
+              name="mailSubject"
+              placeholder="Subject"
+              value={caseStudyDetails.mailSubject}
+              onChange={(e) => {
+                setCaseStudyDetails((prev) => ({ ...prev, mailSubject: e.target.value }));
+                if (errors.mailSubject) setErrors((prev) => ({ ...prev, mailSubject: '' }));
+              }}
+              errorMessage={errors.mailSubject}
+            />
+            <TextareaComponent
+              label="Body"
+              placeholder="Body"
+              id="mailBody"
+              name="mailBody"
+              value={caseStudyDetails.mailBody}
+              onChange={(e) => setCaseStudyDetails((prev) => ({ ...prev, mailBody: e.target.value }))}
+              errorMessage={errors.mailBody}
+            />
           </div>
         </div>
       </div>

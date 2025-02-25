@@ -188,13 +188,8 @@ const AddFaq = () => {
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className="block text-primary">FAQ Status and Visibility</span>
           </div>
-          <div className="dropdown-container relative w-full mt-2 flex flex-col gap-y-5">
-            <ToggleComponent
-              divClassName={''}
-              label={'Is FAQ Active?'}
-              isEnableState={faqDetails.isActive}
-              setIsEnableState={(value) => setFaqDetails((prev) => ({ ...prev, isActive: value }))}
-            />
+          <div className="w-full flex flex-col gap-y-5">
+            <ToggleComponent label={'Is FAQ Active?'} isEnableState={faqDetails.isActive} setIsEnableState={(value) => setFaqDetails((prev) => ({ ...prev, isActive: value }))} />
             <ToggleComponent label={'Is FAQ Global?'} isEnableState={faqDetails.isGlobal} setIsEnableState={(value) => setFaqDetails((prev) => ({ ...prev, isGlobal: value }))} />
           </div>
         </div>

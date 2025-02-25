@@ -124,41 +124,39 @@ const AddSite = () => {
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className=" text-primary">Basic Information</span>
           </div>
-          <div className="w-full">
-            <div className="flex flex-col gap-y-5">
-              <FormField
-                label="Site Name"
-                type="text"
-                id="name"
-                name="name"
-                placeholder="Site Name"
-                onChange={(e) => {
-                  setSiteDetails((prev) => ({ ...prev, name: e.target.value }));
-                  if (errors.name) setErrors((prev) => ({ ...prev, name: '' }));
-                }}
-                value={siteDetails.name}
-                errorMessage={errors.name}
-              />
-              <FormField
-                label="Site Host"
-                type="url"
-                id="host"
-                name="host"
-                placeholder="Site Host"
-                onChange={(e) => {
-                  setSiteDetails((prev) => ({ ...prev, host: e.target.value }));
-                  if (errors.host) setErrors((prev) => ({ ...prev, host: '' }));
-                }}
-                value={siteDetails.host}
-                errorMessage={errors.host}
-              />
+          <div className="w-full flex flex-col gap-y-5">
+            <FormField
+              label="Site Name"
+              type="text"
+              id="name"
+              name="name"
+              placeholder="Site Name"
+              onChange={(e) => {
+                setSiteDetails((prev) => ({ ...prev, name: e.target.value }));
+                if (errors.name) setErrors((prev) => ({ ...prev, name: '' }));
+              }}
+              value={siteDetails.name}
+              errorMessage={errors.name}
+            />
+            <FormField
+              label="Site Host"
+              type="url"
+              id="host"
+              name="host"
+              placeholder="Site Host"
+              onChange={(e) => {
+                setSiteDetails((prev) => ({ ...prev, host: e.target.value }));
+                if (errors.host) setErrors((prev) => ({ ...prev, host: '' }));
+              }}
+              value={siteDetails.host}
+              errorMessage={errors.host}
+            />
 
-              <ToggleComponent
-                label={'Is Site Active?'}
-                isEnableState={siteDetails.isActive}
-                setIsEnableState={(value) => setSiteDetails((prev) => ({ ...prev, isActive: value }))}
-              />
-            </div>
+            <ToggleComponent
+              label={'Is Site Active?'}
+              isEnableState={siteDetails.isActive}
+              setIsEnableState={(value) => setSiteDetails((prev) => ({ ...prev, isActive: value }))}
+            />
           </div>
         </div>
       </div>
@@ -169,18 +167,16 @@ const AddSite = () => {
             <span className=" text-primary">Integration Settings</span>
           </div>
           <div className="w-full">
-            <div>
-              <DropDown
-                name="SMTP"
-                label={'Select SMTP'}
-                SummaryChild={<h5 className="p-0 m-0 text-primary">{siteDetails.smtpObj ? siteDetails.smtpObj.showName : 'SMTP'}</h5>}
-                dropdownList={smtpOptions.map((option) => ({ id: option._id, showName: option.name, name: option._id }))}
-                selected={siteDetails.smtp}
-                search={true}
-                commonFunction={(e) => setSiteDetails((prev) => ({ ...prev, smtp: e.id, smtpObj: e }))}
-                error={errors.smtp}
-              />
-            </div>
+            <DropDown
+              name="SMTP"
+              label={'Select SMTP'}
+              SummaryChild={<h5 className="p-0 m-0 text-primary">{siteDetails.smtpObj ? siteDetails.smtpObj.showName : 'SMTP'}</h5>}
+              dropdownList={smtpOptions.map((option) => ({ id: option._id, showName: option.name, name: option._id }))}
+              selected={siteDetails.smtp}
+              search={true}
+              commonFunction={(e) => setSiteDetails((prev) => ({ ...prev, smtp: e.id, smtpObj: e }))}
+              error={errors.smtp}
+            />
           </div>
         </div>
       </div>
@@ -191,16 +187,14 @@ const AddSite = () => {
             <span className=" text-primary">Module Information</span>
           </div>
           <div className="w-full">
-            <div>
-              <MultiSelectCheckbox
-                options={moduleOptions}
-                label={'Select Modules'}
-                formLabel={'Select Modules'}
-                selected={siteDetails.modules}
-                onChange={(newModules) => setSiteDetails((prev) => ({ ...prev, modules: newModules }))}
-                mode="objects"
-              />
-            </div>
+            <MultiSelectCheckbox
+              options={moduleOptions}
+              label={'Select Modules'}
+              formLabel={'Select Modules'}
+              selected={siteDetails.modules}
+              onChange={(newModules) => setSiteDetails((prev) => ({ ...prev, modules: newModules }))}
+              mode="objects"
+            />
           </div>
         </div>
       </div>
@@ -211,33 +205,31 @@ const AddSite = () => {
             <span className=" text-primary">Webhook URLs</span>
           </div>
           <div className="w-full">
-            <div>
-              <FormField
-                label="Enquiry Webhook URL"
-                type="url"
-                id="enquiryWebhookUrl"
-                name="enquiryWebhookUrl"
-                placeholder="Enquiry Webhook URL"
-                onChange={(e) => setSiteDetails((prev) => ({ ...prev, enquiryWebhookUrl: e.target.value }))}
-                value={siteDetails.enquiryWebhookUrl}
-              />
-              <button onClick={() => setEnquiryModalOpen(true)} className="w-fit whitespace-nowrap rounded-xl bg-primary hover:bg-primary-hover text-white p-2 mt-2">
-                Preview Data
-              </button>
-              <FormField
-                divClassName={'mt-5'}
-                label="Mailing List Webhook URL"
-                type="url"
-                id="mailinglistWebhookUrl"
-                name="mailinglistWebhookUrl"
-                placeholder="Mailing List Webhook URL"
-                onChange={(e) => setSiteDetails((prev) => ({ ...prev, mailinglistWebhookUrl: e.target.value }))}
-                value={siteDetails.mailinglistWebhookUrl}
-              />
-              <button onClick={() => setMailingListModalOpen(true)} className="w-fit whitespace-nowrap rounded-xl bg-primary hover:bg-primary-hover text-white p-2 mt-2">
-                Preview Data
-              </button>
-            </div>
+            <FormField
+              label="Enquiry Webhook URL"
+              type="url"
+              id="enquiryWebhookUrl"
+              name="enquiryWebhookUrl"
+              placeholder="Enquiry Webhook URL"
+              onChange={(e) => setSiteDetails((prev) => ({ ...prev, enquiryWebhookUrl: e.target.value }))}
+              value={siteDetails.enquiryWebhookUrl}
+            />
+            <button onClick={() => setEnquiryModalOpen(true)} className="w-fit whitespace-nowrap rounded-xl bg-primary hover:bg-primary-hover text-white p-2 mt-2">
+              Preview Data
+            </button>
+            <FormField
+              divClassName={'mt-5'}
+              label="Mailing List Webhook URL"
+              type="url"
+              id="mailinglistWebhookUrl"
+              name="mailinglistWebhookUrl"
+              placeholder="Mailing List Webhook URL"
+              onChange={(e) => setSiteDetails((prev) => ({ ...prev, mailinglistWebhookUrl: e.target.value }))}
+              value={siteDetails.mailinglistWebhookUrl}
+            />
+            <button onClick={() => setMailingListModalOpen(true)} className="w-fit whitespace-nowrap rounded-xl bg-primary hover:bg-primary-hover text-white p-2 mt-2">
+              Preview Data
+            </button>
           </div>
         </div>
       </div>

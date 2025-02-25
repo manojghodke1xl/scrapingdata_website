@@ -118,31 +118,29 @@ const AddCoupon = () => {
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className=" text-primary">Coupon Details</span>
           </div>
-          <div className="w-full">
-            <div>
-              <FormField
-                label="Coupon Code"
-                type="text"
-                id="code"
-                name="code"
-                placeholder="Coupon Code"
-                onChange={(e) => {
-                  setCouponDetails((prev) => ({ ...prev, code: e.target.value }));
-                  if (errors.code) setErrors((prev) => ({ ...prev, code: '' }));
-                }}
-                value={couponDetails.code}
-                errorMessage={errors.code}
-              />
-              <TextareaComponent
-                label="Coupon Description"
-                placeholder="Enter a description..."
-                id="info"
-                name="info"
-                value={couponDetails.info}
-                onChange={(e) => setCouponDetails((prev) => ({ ...prev, info: e.target.value }))}
-                errorMessage={errors.info}
-              />
-            </div>
+          <div className="w-full flex flex-col gap-y-5">
+            <FormField
+              label="Coupon Code"
+              type="text"
+              id="code"
+              name="code"
+              placeholder="Coupon Code"
+              onChange={(e) => {
+                setCouponDetails((prev) => ({ ...prev, code: e.target.value }));
+                if (errors.code) setErrors((prev) => ({ ...prev, code: '' }));
+              }}
+              value={couponDetails.code}
+              errorMessage={errors.code}
+            />
+            <TextareaComponent
+              label="Coupon Description"
+              placeholder="Enter a description..."
+              id="info"
+              name="info"
+              value={couponDetails.info}
+              onChange={(e) => setCouponDetails((prev) => ({ ...prev, info: e.target.value }))}
+              errorMessage={errors.info}
+            />
           </div>
         </div>
       </div>
@@ -152,7 +150,7 @@ const AddCoupon = () => {
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className="block text-primary">Vadidity Period</span>
           </div>
-          <div className="dropdown-container relative w-full mt-2">
+          <div className="w-full flex flex-col gap-y-5">
             <DateTimePicker
               id={'startDate'}
               label={'Start Date'}
@@ -165,7 +163,6 @@ const AddCoupon = () => {
               errorMessage={errors.startDate}
             />
             <DateTimePicker
-              divClassName={'mt-5'}
               id={'endDate'}
               label={'End Date'}
               placeholder={formatDateTime(new Date())}
@@ -185,59 +182,54 @@ const AddCoupon = () => {
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className=" text-primary">Discount Details</span>
           </div>
-          <div className="w-full">
-            <div>
-              <FormField
-                label="Minimum Amount"
-                type="text"
-                id="minAmount"
-                name="minAmount"
-                placeholder="Minimum Amount"
-                value={couponDetails.minAmount}
-                onChange={(e) => setCouponDetails((prev) => ({ ...prev, minAmount: e.target.value }))}
-              />
-              <DropDown
-                mt="mt-5"
-                name="type"
-                label="Discount Type"
-                SummaryChild={<h5 className="p-0 m-0 text-primary">{couponDetails.typeObject?.showName || 'Coupon Type'}</h5>}
-                dropdownList={[
-                  { id: 0, showName: 'Percentage', name: 'percentage' },
-                  { id: 1, showName: 'Amount', name: 'amount' }
-                ]}
-                selected={couponDetails.type}
-                search={true}
-                commonFunction={(e) => {
-                  setCouponDetails((prev) => ({ ...prev, type: e.name, typeObject: e }));
-                  if (errors.type) setErrors((prev) => ({ ...prev, type: '' }));
-                }}
-                error={errors.type}
-              />
-              <FormField
-                divClassName={'mt-5'}
-                label="Discount Value"
-                type="number"
-                id="value"
-                name="value"
-                placeholder="Discount Value"
-                onChange={(e) => {
-                  setCouponDetails((prev) => ({ ...prev, value: e.target.value }));
-                  if (errors.value) setErrors((prev) => ({ ...prev, value: '' }));
-                }}
-                value={couponDetails.value}
-                errorMessage={errors.value}
-              />
-              <FormField
-                divClassName={'mt-5'}
-                label="Discount Upto"
-                type="number"
-                id="upto"
-                name="upto"
-                placeholder="Discount Upto"
-                onChange={(e) => setCouponDetails((prev) => ({ ...prev, upto: e.target.value }))}
-                value={couponDetails.upto}
-              />
-            </div>
+          <div className="w-full flex flex-col gap-y-5">
+            <FormField
+              label="Minimum Amount"
+              type="text"
+              id="minAmount"
+              name="minAmount"
+              placeholder="Minimum Amount"
+              value={couponDetails.minAmount}
+              onChange={(e) => setCouponDetails((prev) => ({ ...prev, minAmount: e.target.value }))}
+            />
+            <DropDown
+              name="type"
+              label="Discount Type"
+              SummaryChild={<h5 className="p-0 m-0 text-primary">{couponDetails.typeObject?.showName || 'Coupon Type'}</h5>}
+              dropdownList={[
+                { id: 0, showName: 'Percentage', name: 'percentage' },
+                { id: 1, showName: 'Amount', name: 'amount' }
+              ]}
+              selected={couponDetails.type}
+              search={true}
+              commonFunction={(e) => {
+                setCouponDetails((prev) => ({ ...prev, type: e.name, typeObject: e }));
+                if (errors.type) setErrors((prev) => ({ ...prev, type: '' }));
+              }}
+              error={errors.type}
+            />
+            <FormField
+              label="Discount Value"
+              type="number"
+              id="value"
+              name="value"
+              placeholder="Discount Value"
+              onChange={(e) => {
+                setCouponDetails((prev) => ({ ...prev, value: e.target.value }));
+                if (errors.value) setErrors((prev) => ({ ...prev, value: '' }));
+              }}
+              value={couponDetails.value}
+              errorMessage={errors.value}
+            />
+            <FormField
+              label="Discount Upto"
+              type="number"
+              id="upto"
+              name="upto"
+              placeholder="Discount Upto"
+              onChange={(e) => setCouponDetails((prev) => ({ ...prev, upto: e.target.value }))}
+              value={couponDetails.upto}
+            />
           </div>
         </div>
       </div>
@@ -247,42 +239,40 @@ const AddCoupon = () => {
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className="block text-primary">Coupon Settings</span>
           </div>
-          <div className="w-full">
-            <div className="w-full">
-              <MultiSelectCheckbox
-                options={availableSites
-                  .filter((site) => site.modules?.some((module) => module.coupon === true))
-                  .map((site) => ({ name: `${site.name} (${site.host})`, _id: site._id }))}
-                label="Select Sites"
-                onChange={(selected) => {
-                  setCouponDetails((prev) => ({ ...prev, sites: selected }));
-                  if (errors.sites) setErrors((prev) => ({ ...prev, sites: '' }));
-                }}
-                selected={couponDetails.sites}
-                error={errors.sites}
-              />
-              <ToggleComponent
-                label={'Is Coupon Active?'}
-                isEnableState={couponDetails.isActive}
-                setIsEnableState={(value) => setCouponDetails((prev) => ({ ...prev, isActive: value }))}
-              />
-              <ToggleComponent
-                label={'New User Only?'}
-                isEnableState={couponDetails.firstSub}
-                setIsEnableState={(value) => setCouponDetails((prev) => ({ ...prev, firstSub: value }))}
-              />
+          <div className="w-full flex flex-col gap-y-5">
+            <MultiSelectCheckbox
+              options={availableSites
+                .filter((site) => site.modules?.some((module) => module.coupon === true))
+                .map((site) => ({ name: `${site.name} (${site.host})`, _id: site._id }))}
+              label="Select Sites"
+              onChange={(selected) => {
+                setCouponDetails((prev) => ({ ...prev, sites: selected }));
+                if (errors.sites) setErrors((prev) => ({ ...prev, sites: '' }));
+              }}
+              selected={couponDetails.sites}
+              error={errors.sites}
+            />
+            <ToggleComponent
+              label={'Is Coupon Active?'}
+              isEnableState={couponDetails.isActive}
+              setIsEnableState={(value) => setCouponDetails((prev) => ({ ...prev, isActive: value }))}
+            />
+            <ToggleComponent
+              label={'New User Only?'}
+              isEnableState={couponDetails.firstSub}
+              setIsEnableState={(value) => setCouponDetails((prev) => ({ ...prev, firstSub: value }))}
+            />
 
-              <ToggleComponent
-                label={'Use Only Once?'}
-                isEnableState={couponDetails.useOnce}
-                setIsEnableState={(value) => setCouponDetails((prev) => ({ ...prev, useOnce: value }))}
-              />
-              <ToggleComponent
-                label={'Is Coupon Global?'}
-                isEnableState={couponDetails.isGlobal}
-                setIsEnableState={(value) => setCouponDetails((prev) => ({ ...prev, isGlobal: value }))}
-              />
-            </div>
+            <ToggleComponent
+              label={'Use Only Once?'}
+              isEnableState={couponDetails.useOnce}
+              setIsEnableState={(value) => setCouponDetails((prev) => ({ ...prev, useOnce: value }))}
+            />
+            <ToggleComponent
+              label={'Is Coupon Global?'}
+              isEnableState={couponDetails.isGlobal}
+              setIsEnableState={(value) => setCouponDetails((prev) => ({ ...prev, isGlobal: value }))}
+            />
           </div>
         </div>
       </div>

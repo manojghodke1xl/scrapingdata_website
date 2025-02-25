@@ -187,7 +187,7 @@ const AddAdmin = () => {
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className="block text-primary">Account Status</span>
           </div>
-          <div className="dropdown-container relative w-full mt-2">
+          <div className="w-full">
             <ToggleComponent
               label={'Is Admin Blocked?'}
               isEnableState={adminDetails.isBlocked}

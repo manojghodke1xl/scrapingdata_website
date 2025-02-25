@@ -117,31 +117,28 @@ const AddGuides = () => {
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className=" text-primary">Basic Information</span>
           </div>
-          <div className="w-full">
-            <div>
-              <FormField
-                label="Title"
-                type="text"
-                id="title"
-                name="title"
-                placeholder="Title"
-                onChange={(e) => {
-                  setGuideDetails((prev) => ({ ...prev, title: e.target.value }));
-                  if (errors.title) setErrors((prev) => ({ ...prev, title: '' }));
-                }}
-                value={guideDetails.title}
-                errorMessage={errors.title}
-              />
-              <TextareaComponent
-                divClassName="mt-5"
-                label="Description"
-                placeholder="Enter a description..."
-                id="desc"
-                name="desc"
-                value={guideDetails.desc}
-                onChange={(e) => setGuideDetails((prev) => ({ ...prev, desc: e.target.value }))}
-              />
-            </div>
+          <div className="w-full flex flex-col gap-y-5">
+            <FormField
+              label="Title"
+              type="text"
+              id="title"
+              name="title"
+              placeholder="Title"
+              onChange={(e) => {
+                setGuideDetails((prev) => ({ ...prev, title: e.target.value }));
+                if (errors.title) setErrors((prev) => ({ ...prev, title: '' }));
+              }}
+              value={guideDetails.title}
+              errorMessage={errors.title}
+            />
+            <TextareaComponent
+              label="Description"
+              placeholder="Enter a description..."
+              id="desc"
+              name="desc"
+              value={guideDetails.desc}
+              onChange={(e) => setGuideDetails((prev) => ({ ...prev, desc: e.target.value }))}
+            />
           </div>
         </div>
       </div>
@@ -151,7 +148,7 @@ const AddGuides = () => {
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className="block text-primary">Media Upload</span>
           </div>
-          <div className="dropdown-container relative w-full mt-2">
+          <div className="w-full flex flex-col gap-y-5">
             <FileUpload
               logo={<FaRegImage className="text-primary text-2xl" />}
               error={errors.image}
@@ -163,7 +160,6 @@ const AddGuides = () => {
               imagePreviewUrl={guideDetails.imageFile?.url}
             />
             <FileUpload
-              divClassName={'mt-5'}
               logo={<BsFilePdf className="text-primary text-2xl" />}
               error={errors.pdf}
               setErrors={setErrors}
@@ -182,29 +178,27 @@ const AddGuides = () => {
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className="block text-primary">Site & Global Settings</span>
           </div>
-          <div className="w-full">
-            <div className="w-full">
-              <MultiSelectCheckbox
-                options={availableSites}
-                label="Select Sites"
-                onChange={(selected) => {
-                  setGuideDetails((prev) => ({ ...prev, sites: selected }));
-                  if (errors.sites) setErrors((prev) => ({ ...prev, sites: '' }));
-                }}
-                selected={guideDetails.sites}
-                error={errors.sites}
-              />
-              <ToggleComponent
-                label={'Is Guide Active?'}
-                isEnableState={guideDetails.isActive}
-                setIsEnableState={(value) => setGuideDetails((prev) => ({ ...prev, isActive: value }))}
-              />
-              <ToggleComponent
-                label={'Is Guide Global?'}
-                isEnableState={guideDetails.isGlobal}
-                setIsEnableState={(value) => setGuideDetails((prev) => ({ ...prev, isGlobal: value }))}
-              />
-            </div>
+          <div className="w-full flex flex-col gap-y-5">
+            <MultiSelectCheckbox
+              options={availableSites}
+              label="Select Sites"
+              onChange={(selected) => {
+                setGuideDetails((prev) => ({ ...prev, sites: selected }));
+                if (errors.sites) setErrors((prev) => ({ ...prev, sites: '' }));
+              }}
+              selected={guideDetails.sites}
+              error={errors.sites}
+            />
+            <ToggleComponent
+              label={'Is Guide Active?'}
+              isEnableState={guideDetails.isActive}
+              setIsEnableState={(value) => setGuideDetails((prev) => ({ ...prev, isActive: value }))}
+            />
+            <ToggleComponent
+              label={'Is Guide Global?'}
+              isEnableState={guideDetails.isGlobal}
+              setIsEnableState={(value) => setGuideDetails((prev) => ({ ...prev, isGlobal: value }))}
+            />
           </div>
         </div>
       </div>
@@ -214,32 +208,33 @@ const AddGuides = () => {
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className=" text-primary">Email Configuration</span>
           </div>
-          <div className="w-full">
-            <div>
-              <FormField
-                label="Subject"
-                type="text"
-                id="mailSubject"
-                name="mailSubject"
-                placeholder="Subject"
-                onChange={(e) => {
-                  setGuideDetails((prev) => ({ ...prev, mailSubject: e.target.value }));
-                  if (errors.mailSubject) setErrors((prev) => ({ ...prev, mailSubject: '' }));
-                }}
-                value={guideDetails.mailSubject}
-                errorMessage={errors.mailSubject}
-              />
-              <TextareaComponent
-                divClassName="mt-5"
-                label="Body"
-                placeholder="Body"
-                id="mailBody"
-                name="mailBody"
-                value={guideDetails.mailBody}
-                onChange={(e) => setGuideDetails((prev) => ({ ...prev, mailBody: e.target.value }))}
-                errorMessage={errors.mailBody}
-              />
-            </div>
+          <div className="w-full flex flex-col gap-y-5">
+            <FormField
+              label="Subject"
+              type="text"
+              id="mailSubject"
+              name="mailSubject"
+              placeholder="Subject"
+              onChange={(e) => {
+                setGuideDetails((prev) => ({ ...prev, mailSubject: e.target.value }));
+                if (errors.mailSubject) setErrors((prev) => ({ ...prev, mailSubject: '' }));
+              }}
+              value={guideDetails.mailSubject}
+              errorMessage={errors.mailSubject}
+            />
+            <TextareaComponent
+              divClassName="mt-5"
+              label="Body"
+              placeholder="Body"
+              id="mailBody"
+              name="mailBody"
+              value={guideDetails.mailBody}
+              onChange={(e) => {
+                setGuideDetails((prev) => ({ ...prev, mailBody: e.target.value }));
+                if (errors.mailBody) setErrors((prev) => ({ ...prev, mailBody: '' }));
+              }}
+              errorMessage={errors.mailBody}
+            />
           </div>
         </div>
       </div>

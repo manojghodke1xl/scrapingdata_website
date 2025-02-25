@@ -12,7 +12,7 @@ const SearchFilter = ({ searchCategory, setSearchKey, selectedCategory, setSelec
   };
 
   return (
-    <div className="dropdown-container relative w-full">
+    <div className="relative w-full">
       <details
         name="tone"
         open={isOpen}

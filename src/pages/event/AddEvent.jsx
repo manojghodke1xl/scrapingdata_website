@@ -10,6 +10,7 @@ import DropDown from '../../atoms/formFields/DropDown';
 import { showNotification } from '../../utils/showNotification';
 import { addEventApi, getEventByIdApi, updateEventApi } from '../../apis/event-apis';
 import ToggleComponent from '../../atoms/formFields/ToggleComponent';
+import { MdDeleteForever } from 'react-icons/md';
 
 var tzInts = [
   { name: '(GMT-12:00) International Date Line West', value: '-12' },
@@ -295,9 +296,8 @@ const AddEvent = () => {
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className="block text-primary">Validity Period</span>
           </div>
-          <div className="dropdown-container relative w-full mt-2">
+          <div className="w-full flex flex-col gap-y-5">
             <DropDown
-              mt={'mb-4'}
               name="Time Zone"
               dropdownList={tzInts.map((tz, index) => {
                 return { id: index, showName: tz.name, name: tz.name, value: tz.value };
@@ -329,7 +329,6 @@ const AddEvent = () => {
             />
 
             <DateTimePicker
-              divClassName={'mt-5'}
               id={'endDate'}
               label={'End Date'}
               placeholder={formatDateTime(new Date())}
@@ -341,7 +340,6 @@ const AddEvent = () => {
               errorMessage={errors.endDate}
             />
             <DateTimePicker
-              divClassName={'mt-5'}
               id={'lastBookingDate'}
               label={'Last Booking Date'}
               placeholder={formatDateTime(new Date())}
@@ -361,7 +359,7 @@ const AddEvent = () => {
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className="block text-primary">Notification Preferences</span>
           </div>
-          <div className="dropdown-container relative w-full mt-2">
+          <div className="w-full flex flex-col gap-y-5">
             <ToggleComponent
               bgColor={'bg-grey'}
               label={'Send Admin Emails'}
@@ -372,7 +370,6 @@ const AddEvent = () => {
             {eventDetails.sendAdminEmails && (
               <div>
                 <FormField
-                  divClassName={'mt-5'}
                   label="Email ID"
                   type="email"
                   id="email"
@@ -397,11 +394,9 @@ const AddEvent = () => {
 
                 <ul className="space-y-2 mt-5">
                   {eventDetails.adminEmails.map((email, index) => (
-                    <li key={index} className="flex justify-between items-center p-2 bg-white shadow rounded-md">
+                    <li key={index} className="flex justify-between items-center p-2 bg-main shadow rounded-md">
                       {email}
-                      <button type="button" className="px-2 py-1 text-white bg-red hover:bg-red rounded" onClick={() => removeItemAtIndex(setEventDetails, 'adminEmails', index)}>
-                        Remove
-                      </button>
+                      <MdDeleteForever className="text-danger text-3xl gap-2" onClick={() => removeItemAtIndex(setEventDetails, 'adminEmails', index)} />
                     </li>
                   ))}
                 </ul>
@@ -411,9 +406,6 @@ const AddEvent = () => {
         </div>
       </div>
 
-      {/* <div className="w-full justify-center items-center border-b  border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end ">
-<NoteComponent note={id ? editAdminNote : addAdminNote} />
-</div> */}
       {!isScrollable && (
         <div className="w-full flex justify-end items-center gap-4 pt-8  border- border-primary">
           <FormButtons to="/events/event-list" type="submit" onClick={handleSubmit} btnLebal={id ? (isDuplicate ? 'Add' : 'Save Changes') : 'Add'} loading={isLoading} />

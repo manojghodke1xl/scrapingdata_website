@@ -309,7 +309,7 @@ const AddProduct = () => {
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className="block text-primary">Media Upload</span>
           </div>
-          <div className="dropdown-container relative w-full mt-2 flex flex-col gap-y-5">
+          <div className="w-full flex flex-col gap-y-5">
             <FileUpload
               logo={<FaRegImage className="text-primary text-2xl" />}
               error={errors.image}
@@ -360,7 +360,7 @@ const AddProduct = () => {
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className="block text-primary">Related Products</span>
           </div>
-          <div className="dropdown-container relative w-full mt-2 flex flex-col gap-y-5">
+          <div className="w-full flex flex-col gap-y-5">
             <ToggleComponent
               label={'Product up-sell ?'}
               isEnableState={productDetails.upsell}
@@ -418,7 +418,7 @@ const AddProduct = () => {
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className="block text-primary">Product Type</span>
           </div>
-          <div className="dropdown-container relative w-full mt-2 flex flex-col gap-y-5">
+          <div className="w-full flex flex-col gap-y-5">
             <DropDown
               name="type"
               label="Product Type"
@@ -534,7 +534,7 @@ const AddProduct = () => {
             <div className="sm:w-7/12 w-full flex flex-col">
               <span className="block text-primary">Pricing</span>
             </div>
-            <div className="dropdown-container relative w-full mt-2 flex flex-col gap-y-5">
+            <div className="w-full flex flex-col gap-y-5">
               {productDetails.currencies.map((currency) => (
                 <div key={currency} className="flex md:flex-row flex-col items-center justify-between md:gap-5">
                   <FormField

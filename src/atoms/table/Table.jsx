@@ -109,7 +109,7 @@ const TableComponent = ({
   // Sorting state
   const [sortConfig, setSortConfig] = useState({
     sortBy: null,
-    sortOrder: 'asc'
+    sortOrder: 'desc'
   });
 
   // Drag and drop handlers
