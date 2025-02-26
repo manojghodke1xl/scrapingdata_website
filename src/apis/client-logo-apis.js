@@ -13,11 +13,11 @@ export const updateClientLogoApi = async (id, userData) => {
 };
 
 export const updateClientLogoStatusApi = async (ids, isActive) => {
-  return await putMethodCall(`${import.meta.env.VITE_API_URL}/client-logo-status`, { ids, isActive });
+  return await putMethodCall(`${import.meta.env.VITE_API_URL}/client-logo/status`, { ids, isActive });
 };
 
 export const updateClientLogoSitesApi = async (cids, sids, action) => {
-  return await putMethodCall(`${import.meta.env.VITE_API_URL}/client-logo-sites`, { cids, sids, action });
+  return await putMethodCall(`${import.meta.env.VITE_API_URL}/client-logo/sites`, { cids, sids, action });
 };
 
 export const deleteClientLogoApi = async (ids) => {

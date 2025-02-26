@@ -13,16 +13,13 @@ export const updateGalleryApi = async (id, userData) => {
 };
 
 export const updateGalleryStatusApi = async (ids, isActive) => {
-  return await putMethodCall(`${import.meta.env.VITE_API_URL}/gallery-status`, {
-    ids,
-    isActive
-  });
+  return await putMethodCall(`${import.meta.env.VITE_API_URL}/gallery/status`, { ids, isActive });
 };
 
 export const updateGallerySitesApi = async (gids, sids, action) => {
-  return await putMethodCall(`${import.meta.env.VITE_API_URL}/gallery-sites`, { gids, sids, action });
+  return await putMethodCall(`${import.meta.env.VITE_API_URL}/gallery/sites`, { gids, sids, action });
 };
 
 export const deleteGalleryApi = async (ids) => {
-  return await deleteMethodCall(`${import.meta.env.VITE_API_URL}/gallery`, {ids});
+  return await deleteMethodCall(`${import.meta.env.VITE_API_URL}/gallery`, { ids });
 };

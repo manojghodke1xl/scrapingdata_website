@@ -1,10 +1,14 @@
 import { useState, useEffect } from 'react';
 import { IoIosArrowDown } from 'react-icons/io';
 import TruncatableFieldToolTip from '../common/TruncatableFeildToolTip';
+import SearchComponent from '../common/SearchComponent';
 
 const FilterDropDown = ({ name, data, selected, setDataId }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedSites, setSelectedSites] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const filteredList = data.filter((item) => item.name.toLowerCase().includes(searchQuery.toLowerCase()));
 
   useEffect(() => {
     if (selected) {
@@ -50,8 +54,11 @@ const FilterDropDown = ({ name, data, selected, setDataId }) => {
         <ul
           className={`absolute end-0 top-11 z-40 mt-1 min-w-[250px] max-w-[300px] max-h-[200px] rounded-xl bg-main text-[12px] md:text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm overflow-y-auto custom-scrollbar`}
         >
+          <div className=" sticky top-0 w-full flex items-center rounded-xl border border-primary px-3">
+            <SearchComponent value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
+          </div>
           <div className="relative py-2 border-b border-primary">
-            {data?.map((site) => (
+            {filteredList?.map((site) => (
               <li
                 key={site._id}
                 className={`group relative cursor-default select-none py-2 pl-3 pr-14 text-primary  ${selectedSites?._id === site._id ? 'bg-primary-faded' : 'hover:bg-hover'}`}
@@ -68,9 +75,6 @@ const FilterDropDown = ({ name, data, selected, setDataId }) => {
               </li>
             ))}
           </div>
-          {/* <button className="w-full py-3 pb-5 font-normal text-left px-4 hover:bg-hover" onClick={(e) => e.currentTarget.closest('details').removeAttribute('open')}>
-            Add to advanced filter
-          </button> */}
         </ul>
       </details>
     </div>

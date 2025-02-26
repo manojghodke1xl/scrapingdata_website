@@ -30,7 +30,6 @@ const SmtpList = () => {
               <TableComponent
                 selectable={true}
                 siteModule={'smtp'}
-                
                 headers={[
                   { label: 'Sr. No.', key: 'srno' },
                   { label: 'Name', key: 'name' },
@@ -45,6 +44,7 @@ const SmtpList = () => {
                 pagination={true}
                 actions={true}
                 editPath={'/smtp/edit-smtp'}
+                copyPath={'/smtp/duplicate-smtp'}
                 search={true}
                 searchCategory={[
                   { id: 0, name: 'Name' },

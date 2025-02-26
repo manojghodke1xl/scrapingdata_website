@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import useGlobalContext from '../../hooks/useGlobalContext';
 import { addSmtpApi, getSmtpByIdApi, updateSmtpApi } from '../../apis/smtp-apis';
 import { showNotification } from '../../utils/showNotification';
@@ -13,6 +13,8 @@ const AddSmtp = () => {
   const navigate = useNavigate();
   const { id = '' } = useParams();
   const { setLoading, isLoading } = useGlobalContext();
+  const { pathname } = useLocation();
+  const isDuplicate = pathname.includes('duplicate');
 
   const [errors, setErrors] = useState({});
   const [isScrollable, setIsScrollable] = useState(false);
@@ -56,7 +58,7 @@ const AddSmtp = () => {
     if (!validate()) return;
     setLoading(true);
     try {
-      const { status, data } = await (id ? updateSmtpApi(id, smtpDetails) : addSmtpApi(smtpDetails));
+      const { status, data } = await (id ? (isDuplicate ? addSmtpApi(smtpDetails) : updateSmtpApi(id, smtpDetails)) : addSmtpApi(smtpDetails));
 
       if (status) {
         showNotification('success', data.message);
@@ -85,9 +87,9 @@ const AddSmtp = () => {
     <div className="py-8 p-4 sm:p-8 overflow-x-hidden mb-20">
       <div className="w-full pb-8 border-b border-primary gap-y-4 gap-2 flex flex-col items-start md:flex-row lg:flex-col xl:flex-row justify-between lg:items-start md:items-end xl:items-end">
         <div>
-          <span className="text-3xl font-semibold text-dark">{id ? 'Edit' : 'Add'} SMTP</span>
+          <span className="text-3xl font-semibold text-dark">{id ? (isDuplicate ? 'Add' : 'Edit') : 'Add'} SMTP</span>
         </div>
-        <FormButtons to="/smtp/smtp-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} loading={isLoading} />
+        <FormButtons to="/smtp/smtp-list" type="submit" onClick={handleSubmit} btnLebal={id ? (isDuplicate ? 'Add' : 'Save Changes') : 'Add'} loading={isLoading} />
       </div>
 
       <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
@@ -234,7 +236,7 @@ const AddSmtp = () => {
       </div>
       {!isScrollable && (
         <div className="w-full flex justify-end items-center gap-4 pt-8  border- border-primary">
-          <FormButtons to="/smtp/smtp-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} loading={isLoading} />
+          <FormButtons to="/smtp/smtp-list" type="submit" onClick={handleSubmit} btnLebal={id ? (isDuplicate ? 'Add' : 'Save Changes') : 'Add'} loading={isLoading} />
         </div>
       )}
     </div>

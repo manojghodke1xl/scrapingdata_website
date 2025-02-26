@@ -49,7 +49,6 @@ const TestimonialCategoryList = () => {
                 actions={true}
                 editPath={'/testimonial-category/edit-testimonial-category'}
                 search={true}
-                searchCategory={[{ id: 1, name: 'Name' }]}
               />
             </div>
           </div>
