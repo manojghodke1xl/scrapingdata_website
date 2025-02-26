@@ -13,10 +13,10 @@ export const updateTestimonialApi = async (id, userData) => {
 };
 
 export const updateTestimonialStatusApi = async (ids, isActive) => {
-  return await putMethodCall(`${import.meta.env.VITE_API_URL}/testimonial-status`, { ids, isActive });
+  return await putMethodCall(`${import.meta.env.VITE_API_URL}/testimonial/status`, { ids, isActive });
 };
 export const updateTestimonialSitesApi = async (tids, sids, action) => {
-  return await putMethodCall(`${import.meta.env.VITE_API_URL}/testimonial-sites`, { tids, sids, action });
+  return await putMethodCall(`${import.meta.env.VITE_API_URL}/testimonial/sites`, { tids, sids, action });
 };
 
 export const deleteTestimonialApi = async (ids) => {

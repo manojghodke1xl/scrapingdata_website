@@ -43,7 +43,7 @@ const TestimonialCategoryList = () => {
                 ]}
                 tableData={(data) => setTestimonialCategories(data.categories)}
                 rows={rows}
-                apiUrl={'categories'}
+                apiUrl={'testimonial-category'}
                 tableCountLabel={true}
                 pagination={true}
                 actions={true}

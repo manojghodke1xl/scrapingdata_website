@@ -59,7 +59,12 @@ export const exportHandler = ({ type, apiUrl, rows, headers, selected }) => {
           coupon: 'coupons',
           webinar: 'webinars',
           'webinar/links': 'webinarLinks',
-          'notif-agent': 'notifAgents'
+          'notif-agent': 'notifAgents',
+          file: 'files',
+          package: 'packages',
+          smtp: 'smtps',
+          testimonial: 'testimonials',
+          'testimonial-category': 'categories'
         };
 
         const allData = data[apiUrlMapping[apiUrl] || apiUrl];

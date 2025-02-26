@@ -66,7 +66,7 @@ const PackageList = () => {
                 ]}
                 tableData={(data) => setPackages(data.packages)}
                 rows={rows}
-                apiUrl={'packages'}
+                apiUrl={'package'}
                 events={event}
                 tableCountLabel={true}
                 pagination={true}

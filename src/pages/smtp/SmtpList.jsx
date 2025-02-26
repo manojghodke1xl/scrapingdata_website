@@ -29,6 +29,8 @@ const SmtpList = () => {
             <div className="p-1.5 min-w-full align-middle">
               <TableComponent
                 selectable={true}
+                siteModule={'smtp'}
+                
                 headers={[
                   { label: 'Sr. No.', key: 'srno' },
                   { label: 'Name', key: 'name' },
@@ -38,7 +40,7 @@ const SmtpList = () => {
                 ]}
                 tableData={(data) => setSmtps(data.smtps)}
                 rows={rows}
-                apiUrl={'smtps'}
+                apiUrl={'smtp'}
                 tableCountLabel={true}
                 pagination={true}
                 actions={true}

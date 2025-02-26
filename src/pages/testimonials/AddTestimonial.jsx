@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import useGlobalContext from '../../hooks/useGlobalContext';
-import { getAllCategoriesApi } from '../../apis/category-apis';
+import { getAllTestimonialCategoriesApi } from '../../apis/testimonial-categories-apis';
 import { showNotification } from '../../utils/showNotification';
 import { addTestimonialApi, getTestimonialById, updateTestimonialApi } from '../../apis/testimonial-apis';
 import FormButtons from '../../atoms/formFields/FormButtons';
@@ -59,7 +59,7 @@ const AddTestimonial = () => {
 
   useEffect(() => {
     (async () => {
-      const { status, data } = await getAllCategoriesApi();
+      const { status, data } = await getAllTestimonialCategoriesApi();
       if (status) setAvailableCategories(data.categories);
       else showNotification('warn', data);
     })().catch((error) => showNotification('error', error.message));
@@ -296,7 +296,7 @@ const AddTestimonial = () => {
             <span className="block text-primary">Status Settings</span>
           </div>
           <div className="w-full">
-            <div className="w-full">
+            <div className="w-full flex flex-col gap-y-5">
               <ToggleComponent
                 label={'Is Testimonial Active?'}
                 isEnableState={testimonialDetails.isActive}

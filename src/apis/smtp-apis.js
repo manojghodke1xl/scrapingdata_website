@@ -1,7 +1,7 @@
 import { getMethodCall, postMethodCall, putMethodCall } from './api-handler';
 
 export const getAllSmtpsApi = async () => {
-  return await getMethodCall(`${import.meta.env.VITE_API_URL}/allSmtps`);
+  return await getMethodCall(`${import.meta.env.VITE_API_URL}/smtp/all`);
 };
 
 export const getSmtpByIdApi = async (id) => {

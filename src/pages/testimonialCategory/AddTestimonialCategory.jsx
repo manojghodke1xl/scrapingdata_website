@@ -2,7 +2,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import FormButtons from '../../atoms/formFields/FormButtons';
 import { useEffect, useState } from 'react';
 import useGlobalContext from '../../hooks/useGlobalContext';
-import { addCategoryApi, getCategoryByIdApi, updateCategoryApi } from '../../apis/category-apis';
+import { addTestimonialCategoryApi, getTestimonialCategoryById, updateTestimonialCategoryApi } from '../../apis/testimonial-categories-apis';
 import { showNotification } from '../../utils/showNotification';
 import FormField from '../../atoms/formFields/InputField';
 import NoteComponent from '../../atoms/common/NoteComponent';
@@ -27,7 +27,7 @@ const AddTestimonialCategory = () => {
       setLoading(true);
       (async () => {
         try {
-          const { status, data } = await getCategoryByIdApi(id);
+          const { status, data } = await getTestimonialCategoryById(id);
           if (status) {
             const { name } = data.category;
             setCategoryName(name);
@@ -47,7 +47,7 @@ const AddTestimonialCategory = () => {
     setLoading(true);
     try {
       const name = { name: categoryName };
-      const { status, data } = await (id ? updateCategoryApi(id, name) : addCategoryApi(name));
+      const { status, data } = await (id ? updateTestimonialCategoryApi(id, name) : addTestimonialCategoryApi(name));
       if (status) {
         showNotification('success', data.message);
         navigate('/testimonial-category/testimonial-category-list');

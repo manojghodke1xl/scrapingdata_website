@@ -29,7 +29,7 @@ const FilesList = () => {
             <div className="p-1.5 min-w-full align-middle">
               <TableComponent
                 selectable={true}
-                siteModule={'events'}
+                siteModule={'files'}
                 headers={[
                   { label: 'Sr. No.', key: 'srno' },
                   { label: 'File Name', key: 'attachments' },
@@ -39,7 +39,7 @@ const FilesList = () => {
                 ]}
                 tableData={(data) => setFiles(data.files)}
                 rows={rows}
-                apiUrl={'files'}
+                apiUrl={'file'}
                 tableCountLabel={true}
                 pagination={true}
                 deleteBtn={true}
