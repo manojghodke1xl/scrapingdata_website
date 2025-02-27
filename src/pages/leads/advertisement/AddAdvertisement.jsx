@@ -30,8 +30,6 @@ const AddAdvertisement = () => {
     site: ''
   });
 
-
-
   const validate = () => {
     const newErrors = {};
     if (!advertisementDetails.name.trim()) newErrors.name = 'Name is required';
@@ -103,6 +101,7 @@ const AddAdvertisement = () => {
                 type="text"
                 id="name"
                 name="name"
+                required
                 placeholder="Name"
                 onChange={(e) => {
                   setAdvertisementDetails((prev) => ({ ...prev, name: e.target.value }));
@@ -117,6 +116,7 @@ const AddAdvertisement = () => {
                 type="email"
                 id="email"
                 name="email"
+                required
                 placeholder="Email ID"
                 onChange={(e) => {
                   setAdvertisementDetails((prev) => ({ ...prev, email: e.target.value }));
@@ -131,12 +131,11 @@ const AddAdvertisement = () => {
                 label="Mobile Number"
                 placeholder="Mobile Number"
                 name="mobile"
+                required
                 value={advertisementDetails.ccode + advertisementDetails.mobile}
                 handlePhoneChange={handlePhoneChange}
                 phoneError={errors.mobile}
               />
-
-              
 
               <FormField
                 label="Subject"

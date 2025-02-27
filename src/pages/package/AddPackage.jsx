@@ -67,8 +67,8 @@ const AddPackage = () => {
 
   const validate = () => {
     const newErrors = {};
-    if (!packageDetails.title.trim()) newErrors.title = 'Name is required';
-    if (!packageDetails.event) newErrors.event = 'Event is required';
+    if (!packageDetails.title.trim()) newErrors.title = 'Title is required';
+    if (!packageDetails.event) newErrors.event = 'Events is required';
     if (packageDetails.onSale && !packageDetails.saleEndDate) newErrors.saleEndDate = 'Sale end date is required';
 
     if (!showTicket) packageDetails.ticket = null;
@@ -87,7 +87,8 @@ const AddPackage = () => {
         packageDetails.currencies[currency] < 0
       ) {
         newErrors.currencies = { ...newErrors.currencies, [currency]: `Price in (${currency}) cannot be negative` };
-        if (packageDetails.onSale && packageDetails.salePrice[currency] < 0) newErrors.salePrice = { ...newErrors.salePrice, [currency]: `Sale Price in (${currency}) cannot be negative` };
+        if (packageDetails.onSale && packageDetails.salePrice[currency] < 0)
+          newErrors.salePrice = { ...newErrors.salePrice, [currency]: `Sale Price in (${currency}) cannot be negative` };
       }
     });
 
@@ -249,7 +250,8 @@ const AddPackage = () => {
                 type="text"
                 id="title"
                 name="title"
-                placeholder="Package Title"
+                placeholder="Title"
+                required
                 onChange={(e) => {
                   setPackageDetails((prev) => ({ ...prev, title: e.target.value }));
                   if (errors.title) setErrors((prev) => ({ ...prev, title: '' }));
@@ -531,19 +533,21 @@ const AddPackage = () => {
                     error={errors.certificate}
                   />
 
-                  {packageDetails.certificate && <DropDown
-                    label={'Select Certificate Email Template'}
-                    name="CertificateTemplate"
-                    dropdownList={templates?.map((template) => ({ name: template._id, showName: template.name, id: template._id }))}
-                    SummaryChild={<h5 className="p-0 m-0 text-primary">Email Templates</h5>}
-                    search={true}
-                    selected={packageDetails.certificateTemplate}
-                    commonFunction={(e) => {
-                      setPackageDetails((prev) => ({ ...prev, certificateTemplate: e.name }));
-                      if (errors.certificateTemplate) setErrors((prev) => ({ ...prev, certificateTemplate: '' }));
-                    }}
-                    error={errors.certificateTemplate}
-                  />}
+                  {packageDetails.certificate && (
+                    <DropDown
+                      label={'Select Certificate Email Template'}
+                      name="CertificateTemplate"
+                      dropdownList={templates?.map((template) => ({ name: template._id, showName: template.name, id: template._id }))}
+                      SummaryChild={<h5 className="p-0 m-0 text-primary">Email Templates</h5>}
+                      search={true}
+                      selected={packageDetails.certificateTemplate}
+                      commonFunction={(e) => {
+                        setPackageDetails((prev) => ({ ...prev, certificateTemplate: e.name }));
+                        if (errors.certificateTemplate) setErrors((prev) => ({ ...prev, certificateTemplate: '' }));
+                      }}
+                      error={errors.certificateTemplate}
+                    />
+                  )}
 
                   <ToggleComponent label={'Do you want to add ticket?'} isEnableState={showTicket} setIsEnableState={(e) => setShowTicket(e)} />
                   {showTicket && (

@@ -15,14 +15,15 @@ const FormField = ({
   errorMessage = '',
   onChange,
   value,
-  preview = false
+  preview = false,
+  required
 }) => {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
     <div className={`${divClassName} w-full`}>
       <label htmlFor={id} className="block text-sm  font-medium text-primary">
-        {label}
+        {label} {required && <span className="text-danger text-lg">*</span>}
       </label>
       <div className="relative flex justify-center items-center">
         <input
@@ -53,7 +54,7 @@ const FormField = ({
           </button>
         )}
       </div>
-      {errorMessage && <p className="text-red-500 mt-1 text-sm">{errorMessage}</p>}
+      {errorMessage && <p className="text-danger mt-1 text-sm">{errorMessage}</p>}
       {preview && (
         <p className="text-secondary mt-1 text-sm">
           <span className="text-primary font-semibold">Ticket preview:</span> {preview}

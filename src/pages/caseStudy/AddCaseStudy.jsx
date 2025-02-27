@@ -124,6 +124,7 @@ const AddCaseStudy = () => {
               type="text"
               id="title"
               name="title"
+              required
               placeholder="Title"
               onChange={(e) => {
                 setCaseStudyDetails((prev) => ({ ...prev, title: e.target.value }));
@@ -226,6 +227,7 @@ const AddCaseStudy = () => {
               type="text"
               id="mailSubject"
               name="mailSubject"
+              required
               placeholder="Subject"
               value={caseStudyDetails.mailSubject}
               onChange={(e) => {
@@ -239,6 +241,7 @@ const AddCaseStudy = () => {
               placeholder="Body"
               id="mailBody"
               name="mailBody"
+              required
               value={caseStudyDetails.mailBody}
               onChange={(e) => setCaseStudyDetails((prev) => ({ ...prev, mailBody: e.target.value }))}
               errorMessage={errors.mailBody}

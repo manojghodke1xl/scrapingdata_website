@@ -30,8 +30,6 @@ const AddAffiliate = () => {
     site: ''
   });
 
-  
-
   const validate = () => {
     const newErrors = {};
     if (!affiliateDetails.name.trim()) newErrors.name = 'Name is required';
@@ -103,6 +101,7 @@ const AddAffiliate = () => {
                 type="text"
                 id="name"
                 name="name"
+                required
                 placeholder="Name"
                 onChange={(e) => {
                   setAffiliateDetails((prev) => ({ ...prev, name: e.target.value }));
@@ -117,6 +116,7 @@ const AddAffiliate = () => {
                 type="email"
                 id="email"
                 name="email"
+                required
                 placeholder="Email ID"
                 onChange={(e) => {
                   setAffiliateDetails((prev) => ({ ...prev, email: e.target.value }));
@@ -131,12 +131,11 @@ const AddAffiliate = () => {
                 label="Mobile Number"
                 placeholder="Mobile Number"
                 name="mobile"
+                required
                 value={affiliateDetails.ccode + affiliateDetails.mobile}
                 handlePhoneChange={handlePhoneChange}
                 phoneError={errors.mobile}
               />
-
-             
 
               <FormField
                 label="Subject"

@@ -95,7 +95,7 @@ const DropDown = ({ mt = '', width = 'w-full', name, label, SummaryChild, dropdo
           </div>
         </ul>
       </details>
-      {error && <p className="text-red-500 mt-1 text-sm">{error}</p>}
+      {error && <p className="text-danger mt-1 text-sm">{error}</p>}
     </div>
   );
 };

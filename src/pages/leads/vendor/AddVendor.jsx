@@ -9,7 +9,6 @@ import PhoneInputField from '../../../atoms/formFields/PhoneInputField';
 import TextareaComponent from '../../../atoms/formFields/TextareaComponent';
 import DropDown from '../../../atoms/formFields/DropDown';
 
-
 const AddVendor = () => {
   const navigate = useNavigate();
   const {
@@ -29,10 +28,6 @@ const AddVendor = () => {
     subject: '',
     site: ''
   });
-
-  const handlePhoneDataChange = (updatedPhoneData) => {
-    setVendorDetails((prevDetails) => ({ ...prevDetails, mobile: updatedPhoneData.phoneNumber, ccode: updatedPhoneData.dialingCode }));
-  };
 
   const validate = () => {
     const newErrors = {};
@@ -105,6 +100,7 @@ const AddVendor = () => {
                 type="text"
                 id="name"
                 name="name"
+                required
                 placeholder="Name"
                 onChange={(e) => {
                   setVendorDetails((prev) => ({ ...prev, name: e.target.value }));
@@ -120,6 +116,7 @@ const AddVendor = () => {
                 type="email"
                 id="email"
                 name="email"
+                required
                 placeholder="Email ID"
                 onChange={(e) => {
                   setVendorDetails((prev) => ({ ...prev, email: e.target.value }));
@@ -134,6 +131,7 @@ const AddVendor = () => {
                 label="Mobile Number"
                 placeholder="Mobile Number"
                 name="mobile"
+                required
                 value={vendorDetails.ccode + vendorDetails.mobile}
                 handlePhoneChange={handlePhoneChange}
                 phoneError={errors.mobile}

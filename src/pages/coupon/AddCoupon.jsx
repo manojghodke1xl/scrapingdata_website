@@ -124,6 +124,7 @@ const AddCoupon = () => {
               type="text"
               id="code"
               name="code"
+              required
               placeholder="Coupon Code"
               onChange={(e) => {
                 setCouponDetails((prev) => ({ ...prev, code: e.target.value }));
@@ -136,6 +137,7 @@ const AddCoupon = () => {
               label="Coupon Description"
               placeholder="Enter a description..."
               id="info"
+              required
               name="info"
               value={couponDetails.info}
               onChange={(e) => setCouponDetails((prev) => ({ ...prev, info: e.target.value }))}
@@ -213,6 +215,7 @@ const AddCoupon = () => {
               type="number"
               id="value"
               name="value"
+              required
               placeholder="Discount Value"
               onChange={(e) => {
                 setCouponDetails((prev) => ({ ...prev, value: e.target.value }));

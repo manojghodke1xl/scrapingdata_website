@@ -15,18 +15,33 @@ export const navLinks = [
 
 export const leadsPath = [
   { title: 'Enquiry', to: ['/enquiry/enquiry-list', '/enquiry/view-enquiry', '/enquiry/enquiry-integration'] },
-  { title: 'Newsletter Subscribers', to: ['/subscriber/subscriber-list', '/subscriber/view-subscriber', '/subscriber/subscriber-integration'] },
-  { title: 'Feedbacks', to: ['/feedback/feedback-list', '/feedback/view-feedback', '/feedback/feedback-integration'] },
+  {
+    title: 'Newsletter Subscribers',
+    to: ['/subscriber/subscriber-list', '/subscriber/view-subscriber', '/subscriber/subscriber-integration', '/subscriber/add-subscriber', '/subscriber/edit-subscriber']
+  },
+  { title: 'Feedbacks', to: ['/feedback/feedback-list', '/feedback/view-feedback', '/feedback/feedback-integration', '/feedback/add-feedback', '/feedback/edit-feedback'] },
   {
     title: 'Advertisements',
-    to: ['/advertisement/advertisement-list', '/advertisement/add-advertisement', '/advertisement/advertisement-integration', 'advertisement/view-advertisement']
+    to: [
+      '/advertisement/advertisement-list',
+      '/advertisement/add-advertisement',
+      '/advertisement/advertisement-integration',
+      'advertisement/view-advertisement',
+      '/advertisement/edit-advertisement'
+    ]
   },
-  { title: 'Vendors', to: ['/vendor/vendor-list', '/vendor/add-vendor', '/vendor/view-vendor', '/vendor/vendor-integration'] },
-  { title: 'Distributors', to: ['/distributor/distributor-list', '/distributor/add-distributor', '/distributor/view-distributor', '/distributor/distributor-integration'] },
-  { title: 'Resellers', to: ['/reseller/reseller-list', '/reseller/add-reseller', '/reseller/view-reseller', '/reseller/reseller-integration'] },
-  { title: 'Affiliates', to: ['/affiliate/affiliate-list', '/affiliate/add-affiliate', '/affiliate/view-affiliate', '/affiliate/affiliate-integration'] },
-  { title: 'Fan Clubs', to: ['/fan-club/fan-club-list', '/fan-club/add-fan-club', '/fan-club/view-fan-club', '/fan-club/fan-club-integration'] },
-  { title: 'Career', to: ['/career/career-list', '/career/add-career', '/career/view-career', '/career/career-integration'] }
+  { title: 'Vendors', to: ['/vendor/vendor-list', '/vendor/add-vendor', '/vendor/view-vendor', '/vendor/vendor-integration', '/vendor/edit-vendor'] },
+  {
+    title: 'Distributors',
+    to: ['/distributor/distributor-list', '/distributor/add-distributor', '/distributor/view-distributor', '/distributor/distributor-integration', '/distributor/edit-distributor']
+  },
+  { title: 'Resellers', to: ['/reseller/reseller-list', '/reseller/add-reseller', '/reseller/view-reseller', '/reseller/reseller-integration', '/reseller/edit-reseller'] },
+  {
+    title: 'Affiliates',
+    to: ['/affiliate/affiliate-list', '/affiliate/add-affiliate', '/affiliate/view-affiliate', '/affiliate/affiliate-integration', '/affiliate/edit-affiliate']
+  },
+  { title: 'Fan Clubs', to: ['/fan-club/fan-club-list', '/fan-club/add-fan-club', '/fan-club/view-fan-club', '/fan-club/fan-club-integration', '/fan-club/edit-fan-club'] },
+  { title: 'Career', to: ['/career/career-list', '/career/add-career', '/career/view-career', '/career/career-integration', '/career/edit-career'] }
 ];
 
 export const contentsPath = [

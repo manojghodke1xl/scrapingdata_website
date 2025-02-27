@@ -11,7 +11,7 @@ const TextareaComponent = ({
   minLength = 10,
   rows = 3,
   cols = 50,
-  required = false,
+  required,
   disabled = false,
   readOnly = false,
   autoFocus = false,
@@ -37,7 +37,7 @@ const TextareaComponent = ({
   return (
     <div className={`${divClassName} w-full`}>
       <label htmlFor={id} className="block text-sm font-medium text-primary">
-        {label}
+        {label} {required && <span className="text-danger text-lg">*</span>}
       </label>
       <div className="relative">
         <textarea
@@ -49,7 +49,6 @@ const TextareaComponent = ({
           placeholder={placeholder}
           maxLength={showCharCount ? maxLength : ''}
           minLength={minLength}
-          required={required}
           disabled={disabled}
           readOnly={readOnly}
           autoFocus={autoFocus}

@@ -11,7 +11,7 @@ const DateTimePicker = ({ divClassName, label, id, placeholder, selectedDateTime
       <label htmlFor={id} className="block text-sm font-medium text-primary">
         {label}
       </label>
-      <div className={`w-full mt-2 rounded-xl border ${errorMessage ? 'border-fadered focus:border-fadered' : 'border-primary focus:border-secondary'} relative`}>
+      <div className={`w-full mt-2 rounded-xl border ${errorMessage ? 'border-danger focus:border-fadered' : 'border-primary focus:border-secondary'} relative`}>
         <DatePicker
           ref={datePickerRef}
           id={id}
@@ -22,7 +22,7 @@ const DateTimePicker = ({ divClassName, label, id, placeholder, selectedDateTime
           timeIntervals={15}
           dateFormat="dd/MM/yyyy hh:mm aa"
           minDate={new Date()}
-          className={` font-normal focus:outline-none focus:ring-0 px-4 py-2.5 focus:border-none placeholder:text-gray-400 text-dark bg-transparent w-full`}
+          className={` font-normal focus:outline-none focus:ring-0 px-4 py-2.5 focus:border-none placeholder:text-secondary text-dark bg-transparent w-full`}
           calendarClassName="custom-datepicker"
           popperClassName="custom-datepicker-popper"
           placeholderText={placeholder}
@@ -36,13 +36,13 @@ const DateTimePicker = ({ divClassName, label, id, placeholder, selectedDateTime
         <div
           className="absolute right-3 top-3 cursor-pointer"
           onClick={() => {
-            if (datePickerRef.current) datePickerRef.current.setFocus(); // Focus the DatePicker input, which will open the calendar
+            if (datePickerRef.current) datePickerRef.current.setFocus();
           }}
         >
           <FiCalendar className="text-secondary" size={20} />
         </div>
       </div>
-      {errorMessage && <p className="text-red-500 mt-1 text-sm">{errorMessage}</p>}
+      {errorMessage && <p className="text-danger mt-1 text-sm">{errorMessage}</p>}
     </div>
   );
 };

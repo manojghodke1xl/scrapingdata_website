@@ -130,6 +130,7 @@ const AddSite = () => {
               type="text"
               id="name"
               name="name"
+              required
               placeholder="Site Name"
               onChange={(e) => {
                 setSiteDetails((prev) => ({ ...prev, name: e.target.value }));
@@ -143,6 +144,7 @@ const AddSite = () => {
               type="url"
               id="host"
               name="host"
+              required
               placeholder="Site Host"
               onChange={(e) => {
                 setSiteDetails((prev) => ({ ...prev, host: e.target.value }));

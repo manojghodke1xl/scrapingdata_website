@@ -81,6 +81,7 @@ const AddSubscriber = () => {
                 type="text"
                 id="name"
                 name="name"
+                required
                 placeholder="Name"
                 onChange={(e) => {
                   setEnquiryDetails((prev) => ({ ...prev, name: e.target.value }));
@@ -96,6 +97,7 @@ const AddSubscriber = () => {
                 type="email"
                 id="email"
                 name="email"
+                required
                 placeholder="Email ID"
                 onChange={(e) => {
                   setEnquiryDetails((prev) => ({ ...prev, email: e.target.value }));

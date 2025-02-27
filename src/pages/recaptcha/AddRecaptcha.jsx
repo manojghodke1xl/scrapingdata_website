@@ -163,8 +163,9 @@ const AddRecaptcha = () => {
             <FormField
               label="Site key"
               type="text"
-              id="name"
-              name="name"
+              id="sitekey"
+              name="sitekey"
+              required
               placeholder="Site key"
               onChange={(e) => {
                 setRecaptcha((prev) => ({ ...prev, sitekey: e.target.value }));
@@ -178,6 +179,7 @@ const AddRecaptcha = () => {
               type="text"
               id="secretkey"
               name="secretkey"
+              required
               placeholder="Secret key"
               onChange={(e) => {
                 setRecaptcha((prev) => ({ ...prev, secretkey: e.target.value }));

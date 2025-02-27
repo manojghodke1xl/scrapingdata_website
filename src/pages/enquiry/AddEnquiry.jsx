@@ -101,6 +101,7 @@ const AddEnquiry = () => {
                 type="text"
                 id="name"
                 name="name"
+                required
                 placeholder="Name"
                 onChange={(e) => {
                   setEnquiryDetails((prev) => ({ ...prev, name: e.target.value }));
@@ -115,6 +116,7 @@ const AddEnquiry = () => {
                 type="email"
                 id="email"
                 name="email"
+                required
                 placeholder="Email ID"
                 onChange={(e) => {
                   setEnquiryDetails((prev) => ({ ...prev, email: e.target.value }));
@@ -129,6 +131,7 @@ const AddEnquiry = () => {
                 label="Mobile Number"
                 placeholder="Mobile Number"
                 name="mobile"
+                required
                 value={enquiryDetails.ccode + enquiryDetails.mobile}
                 handlePhoneChange={handlePhoneChange}
                 phoneError={errors.mobile}

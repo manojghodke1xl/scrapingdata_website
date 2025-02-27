@@ -97,50 +97,49 @@ const AddSmtp = () => {
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className=" text-primary ">SMTP Server Details</span>
           </div>
-          <div className="w-full">
-            <div>
-              <FormField
-                label="Name"
-                type="text"
-                id="name"
-                name="name"
-                placeholder="Name"
-                onChange={(e) => {
-                  setSmtpDetails((prev) => ({ ...prev, name: e.target.value }));
-                  if (errors.name) setErrors((prev) => ({ ...prev, name: '' }));
-                }}
-                value={smtpDetails.name}
-                errorMessage={errors.name}
-              />
-              <FormField
-                divClassName={'mt-5'}
-                label="Host"
-                type="text"
-                id="host"
-                name="host"
-                placeholder="Host"
-                onChange={(e) => {
-                  setSmtpDetails((prev) => ({ ...prev, host: e.target.value }));
-                  if (errors.host) setErrors((prev) => ({ ...prev, host: '' }));
-                }}
-                value={smtpDetails.host}
-                errorMessage={errors.host}
-              />
-              <FormField
-                divClassName={'mt-5'}
-                label="Port"
-                type="number"
-                id="port"
-                name="port"
-                placeholder="Port"
-                onChange={(e) => {
-                  setSmtpDetails((prev) => ({ ...prev, port: e.target.value }));
-                  if (errors.port) setErrors((prev) => ({ ...prev, port: '' }));
-                }}
-                value={smtpDetails.port}
-                errorMessage={errors.port}
-              />
-            </div>
+          <div className="w-full flex flex-col gap-y-5">
+            <FormField
+              label="Name"
+              type="text"
+              id="name"
+              name="name"
+              required
+              placeholder="Name"
+              onChange={(e) => {
+                setSmtpDetails((prev) => ({ ...prev, name: e.target.value }));
+                if (errors.name) setErrors((prev) => ({ ...prev, name: '' }));
+              }}
+              value={smtpDetails.name}
+              errorMessage={errors.name}
+            />
+            <FormField
+              label="Host"
+              type="text"
+              id="host"
+              name="host"
+              required
+              placeholder="Host"
+              onChange={(e) => {
+                setSmtpDetails((prev) => ({ ...prev, host: e.target.value }));
+                if (errors.host) setErrors((prev) => ({ ...prev, host: '' }));
+              }}
+              value={smtpDetails.host}
+              errorMessage={errors.host}
+            />
+            <FormField
+              label="Port"
+              type="number"
+              id="port"
+              name="port"
+              required
+              placeholder="Port"
+              onChange={(e) => {
+                setSmtpDetails((prev) => ({ ...prev, port: e.target.value }));
+                if (errors.port) setErrors((prev) => ({ ...prev, port: '' }));
+              }}
+              value={smtpDetails.port}
+              errorMessage={errors.port}
+            />
           </div>
         </div>
       </div>
@@ -150,57 +149,54 @@ const AddSmtp = () => {
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className=" text-primary ">Authentication Details</span>
           </div>
-          <div className="w-full">
-            <div>
-              <FormField
-                label="Sender Name"
-                type="text"
-                id="senderName"
-                name="senderName"
-                placeholder="Sender Name"
-                onChange={(e) => setSmtpDetails((prev) => ({ ...prev, senderName: e.target.value }))}
-                value={smtpDetails.senderName}
-              />
-              <FormField
-                label="Sender Email"
-                divClassName={'mt-5'}
-                type="email"
-                id="senderEmail"
-                name="senderEmail"
-                placeholder="Sender Email"
-                onChange={(e) => setSmtpDetails((prev) => ({ ...prev, senderEmail: e.target.value }))}
-                value={smtpDetails.senderEmail}
-              />
-              <FormField
-                divClassName={'mt-5'}
-                label="User"
-                type="text"
-                id="user"
-                name="user"
-                placeholder="User"
-                onChange={(e) => {
-                  setSmtpDetails((prev) => ({ ...prev, user: e.target.value }));
-                  if (errors.user) setErrors((prev) => ({ ...prev, user: '' }));
-                }}
-                value={smtpDetails.user}
-                errorMessage={errors.user}
-              />
-              <FormField
-                divClassName={'mt-5'}
-                label="Password"
-                type="password"
-                id="password"
-                name="password"
-                placeholder="Password"
-                showPasswordToggle={true}
-                onChange={(e) => {
-                  setSmtpDetails((prev) => ({ ...prev, password: e.target.value }));
-                  if (errors.password) setErrors((prev) => ({ ...prev, password: '' }));
-                }}
-                value={smtpDetails.password}
-                errorMessage={errors.password}
-              />
-            </div>
+          <div className="w-full flex flex-col gap-y-5">
+            <FormField
+              label="Sender Name"
+              type="text"
+              id="senderName"
+              name="senderName"
+              placeholder="Sender Name"
+              onChange={(e) => setSmtpDetails((prev) => ({ ...prev, senderName: e.target.value }))}
+              value={smtpDetails.senderName}
+            />
+            <FormField
+              label="Sender Email"
+              type="email"
+              id="senderEmail"
+              name="senderEmail"
+              placeholder="Sender Email"
+              onChange={(e) => setSmtpDetails((prev) => ({ ...prev, senderEmail: e.target.value }))}
+              value={smtpDetails.senderEmail}
+            />
+            <FormField
+              label="User"
+              type="text"
+              id="user"
+              name="user"
+              required
+              placeholder="User"
+              onChange={(e) => {
+                setSmtpDetails((prev) => ({ ...prev, user: e.target.value }));
+                if (errors.user) setErrors((prev) => ({ ...prev, user: '' }));
+              }}
+              value={smtpDetails.user}
+              errorMessage={errors.user}
+            />
+            <FormField
+              label="Password"
+              type="password"
+              id="password"
+              name="password"
+              required
+              placeholder="Password"
+              showPasswordToggle={true}
+              onChange={(e) => {
+                setSmtpDetails((prev) => ({ ...prev, password: e.target.value }));
+                if (errors.password) setErrors((prev) => ({ ...prev, password: '' }));
+              }}
+              value={smtpDetails.password}
+              errorMessage={errors.password}
+            />
           </div>
         </div>
       </div>
@@ -210,23 +206,21 @@ const AddSmtp = () => {
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className=" text-primary ">Security Settings</span>
           </div>
-          <div className="w-full">
-            <div>
-              <DropDown
-                name="Security Protocol"
-                label="Security Protocol"
-                SummaryChild={<h5 className="p-0 m-0 text-primary">{smtpDetails.secureObj?.showName ? smtpDetails.secureObj?.showName : 'None'}</h5>}
-                dropdownList={[
-                  { id: 0, showName: 'None', name: 'None' },
-                  { id: 1, showName: 'TLS', name: 'TLS' },
-                  { id: 2, showName: 'SSL', name: 'SSL' },
-                  { id: 3, showName: 'STARTTLS', name: 'STARTTLS' }
-                ]}
-                selected={smtpDetails.secure}
-                search={true}
-                commonFunction={(e) => setSmtpDetails((prev) => ({ ...prev, secure: e.name, secureObj: e }))}
-              />
-            </div>
+          <div className="w-full flex flex-col gap-y-5">
+            <DropDown
+              name="Security Protocol"
+              label="Security Protocol"
+              SummaryChild={<h5 className="p-0 m-0 text-primary">{smtpDetails.secureObj?.showName ? smtpDetails.secureObj?.showName : 'None'}</h5>}
+              dropdownList={[
+                { id: 0, showName: 'None', name: 'None' },
+                { id: 1, showName: 'TLS', name: 'TLS' },
+                { id: 2, showName: 'SSL', name: 'SSL' },
+                { id: 3, showName: 'STARTTLS', name: 'STARTTLS' }
+              ]}
+              selected={smtpDetails.secure}
+              search={true}
+              commonFunction={(e) => setSmtpDetails((prev) => ({ ...prev, secure: e.name, secureObj: e }))}
+            />
           </div>
         </div>
       </div>

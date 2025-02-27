@@ -129,31 +129,29 @@ const AddClientLogo = () => {
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className="block text-primary">Site and Visibility Settings</span>
           </div>
-          <div className="w-full">
-            <div className="w-full flex flex-col gap-y-5">
-              <MultiSelectCheckbox
-                options={availableSites
-                  .filter((site) => site.modules?.some((module) => module.clientlogo === true))
-                  .map((site) => ({ name: `${site.name} (${site.host})`, _id: site._id }))}
-                label="Select Sites"
-                onChange={(selected) => {
-                  setClientLogoDetails((prev) => ({ ...prev, sites: selected }));
-                  if (errors.sites) setErrors((prev) => ({ ...prev, sites: '' }));
-                }}
-                selected={clientlogoDetails.sites}
-                error={errors.sites}
-              />
-              <ToggleComponent
-                label={'Is Client Logo Active?'}
-                isEnableState={clientlogoDetails.isActive}
-                setIsEnableState={(value) => setClientLogoDetails((prev) => ({ ...prev, isActive: value }))}
-              />
-              <ToggleComponent
-                label={'Is Client Logo Global?'}
-                isEnableState={clientlogoDetails.isGlobal}
-                setIsEnableState={(value) => setClientLogoDetails((prev) => ({ ...prev, isGlobal: value }))}
-              />
-            </div>
+          <div className="w-full flex flex-col gap-y-5">
+            <MultiSelectCheckbox
+              options={availableSites
+                .filter((site) => site.modules?.some((module) => module.clientlogo === true))
+                .map((site) => ({ name: `${site.name} (${site.host})`, _id: site._id }))}
+              label="Select Sites"
+              onChange={(selected) => {
+                setClientLogoDetails((prev) => ({ ...prev, sites: selected }));
+                if (errors.sites) setErrors((prev) => ({ ...prev, sites: '' }));
+              }}
+              selected={clientlogoDetails.sites}
+              error={errors.sites}
+            />
+            <ToggleComponent
+              label={'Is Client Logo Active?'}
+              isEnableState={clientlogoDetails.isActive}
+              setIsEnableState={(value) => setClientLogoDetails((prev) => ({ ...prev, isActive: value }))}
+            />
+            <ToggleComponent
+              label={'Is Client Logo Global?'}
+              isEnableState={clientlogoDetails.isGlobal}
+              setIsEnableState={(value) => setClientLogoDetails((prev) => ({ ...prev, isGlobal: value }))}
+            />
           </div>
         </div>
       </div>

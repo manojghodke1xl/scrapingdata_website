@@ -30,12 +30,6 @@ const AddFeedback = () => {
     site: ''
   });
 
-  
-
-  const handlePhoneDataChange = (updatedPhoneData) => {
-    setEnquiryDetails((prevDetails) => ({ ...prevDetails, mobile: updatedPhoneData.phoneNumber, ccode: updatedPhoneData.dialingCode }));
-  };
-
   const validate = () => {
     const newErrors = {};
     if (!enquiryDetails.name.trim()) newErrors.name = 'Name is required';
@@ -107,6 +101,7 @@ const AddFeedback = () => {
                 type="text"
                 id="name"
                 name="name"
+                required
                 placeholder="Name"
                 onChange={(e) => {
                   setEnquiryDetails((prev) => ({ ...prev, name: e.target.value }));
@@ -121,6 +116,7 @@ const AddFeedback = () => {
                 label="Email ID"
                 type="email"
                 id="email"
+                required
                 name="email"
                 placeholder="Email ID"
                 onChange={(e) => {
@@ -136,13 +132,12 @@ const AddFeedback = () => {
                 label="Mobile Number"
                 placeholder="Mobile Number"
                 id="mobile"
+                required
                 name="mobile"
                 value={enquiryDetails.ccode + enquiryDetails.mobile}
                 handlePhoneChange={handlePhoneChange}
                 phoneError={errors.mobile}
               />
-
-          
 
               <FormField
                 label="Subject"

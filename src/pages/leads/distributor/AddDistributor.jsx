@@ -30,8 +30,6 @@ const AddDistriubtor = () => {
     site: ''
   });
 
-  
-
   const validate = () => {
     const newErrors = {};
     if (!distributorDetails.name.trim()) newErrors.name = 'Name is required';
@@ -103,6 +101,7 @@ const AddDistriubtor = () => {
                 type="text"
                 id="name"
                 name="name"
+                required
                 placeholder="Name"
                 onChange={(e) => {
                   setDistributorDetails((prev) => ({ ...prev, name: e.target.value }));
@@ -117,6 +116,7 @@ const AddDistriubtor = () => {
                 type="email"
                 id="email"
                 name="email"
+                required
                 placeholder="Email ID"
                 onChange={(e) => {
                   setDistributorDetails((prev) => ({ ...prev, email: e.target.value }));
@@ -131,12 +131,11 @@ const AddDistriubtor = () => {
                 label="Mobile Number"
                 placeholder="Mobile Number"
                 name="mobile"
+                required
                 value={distributorDetails.ccode + distributorDetails.mobile}
                 handlePhoneChange={handlePhoneChange}
                 phoneError={errors.mobile}
               />
-
-          
 
               <FormField
                 label="Subject"

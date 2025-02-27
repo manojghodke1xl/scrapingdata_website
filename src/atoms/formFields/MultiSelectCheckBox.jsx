@@ -76,14 +76,14 @@ const MultiSelectCheckbox = ({
   }, []);
 
   return (
-    <div className={`${divClassName} relative w-full`} ref={dropdownRef}>
+    <div className={`${divClassName}  relative w-full`} ref={dropdownRef}>
       <label className="block text-sm font-medium text-primary">{formLabel}</label>
       {/* Dropdown Header */}
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
         className={`w-full flex items-center justify-between px-3 py-3 border rounded-xl ${
-          error ? 'border-fadered focus:border-fadered' : ' border-primary focus:border-secondary'
+          error ? 'border-danger focus:border-fadered' : ' border-primary focus:border-secondary'
         } bg-inherit text-primary`}
       >
         <span className="font-medium text-primary">{label}</span>
@@ -130,7 +130,7 @@ const MultiSelectCheckbox = ({
           </div>
         </div>
       )}
-      {error && <p className="text-red-500 mt-1 text-sm">{error}</p>}
+      {error && <p className="text-danger mt-1 text-sm">{error}</p>}
     </div>
   );
 };

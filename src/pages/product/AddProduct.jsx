@@ -255,6 +255,7 @@ const AddProduct = () => {
                 type="text"
                 id="name"
                 name="name"
+                required
                 placeholder="Product Name"
                 onChange={(e) => {
                   setProductDetails((prev) => ({ ...prev, name: e.target.value }));

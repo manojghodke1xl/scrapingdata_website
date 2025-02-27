@@ -101,6 +101,7 @@ const AddFanClub = () => {
                 type="text"
                 id="name"
                 name="name"
+                required
                 placeholder="Name"
                 onChange={(e) => {
                   setAdvertisementDetails((prev) => ({ ...prev, name: e.target.value }));
@@ -115,6 +116,7 @@ const AddFanClub = () => {
                 type="email"
                 id="email"
                 name="email"
+                required
                 placeholder="Email ID"
                 onChange={(e) => {
                   setAdvertisementDetails((prev) => ({ ...prev, email: e.target.value }));
@@ -129,6 +131,7 @@ const AddFanClub = () => {
                 label="Mobile Number"
                 placeholder="Mobile Number"
                 name="mobile"
+                required
                 value={advertisementDetails.ccode + advertisementDetails.mobile}
                 handlePhoneChange={handlePhoneChange}
                 phoneError={errors.mobile}

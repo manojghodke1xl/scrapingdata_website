@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import PhoneInput from 'react-phone-input-2';
 
-const PhoneInputField = ({ divClassName = '', label, name, value, handlePhoneChange, phoneError, country = 'in', placeholder, disabled }) => {
+const PhoneInputField = ({ divClassName = '', label, name, value, handlePhoneChange, phoneError, country = 'in', placeholder, disabled, required }) => {
   const [isFocused, setIsFocused] = useState(false);
   return (
     <div className={`${divClassName} mb-6 bg-transparent `}>
-      <label className="block text-sm font-medium text-primary">{label}</label>
+      <label className="block text-sm font-medium text-primary">
+        {label} {required && <span className="text-danger text-lg">*</span>}
+      </label>
       <PhoneInput
         country={country}
         name={name}
@@ -19,7 +21,7 @@ const PhoneInputField = ({ divClassName = '', label, name, value, handlePhoneCha
         placeholder={placeholder}
         disabled={disabled}
       />
-      {phoneError && <p className="text-red-500 text-sm mt-1">{phoneError}</p>}
+      {phoneError && <p className="text-danger text-sm mt-1">{phoneError}</p>}
     </div>
   );
 };

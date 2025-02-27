@@ -30,8 +30,6 @@ const AddCareer = () => {
     site: ''
   });
 
- 
-
   const validate = () => {
     const newErrors = {};
     if (!careerDetails.name.trim()) newErrors.name = 'Name is required';
@@ -86,7 +84,7 @@ const AddCareer = () => {
     <div className="py-8 p-4 sm:p-8 overflow-x-hidden mb-20">
       <div className="w-full pb-8 border-b border-primary gap-y-4 gap-2 flex flex-col items-start md:flex-row lg:flex-col xl:flex-row justify-between lg:items-start md:items-end xl:items-end">
         <div>
-          <span className="text-3xl font-semibold text-dark">{'Add'} Advertisement</span>
+          <span className="text-3xl font-semibold text-dark">{'Add'} Career</span>
         </div>
         <FormButtons to="/career/career-list" type="submit" onClick={handleSubmit} btnLebal={'Add'} loading={isLoading} />
       </div>
@@ -103,6 +101,7 @@ const AddCareer = () => {
                 type="text"
                 id="name"
                 name="name"
+                required
                 placeholder="Name"
                 onChange={(e) => {
                   setCareerDetails((prev) => ({ ...prev, name: e.target.value }));
@@ -117,6 +116,7 @@ const AddCareer = () => {
                 type="email"
                 id="email"
                 name="email"
+                required
                 placeholder="Email ID"
                 onChange={(e) => {
                   setCareerDetails((prev) => ({ ...prev, email: e.target.value }));
@@ -131,11 +131,11 @@ const AddCareer = () => {
                 label="Mobile Number"
                 placeholder="Mobile Number"
                 name="mobile"
+                required
                 value={careerDetails.ccode + careerDetails.mobile}
                 handlePhoneChange={handlePhoneChange}
                 phoneError={errors.mobile}
               />
-
 
               <FormField
                 label="Subject"

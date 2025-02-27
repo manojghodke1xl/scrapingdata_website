@@ -186,6 +186,7 @@ const AddPopup = () => {
                 type="text"
                 id="title"
                 name="title"
+                required
                 placeholder="Name"
                 onChange={(e) => {
                   setPopupDetails((prev) => ({ ...prev, name: e.target.value }));

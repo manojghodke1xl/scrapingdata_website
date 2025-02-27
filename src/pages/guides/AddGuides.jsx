@@ -123,6 +123,7 @@ const AddGuides = () => {
               type="text"
               id="title"
               name="title"
+              required
               placeholder="Title"
               onChange={(e) => {
                 setGuideDetails((prev) => ({ ...prev, title: e.target.value }));
@@ -214,6 +215,7 @@ const AddGuides = () => {
               type="text"
               id="mailSubject"
               name="mailSubject"
+              required
               placeholder="Subject"
               onChange={(e) => {
                 setGuideDetails((prev) => ({ ...prev, mailSubject: e.target.value }));
@@ -228,6 +230,7 @@ const AddGuides = () => {
               placeholder="Body"
               id="mailBody"
               name="mailBody"
+              required
               value={guideDetails.mailBody}
               onChange={(e) => {
                 setGuideDetails((prev) => ({ ...prev, mailBody: e.target.value }));
