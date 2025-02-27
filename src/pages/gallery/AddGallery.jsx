@@ -49,8 +49,8 @@ const AddGallery = () => {
             ...prev,
             ...rest,
             sites: sites.map((s) => s._id),
-            images: image._id ? [...image._id] : [],
-            imageFile: image
+            images: image._id ? [image._id] : [],
+            imageFile: [image]
           }));
         } else {
           showNotification('warn', data);
@@ -104,24 +104,25 @@ const AddGallery = () => {
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className=" text-primary ">Logo Upload Details</span>
           </div>
-          <div className="w-full">
-            <div>
-              <MultipleFileUpload
-                onUploadSuccess={(files) => {
-                  setGalleryDetails((prev) => ({ ...prev, images: [...(prev.images || []), ...files] }));
-                  if (errors.images) setErrors((prev) => ({ ...prev, images: '' }));
-                }}
-                id={id}
-                isMultiple
-                label={'Upload Gallery Images'}
-                allowedTypes={['image/png', 'image/jpeg', 'image/svg+xml', 'image/gif']}
-                allowedFileTypes={['.png', '.jpeg', '.svg', '.gif']}
-                imagePreviewUrl={galleryDetails.imageFile?.url}
-                isImage
-                setLoading={setLoading}
-                error={errors.images}
-              />
-            </div>
+          <div className="w-full flex flex-col gap-y-5">
+            <MultipleFileUpload
+              label={'Upload Gallery Images'}
+              onUploadSuccess={(files) => {
+                setGalleryDetails((prev) => ({ ...prev, images: files }));
+                if (errors.images) setErrors((prev) => ({ ...prev, images: '' }));
+              }}
+              onRemoveFile={(fileId) =>
+                setGalleryDetails((prev) => ({ ...prev, images: prev.images.filter((f) => f !== fileId), imageFile: prev.imageFile.filter((f) => f._id !== fileId) }))
+              }
+              selected={galleryDetails?.imageFile ?? []}
+              allowedTypes={['image/png', 'image/jpeg', 'image/svg+xml', 'image/gif']}
+              allowedFileTypes={['.png', '.jpeg', '.svg', '.gif']}
+              imagePreviewUrl={galleryDetails.imageFile?.url}
+              isMultiple
+              isImage
+              setLoading={setLoading}
+              error={errors.images}
+            />
           </div>
         </div>
       </div>

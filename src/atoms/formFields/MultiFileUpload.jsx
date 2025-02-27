@@ -1,15 +1,16 @@
-import { useEffect, useRef, useState, useMemo } from 'react';
+import { useRef, useState } from 'react';
 import { uploadMultipleFiles } from '../../utils/fileUploads';
 import { showNotification } from '../../utils/showNotification';
-import { FaRegEdit, FaRegImage } from 'react-icons/fa';
-import { IoCloseOutline } from 'react-icons/io5';
+import { FaRegImage } from 'react-icons/fa';
 import { CiExport } from 'react-icons/ci';
+import { MdDeleteForever } from 'react-icons/md';
+import { getFileIcon } from '../../constants/FileIcon';
 
 const MultipleFileUpload = ({
   divClassName,
-  imagePreviewUrl: externalImagePreviewUrl,
   onUploadSuccess,
-  id,
+  onRemoveFile,
+  selected = [],
   label,
   allowedTypes,
   allowedFileTypes,
@@ -24,40 +25,20 @@ const MultipleFileUpload = ({
   const fileInputRef = useRef(null);
   const dropZoneRef = useRef(null);
 
-  // Memoize the imagePreviews calculation
-  const imagePreviews = useMemo(() => {
-    if (externalImagePreviewUrl) return [externalImagePreviewUrl];
-    return selectedFiles.map((file) => URL.createObjectURL(file));
-  }, [externalImagePreviewUrl, selectedFiles]);
-
-  // Cleanup object URLs when component unmounts or dependencies change
-  useEffect(() => {
-    return () => {
-      imagePreviews.forEach((preview) => {
-        if (preview && !preview.includes('http')) URL.revokeObjectURL(preview);
-      });
-    };
-  }, [imagePreviews]);
-
   const handleFiles = async (files) => {
     const fileArray = Array.from(files);
     const validFiles = fileArray.filter((file) => allowedTypes.includes(file.type));
     const invalidFiles = fileArray.filter((file) => !allowedTypes.includes(file.type));
 
-    if (invalidFiles.length > 0) {
-      showNotification('warn', `Some files were skipped. Accepted file types: ${allowedFileTypes.join(', ')}`);
-    }
+    if (invalidFiles.length > 0) showNotification('warn', `Some files were skipped. Accepted file types: ${allowedFileTypes.join(', ')}`);
 
     if (validFiles.length > 0) {
       setLoading(true);
       try {
-        const fileIds = await uploadMultipleFiles(validFiles);
-        if (onUploadSuccess) {
-          if (!id) onUploadSuccess(fileIds);
-          else onUploadSuccess(fileIds);
-        }
-        const newFiles = isMultiple ? [...selectedFiles, ...validFiles] : [validFiles[0]];
-        setSelectedFiles(newFiles);
+        const files = await uploadMultipleFiles(validFiles);
+        const fileIds = files.map((file) => file._id);
+        setSelectedFiles((prev) => [...prev, ...files]);
+        if (onUploadSuccess) onUploadSuccess(fileIds);
       } catch (error) {
         showNotification('error', error.message);
       } finally {
@@ -100,52 +81,27 @@ const MultipleFileUpload = ({
     }
   };
 
-  const handleDelete = (indexToRemove) => {
-    setSelectedFiles((prev) => prev.filter((_, index) => index !== indexToRemove));
+  const handleDelete = (id) => {
+    setSelectedFiles((prev) => prev.filter((file) => file._id !== id));
+    onRemoveFile(id);
   };
 
   return (
-    <div className={`${divClassName} w-full border border-primary rounded-xl p-6 shadow-sm`}>
-      <h1 className="text-primary text-lg mb-3 text-left flex items-center gap-2">
-        {isImage ? <FaRegImage className="text-primary text-2xl" /> : <CiExport className="text-primary text-2xl" strokeWidth={1.2} />}
-        {label || 'Upload'}
-      </h1>
+    <>
+      <div className={`${divClassName} w-full border  ${error ? 'border-danger' : 'border-primary'} rounded-xl p-6 shadow-sm`}>
+        <h1 className="text-primary text-lg mb-3 text-left flex items-center gap-2">
+          {isImage ? <FaRegImage className="text-primary text-2xl" /> : <CiExport className="text-primary text-2xl" strokeWidth={1.2} />}
+          {label || 'Upload'}
+        </h1>
 
-      <div
-        ref={dropZoneRef}
-        className={`border-2 border-primary rounded-xl text-center border-dashed p-3 w-auto transition-colors duration-200 ${isDragging ? 'bg-primary/10 border-primary' : ''}`}
-        onDragEnter={handleDragEnter}
-        onDragOver={handleDragOver}
-        onDragLeave={handleDragLeave}
-        onDrop={handleDrop}
-      >
-        {imagePreviews.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-            {imagePreviews.map((preview, index) => (
-              <div key={index} className="relative p-2">
-                <img src={preview} alt={`Preview ${index + 1}`} className="rounded-xl w-full h-32 object-cover" />
-                <div className="absolute top-4 right-4 flex gap-2">
-                  <button onClick={() => fileInputRef.current.click()}>
-                    <FaRegEdit className="text-primary text-xl bg-white rounded-full p-1" />
-                  </button>
-                  {isMultiple && (
-                    <button onClick={() => handleDelete(index)}>
-                      <IoCloseOutline className="text-primary text-xl bg-white rounded-full p-1" />
-                    </button>
-                  )}
-                </div>
-              </div>
-            ))}
-            {isMultiple && (
-              <>
-                <input type="file" onChange={handleFileChange} className="hidden" accept={`.${allowedTypes.join(', ')}`} ref={fileInputRef} multiple={isMultiple} />
-                <div className="flex items-center justify-center h-32 border-2 border-dashed border-primary rounded-xl cursor-pointer" onClick={() => fileInputRef.current.click()}>
-                  <span className="text-primary">+ Add More</span>
-                </div>
-              </>
-            )}
-          </div>
-        ) : (
+        <div
+          ref={dropZoneRef}
+          className={`border-2 border-primary rounded-xl text-center border-dashed p-3 w-auto transition-colors duration-200 ${isDragging ? 'bg-primary/10 border-primary' : ''}`}
+          onDragEnter={handleDragEnter}
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onDrop={handleDrop}
+        >
           <div>
             <p className="font-normal text-sm text-primary w-5/12 text-center m-auto">
               {isDragging ? 'Drop files here' : `Choose ${isMultiple ? 'files' : 'a file'} or drag and drop here to upload`}
@@ -165,17 +121,65 @@ const MultipleFileUpload = ({
 
             <div className="font-normal text-xs text-primary text-center m-auto">{toolTip ? toolTip : `Accepted file types: ${allowedFileTypes.join(', ')}`}</div>
           </div>
-        )}
+        </div>
+
+        {/* File information and constraints */}
+        <div className="flex justify-between mt-5 mx-auto font-normal text-xs text-primary">
+          <span>Maximum file size: 1MB</span>
+          <span>Ideal dimensions: 250px x 100px</span>
+        </div>
+        {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
       </div>
 
-      {/* File information and constraints */}
-      <div className="flex justify-between mt-5 mx-auto font-normal text-xs text-primary">
-        <span>Maximum file size: 1MB</span>
-        <span>Ideal dimensions: 250px x 100px</span>
-      </div>
+      <div>
+        {selected.length > 0 &&
+          selected.map((selected) => (
+            <div key={selected?._id} className="flex justify-between items-center border border-primary p-2 rounded-xl mb-2">
+              <div
+                className="flex items-center gap-2"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  const previewUrl = `${selected?.url}`;
+                  window.open(previewUrl, '_blank');
+                }}
+              >
+                {getFileIcon(selected?.name)}
+                <div>
+                  <p className="text-sm font-medium">{selected?.name.replace(/vista-group\//g, '')}</p>
+                </div>
+              </div>
 
-      {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
-    </div>
+              <div>
+                <MdDeleteForever className="text-2xl text-danger cursor-pointer" onClick={() => handleDelete(selected?._id)} />
+              </div>
+            </div>
+          ))}
+
+        {selectedFiles.map((file, index) => (
+          <li key={index} className="flex flex-col border border-primary rounded-xl p-2 mb-2">
+            <div className="flex justify-between items-center">
+              <div
+                className="flex items-center gap-2"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  const previewUrl = `${file.url}${file.fields.key}?response-content-disposition=inline`;
+                  window.open(previewUrl, '_blank');
+                }}
+              >
+                {getFileIcon(file.fields.key)}
+                <div>
+                  <p className="text-sm font-medium">{file.fields.key.replace(/vista-group\//g, '')}</p>
+                </div>
+              </div>
+
+              <div>
+                <MdDeleteForever className="text-2xl text-danger cursor-pointer" onClick={() => handleDelete(file._id)} />
+              </div>
+            </div>
+          </li>
+        ))}
+      </div>
+    </>
   );
 };
 

@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
-import { AiOutlineFilePdf, AiOutlineFileWord, AiOutlineFileExcel, AiOutlineFileImage } from 'react-icons/ai';
 import { FaRegFile } from 'react-icons/fa';
 import { FaEllipsisVertical } from 'react-icons/fa6';
+import { showNotification } from '../../utils/showNotification';
+import { updateFileNameApi } from '../../apis/file-apis';
+import { getFileIcon } from '../../constants/FileIcon';
 
 const DocumentFileUpload = ({
   divClassName,
@@ -17,63 +19,79 @@ const DocumentFileUpload = ({
   handleFileUpload,
   error
 }) => {
-  const [dropdownIndex, setDropdownIndex] = useState(null);
-  const [renameIndex, setRenameIndex] = useState(null);
-  const [renameValue, setRenameValue] = useState('');
   const fileInputRef = useRef(null);
   const dropdownRefs = useRef([]);
-  const [isDragging, setIsDragging] = useState(false);
+  const existingDropdownRefs = useRef([]);
   const dropZoneRef = useRef(null);
+  
+  const [isDragging, setIsDragging] = useState(false);
+  const [dropdownIndexState, setDropdownIndexState] = useState({
+    current: null,
+    previous: null
+  });
 
-  const getFileIcon = (fileName) => {
-    const extension = fileName?.split('.').pop().toLowerCase();
-    switch (extension) {
-      case 'pdf':
-        return <AiOutlineFilePdf className="text-danger text-2xl" />;
-      case 'doc':
-      case 'docx':
-        return <AiOutlineFileWord className="text-brand text-2xl" />;
-      case 'xls':
-      case 'xlsx':
-      case 'csv':
-        return <AiOutlineFileExcel className="text-success text-2xl" />;
-      case 'jpg':
-      case 'jpeg':
-      case 'png':
-      case 'gif':
-        return <AiOutlineFileImage className="text-pending text-2xl" />;
-      default:
-        return <AiOutlineFilePdf className="text-secondary text-2xl" />;
-    }
-  };
+  const [renameState, setRenameState] = useState({
+    current: { val: '', index: null },
+    previous: { val: '', index: null }
+  });
 
   const toggleDropdown = (index) => {
-    setDropdownIndex(dropdownIndex === index ? null : index);
-    setRenameIndex(null);
+    setDropdownIndexState((prev) => ({ ...prev, current: prev.current === index ? null : index }));
+    setRenameState((prev) => ({ ...prev, current: { val: '', index: null } }));
+  };
+
+  const toggleExistingDropdown = (index) => {
+    setDropdownIndexState((prev) => ({ ...prev, previous: prev.previous === index ? null : index }));
+    setRenameState((prev) => ({ ...prev, previous: { val: '', index: null } }));
   };
 
   const handleRename = (index) => {
-    setRenameIndex(index);
-    setRenameValue(files[index].customName);
-    setDropdownIndex(null);
+    setRenameState((prev) => ({ ...prev, current: { val: files[index].customName, index: index } }));
+    setDropdownIndexState((prev) => ({ ...prev, current: null }));
+  };
+
+  const handleExistingRename = (index) => {
+    setRenameState((prev) => ({ ...prev, previous: { val: existingFiles[index].name, index: index } }));
+    setDropdownIndexState((prev) => ({ ...prev, previous: null }));
   };
 
   const saveRename = (index) => {
     const updatedFiles = [...files];
-    updatedFiles[index].customName = renameValue;
+    updatedFiles[index].customName = renameState.current.val;
     setFiles(updatedFiles);
-    setRenameIndex(null);
+    setRenameState((prev) => ({ ...prev, current: { val: '', index: null } }));
+    showNotification('success', 'File name updated successfully');
+  };
+
+  const handleExistingSaveRename = async (index) => {
+    let updatedFiles = [...existingFiles];
+    updatedFiles[index].name = renameState.previous.val;
+    const id = updatedFiles[index]._id;
+
+    try {
+      const { status, data } = await updateFileNameApi(id, renameState.previous.val);
+      if (status) {
+        showNotification('success', data.message);
+        setExistingFiles((prev) => ({ ...prev, attachments: updatedFiles }));
+        setRenameState((prev) => ({ ...prev, previous: { val: '', index: null } }));
+      } else showNotification('error', data.message);
+    } catch (error) {
+      showNotification('error', error.message);
+    }
   };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (dropdownRefs.current.every((ref, index) => index !== dropdownIndex || (ref && !ref.contains(event.target)))) setDropdownIndex(null);
+      if (dropdownRefs.current.every((ref, index) => index !== dropdownIndexState.current || (ref && !ref.contains(event.target))))
+        setDropdownIndexState((prev) => ({ ...prev, current: null }));
+      if (existingDropdownRefs.current.every((ref, index) => index !== dropdownIndexState.previous || (ref && !ref.contains(event.target))))
+        setDropdownIndexState((prev) => ({ ...prev, previous: null }));
     };
     document.addEventListener('click', handleClickOutside);
     return () => {
       document.removeEventListener('click', handleClickOutside);
     };
-  }, [dropdownIndex]);
+  }, [dropdownIndexState]);
 
   const handleDragEnter = (e) => {
     e.preventDefault();
@@ -141,23 +159,31 @@ const DocumentFileUpload = ({
 
           <div className="font-normal text-xs text-primary text-center m-auto">{toolTip ? toolTip : `Accepted file types: ${allowedFileTypes.join(', ')}`}</div>
         </div>
-        {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+        {error && <p className="text-danger text-sm mt-2">{error}</p>}
       </div>
 
       <div className="mt-5">
-        {files.length > 0 && <h3 className="font-semibold text-gray-700 mb-2">Attached Documents</h3>}
+        {files.length > 0 && <h3 className="font-semibold text-primary mb-2">Attached Documents</h3>}
         <ul>
-          {/* {existingFiles.map((file, index) => (
+          {existingFiles.map((file, index) => (
             <li key={index} className="flex flex-col border border-primary rounded-xl p-2 mb-2">
-              {renameIndex === index ? (
+              {renameState.previous.index === index ? (
                 <div className="flex flex-col gap-2 p-4">
                   <label className="font-medium text-primary">Rename File</label>
-                  <input type="text" value={renameValue} onChange={(e) => setRenameValue(e.target.value)} className="p-2 px-4 border rounded-xl text-primary" />
+                  <input
+                    type="text"
+                    value={renameState.previous.val}
+                    onChange={(e) => setRenameState((prev) => ({ ...prev, previous: { val: e.target.value, index: index } }))}
+                    className="p-2 px-4 border rounded-xl text-primary bg-inherit"
+                  />
                   <div className="flex gap-2 items-center justify-end mt-5">
-                    <button onClick={() => setRenameIndex(null)} className="px-4 py-2 border border-primary text-primary rounded-xl">
+                    <button
+                      onClick={() => setRenameState((prev) => ({ ...prev, previous: { val: '', index: null } }))}
+                      className="px-4 py-2 border border-primary text-primary rounded-xl"
+                    >
                       Cancel
                     </button>
-                    <button onClick={() => saveRename(index)} className="px-4 py-2 bg-primary text-white rounded-xl">
+                    <button onClick={() => handleExistingSaveRename(index)} className="px-4 py-2 bg-primary text-white rounded-xl">
                       Save
                     </button>
                   </div>
@@ -167,23 +193,29 @@ const DocumentFileUpload = ({
                   <div className="flex items-center gap-2">
                     {getFileIcon(file.name)}
                     <div>
-                      <p className="text-sm font-medium">{file.name}</p>
-                      <p className="text-xs text-gray-500">{(file.size / 1024).toFixed(3)} KB</p>
+                      <p className="text-sm font-medium text-primary">{file.name}</p>
+                      <p className="text-xs text-secondary">{(file.size / 1024).toFixed(3)} KB</p>
                     </div>
                   </div>
-                  <div className="relative" ref={(el) => (dropdownRefs.current[index] = el)}>
-                    <FaEllipsisVertical className="text-gray-500 cursor-pointer text-xl" onClick={() => toggleDropdown(index)} />
-                    {dropdownIndex === index && (
-                      <div className="absolute right-0 mt-2 w-32 bg-white border border-gray-200 rounded-md shadow-lg z-10">
-                        <button className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-hover" onClick={() => console.log('View clicked for', file.name)}>
+                  <div className="relative" ref={(el) => (existingDropdownRefs.current[index] = el)}>
+                    <FaEllipsisVertical className="text-secondary cursor-pointer text-xl" onClick={() => toggleExistingDropdown(index)} />
+                    {dropdownIndexState.previous === index && (
+                      <div className="absolute right-0 mt-2 w-32 bg-main border border-primary rounded-md shadow-lg z-10">
+                        {/* <button
+                          className="block w-full text-left px-4 py-2 text-sm text-secondary hover:bg-hover"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            window.open(file.url, '_blank');
+                          }}
+                        >
                           View
-                        </button>
-                        <button className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-hover" onClick={() => handleRename(index)}>
+                        </button> */}
+                        <button className="block w-full text-left px-4 py-2 text-sm text-secondary hover:bg-hover" onClick={() => handleExistingRename(index)}>
                           Rename
                         </button>
                         <button
-                          className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-hover"
-                          onClick={() => setExistingFiles(existingFiles.filter(({ attachments }, fileIndex) => attachments[fileIndex] !== index))}
+                          className="block w-full text-left px-4 py-2 text-sm text-danger hover:bg-hover"
+                          onClick={() => setExistingFiles((prev) => ({ ...prev, attachments: prev.attachments.filter((f) => f._id !== file._id) }))}
                         >
                           Delete
                         </button>
@@ -193,15 +225,23 @@ const DocumentFileUpload = ({
                 </div>
               )}
             </li>
-          ))} */}
+          ))}
           {files.map((file, index) => (
             <li key={index} className="flex flex-col border border-primary rounded-xl p-2 mb-2">
-              {renameIndex === index ? (
+              {renameState.current.index === index ? (
                 <div className="flex flex-col gap-2 p-4">
                   <label className="font-medium text-primary">Rename File</label>
-                  <input type="text" value={renameValue} onChange={(e) => setRenameValue(e.target.value)} className="p-2 px-4 border rounded-xl text-primary" />
+                  <input
+                    type="text"
+                    value={renameState.current.val}
+                    onChange={(e) => setRenameState((prev) => ({ ...prev, current: { val: e.target.value, index } }))}
+                    className="p-2 px-4 border rounded-xl text-primary bg-inherit"
+                  />
                   <div className="flex gap-2 items-center justify-end mt-5">
-                    <button onClick={() => setRenameIndex(null)} className="px-4 py-2 border border-primary text-primary rounded-xl">
+                    <button
+                      onClick={() => setRenameState((prev) => ({ ...prev, current: { val: '', index: null } }))}
+                      className="px-4 py-2 border border-primary text-primary rounded-xl"
+                    >
                       Cancel
                     </button>
                     <button onClick={() => saveRename(index)} className="px-4 py-2 bg-primary text-white rounded-xl">
@@ -215,21 +255,21 @@ const DocumentFileUpload = ({
                     {getFileIcon(file.customName)}
                     <div>
                       <p className="text-sm font-medium">{file.customName}</p>
-                      <p className="text-xs text-gray-500">{(file.file.size / 1024).toFixed(3)} KB</p>
+                      {file.file.size && <p className="text-xs text-secondary">{(file.file.size / 1024).toFixed(3)} KB</p>}
                     </div>
                   </div>
                   <div className="relative" ref={(el) => (dropdownRefs.current[index] = el)}>
-                    <FaEllipsisVertical className="text-gray-500 cursor-pointer text-xl" onClick={() => toggleDropdown(index)} />
-                    {dropdownIndex === index && (
-                      <div className="absolute right-0 mt-2 w-32 bg-white border border-gray-200 rounded-md shadow-lg z-10">
+                    <FaEllipsisVertical className="text-secondary cursor-pointer text-xl" onClick={() => toggleDropdown(index)} />
+                    {dropdownIndexState.current === index && (
+                      <div className="absolute right-0 mt-2 w-32 bg-main border border-primary rounded-md shadow-lg z-10">
                         {/* <button className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-hover" onClick={() => console.log('View clicked for', file.name)}>
                           View
                         </button> */}
-                        <button className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-hover" onClick={() => handleRename(index)}>
+                        <button className="block w-full text-left px-4 py-2 text-sm text-primary hover:bg-hover" onClick={() => handleRename(index)}>
                           Rename
                         </button>
                         <button
-                          className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-hover"
+                          className="block w-full text-left px-4 py-2 text-sm text-danger hover:bg-hover"
                           onClick={() => setFiles(files.filter((_, fileIndex) => fileIndex !== index))}
                         >
                           Delete

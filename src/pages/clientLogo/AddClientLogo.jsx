@@ -49,8 +49,8 @@ const AddClientLogo = () => {
             ...prev,
             ...rest,
             sites: sites.map((s) => s._id),
-            images: image._id ? [...image._id] : [],
-            imageFile: image
+            images: image._id ? [image._id] : [],
+            imageFile: [image]
           }));
         } else showNotification('warn', data);
       })()
@@ -102,24 +102,24 @@ const AddClientLogo = () => {
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className=" text-primary ">Logo Upload Details</span>
           </div>
-          <div className="w-full">
-            <div>
-              <MultipleFileUpload
-                onUploadSuccess={(files) => {
-                  setClientLogoDetails((prev) => ({ ...prev, images: [...(prev.images || []), ...files] }));
-                  if (errors.images) setErrors((prev) => ({ ...prev, images: '' }));
-                }}
-                id={id}
-                label={'Upload Client Logo'}
-                allowedTypes={['image/png', 'image/jpeg', 'application/svg+xml', 'image/gif']}
-                allowedFileTypes={['.png', '.jpeg', '.svg', '.gif']}
-                isMultiple
-                imagePreviewUrl={clientlogoDetails.imageFile?.url}
-                isImage
-                setLoading={setLoading}
-                error={errors.images}
-              />
-            </div>
+          <div className="w-full flex flex-col gap-y-5">
+            <MultipleFileUpload
+              label={'Upload Client Logo'}
+              onUploadSuccess={(files) => {
+                setClientLogoDetails((prev) => ({ ...prev, images: [...(prev.images || []), ...files] }));
+                if (errors.images) setErrors((prev) => ({ ...prev, images: '' }));
+              }}
+              onRemoveFile={(fileId) => {
+                setClientLogoDetails((prev) => ({ ...prev, images: prev.images.filter((f) => f !== fileId), imageFile: prev.imageFile.filter((f) => f._id !== fileId) }));
+              }}
+              selected={clientlogoDetails?.imageFile ?? []}
+              allowedTypes={['image/png', 'image/jpeg', 'application/svg+xml', 'image/gif']}
+              allowedFileTypes={['.png', '.jpeg', '.svg', '.gif']}
+              isMultiple
+              isImage
+              setLoading={setLoading}
+              error={errors.images}
+            />
           </div>
         </div>
       </div>

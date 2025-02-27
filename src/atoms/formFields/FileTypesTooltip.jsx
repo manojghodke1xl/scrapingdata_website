@@ -33,7 +33,7 @@ const FileTypesTooltip = () => {
       <div className="text-sm text-primary">
         <span className="block">
           Accepted File Types: PDF, PowerPoint, Images, Videos, Archives, Documents, Excel &nbsp;
-          <button onClick={toggleTooltip} className="mt-1 text-brand-500 underline hover:text-brand-700 text-left">
+          <button onClick={toggleTooltip} className="mt-1 text-brand underline hover:text-brand-700 text-left">
             Click for full list
           </button>
         </span>
@@ -41,7 +41,7 @@ const FileTypesTooltip = () => {
 
       {/* Tooltip with left alignment */}
       {isTooltipVisible && (
-        <div className="absolute z-10 mt-2 p-4 bg-white border border-gray-300 shadow-lg rounded-lg w-96 text-sm left-0 text-left">
+        <div className="absolute z-10 mt-2 p-4 bg-main border border-primary shadow-lg rounded-lg w-96 text-sm left-0 text-left">
           <h4 className="font-semibold text-primary">Full List of Supported File Types:</h4>
           <ul className="mt-2 text-primary">
             <li>

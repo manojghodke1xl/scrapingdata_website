@@ -87,7 +87,7 @@ export const uploadMultipleFiles = async (files = []) => {
 
     if (!uploadRes.ok) throw new Error('File upload failed');
 
-    fileIds.push(data._id);
+    fileIds.push(data);
   }
 
   return fileIds;

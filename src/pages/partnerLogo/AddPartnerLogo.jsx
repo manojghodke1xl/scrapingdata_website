@@ -42,8 +42,8 @@ const AddPartnerLogo = () => {
             ...prev,
             ...rest,
             sites: sites.map((s) => s._id),
-            images: image._id ? [...image._id] : [],
-            imageFile: image
+            images: image._id ? [image._id] : [],
+            imageFile: [image]
           }));
         } else {
           showNotification('warn', data);
@@ -105,30 +105,30 @@ const AddPartnerLogo = () => {
         </div>
         <FormButtons to="/partner-logo/partner-logo-list" type="submit" onClick={handleSubmit} btnLebal={id ? (isDuplicate ? 'Add' : 'Save Changes') : 'Add'} loading={isLoading} />
       </div>
-
       <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
         <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className=" text-primary ">Logo Upload Details</span>
           </div>
-          <div className="w-full">
-            <div>
-              <MultipleFileUpload
-                onUploadSuccess={(files) => {
-                  setPartnerLogoDetails((prev) => ({ ...prev, images: [...(prev.images || []), ...files] }));
-                  if (errors.images) setErrors((prev) => ({ ...prev, images: '' }));
-                }}
-                id={id}
-                label={'Upload Partner Logo'}
-                isMultiple
-                allowedTypes={['image/png', 'image/jpeg', 'application/svg+xml', 'image/gif']}
-                allowedFileTypes={['.png', '.jpeg', '.svg', '.gif']}
-                imagePreviewUrl={partnerlogoDetails.imageFile?.url}
-                isImage
-                setLoading={setLoading}
-                error={errors.images}
-              />
-            </div>
+          <div className="w-full flex flex-col gap-y-5">
+            <MultipleFileUpload
+              label={'Upload Partner Logo'}
+              onUploadSuccess={(files) => {
+                setPartnerLogoDetails((prev) => ({ ...prev, images: [...(prev.images || []), ...files] }));
+                if (errors.images) setErrors((prev) => ({ ...prev, images: '' }));
+              }}
+              onRemoveFile={(fileId) =>
+                setPartnerLogoDetails((prev) => ({ ...prev, images: prev.images.filter((f) => f !== fileId), imageFile: prev.imageFile.filter((f) => f._id !== fileId) }))
+              }
+              selected={partnerlogoDetails?.imageFile ?? []}
+              allowedTypes={['image/png', 'image/jpeg', 'application/svg+xml', 'image/gif']}
+              allowedFileTypes={['.png', '.jpeg', '.svg', '.gif']}
+              imagePreviewUrl={partnerlogoDetails.imageFile?.url}
+              isMultiple
+              isImage
+              setLoading={setLoading}
+              error={errors.images}
+            />
           </div>
         </div>
       </div>

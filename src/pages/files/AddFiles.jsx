@@ -64,10 +64,11 @@ const AddFiles = () => {
     e.preventDefault();
     if (!validate()) return;
     const fileIds = await uploadMultipleCustomFiles(attachments);
+    const existingFiles = file.attachments.map((f) => f._id);
     if (fileIds.length > 0) {
       const payload = {
         site: file.site,
-        attachments: fileIds
+        attachments: [...existingFiles, ...fileIds]
       };
       try {
         const { status, data } = await (id ? (isDuplicate ? addFileApi(payload) : updateFileApi(id, payload)) : addFileApi(payload));
@@ -154,9 +155,6 @@ const AddFiles = () => {
         </div>
       </div>
 
-      {/* <div className="w-full justify-center items-center border-b  border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end ">
-        <NoteComponent note={id ? editPartnerLogoNote : addPartnerLogoNote} />
-      </div> */}
       {!isScrollable && (
         <div className="w-full flex justify-end items-center gap-4 pt-8  border- border-primary">
           <FormButtons to="/files/file-list" type="submit" onClick={handleSubmit} btnLebal={id ? (isDuplicate ? 'Add' : 'Save Changes') : 'Add'} loading={isLoading} />

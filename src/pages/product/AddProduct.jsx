@@ -57,9 +57,9 @@ const AddProduct = () => {
     currencies: [],
     price: {},
     salePrice: {},
-    // image: '',
+    image: undefined,
     gallery: [],
-    // digitalProducts: [],
+    digitalProducts: [],
     site: ''
   });
 
@@ -78,10 +78,10 @@ const AddProduct = () => {
               siteData: site ? site : {},
               image: image ? image._id : undefined,
               imageFile: image ? image : {},
-              digitalProducts: digitalProducts ? digitalProducts.map((product) => product?._id) : '',
-              digitalProductsFile: digitalProducts ? digitalProducts.map((product) => ({ _id: product?._id, url: product?.url })) : [],
-              gallery: gallery ? gallery.map((product) => product?._id) : [],
-              galleryFile: gallery ? gallery.map((product) => ({ _id: product?._id, url: product?.url })) : []
+              digitalProducts: digitalProducts.length > 0 ? digitalProducts.map((product) => product?._id) : [],
+              digitalProductsFile: digitalProducts.length > 0 ? digitalProducts.map((product) => ({ _id: product?._id, name: product?.name, url: product?.url })) : null,
+              gallery: gallery.length > 0 ? gallery.map((product) => product?._id) : [],
+              galleryFile: gallery.length > 0 ? gallery.map((product) => ({ _id: product?._id, url: product?.url })) : null
             }));
           } else showNotification('warn', data);
         } catch (error) {
@@ -96,9 +96,7 @@ const AddProduct = () => {
   const getProductsBySite = useCallback(async () => {
     try {
       const { status, data } = await getProductsBySiteApi(productDetails.site);
-      if (status) {
-        setSiteProducts(data.products);
-      } else showNotification('warn', data);
+      if (status) setSiteProducts(data.products);
     } catch (error) {
       showNotification('error', error.message);
     }
@@ -114,6 +112,7 @@ const AddProduct = () => {
     if (!productDetails.type) newErrors.type = 'Product Type is required';
     if (!productDetails.site) newErrors.site = 'Site is required';
     if (productDetails.currencies.length === 0) newErrors.currencies = 'Currencies are required';
+    if (productDetails.type === 'Digital' && productDetails.digitalProducts.length === 0) newErrors.digitalProducts = 'At least one digital product is required';
 
     if (productDetails.type === 'Physical') {
       if (productDetails.shippingDetails.length === 0) newErrors.shippingDetails = 'Shipping details are required';
@@ -326,15 +325,18 @@ const AddProduct = () => {
                 setProductDetails((prev) => ({ ...prev, gallery: [...(prev.gallery || []), ...files] }));
                 if (errors.gallery) setErrors((prev) => ({ ...prev, gallery: '' }));
               }}
-              id={id}
+              onRemoveFile={(fileId) =>
+                setProductDetails((prev) => ({ ...prev, gallery: prev.gallery.filter((f) => f !== fileId), galleryFile: prev.galleryFile.filter((f) => f._id !== fileId) }))
+              }
+              selected={productDetails.galleryFile ?? []}
               isMultiple
               label="Upload Gallery"
               allowedTypes={['image/jpeg', 'image/png', 'image/gif', 'image/svg+xml', 'video/mp4', 'video/quicktime']}
               allowedFileTypes={['.jpeg', '.png', '.gif', '.svg', '.mp4', '.mov']}
-              imagePreviewUrl={productDetails?.galleryFile?.map((file) => file.url)}
               setLoading={setLoading}
               error={errors.gallery}
             />
+
             {productDetails.type === 'Digital' && (
               <MultipleFileUpload
                 label={'Upload Digital Products'}
@@ -342,11 +344,18 @@ const AddProduct = () => {
                   setProductDetails((prev) => ({ ...prev, digitalProducts: [...(prev.digitalProducts || []), ...files] }));
                   if (errors.digitalProducts) setErrors((prev) => ({ ...prev, digitalProducts: '' }));
                 }}
+                onRemoveFile={(fileId) =>
+                  setProductDetails((prev) => ({
+                    ...prev,
+                    digitalProducts: prev.digitalProducts.filter((f) => f !== fileId),
+                    digitalProductsFile: prev.digitalProductsFile.filter((f) => f._id !== fileId)
+                  }))
+                }
                 isMultiple
+                selected={productDetails?.digitalProductsFile ?? []}
                 allowedTypes={acceptedProductTypes}
                 allowedFileTypes={acceptedExtensions}
                 toolTip={<FileTypesTooltip />}
-                imagePreviewUrl={productDetails?.digitalProductsFile?.map((file) => file?.name)}
                 setLoading={setLoading}
                 error={errors.digitalProducts}
               />

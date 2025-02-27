@@ -42,6 +42,8 @@ const FilesList = () => {
                 apiUrl={'file'}
                 tableCountLabel={true}
                 pagination={true}
+                actions={true}
+                editPath={'/files/edit-file'}
                 deleteBtn={true}
                 deleteApi={deleteFileApi}
                 deleteMessage="Are you sure you want to delete this file?"
