@@ -57,6 +57,7 @@ import UTMBuilderRoutes from './private-routes/UTMBuilderRoutes';
 import BroadcastRoutes from './private-routes/BroadcastRoutes';
 import NotifAgentRoutes from './private-routes/NotifAgentRoutes';
 import TaskRoutes from './private-routes/taskRoutes';
+import Layout_SEO from '../layouts/LayoutSeo';
 
 const ZohoStatus = lazy(() => import('../pages/integration/ZohoStatus'));
 
@@ -116,26 +117,28 @@ const App = () => {
       <ColorProvider>
         <div className="w-screen inter-unique overflow-x-hidden">
           <BrowserRouter>
-            <Suspense fallback={<></>}>
-              <Routes>
-                {/* Public Routes */}
-                <Route element={<DeAuthComponent />}>
-                  <Route path="/" element={<Login />} />
-                </Route>
-
-                {/* Private Routes */}
-                <Route element={<AuthComponent />}>
-                  <Route element={<StructuredLayout />}>
-                    <Route path="/dashboard" element={<Dashboard />} />
-                    <Route path="/auth-status/:id" element={<ZohoStatus />} />
-                    {privateRoutes.map(({ path, Component }) => (
-                      <Route key={path} path={`/${path}`} element={<Component />} />
-                    ))}
+            <Layout_SEO>
+              <Suspense fallback={<></>}>
+                <Routes>
+                  {/* Public Routes */}
+                  <Route element={<DeAuthComponent />}>
+                    <Route path="/" element={<Login />} />
                   </Route>
-                </Route>
-                <Route path="*" element={<PageNotFound />} />
-              </Routes>
-            </Suspense>
+
+                  {/* Private Routes */}
+                  <Route element={<AuthComponent />}>
+                    <Route element={<StructuredLayout />}>
+                      <Route path="/dashboard" element={<Dashboard />} />
+                      <Route path="/auth-status/:id" element={<ZohoStatus />} />
+                      {privateRoutes.map(({ path, Component }) => (
+                        <Route key={path} path={`/${path}`} element={<Component />} />
+                      ))}
+                    </Route>
+                  </Route>
+                  <Route path="*" element={<PageNotFound />} />
+                </Routes>
+              </Suspense>
+            </Layout_SEO>
           </BrowserRouter>
           <ToastContainer />
         </div>

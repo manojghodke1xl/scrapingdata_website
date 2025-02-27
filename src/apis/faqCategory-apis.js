@@ -13,5 +13,5 @@ export const updateFaqCategoryApi = async (id, userData) => {
 };
 
 export const getAllFaqCategoriesApi = async () => {
-  return await getMethodCall(`${import.meta.env.VITE_API_URL}/all-faq-category`);
+  return await getMethodCall(`${import.meta.env.VITE_API_URL}/faq-category/all`);
 };

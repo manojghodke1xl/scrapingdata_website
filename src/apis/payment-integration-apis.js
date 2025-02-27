@@ -1,20 +1,13 @@
-import { getMethodCall, postMethodCall, putMethodCall } from './api-handler';
+import { getMethodCall, putMethodCall } from './api-handler';
 
-export const addPaymentIntegrationApi = (site, payment) => {
-  return postMethodCall(`${import.meta.env.VITE_API_URL}/intigration`, { site, payment });
-};
 export const updatePaymentIntegrationApi = (site, payment = undefined, crm = undefined, social = undefined) => {
-  return putMethodCall(`${import.meta.env.VITE_API_URL}/intigration`, { site, payment, crm, social });
+  return putMethodCall(`${import.meta.env.VITE_API_URL}/integration`, { site, payment, crm, social });
 };
 
 export const getIntegrationBySite = async (siteId) => {
-  return await getMethodCall(`${import.meta.env.VITE_API_URL}/intigration/${siteId}`);
+  return await getMethodCall(`${import.meta.env.VITE_API_URL}/integration/${siteId}`);
 };
 
 export const getIntegrationByEvent = async (eventId) => {
-  return await getMethodCall(`${import.meta.env.VITE_API_URL}/intigration-event/${eventId}`);
-};
-
-export const whatsAppOauthoApi = async () => {
-  return await postMethodCall(`${import.meta.env.VITE_API_URL}/wa-create-auth`);
+  return await getMethodCall(`${import.meta.env.VITE_API_URL}/integration/event/${eventId}`);
 };

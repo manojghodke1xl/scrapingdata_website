@@ -17,9 +17,9 @@ export const deleteRecaptchaApi = async (ids) => {
 };
 
 export const updateRecaptchaStatusApi = async (ids, isActive) => {
-  return await putMethodCall(`${import.meta.env.VITE_API_URL}/recaptcha-status`, { ids, isActive });
+  return await putMethodCall(`${import.meta.env.VITE_API_URL}/recaptcha/status`, { ids, isActive });
 };
 
 export const updateRecaptchaSitesApi = async (ids, sids, action) => {
-  return await putMethodCall(`${import.meta.env.VITE_API_URL}/recaptcha-sites`, { ids, sids, action });
+  return await putMethodCall(`${import.meta.env.VITE_API_URL}/recaptcha/sites`, { ids, sids, action });
 };

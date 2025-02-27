@@ -56,7 +56,7 @@ const OrderList = () => {
                 ]}
                 tableData={(data) => setOrders(data.orders)}
                 rows={rows}
-                apiUrl={'orders'}
+                apiUrl={'order'}
                 tableCountLabel={true}
                 pagination={true}
                 search={true}

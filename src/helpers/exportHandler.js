@@ -64,7 +64,9 @@ export const exportHandler = ({ type, apiUrl, rows, headers, selected }) => {
           package: 'packages',
           smtp: 'smtps',
           testimonial: 'testimonials',
-          'testimonial-category': 'categories'
+          'testimonial-category': 'categories',
+          order: 'orders',
+          booking: 'bookings'
         };
 
         const allData = data[apiUrlMapping[apiUrl] || apiUrl];
