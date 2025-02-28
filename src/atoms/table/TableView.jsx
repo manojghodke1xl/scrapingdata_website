@@ -1,7 +1,7 @@
 import { RxCaretSort } from 'react-icons/rx';
 import TableRowActions from './TableRowActions';
 import Checkbox from '../formFields/Checkbox';
-import { useColor } from '../../contexts/contexts/ColorContext';
+import useColorContext from '../../hooks/useColorContext';
 
 const TableView = ({
   selectable,
@@ -36,7 +36,7 @@ const TableView = ({
   currentPage,
   itemsPerPage
 }) => {
-  const { isDarkMode } = useColor();
+  const { isDarkMode } = useColorContext();
 
   const getSerialNumber = (index) => {
     const activePage = currentPage || tableState.currentPage;

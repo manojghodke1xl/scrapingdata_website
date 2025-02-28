@@ -1,15 +1,14 @@
 import { useState } from 'react';
-import { useColor } from '../../contexts/contexts/ColorContext';
+import { IoMdAdd } from 'react-icons/io';
 import TruncatableFieldToolTip from '../../atoms/common/TruncatableFeildToolTip';
 import { formatDateTime } from '../../utils/dateFormats';
 import TableHeader from '../../atoms/table/TableHeader';
-import { IoMdAdd } from 'react-icons/io';
+import useColorContext from '../../hooks/useColorContext';
 import TableComponent from '../../atoms/table/Table';
 import { deleteNotifAgentApi, updateNotifAgentStatusApi } from '../../apis/notif-agent-apis';
 
 const NotifAgentList = () => {
-  const { isDarkMode } = useColor();
-
+  const { isDarkMode } = useColorContext();
   const [notifAgents, setNotifAgents] = useState([]);
 
   const rows = notifAgents.map((agent) => {

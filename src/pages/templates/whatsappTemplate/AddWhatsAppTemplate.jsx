@@ -169,7 +169,7 @@ const AddWhatsAppTemplate = () => {
             <span className="text-primary">Site Association</span>
           </div>
           <div className="w-full">
-            <div className="w-full sm:w-1/2">
+            <div className="w-full sm:w-1/2 flex flex-col gap-y-5">
               <DropDown
                 name="site"
                 label={'Select Site'}
@@ -194,12 +194,13 @@ const AddWhatsAppTemplate = () => {
             <span className="text-primary">Basic Information</span>
           </div>
           <div className="w-full">
-            <div className="w-full sm:w-1/2">
+            <div className="w-full sm:w-1/2 flex flex-col gap-y-5">
               <FormField
                 label="Template Name"
                 name="name"
                 id="name"
                 placeholder="Template Name"
+                required
                 value={whatsAppTemplate.name}
                 onChange={(e) => {
                   const value = e.target.value
@@ -212,7 +213,6 @@ const AddWhatsAppTemplate = () => {
                 errorMessage={errors.name}
               />
               <FormField
-                divClassName={'mt-5'}
                 label="WhatsApp Template Name"
                 name="whatsAppTemplateName"
                 id="whatsAppTemplateName"
@@ -229,9 +229,8 @@ const AddWhatsAppTemplate = () => {
                 errorMessage={errors.whatsAppTemplateName}
               />
               <DropDown
-                mt="mt-5"
                 name="WhatsAppCategory"
-                label="WhatsApp Category"
+                label={'WhatsApp Category'}
                 SummaryChild={<h5 className="text-primary p-0 m-0">WhatsApp Category</h5>}
                 dropdownList={[
                   { _id: 1, name: 'UTILITY', showName: 'Utility' },
@@ -252,9 +251,8 @@ const AddWhatsAppTemplate = () => {
               />
 
               <DropDown
-                mt="mt-5"
                 name="category"
-                label="Category"
+                label={'Category'}
                 SummaryChild={<h5 className="text-primary p-0 m-0">Category</h5>}
                 dropdownList={templateCategories.map((category) => ({ id: category._id, showName: category.name, name: category._id }))}
                 selected={whatsAppTemplate.category}
@@ -267,7 +265,6 @@ const AddWhatsAppTemplate = () => {
               />
 
               <DropDown
-                mt="mt-5"
                 name={'phoneNumberId'}
                 label={'Phone Number'}
                 SummaryChild={<h5 className="text-primary p-0 m-0">Phone Number</h5>}
@@ -305,13 +302,13 @@ const AddWhatsAppTemplate = () => {
             <span className="text-primary">Message Content</span>
           </div>
           <div className="w-1/2">
-            <div className="w-full ">
+            <div className="w-full">
               <TextareaComponent
-                divClassName="mt-5"
                 label="Message give variables in {name} format"
                 placeholder="Message..."
                 id="message"
                 name="message"
+                required
                 rows={35}
                 value={whatsAppTemplate.message}
                 onChange={(e) => setWhatsAppTemplate((prev) => ({ ...prev, message: e.target.value }))}

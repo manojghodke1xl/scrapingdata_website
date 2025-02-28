@@ -5,10 +5,10 @@ import { showNotification } from '../../utils/showNotification';
 import Logo from '../../assets/images/marsCMS-logo.png';
 import DarkLogo from '../../assets/images/dark-mode-logo.png';
 import useGlobalContext from '../../hooks/useGlobalContext';
-import { useColor } from '../../contexts/contexts/ColorContext';
+import useColorContext from '../../hooks/useColorContext';
 
 const Login = () => {
-  const { isDarkMode } = useColor();
+  const { isDarkMode } = useColorContext();
   const navigate = useNavigate();
   const { dispatch, setLoading } = useGlobalContext();
   const [email, setEmail] = useState(import.meta.env.DEV ? 'vishwajeet.patil@dreamsinternational.in' : '');

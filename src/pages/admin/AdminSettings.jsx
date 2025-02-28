@@ -1,14 +1,14 @@
+import { useState } from 'react';
 import ToggleComponent from '../../atoms/formFields/ToggleComponent';
 import ColorPalette from '../../atoms/common/ColorPalette';
-import { useColor } from '../../contexts/contexts/ColorContext';
-import { useState } from 'react';
+import useColorContext from '../../hooks/useColorContext';
 import useGlobalContext from '../../hooks/useGlobalContext';
 import { showNotification } from '../../utils/showNotification';
 import { updateAdminThemeApi } from '../../apis/admin-apis';
 import FormButtons from '../../atoms/formFields/FormButtons';
 
 const AdminSettings = () => {
-  const { toggleDarkMode, isDarkMode, setIsDarkMode } = useColor();
+  const { toggleDarkMode, isDarkMode, setIsDarkMode } = useColorContext();
 
   const {
     auth: { id },

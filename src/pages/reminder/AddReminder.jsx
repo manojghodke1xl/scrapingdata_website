@@ -16,6 +16,7 @@ import { FaEye } from 'react-icons/fa';
 import EmailPreview from '../../atoms/templatePreview/EmailPreview';
 import WhatsAppPreview from '../../atoms/templatePreview/WhatsAppPreview';
 import { MdEdit } from 'react-icons/md';
+import { handleTimeConversion } from '../../constants/comon';
 
 const AddReminder = () => {
   const { id = '' } = useParams();
@@ -186,19 +187,6 @@ const AddReminder = () => {
     });
   };
 
-  const handleTimeConversion = (value, unit) => {
-    const msConversions = {
-      Seconds: 1000,
-      Minutes: 60 * 1000,
-      Hours: 60 * 60 * 1000,
-      Days: 24 * 60 * 60 * 1000,
-      Weeks: 7 * 24 * 60 * 60 * 1000,
-      Months: 30 * 24 * 60 * 60 * 1000,
-      Years: 365 * 24 * 60 * 60 * 1000
-    };
-    return value * msConversions[unit];
-  };
-
   const handleCustomScheduleChange = (value, unit, index) => {
     const msValue = handleTimeConversion(value, unit);
     handleVariableChange(index, 'delay.ms', msValue.toString());
@@ -251,29 +239,28 @@ const AddReminder = () => {
             <span className=" text-primary ">Site Details</span>
           </div>
           <div className="w-full">
-            <div>
-              {id && !isDuplicate ? (
-                <h1 className="text-xl flex items-center justify-between gap-2 font-bold">
-                  <div className="flex items-center gap-2">
-                    <span className="text-primary">Site:</span>
-                    <span className="text-primary font-semibold">{`${reminderDetails?.siteData?.name} ( ${reminderDetails?.siteData?.host} )`}</span>
-                  </div>
-                </h1>
-              ) : (
-                <DropDown
-                  name="sites"
-                  dropdownList={availableSites?.map((site) => ({ name: site._id, showName: `${site.name} (${site.host})`, id: site._id }))}
-                  SummaryChild={<h5 className="p-0 m-0 text-primary">Sites</h5>}
-                  search={true}
-                  selected={reminderDetails.site}
-                  commonFunction={(e) => {
-                    setReminderDetails((prev) => ({ ...prev, site: e.name }));
-                    if (errors.site) setErrors((prev) => ({ ...prev, site: '' }));
-                  }}
-                  error={errors.site}
-                />
-              )}
-            </div>
+            {id && !isDuplicate ? (
+              <h1 className="text-xl flex items-center justify-between gap-2 font-bold">
+                <div className="flex items-center gap-2">
+                  <span className="text-primary">Site:</span>
+                  <span className="text-primary font-semibold">{`${reminderDetails?.siteData?.name} ( ${reminderDetails?.siteData?.host} )`}</span>
+                </div>
+              </h1>
+            ) : (
+              <DropDown
+                name="sites"
+                label={'Select Site'}
+                dropdownList={availableSites?.map((site) => ({ name: site._id, showName: `${site.name} (${site.host})`, id: site._id }))}
+                SummaryChild={<h5 className="p-0 m-0 text-primary">Sites</h5>}
+                search={true}
+                selected={reminderDetails.site}
+                commonFunction={(e) => {
+                  setReminderDetails((prev) => ({ ...prev, site: e.name }));
+                  if (errors.site) setErrors((prev) => ({ ...prev, site: '' }));
+                }}
+                error={errors.site}
+              />
+            )}
           </div>
         </div>
       </div>
@@ -283,54 +270,53 @@ const AddReminder = () => {
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className=" text-primary ">Target</span>
           </div>
-          <div className="w-full">
-            <div>
-              {id && !isDuplicate ? (
-                <h1 className="text-xl flex items-center gap-2 font-bold ">
-                  <span className="text-primary">
-                    {reminderDetails?.target}: &nbsp; {reminderDetails?.refToData?.name}
-                  </span>
-                </h1>
-              ) : (
-                <>
-                  <DropDown
-                    name="Events"
-                    dropdownList={[
-                      { id: 'Event', name: 'Event', showName: 'Event' },
-                      { id: 'Product', name: 'Product', showName: 'Product' },
-                      { id: 'Service', name: 'Service', showName: 'Service' }
-                    ]}
-                    SummaryChild={<h5 className="p-0 m-0 text-primary">Target</h5>}
-                    search={true}
-                    selected={reminderDetails.target}
-                    commonFunction={(e) => {
-                      setReminderDetails((prev) => ({ ...prev, target: e.name, refTo: undefined }));
-                      setFormState((prev) => ({ ...prev, list: [] }));
-                      if (errors.target) setErrors((prev) => ({ ...prev, target: '' }));
-                    }}
-                    error={errors.target}
-                  />
+          <div className="w-full flex flex-col gap-y-5">
+            {id && !isDuplicate ? (
+              <h1 className="text-xl flex items-center gap-2 font-bold ">
+                <span className="text-primary">
+                  {reminderDetails?.target}: &nbsp; {reminderDetails?.refToData?.name}
+                </span>
+              </h1>
+            ) : (
+              <>
+                <DropDown
+                  name="Events"
+                  label={'Select Target'}
+                  dropdownList={[
+                    { id: 'Event', name: 'Event', showName: 'Event' },
+                    { id: 'Product', name: 'Product', showName: 'Product' },
+                    { id: 'Service', name: 'Service', showName: 'Service' }
+                  ]}
+                  SummaryChild={<h5 className="p-0 m-0 text-primary">Target</h5>}
+                  search={true}
+                  selected={reminderDetails.target}
+                  commonFunction={(e) => {
+                    setReminderDetails((prev) => ({ ...prev, target: e.name, refTo: undefined }));
+                    setFormState((prev) => ({ ...prev, list: [] }));
+                    if (errors.target) setErrors((prev) => ({ ...prev, target: '' }));
+                  }}
+                  error={errors.target}
+                />
 
-                  <DropDown
-                    mt="mt-5"
-                    name="refTo"
-                    dropdownList={
-                      reminderDetails.target === 'Event'
-                        ? formState.list?.map((event) => ({ name: event._id, showName: `${event.name} (${formatDateTime(event.date)})`, id: event._id }))
-                        : formState.list?.map((product) => ({ name: product._id, showName: product.name, id: product._id }))
-                    }
-                    SummaryChild={<h5 className="p-0 m-0 text-primary">Select {reminderDetails.target}</h5>}
-                    search={true}
-                    selected={reminderDetails.refTo}
-                    commonFunction={(e) => {
-                      setReminderDetails((prev) => ({ ...prev, refTo: e.name }));
-                      if (errors.refTo) setErrors((prev) => ({ ...prev, refTo: '' }));
-                    }}
-                    error={errors.target}
-                  />
-                </>
-              )}
-            </div>
+                <DropDown
+                  name="refTo"
+                  label={`Select ${reminderDetails.target}`}
+                  dropdownList={
+                    reminderDetails.target === 'Event'
+                      ? formState.list?.map((event) => ({ name: event._id, showName: `${event.name} (${formatDateTime(event.date)})`, id: event._id }))
+                      : formState.list?.map((product) => ({ name: product._id, showName: product.name, id: product._id }))
+                  }
+                  SummaryChild={<h5 className="p-0 m-0 text-primary">Select {reminderDetails.target}</h5>}
+                  search={true}
+                  selected={reminderDetails.refTo}
+                  commonFunction={(e) => {
+                    setReminderDetails((prev) => ({ ...prev, refTo: e.name }));
+                    if (errors.refTo) setErrors((prev) => ({ ...prev, refTo: '' }));
+                  }}
+                  error={errors.target}
+                />
+              </>
+            )}
           </div>
         </div>
       </div>

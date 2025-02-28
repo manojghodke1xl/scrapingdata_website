@@ -80,6 +80,7 @@ const AddFaqCategory = () => {
                 type="text"
                 id="fqaCategoryName"
                 name="fqaCategoryName"
+                required
                 placeholder="Faq Category Name"
                 onChange={(e) => {
                   setFqaCategoryName(e.target.value);

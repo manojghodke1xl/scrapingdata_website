@@ -8,7 +8,7 @@ import { getFileIcon } from '../../constants/FileIcon';
 const DocumentFileUpload = ({
   divClassName,
   files,
-  existingFiles,
+  existingFiles = [],
   setFiles,
   setExistingFiles,
   label,
@@ -23,7 +23,7 @@ const DocumentFileUpload = ({
   const dropdownRefs = useRef([]);
   const existingDropdownRefs = useRef([]);
   const dropZoneRef = useRef(null);
-  
+
   const [isDragging, setIsDragging] = useState(false);
   const [dropdownIndexState, setDropdownIndexState] = useState({
     current: null,
@@ -125,8 +125,8 @@ const DocumentFileUpload = ({
   };
 
   return (
-    <>
-      <div className={`${divClassName} w-full border border-primary rounded-xl p-6 shadow-sm`}>
+    <div className="w-full flex flex-col gap-y-5">
+      <div className={`${divClassName} w-full border ${error ? 'border-danger focus:border-fadered' : 'border-primary focus:border-secondary'}  rounded-xl p-6 shadow-sm`}>
         <h1 className="text-primary text-lg mb-3 text-left flex items-center gap-2">
           <FaRegFile className="text-secondary text-2xl" strokeWidth={1.2} />
           {label || 'Upload'}
@@ -162,7 +162,7 @@ const DocumentFileUpload = ({
         {error && <p className="text-danger text-sm mt-2">{error}</p>}
       </div>
 
-      <div className="mt-5">
+      <div>
         {files.length > 0 && <h3 className="font-semibold text-primary mb-2">Attached Documents</h3>}
         <ul>
           {existingFiles.map((file, index) => (
@@ -283,7 +283,7 @@ const DocumentFileUpload = ({
           ))}
         </ul>
       </div>
-    </>
+    </div>
   );
 };
 

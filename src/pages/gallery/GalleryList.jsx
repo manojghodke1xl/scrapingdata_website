@@ -7,10 +7,10 @@ import NoteComponent from '../../atoms/common/NoteComponent';
 import { galleryListNote } from './GalleryNotes';
 import TruncatableFieldToolTip from '../../atoms/common/TruncatableFeildToolTip';
 import TableHeader from '../../atoms/table/TableHeader';
-import { useColor } from '../../contexts/contexts/ColorContext';
+import useColorContext from '../../hooks/useColorContext';
 
 const GalleryList = () => {
-  const { isDarkMode } = useColor();
+  const { isDarkMode } = useColorContext();
   const [galleries, setGalleries] = useState([]);
 
   const rows = galleries.map((gallery) => {

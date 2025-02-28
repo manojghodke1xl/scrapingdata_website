@@ -77,7 +77,7 @@ const MultiSelectCheckbox = ({
 
   return (
     <div className={`${divClassName}  relative w-full`} ref={dropdownRef}>
-      <label className="block text-sm font-medium text-primary">{formLabel}</label>
+      <label className="block text-sm font-medium text-primary mb-2">{formLabel}</label>
       {/* Dropdown Header */}
       <button
         type="button"

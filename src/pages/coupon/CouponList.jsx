@@ -7,10 +7,10 @@ import NoteComponent from '../../atoms/common/NoteComponent';
 import { couponListNote } from './CouponNotes';
 import TruncatableFieldToolTip from '../../atoms/common/TruncatableFeildToolTip';
 import TableHeader from '../../atoms/table/TableHeader';
-import { useColor } from '../../contexts/contexts/ColorContext';
+import useColorContext from '../../hooks/useColorContext';
 
 const CouponList = () => {
-  const { isDarkMode } = useColor();
+  const { isDarkMode } = useColorContext();
   const [coupons, setCoupons] = useState([]);
 
   const rows = coupons.map((coupon) => {

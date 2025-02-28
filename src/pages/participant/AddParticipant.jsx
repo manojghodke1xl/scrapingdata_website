@@ -142,8 +142,9 @@ const AddParticipant = () => {
             <div className="flex flex-col gap-y-5">
               <DropDown
                 name="site"
+                label={'Select Site'}
                 dropdownList={availableSites?.map((site) => ({ name: site._id, showName: site.name, id: site._id }))}
-                SummaryChild={<h5 className="p-0 m-0 text-primary">Select Site</h5>}
+                SummaryChild={<h5 className="p-0 m-0 text-primary">Sites</h5>}
                 search={true}
                 selected={participantDetails.site}
                 commonFunction={(e) => {
@@ -166,8 +167,9 @@ const AddParticipant = () => {
             <div className="flex flex-col gap-y-5">
               <DropDown
                 name="event"
+                label={'Select Event'}
                 dropdownList={formState.events?.map((event) => ({ name: event._id, showName: `${event.name} (${formatDateTime(event.date)})`, id: event._id }))}
-                SummaryChild={<h5 className="p-0 m-0 text-primary">Select Event</h5>}
+                SummaryChild={<h5 className="p-0 m-0 text-primary">Events</h5>}
                 search={true}
                 selected={participantDetails.event}
                 commonFunction={(e) => {
@@ -179,8 +181,9 @@ const AddParticipant = () => {
 
               <DropDown
                 name={'Package'}
+                label={'Select Package'}
                 dropdownList={formState.package.map((p) => ({ name: p._id, showName: p.title, id: p._id }))}
-                SummaryChild={<h5 className="p-0 m-0 text-primary"> Select Package</h5>}
+                SummaryChild={<h5 className="p-0 m-0 text-primary">Packages</h5>}
                 search={true}
                 selected={participantDetails.package}
                 commonFunction={(e) => {
@@ -206,6 +209,7 @@ const AddParticipant = () => {
                 type="text"
                 id="name"
                 name="name"
+                required
                 placeholder="Name"
                 onChange={(e) => {
                   setParticipantDetails((prev) => ({ ...prev, userDetails: { ...prev.userDetails, name: e.target.value } }));
@@ -218,6 +222,7 @@ const AddParticipant = () => {
                 label="Email ID"
                 type="email"
                 id="email"
+                required
                 name="email"
                 placeholder="Email ID"
                 onChange={(e) => {
@@ -230,6 +235,7 @@ const AddParticipant = () => {
               <PhoneInputField
                 label="Mobile Number"
                 placeholder="Mobile number"
+                required
                 name="phoneNumber"
                 phoneError={errors.phoneNumber}
                 handlePhoneChange={(value, countryData) => handlePhoneChange(value, countryData)}
@@ -252,8 +258,9 @@ const AddParticipant = () => {
               {formState.currency && (
                 <DropDown
                   name={'currency'}
+                  label={'Select Currency'}
                   dropdownList={formState.currency.map((currency) => ({ name: currency, showName: currency, id: currency }))}
-                  SummaryChild={<h5 className="p-0 m-0 text-primary">{participantDetails.currency || 'Select Currency'} </h5>}
+                  SummaryChild={<h5 className="p-0 m-0 text-primary">{participantDetails.currency || 'Currency'} </h5>}
                   selected={participantDetails.currency}
                   commonFunction={(e) => {
                     setParticipantDetails((prev) => ({ ...prev, currency: e.name }));

@@ -8,10 +8,10 @@ import { guideListNote } from './GuideNotes';
 import { AiOutlineApi } from 'react-icons/ai';
 import TruncatableFieldToolTip from '../../atoms/common/TruncatableFeildToolTip';
 import TableHeader from '../../atoms/table/TableHeader';
-import { useColor } from '../../contexts/contexts/ColorContext';
+import useColorContext from '../../hooks/useColorContext';
 
 const GuidesList = () => {
-  const { isDarkMode } = useColor();
+  const { isDarkMode } = useColorContext();
   const [guides, setGuides] = useState([]);
 
   const rows = guides.map((guide) => {

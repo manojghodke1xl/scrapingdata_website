@@ -115,8 +115,9 @@ const AddFiles = () => {
             <div>
               <DropDown
                 name="Sites"
+                label={'Select Site'}
                 dropdownList={availableSites.map((site) => ({ id: site._id, showName: `${site.name} (${site.host})`, name: site._id }))}
-                SummaryChild={<h5 className="p-0 m-0 text-primary">Sites</h5>}
+                SummaryChild={<h5 className="p-0 m-0 text-primary">Site</h5>}
                 search={true}
                 selected={file.site}
                 commonFunction={(e) => {

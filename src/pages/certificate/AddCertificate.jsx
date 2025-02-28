@@ -88,6 +88,7 @@ const AddCertificate = () => {
                 type="text"
                 id="name"
                 name="name"
+                required
                 placeholder="Certificate Name"
                 onChange={(e) => {
                   setCertificate((prev) => ({ ...prev, name: e.target.value }));

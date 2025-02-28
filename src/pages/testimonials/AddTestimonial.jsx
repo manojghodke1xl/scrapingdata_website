@@ -138,6 +138,7 @@ const AddTestimonial = () => {
               type="text"
               id="name"
               name="name"
+              required
               placeholder="Name"
               onChange={(e) => {
                 setTestimonialDetails((prev) => ({ ...prev, name: e.target.value }));

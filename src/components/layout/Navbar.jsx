@@ -1,19 +1,18 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 import Person from '../../assets/images/person.png';
 import Logo from '../../assets/images/marsCMS-logo.png';
 import DarkLogo from '../../assets/images/dark-mode-logo.png';
-
-import MaterialSidebar from './sidebar/MaterialSidebar';
 import { IoIosMenu } from 'react-icons/io';
-import useGlobalContext from '../../hooks/useGlobalContext';
-import { useColor } from '../../contexts/contexts/ColorContext';
 import { GrSun } from 'react-icons/gr';
 import { PiMoonStarsLight } from 'react-icons/pi';
-import { Link } from 'react-router-dom';
+import MaterialSidebar from './sidebar/MaterialSidebar';
+import useGlobalContext from '../../hooks/useGlobalContext';
+import useColorContext from '../../hooks/useColorContext';
 
 const Navbar = () => {
-  const { isDarkMode, toggleDarkMode } = useColor();
   const { dispatch } = useGlobalContext();
+  const { isDarkMode, toggleDarkMode } = useColorContext();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const sidebarRef = useRef(null);
@@ -51,7 +50,7 @@ const Navbar = () => {
     <>
       <div className="w-screen py-2 px-4 sm:px-6 flex justify-between border-b border-primary">
         <Link to={'/dashboard'} className="px-2 flex items-center font-bold">
-          <img src={isDarkMode ? DarkLogo : Logo} className='w-fit' alt="logo" />
+          <img src={isDarkMode ? DarkLogo : Logo} className="w-fit" alt="logo" />
         </Link>
 
         <div className="flex gap-5  items-center pr-6">

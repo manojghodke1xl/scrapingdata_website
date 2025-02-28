@@ -111,51 +111,50 @@ const AddAdmin = () => {
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className=" text-primary ">Admin Details</span>
           </div>
-          <div className="w-full">
-            <div>
-              <FormField
-                label="Admin Name"
-                type="text"
-                id="name"
-                name="name"
-                placeholder="Admin Name"
-                onChange={(e) => {
-                  setAdminDetails((prev) => ({ ...prev, name: e.target.value }));
-                  if (errors.name) setErrors((prev) => ({ ...prev, name: '' }));
-                }}
-                value={adminDetails.name}
-                errorMessage={errors.name}
-              />
-              <FormField
-                divClassName={'mt-5'}
-                label="Admin Email"
-                type="email"
-                id="email"
-                name="email"
-                placeholder="Admin Email"
-                onChange={(e) => {
-                  setAdminDetails((prev) => ({ ...prev, email: e.target.value }));
-                  if (errors.email) setErrors((prev) => ({ ...prev, email: '' }));
-                }}
-                value={adminDetails.email}
-                errorMessage={errors.email}
-              />
-              <FormField
-                divClassName={'mt-5'}
-                label="Admin Password"
-                type="password"
-                id="password"
-                name="password"
-                placeholder="Admin Password"
-                showPasswordToggle={true}
-                onChange={(e) => {
-                  setAdminDetails((prev) => ({ ...prev, password: e.target.value }));
-                  if (errors.password) setErrors((prev) => ({ ...prev, password: '' }));
-                }}
-                value={adminDetails.password}
-                errorMessage={errors.password}
-              />
-            </div>
+          <div className="w-full flex flex-col gap-y-5">
+            <FormField
+              label="Admin Name"
+              type="text"
+              id="name"
+              name="name"
+              required
+              placeholder="Admin Name"
+              onChange={(e) => {
+                setAdminDetails((prev) => ({ ...prev, name: e.target.value }));
+                if (errors.name) setErrors((prev) => ({ ...prev, name: '' }));
+              }}
+              value={adminDetails.name}
+              errorMessage={errors.name}
+            />
+            <FormField
+              label="Admin Email"
+              type="email"
+              id="email"
+              name="email"
+              placeholder="Admin Email"
+              required
+              onChange={(e) => {
+                setAdminDetails((prev) => ({ ...prev, email: e.target.value }));
+                if (errors.email) setErrors((prev) => ({ ...prev, email: '' }));
+              }}
+              value={adminDetails.email}
+              errorMessage={errors.email}
+            />
+            <FormField
+              label="Admin Password"
+              type="password"
+              id="password"
+              name="password"
+              placeholder="Admin Password"
+              required
+              showPasswordToggle={true}
+              onChange={(e) => {
+                setAdminDetails((prev) => ({ ...prev, password: e.target.value }));
+                if (errors.password) setErrors((prev) => ({ ...prev, password: '' }));
+              }}
+              value={adminDetails.password}
+              errorMessage={errors.password}
+            />
           </div>
         </div>
       </div>
@@ -165,20 +164,19 @@ const AddAdmin = () => {
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className="block text-primary">Access Settings</span>
           </div>
-          <div className="w-full">
-            <div className="w-full">
-              <MultiSelectCheckbox
-                options={availableSites.map((site) => ({ name: `${site.name} (${site.host})`, _id: site._id }))}
-                label="Select Sites"
-                onChange={(selected) => {
-                  setAdminDetails((prev) => ({ ...prev, sites: selected }));
-                  if (errors.sites) setErrors((prev) => ({ ...prev, sites: '' }));
-                }}
-                isSuperAdmin={adminDetails.isSuperAdmin}
-                selected={adminDetails.sites}
-                error={errors.sites}
-              />
-            </div>
+          <div className="w-full flex flex-col gap-y-5">
+            <MultiSelectCheckbox
+              options={availableSites.map((site) => ({ name: `${site.name} (${site.host})`, _id: site._id }))}
+              formLabel={'Select Sites'}
+              label="Sites"
+              onChange={(selected) => {
+                setAdminDetails((prev) => ({ ...prev, sites: selected }));
+                if (errors.sites) setErrors((prev) => ({ ...prev, sites: '' }));
+              }}
+              isSuperAdmin={adminDetails.isSuperAdmin}
+              selected={adminDetails.sites}
+              error={errors.sites}
+            />
           </div>
         </div>
       </div>
@@ -187,7 +185,7 @@ const AddAdmin = () => {
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className="block text-primary">Account Status</span>
           </div>
-          <div className="w-full">
+          <div className="w-full flex flex-col gap-y-5">
             <ToggleComponent
               label={'Is Admin Blocked?'}
               isEnableState={adminDetails.isBlocked}

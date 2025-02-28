@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react';
+import { IoMdAdd } from 'react-icons/io';
+import { CiExport } from 'react-icons/ci';
 import { formatDateTime } from '../../utils/dateFormats';
 import TableComponent from '../../atoms/table/Table';
 import { getAllEventsApi } from '../../apis/event-apis';
@@ -6,13 +8,11 @@ import { showNotification } from '../../utils/showNotification';
 import TruncatableFieldToolTip from '../../atoms/common/TruncatableFeildToolTip';
 import CountryFlag from '../../atoms/common/CountryFlag';
 import TableHeader from '../../atoms/table/TableHeader';
-import { useColor } from '../../contexts/contexts/ColorContext';
+import useColorContext from '../../hooks/useColorContext';
 import { sendCertificateApi } from '../../apis/participant-apis';
-import { IoMdAdd } from 'react-icons/io';
-import { CiExport } from 'react-icons/ci';
 
 const ParticipantList = () => {
-  const { isDarkMode } = useColor();
+  const { isDarkMode } = useColorContext();
   const [participants, setParticipants] = useState([]);
   const [event, setEvent] = useState([]);
 

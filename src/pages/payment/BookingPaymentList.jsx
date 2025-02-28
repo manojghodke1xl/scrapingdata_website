@@ -3,10 +3,10 @@ import { formatDateTime } from '../../utils/dateFormats';
 import TableComponent from '../../atoms/table/Table';
 import TruncatableFieldToolTip from '../../atoms/common/TruncatableFeildToolTip';
 import TableHeader from '../../atoms/table/TableHeader';
-import { useColor } from '../../contexts/contexts/ColorContext';
+import useColorContext from '../../hooks/useColorContext';
 
 const BookingPaymentList = () => {
-  const { isDarkMode } = useColor();
+  const { isDarkMode } = useColorContext();
   const [bookingPayments, setBookingPayments] = useState([]);
 
   const rows = bookingPayments.map((booking) => {

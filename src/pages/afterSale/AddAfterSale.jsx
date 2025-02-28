@@ -15,6 +15,7 @@ import WhatsAppPreview from '../../atoms/templatePreview/WhatsAppPreview';
 import EmailPreview from '../../atoms/templatePreview/EmailPreview';
 import { FaEye } from 'react-icons/fa';
 import { MdEdit } from 'react-icons/md';
+import { handleTimeConversion } from '../../constants/comon';
 
 const AddAfterSale = () => {
   const { id = '' } = useParams();
@@ -58,11 +59,8 @@ const AddAfterSale = () => {
   const [displayTemplate, setDisplayTemplate] = useState(null);
 
   const handleFindTemplate = (type, id) => {
-    if (displayTemplate && displayTemplate.type === type && displayTemplate.template._id === id) {
-      // If the template is already displayed, reset it to null
-      setDisplayTemplate(null);
-    } else {
-      // Otherwise, find and set the template
+    if (displayTemplate && displayTemplate.type === type && displayTemplate.template._id === id) setDisplayTemplate(null);
+    else {
       let template;
       if (type === 'email') template = formState.emailTemplate.find((template) => template._id === id);
       if (type === 'whatsapp') template = formState.whatsAppTemplate.find((template) => template._id === id);
@@ -75,7 +73,6 @@ const AddAfterSale = () => {
       setLoading(true);
       try {
         const { status, data } = await apiFunction(site);
-
         if (status) setFormState((prev) => ({ ...prev, list: data[key] }));
         else showNotification('error', data);
       } catch (error) {
@@ -93,7 +90,6 @@ const AddAfterSale = () => {
     if (afterSaleDetails.site && afterSaleDetails.refTo) {
       (async () => {
         const { status, data } = await getAfterSaleTemplateApi({ site: afterSaleDetails.site, event: afterSaleDetails.refTo });
-
         if (status) setFormState((prev) => ({ ...prev, emailTemplate: data.emailTemplates, whatsAppTemplate: data.waTemplates }));
         else showNotification('error', data);
       })();
@@ -200,19 +196,6 @@ const AddAfterSale = () => {
     });
   };
 
-  const handleTimeConversion = (value, unit) => {
-    const msConversions = {
-      Seconds: 1000,
-      Minutes: 60 * 1000,
-      Hours: 60 * 60 * 1000,
-      Days: 24 * 60 * 60 * 1000,
-      Weeks: 7 * 24 * 60 * 60 * 1000,
-      Months: 30 * 24 * 60 * 60 * 1000,
-      Years: 365 * 24 * 60 * 60 * 1000
-    };
-    return value * msConversions[unit];
-  };
-
   const handleCustomScheduleChange = (value, unit, index) => {
     const msValue = handleTimeConversion(value, unit);
     handleVariableChange(index, 'delay.ms', msValue.toString());
@@ -265,6 +248,7 @@ const AddAfterSale = () => {
               ) : (
                 <DropDown
                   name="sites"
+                  label={'Select Site'}
                   dropdownList={availableSites?.map((site) => ({ name: site._id, showName: `${site.name} (${site.host})`, id: site._id }))}
                   SummaryChild={<h5 className="p-0 m-0 text-primary">Sites</h5>}
                   search={true}
@@ -286,54 +270,53 @@ const AddAfterSale = () => {
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className=" text-primary ">Target</span>
           </div>
-          <div className="w-full">
-            <div>
-              {id && !isDuplicate ? (
-                <h1 className="text-xl flex items-center gap-2 font-bold ">
-                  <span className="text-primary">
-                    {afterSaleDetails?.target}: &nbsp; {afterSaleDetails?.refToData?.name}
-                  </span>
-                </h1>
-              ) : (
-                <>
-                  <DropDown
-                    name="Events"
-                    dropdownList={[
-                      { id: 'Event', name: 'Event', showName: 'Event' },
-                      { id: 'Product', name: 'Product', showName: 'Product' },
-                      { id: 'Service', name: 'Service', showName: 'Service' }
-                    ]}
-                    SummaryChild={<h5 className="p-0 m-0 text-primary">Target</h5>}
-                    search={true}
-                    selected={afterSaleDetails.target}
-                    commonFunction={(e) => {
-                      setAfterSaleDetails((prev) => ({ ...prev, target: e.name, refTo: undefined }));
-                      setFormState((prev) => ({ ...prev, list: [] }));
-                      if (errors.target) setErrors((prev) => ({ ...prev, target: '' }));
-                    }}
-                    error={errors.target}
-                  />
+          <div className="w-full flex flex-col gap-y-5">
+            {id && !isDuplicate ? (
+              <h1 className="text-xl flex items-center gap-2 font-bold ">
+                <span className="text-primary">
+                  {afterSaleDetails?.target}: &nbsp; {afterSaleDetails?.refToData?.name}
+                </span>
+              </h1>
+            ) : (
+              <>
+                <DropDown
+                  name="Events"
+                  label={'Select Target'}
+                  dropdownList={[
+                    { id: 'Event', name: 'Event', showName: 'Event' },
+                    { id: 'Product', name: 'Product', showName: 'Product' },
+                    { id: 'Service', name: 'Service', showName: 'Service' }
+                  ]}
+                  SummaryChild={<h5 className="p-0 m-0 text-primary">Target</h5>}
+                  search={true}
+                  selected={afterSaleDetails.target}
+                  commonFunction={(e) => {
+                    setAfterSaleDetails((prev) => ({ ...prev, target: e.name, refTo: undefined }));
+                    setFormState((prev) => ({ ...prev, list: [] }));
+                    if (errors.target) setErrors((prev) => ({ ...prev, target: '' }));
+                  }}
+                  error={errors.target}
+                />
 
-                  <DropDown
-                    mt="mt-5"
-                    name="refTo"
-                    dropdownList={
-                      afterSaleDetails.target === 'Event'
-                        ? formState.list?.map((event) => ({ name: event._id, showName: `${event.name} (${formatDateTime(event.date)})`, id: event._id }))
-                        : formState.list?.map((product) => ({ name: product._id, showName: product.name, id: product._id }))
-                    }
-                    SummaryChild={<h5 className="p-0 m-0 text-primary">Select {afterSaleDetails.target}</h5>}
-                    search={true}
-                    selected={afterSaleDetails.refTo}
-                    commonFunction={(e) => {
-                      setAfterSaleDetails((prev) => ({ ...prev, refTo: e.name }));
-                      if (errors.refTo) setErrors((prev) => ({ ...prev, refTo: '' }));
-                    }}
-                    error={errors.target}
-                  />
-                </>
-              )}
-            </div>
+                <DropDown
+                  name="refTo"
+                  label={`Select ${afterSaleDetails.target}`}
+                  dropdownList={
+                    afterSaleDetails.target === 'Event'
+                      ? formState.list?.map((event) => ({ name: event._id, showName: `${event.name} (${formatDateTime(event.date)})`, id: event._id }))
+                      : formState.list?.map((product) => ({ name: product._id, showName: product.name, id: product._id }))
+                  }
+                  SummaryChild={<h5 className="p-0 m-0 text-primary">Select {afterSaleDetails.target}</h5>}
+                  search={true}
+                  selected={afterSaleDetails.refTo}
+                  commonFunction={(e) => {
+                    setAfterSaleDetails((prev) => ({ ...prev, refTo: e.name }));
+                    if (errors.refTo) setErrors((prev) => ({ ...prev, refTo: '' }));
+                  }}
+                  error={errors.target}
+                />
+              </>
+            )}
           </div>
         </div>
       </div>

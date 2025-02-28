@@ -8,10 +8,10 @@ import { casestudyListNote } from './CaseStudyNotes';
 import { AiOutlineApi } from 'react-icons/ai';
 import TruncatableFieldToolTip from '../../atoms/common/TruncatableFeildToolTip';
 import TableHeader from '../../atoms/table/TableHeader';
-import { useColor } from '../../contexts/contexts/ColorContext';
+import useColorContext from '../../hooks/useColorContext';
 
 const CaseStudyList = () => {
-  const { isDarkMode } = useColor();
+  const { isDarkMode } = useColorContext();
   const [caseStudies, setCaseStudies] = useState([]);
 
   const rows = caseStudies.map((caseStudy) => {

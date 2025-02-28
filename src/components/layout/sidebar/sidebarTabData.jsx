@@ -78,7 +78,7 @@ export const filesPath = [{ title: 'Files', to: ['/files/file-list', '/files/add
 
 export const eventsPath = [
   { title: 'Events', to: ['/events/event-list', '/events/add-event', '/events/edit-event', '/events/duplicate-event', '/events/view-event'] },
-  { title: 'Participants', to: ['/participants/participant-list'] },
+  { title: 'Participants', to: ['/participants/participant-list', '/participants/add-participant', '/participants/edit-participant', '/participants/duplicate-participant'] },
   { title: 'Packages', to: ['/packages/package-list', '/packages/add-package', '/packages/edit-package', '/packages/duplicate-package'] },
   { title: 'Tickets', to: ['/tickets/ticket-list', '/tickets/add-ticket', '/tickets/edit-ticket'] },
   { title: 'Booking Payments', to: ['/payments/booking-payment-list'] },

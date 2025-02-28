@@ -7,10 +7,10 @@ import NoteComponent from '../../atoms/common/NoteComponent';
 import { clientLogoListNote } from './ClientLogoNotes';
 import TruncatableFieldToolTip from '../../atoms/common/TruncatableFeildToolTip';
 import TableHeader from '../../atoms/table/TableHeader';
-import { useColor } from '../../contexts/contexts/ColorContext';
+import useColorContext from '../../hooks/useColorContext';
 
 const ClientLogoList = () => {
-  const { isDarkMode } = useColor();
+  const { isDarkMode } = useColorContext();
   const [clientlogos, setClientLogos] = useState([]);
 
   const rows = clientlogos.map((clientlogo) => {

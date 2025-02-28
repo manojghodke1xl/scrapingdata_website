@@ -9,10 +9,10 @@ import NoteComponent from '../../atoms/common/NoteComponent';
 import { websiteListNote } from './SiteNotes';
 import TruncatableFieldToolTip from '../../atoms/common/TruncatableFeildToolTip';
 import TruncatableCopyFeild from '../../atoms/common/TruncatableCopyFeild';
-import { useColor } from '../../contexts/contexts/ColorContext';
+import useColorContext from '../../hooks/useColorContext';
 
 const SiteList = () => {
-  const { isDarkMode } = useColor();
+  const { isDarkMode } = useColorContext();
   const [sites, setSites] = useState([]);
   const {
     auth: { isSuperAdmin }

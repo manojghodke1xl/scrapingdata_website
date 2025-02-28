@@ -108,23 +108,23 @@ const AddProduct = () => {
 
   const validate = () => {
     const newErrors = {};
-    if (!productDetails.name.trim()) newErrors.name = 'Name is required';
-    if (!productDetails.type) newErrors.type = 'Product Type is required';
-    if (!productDetails.site) newErrors.site = 'Site is required';
-    if (productDetails.currencies.length === 0) newErrors.currencies = 'Currencies are required';
-    if (productDetails.type === 'Digital' && productDetails.digitalProducts.length === 0) newErrors.digitalProducts = 'At least one digital product is required';
+    if (!productDetails.name.trim()) newErrors.name = 'Name is required.';
+    if (!productDetails.type) newErrors.type = 'Product Type is required.';
+    if (!productDetails.site) newErrors.site = 'Site is required.';
+    if (productDetails.currencies.length === 0) newErrors.currencies = 'Currencies are required.';
+    if (productDetails.type === 'Digital' && productDetails.digitalProducts.length === 0) newErrors.digitalProducts = 'At least one digital product is required.';
 
     if (productDetails.type === 'Physical') {
-      if (productDetails.shippingDetails.length === 0) newErrors.shippingDetails = 'Shipping details are required';
+      if (productDetails.shippingDetails.length === 0) newErrors.shippingDetails = 'Shipping details are required.';
     }
-    if (productDetails.onSale && !productDetails.saleEndDate) newErrors.saleEndDate = 'Sale end date is required';
+    if (productDetails.onSale && !productDetails.saleEndDate) newErrors.saleEndDate = 'Sale end date is required.';
 
     if (productDetails.currencies.length > 0) {
       const newErrorsPrice = {};
       const newErrorsSalePrice = {};
       productDetails.currencies.forEach((currency) => {
-        if (!productDetails.price?.[currency]) newErrorsPrice[currency] = `Price for ${currency} currency is required`;
-        if (productDetails.onSale && !productDetails.salePrice[currency]) newErrorsSalePrice[currency] = `Sale Price for ${currency} currency is required`;
+        if (!productDetails.price?.[currency]) newErrorsPrice[currency] = `Price for ${currency} currency is required.`;
+        if (productDetails.onSale && !productDetails.salePrice[currency]) newErrorsSalePrice[currency] = `Sale Price for ${currency} currency is required.`;
 
         if (productDetails.shippingDetails.length > 0) {
           productDetails.shippingDetails.forEach((shipping) => {
@@ -132,7 +132,7 @@ const AddProduct = () => {
               Object.keys(shipping.charges).forEach((currency) => {
                 if (shipping.charges[currency] === undefined || shipping.charges[currency] === '') {
                   newErrors.charges = newErrors.charges || {};
-                  newErrors.charges[currency] = `Charges for ${currency} currency is required`;
+                  newErrors.charges[currency] = `Charges for ${currency} currency is required.`;
                 }
               });
             }
@@ -144,7 +144,7 @@ const AddProduct = () => {
       if (Object.keys(newErrorsSalePrice).length > 0) newErrors.salePrice = newErrorsSalePrice;
     }
 
-    if (productDetails.type === 'Digital' && productDetails.digitalProducts?.length === 0) newErrors.digitalProducts = 'At least one digital product is required';
+    if (productDetails.type === 'Digital' && productDetails.digitalProducts?.length === 0) newErrors.digitalProducts = 'At least one digital product is required.';
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -327,7 +327,7 @@ const AddProduct = () => {
                 if (errors.gallery) setErrors((prev) => ({ ...prev, gallery: '' }));
               }}
               onRemoveFile={(fileId) =>
-                setProductDetails((prev) => ({ ...prev, gallery: prev.gallery.filter((f) => f !== fileId), galleryFile: prev.galleryFile.filter((f) => f._id !== fileId) }))
+                setProductDetails((prev) => ({ ...prev, gallery: prev.gallery.filter((f) => f !== fileId), galleryFile: prev.galleryFile?.filter((f) => f._id !== fileId) }))
               }
               selected={productDetails.galleryFile ?? []}
               isMultiple
@@ -349,7 +349,7 @@ const AddProduct = () => {
                   setProductDetails((prev) => ({
                     ...prev,
                     digitalProducts: prev.digitalProducts.filter((f) => f !== fileId),
-                    digitalProductsFile: prev.digitalProductsFile.filter((f) => f._id !== fileId)
+                    digitalProductsFile: prev.digitalProductsFile?.filter((f) => f._id !== fileId)
                   }))
                 }
                 isMultiple

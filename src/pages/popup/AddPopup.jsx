@@ -94,9 +94,9 @@ const AddPopup = () => {
   }, [popupDetails.contentType]);
   const validate = () => {
     const newErrors = {};
-    if (!popupDetails.name) newErrors.name = 'Name is required';
-    if (!popupDetails.position) newErrors.position = 'Position is required';
-    if (!popupDetails.site) newErrors.site = 'At least one site must be selected';
+    if (!popupDetails.name) newErrors.name = 'Name is required.';
+    if (!popupDetails.position) newErrors.position = 'Position is required.';
+    if (!popupDetails.site) newErrors.site = 'At least one site must be selected.';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };

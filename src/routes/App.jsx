@@ -2,7 +2,7 @@ import { lazy, Suspense } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import { GlobalProvider } from '../contexts/providers/GlobalProvider';
-import { ColorProvider } from '../contexts/contexts/ColorContext';
+import { ColorProvider } from '../contexts/providers/ColorProvider';
 import DeAuthComponent from '../components/authentication/DeAuthComponent';
 import Login from '../pages/authentication/Login';
 import AuthComponent from '../components/authentication/AuthComponent';

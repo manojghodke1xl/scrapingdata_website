@@ -116,35 +116,35 @@ const AddFaq = () => {
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className=" text-primary ">FAQ Details</span>
           </div>
-          <div className="w-full">
-            <div className="flex flex-col gap-y-5">
-              <FormField
-                label="Question"
-                type="text"
-                id="question"
-                name="question"
-                placeholder="Question"
-                onChange={(e) => {
-                  setFaqDetails((prev) => ({ ...prev, question: e.target.value }));
-                  if (errors.question) setErrors((prev) => ({ ...prev, question: '' }));
-                }}
-                value={faqDetails.question}
-                errorMessage={errors.question}
-              />
+          <div className="w-full flex flex-col gap-y-5">
+            <FormField
+              label="Question"
+              type="text"
+              id="question"
+              name="question"
+              required
+              placeholder="Question"
+              onChange={(e) => {
+                setFaqDetails((prev) => ({ ...prev, question: e.target.value }));
+                if (errors.question) setErrors((prev) => ({ ...prev, question: '' }));
+              }}
+              value={faqDetails.question}
+              errorMessage={errors.question}
+            />
 
-              <TextareaComponent
-                label="Answer"
-                placeholder="Answer..."
-                id="answer"
-                name="answer"
-                value={faqDetails.answer}
-                onChange={(e) => {
-                  setFaqDetails((prev) => ({ ...prev, answer: e.target.value }));
-                  if (errors.answer) setErrors((prev) => ({ ...prev, answer: '' }));
-                }}
-                errorMessage={errors.answer}
-              />
-            </div>
+            <TextareaComponent
+              label="Answer"
+              placeholder="Answer..."
+              id="answer"
+              name="answer"
+              required
+              value={faqDetails.answer}
+              onChange={(e) => {
+                setFaqDetails((prev) => ({ ...prev, answer: e.target.value }));
+                if (errors.answer) setErrors((prev) => ({ ...prev, answer: '' }));
+              }}
+              errorMessage={errors.answer}
+            />
           </div>
         </div>
       </div>
@@ -154,31 +154,29 @@ const AddFaq = () => {
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className="block text-primary">Category and Site Settings</span>
           </div>
-          <div className="w-full">
-            <div className="w-full flex flex-col gap-y-5">
-              <MultiSelectCheckbox
-                options={availableSites
-                  .filter((site) => site.modules?.some((module) => module.faq === true))
-                  .map((site) => ({ name: `${site.name} (${site.host})`, _id: site._id }))}
-                label="Select Sites"
-                onChange={(selected) => {
-                  setFaqDetails((prev) => ({ ...prev, sites: selected }));
-                  if (errors.sites) setErrors((prev) => ({ ...prev, sites: '' }));
-                }}
-                selected={faqDetails.sites}
-                error={errors.sites}
-              />
-              <MultiSelectCheckbox
-                options={availableFaqCategories}
-                label="Select Faq Categories"
-                onChange={(selected) => {
-                  setFaqDetails((prev) => ({ ...prev, faqCategory: selected }));
-                  if (errors.faqCategory) setErrors((prev) => ({ ...prev, faqCategory: '' }));
-                }}
-                selected={faqDetails.faqCategory}
-                error={errors.faqCategory}
-              />
-            </div>
+          <div className="w-full flex flex-col gap-y-5">
+            <MultiSelectCheckbox
+              formLabel={'Select Sites'}
+              options={availableSites.filter((site) => site.modules?.some((module) => module.faq === true)).map((site) => ({ name: `${site.name} (${site.host})`, _id: site._id }))}
+              label="Select Sites"
+              onChange={(selected) => {
+                setFaqDetails((prev) => ({ ...prev, sites: selected }));
+                if (errors.sites) setErrors((prev) => ({ ...prev, sites: '' }));
+              }}
+              selected={faqDetails.sites}
+              error={errors.sites}
+            />
+            <MultiSelectCheckbox
+              formLabel={'Select Faq Categories'}
+              options={availableFaqCategories}
+              label="Select Faq Categories"
+              onChange={(selected) => {
+                setFaqDetails((prev) => ({ ...prev, faqCategory: selected }));
+                if (errors.faqCategory) setErrors((prev) => ({ ...prev, faqCategory: '' }));
+              }}
+              selected={faqDetails.faqCategory}
+              error={errors.faqCategory}
+            />
           </div>
         </div>
       </div>

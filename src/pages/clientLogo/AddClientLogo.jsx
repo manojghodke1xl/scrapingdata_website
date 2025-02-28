@@ -110,7 +110,7 @@ const AddClientLogo = () => {
                 if (errors.images) setErrors((prev) => ({ ...prev, images: '' }));
               }}
               onRemoveFile={(fileId) => {
-                setClientLogoDetails((prev) => ({ ...prev, images: prev.images.filter((f) => f !== fileId), imageFile: prev.imageFile.filter((f) => f._id !== fileId) }));
+                setClientLogoDetails((prev) => ({ ...prev, images: prev.images.filter((f) => f !== fileId), imageFile: prev.imageFile?.filter((f) => f._id !== fileId) }));
               }}
               selected={clientlogoDetails?.imageFile ?? []}
               allowedTypes={['image/png', 'image/jpeg', 'application/svg+xml', 'image/gif']}

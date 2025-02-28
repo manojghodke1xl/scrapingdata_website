@@ -157,12 +157,13 @@ const AddSMSTemplate = () => {
             <span className="text-primary">Basic Information</span>
           </div>
           <div className="w-full">
-            <div className="w-full sm:w-1/2">
+            <div className="w-full sm:w-1/2 flex flex-col gap-y-5">
               <FormField
                 label="Template Name"
                 name="name"
                 id="name"
                 placeholder="Template Name"
+                required
                 value={SMSTemplate.name}
                 onChange={(e) => {
                   setSMSTemplate((prev) => ({ ...prev, name: e.target.value }));
@@ -171,7 +172,6 @@ const AddSMSTemplate = () => {
                 errorMessage={errors.name}
               />
               <DropDown
-                mt="mt-5"
                 name="category"
                 label="Category"
                 SummaryChild={<h5 className="text-primary p-0 m-0">Category</h5>}
@@ -209,13 +209,13 @@ const AddSMSTemplate = () => {
             <span className="text-primary">SMS Content</span>
           </div>
           <div className="w-full">
-            <div className="w-full sm:w-1/2">
+            <div className="w-full sm:w-1/2 flex flex-col gap-y-5">
               <TextareaComponent
-                divClassName="mt-5"
                 label="Message"
                 placeholder="Message..."
                 id="message"
                 name="message"
+                required
                 value={SMSTemplate.message}
                 onChange={(e) => setSMSTemplate((prev) => ({ ...prev, message: e.target.value }))}
                 errorMessage={errors.message}
@@ -231,7 +231,7 @@ const AddSMSTemplate = () => {
             <span className="block text-primary">Attached Document</span>
           </div>
           <div className="w-full">
-            <div className="w-full sm:w-1/2">
+            <div className="w-full sm:w-1/2 flex flex-col gap-y-5">
               {files && files.attachments && files.attachments.length > 0 && (
                 <MultiSelectCheckbox
                   options={files.attachments || []}
@@ -243,7 +243,6 @@ const AddSMSTemplate = () => {
               )}
 
               <DocumentFileUpload
-                divClassName={'mt-5'}
                 label={'Attachment Files'}
                 isMultiple
                 files={attachments}

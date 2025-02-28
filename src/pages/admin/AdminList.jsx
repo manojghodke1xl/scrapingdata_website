@@ -8,10 +8,10 @@ import { updateAdminStatusApi } from '../../apis/admin-apis';
 import NoteComponent from '../../atoms/common/NoteComponent';
 import { adminListNote } from './AdminNotes';
 import TableHeader from '../../atoms/table/TableHeader';
-import { useColor } from '../../contexts/contexts/ColorContext';
+import useColorContext from '../../hooks/useColorContext';
 
 const AdminList = () => {
-  const { isDarkMode } = useColor();
+  const { isDarkMode } = useColorContext();
   const {
     auth: { allSites }
   } = useGlobalContext();

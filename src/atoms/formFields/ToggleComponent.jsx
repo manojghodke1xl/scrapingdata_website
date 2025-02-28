@@ -1,8 +1,8 @@
 import { CiCircleInfo } from 'react-icons/ci';
-import { useColor } from '../../contexts/contexts/ColorContext';
+import useColorContext from '../../hooks/useColorContext';
 
 const ToggleComponent = ({ divClassName, bgColor, label, description, isEnableState, setIsEnableState, onChange = () => {} }) => {
-  const { isDarkMode } = useColor();
+  const { isDarkMode } = useColorContext();
   return (
     <div className={`${divClassName} rounded-xl border border-primary py-2 px-4 w-full flex justify-between items-center ${bgColor} `}>
       <div className="flex flex-col bg">

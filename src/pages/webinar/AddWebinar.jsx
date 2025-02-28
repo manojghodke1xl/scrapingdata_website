@@ -9,9 +9,9 @@ import { showNotification } from '../../utils/showNotification';
 import { formatDateTime } from '../../utils/dateFormats';
 import { addWebinarApi, getWebinarByIdApi, updateWebinarApi } from '../../apis/webinar-apis';
 import { IoCloseSharp } from 'react-icons/io5';
-
 import MultiSelectCheckbox from '../../atoms/formFields/MultiSelectCheckBox';
-import FollowUpSettings from '../../atoms/common/FollowUpItem';
+import { handleTimeConversion } from '../../constants/comon';
+import { FaEye } from 'react-icons/fa';
 
 const AddWebinar = () => {
   const navigate = useNavigate();
@@ -52,8 +52,6 @@ const AddWebinar = () => {
       }
     ]
   });
-
-  console.log('webinarDetials', webinarDetials);
 
   const [formState, setFormState] = useState({
     events: [],
@@ -161,21 +159,8 @@ const AddWebinar = () => {
     });
   };
 
-  const handleTimeConversion = (value, unit) => {
-    const msConversions = {
-      Seconds: 1000,
-      Minutes: 60 * 1000,
-      Hours: 60 * 60 * 1000,
-      Days: 24 * 60 * 60 * 1000,
-      Weeks: 7 * 24 * 60 * 60 * 1000,
-      Months: 30 * 24 * 60 * 60 * 1000,
-      Years: 365 * 24 * 60 * 60 * 1000
-    };
-    return value * msConversions[unit];
-  };
-
   const removeVariable = (index) => {
-    if (afterSaleDetails.followUps.length === 1) return;
+    if (webinarDetials.followUps.length === 1) return;
     setWebinarDetials((prev) => ({
       ...prev,
       followUps: prev.followUps.filter((_, i) => i !== index)
@@ -274,6 +259,7 @@ const AddWebinar = () => {
                 type="text"
                 id="name"
                 name="name"
+                required
                 placeholder="Name"
                 onChange={(e) => {
                   setWebinarDetials((prev) => ({ ...prev, name: e.target.value }));
@@ -361,7 +347,6 @@ const AddWebinar = () => {
           </div>
           <div className="w-full">
             <div className="flex flex-col gap-y-5">
-
               {webinarDetials.followUps?.map((item, index) => (
                 <div key={index} className="flex flex-col border border-primary bg-grey p-4 rounded-xl mt-5">
                   <div className="flex justify-end items-center">

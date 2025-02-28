@@ -112,7 +112,7 @@ const AddGallery = () => {
                 if (errors.images) setErrors((prev) => ({ ...prev, images: '' }));
               }}
               onRemoveFile={(fileId) =>
-                setGalleryDetails((prev) => ({ ...prev, images: prev.images.filter((f) => f !== fileId), imageFile: prev.imageFile.filter((f) => f._id !== fileId) }))
+                setGalleryDetails((prev) => ({ ...prev, images: prev.images.filter((f) => f !== fileId), imageFile: prev.imageFile?.filter((f) => f._id !== fileId) }))
               }
               selected={galleryDetails?.imageFile ?? []}
               allowedTypes={['image/png', 'image/jpeg', 'image/svg+xml', 'image/gif']}

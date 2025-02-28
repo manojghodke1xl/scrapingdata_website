@@ -3,13 +3,13 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { useRef } from 'react';
 
-const DateTimePicker = ({ divClassName, label, id, placeholder, selectedDateTime, setSelectedDateTime, errorMessage }) => {
+const DateTimePicker = ({ divClassName, label, id, placeholder, selectedDateTime, setSelectedDateTime, errorMessage, required }) => {
   const datePickerRef = useRef(null);
 
   return (
     <div className={`${divClassName} w-full`}>
       <label htmlFor={id} className="block text-sm font-medium text-primary">
-        {label}
+        {label} {required && <span className="text-danger text-lg">*</span>}
       </label>
       <div className={`w-full mt-2 rounded-xl border ${errorMessage ? 'border-danger focus:border-fadered' : 'border-primary focus:border-secondary'} relative`}>
         <DatePicker

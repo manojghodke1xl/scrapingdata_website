@@ -7,10 +7,10 @@ import NoteComponent from '../../atoms/common/NoteComponent';
 import { faqListNote } from './faqNotes';
 import TruncatableFieldToolTip from '../../atoms/common/TruncatableFeildToolTip';
 import TableHeader from '../../atoms/table/TableHeader';
-import { useColor } from '../../contexts/contexts/ColorContext';
+import useColorContext from '../../hooks/useColorContext';
 
 const FaqList = () => {
-  const { isDarkMode } = useColor();
+  const { isDarkMode } = useColorContext();
   const [faqs, setFaqs] = useState([]);
 
   const rows = faqs.map((faq) => {

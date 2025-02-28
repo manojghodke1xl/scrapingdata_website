@@ -79,52 +79,45 @@ const AddEventTicket = () => {
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className=" text-primary ">Ticket Details</span>
           </div>
-          <div className="w-full">
-            <div>
-              <FormField
-                label="Ticket Name"
-                type="text"
-                id="name"
-                name="name"
-                placeholder="Ticket Name"
-                onChange={(e) => {
-                  setEventTicket((prev) => ({ ...prev, name: e.target.value }));
-                  if (errors.name) setErrors((prev) => ({ ...prev, name: '' }));
-                }}
-                value={eventTicket.name}
-                errorMessage={errors.name}
-              />
+          <div className="w-full flex flex-col gap-y-5">
+            <FormField
+              label="Ticket Name"
+              type="text"
+              id="name"
+              name="name"
+              placeholder="Ticket Name"
+              required
+              onChange={(e) => {
+                setEventTicket((prev) => ({ ...prev, name: e.target.value }));
+                if (errors.name) setErrors((prev) => ({ ...prev, name: '' }));
+              }}
+              value={eventTicket.name}
+              errorMessage={errors.name}
+            />
 
-              <TextareaComponent
-                divClassName="mt-5"
-                label="Description"
-                placeholder="Enter a description..."
-                id="description"
-                name="description"
-                value={eventTicket?.description}
-                onChange={(e) => setEventTicket((prev) => ({ ...prev, description: e.target.value }))}
-              />
+            <TextareaComponent
+              label="Description"
+              placeholder="Enter a description..."
+              id="description"
+              name="description"
+              value={eventTicket?.description}
+              onChange={(e) => setEventTicket((prev) => ({ ...prev, description: e.target.value }))}
+            />
 
-              <FileUpload
-                divClassName={'mt-5'}
-                label={'Ticket Svg with {ticket_id} as variable'}
-                logo={<FaRegImage className="text-primary text-2xl" />}
-                error={errors.image}
-                setErrors={setErrors}
-                acceptedTypes={['.svg']}
-                fieldName="image"
-                isImage
-                setDetails={setEventTicket}
-                imagePreviewUrl={eventTicket?.imageFile?.url}
-              />
-            </div>
+            <FileUpload
+              label={'Ticket Svg with {ticket_id} as variable'}
+              logo={<FaRegImage className="text-primary text-2xl" />}
+              error={errors.image}
+              setErrors={setErrors}
+              acceptedTypes={['.svg']}
+              fieldName="image"
+              isImage
+              setDetails={setEventTicket}
+              imagePreviewUrl={eventTicket?.imageFile?.url}
+            />
           </div>
         </div>
       </div>
-
-      {/* <div className="w-full justify-center items-center border-b  border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end ">
-        <NoteComponent note={id ? editFaqCategoryNote : addFaqCategoryNote} />
-      </div> */}
     </div>
   );
 };

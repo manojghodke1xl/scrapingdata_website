@@ -21,7 +21,6 @@ const AddPartnerLogo = () => {
   const { pathname } = useLocation();
   const isDuplicate = pathname.includes('duplicate');
 
-  const [isScrollable, setIsScrollable] = useState(false);
   const [errors, setErrors] = useState({});
   const [partnerlogoDetails, setPartnerLogoDetails] = useState({
     images: !id ? [] : undefined,
@@ -85,18 +84,6 @@ const AddPartnerLogo = () => {
     }
   };
 
-  const checkScrollability = () => {
-    const contentHeight = document.documentElement.scrollHeight;
-    const windowHeight = window.innerHeight;
-    setIsScrollable(contentHeight > windowHeight);
-  };
-
-  useEffect(() => {
-    checkScrollability();
-    window.addEventListener('resize', checkScrollability);
-    return () => window.removeEventListener('resize', checkScrollability);
-  }, []);
-
   return (
     <div className="py-8 p-4 sm:p-8 overflow-x-hidden mb-20">
       <div className="w-full pb-8 border-b border-primary gap-y-4 gap-2 flex flex-col items-start md:flex-row lg:flex-col xl:flex-row justify-between lg:items-start md:items-end xl:items-end">
@@ -118,7 +105,7 @@ const AddPartnerLogo = () => {
                 if (errors.images) setErrors((prev) => ({ ...prev, images: '' }));
               }}
               onRemoveFile={(fileId) =>
-                setPartnerLogoDetails((prev) => ({ ...prev, images: prev.images.filter((f) => f !== fileId), imageFile: prev.imageFile.filter((f) => f._id !== fileId) }))
+                setPartnerLogoDetails((prev) => ({ ...prev, images: prev.images.filter((f) => f !== fileId), imageFile: prev.imageFile?.filter((f) => f._id !== fileId) }))
               }
               selected={partnerlogoDetails?.imageFile ?? []}
               allowedTypes={['image/png', 'image/jpeg', 'application/svg+xml', 'image/gif']}
@@ -170,17 +157,6 @@ const AddPartnerLogo = () => {
       <div className="w-full justify-center items-center border-b  border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end ">
         <NoteComponent note={id ? editPartnerLogoNote : addPartnerLogoNote} />
       </div>
-      {!isScrollable && (
-        <div className="w-full flex justify-end items-center gap-4 pt-8  border- border-primary">
-          <FormButtons
-            to="/partner-logo/partner-logo-list"
-            type="submit"
-            onClick={handleSubmit}
-            btnLebal={id ? (isDuplicate ? 'Add' : 'Save Changes') : 'Add'}
-            loading={isLoading}
-          />
-        </div>
-      )}
     </div>
   );
 };

@@ -103,7 +103,7 @@ const FileUpload = ({
 
   return (
     <>
-      <div className={`${divClassName} w-full border ${error ? 'border-fadered focus:border-fadered' : ' border-primary focus:border-secondary'} rounded-xl p-6 shadow-sm`}>
+      <div className={`${divClassName} w-full border ${error ? 'border-danger focus:border-fadered' : ' border-primary focus:border-secondary'} rounded-xl p-6 shadow-sm`}>
         <h1 className="text-primary text-lg mb-3 text-left flex items-center gap-2">
           {logo || <MdOutlineUploadFile className="text-primary text-2xl" />}
           Upload {isImage ? label || 'Image' : isPdf ? label || 'PDF' : isVideo ? label || 'Video' : label || 'File'}

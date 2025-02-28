@@ -68,7 +68,7 @@ const TextareaComponent = ({
         )}
         <p className="mt-1 text-primary text-sm">{hint}</p>
       </div>
-      {errorMessage && <p className="text-danger mt-1 text-sm">{errorMessage}</p>}
+      {errorMessage && <p className="text-danger mb-1 text-sm">{errorMessage}</p>}
     </div>
   );
 };

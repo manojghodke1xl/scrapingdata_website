@@ -74,21 +74,20 @@ const AddTestimonialCategory = () => {
             <span className=" text-primary ">Category Details</span>
           </div>
           <div className="w-full">
-            <div>
-              <FormField
-                label="Category Name"
-                type="text"
-                id="name"
-                name="name"
-                placeholder="Category Name"
-                onChange={(e) => {
-                  setCategoryName(e.target.value);
-                  if (errors.name) setErrors((prev) => ({ ...prev, name: '' }));
-                }}
-                value={categoryName}
-                errorMessage={errors.name}
-              />
-            </div>
+            <FormField
+              label="Category Name"
+              type="text"
+              id="name"
+              name="name"
+              required
+              placeholder="Category Name"
+              onChange={(e) => {
+                setCategoryName(e.target.value);
+                if (errors.name) setErrors((prev) => ({ ...prev, name: '' }));
+              }}
+              value={categoryName}
+              errorMessage={errors.name}
+            />
           </div>
         </div>
       </div>

@@ -7,10 +7,10 @@ import NoteComponent from '../../atoms/common/NoteComponent';
 import { partnerLogoListNote } from './PartnerLogoNotes';
 import TruncatableFieldToolTip from '../../atoms/common/TruncatableFeildToolTip';
 import TableHeader from '../../atoms/table/TableHeader';
-import { useColor } from '../../contexts/contexts/ColorContext';
+import useColorContext from '../../hooks/useColorContext';
 
 const PartnerLogoList = () => {
-  const { isDarkMode } = useColor();
+  const { isDarkMode } = useColorContext();
   const [partnerlogos, setPartnerLogos] = useState([]);
 
   const rows = partnerlogos.map((partnerLogo) => {

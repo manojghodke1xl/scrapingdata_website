@@ -163,12 +163,13 @@ const AddEmailTemplate = () => {
             <span className="text-primary">Basic Information</span>
           </div>
           <div className="w-full">
-            <div className="w-full sm:w-1/2">
+            <div className="w-full sm:w-1/2 flex flex-col gap-y-5">
               <FormField
                 label="Template Name"
                 name="name"
                 id="name"
                 placeholder="Template Name"
+                required
                 value={emailTemplate.name}
                 onChange={(e) => {
                   setEmailTemplate((prev) => ({ ...prev, name: e.target.value }));
@@ -177,7 +178,6 @@ const AddEmailTemplate = () => {
                 errorMessage={errors.name}
               />
               <DropDown
-                mt="mt-5"
                 name="category"
                 label="Category"
                 SummaryChild={<h5 className="text-primary p-0 m-0">Category</h5>}
@@ -215,12 +215,13 @@ const AddEmailTemplate = () => {
             <span className="text-primary">Email Content</span>
           </div>
           <div className="w-1/2">
-            <div className="w-full ">
+            <div className="w-full flex flex-col gap-y-5">
               <FormField
                 label="Subject"
                 name="subject"
                 id="subject"
                 placeholder="Subject"
+                required
                 value={emailTemplate.subject}
                 onChange={(e) => {
                   setEmailTemplate((prev) => ({ ...prev, subject: e.target.value }));
@@ -231,7 +232,6 @@ const AddEmailTemplate = () => {
 
               <TextareaComponent
                 rows={15}
-                divClassName="mt-5"
                 label="Body"
                 placeholder="Body"
                 id="mailBody"

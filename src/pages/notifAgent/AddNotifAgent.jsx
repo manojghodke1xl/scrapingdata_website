@@ -15,11 +15,10 @@ const AddNotifAgent = () => {
     setLoading,
     isLoading
   } = useGlobalContext();
-  const { pathname } = useLocation();
-  const isDuplicate = pathname.includes('duplicate');
-
   const navigate = useNavigate();
   const { id = '' } = useParams();
+  const { pathname } = useLocation();
+  const isDuplicate = pathname.includes('duplicate');
 
   const [notifAgentDetials, setNotifAgentDetails] = useState({
     email: '',
@@ -29,7 +28,6 @@ const AddNotifAgent = () => {
     sites: [],
     isBlocked: false
   });
-
   const [errors, setErrors] = useState({});
   const [isScrollable, setIsScrollable] = useState(false);
 
@@ -111,43 +109,44 @@ const AddNotifAgent = () => {
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className=" text-primary ">Notification Agent Details</span>
           </div>
-          <div className="w-full">
-            <div className="flex flex-col gap-y-5">
-              <FormField
-                label="Agent Name"
-                type="text"
-                id="name"
-                name="name"
-                placeholder="Agent Name"
-                onChange={(e) => {
-                  setNotifAgentDetails((prev) => ({ ...prev, name: e.target.value }));
-                  if (errors.name) setErrors((prev) => ({ ...prev, name: '' }));
-                }}
-                value={notifAgentDetials.name}
-                errorMessage={errors.name}
-              />
-              <FormField
-                label="Agent Email ID"
-                type="email"
-                id="email"
-                name="email"
-                placeholder="Agent Email ID"
-                onChange={(e) => {
-                  setNotifAgentDetails((prev) => ({ ...prev, email: e.target.value }));
-                  if (errors.email) setErrors((prev) => ({ ...prev, email: '' }));
-                }}
-                value={notifAgentDetials.email}
-                errorMessage={errors.email}
-              />
-              <PhoneInputField
-                label="Mobile Number"
-                placeholder="Mobile Number"
-                name="mobile"
-                value={notifAgentDetials.phoneCode + notifAgentDetials.phoneNumber}
-                handlePhoneChange={handlePhoneChange}
-                phoneError={errors.phoneNumber}
-              />
-            </div>
+          <div className=" w-full flex flex-col gap-y-5">
+            <FormField
+              label="Agent Name"
+              type="text"
+              id="name"
+              name="name"
+              required
+              placeholder="Agent Name"
+              onChange={(e) => {
+                setNotifAgentDetails((prev) => ({ ...prev, name: e.target.value }));
+                if (errors.name) setErrors((prev) => ({ ...prev, name: '' }));
+              }}
+              value={notifAgentDetials.name}
+              errorMessage={errors.name}
+            />
+            <FormField
+              label="Agent Email ID"
+              type="email"
+              id="email"
+              name="email"
+              required
+              placeholder="Agent Email ID"
+              onChange={(e) => {
+                setNotifAgentDetails((prev) => ({ ...prev, email: e.target.value }));
+                if (errors.email) setErrors((prev) => ({ ...prev, email: '' }));
+              }}
+              value={notifAgentDetials.email}
+              errorMessage={errors.email}
+            />
+            <PhoneInputField
+              label="Mobile Number"
+              placeholder="Mobile Number"
+              name="mobile"
+              required
+              value={notifAgentDetials.phoneCode + notifAgentDetials.phoneNumber}
+              handlePhoneChange={handlePhoneChange}
+              phoneError={errors.phoneNumber}
+            />
           </div>
         </div>
       </div>
@@ -157,19 +156,18 @@ const AddNotifAgent = () => {
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className="block text-primary">Access Settings</span>
           </div>
-          <div className="w-full">
-            <div className="w-full">
-              <MultiSelectCheckbox
-                options={availableSites.map((site) => ({ name: `${site.name} (${site.host})`, _id: site._id }))}
-                label="Select Sites"
-                onChange={(selected) => {
-                  setNotifAgentDetails((prev) => ({ ...prev, sites: selected }));
-                  if (errors.sites) setErrors((prev) => ({ ...prev, sites: '' }));
-                }}
-                selected={notifAgentDetials.sites}
-                error={errors.sites}
-              />
-            </div>
+          <div className="w-full flex flex-col gap-y-5">
+            <MultiSelectCheckbox
+              options={availableSites.map((site) => ({ name: `${site.name} (${site.host})`, _id: site._id }))}
+              formLabel={'Select Sites'}
+              label="Sites"
+              onChange={(selected) => {
+                setNotifAgentDetails((prev) => ({ ...prev, sites: selected }));
+                if (errors.sites) setErrors((prev) => ({ ...prev, sites: '' }));
+              }}
+              selected={notifAgentDetials.sites}
+              error={errors.sites}
+            />
           </div>
         </div>
       </div>
@@ -178,7 +176,7 @@ const AddNotifAgent = () => {
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className="block text-primary">Account Status</span>
           </div>
-          <div className="w-full">
+          <div className="w-full flex flex-col gap-y-5">
             <ToggleComponent
               label={'Is Agent Blocked?'}
               isEnableState={notifAgentDetials.isBlocked}

@@ -1,16 +1,16 @@
 import { useState } from 'react';
-import { formatDateTime } from '../../utils/dateFormats';
 import { IoMdAdd } from 'react-icons/io';
+import { formatDateTime } from '../../utils/dateFormats';
 import TableComponent from '../../atoms/table/Table';
 import { updateTestimonialSitesApi, updateTestimonialStatusApi } from '../../apis/testimonial-apis';
 import NoteComponent from '../../atoms/common/NoteComponent';
 import { testimonialListNote } from './TestimonialNotes';
 import TruncatableFieldToolTip from '../../atoms/common/TruncatableFeildToolTip';
 import TableHeader from '../../atoms/table/TableHeader';
-import { useColor } from '../../contexts/contexts/ColorContext';
+import useColorContext from '../../hooks/useColorContext';
 
 const TestimonialList = () => {
-  const { isDarkMode } = useColor();
+  const { isDarkMode } = useColorContext();
   const [testimonials, setTestimonials] = useState([]);
 
   const rows = testimonials.map((testimonial) => {

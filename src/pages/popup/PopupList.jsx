@@ -1,17 +1,17 @@
-import { formatDateTime } from '../../utils/dateFormats';
-import { IoMdAdd } from 'react-icons/io';
-import TableComponent from '../../atoms/table/Table';
 import { useState } from 'react';
+import { IoMdAdd } from 'react-icons/io';
+import { AiOutlineApi } from 'react-icons/ai';
+import { formatDateTime } from '../../utils/dateFormats';
+import TableComponent from '../../atoms/table/Table';
 import { deletePopupApi, duplicatePopupApi, updatePopupStatusApi } from '../../apis/popup-apis';
 import NoteComponent from '../../atoms/common/NoteComponent';
 import { listPopupNote } from './PopupNotes';
-import { AiOutlineApi } from 'react-icons/ai';
 import TruncatableFieldToolTip from '../../atoms/common/TruncatableFeildToolTip';
 import TableHeader from '../../atoms/table/TableHeader';
-import { useColor } from '../../contexts/contexts/ColorContext';
+import useColorContext from '../../hooks/useColorContext';
 
 const PopupList = () => {
-  const { isDarkMode } = useColor();
+  const { isDarkMode } = useColorContext();
   const [popups, setPopups] = useState([]);
 
   const rows = popups.map((popup) => {

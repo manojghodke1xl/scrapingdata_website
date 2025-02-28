@@ -1,5 +1,4 @@
 import { IoCloseSharp } from 'react-icons/io5';
-import { useColor } from '../../contexts/contexts/ColorContext';
 
 const CommonModal = ({ isModalVisible, onConfirm, onCancel, setModalVisibility, label, message }) => {
   if (!isModalVisible) return null;

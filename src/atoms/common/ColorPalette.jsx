@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
 import { VscSymbolColor } from 'react-icons/vsc';
 import { GrCheckmark } from 'react-icons/gr';
-import { colors } from '../../utils/themeColors.js';
-import { useColor } from '../../contexts/contexts/ColorContext.jsx';
-import useGlobalContext from '../../hooks/useGlobalContext.jsx';
+import { colors } from '../../utils/themeColors';
+import useGlobalContext from '../../hooks/useGlobalContext';
+import useColorContext from '../../hooks/useColorContext';
 
 const ColorPalette = ({ title = 'Color Palette', onColorChange }) => {
   const { auth } = useGlobalContext();
-  const { handleColorChange, isDarkMode } = useColor();
+  const { handleColorChange, isDarkMode } = useColorContext();
   const [selectedColor, setSelectedColor] = useState(
     auth.theme?.primaryColor || {
       name: 'Blue',
@@ -29,7 +29,7 @@ const ColorPalette = ({ title = 'Color Palette', onColorChange }) => {
   // Send default color to parent on mount
   useEffect(() => {
     if (onColorChange) onColorChange(selectedColor);
-  }, [onColorChange, selectedColor]); 
+  }, [onColorChange, selectedColor]);
 
   const handleColorSelect = (color) => {
     setSelectedColor(color);

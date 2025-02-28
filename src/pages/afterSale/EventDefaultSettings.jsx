@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import FormButtons from '../../atoms/formFields/FormButtons';
 import useGlobalContext from '../../hooks/useGlobalContext';
 import MultiSelectCheckbox from '../../atoms/formFields/MultiSelectCheckBox';
@@ -6,6 +6,7 @@ import DropDown from '../../atoms/formFields/DropDown';
 import { showNotification } from '../../utils/showNotification';
 import { addAfterSaleApi, getAfterSaleTemplateApi } from '../../apis/after-sale-apis';
 import { IoCloseSharp } from 'react-icons/io5';
+import { handleTimeConversion } from '../../constants/comon';
 
 const EventDefaultSettings = () => {
   const { isLoading, setLoading } = useGlobalContext();
@@ -60,19 +61,6 @@ const EventDefaultSettings = () => {
 
       return updated;
     });
-  };
-
-  const handleTimeConversion = (value, unit) => {
-    const msConversions = {
-      Seconds: 1000,
-      Minutes: 60 * 1000,
-      Hours: 60 * 60 * 1000,
-      Days: 24 * 60 * 60 * 1000,
-      Weeks: 7 * 24 * 60 * 60 * 1000,
-      Months: 30 * 24 * 60 * 60 * 1000,
-      Years: 365 * 24 * 60 * 60 * 1000
-    };
-    return value * msConversions[unit];
   };
 
   const handleCustomScheduleChange = (value, unit, index) => {
