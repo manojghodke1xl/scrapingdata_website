@@ -1,12 +1,15 @@
-import { IoMdAdd } from 'react-icons/io';
-import TableComponent from '../../../atoms/table/Table';
 import { useState } from 'react';
+import { IoMdAdd } from 'react-icons/io';
+import { IoMdRefresh } from 'react-icons/io';
+import TableComponent from '../../../atoms/table/Table';
 import { formatDateTime } from '../../../utils/dateFormats';
 import { deleteWhatsAppTemplateApi, getWhatsAppTemplateApprovalApi, getWhatsAppTemplateRefreshApi } from '../../../apis/templates/template-apis';
 import TruncatableFieldToolTip from '../../../atoms/common/TruncatableFeildToolTip';
 import TableHeader from '../../../atoms/table/TableHeader';
-import { IoMdRefresh } from 'react-icons/io';
+import useColorContext from '../../../hooks/useColorContext';
+
 const WhatsAppTemplateList = () => {
+  const { isDarkMode } = useColorContext();
   const [whatsAppTemplates, setWhatsAppTemplates] = useState([]);
   const [fetchRefresh, setFetchRefresh] = useState(false);
 
@@ -29,19 +32,23 @@ const WhatsAppTemplateList = () => {
       status: status ? (
         <div
           className={`rounded-xl ${
-            status === 'APPROVED' ? `bg-lightgreen text-success` : status === 'REJECTED' ? 'bg-fadedred text-failed' : 'bg-fadeyellow text-pending'
+            status === 'APPROVED'
+              ? `${isDarkMode ? 'border border-success' : 'bg-lightgreen'} text-success`
+              : status === 'REJECTED'
+              ? `${isDarkMode ? 'border border-failed ' : 'bg-fadedred'} text-failed`
+              : `${isDarkMode ? 'border border-pending' : 'bg-fadeyellow'} text-pending`
           } px-2 py-1 w-fit flex gap-2 items-center`}
         >
           <span className={`min-w-[8px] min-h-[8px] rounded-full ${status === 'APPROVED' ? 'bg-green' : 'bg-pending'}`}></span>
           <span>{status}</span>
           {status !== 'APPROVED' && status !== 'REJECTED' && (
-            <span onClick={() => whatsappRefresh(_id)} className="">
+            <span onClick={() => whatsappRefresh(_id)}>
               <IoMdRefresh />
             </span>
           )}
         </div>
       ) : (
-        <span onClick={() => whatsappRefresh(_id)} className="">
+        <span onClick={() => whatsappRefresh(_id)}>
           <IoMdRefresh />
         </span>
       ),
@@ -62,7 +69,6 @@ const WhatsAppTemplateList = () => {
                 selectable={true}
                 siteModule={'whats-app-templates'}
                 headers={[
-                  { label: 'Sr. No.', key: 'srno' },
                   { label: 'Name', key: 'name' },
                   { label: 'WhatsApp Template Name', key: 'whatsAppTemplateName' },
                   { label: 'Message', key: 'message' },

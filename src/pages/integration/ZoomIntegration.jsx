@@ -22,8 +22,8 @@ const ZoomIntegration = () => {
 
   const validate = () => {
     const newErrors = {};
-    if (!zoomDetails.clientId) newErrors.clientId = 'Client Id is required';
-    if (!zoomDetails.clientSecret) newErrors.clientSecret = 'Client Secret is required';
+    if (!zoomDetails.clientId) newErrors.clientId = 'Client Id is required.';
+    if (!zoomDetails.clientSecret) newErrors.clientSecret = 'Client Secret is required.';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };

@@ -31,7 +31,6 @@ const SmtpList = () => {
                 selectable={true}
                 siteModule={'smtp'}
                 headers={[
-                  { label: 'Sr. No.', key: 'srno' },
                   { label: 'Name', key: 'name' },
                   { label: 'Host', key: 'host' },
                   { label: 'Created Date', key: 'createdAt' },

@@ -10,7 +10,7 @@ const Checkbox = ({ id, checked, onChange, labelText, labelProps = {}, checkboxP
           checked={checked}
           onChange={onChange}
           disabled={disabled}
-          className={`before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-sm border border-primary transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-secondary checked:bg-primary-faded checked:before:bg-gray-100  focus:outline-none ${
+          className={`before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-sm border border-primary transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-secondary checked:bg-primary-faded checked:before:bg-secondary focus:outline-none disabled:cursor-not-allowed ${
             checkboxProps.className || ''
           }`}
           {...checkboxProps}

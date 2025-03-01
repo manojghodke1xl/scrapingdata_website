@@ -28,7 +28,6 @@ const BulkImport = ({ config }) => {
   });
 
   const headers = [
-    { label: 'Sr. No.', key: 'srno' },
     ...Object.keys(templateFields).map((key) => ({
       label: key.charAt(0).toUpperCase() + key.slice(1),
       key

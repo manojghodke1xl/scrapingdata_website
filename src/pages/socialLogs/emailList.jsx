@@ -18,7 +18,7 @@ const EmailLogList = () => {
       to: <TruncatableFieldToolTip title={'To'} content={to} />,
       subject: <TruncatableFieldToolTip title={'Subject'} content={subject} />,
       message: <TruncatableFieldToolTip title={'Message'} content={message} />,
-      statusCode: (
+      status: (
         <div
           className={`rounded-xl ${
             statusCode === 200
@@ -55,12 +55,11 @@ const EmailLogList = () => {
                 selectable={true}
                 siteModule={'whats-app-templates'}
                 headers={[
-                  { label: 'Sr. No.', key: 'srno' },
                   { label: 'From', key: 'from' },
                   { label: 'To', key: 'to' },
                   { label: 'Subject', key: 'subject' },
                   { label: 'Message', key: 'message' },
-                  { label: 'Status', key: 'statusCode' },
+                  { label: 'Status', key: 'status' },
                   { label: 'Error', key: 'error' },
                   { label: 'Created Date', key: 'createdAt' },
                   { label: 'Updated Date', key: 'updatedAt' }

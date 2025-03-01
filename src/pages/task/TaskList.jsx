@@ -26,7 +26,6 @@ const TaskList = () => {
               <TableComponent
                 selectable={true}
                 headers={[
-                  { label: 'Sr. No.', key: 'srno' },
                   { label: 'Name', key: 'name' },
                   { label: 'Created Date', key: 'createdAt' },
                   { label: 'Updated Date', key: 'updatedAt' }

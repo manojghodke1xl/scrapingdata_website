@@ -54,7 +54,6 @@ const DistributorList = () => {
                 selectable={true}
                 siteModule={'distributors'}
                 headers={[
-                  { label: 'Sr. No.', key: 'srno' },
                   { label: 'Customer Name', key: 'name' },
                   { label: 'Email', key: 'email' },
                   { label: 'Enquiry Service', key: 'service' },

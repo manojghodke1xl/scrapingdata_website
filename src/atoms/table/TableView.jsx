@@ -1,7 +1,9 @@
+import { useState } from 'react';
 import { RxCaretSort } from 'react-icons/rx';
 import TableRowActions from './TableRowActions';
 import Checkbox from '../formFields/Checkbox';
 import useColorContext from '../../hooks/useColorContext';
+import { LuPin, LuPinOff } from 'react-icons/lu';
 
 const TableView = ({
   selectable,
@@ -30,13 +32,16 @@ const TableView = ({
   handleDragOver,
   handleDrop,
   handleDragEnd,
-  isDragging,
   sortConfig,
   onSort,
   currentPage,
-  itemsPerPage
+  itemsPerPage,
+  pinnedColumns,
+  hiddenColumns,
+  handleTogglePin
 }) => {
   const { isDarkMode } = useColorContext();
+  const [openDropdownId, setOpenDropdownId] = useState(null);
 
   const getSerialNumber = (index) => {
     const activePage = currentPage || tableState.currentPage;
@@ -44,42 +49,131 @@ const TableView = ({
     return ((activePage - 1) * activeItemsPerPage + (index + 1)).toString().padStart(3, '0');
   };
 
+  const isPinnedLeft = (colId) => pinnedColumns.left.includes(colId);
+  const isPinnedRight = (colId) => hiddenColumns.includes(colId) || colId === 'status';
+  const isHidden = (colId) => hiddenColumns.includes(colId);
+
+  const defaultPinnedWidth = 80;
+
+  const CHECKBOX_WIDTH = 36;
+  const SERIAL_WIDTH = 40;
+  const getInitialOffset = () => (selectable ? CHECKBOX_WIDTH + SERIAL_WIDTH : SERIAL_WIDTH);
+
+  // Compute offsets for left pinned columns
+  const leftPinnedOffsets = {};
+  let currentLeftOffset = getInitialOffset(); // Start after fixed columns
+  headers.forEach((col) => {
+    if (isPinnedLeft(col.key)) {
+      leftPinnedOffsets[col.key] = currentLeftOffset;
+      currentLeftOffset += col.width || defaultPinnedWidth;
+    }
+  });
+
+  // Compute offsets for right pinned columns (iterate in reverse order)
+  const rightPinnedOffsets = {};
+  let currentRightOffset = actions ? 80 : 0; // Start with action column width if it exists
+  [...headers].reverse().forEach((col) => {
+    if (col.key === 'status' || isPinnedRight(col.key)) {
+      rightPinnedOffsets[col.key] = currentRightOffset;
+      currentRightOffset += col.width || defaultPinnedWidth;
+    }
+  });
+
+  const groupHeaders = (headers) => {
+    return headers.reduce(
+      (acc, header) => {
+        if (isPinnedLeft(header.key)) {
+          acc.leftPinned.push(header);
+        } else if (header.key === 'status' || isPinnedRight(header.key)) {
+          acc.rightPinned.push(header);
+        } else {
+          acc.unpinned.push(header);
+        }
+        return acc;
+      },
+      { leftPinned: [], unpinned: [], rightPinned: [] }
+    );
+  };
+
   return (
-    <>
+    <div className="relative overflow-x-auto">
       <table className="min-w-full divide-y divide-primary text-sm">
         <thead>
           <tr>
+            {/* Checkbox column */}
             {selectable && (
-              <th scope="col" className="px-4 py-2 text-left">
+              <th scope="col" className="px-2 py-2 text-left sticky left-0 bg-main z-30 w-[60px]">
                 <Checkbox checked={selectionState.isAllSelected} onChange={handleMasterCheckboxChange} />
               </th>
             )}
-            {headers?.map((header) => (
-              <th
-                key={header.key}
-                draggable={true}
-                onDragStart={(e) => handleDragStart(e, header.key)}
-                onDragOver={handleDragOver}
-                onDrop={(e) => handleDrop(e, header.key)}
-                onDragEnd={handleDragEnd}
-                className={`px-2 text-left font-semibold text-primary cursor-move ${isDragging ? 'opacity-50' : ''}`}
-              >
-                <div className="flex items-center gap-2">
-                  <span className="whitespace-nowrap">{header.label}</span>
-                  {header.sortable !== false && (
-                    <RxCaretSort
-                      size={20}
-                      strokeWidth="0.5"
-                      fill="none"
-                      onClick={() => onSort(header.key)}
-                      className={`cursor-pointer ${sortConfig.key === header.key ? 'text-brand' : ''}`}
-                    />
-                  )}
-                </div>
-              </th>
-            ))}
+
+            {/* Serial number column */}
+            <th scope="col" style={{ left: selectable ? `${CHECKBOX_WIDTH}px` : 0 }} className="px-2 py-2 whitespace-nowrap text-left sticky bg-main z-30 w-[60px]">
+              Sr. No.
+            </th>
+
+            {/* Group and render headers in correct order */}
+            {(() => {
+              const { leftPinned, unpinned, rightPinned } = groupHeaders(headers);
+
+              return [...leftPinned, ...unpinned, ...rightPinned].map((header) => {
+                if (isHidden(header.key)) return null;
+
+                let pinnedStyle = {};
+                let zIndex = 'z-0';
+
+                if (isPinnedLeft(header.key)) {
+                  pinnedStyle = { left: `${leftPinnedOffsets[header.key]}px` };
+                  zIndex = 'z-20';
+                } else if (header.key === 'status' || isPinnedRight(header.key)) {
+                  pinnedStyle = { right: `${rightPinnedOffsets[header.key]}px` };
+                  zIndex = header.key === 'status' ? 'z-10' : 'z-20';
+                }
+
+                const stickyClass = isPinnedLeft(header.key) || isPinnedRight(header.key) ? `sticky ${zIndex} bg-main` : '';
+
+                return (
+                  <th
+                    scope="col"
+                    key={header.key}
+                    draggable={!isPinnedLeft(header.key) && !isPinnedRight(header.key)} // Disable dragging for pinned columns
+                    onDragStart={(e) => handleDragStart(e, header.key)}
+                    onDragOver={handleDragOver}
+                    onDrop={(e) => handleDrop(e, header.key)}
+                    onDragEnd={handleDragEnd}
+                    style={pinnedStyle}
+                    className={`px-2 text-left font-semibold text-primary ${stickyClass}`}
+                  >
+                    <div className="flex items-center gap-1">
+                      <span className="whitespace-nowrap">{header.label}</span>
+                      {header.sortable !== false && (
+                        <RxCaretSort
+                          size={20}
+                          strokeWidth="0.5"
+                          fill="none"
+                          onClick={() => onSort(header.key)}
+                          className={`cursor-pointer ${sortConfig.key === header.key ? 'text-brand' : ''}`}
+                        />
+                      )}
+                      {!['status'].includes(header.key) && (
+                        <button
+                          className="text-xs text-secondary focus:outline-none"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleTogglePin(header.key);
+                          }}
+                        >
+                          {isPinnedLeft(header.key) || isPinnedRight(header.key) ? <LuPinOff size={15} className="text-primary" /> : <LuPin size={15} className="text-primary " />}
+                        </button>
+                      )}
+                    </div>
+                  </th>
+                );
+              });
+            })()}
+
             {actions && (
-              <th scope="col" className="px-2 text-left font-semibold text-primary">
+              <th scope="col" style={{ right: 0 }} className="px-2 text-left font-semibold text-primary sticky bg-main z-30">
                 Actions
               </th>
             )}
@@ -107,32 +201,63 @@ const TableView = ({
               return (
                 <tr key={row.id} className={`border-b border-primary ${selectionState.selectedItems.includes(row.id) ? 'bg-primary-faded' : 'hover:bg-hover'}`}>
                   {selectable && (
-                    <td className="px-4 py-1">
+                    <td className="px-2 py-1 sticky left-0 bg-main z-30 w-[60px]">
                       <Checkbox checked={selectionState.selectedItems.includes(row.id)} onChange={() => handleRowCheckboxChange(row.id)} disabled={row.isSuperAdmin} />
                     </td>
                   )}
-                  {headers.map((header, headerIndex) => (
-                    <td key={`${row.id}-${headerIndex}`} className="px-2 text-secondary whitespace-nowrap font-medium">
-                      {header.key === 'srno' ? getSerialNumber(index) : row[header.key]}
-                    </td>
-                  ))}
+                  <td style={{ left: selectable ? `${CHECKBOX_WIDTH}px` : 0 }} className="px-2 py-1 sticky bg-main z-30 w-[60px]">
+                    {getSerialNumber(index)}
+                  </td>
+
+                  {(() => {
+                    const { leftPinned, unpinned, rightPinned } = groupHeaders(headers);
+
+                    return [...leftPinned, ...unpinned, ...rightPinned].map((header) => {
+                      if (isHidden(header.key)) return null;
+
+                      let pinnedStyle = {};
+                      let zIndex = 'z-0';
+
+                      if (isPinnedLeft(header.key)) {
+                        pinnedStyle = { left: `${leftPinnedOffsets[header.key]}px` };
+                        zIndex = 'z-20';
+                      } else if (header.key === 'status' || isPinnedRight(header.key)) {
+                        pinnedStyle = { right: `${rightPinnedOffsets[header.key]}px` };
+                        zIndex = header.key === 'status' ? 'z-10' : 'z-20';
+                      }
+
+                      const stickyClass = isPinnedLeft(header.key) || isPinnedRight(header.key) ? `sticky ${zIndex} bg-main` : '';
+
+                      return (
+                        <td key={header.key} style={pinnedStyle} className={`whitespace-nowrap px-2 py-1 ${stickyClass}`}>
+                          {row[header.key]}
+                        </td>
+                      );
+                    });
+                  })()}
+
                   {actions && (
-                    <TableRowActions
-                      row={row}
-                      editPath={editPath}
-                      viewPath={viewPath}
-                      appsPath={appsPath}
-                      copyPath={copyPath}
-                      deleteAction={deleteAction}
-                      setSelectionState={setSelectionState}
-                      setModalState={setModalState}
-                      managePackage={managePackage}
-                      managePackagePath={managePackagePath}
-                      sendForApproval={sendForApproval}
-                      sendCertificate={sendCertificate}
-                      sendCertificateUnique={sendCertificateUnique}
-                      approvalApi={approvalApi}
-                    />
+                    <td style={{ right: 0 }} className="sticky bg-main z-30">
+                      <TableRowActions
+                        row={row}
+                        editPath={editPath}
+                        viewPath={viewPath}
+                        appsPath={appsPath}
+                        copyPath={copyPath}
+                        deleteAction={deleteAction}
+                        setSelectionState={setSelectionState}
+                        setModalState={setModalState}
+                        managePackage={managePackage}
+                        managePackagePath={managePackagePath}
+                        sendForApproval={sendForApproval}
+                        sendCertificate={sendCertificate}
+                        sendCertificateUnique={sendCertificateUnique}
+                        approvalApi={approvalApi}
+                        isOpen={openDropdownId === row.id}
+                        openDropdownId={openDropdownId}
+                        onToggle={(id) => setOpenDropdownId(openDropdownId === id ? null : id)}
+                      />
+                    </td>
                   )}
                 </tr>
               );
@@ -149,7 +274,7 @@ const TableView = ({
           )}
         </tbody>
       </table>
-    </>
+    </div>
   );
 };
 

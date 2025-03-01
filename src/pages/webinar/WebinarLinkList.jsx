@@ -28,7 +28,6 @@ const WebinarLinkList = () => {
               <TableComponent
                 selectable={true}
                 headers={[
-                  { label: 'Sr. No.', key: 'srno' },
                   { label: 'Link', key: 'link' },
                   { label: 'Created Date', key: 'createdAt' },
                   { label: 'Updated Date', key: 'updatedAt' }

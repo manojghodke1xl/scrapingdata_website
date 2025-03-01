@@ -56,7 +56,6 @@ const EnquiryList = () => {
                 selectable={true}
                 siteModule={'enquiry'}
                 headers={[
-                  { label: 'Sr. No.', key: 'srno' },
                   { label: 'Customer Name', key: 'name' },
                   { label: 'Email', key: 'email' },
                   { label: 'Enquiry Service', key: 'service' },

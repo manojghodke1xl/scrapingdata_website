@@ -53,7 +53,6 @@ const SegmentList = () => {
               <TableComponent
                 selectable={true}
                 headers={[
-                  { label: 'Sr. No.', key: 'srno' },
                   { label: 'Key', key: 'keys' },
                   { label: 'Website Name', key: 'name' },
                   { label: 'Web Address', key: 'host' },

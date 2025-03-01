@@ -22,8 +22,8 @@ const MailerMagixIntegration = () => {
 
   const validate = () => {
     const newErrors = {};
-    if (!mailerMagixDetails.api_token) newErrors.api_token = 'API Token is required';
-    if (!mailerMagixDetails.list_uid) newErrors.list_uid = 'List ID is required';
+    if (!mailerMagixDetails.api_token) newErrors.api_token = 'API Token is required.';
+    if (!mailerMagixDetails.list_uid) newErrors.list_uid = 'List ID is required.';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };

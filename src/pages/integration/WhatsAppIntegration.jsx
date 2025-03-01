@@ -30,9 +30,9 @@ const WhatsAppIntegration = () => {
   const validate = () => {
     const newErrors = {};
     whatsappDetails.forEach((whatsapp, index) => {
-      if (!whatsapp.phoneNumber) newErrors[index] = { ...newErrors[index], phoneNumber: 'Mobile number is required' };
-      if (!whatsapp.phoneNumberId) newErrors[index] = { ...newErrors[index], phoneNumberId: 'Mobile ID is required' };
-      if (!whatsapp.accessToken) newErrors[index] = { ...newErrors[index], accessToken: 'Token is required' };
+      if (!whatsapp.phoneNumber) newErrors[index] = { ...newErrors[index], phoneNumber: 'Mobile number is required.' };
+      if (!whatsapp.phoneNumberId) newErrors[index] = { ...newErrors[index], phoneNumberId: 'Mobile ID is required.' };
+      if (!whatsapp.accessToken) newErrors[index] = { ...newErrors[index], accessToken: 'Token is required.' };
     });
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;

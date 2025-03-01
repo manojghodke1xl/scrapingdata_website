@@ -10,14 +10,14 @@ const WhatsAppLogList = () => {
   const [whatsAppTemplates, setWhatsAppTemplates] = useState([]);
 
   const rows = whatsAppTemplates?.map((whatsAppTemplate) => {
-    const { _id, requestData, responseData, statusCode, error, createdAt, updatedAt } = whatsAppTemplate;
+    const { _id, statusCode, error, createdAt, updatedAt } = whatsAppTemplate;
 
     return {
       id: _id,
       fromNumber: whatsAppTemplate.fromNumber || '-',
       toNumber: whatsAppTemplate.toNumber || '-',
       message: <TruncatableFieldToolTip title={'Message'} content={whatsAppTemplate.message} />,
-      statusCode: (
+      status: (
         <div
           className={`rounded-xl ${
             statusCode === 200
@@ -48,11 +48,10 @@ const WhatsAppLogList = () => {
                 selectable={true}
                 siteModule={'whats-app-templates'}
                 headers={[
-                  { label: 'Sr. No.', key: 'srno' },
                   { label: 'From Number', key: 'fromNumber' },
                   { label: 'To Number', key: 'toNumber' },
                   { label: 'Message', key: 'message' },
-                  { label: 'Status', key: 'statusCode' },
+                  { label: 'Status', key: 'status' },
                   { label: 'Error', key: 'error' },
                   { label: 'Created Date', key: 'createdAt' },
                   { label: 'Updated Date', key: 'updatedAt' }

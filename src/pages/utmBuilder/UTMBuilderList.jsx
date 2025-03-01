@@ -49,7 +49,6 @@ const UTMBuilderList = () => {
                 selectable={true}
                 siteModule={'utm-builder'}
                 headers={[
-                  { label: 'Sr. No.', key: 'srno' },
                   { label: 'URL', key: 'url' },
                   { label: 'Campaign Id', key: 'campaignId' },
                   { label: 'Name', key: 'name' },

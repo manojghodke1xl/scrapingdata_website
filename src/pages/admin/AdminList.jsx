@@ -31,7 +31,7 @@ const AdminList = () => {
           content={isSuperAdmin ? allSites.map((s) => `${s.name} (${s.host})`).join(', ') : sites.map((s) => `${s.name} (${s.host})`).join(', ')}
         />
       ),
-      isBlocked: (
+      status: (
         <div
           className={`rounded-xl ${
             isBlocked ? `${isDarkMode ? 'border border-failed ' : 'bg-fadedred'} text-failed` : `${isDarkMode ? 'border border-success' : 'bg-lightgreen'} text-success`
@@ -57,11 +57,10 @@ const AdminList = () => {
                 selectable={true}
                 siteModule={'admins'}
                 headers={[
-                  { label: 'Sr. No.', key: 'srno' },
                   { label: 'Admin Name', key: 'name' },
                   { label: 'Admin Email', key: 'email' },
                   { label: 'Sites', key: 'sites' },
-                  { label: 'Status', key: 'isBlocked' },
+                  { label: 'Status', key: 'status' },
                   { label: 'Created Date', key: 'createdAt' },
                   { label: 'Updated Date', key: 'updatedAt' }
                 ]}

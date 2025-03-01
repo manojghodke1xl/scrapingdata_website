@@ -66,7 +66,6 @@ const BookingList = () => {
                 selectable={true}
                 siteModule="booking"
                 headers={[
-                  { label: 'Sr. No.', key: 'srno' },
                   { label: 'Keys', key: 'Keys' },
                   { label: 'Customer Name', key: 'name' },
                   { label: 'Email', key: 'email' },

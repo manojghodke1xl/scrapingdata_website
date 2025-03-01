@@ -33,7 +33,6 @@ const AfterSalesList = () => {
                 siteModule={'after-sales'}
                 selectable={true}
                 headers={[
-                  { label: 'Sr. No.', key: 'srno' },
                   { label: 'After Sales', key: 'afterSale' },
                   { label: 'Category', key: 'target' },
                   { label: 'Follow Ups', key: 'followUps' },

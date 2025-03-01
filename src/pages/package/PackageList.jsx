@@ -53,7 +53,6 @@ const PackageList = () => {
                 selectable={true}
                 siteModule={'packages'}
                 headers={[
-                  { label: 'Sr. No.', key: 'srno' },
                   { label: 'Key', key: 'key' },
                   { label: 'Package Title', key: 'title' },
                   { label: 'Event', key: 'event' },

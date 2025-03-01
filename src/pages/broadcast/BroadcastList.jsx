@@ -33,7 +33,6 @@ const BroadcastList = () => {
                 siteModule={'broadcast'}
                 selectable={true}
                 headers={[
-                  { label: 'Sr. No.', key: 'srno' },
                   { label: 'Reminder', key: 'reminder' },
                   { label: 'Category', key: 'target' },
                   { label: 'Follow Ups', key: 'followUps' },

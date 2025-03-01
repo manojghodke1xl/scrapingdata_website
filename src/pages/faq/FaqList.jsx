@@ -21,7 +21,7 @@ const FaqList = () => {
       sites: <TruncatableFieldToolTip title={'Sites'} content={sites.map((s) => `${s.name} (${s.host})`).join(', ')} />,
       question: <TruncatableFieldToolTip title={'Question'} content={question} />,
       answer: <TruncatableFieldToolTip title={'Answer'} content={answer} />,
-      isActive: (
+      status: (
         <div
           className={`rounded-xl ${
             isActive ? `${isDarkMode ? 'border border-[#027948]' : 'bg-[#ECFDF3]'} text-[#027948]` : `${isDarkMode ? 'border border-[#344054]' : 'bg-[#F2F4F7]'} text-[#344054]`
@@ -47,11 +47,10 @@ const FaqList = () => {
                 selectable={true}
                 siteModule={'faq'}
                 headers={[
-                  { label: 'Sr. No.', key: 'srno' },
                   { label: 'Sites', key: 'sites' },
                   { label: 'Question', key: 'question' },
                   { label: 'Answer', key: 'answer' },
-                  { label: 'Status', key: 'isActive' },
+                  { label: 'Status', key: 'status' },
                   { label: 'Created Date', key: 'createdAt' },
                   { label: 'Updated Date', key: 'updatedAt' }
                 ]}

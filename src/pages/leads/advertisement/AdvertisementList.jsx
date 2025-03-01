@@ -54,7 +54,6 @@ const AdvertisementList = () => {
                 selectable={true}
                 siteModule={'advertisement'}
                 headers={[
-                  { label: 'Sr. No.', key: 'srno' },
                   { label: 'Customer Name', key: 'name' },
                   { label: 'Email', key: 'email' },
                   { label: 'Enquiry Service', key: 'service' },

@@ -127,9 +127,11 @@ const IntegrationHub = () => {
               </div>
               <h1>{item.name}</h1>
               <div className="text-sm text-primary font-normal">{item.description}</div>
-              <div className="flex gap-4 items-center ">
+              <div className="flex gap-4 items-center">
                 <button
-                  className="w-fit border border-primary p-2 rounded-xl font-normal text-primary disabled:bg-grey disabled:text-secondary "
+                  className={`w-fit border border-primary p-2 rounded-xl font-normal text-primary disabled:bg-grey disabled:text-secondary hover:bg-hover ${
+                    isVerified ? 'cursor-not-allowed' : 'cursor-pointer'
+                  }`}
                   onClick={() => navigate(`/apps/integration/${item.id}`, { state: { integrationData, siteId: id } })}
                   disabled={isVerified || isLoading}
                 >
@@ -137,7 +139,7 @@ const IntegrationHub = () => {
                 </button>
                 {isVerified && (
                   <button
-                    className="w-fit border border-primary p-2 rounded-xl font-normal"
+                    className="w-fit border border-primary p-2 rounded-xl font-normal hover:bg-hover text-primary disabled:bg-grey disabled:text-secondary"
                     onClick={() => navigate(`/apps/integration/${item.id}`, { state: { integrationData, siteId: id } })}
                     disabled={isLoading}
                   >

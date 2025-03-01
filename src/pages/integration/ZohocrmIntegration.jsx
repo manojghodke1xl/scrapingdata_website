@@ -22,8 +22,8 @@ const ZohocrmIntegration = () => {
 
   const validate = () => {
     const newErrors = {};
-    if (!zohocrmDetails.clientId) newErrors.clientId = 'Client Id is required';
-    if (!zohocrmDetails.clientSecret) newErrors.clientSecret = 'Client Secret is required';
+    if (!zohocrmDetails.clientId) newErrors.clientId = 'Client Id is required.';
+    if (!zohocrmDetails.clientSecret) newErrors.clientSecret = 'Client Secret is required.';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };

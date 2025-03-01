@@ -26,7 +26,7 @@ const SiteList = () => {
       keys: <TruncatableCopyFeild content={_id} />,
       name: <TruncatableFieldToolTip title={'Website Name'} content={name} />,
       host: <TruncatableFieldToolTip title={'Web Address'} content={host} />,
-      isActive: (
+      status: (
         <div
           className={`rounded-xl ${
             isActive ? `${isDarkMode ? 'border border-[#027948]' : 'bg-[#ECFDF3]'} text-[#027948]` : `${isDarkMode ? 'border border-[#344054]' : 'bg-[#F2F4F7]'} text-[#344054]`
@@ -61,13 +61,12 @@ const SiteList = () => {
               <TableComponent
                 selectable={true}
                 headers={[
-                  { label: 'Sr. No.', key: 'srno' },
                   { label: 'Key', key: 'keys' },
                   { label: 'Website Name', key: 'name' },
                   { label: 'Web Address', key: 'host' },
-                  { label: 'Status', key: 'isActive' },
                   { label: 'Created Date', key: 'createdAt' },
-                  { label: 'Updated Date', key: 'updatedAt' }
+                  { label: 'Updated Date', key: 'updatedAt' },
+                  { label: 'Status', key: 'status' }
                 ]}
                 tableData={(data) => setSites(data.sites)}
                 rows={rows}

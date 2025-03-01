@@ -21,7 +21,7 @@ const GuidesList = () => {
       exportData: guide,
       title: <TruncatableFieldToolTip title={'Title'} content={title} />,
       sites: <TruncatableFieldToolTip title={'Sites'} content={sites.map((s) => `${s.name} (${s.host})`).join(', ')} />,
-      isActive: (
+      status: (
         <div
           className={`rounded-xl ${
             isActive ? `${isDarkMode ? 'border border-[#027948]' : 'bg-[#ECFDF3]'} text-[#027948]` : `${isDarkMode ? 'border border-[#344054]' : 'bg-[#F2F4F7]'} text-[#344054]`
@@ -57,12 +57,11 @@ const GuidesList = () => {
                 selectable={true}
                 siteModule={'guide'}
                 headers={[
-                  { label: 'Sr. No.', key: 'srno' },
                   { label: 'Title', key: 'title' },
                   { label: 'Sites', key: 'sites' },
-                  { label: 'Status', key: 'isActive' },
                   { label: 'Created Date', key: 'createdAt' },
-                  { label: 'Updated Date', key: 'updatedAt' }
+                  { label: 'Updated Date', key: 'updatedAt' },
+                  { label: 'Status', key: 'status' }
                 ]}
                 tableData={(data) => setGuides(data.guides)}
                 rows={rows}

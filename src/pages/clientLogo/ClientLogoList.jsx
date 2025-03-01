@@ -21,7 +21,7 @@ const ClientLogoList = () => {
       exportData: clientlogo,
       image: <img src={image.url} alt="Company Logo" className="w-8 h-8 rounded" />,
       sites: <TruncatableFieldToolTip title={'Sites'} content={sites.map((s) => `${s.name} (${s.host})`).join(', ')} />,
-      isActive: (
+      status: (
         <div
           className={`rounded-xl ${
             isActive ? `${isDarkMode ? 'border border-[#027948]' : 'bg-[#ECFDF3]'} text-[#027948]` : `${isDarkMode ? 'border border-[#344054]' : 'bg-[#F2F4F7]'} text-[#344054]`
@@ -48,10 +48,9 @@ const ClientLogoList = () => {
                 siteModule={'clientlogo'}
                 search={true}
                 headers={[
-                  { label: 'Sr. No.', key: 'srno' },
                   { label: 'Client Logo', key: 'image' },
                   { label: 'Sites', key: 'sites' },
-                  { label: 'Status', key: 'isActive' },
+                  { label: 'Status', key: 'status' },
                   { label: 'Created Date', key: 'createdAt' },
                   { label: 'Updated Date', key: 'updatedAt' }
                 ]}

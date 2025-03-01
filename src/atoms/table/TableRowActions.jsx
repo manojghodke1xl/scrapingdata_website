@@ -17,7 +17,9 @@ const TableRowActions = ({
   sendForApproval,
   sendCertificate,
   sendCertificateUnique,
-  approvalApi
+  approvalApi,
+  openDropdownId,
+  onToggle
 }) => {
   const navigate = useNavigate();
 
@@ -39,14 +41,19 @@ const TableRowActions = ({
   const availableActions = getActions(row);
 
   return (
-    <td className="flex gap-2 items-center px-6 whitespace-nowrap font-medium text-secondary text-sm">
-      {/* If there are more than 2 actions, show dropdown */}
-      {availableActions.length > 0 ? (
-        <details className="inline-block text-left">
-          <summary className="text-white p-1.5 rounded-xl hover:bg-hover cursor-pointer focus:outline-none">
-            <BsThreeDotsVertical size={20} className="text-secondary hover:text-primary" />
-          </summary>
-          <ul className={`absolute mt-2 right-10 z-40 w-fit rounded-md bg-main shadow-lg border border-primary`}>
+    <td className={`flex gap-2 items-center px-6 whitespace-nowrap font-medium text-secondary text-sm ${openDropdownId === row.id ? 'fixed z-50' : 'sticky z-10 right-0'} bg-main`}>
+      <details className="inline-block text-left">
+        <summary
+          className="text-white p-1.5 rounded-xl hover:bg-hover cursor-pointer focus:outline-none"
+          onClick={(e) => {
+            e.stopPropagation();
+            onToggle(row.id);
+          }}
+        >
+          <BsThreeDotsVertical size={20} className="text-secondary hover:text-primary" />
+        </summary>
+        {openDropdownId === row.id && (
+          <ul className={`absolute -mt-2 right-0 z-50 w-fit rounded-md bg-main shadow-lg border border-primary`}>
             {availableActions.map((action, i) => (
               <button
                 key={i}
@@ -87,10 +94,8 @@ const TableRowActions = ({
               </button>
             ))}
           </ul>
-        </details>
-      ) : (
-        'N/A'
-      )}
+        )}
+      </details>
     </td>
   );
 };

@@ -31,7 +31,6 @@ const FilesList = () => {
                 selectable={true}
                 siteModule={'files'}
                 headers={[
-                  { label: 'Sr. No.', key: 'srno' },
                   { label: 'File Name', key: 'attachments' },
                   { label: 'Sites', key: 'site' },
                   { label: 'Created Date', key: 'createdAt' },

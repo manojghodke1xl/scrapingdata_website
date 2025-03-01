@@ -32,7 +32,6 @@ const SMSTemplateList = () => {
                 selectable={true}
                 siteModule={'sms-templates'}
                 headers={[
-                  { label: 'Sr. No.', key: 'srno' },
                   { label: 'Name', key: 'name' },
                   { label: 'Sites', key: 'site' },
                   { label: 'Created Date', key: 'createdAt' },

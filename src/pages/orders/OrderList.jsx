@@ -47,7 +47,6 @@ const OrderList = () => {
                 selectable={true}
                 siteModule="orders"
                 headers={[
-                  { label: 'Sr. No.', key: 'srno' },
                   { label: 'Customer', key: 'customer' },
                   // { label: 'Product', key: 'product' },
                   { label: 'Status', key: 'status' },

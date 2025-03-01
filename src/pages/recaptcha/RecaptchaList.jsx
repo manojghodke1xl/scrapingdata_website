@@ -22,7 +22,7 @@ const RecaptchaList = () => {
       version: version,
       sitekey: <TruncatableFieldToolTip title={'Title'} content={sitekey} />,
       secretkey: <TruncatableFieldToolTip title={'Title'} content={secretkey} />,
-      isActive: (
+      status: (
         <div
           className={`rounded-xl ${
             isActive ? `${isDarkMode ? 'border border-[#027948]' : 'bg-[#ECFDF3]'} text-[#027948]` : `${isDarkMode ? 'border border-[#344054]' : 'bg-[#F2F4F7]'} text-[#344054]`
@@ -48,12 +48,11 @@ const RecaptchaList = () => {
                 selectable={true}
                 siteModule={'recaptcha'}
                 headers={[
-                  { label: 'Sr. No.', key: 'srno' },
                   { label: 'Sites', key: 'sites' },
                   { label: 'Version', key: 'version' },
                   { label: 'site Key', key: 'sitekey' },
                   { label: 'Secret Key', key: 'secretkey' },
-                  { label: 'Status', key: 'isActive' },
+                  { label: 'Status', key: 'status' },
                   { label: 'Created Date', key: 'createdAt' },
                   { label: 'Updated Date', key: 'updatedAt' }
                 ]}

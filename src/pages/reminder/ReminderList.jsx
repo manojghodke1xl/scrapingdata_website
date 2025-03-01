@@ -33,7 +33,6 @@ const ReminderList = () => {
                 siteModule={'after-sales'}
                 selectable={true}
                 headers={[
-                  { label: 'Sr. No.', key: 'srno' },
                   { label: 'Reminder', key: 'reminder' },
                   { label: 'Category', key: 'target' },
                   { label: 'Follow Ups', key: 'followUps' },

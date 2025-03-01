@@ -56,7 +56,6 @@ const FeedbackList = () => {
                 selectable={true}
                 siteModule={'feedback'}
                 headers={[
-                  { label: 'Sr. No.', key: 'srno' },
                   { label: 'Customer Name', key: 'name' },
                   { label: 'Email', key: 'email' },
                   { label: 'Feedback Service', key: 'service' },

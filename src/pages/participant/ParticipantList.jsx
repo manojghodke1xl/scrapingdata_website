@@ -87,7 +87,6 @@ const ParticipantList = () => {
                 siteModule={'participant'}
                 actions={true}
                 headers={[
-                  { label: 'Sr. No.', key: 'srno' },
                   { label: 'Name', key: 'name' },
                   { label: 'Email', key: 'email' },
                   { label: 'City', key: 'city' },

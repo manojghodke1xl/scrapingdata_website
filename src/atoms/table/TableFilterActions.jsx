@@ -1,6 +1,7 @@
 import { MdDeleteForever } from 'react-icons/md';
 import StatusFilter from '../filter/StatusFilter';
 import { CiImport } from 'react-icons/ci';
+import TableColumnSelector from './TableColumnSelector';
 
 const TableFilterActions = ({
   deleteBtn,
@@ -14,7 +15,10 @@ const TableFilterActions = ({
   setModalState,
   statuses,
   handleStatusChange,
-  handleClearFilter
+  handleClearFilter,
+  headers,
+  hiddenColumns,
+  setHiddenColumns
 }) => {
   return (
     <>
@@ -57,16 +61,15 @@ const TableFilterActions = ({
         </button>
       )}
       {exportBtn && (
-        <>
-          <button
-            onClick={() => setModalState((prev) => ({ ...prev, isExportModelOpen: true }))}
-            className="sm:w-fit text-primary font-normal hover:bg-hover rounded-xl border border-primary py-2 px-3 sm:px-2 sm:py-2 md:px-3 whitespace-nowrap flex gap-1 sm:gap-2"
-          >
-            <CiImport size={20} strokeWidth="1.2" fill="none" />
-            <span className="sm:text-base text-sm">Export</span>
-          </button>
-        </>
+        <button
+          onClick={() => setModalState((prev) => ({ ...prev, isExportModelOpen: true }))}
+          className="sm:w-fit text-primary font-normal hover:bg-hover rounded-xl border border-primary py-2 px-3 sm:px-2 sm:py-2 md:px-3 whitespace-nowrap flex gap-1 sm:gap-2"
+        >
+          <CiImport size={20} strokeWidth="1.2" fill="none" />
+          <span className="sm:text-base text-sm">Export</span>
+        </button>
       )}
+      <TableColumnSelector allColumns={headers} hiddenColumns={hiddenColumns} onHiddenColumnsChange={setHiddenColumns} />
       {isFilterActive && (
         <button
           className="sm:w-fit text-primary font-normal hover:bg-hover rounded-xl border border-primary py-2 px-3 sm:px-2 sm:py-2 md:px-3 whitespace-nowrap flex gap-1 sm:gap-2 text-sm sm:text-base"

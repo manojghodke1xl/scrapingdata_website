@@ -77,12 +77,12 @@ const AddCaseStudy = () => {
 
   const validate = () => {
     const newErrors = {};
-    if (!caseStudyDetails.title.trim()) newErrors.title = 'Title is required';
-    if (!caseStudyDetails.sites.length) newErrors.sites = 'Minimum one site is required';
-    if (!caseStudyDetails.mailSubject.trim()) newErrors.mailSubject = 'Subject is required';
-    if (!caseStudyDetails.mailBody.trim()) newErrors.mailBody = 'Body is required';
-    if (!caseStudyDetails.image) newErrors.image = 'Image is required';
-    if (!caseStudyDetails.pdf) newErrors.pdf = 'PDF is required';
+    if (!caseStudyDetails.title.trim()) newErrors.title = 'Title is required.';
+    if (!caseStudyDetails.sites.length) newErrors.sites = 'Minimum one site is required.';
+    if (!caseStudyDetails.mailSubject.trim()) newErrors.mailSubject = 'Subject is required.';
+    if (!caseStudyDetails.mailBody.trim()) newErrors.mailBody = 'Body is required.';
+    if (!caseStudyDetails.image) newErrors.image = 'Image is required.';
+    if (!caseStudyDetails.pdf) newErrors.pdf = 'PDF is required.';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -135,7 +135,7 @@ const AddCaseStudy = () => {
             />
             <TextareaComponent
               label="Short Description"
-              placeholder="Enter a description..."
+              placeholder="Short description..."
               id="sdesc"
               name="sdesc"
               value={caseStudyDetails.sdesc}
@@ -143,7 +143,7 @@ const AddCaseStudy = () => {
             />
             <TextareaComponent
               label="Long Description"
-              placeholder="Enter a description..."
+              placeholder="Long description..."
               id="ldesc"
               name="ldesc"
               value={caseStudyDetails.ldesc}
@@ -172,7 +172,7 @@ const AddCaseStudy = () => {
             />
             <FileUpload
               logo={<BsFilePdf className="text-primary text-2xl" />}
-              error={errors.image}
+              error={errors.pdf}
               setErrors={setErrors}
               acceptedTypes={['.pdf']}
               fieldName="pdf"

@@ -54,7 +54,6 @@ const FanClubList = () => {
                 selectable={true}
                 siteModule={'fan-club'}
                 headers={[
-                  { label: 'Sr. No.', key: 'srno' },
                   { label: 'Customer Name', key: 'name' },
                   { label: 'Email', key: 'email' },
                   { label: 'Enquiry Service', key: 'service' },

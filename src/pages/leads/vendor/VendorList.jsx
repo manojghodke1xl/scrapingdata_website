@@ -54,7 +54,6 @@ const VendorList = () => {
                 selectable={true}
                 siteModule={'vendors'}
                 headers={[
-                  { label: 'Sr. No.', key: 'srno' },
                   { label: 'Customer Name', key: 'name' },
                   { label: 'Email', key: 'email' },
                   { label: 'Vendor Service', key: 'service' },

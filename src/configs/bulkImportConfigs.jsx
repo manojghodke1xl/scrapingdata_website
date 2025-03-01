@@ -84,7 +84,6 @@ export const participantImportConfig = {
   getResponseHeaders: (data) => {
     if (!data || data.length === 0) return [];
     return [
-      { label: 'Sr. No.', key: 'srno' },
       { label: 'Package', key: 'packageId' },
       { label: 'Currency', key: 'currency' },
       { label: 'Name', key: 'name' },

@@ -45,7 +45,6 @@ const PaymentList = () => {
                 selectable={true}
                 siteModule={'payment'}
                 headers={[
-                  { label: 'Sr. No.', key: 'srno' },
                   { label: 'Participant', key: 'participant' },
                   { label: 'Sites', key: 'site' },
                   { label: 'Event', key: 'event' },

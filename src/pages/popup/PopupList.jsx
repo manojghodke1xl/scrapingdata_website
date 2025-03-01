@@ -23,7 +23,7 @@ const PopupList = () => {
       site: <TruncatableFieldToolTip title={'Sites'} content={`${site?.name} (${site?.host}) `} maxLength={20} />,
       showOnDeviceType: showOnDeviceType === 'mobile' ? 'Mobile' : showOnDeviceType === 'desktop' ? 'Desktop' : 'All',
       contentType: contentType === 'guide' ? 'Guide' : contentType === 'casestudy' ? 'Case Study' : 'Basic',
-      isActive: (
+      status: (
         <div
           className={`rounded-xl ${
             isActive ? `${isDarkMode ? 'border border-[#027948]' : 'bg-[#ECFDF3]'} text-[#027948]` : `${isDarkMode ? 'border border-[#344054]' : 'bg-[#F2F4F7]'} text-[#344054]`
@@ -59,14 +59,13 @@ const PopupList = () => {
                 selectable={true}
                 siteModule={'popup'}
                 headers={[
-                  { label: 'Sr. No.', key: 'srno' },
                   { label: 'Name', key: 'name' },
                   { label: 'Sites', key: 'site' },
                   { label: 'Device Type', key: 'showOnDeviceType' },
                   { label: 'Type', key: 'contentType' },
-                  { label: 'Status', key: 'isActive' },
                   { label: 'Created Date', key: 'createdAt' },
-                  { label: 'Updated Date', key: 'updatedAt' }
+                  { label: 'Updated Date', key: 'updatedAt' },
+                  { label: 'Status', key: 'status' }
                 ]}
                 tableData={(data) => setPopups(data.popups)}
                 rows={rows}

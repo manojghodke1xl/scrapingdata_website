@@ -34,7 +34,6 @@ const EmailTemplateList = () => {
                 selectable={true}
                 siteModule={'email-templates'}
                 headers={[
-                  { label: 'Sr. No.', key: 'srno' },
                   { label: 'Name', key: 'name' },
                   { label: 'Subject', key: 'subject' },
                   { label: 'Body', key: 'body' },

@@ -45,12 +45,11 @@ const PaypalIntegration = () => {
 
   const validate = () => {
     const newErrors = {};
-    if (!paypalDetails.clientId) newErrors.clientId = 'Client Id is required';
-    if (!paypalDetails.clientSecret) newErrors.clientSecret = 'Client Secret is required';
-    if (!paypalDetails.environment) newErrors.environment = 'Environment is required';
-    if (!paypalDetails.redirectUrl?.success) newErrors.redirectUrlsuccess = 'Succes URL is required';
-    if (!paypalDetails.redirectUrl?.failure) newErrors.redirectUrlfailure = 'Failure URL is required';
-
+    if (!paypalDetails.clientId) newErrors.clientId = 'Client Id is required.';
+    if (!paypalDetails.clientSecret) newErrors.clientSecret = 'Client Secret is required.';
+    if (!paypalDetails.environment) newErrors.environment = 'Environment is required.';
+    if (!paypalDetails.redirectUrl?.success) newErrors.redirectUrlsuccess = 'Succes URL is required.';
+    if (!paypalDetails.redirectUrl?.failure) newErrors.redirectUrlfailure = 'Failure URL is required.';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };

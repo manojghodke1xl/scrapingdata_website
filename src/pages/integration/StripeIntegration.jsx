@@ -45,11 +45,11 @@ const StripeIntegration = () => {
 
   const validate = () => {
     const newErrors = {};
-    if (!stripeDetails.publicKey) newErrors.publicKey = 'Public Key is required';
-    if (!stripeDetails.secretKey) newErrors.secretKey = 'Secret Key is required';
-    if (!stripeDetails.environment) newErrors.environment = 'Environment is required';
-    if (!stripeDetails.redirectUrl?.success) newErrors.redirectUrlsuccess = 'Succes URL is required';
-    if (!stripeDetails.redirectUrl?.failure) newErrors.redirectUrlfailure = 'Failure URL is required';
+    if (!stripeDetails.publicKey) newErrors.publicKey = 'Public Key is required.';
+    if (!stripeDetails.secretKey) newErrors.secretKey = 'Secret Key is required.';
+    if (!stripeDetails.environment) newErrors.environment = 'Environment is required.';
+    if (!stripeDetails.redirectUrl?.success) newErrors.redirectUrlsuccess = 'Succes URL is required.';
+    if (!stripeDetails.redirectUrl?.failure) newErrors.redirectUrlfailure = 'Failure URL is required.';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };

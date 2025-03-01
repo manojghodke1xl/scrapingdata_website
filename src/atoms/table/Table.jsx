@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import Pagination from './Pagination';
 import { showNotification } from '../../utils/showNotification';
 import useSetTimeout from '../../hooks/useDebounce';
@@ -105,6 +105,7 @@ const TableComponent = ({
   // State for drag and drop
   const [updatedHeaders, setUpdatedHeaders] = useState(headers);
   const [isDragging, setIsDragging] = useState(false);
+  const [hiddenColumns, setHiddenColumns] = useState([]);
 
   // Sorting state
   const [sortConfig, setSortConfig] = useState({
@@ -112,8 +113,41 @@ const TableComponent = ({
     sortOrder: 'desc'
   });
 
+  const handleTogglePin = useCallback((accessor) => {
+    setUpdatedHeaders((prev) => {
+      const newColumns = [...prev];
+      const index = newColumns.findIndex((col) => col.key === accessor);
+      if (index === -1) return prev;
+
+      const column = { ...newColumns[index] };
+      newColumns.splice(index, 1);
+
+      if (column.pinned === 'left') {
+        column.pinned = undefined;
+        const leftPinnedCount = newColumns.filter((col) => col.pinned === 'left').length;
+        newColumns.splice(leftPinnedCount, 0, column);
+      } else {
+        column.pinned = 'left';
+        const leftPinnedCount = newColumns.filter((col) => col.pinned === 'left').length;
+        newColumns.splice(leftPinnedCount, 0, column);
+      }
+
+      return newColumns;
+    });
+  }, []);
+
+  // Compute pinned columns
+  const pinnedColumns = {
+    left: updatedHeaders.filter((c) => c.pinned === 'left').map((c) => c.key),
+    right: updatedHeaders.filter((c) => c.pinned === 'right').map((c) => c.key)
+  };
+
   // Drag and drop handlers
   const handleDragStart = (e, columnKey) => {
+    if (pinnedColumns.left.includes(columnKey) || pinnedColumns.right.includes(columnKey)) {
+      e.preventDefault();
+      return;
+    }
     e.dataTransfer.setData('columnKey', columnKey);
     setIsDragging(true);
   };
@@ -306,7 +340,7 @@ const TableComponent = ({
     : allSites.filter((site) => site.modules?.some((module) => module[siteModule] === true)).map((site) => ({ name: site.name, _id: site._id }));
 
   return (
-    <div className="overflow-hidden relative">
+    <div className="overflow-hidden">
       <div className="my-4 rounded-xl border border-primary overflow-hidden">
         <div className="w-full flex flex-row sm:flex-row flex-wrap gap-y-4 justify-between items-center px-3 sm:px-6 py-4 border-b border-primary">
           <TableFilter
@@ -345,16 +379,17 @@ const TableComponent = ({
               setExportDropdownOpen={setExportDropdownOpen}
               exportDropdownOpen={exportDropdownOpen}
               handleClearFilter={handleClearFilter}
+              headers={updatedHeaders}
+              hiddenColumns={hiddenColumns}
+              setHiddenColumns={setHiddenColumns}
             />
           </div>
         </div>
         {tableCountLabel && selectionState.selectedItems.length > 0 && (
           <div className="w-full py-2 text-center bg-grey border-b border-primary ">
             <p className="text-secondary">
-              {selectionState.selectedItems.length === tableState.totalCount && 'All'} {selectionState.selectedItems.length} record from this page is selected
-              <a href="#" className="text-brand pl-2">
-                Select all {tableState.totalCount} records from this table
-              </a>
+              {selectionState.selectedItems.length === tableState.totalCount && 'All'} {selectionState.selectedItems.length} record from this page are selected.
+              <span className="text-brand pl-2">Select all {tableState.totalCount} records from this table.</span>
             </p>
           </div>
         )}
@@ -395,6 +430,9 @@ const TableComponent = ({
             onSort={handleSort}
             currentPage={currentPage}
             itemsPerPage={itemsPerPage}
+            handleTogglePin={handleTogglePin}
+            pinnedColumns={pinnedColumns}
+            hiddenColumns={hiddenColumns}
           />
         </div>
         <div className="w-full">

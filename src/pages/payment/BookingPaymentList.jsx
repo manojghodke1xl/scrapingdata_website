@@ -73,7 +73,6 @@ const BookingPaymentList = () => {
                 selectable={true}
                 siteModule={'booking-payments'}
                 headers={[
-                  { label: 'Sr. No.', key: 'srno' },
                   { label: 'Customer Name', key: 'customer' },
                   { label: 'Email', key: 'email' },
                   { label: 'Mobile Number', key: 'phoneNumber' },

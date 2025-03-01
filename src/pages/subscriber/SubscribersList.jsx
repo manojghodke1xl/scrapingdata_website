@@ -53,7 +53,6 @@ const SubscribersList = () => {
                 selectable={true}
                 siteModule={'subscriber'}
                 headers={[
-                  { label: 'Sr. No.', key: 'srno' },
                   { label: 'Name', key: 'name' },
                   { label: 'Email', key: 'email' },
                   { label: 'Sites', key: 'site' },
