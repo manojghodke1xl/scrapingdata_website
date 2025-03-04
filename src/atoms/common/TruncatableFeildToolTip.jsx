@@ -15,7 +15,8 @@ const TruncatableFieldToolTip = ({ content = '', maxLength = 20 }) => {
             ...
           </button>
         ) : (
-          <span>{content || '-'}</span>
+          // <span>{content || '-'}</span>
+          <span>{''}</span>
         )}
       </span>
 

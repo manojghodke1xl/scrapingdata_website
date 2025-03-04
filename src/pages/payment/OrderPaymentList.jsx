@@ -16,7 +16,9 @@ const OrderPaymentList = () => {
       payment: { channel, amount, currency, status, site, coupon },
       products,
       createdAt,
-      updatedAt
+      updatedAt,
+      orderId,
+      address
     } = payment;
 
     const product = products?.map((p) => p.product?.name).join(', ');
@@ -27,7 +29,9 @@ const OrderPaymentList = () => {
       id: _id,
       exportData: payment,
       customer: <TruncatableFieldToolTip content={customer.name} />,
+      orderId: orderId || 'N/A',
       site: <TruncatableFieldToolTip content={`${site?.name} (${site?.host})`} />,
+      address: <TruncatableFieldToolTip content={`${address.addressLine1 + ', ' + address.city + ', ' + address.state + ', ' + address.country} `} />,
       amount: <TruncatableFieldToolTip content={amount} />,
       channel: channel === 'razorpay' ? 'Razorpay' : channel === 'stripe' ? 'Stripe' : 'PayPal',
       products: <TruncatableFieldToolTip content={product ?? '-'} />,
@@ -67,6 +71,9 @@ const OrderPaymentList = () => {
                 headers={[
                   { label: 'Customer Name', key: 'customer' },
                   { label: 'Site', key: 'site' },
+                  { label: 'Order ID', key: 'orderId' },
+                  { label: 'Address', key: 'address' },
+
                   { label: 'Products', key: 'products' },
                   { label: 'Qty', key: 'quantity' },
                   { label: 'Channel', key: 'channel' },
