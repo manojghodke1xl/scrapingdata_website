@@ -55,8 +55,8 @@ const AddPartnerLogo = () => {
 
   const validate = () => {
     const newErrors = {};
-    if (!id && !partnerlogoDetails.images?.length) newErrors.images = 'At least one image is needed';
-    if (partnerlogoDetails.sites.length === 0) newErrors.sites = 'At least one site must be selected';
+    if (!id && !partnerlogoDetails.images?.length) newErrors.images = 'At least one image is needed.';
+    if (partnerlogoDetails.sites.length === 0) newErrors.sites = 'At least one site must be selected.';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -142,11 +142,13 @@ const AddPartnerLogo = () => {
               <ToggleComponent
                 label={'Is Partner Logo Active?'}
                 isEnableState={partnerlogoDetails.isActive}
+                tooltipContent={'If partner logo is not active, it will not be visible on the website.'}
                 setIsEnableState={(value) => setPartnerLogoDetails((prev) => ({ ...prev, isActive: value }))}
               />
               <ToggleComponent
                 label={'Is Partner Logo Global?'}
                 isEnableState={partnerlogoDetails.isGlobal}
+                tooltipContent={'If partner logo is global, it will be visible on all sites.'}
                 setIsEnableState={(value) => setPartnerLogoDetails((prev) => ({ ...prev, isGlobal: value }))}
               />
             </div>

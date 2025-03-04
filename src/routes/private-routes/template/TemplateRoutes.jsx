@@ -19,7 +19,7 @@ const TemplateRoutes = () => {
       <Route path="/email-template-list" element={<EmailTemplateList />} />
       <Route path="/add-email-template" element={<AddEmailTemplate />} />
       <Route path="/edit-email-template/:id" element={<AddEmailTemplate />} />
-      <Route path="/duplicate-email-template/:id" element={<AddEmailTemplate />} />
+      <Route path="/duplicate-email-template/:id?" element={<AddEmailTemplate />} />
 
       {/* SMS Template Routes */}
       <Route path="/sms-template-list" element={<SMSTemplateList />} />

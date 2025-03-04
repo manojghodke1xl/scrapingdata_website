@@ -129,10 +129,10 @@ const AddAfterSale = () => {
 
   const validate = () => {
     const newErrors = {};
-    if (!afterSaleDetails.site) newErrors.site = 'Site is required';
-    if (!afterSaleDetails.target) newErrors.target = 'Target is required';
-    if (afterSaleDetails.target === 'Event' && !afterSaleDetails.refTo) newErrors.refTo = 'Event is required';
-    if (afterSaleDetails.target === 'Product' && !afterSaleDetails.refTo) newErrors.refTo = 'Product is required';
+    if (!afterSaleDetails.site) newErrors.site = 'Site is required.';
+    if (!afterSaleDetails.target) newErrors.target = 'Target is required.';
+    if (afterSaleDetails.target === 'Event' && !afterSaleDetails.refTo) newErrors.refTo = 'Event is required.';
+    if (afterSaleDetails.target === 'Product' && !afterSaleDetails.refTo) newErrors.refTo = 'Product is required.';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };

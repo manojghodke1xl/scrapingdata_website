@@ -374,6 +374,7 @@ const AddProduct = () => {
             <ToggleComponent
               label={'Product up-sell ?'}
               isEnableState={productDetails.upsell}
+              tooltipContent={'When enabled, customers who purchase this product will be recommended to purchase other products you have selected as up-sell products.'}
               setIsEnableState={(e) => setProductDetails((prev) => ({ ...prev, upsell: e, upsellProducts: [] }))}
               errorMessage={errors.upsell}
             />
@@ -390,6 +391,7 @@ const AddProduct = () => {
             <ToggleComponent
               label={'Product cross-sell ?'}
               isEnableState={productDetails.crossSell}
+              tooltipContent={'When enabled, customers who purchase this product will be recommended to purchase other products you have selected as cross-sell products.'}
               setIsEnableState={(e) => setProductDetails((prev) => ({ ...prev, crossSell: e, crossSellProducts: [] }))}
               errorMessage={errors.crossSell}
             />
@@ -407,6 +409,7 @@ const AddProduct = () => {
             <ToggleComponent
               label={'Product post-purchase ?'}
               isEnableState={productDetails.postPurchase}
+              tooltipContent={'When enabled, customers who purchase this product will be recommended to purchase other products you have selected as post-purchase products.'}
               setIsEnableState={(e) => setProductDetails((prev) => ({ ...prev, postPurchase: e, postPurchaseProducts: [] }))}
               errorMessage={errors.postPurchase}
             />
@@ -452,6 +455,7 @@ const AddProduct = () => {
               <ToggleComponent
                 label={'Manage Inventory'}
                 isEnableState={productDetails.manageInventry}
+                tooltipContent={'When enabled, you can track the stock of your product.'}
                 setIsEnableState={(e) => setProductDetails((prev) => ({ ...prev, manageInventry: e, stock: 0, inStock: false }))}
                 errorMessage={errors.manageInventry}
               />
@@ -460,6 +464,7 @@ const AddProduct = () => {
             <ToggleComponent
               label={'Product on Sale ?'}
               isEnableState={productDetails.onSale}
+              tooltipContent={'When enabled, you can set a sale price and sale end date for your product.'}
               setIsEnableState={(e) => setProductDetails((prev) => ({ ...prev, onSale: e, salePrice: {}, saleEndDate: '' }))}
               errorMessage={errors.onSale}
             />
@@ -666,6 +671,7 @@ const AddProduct = () => {
                 <ToggleComponent
                   label={'In Stock'}
                   isEnableState={productDetails.inStock}
+                  tooltipContent={'If product is in stock, it will be visible to the users.'}
                   setIsEnableState={(e) => setProductDetails((prev) => ({ ...prev, inStock: e }))}
                   errorMessage={errors.inStock}
                 />

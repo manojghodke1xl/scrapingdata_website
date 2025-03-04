@@ -96,7 +96,7 @@ const AddEmailTemplate = () => {
     try {
       let fileIds = [];
       if (attachments.length > 0) fileIds = await uploadMultipleCustomFiles(attachments);
-      const payload = { ...emailTemplate, files: [...emailTemplate.files, ...fileIds], fileId: files._id };
+      const payload = { ...emailTemplate, files: [...emailTemplate.files, ...fileIds], fileId: files?._id };
       const { status, data } = await (id ? (isDuplicate ? addEmailTemplateApi(payload) : updateEmailTemplateApi(id, payload)) : addEmailTemplateApi(payload));
       if (status) {
         showNotification('success', data.message);
@@ -238,8 +238,6 @@ const AddEmailTemplate = () => {
                 name="mailBody"
                 value={emailTemplate.body}
                 onChange={(e) => setEmailTemplate((prev) => ({ ...prev, body: e.target.value }))}
-                // value={emailContent}
-                // onChange={(e) => setEmailContent(e.target.value)}
                 errorMessage={errors.body}
               />
             </div>

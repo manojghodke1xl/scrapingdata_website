@@ -54,9 +54,9 @@ const AddRecaptcha = () => {
 
   const validate = () => {
     const newErrors = {};
-    if (!recaptcha.sitekey.trim()) newErrors.sitekey = 'Site key is required';
-    if (!recaptcha.secretkey.trim()) newErrors.secretkey = 'Secret key is required';
-    if (!recaptcha.sites.length) newErrors.sites = 'At least one site is required';
+    if (!recaptcha.sitekey.trim()) newErrors.sitekey = 'Site key is required.';
+    if (!recaptcha.secretkey.trim()) newErrors.secretkey = 'Secret key is required.';
+    if (!recaptcha.sites.length) newErrors.sites = 'At least one site is required.';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -120,11 +120,13 @@ const AddRecaptcha = () => {
             <ToggleComponent
               label={'Is reCAPTCHA Active?'}
               isEnableState={recaptcha.isActive}
+              tooltipContent={'If reCAPTCHA is active, it will be visible to the users.'}
               setIsEnableState={(value) => setRecaptcha((prev) => ({ ...prev, isActive: value }))}
             />
             <ToggleComponent
               label={'Is reCAPTCHA Global?'}
               isEnableState={recaptcha.isGlobal}
+              tooltipContent={'If reCAPTCHA is global, it will be visible to all sites.'}
               setIsEnableState={(value) => setRecaptcha((prev) => ({ ...prev, isGlobal: value }))}
             />
           </div>

@@ -18,7 +18,12 @@ const TableFilterActions = ({
   handleClearFilter,
   headers,
   hiddenColumns,
-  setHiddenColumns
+  setHiddenColumns,
+  handleDragStart,
+  handleDragOver,
+  handleDrop,
+  handleDragEnd,
+  isDragging
 }) => {
   return (
     <>
@@ -69,7 +74,16 @@ const TableFilterActions = ({
           <span className="sm:text-base text-sm">Export</span>
         </button>
       )}
-      <TableColumnSelector allColumns={headers} hiddenColumns={hiddenColumns} onHiddenColumnsChange={setHiddenColumns} />
+      <TableColumnSelector
+        allColumns={headers}
+        hiddenColumns={hiddenColumns}
+        onHiddenColumnsChange={setHiddenColumns}
+        handleDragStart={handleDragStart}
+        handleDragOver={handleDragOver}
+        handleDrop={handleDrop}
+        handleDragEnd={handleDragEnd}
+        isDragging={isDragging}
+      />
       {isFilterActive && (
         <button
           className="sm:w-fit text-primary font-normal hover:bg-hover rounded-xl border border-primary py-2 px-3 sm:px-2 sm:py-2 md:px-3 whitespace-nowrap flex gap-1 sm:gap-2 text-sm sm:text-base"

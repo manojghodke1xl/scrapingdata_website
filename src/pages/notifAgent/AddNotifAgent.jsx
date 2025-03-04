@@ -180,6 +180,7 @@ const AddNotifAgent = () => {
             <ToggleComponent
               label={'Is Agent Blocked?'}
               isEnableState={notifAgentDetials.isBlocked}
+              tooltipContent={'If checked, the agent will not receive any notifications.'}
               setIsEnableState={(value) => setNotifAgentDetails((prev) => ({ ...prev, isBlocked: value }))}
             />
           </div>

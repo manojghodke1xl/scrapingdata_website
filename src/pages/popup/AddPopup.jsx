@@ -436,6 +436,7 @@ const AddPopup = () => {
               <ToggleComponent
                 label={'Is Popup Active?'}
                 isEnableState={popupDetails.isActive}
+                tooltipContent={'If popup is active, it will be visible on the website.'}
                 setIsEnableState={(value) => setPopupDetails((prev) => ({ ...prev, isActive: value }))}
               />
             </div>

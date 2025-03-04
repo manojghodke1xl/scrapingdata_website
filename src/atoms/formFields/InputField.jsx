@@ -50,7 +50,7 @@ const FormField = ({
             className="absolute right-3 mt-1 top-1/2 transform -translate-y-1/2 text-secondary hover:text-primary transition-colors"
             onClick={() => setShowPassword(!showPassword)}
           >
-            {showPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
+            {showPassword ? <FaEye className="text-secondary text-xl" /> : <FaEyeSlash className="text-secondary text-xl" />}
           </button>
         )}
       </div>

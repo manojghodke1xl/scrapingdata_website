@@ -123,10 +123,10 @@ const AddBroadcast = () => {
 
   const validate = () => {
     const newErrors = {};
-    if (!broadcastDetails.site) newErrors.site = 'Site is required';
-    if (!broadcastDetails.target) newErrors.target = 'Target is required';
-    if (broadcastDetails.target === 'Event' && !broadcastDetails.refTo) newErrors.refTo = 'Event is required';
-    if (broadcastDetails.target === 'Product' && !broadcastDetails.refTo) newErrors.refTo = 'Product is required';
+    if (!broadcastDetails.site) newErrors.site = 'Site is required.';
+    if (!broadcastDetails.target) newErrors.target = 'Target is required.';
+    if (broadcastDetails.target === 'Event' && !broadcastDetails.refTo) newErrors.refTo = 'Event is required.';
+    if (broadcastDetails.target === 'Product' && !broadcastDetails.refTo) newErrors.refTo = 'Product is required.';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -391,6 +391,7 @@ const AddBroadcast = () => {
 
                 <ToggleComponent
                   label={'Send Instantly?'}
+                  tooltipContent="Toggle to send the broadcast instantly without any delay"
                   isEnableState={item.isSendInstantly}
                   setIsEnableState={(value) => handleVariableChange(index, 'isSendInstantly', value)}
                 />

@@ -60,13 +60,14 @@ const SiteList = () => {
             <div className="p-1.5 min-w-full align-middle">
               <TableComponent
                 selectable={true}
+                siteModule={'site'}
                 headers={[
-                  { label: 'Key', key: 'keys' },
-                  { label: 'Website Name', key: 'name' },
-                  { label: 'Web Address', key: 'host' },
-                  { label: 'Created Date', key: 'createdAt' },
-                  { label: 'Updated Date', key: 'updatedAt' },
-                  { label: 'Status', key: 'status' }
+                  { id: 0, label: 'Key', key: 'keys' },
+                  { id: 1, label: 'Website Name', key: 'name' },
+                  { id: 2, label: 'Web Address', key: 'host' },
+                  { id: 3, label: 'Created Date', key: 'createdAt' },
+                  { id: 4, label: 'Updated Date', key: 'updatedAt' },
+                  { id: 5, label: 'Status', key: 'status' }
                 ]}
                 tableData={(data) => setSites(data.sites)}
                 rows={rows}

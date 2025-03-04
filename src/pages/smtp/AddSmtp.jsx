@@ -132,6 +132,7 @@ const AddSmtp = () => {
               id="port"
               name="port"
               required
+              min={0}
               placeholder="Port"
               onChange={(e) => {
                 setSmtpDetails((prev) => ({ ...prev, port: e.target.value }));

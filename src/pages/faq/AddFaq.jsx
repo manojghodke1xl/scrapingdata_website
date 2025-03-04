@@ -187,8 +187,18 @@ const AddFaq = () => {
             <span className="block text-primary">FAQ Status and Visibility</span>
           </div>
           <div className="w-full flex flex-col gap-y-5">
-            <ToggleComponent label={'Is FAQ Active?'} isEnableState={faqDetails.isActive} setIsEnableState={(value) => setFaqDetails((prev) => ({ ...prev, isActive: value }))} />
-            <ToggleComponent label={'Is FAQ Global?'} isEnableState={faqDetails.isGlobal} setIsEnableState={(value) => setFaqDetails((prev) => ({ ...prev, isGlobal: value }))} />
+            <ToggleComponent
+              label={'Is FAQ Active?'}
+              isEnableState={faqDetails.isActive}
+              tooltipContent={'If FAQ is active, it will be visible to the users.'}
+              setIsEnableState={(value) => setFaqDetails((prev) => ({ ...prev, isActive: value }))}
+            />
+            <ToggleComponent
+              label={'Is FAQ Global?'}
+              isEnableState={faqDetails.isGlobal}
+              tooltipContent={'If FAQ is global, it will be visible to all sites.'}
+              setIsEnableState={(value) => setFaqDetails((prev) => ({ ...prev, isGlobal: value }))}
+            />
           </div>
         </div>
       </div>

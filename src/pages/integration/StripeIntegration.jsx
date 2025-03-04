@@ -138,6 +138,7 @@ const StripeIntegration = () => {
             <ToggleComponent
               label={'Turn On/Off Integration'}
               isEnableState={stripeDetails?.isVerified}
+              tooltipContent={'If you turn off this integration, you will not be able to use it.'}
               setIsEnableState={(value) => setStripeDetails((prev) => ({ ...prev, isVerified: value }))}
             />
           </div>

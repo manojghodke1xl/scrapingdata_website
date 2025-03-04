@@ -8,7 +8,7 @@ export const dashBoardStats = [
     stats: 250
   },
   {
-    field: 'New Feedback',
+    field: 'New Feedbacks',
     stats: 75
   },
   {

@@ -44,8 +44,8 @@ const AddCertificate = () => {
 
   const validate = () => {
     const newErrors = {};
-    if (!certificate.name) newErrors.name = 'Name is required';
-    if (!certificate.image) newErrors.image = 'Ticket SVG is required';
+    if (!certificate.name) newErrors.name = 'Name is required.';
+    if (!certificate.image) newErrors.image = 'Ticket SVG is required.';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };

@@ -288,6 +288,7 @@ const AddPackage = () => {
               <ToggleComponent
                 label={'Product on Sale ?'}
                 isEnableState={packageDetails.onSale}
+                tooltipContent={'If you enable this option, then you can set the product on sale.'}
                 setIsEnableState={(e) => setPackageDetails((prev) => ({ ...prev, onSale: e, salePrice: {}, saleEndDate: '' }))}
                 errorMessage={errors.onSale}
               />
@@ -550,7 +551,12 @@ const AddPackage = () => {
                     />
                   )}
 
-                  <ToggleComponent label={'Do you want to add ticket?'} isEnableState={showTicket} setIsEnableState={(e) => setShowTicket(e)} />
+                  <ToggleComponent
+                    label={'Do you want to add ticket?'}
+                    isEnableState={showTicket}
+                    tooltipContent={'If checked, then you can add a ticket'}
+                    setIsEnableState={(e) => setShowTicket(e)}
+                  />
                   {showTicket && (
                     <DropDown
                       name="Tickets"

@@ -204,11 +204,13 @@ const AddCaseStudy = () => {
             />
             <ToggleComponent
               label={'Is Case Study Active?'}
+              tooltipContent="If case study is active, it will be visible to the users."
               isEnableState={caseStudyDetails.isActive}
               setIsEnableState={(value) => setCaseStudyDetails((prev) => ({ ...prev, isActive: value }))}
             />
             <ToggleComponent
               label={'Is Case Study Global?'}
+              tooltipContent="If case study is global, it will be visible to all sites."
               isEnableState={caseStudyDetails.isGlobal}
               setIsEnableState={(value) => setCaseStudyDetails((prev) => ({ ...prev, isGlobal: value }))}
             />

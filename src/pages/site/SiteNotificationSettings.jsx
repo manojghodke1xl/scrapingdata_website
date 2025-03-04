@@ -180,6 +180,7 @@ const SitesNotificationSettings = () => {
                     bgColor={'bg-grey'}
                     label={'Send User Enquiry Notification'}
                     isEnableState={siteNotification.sendUserEnquiry}
+                    tooltipContent={'This toggle controls whether user enquiry notifications are sent.'}
                     setIsEnableState={(value) =>
                       setSiteNotification((prev) => ({ ...prev, sendUserEnquiry: value, userEnquiryEmailTemplate: null, userEnquriyWhatsAppTemplate: null }))
                     }
@@ -231,6 +232,7 @@ const SitesNotificationSettings = () => {
                     bgColor={'bg-grey'}
                     label={'Send User Subscriber Notification'}
                     isEnableState={siteNotification.sendUserSubscriber}
+                    tooltipContent={'This toggle controls whether user subscriber notifications are sent.'}
                     setIsEnableState={(value) =>
                       setSiteNotification((prev) => ({ ...prev, sendUserSubscriber: value, userSubscriberEmailTemplate: null, userSubscriberWhatsAppTemplate: null }))
                     }
@@ -281,6 +283,7 @@ const SitesNotificationSettings = () => {
                   <ToggleComponent
                     bgColor={'bg-grey'}
                     label={'Send User Donation Notification'}
+                    tooltipContent={'This toggle controls whether user donation notifications are sent.'}
                     isEnableState={siteNotification.sendUserDonation || siteNotification.userDonationEmailTemplate || siteNotification.userDonationWhatsAppTemplate}
                     setIsEnableState={(value) =>
                       setSiteNotification((prev) => ({ ...prev, sendUserDonation: value, userDonationEmailTemplate: null, userDonationWhatsAppTemplate: null }))
@@ -332,6 +335,7 @@ const SitesNotificationSettings = () => {
                   <ToggleComponent
                     bgColor={'bg-grey'}
                     label={'Send User Product Notification'}
+                    tooltipContent={'This toggle controls whether user product notifications are sent.'}
                     isEnableState={siteNotification.sendUserProduct || siteNotification.userProductEmailTemplate || siteNotification.userProductWhatsAppTemplate}
                     setIsEnableState={(value) =>
                       setSiteNotification((prev) => ({ ...prev, sendUserProduct: value, userProductEmailTemplate: null, userProductWhatsAppTemplate: null }))
@@ -384,6 +388,7 @@ const SitesNotificationSettings = () => {
                     bgColor={'bg-grey'}
                     label={'Send Admin Enquiry Notification'}
                     isEnableState={siteNotification.sendAdminEnquiry}
+                    tooltipContent={'This toggle controls whether admin enquiry notifications are sent.'}
                     setIsEnableState={(value) =>
                       setSiteNotification((prev) => ({
                         ...prev,
@@ -472,6 +477,7 @@ const SitesNotificationSettings = () => {
                     bgColor={'bg-grey'}
                     label={'Send Admin Subscriber Notification'}
                     isEnableState={siteNotification.sendAdminSubscriber}
+                    tooltipContent={'This toggle controls whether admin subscriber notifications are sent.'}
                     setIsEnableState={(value) =>
                       setSiteNotification((prev) => ({
                         ...prev,
@@ -559,6 +565,7 @@ const SitesNotificationSettings = () => {
                   <ToggleComponent
                     bgColor={'bg-grey'}
                     label={'Send Admin Product Notification'}
+                    tooltipContent={'This toggle controls whether admin product notifications are sent.'}
                     isEnableState={siteNotification.sendAdminProduct || siteNotification.adminProductEmailTemplate || siteNotification.adminProductWhatsAppTemplate}
                     setIsEnableState={(value) =>
                       setSiteNotification((prev) => ({

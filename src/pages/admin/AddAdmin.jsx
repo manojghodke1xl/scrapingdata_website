@@ -58,10 +58,10 @@ const AddAdmin = () => {
 
   const validate = () => {
     const newErrors = {};
-    if (!adminDetails.email.trim()) newErrors.email = 'Email is required';
-    if (!adminDetails.name.trim()) newErrors.name = 'Name is required';
-    if (!adminDetails.password.trim() && !id) newErrors.password = 'Password is required';
-    if (adminDetails.sites.length === 0) newErrors.sites = 'At least one site must be selected';
+    if (!adminDetails.email.trim()) newErrors.email = 'Email is required.';
+    if (!adminDetails.name.trim()) newErrors.name = 'Name is required.';
+    if (!adminDetails.password.trim() && !id) newErrors.password = 'Password is required.';
+    if (adminDetails.sites.length === 0) newErrors.sites = 'At least one site must be selected.';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -188,6 +188,7 @@ const AddAdmin = () => {
           <div className="w-full flex flex-col gap-y-5">
             <ToggleComponent
               label={'Is Admin Blocked?'}
+              tooltipContent={'If checked, admin will not be able to login.'}
               isEnableState={adminDetails.isBlocked}
               setIsEnableState={(value) => setAdminDetails((prev) => ({ ...prev, isBlocked: value }))}
             />

@@ -157,6 +157,7 @@ const AddSite = () => {
             <ToggleComponent
               label={'Is Site Active?'}
               isEnableState={siteDetails.isActive}
+              tooltipContent={'If Site is active, it will be visible to the users.'}
               setIsEnableState={(value) => setSiteDetails((prev) => ({ ...prev, isActive: value }))}
             />
           </div>

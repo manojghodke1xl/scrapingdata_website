@@ -50,7 +50,13 @@ const AdminSettings = () => {
             <span className=" text-primary">Dark Mode</span>
           </div>
           <div className="w-full">
-            <ToggleComponent label={'Toggle Dark Mode'} isEnableState={isDarkMode} setIsEnableState={setIsDarkMode} onChange={() => toggleDarkMode()} />
+            <ToggleComponent
+              label={'Toggle Dark Mode'}
+              isEnableState={isDarkMode}
+              tooltipContent={'Toggle dark mode'}
+              setIsEnableState={setIsDarkMode}
+              onChange={() => toggleDarkMode()}
+            />
           </div>
         </div>
       </div>

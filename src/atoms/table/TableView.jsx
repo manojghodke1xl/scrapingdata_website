@@ -71,7 +71,7 @@ const TableView = ({
 
   // Compute offsets for right pinned columns (iterate in reverse order)
   const rightPinnedOffsets = {};
-  let currentRightOffset = actions ? 80 : 0; // Start with action column width if it exists
+  let currentRightOffset = actions ? 68 : 0; // Start with action column width if it exists
   [...headers].reverse().forEach((col) => {
     if (col.key === 'status' || isPinnedRight(col.key)) {
       rightPinnedOffsets[col.key] = currentRightOffset;
@@ -82,13 +82,9 @@ const TableView = ({
   const groupHeaders = (headers) => {
     return headers.reduce(
       (acc, header) => {
-        if (isPinnedLeft(header.key)) {
-          acc.leftPinned.push(header);
-        } else if (header.key === 'status' || isPinnedRight(header.key)) {
-          acc.rightPinned.push(header);
-        } else {
-          acc.unpinned.push(header);
-        }
+        if (isPinnedLeft(header.key)) acc.leftPinned.push(header);
+        else if (header.key === 'status' || isPinnedRight(header.key)) acc.rightPinned.push(header);
+        else acc.unpinned.push(header);
         return acc;
       },
       { leftPinned: [], unpinned: [], rightPinned: [] }
@@ -96,7 +92,7 @@ const TableView = ({
   };
 
   return (
-    <div className="relative overflow-x-auto">
+    <div className=" overflow-x-auto">
       <table className="min-w-full divide-y divide-primary text-sm">
         <thead>
           <tr>
@@ -120,23 +116,17 @@ const TableView = ({
                 if (isHidden(header.key)) return null;
 
                 let pinnedStyle = {};
-                let zIndex = 'z-0';
 
-                if (isPinnedLeft(header.key)) {
-                  pinnedStyle = { left: `${leftPinnedOffsets[header.key]}px` };
-                  zIndex = 'z-20';
-                } else if (header.key === 'status' || isPinnedRight(header.key)) {
-                  pinnedStyle = { right: `${rightPinnedOffsets[header.key]}px` };
-                  zIndex = header.key === 'status' ? 'z-10' : 'z-20';
-                }
+                if (isPinnedLeft(header.key)) pinnedStyle = { left: `${leftPinnedOffsets[header.key]}px` };
+                else if (header.key === 'status' || isPinnedRight(header.key)) pinnedStyle = { right: `${rightPinnedOffsets[header.key]}px` };
 
-                const stickyClass = isPinnedLeft(header.key) || isPinnedRight(header.key) ? `sticky ${zIndex} bg-main` : '';
+                const stickyClass = isPinnedLeft(header.key) || isPinnedRight(header.key) ? `sticky bg-main` : '';
 
                 return (
                   <th
                     scope="col"
                     key={header.key}
-                    draggable={!isPinnedLeft(header.key) && !isPinnedRight(header.key)} // Disable dragging for pinned columns
+                    draggable={!isPinnedLeft(header.key) && !isPinnedRight(header.key)}
                     onDragStart={(e) => handleDragStart(e, header.key)}
                     onDragOver={handleDragOver}
                     onDrop={(e) => handleDrop(e, header.key)}
@@ -216,17 +206,11 @@ const TableView = ({
                       if (isHidden(header.key)) return null;
 
                       let pinnedStyle = {};
-                      let zIndex = 'z-0';
 
-                      if (isPinnedLeft(header.key)) {
-                        pinnedStyle = { left: `${leftPinnedOffsets[header.key]}px` };
-                        zIndex = 'z-20';
-                      } else if (header.key === 'status' || isPinnedRight(header.key)) {
-                        pinnedStyle = { right: `${rightPinnedOffsets[header.key]}px` };
-                        zIndex = header.key === 'status' ? 'z-10' : 'z-20';
-                      }
+                      if (isPinnedLeft(header.key)) pinnedStyle = { left: `${leftPinnedOffsets[header.key]}px` };
+                      else if (header.key === 'status' || isPinnedRight(header.key)) pinnedStyle = { right: `${rightPinnedOffsets[header.key]}px` };
 
-                      const stickyClass = isPinnedLeft(header.key) || isPinnedRight(header.key) ? `sticky ${zIndex} bg-main` : '';
+                      const stickyClass = isPinnedLeft(header.key) || isPinnedRight(header.key) ? `sticky bg-main` : '';
 
                       return (
                         <td key={header.key} style={pinnedStyle} className={`whitespace-nowrap px-2 py-1 ${stickyClass}`}>
@@ -237,7 +221,7 @@ const TableView = ({
                   })()}
 
                   {actions && (
-                    <td style={{ right: 0 }} className="sticky bg-main z-30">
+                    <td className={`bg-main ${openDropdownId === row.id ? 'fixed right-20 pr-9 z-10' : 'sticky right-0'} `}>
                       <TableRowActions
                         row={row}
                         editPath={editPath}

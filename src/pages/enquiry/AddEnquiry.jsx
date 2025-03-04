@@ -32,10 +32,10 @@ const AddEnquiry = () => {
 
   const validate = () => {
     const newErrors = {};
-    if (!enquiryDetails.name.trim()) newErrors.name = 'Name is required';
-    if (!enquiryDetails.email.trim()) newErrors.email = 'Email is required';
-    if (!enquiryDetails.mobile.trim()) newErrors.mobile = 'Mobile is required';
-    if (!enquiryDetails.site) newErrors.site = 'Site is required';
+    if (!enquiryDetails.name.trim()) newErrors.name = 'Name is required.';
+    if (!enquiryDetails.email.trim()) newErrors.email = 'Email is required.';
+    if (!enquiryDetails.mobile.trim()) newErrors.mobile = 'Mobile is required.';
+    if (!enquiryDetails.site) newErrors.site = 'Site is required.';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };

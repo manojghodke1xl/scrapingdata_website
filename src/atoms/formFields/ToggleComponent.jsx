@@ -1,14 +1,27 @@
-import { CiCircleInfo } from 'react-icons/ci';
 import useColorContext from '../../hooks/useColorContext';
+import { IoInformationCircleOutline } from 'react-icons/io5';
+import Tooltip from '../common/Tooltip';
 
-const ToggleComponent = ({ divClassName, bgColor, label, description, isEnableState, setIsEnableState, onChange = () => {} }) => {
+const ToggleComponent = ({
+  divClassName,
+  bgColor,
+  label,
+  description,
+  tooltipContent, // Add this prop
+  isEnableState,
+  setIsEnableState,
+  onChange = () => {}
+}) => {
   const { isDarkMode } = useColorContext();
   return (
     <div className={`${divClassName} rounded-xl border border-primary py-2 px-4 w-full flex justify-between items-center ${bgColor} `}>
       <div className="flex flex-col bg">
         <div className="flex gap-2 items-center justify-center">
           <div className="flex gap-2 text-xs sm:text-base items-center font-medium whitespace-nowrap">
-            {label} <CiCircleInfo className="text-secondary text-md" />
+            {label}
+            <Tooltip content={tooltipContent || description}>
+              <IoInformationCircleOutline className="text-lg cursor-help" />
+            </Tooltip>
           </div>
         </div>
         {description && <p className="text-secondary font-normal pt-0.5">{description}</p>}

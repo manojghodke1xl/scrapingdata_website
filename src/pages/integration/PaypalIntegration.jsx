@@ -138,6 +138,7 @@ const PaypalIntegration = () => {
             <ToggleComponent
               label={'Turn On/Off Integration'}
               isEnableState={paypalDetails?.isVerified}
+              tooltipContent={'If you turn off this integration, you will not be able to use it.'}
               setIsEnableState={(value) => setPaypalDetails((prev) => ({ ...prev, isVerified: value }))}
             />
           </div>

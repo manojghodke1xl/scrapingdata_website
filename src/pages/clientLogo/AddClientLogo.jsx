@@ -32,8 +32,8 @@ const AddClientLogo = () => {
 
   const validate = () => {
     const newErrors = {};
-    if (!id && !clientlogoDetails.images?.length) newErrors.images = 'At least one image is needed';
-    if (clientlogoDetails.sites.length === 0) newErrors.sites = 'At least one site must be selected';
+    if (!id && !clientlogoDetails.images?.length) newErrors.images = 'At least one image is needed.';
+    if (clientlogoDetails.sites.length === 0) newErrors.sites = 'At least one site must be selected.';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -145,11 +145,13 @@ const AddClientLogo = () => {
             <ToggleComponent
               label={'Is Client Logo Active?'}
               isEnableState={clientlogoDetails.isActive}
+              tooltipContent="If client logo is active, it will be visible to the users."
               setIsEnableState={(value) => setClientLogoDetails((prev) => ({ ...prev, isActive: value }))}
             />
             <ToggleComponent
               label={'Is Client Logo Global?'}
               isEnableState={clientlogoDetails.isGlobal}
+              tooltipContent="IF client logo global, it will be visible to all sites."
               setIsEnableState={(value) => setClientLogoDetails((prev) => ({ ...prev, isGlobal: value }))}
             />
           </div>

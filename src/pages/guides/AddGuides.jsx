@@ -193,11 +193,13 @@ const AddGuides = () => {
             <ToggleComponent
               label={'Is Guide Active?'}
               isEnableState={guideDetails.isActive}
+              tooltipContent={'If Guide is active, it will be visible to the users.'}
               setIsEnableState={(value) => setGuideDetails((prev) => ({ ...prev, isActive: value }))}
             />
             <ToggleComponent
               label={'Is Guide Global?'}
               isEnableState={guideDetails.isGlobal}
+              tooltipContent={'If Guide is global, it will be visible to all sites.'}
               setIsEnableState={(value) => setGuideDetails((prev) => ({ ...prev, isGlobal: value }))}
             />
           </div>

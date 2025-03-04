@@ -11,6 +11,7 @@ import TableFilter from './TableFilter';
 import TableFilterActions from './TableFilterActions';
 import ExportDataModal from '../modal/ExportDataModal';
 import Checkbox from '../formFields/Checkbox';
+import { createAndUpdateTableColumnApi, getTableColumnApi } from '../../apis/table-apis';
 
 const TableComponent = ({
   selectable,
@@ -101,6 +102,7 @@ const TableComponent = ({
     event: false
   });
   const [exportDropdownOpen, setExportDropdownOpen] = useState(false);
+  const [columnPreferences, setColumnPreferences] = useState({});
 
   // State for drag and drop
   const [updatedHeaders, setUpdatedHeaders] = useState(headers);
@@ -109,9 +111,36 @@ const TableComponent = ({
 
   // Sorting state
   const [sortConfig, setSortConfig] = useState({
-    sortBy: null,
+    sortBy: 'all',
     sortOrder: 'desc'
   });
+
+  // Compute pinned columns
+  const pinnedColumns = useMemo(
+    () => ({
+      left: updatedHeaders.filter((c) => c.pinned === 'left').map((c) => c.key),
+      right: updatedHeaders.filter((c) => c.pinned === 'right').map((c) => c.key)
+    }),
+    [updatedHeaders]
+  );
+
+  // const saveColumnConfig = useCallback(async () => {
+  //   const payload = {
+  //     tableName: siteModule,
+  //     headers,
+  //     updatedHeaders,
+  //     pinnedColumns
+  //   };
+
+  //   console.log('payload', payload);
+
+  //   try {
+  //     const { status, data } = await createAndUpdateTableColumnApi(payload);
+  //     if (status) console.log('data', data);
+  //   } catch (error) {
+  //     showNotification('error', error.message);
+  //   }
+  // }, [headers, pinnedColumns, siteModule, updatedHeaders]);
 
   const handleTogglePin = useCallback((accessor) => {
     setUpdatedHeaders((prev) => {
@@ -135,12 +164,6 @@ const TableComponent = ({
       return newColumns;
     });
   }, []);
-
-  // Compute pinned columns
-  const pinnedColumns = {
-    left: updatedHeaders.filter((c) => c.pinned === 'left').map((c) => c.key),
-    right: updatedHeaders.filter((c) => c.pinned === 'right').map((c) => c.key)
-  };
 
   // Drag and drop handlers
   const handleDragStart = (e, columnKey) => {
@@ -171,8 +194,10 @@ const TableComponent = ({
     }
   };
 
-  const handleDragEnd = () => {
+  const handleDragEnd = async (e) => {
+    e.preventDefault();
     setIsDragging(false);
+    // await saveColumnConfig();
   };
 
   // Sorting handler
@@ -224,6 +249,20 @@ const TableComponent = ({
     filterState.siteId,
     filterState.eventId
   );
+
+  // useEffect(() => {
+  //   (async () => {
+  //     try {
+  //       const { status, data } = await getTableColumnApi(siteModule);
+  //       if (status) {
+  //         setColumnPreferences(data.columnPreference);
+  //         console.log('data', data.columnPreference);
+  //       }
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   })();
+  // }, [siteModule]);
 
   useEffect(() => {
     setRefresh((r) => !r);
@@ -382,6 +421,11 @@ const TableComponent = ({
               headers={updatedHeaders}
               hiddenColumns={hiddenColumns}
               setHiddenColumns={setHiddenColumns}
+              handleDragStart={handleDragStart}
+              handleDragOver={handleDragOver}
+              handleDrop={handleDrop}
+              handleDragEnd={handleDragEnd}
+              isDragging={isDragging}
             />
           </div>
         </div>

@@ -283,6 +283,7 @@ const AddEvent = () => {
             <ToggleComponent
               bgColor={'bg-grey'}
               label={'Send Admin Emails'}
+              tooltipContent={'Send emails to admin about ticket sales, and event cancelation.'}
               isEnableState={eventDetails.sendAdminEmails}
               setIsEnableState={(value) => setEventDetails((prev) => ({ ...prev, sendAdminEmails: value, adminEmails: [] }))}
             />

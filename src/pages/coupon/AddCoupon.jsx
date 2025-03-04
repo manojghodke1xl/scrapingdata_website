@@ -45,15 +45,15 @@ const AddCoupon = () => {
 
   const validate = () => {
     const newErrors = {};
-    if (!couponDetails.code.trim()) newErrors.code = 'Coupon Code is required';
-    if (!couponDetails.info.trim()) newErrors.info = 'Description is required';
-    if (!couponDetails.startDate) newErrors.startDate = 'Start Date is required';
-    if (!couponDetails.endDate) newErrors.endDate = 'End Date is required';
-    if (!couponDetails.type) newErrors.type = 'Coupon Type is required';
-    if (!couponDetails.value) newErrors.value = 'Discount value is required';
+    if (!couponDetails.code.trim()) newErrors.code = 'Coupon Code is required.';
+    if (!couponDetails.info.trim()) newErrors.info = 'Description is required.';
+    if (!couponDetails.startDate) newErrors.startDate = 'Start Date is required.';
+    if (!couponDetails.endDate) newErrors.endDate = 'End Date is required.';
+    if (!couponDetails.type) newErrors.type = 'Coupon Type is required.';
+    if (!couponDetails.value) newErrors.value = 'Discount value is required.';
     if (couponDetails.type === 'percentage' && (couponDetails.value < 1 || couponDetails.value > 100))
-      newErrors.value = 'Discount value should be between 1 and 100 as type is percentage';
-    if (couponDetails.sites.length === 0) newErrors.sites = 'At least one site must be selected';
+      newErrors.value = 'Discount value should be between 1 and 100 as type is percentage.';
+    if (couponDetails.sites.length === 0) newErrors.sites = 'At least one site must be selected.';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -257,22 +257,26 @@ const AddCoupon = () => {
             />
             <ToggleComponent
               label={'Is Coupon Active?'}
+              tooltipContent={'If coupon active is active, it will be visible to the users.'}
               isEnableState={couponDetails.isActive}
               setIsEnableState={(value) => setCouponDetails((prev) => ({ ...prev, isActive: value }))}
             />
             <ToggleComponent
               label={'New User Only?'}
+              tooltipContent={'If new user only is active, it will be visible to the new users only.'}
               isEnableState={couponDetails.firstSub}
               setIsEnableState={(value) => setCouponDetails((prev) => ({ ...prev, firstSub: value }))}
             />
 
             <ToggleComponent
               label={'Use Only Once?'}
+              tooltipContent={'If use only once is active, it will can be used only once.'}
               isEnableState={couponDetails.useOnce}
               setIsEnableState={(value) => setCouponDetails((prev) => ({ ...prev, useOnce: value }))}
             />
             <ToggleComponent
               label={'Is Coupon Global?'}
+              tooltipContent={'If coupon global, it will be visible to all sites.'}
               isEnableState={couponDetails.isGlobal}
               setIsEnableState={(value) => setCouponDetails((prev) => ({ ...prev, isGlobal: value }))}
             />

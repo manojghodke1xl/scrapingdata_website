@@ -217,12 +217,9 @@ const AddTestimonial = () => {
                 <ToggleComponent
                   label={'Switch to Url?'}
                   isEnableState={testimonialDetails.videoBolean}
+                  tooltipContent={'This toggle controls whether the video is uploaded or the video URL is entered.'}
                   setIsEnableState={(value) =>
-                    setTestimonialDetails((prev) => ({
-                      ...prev,
-                      videoBolean: value,
-                      ...(value ? { video: undefined, videoFile: null } : { videoUrl: '' })
-                    }))
+                    setTestimonialDetails((prev) => ({ ...prev, videoBolean: value, ...(value ? { video: undefined, videoFile: null } : { videoUrl: '' }) }))
                   }
                 />
                 {testimonialDetails.videoBolean ? (
@@ -301,11 +298,13 @@ const AddTestimonial = () => {
               <ToggleComponent
                 label={'Is Testimonial Active?'}
                 isEnableState={testimonialDetails.isActive}
+                tooltipContent={'If Testimonial is active, it will be displayed on the site.'}
                 setIsEnableState={(value) => setTestimonialDetails((prev) => ({ ...prev, isActive: value }))}
               />
               <ToggleComponent
                 label={'Is Testimonial Global?'}
                 isEnableState={testimonialDetails.isGlobal}
+                tooltipContent={'If Testimonial is global, it will be displayed on all sites.'}
                 setIsEnableState={(value) => setTestimonialDetails((prev) => ({ ...prev, isGlobal: value }))}
               />
             </div>
