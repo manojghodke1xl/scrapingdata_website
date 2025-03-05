@@ -53,18 +53,18 @@ const SubscribersList = () => {
                 selectable={true}
                 siteModule={'subscriber'}
                 headers={[
-                  { label: 'Name', key: 'name' },
-                  { label: 'Email', key: 'email' },
-                  { label: 'Sites', key: 'site' },
-                  { label: 'URL', key: 'url' },
-                  { label: 'Campaign Name', key: 'campaign' },
-                  { label: 'Medium', key: 'medium' },
-                  { label: 'Source', key: 'source' },
-                  { label: 'Content', key: 'content' },
-                  { label: 'Term', key: 'term' },
-                  { label: 'Campaign ID', key: 'campaignId' },
-                  { label: 'Created Date', key: 'createdAt' },
-                  { label: 'Updated Date', key: 'updatedAt' }
+                  { id: 0, label: 'Name', key: 'name' },
+                  { id: 1, label: 'Email', key: 'email' },
+                  { id: 2, label: 'Sites', key: 'site' },
+                  { id: 3, label: 'URL', key: 'url' },
+                  { id: 4, label: 'Campaign Name', key: 'campaign' },
+                  { id: 5, label: 'Medium', key: 'medium' },
+                  { id: 6, label: 'Source', key: 'source' },
+                  { id: 7, label: 'Content', key: 'content' },
+                  { id: 8, label: 'Term', key: 'term' },
+                  { id: 9, label: 'Campaign ID', key: 'campaignId' },
+                  { id: 10, label: 'Created Date', key: 'createdAt' },
+                  { id: 11, label: 'Updated Date', key: 'updatedAt' }
                 ]}
                 tableData={(data) => setLists(data.lists)}
                 rows={rows}

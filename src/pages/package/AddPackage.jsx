@@ -414,6 +414,7 @@ const AddPackage = () => {
                         type="number"
                         id="currencies-INR"
                         name="currencies-INR"
+                        min={0}
                         placeholder="Price (in INR) is inclusive of tax"
                         onChange={(e) => {
                           setPackageDetails((prev) => ({ ...prev, currencies: { ...prev.currencies, INR: e.target.value } }));
@@ -428,6 +429,7 @@ const AddPackage = () => {
                           type="number"
                           id={`salePrice-INR`}
                           name={`salePrice-INR`}
+                          min={0}
                           placeholder={`Sale Price (INR)`}
                           onChange={(e) => {
                             setPackageDetails((prev) => ({ ...prev, salePrice: { ...prev.salePrice, INR: e.target.value } }));
@@ -446,6 +448,7 @@ const AddPackage = () => {
                         type="number"
                         id="currencies-AED"
                         name="currencies-AED"
+                        min={0}
                         placeholder="Price (in AED) is inclusive of tax"
                         onChange={(e) => {
                           setPackageDetails((prev) => ({ ...prev, currencies: { ...prev.currencies, AED: e.target.value } }));
@@ -461,6 +464,7 @@ const AddPackage = () => {
                           type="number"
                           id={`salePrice-AED`}
                           name={`salePrice-AED`}
+                          min={0}
                           placeholder={`Sale Price (AED)`}
                           onChange={(e) => {
                             setPackageDetails((prev) => ({ ...prev, salePrice: { ...prev.salePrice, AED: e.target.value } }));
@@ -479,6 +483,7 @@ const AddPackage = () => {
                         type="number"
                         id="currencies-USD"
                         name="currencies-USD"
+                        min={0}
                         placeholder="Price (in USD) is inclusive of tax"
                         onChange={(e) => {
                           setPackageDetails((prev) => ({ ...prev, currencies: { ...prev.currencies, USD: e.target.value } }));
@@ -494,6 +499,7 @@ const AddPackage = () => {
                           type="number"
                           id={`salePrice-USD`}
                           name={`salePrice-USD`}
+                          min={0}
                           placeholder={`Sale Price (USD)`}
                           onChange={(e) => {
                             setPackageDetails((prev) => ({ ...prev, salePrice: { ...prev.salePrice, USD: e.target.value } }));
@@ -512,6 +518,7 @@ const AddPackage = () => {
                       id="maxLimit"
                       name="maxLimit"
                       placeholder="Max Limit"
+                      min={0}
                       onChange={(e) => {
                         setPackageDetails((prev) => ({ ...prev, maxLimit: e.target.value }));
                         if (errors.maxLimit) setErrors((prev) => ({ ...prev, maxLimit: '' }));

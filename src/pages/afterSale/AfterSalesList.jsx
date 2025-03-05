@@ -33,12 +33,12 @@ const AfterSalesList = () => {
                 siteModule={'after-sales'}
                 selectable={true}
                 headers={[
-                  { label: 'After Sales', key: 'afterSale' },
-                  { label: 'Category', key: 'target' },
-                  { label: 'Follow Ups', key: 'followUps' },
-                  { label: 'Sites', key: 'site' },
-                  { label: 'Created Date', key: 'createdAt' },
-                  { label: 'Updated Date', key: 'updatedAt' }
+                  { id: 0, label: 'After Sales', key: 'afterSale' },
+                  { id: 1, label: 'Category', key: 'target' },
+                  { id: 2, label: 'Follow Ups', key: 'followUps' },
+                  { id: 3, label: 'Sites', key: 'site' },
+                  { id: 4, label: 'Created Date', key: 'createdAt' },
+                  { id: 5, label: 'Updated Date', key: 'updatedAt' }
                 ]}
                 tableData={(data) => setAfterSales(data.afterSales)}
                 rows={rows}

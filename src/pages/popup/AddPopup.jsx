@@ -293,6 +293,7 @@ const AddPopup = () => {
                 id="afterPageLoad "
                 name="afterPageLoad "
                 placeholder="After Page Load"
+                min={0}
                 onChange={(e) => setPopupDetails((prev) => ({ ...prev, afterPageLoad: e.target.value }))}
                 value={popupDetails.afterPageLoad}
               />
@@ -303,6 +304,7 @@ const AddPopup = () => {
                 id="atPageScroll"
                 name="atPageScroll"
                 placeholder="At Page Scroll"
+                min={0}
                 onChange={(e) => setPopupDetails((prev) => ({ ...prev, atPageScroll: e.target.value }))}
                 value={popupDetails.atPageScroll}
               />
@@ -314,6 +316,7 @@ const AddPopup = () => {
                 id="againWhenCanceled"
                 name="againWhenCanceled"
                 placeholder="Again when Cancelled"
+                min={0}
                 onChange={(e) => setPopupDetails((prev) => ({ ...prev, againWhenCanceled: e.target.value }))}
                 value={popupDetails.againWhenCanceled}
               />

@@ -4,7 +4,6 @@ import useGlobalContext from '../../../hooks/useGlobalContext';
 import { getCareerById } from '../../../apis/leads/career-apis';
 import { showNotification } from '../../../utils/showNotification';
 import CountryFlag from '../../../atoms/common/CountryFlag';
-import { CiCircleInfo } from 'react-icons/ci';
 import { formatDateTime } from '../../../utils/dateFormats';
 
 const ViewCareer = () => {
@@ -57,21 +56,21 @@ const ViewCareer = () => {
           <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div className="mt-5">
               <h1 className="font-semibold text-primary">Customer Name</h1>
-              <p className="text-secondary"> {career?.name || 'No name available'}</p>
+              <p className="text-placeholder font-normal"> {career?.name || 'No name available'}</p>
             </div>
             <div className="mt-5">
               <h1 className="font-semibold text-primary">Email ID</h1>
               {career?.email ? (
-                <a className="text-secondary" href={`mailto:${career.email}`}>
+                <a className="text-placeholder font-normal" href={`mailto:${career.email}`}>
                   {career.email}
                 </a>
               ) : (
-                <p className="text-secondary">No email available</p>
+                <p className="text-placeholder font-normal">No email available</p>
               )}
             </div>
             <div className="mt-5">
               <h1 className="font-semibold text-primary">Country</h1>
-              <p className="text-secondary flex items-center ">
+              <p className="text-placeholder font-normal flex items-center ">
                 <CountryFlag dialingCode={career?.ccode?.startsWith('+') ? career?.ccode.slice(1) : career?.ccode} showName={true} />
               </p>
             </div>
@@ -79,26 +78,26 @@ const ViewCareer = () => {
               <h1 className="font-semibold text-primary">Phone Number</h1>
               {career?.mobile || career?.ccode ? (
                 <a
-                  className="text-secondary"
+                  className="text-placeholder font-normal"
                   href={`tel:${(career.ccode ? (career.ccode.startsWith('+') ? career.ccode : '+' + career.ccode) : '') + career.mobile.replace(/\s+/g, '')}`}
                 >
                   {(career.ccode ? (career.ccode.startsWith('+') ? career.ccode : '+' + career.ccode) : '') + ' ' + career.mobile.replace(/\s+/g, '')}
                 </a>
               ) : (
-                <p className="text-secondary">No phone number available</p>
+                <p className="text-placeholder font-normal">No phone number available</p>
               )}
             </div>
             <div className="mt-5">
               <h1 className="font-semibold text-primary">Service</h1>
-              <p className="text-secondary"> {career?.service || 'No service available'}</p>
+              <p className="text-placeholder font-normal"> {career?.service || 'No service available'}</p>
             </div>
             <div className="mt-5">
               <h1 className="font-semibold text-primary">Subject</h1>
-              <p className="text-secondary"> {career?.suject || 'No subject available'}</p>
+              <p className="text-placeholder font-normal"> {career?.suject || 'No subject available'}</p>
             </div>
             <div className="mt-5">
               <h1 className="font-semibold text-primary">IP Address</h1>
-              <p className="text-secondary"> {career?.ipaddress || 'Not Present'}</p>
+              <p className="text-placeholder font-normal"> {career?.ipaddress || 'Not Present'}</p>
             </div>
           </div>
         </div>
@@ -108,20 +107,18 @@ const ViewCareer = () => {
         <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className=" text-primary">
-              <div className="flex items-center gap-2">
-                Additional Information <CiCircleInfo />
-              </div>
+              <div className="flex items-center gap-2">Additional Information</div>
             </span>
           </div>
           <div className="w-full">
             <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div className="mt-5">
                 <h1 className="font-semibold text-primary">Site Name</h1>
-                <p className="text-secondary"> {career?.site?.name || 'No Site Name available'}</p>
+                <p className="text-placeholder font-normal"> {career?.site?.name || 'No Site Name available'}</p>
               </div>
               <div className="mt-5">
                 <h1 className="font-semibold text-primary">Date & Time</h1>
-                <p className="text-secondary"> {formatDateTime(career?.createdAt) || 'No Date & Time available'}</p>
+                <p className="text-placeholder font-normal"> {formatDateTime(career?.createdAt) || 'No Date & Time available'}</p>
               </div>
             </div>
           </div>
@@ -135,7 +132,7 @@ const ViewCareer = () => {
           </div>
           <div className="w-full mt-5">
             <h1 className="font-semibold text-primary">Message</h1>
-            <p className="text-secondary"> {career?.careerMessage || 'Not Present'}</p>
+            <p className="text-placeholder font-normal"> {career?.careerMessage || 'Not Present'}</p>
           </div>
         </div>
       </div>
@@ -144,19 +141,17 @@ const ViewCareer = () => {
         <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className="block text-primary">
-              <div className="flex items-center gap-2">
-                Request Header Details <CiCircleInfo />
-              </div>
+              <div className="flex items-center gap-2">Request Header Details</div>
             </span>
           </div>
           <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div className="mt-5">
               <h1 className="font-semibold text-primary">Request Header</h1>
-              <p className="text-secondary"> {career?.header || 'No header available'}</p>
+              <p className="text-placeholder font-normal"> {career?.header || 'No header available'}</p>
             </div>
             <div className="mt-5">
               <h1 className="font-semibold text-primary">User Agent String</h1>
-              <p className="text-secondary"> {career?.uastring || 'No User Agent String available'}</p>
+              <p className="text-placeholder font-normal"> {career?.uastring || 'No User Agent String available'}</p>
             </div>
           </div>
         </div>

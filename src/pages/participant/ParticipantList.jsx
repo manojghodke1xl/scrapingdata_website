@@ -87,21 +87,21 @@ const ParticipantList = () => {
                 siteModule={'participant'}
                 actions={true}
                 headers={[
-                  { label: 'Name', key: 'name' },
-                  { label: 'Email', key: 'email' },
-                  { label: 'City', key: 'city' },
-                  { label: 'Country', key: 'country' },
-                  { label: 'Mobile Number', key: 'phoneNumber' },
-                  { label: 'Ticket ID', key: 'ticketId' },
-                  { label: 'Sites', key: 'site' },
-                  { label: 'Event', key: 'event' },
-                  { label: 'Event Date', key: 'eventDate' },
-                  { label: 'Package', key: 'title' },
-                  { label: 'Coupon Code', key: 'couponCode' },
-                  { label: 'Referrer User', key: 'refUser' },
-                  { label: 'Status', key: 'status' },
-                  { label: 'Created Date', key: 'createdAt' },
-                  { label: 'Updated Date', key: 'updatedAt' }
+                  { id: 0, label: 'Name', key: 'name' },
+                  { id: 1, label: 'Email', key: 'email' },
+                  { id: 2, label: 'City', key: 'city' },
+                  { id: 3, label: 'Country', key: 'country' },
+                  { id: 4, label: 'Mobile Number', key: 'phoneNumber' },
+                  { id: 5, label: 'Ticket ID', key: 'ticketId' },
+                  { id: 6, label: 'Sites', key: 'site' },
+                  { id: 7, label: 'Event', key: 'event' },
+                  { id: 8, label: 'Event Date', key: 'eventDate' },
+                  { id: 9, label: 'Package', key: 'title' },
+                  { id: 10, label: 'Coupon Code', key: 'couponCode' },
+                  { id: 11, label: 'Referrer User', key: 'refUser' },
+                  { id: 12, label: 'Status', key: 'status' },
+                  { id: 13, label: 'Created Date', key: 'createdAt' },
+                  { id: 14, label: 'Updated Date', key: 'updatedAt' }
                 ]}
                 tableData={(data) => setParticipants(data.participants)}
                 rows={rows}

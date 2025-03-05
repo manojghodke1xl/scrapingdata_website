@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import useGlobalContext from '../../hooks/useGlobalContext';
 import { showNotification } from '../../utils/showNotification';
-import { CiCircleInfo } from 'react-icons/ci';
 import { formatDateTime } from '../../utils/dateFormats';
 import { viewEnquiryNote } from './EnquiryNotes';
 import NoteComponent from '../../atoms/common/NoteComponent';
@@ -59,21 +58,21 @@ const ViewEnquiry = () => {
           <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div className="mt-5">
               <h1 className="font-semibold text-primary">Customer Name</h1>
-              <p className="text-secondary"> {enquiry?.name || 'No name available'}</p>
+              <p className="text-placeholder font-normal"> {enquiry?.name || 'No name available'}</p>
             </div>
             <div className="mt-5">
               <h1 className="font-semibold text-primary">Email ID</h1>
               {enquiry?.email ? (
-                <a className="text-secondary" href={`mailto:${enquiry.email}`}>
+                <a className="text-placeholder font-normal" href={`mailto:${enquiry.email}`}>
                   {enquiry.email}
                 </a>
               ) : (
-                <p className="text-secondary">No email available</p>
+                <p className="text-placeholder font-normal">No email available</p>
               )}
             </div>
             <div className="mt-5">
               <h1 className="font-semibold text-primary">Country</h1>
-              <p className="text-secondary flex items-center ">
+              <p className="text-placeholder font-normal flex items-center ">
                 <CountryFlag dialingCode={enquiry?.ccode?.startsWith('+') ? enquiry?.ccode.slice(1) : enquiry?.ccode} showName={true} />
               </p>
             </div>
@@ -81,26 +80,26 @@ const ViewEnquiry = () => {
               <h1 className="font-semibold text-primary">Phone Number</h1>
               {enquiry?.mobile || enquiry?.ccode ? (
                 <a
-                  className="text-secondary"
+                  className="text-placeholder font-normal"
                   href={`tel:${(enquiry.ccode ? (enquiry.ccode.startsWith('+') ? enquiry.ccode : '+' + enquiry.ccode) : '') + enquiry.mobile.replace(/\s+/g, '')}`}
                 >
                   {(enquiry.ccode ? (enquiry.ccode.startsWith('+') ? enquiry.ccode : '+' + enquiry.ccode) : '') + ' ' + enquiry.mobile.replace(/\s+/g, '')}
                 </a>
               ) : (
-                <p className="text-secondary">No phone number available</p>
+                <p className="text-placeholder font-normal">No phone number available</p>
               )}
             </div>
             <div className="mt-5">
               <h1 className="font-semibold text-primary">Service</h1>
-              <p className="text-secondary"> {enquiry?.service || 'No service available'}</p>
+              <p className="text-placeholder font-normal"> {enquiry?.service || 'No service available'}</p>
             </div>
             <div className="mt-5">
               <h1 className="font-semibold text-primary">Subject</h1>
-              <p className="text-secondary"> {enquiry?.suject || 'No subject available'}</p>
+              <p className="text-placeholder font-normal"> {enquiry?.suject || 'No subject available'}</p>
             </div>
             <div className="mt-5">
               <h1 className="font-semibold text-primary">IP Address</h1>
-              <p className="text-secondary"> {enquiry?.ipaddress || 'Not Present'}</p>
+              <p className="text-placeholder font-normal"> {enquiry?.ipaddress || 'Not Present'}</p>
             </div>
           </div>
         </div>
@@ -110,20 +109,18 @@ const ViewEnquiry = () => {
         <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className=" text-primary">
-              <div className="flex items-center gap-2">
-                Additional Information <CiCircleInfo />
-              </div>
+              <div className="flex items-center gap-2">Additional Information</div>
             </span>
           </div>
           <div className="w-full">
             <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div className="mt-5">
                 <h1 className="font-semibold text-primary">Site Name</h1>
-                <p className="text-secondary"> {enquiry?.site?.name || 'No Site Name available'}</p>
+                <p className="text-placeholder font-normal"> {enquiry?.site?.name || 'No Site Name available'}</p>
               </div>
               <div className="mt-5">
                 <h1 className="font-semibold text-primary">Date & Time</h1>
-                <p className="text-secondary"> {formatDateTime(enquiry?.createdAt) || 'No Date & Time available'}</p>
+                <p className="text-placeholder font-normal"> {formatDateTime(enquiry?.createdAt) || 'No Date & Time available'}</p>
               </div>
             </div>
           </div>
@@ -137,7 +134,7 @@ const ViewEnquiry = () => {
           </div>
           <div className="w-full mt-5">
             <h1 className="font-semibold text-primary">Message</h1>
-            <p className="text-secondary"> {enquiry?.message || 'Not Present'}</p>
+            <p className="text-placeholder font-normal"> {enquiry?.message || 'Not Present'}</p>
           </div>
         </div>
       </div>
@@ -146,19 +143,17 @@ const ViewEnquiry = () => {
         <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className="block text-primary">
-              <div className="flex items-center gap-2">
-                Request Header Details <CiCircleInfo />
-              </div>
+              <div className="flex items-center gap-2">Request Header Details</div>
             </span>
           </div>
           <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div className="mt-5">
               <h1 className="font-semibold text-primary">Request Header</h1>
-              <p className="text-secondary"> {enquiry?.header || 'No header available'}</p>
+              <p className="text-placeholder font-normal"> {enquiry?.header || 'No header available'}</p>
             </div>
             <div className="mt-5">
               <h1 className="font-semibold text-primary">User Agent String</h1>
-              <p className="text-secondary"> {enquiry?.uastring || 'No User Agent String available'}</p>
+              <p className="text-placeholder font-normal"> {enquiry?.uastring || 'No User Agent String available'}</p>
             </div>
           </div>
         </div>

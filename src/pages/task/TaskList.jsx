@@ -25,10 +25,11 @@ const TaskList = () => {
             <div className="p-1.5 min-w-full align-middle">
               <TableComponent
                 selectable={true}
+                siteModule={'task'}
                 headers={[
-                  { label: 'Name', key: 'name' },
-                  { label: 'Created Date', key: 'createdAt' },
-                  { label: 'Updated Date', key: 'updatedAt' }
+                  { id: 0, label: 'Name', key: 'name' },
+                  { id: 1, label: 'Created Date', key: 'createdAt' },
+                  { id: 2, label: 'Updated Date', key: 'updatedAt' }
                 ]}
                 tableData={(data) => setTasks(data.tasks)}
                 rows={rows}

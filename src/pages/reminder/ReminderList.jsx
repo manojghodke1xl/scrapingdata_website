@@ -33,12 +33,12 @@ const ReminderList = () => {
                 siteModule={'after-sales'}
                 selectable={true}
                 headers={[
-                  { label: 'Reminder', key: 'reminder' },
-                  { label: 'Category', key: 'target' },
-                  { label: 'Follow Ups', key: 'followUps' },
-                  { label: 'Sites', key: 'site' },
-                  { label: 'Created Date', key: 'createdAt' },
-                  { label: 'Updated Date', key: 'updatedAt' }
+                  { id: 0, label: 'Reminder', key: 'reminder' },
+                  { id: 1, label: 'Category', key: 'target' },
+                  { id: 2, label: 'Follow Ups', key: 'followUps' },
+                  { id: 3, label: 'Sites', key: 'site' },
+                  { id: 4, label: 'Created Date', key: 'createdAt' },
+                  { id: 5, label: 'Updated Date', key: 'updatedAt' }
                 ]}
                 tableData={(data) => setReminders(data.reminders)}
                 rows={rows}

@@ -57,12 +57,12 @@ const AdminList = () => {
                 selectable={true}
                 siteModule={'admins'}
                 headers={[
-                  { label: 'Admin Name', key: 'name' },
-                  { label: 'Admin Email', key: 'email' },
-                  { label: 'Sites', key: 'sites' },
-                  { label: 'Status', key: 'status' },
-                  { label: 'Created Date', key: 'createdAt' },
-                  { label: 'Updated Date', key: 'updatedAt' }
+                  { id: 0, label: 'Admin Name', key: 'name' },
+                  { id: 1, label: 'Admin Email', key: 'email' },
+                  { id: 2, label: 'Sites', key: 'sites' },
+                  { id: 3, label: 'Status', key: 'status' },
+                  { id: 4, label: 'Created Date', key: 'createdAt' },
+                  { id: 5, label: 'Updated Date', key: 'updatedAt' }
                 ]}
                 tableData={(data) => setAdmins(data.admins)}
                 rows={rows}

@@ -34,12 +34,12 @@ const ProductList = () => {
                 selectable={true}
                 siteModule={'products'}
                 headers={[
-                  { label: 'Key', key: 'key' },
-                  { label: 'Product Name', key: 'name' },
-                  { label: 'Product Type', key: 'type' },
-                  { label: 'Sites', key: 'site' },
-                  { label: 'Created Date', key: 'createdAt' },
-                  { label: 'Updated Date', key: 'updatedAt' }
+                  { id: 0, label: 'Key', key: 'key' },
+                  { id: 1, label: 'Product Name', key: 'name' },
+                  { id: 2, label: 'Product Type', key: 'type' },
+                  { id: 3, label: 'Sites', key: 'site' },
+                  { id: 4, label: 'Created Date', key: 'createdAt' },
+                  { id: 5, label: 'Updated Date', key: 'updatedAt' }
                 ]}
                 tableData={(data) => setProducts(data.products)}
                 rows={rows}
@@ -48,16 +48,10 @@ const ProductList = () => {
                 pagination={true}
                 actions={true}
                 editPath={'/products/edit-product'}
-                //
-                // copyPath={'/coupon/duplicate-coupon'}
                 search={true}
                 filter={true}
                 deleteBtn={true}
                 filterCategory={[{ id: 0, name: 'Sites' }]}
-                // statuses={[
-                //   { id: 0, name: 'Active', bgColor: '#ECFDF3', color: '#027948', dotColor: '#12B76A' },
-                //   { id: 2, name: 'Inactive', bgColor: '#F2F4F7', color: '#344054', dotColor: '#667085' }
-                // ]}
                 searchCategory={[{ id: 1, name: 'Name' }]}
                 deleteLabel={'Delete Product'}
                 deleteMessage={'Are you sure you want to delete this product?'}
@@ -67,7 +61,6 @@ const ProductList = () => {
           </div>
         </div>
       </div>
-      {/* <NoteComponent note={couponListNote} /> */}
     </div>
   );
 };

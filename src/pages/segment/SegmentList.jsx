@@ -52,13 +52,14 @@ const SegmentList = () => {
             <div className="p-1.5 min-w-full align-middle">
               <TableComponent
                 selectable={true}
+                siteModule={'segment'}
                 headers={[
-                  { label: 'Key', key: 'keys' },
-                  { label: 'Website Name', key: 'name' },
-                  { label: 'Web Address', key: 'host' },
-                  { label: 'Status', key: 'isActive' },
-                  { label: 'Created Date', key: 'createdAt' },
-                  { label: 'Updated Date', key: 'updatedAt' }
+                  { id: 0, label: 'Key', key: 'keys' },
+                  { id: 1, label: 'Website Name', key: 'name' },
+                  { id: 2, label: 'Web Address', key: 'host' },
+                  { id: 3, label: 'Status', key: 'isActive' },
+                  { id: 4, label: 'Created Date', key: 'createdAt' },
+                  { id: 5, label: 'Updated Date', key: 'updatedAt' }
                 ]}
                 tableData={(data) => setSites(data.sites)}
                 rows={rows}

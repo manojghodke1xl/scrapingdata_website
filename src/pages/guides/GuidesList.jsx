@@ -57,11 +57,11 @@ const GuidesList = () => {
                 selectable={true}
                 siteModule={'guide'}
                 headers={[
-                  { label: 'Title', key: 'title' },
-                  { label: 'Sites', key: 'sites' },
-                  { label: 'Created Date', key: 'createdAt' },
-                  { label: 'Updated Date', key: 'updatedAt' },
-                  { label: 'Status', key: 'status' }
+                  { id: 0, label: 'Title', key: 'title' },
+                  { id: 1, label: 'Sites', key: 'sites' },
+                  { id: 2, label: 'Created Date', key: 'createdAt' },
+                  { id: 3, label: 'Updated Date', key: 'updatedAt' },
+                  { id: 4, label: 'Status', key: 'status' }
                 ]}
                 tableData={(data) => setGuides(data.guides)}
                 rows={rows}

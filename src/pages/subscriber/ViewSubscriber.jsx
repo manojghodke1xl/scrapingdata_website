@@ -4,7 +4,6 @@ import useGlobalContext from '../../hooks/useGlobalContext';
 import { showNotification } from '../../utils/showNotification';
 import { getSubscriberById } from '../../apis/leads/subscriber-apis';
 import { formatDateTime } from '../../utils/dateFormats';
-import { CiCircleInfo } from 'react-icons/ci';
 import NoteComponent from '../../atoms/common/NoteComponent';
 import { viewMailingNote } from './MailingNotes';
 
@@ -60,16 +59,16 @@ const ViewSubscriber = () => {
           <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div className="mt-5">
               <h1 className="font-semibold text-primary">Name</h1>
-              <p className="text-secondary"> {mailingList?.name || 'No name available'}</p>
+              <p className="text-placeholder font-normal"> {mailingList?.name || 'No name available'}</p>
             </div>
             <div className="w-full mt-5">
               <h1 className="font-semibold text-primary">Email ID</h1>
               {mailingList?.email ? (
-                <a className="text-secondary" href={`mailto:${mailingList.email}`}>
+                <a className="text-placeholder font-normal" href={`mailto:${mailingList.email}`}>
                   {mailingList.email}
                 </a>
               ) : (
-                <p className="text-secondary">No email available</p>
+                <p className="text-placeholder font-normal">No email available</p>
               )}
             </div>
           </div>
@@ -80,19 +79,17 @@ const ViewSubscriber = () => {
         <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className="block text-primary">
-              <div className="flex items-center gap-2">
-                Request Header Details <CiCircleInfo />
-              </div>
+              <div className="flex items-center gap-2">Request Header Details</div>
             </span>
           </div>
           <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div className="mt-5">
               <h1 className="font-semibold text-primary">Request Header</h1>
-              <p className="text-secondary"> {mailingList?.header || 'No header available'}</p>
+              <p className="text-placeholder font-normal"> {mailingList?.header || 'No header available'}</p>
             </div>
             <div className="mt-5">
               <h1 className="font-semibold text-primary">User Agent String</h1>
-              <p className="text-secondary"> {mailingList?.uastring || 'No User Agent String available'}</p>
+              <p className="text-placeholder font-normal"> {mailingList?.uastring || 'No User Agent String available'}</p>
             </div>
           </div>
         </div>
@@ -107,15 +104,15 @@ const ViewSubscriber = () => {
             <div className="w-full grid grid-cols-1 sm:grid-cols-2">
               <div className="mt-5">
                 <h1 className="font-semibold text-primary">IP Address</h1>
-                <p className="text-secondary"> {mailingList?.ipaddress || 'Not Present'}</p>
+                <p className="text-placeholder font-normal"> {mailingList?.ipaddress || 'Not Present'}</p>
               </div>
               <div className="mt-5">
                 <h1 className="font-semibold text-primary">Site Name</h1>
-                <p className="text-secondary"> {mailingList?.site?.name || 'No Site Name available'}</p>
+                <p className="text-placeholder font-normal"> {mailingList?.site?.name || 'No Site Name available'}</p>
               </div>
               <div className="mt-5">
                 <h1 className="font-semibold text-primary">Date & Time</h1>
-                <p className="text-secondary"> {formatDateTime(mailingList?.createdAt) || 'No Date & Time available'}</p>
+                <p className="text-placeholder font-normal"> {formatDateTime(mailingList?.createdAt) || 'No Date & Time available'}</p>
               </div>
             </div>
           </div>

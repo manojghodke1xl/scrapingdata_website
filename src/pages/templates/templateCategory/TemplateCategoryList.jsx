@@ -30,11 +30,12 @@ const TemplateCategoryList = () => {
             <div className="p-1.5 min-w-full align-middle">
               <TableComponent
                 selectable={true}
+                siteModule={'template-category'}
                 headers={[
-                  { label: 'Key', key: 'key' },
-                  { label: 'Name', key: 'name' },
-                  { label: 'Created Date', key: 'createdAt' },
-                  { label: 'Updated Date', key: 'updatedAt' }
+                  { id: 0, label: 'Key', key: 'key' },
+                  { id: 1, label: 'Name', key: 'name' },
+                  { id: 2, label: 'Created Date', key: 'createdAt' },
+                  { id: 3, label: 'Updated Date', key: 'updatedAt' }
                 ]}
                 tableData={(data) => setTemplateCategory(data.templateCategories)}
                 rows={rows}

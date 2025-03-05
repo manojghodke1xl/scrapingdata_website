@@ -53,15 +53,15 @@ const PackageList = () => {
                 selectable={true}
                 siteModule={'packages'}
                 headers={[
-                  { label: 'Key', key: 'key' },
-                  { label: 'Package Title', key: 'title' },
-                  { label: 'Event', key: 'event' },
-                  { label: 'Event Date', key: 'date' },
-                  { label: 'Price', key: 'amount' },
-                  { label: 'Max Attendees', key: 'maxLimit' },
-                  { label: 'Ticket ID Pattern', key: 'ticketIdPattern' },
-                  { label: 'Created Date', key: 'createdAt' },
-                  { label: 'Updated Date', key: 'updatedAt' }
+                  { id: 0, label: 'Key', key: 'key' },
+                  { id: 1, label: 'Package Title', key: 'title' },
+                  { id: 2, label: 'Event', key: 'event' },
+                  { id: 3, label: 'Event Date', key: 'date' },
+                  { id: 4, label: 'Price', key: 'amount' },
+                  { id: 5, label: 'Max Attendees', key: 'maxLimit' },
+                  { id: 6, label: 'Ticket ID Pattern', key: 'ticketIdPattern' },
+                  { id: 7, label: 'Created Date', key: 'createdAt' },
+                  { id: 8, label: 'Updated Date', key: 'updatedAt' }
                 ]}
                 tableData={(data) => setPackages(data.packages)}
                 rows={rows}

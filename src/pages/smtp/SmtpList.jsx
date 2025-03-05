@@ -31,10 +31,10 @@ const SmtpList = () => {
                 selectable={true}
                 siteModule={'smtp'}
                 headers={[
-                  { label: 'Name', key: 'name' },
-                  { label: 'Host', key: 'host' },
-                  { label: 'Created Date', key: 'createdAt' },
-                  { label: 'Updated Date', key: 'updatedAt' }
+                  { id: 0, label: 'Name', key: 'name' },
+                  { id: 1, label: 'Host', key: 'host' },
+                  { id: 2, label: 'Created Date', key: 'createdAt' },
+                  { id: 3, label: 'Updated Date', key: 'updatedAt' }
                 ]}
                 tableData={(data) => setSmtps(data.smtps)}
                 rows={rows}

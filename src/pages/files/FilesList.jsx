@@ -31,10 +31,10 @@ const FilesList = () => {
                 selectable={true}
                 siteModule={'files'}
                 headers={[
-                  { label: 'File Name', key: 'attachments' },
-                  { label: 'Sites', key: 'site' },
-                  { label: 'Created Date', key: 'createdAt' },
-                  { label: 'Updated Date', key: 'updatedAt' }
+                  { id: 0, label: 'File Name', key: 'attachments' },
+                  { id: 1, label: 'Sites', key: 'site' },
+                  { id: 2, label: 'Created Date', key: 'createdAt' },
+                  { id: 3, label: 'Updated Date', key: 'updatedAt' }
                 ]}
                 tableData={(data) => setFiles(data.files)}
                 rows={rows}

@@ -20,7 +20,7 @@ const CountryFlag = ({ divClassName, dialingCode, showName }) => {
       {countryCode ? (
         <div className="flex items-center justify-normal">
           <div className={`country-flag flag  ${countryCode}`} />
-          {showName && <span className="text-primary font-semibold">{countryName}</span>}
+          {showName && <span className="text-placeholder font-normal">{countryName}</span>}
         </div>
       ) : (
         <div className="text-primary text-sm pr-2">-</div>

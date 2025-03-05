@@ -27,10 +27,11 @@ const WebinarLinkList = () => {
             <div className="p-1.5 min-w-full align-middle">
               <TableComponent
                 selectable={true}
+                siteModule={'webinar'}
                 headers={[
-                  { label: 'Link', key: 'link' },
-                  { label: 'Created Date', key: 'createdAt' },
-                  { label: 'Updated Date', key: 'updatedAt' }
+                  { id: 0, label: 'Link', key: 'link' },
+                  { id: 1, label: 'Created Date', key: 'createdAt' },
+                  { id: 2, label: 'Updated Date', key: 'updatedAt' }
                 ]}
                 tableData={(data) => setWebinarLinks(data.webinarLinks)}
                 rows={rows}

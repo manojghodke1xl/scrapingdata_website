@@ -64,19 +64,19 @@ const BookingList = () => {
             <div className="p-1.5 min-w-full align-middle">
               <TableComponent
                 selectable={true}
-                siteModule="booking"
+                siteModule={'booking'}
                 headers={[
-                  { label: 'Keys', key: 'Keys' },
-                  { label: 'Customer Name', key: 'name' },
-                  { label: 'Email', key: 'email' },
-                  { label: 'Country', key: 'phoneCode' },
-                  { label: 'Mobile Number', key: 'phoneNumber' },
-                  { label: 'Event', key: 'event' },
-                  { label: 'Package', key: 'title' },
-                  { label: 'Site', key: 'site' },
-                  { label: 'Status', key: 'status' },
-                  { label: 'Created At', key: 'createdAt' },
-                  { label: 'Updated At', key: 'updatedAt' }
+                  { id: 0, label: 'Keys', key: 'Keys' },
+                  { id: 1, label: 'Customer Name', key: 'name' },
+                  { id: 2, label: 'Email', key: 'email' },
+                  { id: 3, label: 'Country', key: 'phoneCode' },
+                  { id: 4, label: 'Mobile Number', key: 'phoneNumber' },
+                  { id: 5, label: 'Event', key: 'event' },
+                  { id: 6, label: 'Package', key: 'title' },
+                  { id: 7, label: 'Site', key: 'site' },
+                  { id: 8, label: 'Status', key: 'status' },
+                  { id: 9, label: 'Created At', key: 'createdAt' },
+                  { id: 10, label: 'Updated At', key: 'updatedAt' }
                 ]}
                 tableData={(data) => setBookings(data.bookings)}
                 rows={rows}
@@ -84,22 +84,11 @@ const BookingList = () => {
                 tableCountLabel={true}
                 pagination={true}
                 search={true}
-                // filter={true}
-                // filterCategory={[
-                //   { id: 1, name: 'Sites' },
-                //   { id: 2, name: 'Status' }
-                // ]}
-                // statuses={[
-                //   { id: 0, name: 'Active', bgColor: '#ECFDF3', color: '#027948', dotColor: '#12B76A' },
-                //   { id: 2, name: 'Inactive', bgColor: '#F2F4F7', color: '#344054', dotColor: '#667085' }
-                // ]}
-                // searchCategory={[{ id: 1, name: 'Title' }]}
               />
             </div>
           </div>
         </div>
       </div>
-      {/* <NoteComponent note={casestudyListNote} /> */}
     </div>
   );
 };

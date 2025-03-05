@@ -46,13 +46,13 @@ const NotifAgentList = () => {
                 selectable={true}
                 siteModule={'NotifAgent'}
                 headers={[
-                  { label: 'Name', key: 'name' },
-                  { label: 'Email', key: 'email' },
-                  { label: 'Mobile Number', key: 'phoneNumber' },
-                  { label: 'Sites', key: 'sites' },
-                  { label: 'Status', key: 'status' },
-                  { label: 'Created Date', key: 'createdAt' },
-                  { label: 'Updated Date', key: 'updatedAt' }
+                  { id: 0, label: 'Name', key: 'name' },
+                  { id: 1, label: 'Email', key: 'email' },
+                  { id: 2, label: 'Mobile Number', key: 'phoneNumber' },
+                  { id: 3, label: 'Sites', key: 'sites' },
+                  { id: 4, label: 'Status', key: 'status' },
+                  { id: 5, label: 'Created Date', key: 'createdAt' },
+                  { id: 6, label: 'Updated Date', key: 'updatedAt' }
                 ]}
                 tableData={(data) => setNotifAgents(data.notifAgents)}
                 rows={rows}

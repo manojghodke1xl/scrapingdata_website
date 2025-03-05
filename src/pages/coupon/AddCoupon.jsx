@@ -135,7 +135,7 @@ const AddCoupon = () => {
             />
             <TextareaComponent
               label="Coupon Description"
-              placeholder="Enter a description..."
+              placeholder="Enter a Coupon Description..."
               id="info"
               required
               name="info"
@@ -187,9 +187,10 @@ const AddCoupon = () => {
           <div className="w-full flex flex-col gap-y-5">
             <FormField
               label="Minimum Amount"
-              type="text"
+              type="number"
               id="minAmount"
               name="minAmount"
+              min={0}
               placeholder="Minimum Amount"
               value={couponDetails.minAmount}
               onChange={(e) => setCouponDetails((prev) => ({ ...prev, minAmount: e.target.value }))}
@@ -215,6 +216,7 @@ const AddCoupon = () => {
               type="number"
               id="value"
               name="value"
+              min={0}
               required
               placeholder="Discount Value"
               onChange={(e) => {
@@ -229,6 +231,7 @@ const AddCoupon = () => {
               type="number"
               id="upto"
               name="upto"
+              min={0}
               placeholder="Discount Upto"
               onChange={(e) => setCouponDetails((prev) => ({ ...prev, upto: e.target.value }))}
               value={couponDetails.upto}

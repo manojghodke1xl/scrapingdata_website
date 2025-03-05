@@ -48,13 +48,13 @@ const RecaptchaList = () => {
                 selectable={true}
                 siteModule={'recaptcha'}
                 headers={[
-                  { label: 'Sites', key: 'sites' },
-                  { label: 'Version', key: 'version' },
-                  { label: 'site Key', key: 'sitekey' },
-                  { label: 'Secret Key', key: 'secretkey' },
-                  { label: 'Status', key: 'status' },
-                  { label: 'Created Date', key: 'createdAt' },
-                  { label: 'Updated Date', key: 'updatedAt' }
+                  { id: 0, label: 'Sites', key: 'sites' },
+                  { id: 1, label: 'Version', key: 'version' },
+                  { id: 2, label: 'site Key', key: 'sitekey' },
+                  { id: 3, label: 'Secret Key', key: 'secretkey' },
+                  { id: 4, label: 'Status', key: 'status' },
+                  { id: 5, label: 'Created Date', key: 'createdAt' },
+                  { id: 6, label: 'Updated Date', key: 'updatedAt' }
                 ]}
                 tableData={(data) => setRecaptchas(data.recaptchas)}
                 rows={rows}

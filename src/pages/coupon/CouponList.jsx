@@ -49,14 +49,14 @@ const CouponList = () => {
                 selectable={true}
                 siteModule={'coupon'}
                 headers={[
-                  { label: 'Coupon Code', key: 'code' },
-                  { label: 'Discount Type', key: 'type' },
-                  { label: 'Discount Value', key: 'value' },
-                  { label: 'Minimum purchase Amount', key: 'minAmount' },
-                  { label: 'Sites', key: 'sites' },
-                  { label: 'Created Date', key: 'createdAt' },
-                  { label: 'Updated Date', key: 'updatedAt' },
-                  { label: 'Status', key: 'status' }
+                  { id: 0, label: 'Coupon Code', key: 'code' },
+                  { id: 1, label: 'Discount Type', key: 'type' },
+                  { id: 2, label: 'Discount Value', key: 'value' },
+                  { id: 3, label: 'Minimum purchase Amount', key: 'minAmount' },
+                  { id: 4, label: 'Sites', key: 'sites' },
+                  { id: 5, label: 'Created Date', key: 'createdAt' },
+                  { id: 6, label: 'Updated Date', key: 'updatedAt' },
+                  { id: 7, label: 'Status', key: 'status' }
                 ]}
                 tableData={(data) => setCoupons(data.coupons)}
                 rows={rows}

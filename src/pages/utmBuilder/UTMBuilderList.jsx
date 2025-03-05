@@ -49,16 +49,16 @@ const UTMBuilderList = () => {
                 selectable={true}
                 siteModule={'utm-builder'}
                 headers={[
-                  { label: 'URL', key: 'url' },
-                  { label: 'Campaign Id', key: 'campaignId' },
-                  { label: 'Name', key: 'name' },
-                  { label: 'Host', key: 'host' },
-                  { label: 'Medium', key: 'medium' },
-                  { label: 'Source', key: 'source' },
-                  { label: 'Content', key: 'content' },
-                  { label: 'Term', key: 'term' },
-                  { label: 'Created Date', key: 'createdAt' },
-                  { label: 'Updated Date', key: 'updatedAt' }
+                  { id: 0, label: 'URL', key: 'url' },
+                  { id: 1, label: 'Campaign Id', key: 'campaignId' },
+                  { id: 2, label: 'Name', key: 'name' },
+                  { id: 3, label: 'Host', key: 'host' },
+                  { id: 4, label: 'Medium', key: 'medium' },
+                  { id: 5, label: 'Source', key: 'source' },
+                  { id: 6, label: 'Content', key: 'content' },
+                  { id: 7, label: 'Term', key: 'term' },
+                  { id: 8, label: 'Created Date', key: 'createdAt' },
+                  { id: 9, label: 'Updated Date', key: 'updatedAt' }
                 ]}
                 tableData={(data) => setUTMList(data.utmBuilders)}
                 rows={rows}

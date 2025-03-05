@@ -32,10 +32,10 @@ const SMSTemplateList = () => {
                 selectable={true}
                 siteModule={'sms-templates'}
                 headers={[
-                  { label: 'Name', key: 'name' },
-                  { label: 'Sites', key: 'site' },
-                  { label: 'Created Date', key: 'createdAt' },
-                  { label: 'Updated Date', key: 'updatedAt' }
+                  { id: 0, label: 'Name', key: 'name' },
+                  { id: 1, label: 'Sites', key: 'site' },
+                  { id: 2, label: 'Created Date', key: 'createdAt' },
+                  { id: 3, label: 'Updated Date', key: 'updatedAt' }
                 ]}
                 tableData={(data) => setSMSTemplates(data.smsTemplates)}
                 rows={rows}

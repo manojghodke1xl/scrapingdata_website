@@ -47,12 +47,12 @@ const FaqList = () => {
                 selectable={true}
                 siteModule={'faq'}
                 headers={[
-                  { label: 'Sites', key: 'sites' },
-                  { label: 'Question', key: 'question' },
-                  { label: 'Answer', key: 'answer' },
-                  { label: 'Status', key: 'status' },
-                  { label: 'Created Date', key: 'createdAt' },
-                  { label: 'Updated Date', key: 'updatedAt' }
+                  { id: 0, label: 'Sites', key: 'sites' },
+                  { id: 1, label: 'Question', key: 'question' },
+                  { id: 2, label: 'Answer', key: 'answer' },
+                  { id: 3, label: 'Status', key: 'status' },
+                  { id: 4, label: 'Created Date', key: 'createdAt' },
+                  { id: 5, label: 'Updated Date', key: 'updatedAt' }
                 ]}
                 tableData={(data) => setFaqs(data.faqs)}
                 rows={rows}

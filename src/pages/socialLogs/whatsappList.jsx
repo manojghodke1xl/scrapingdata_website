@@ -46,15 +46,15 @@ const WhatsAppLogList = () => {
             <div className="p-1.5 min-w-full align-middle">
               <TableComponent
                 selectable={true}
-                siteModule={'whats-app-templates'}
+                siteModule={'whats-app-logs'}
                 headers={[
-                  { label: 'From Number', key: 'fromNumber' },
-                  { label: 'To Number', key: 'toNumber' },
-                  { label: 'Message', key: 'message' },
-                  { label: 'Status', key: 'status' },
-                  { label: 'Error', key: 'error' },
-                  { label: 'Created Date', key: 'createdAt' },
-                  { label: 'Updated Date', key: 'updatedAt' }
+                  { id: 0, label: 'From Number', key: 'fromNumber' },
+                  { id: 1, label: 'To Number', key: 'toNumber' },
+                  { id: 2, label: 'Message', key: 'message' },
+                  { id: 3, label: 'Status', key: 'status' },
+                  { id: 4, label: 'Error', key: 'error' },
+                  { id: 5, label: 'Created Date', key: 'createdAt' },
+                  { id: 6, label: 'Updated Date', key: 'updatedAt' }
                 ]}
                 tableData={(data) => setWhatsAppTemplates(data.logs)}
                 rows={rows}

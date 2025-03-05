@@ -42,16 +42,16 @@ const EventList = () => {
                 selectable={true}
                 siteModule={'events'}
                 headers={[
-                  { label: 'Keys', key: 'Keys' },
-                  { label: 'Event Name', key: 'name' },
-                  { label: 'Sites', key: 'site' },
-                  { label: 'Venue', key: 'venue' },
-                  { label: 'Timezone', key: 'timeZone' },
-                  { label: 'Start Date', key: 'date' },
-                  { label: 'End Date', key: 'endDate' },
-                  { label: 'Last Booking Date', key: 'lastBookingDate' },
-                  { label: 'Created Date', key: 'createdAt' },
-                  { label: 'Updated Date', key: 'updatedAt' }
+                  { id: 0, label: 'Keys', key: 'Keys' },
+                  { id: 1, label: 'Event Name', key: 'name' },
+                  { id: 2, label: 'Sites', key: 'site' },
+                  { id: 3, label: 'Venue', key: 'venue' },
+                  { id: 4, label: 'Timezone', key: 'timeZone' },
+                  { id: 5, label: 'Start Date', key: 'date' },
+                  { id: 6, label: 'End Date', key: 'endDate' },
+                  { id: 7, label: 'Last Booking Date', key: 'lastBookingDate' },
+                  { id: 8, label: 'Created Date', key: 'createdAt' },
+                  { id: 9, label: 'Updated Date', key: 'updatedAt' }
                 ]}
                 tableData={(data) => setEvents(data.events)}
                 rows={rows}

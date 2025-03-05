@@ -69,13 +69,13 @@ const WhatsAppTemplateList = () => {
                 selectable={true}
                 siteModule={'whats-app-templates'}
                 headers={[
-                  { label: 'Name', key: 'name' },
-                  { label: 'WhatsApp Template Name', key: 'whatsAppTemplateName' },
-                  { label: 'Message', key: 'message' },
-                  { label: 'Sites', key: 'site' },
-                  { label: 'Status', key: 'status' },
-                  { label: 'Created Date', key: 'createdAt' },
-                  { label: 'Updated Date', key: 'updatedAt' }
+                  { id: 0, label: 'Name', key: 'name' },
+                  { id: 1, label: 'WhatsApp Template Name', key: 'whatsAppTemplateName' },
+                  { id: 2, label: 'Message', key: 'message' },
+                  { id: 3, label: 'Sites', key: 'site' },
+                  { id: 4, label: 'Status', key: 'status' },
+                  { id: 5, label: 'Created Date', key: 'createdAt' },
+                  { id: 6, label: 'Updated Date', key: 'updatedAt' }
                 ]}
                 tableData={(data) => setWhatsAppTemplates(data.whatsappTemplates)}
                 rows={rows}

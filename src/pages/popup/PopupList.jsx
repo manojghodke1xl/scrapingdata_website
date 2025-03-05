@@ -59,13 +59,13 @@ const PopupList = () => {
                 selectable={true}
                 siteModule={'popup'}
                 headers={[
-                  { label: 'Name', key: 'name' },
-                  { label: 'Sites', key: 'site' },
-                  { label: 'Device Type', key: 'showOnDeviceType' },
-                  { label: 'Type', key: 'contentType' },
-                  { label: 'Created Date', key: 'createdAt' },
-                  { label: 'Updated Date', key: 'updatedAt' },
-                  { label: 'Status', key: 'status' }
+                  { id: 0, label: 'Name', key: 'name' },
+                  { id: 1, label: 'Sites', key: 'site' },
+                  { id: 2, label: 'Device Type', key: 'showOnDeviceType' },
+                  { id: 3, label: 'Type', key: 'contentType' },
+                  { id: 4, label: 'Created Date', key: 'createdAt' },
+                  { id: 5, label: 'Updated Date', key: 'updatedAt' },
+                  { id: 6, label: 'Status', key: 'status' }
                 ]}
                 tableData={(data) => setPopups(data.popups)}
                 rows={rows}

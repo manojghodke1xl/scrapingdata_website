@@ -102,7 +102,12 @@ const TableComponent = ({
     event: false
   });
   const [exportDropdownOpen, setExportDropdownOpen] = useState(false);
-  const [columnPreferences, setColumnPreferences] = useState({});
+  const [columnPreferences, setColumnPreferences] = useState({
+    pinnedColumns: {
+      left: [],
+      right: []
+    }
+  });
 
   // State for drag and drop
   const [updatedHeaders, setUpdatedHeaders] = useState(headers);
@@ -116,62 +121,122 @@ const TableComponent = ({
   });
 
   // Compute pinned columns
-  const pinnedColumns = useMemo(
-    () => ({
-      left: updatedHeaders.filter((c) => c.pinned === 'left').map((c) => c.key),
-      right: updatedHeaders.filter((c) => c.pinned === 'right').map((c) => c.key)
-    }),
-    [updatedHeaders]
+  const pinnedColumns = useMemo(() => {
+    // Default to empty arrays if no preferences exist
+    const leftPinned = columnPreferences?.pinnedColumns?.left || [];
+    const rightPinned = columnPreferences?.pinnedColumns?.right || [];
+
+    // If we have no saved preferences, use the default pinned columns from headers
+    if (leftPinned.length === 0 && rightPinned.length === 0) {
+      return {
+        left: updatedHeaders.filter((c) => c.pinned === 'left').map((c) => String(c.id)),
+        right: updatedHeaders.filter((c) => c.pinned === 'right').map((c) => String(c.id))
+      };
+    }
+
+    return {
+      left: leftPinned,
+      right: rightPinned
+    };
+  }, [columnPreferences?.pinnedColumns, updatedHeaders]);
+
+  // Add state to track original header order
+  const [originalHeaders] = useState([...headers]);
+
+  const saveColumnConfig = useCallback(
+    async (newPreferences) => {
+      const payload = {
+        tableName: siteModule,
+        columns: hiddenColumns.map(String),
+        order: updatedHeaders.map((col) => String(col.id)),
+        pinnedColumns: newPreferences.pinnedColumns
+      };
+
+      try {
+        const { status } = await createAndUpdateTableColumnApi(payload);
+        if (status) {
+          setColumnPreferences(newPreferences);
+        }
+      } catch (error) {
+        showNotification('error', error.message);
+      }
+    },
+    [hiddenColumns, siteModule, updatedHeaders]
   );
 
-  // const saveColumnConfig = useCallback(async () => {
-  //   const payload = {
-  //     tableName: siteModule,
-  //     headers,
-  //     updatedHeaders,
-  //     pinnedColumns
-  //   };
+  // Add state to track column positions before pinning
+  const [previousPositions, setPreviousPositions] = useState({});
 
-  //   console.log('payload', payload);
+  const handleTogglePin = useCallback(
+    (columnId) => {
+      const stringColumnId = String(columnId);
 
-  //   try {
-  //     const { status, data } = await createAndUpdateTableColumnApi(payload);
-  //     if (status) console.log('data', data);
-  //   } catch (error) {
-  //     showNotification('error', error.message);
-  //   }
-  // }, [headers, pinnedColumns, siteModule, updatedHeaders]);
+      setColumnPreferences((prev) => {
+        const newLeftPinned = [...(prev.pinnedColumns?.left || [])];
+        const isPinned = newLeftPinned.includes(stringColumnId);
 
-  const handleTogglePin = useCallback((accessor) => {
-    setUpdatedHeaders((prev) => {
-      const newColumns = [...prev];
-      const index = newColumns.findIndex((col) => col.key === accessor);
-      if (index === -1) return prev;
+        if (isPinned) {
+          // Remove from pinned columns
+          const index = newLeftPinned.indexOf(stringColumnId);
+          newLeftPinned.splice(index, 1);
 
-      const column = { ...newColumns[index] };
-      newColumns.splice(index, 1);
+          // Restore column to its previous position
+          setUpdatedHeaders((current) => {
+            const newHeaders = [...current];
+            const columnToMove = newHeaders.find((h) => String(h.id) === stringColumnId);
 
-      if (column.pinned === 'left') {
-        column.pinned = undefined;
-        const leftPinnedCount = newColumns.filter((col) => col.pinned === 'left').length;
-        newColumns.splice(leftPinnedCount, 0, column);
-      } else {
-        column.pinned = 'left';
-        const leftPinnedCount = newColumns.filter((col) => col.pinned === 'left').length;
-        newColumns.splice(leftPinnedCount, 0, column);
-      }
+            // Get the previous position, fallback to original position if not found
+            const previousPosition = previousPositions[stringColumnId] || originalHeaders.findIndex((h) => String(h.id) === stringColumnId);
 
-      return newColumns;
-    });
-  }, []);
+            if (columnToMove) {
+              // Remove from current position
+              newHeaders.splice(
+                newHeaders.findIndex((h) => String(h.id) === stringColumnId),
+                1
+              );
+              // Insert at previous position
+              newHeaders.splice(previousPosition, 0, columnToMove);
+            }
+
+            return newHeaders;
+          });
+        } else {
+          // Store current position before pinning
+          const currentIndex = updatedHeaders.findIndex((h) => String(h.id) === stringColumnId);
+          setPreviousPositions((prev) => ({
+            ...prev,
+            [stringColumnId]: currentIndex
+          }));
+
+          // Add to pinned columns
+          newLeftPinned.push(stringColumnId);
+        }
+
+        const newPreferences = {
+          ...prev,
+          pinnedColumns: {
+            left: newLeftPinned,
+            right: prev.pinnedColumns?.right || []
+          }
+        };
+
+        // Save to backend and update state
+        saveColumnConfig(newPreferences);
+
+        return newPreferences;
+      });
+    },
+    [originalHeaders, updatedHeaders, previousPositions, saveColumnConfig]
+  );
 
   // Drag and drop handlers
-  const handleDragStart = (e, columnKey) => {
-    if (pinnedColumns.left.includes(columnKey) || pinnedColumns.right.includes(columnKey)) {
+  const handleDragStart = (e, columnId) => {
+    const stringColumnId = String(columnId);
+    if (pinnedColumns.left.includes(stringColumnId) || pinnedColumns.right.includes(stringColumnId)) {
       e.preventDefault();
       return;
     }
-    e.dataTransfer.setData('columnKey', columnKey);
+    e.dataTransfer.setData('columnId', stringColumnId);
     setIsDragging(true);
   };
 
@@ -179,25 +244,28 @@ const TableComponent = ({
     e.preventDefault();
   };
 
-  const handleDrop = (e, dropColumnKey) => {
+  const handleDrop = (e, dropColumnId) => {
+    e.preventDefault();
     setIsDragging(false);
-    const dragColumnKey = e.dataTransfer.getData('columnKey');
+    const dragColumnId = e.dataTransfer.getData('columnId');
 
-    const dragIndex = updatedHeaders.findIndex((col) => col.key === dragColumnKey);
-    const dropIndex = updatedHeaders.findIndex((col) => col.key === dropColumnKey);
+    if (!dragColumnId || dragColumnId === String(dropColumnId)) return;
 
-    if (dragIndex !== -1 && dropIndex !== -1) {
-      const newHeaders = [...updatedHeaders];
-      const [draggedColumn] = newHeaders.splice(dragIndex, 1);
-      newHeaders.splice(dropIndex, 0, draggedColumn);
-      setUpdatedHeaders(newHeaders);
-    }
+    const dragIndex = updatedHeaders.findIndex((col) => String(col.id) === dragColumnId);
+    const dropIndex = updatedHeaders.findIndex((col) => String(col.id) === String(dropColumnId));
+
+    if (dragIndex === -1 || dropIndex === -1) return;
+
+    const newHeaders = [...updatedHeaders];
+    const [draggedColumn] = newHeaders.splice(dragIndex, 1);
+    newHeaders.splice(dropIndex, 0, draggedColumn);
+    setUpdatedHeaders(newHeaders);
   };
 
   const handleDragEnd = async (e) => {
     e.preventDefault();
     setIsDragging(false);
-    // await saveColumnConfig();
+    await saveColumnConfig();
   };
 
   // Sorting handler
@@ -250,19 +318,34 @@ const TableComponent = ({
     filterState.eventId
   );
 
-  // useEffect(() => {
-  //   (async () => {
-  //     try {
-  //       const { status, data } = await getTableColumnApi(siteModule);
-  //       if (status) {
-  //         setColumnPreferences(data.columnPreference);
-  //         console.log('data', data.columnPreference);
-  //       }
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   })();
-  // }, [siteModule]);
+  useEffect(() => {
+    (async () => {
+      try {
+        const { status, data } = await getTableColumnApi(siteModule);
+        if (status && data?.columnPreference) {
+          setColumnPreferences(data.columnPreference);
+
+          // Set hidden columns from saved preferences
+          if (data.columnPreference.columns?.length > 0) setHiddenColumns(data.columnPreference.columns);
+
+          // If we have ordered headers from the backend, use them
+          if (data.columnPreference.order?.length > 0) {
+            const orderedHeaders = data.columnPreference.order.map((id) => headers.find((header) => String(header.id) === String(id))).filter(Boolean);
+
+            // Add any headers that might not be in the saved order
+            const remainingHeaders = headers.filter((header) => !data.columnPreference.order.includes(String(header.id)));
+
+            setUpdatedHeaders([...orderedHeaders, ...remainingHeaders]);
+
+            // Reset previous positions
+            setPreviousPositions({});
+          }
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    })();
+  }, [headers, siteModule]);
 
   useEffect(() => {
     setRefresh((r) => !r);
@@ -361,7 +444,7 @@ const TableComponent = ({
     'whats-app-templates',
     'after-sales',
     'advertisement',
-    'vendors',
+    'vendor',
     'NotifAgent',
     'enquiry',
     'subscriber',
@@ -370,13 +453,48 @@ const TableComponent = ({
     'career',
     'distributors',
     'fan-club',
-    'resellers',
+    'reseller',
     'broadcast'
   ];
 
   const availableSites = modulesArray.includes(siteModule)
     ? allSites
     : allSites.filter((site) => site.modules?.some((module) => module[siteModule] === true)).map((site) => ({ name: site.name, _id: site._id }));
+
+  const handleSaveColumnPreferences = async () => {
+    await saveColumnConfig({
+      ...columnPreferences,
+      pinnedColumns: pinnedColumns
+    });
+    showNotification('success', 'Column preferences saved successfully');
+  };
+
+  const handleResetColumnPreferences = async () => {
+    // Reset headers to original order
+    setUpdatedHeaders([...originalHeaders]);
+
+    // Reset hidden columns
+    setHiddenColumns([]);
+
+    // Reset pinned columns
+    const defaultPinnedColumns = {
+      left: originalHeaders.filter((h) => h.pinned === 'left').map((h) => String(h.id)),
+      right: originalHeaders.filter((h) => h.pinned === 'right').map((h) => String(h.id))
+    };
+
+    // Save reset preferences to backend
+    await saveColumnConfig({
+      pinnedColumns: defaultPinnedColumns,
+      columns: [],
+      order: originalHeaders.map((h) => String(h.id))
+    });
+
+    // Reset local state
+    setColumnPreferences({ pinnedColumns: defaultPinnedColumns });
+    setPreviousPositions({});
+
+    showNotification('success', 'Column preferences reset to default');
+  };
 
   return (
     <div className="overflow-hidden">
@@ -426,6 +544,9 @@ const TableComponent = ({
               handleDrop={handleDrop}
               handleDragEnd={handleDragEnd}
               isDragging={isDragging}
+              pinnedColumns={pinnedColumns}
+              onSaveColumns={handleSaveColumnPreferences}
+              onResetColumns={handleResetColumnPreferences}
             />
           </div>
         </div>

@@ -45,11 +45,11 @@ const TestimonialList = () => {
                 selectable={true}
                 siteModule={'testimonial'}
                 headers={[
-                  { label: 'Name', key: 'name' },
-                  { label: 'Sites', key: 'sites' },
-                  { label: 'Status', key: 'status' },
-                  { label: 'Created Date', key: 'createdAt' },
-                  { label: 'Updated Date', key: 'updatedAt' }
+                  { id: 0, label: 'Name', key: 'name' },
+                  { id: 1, label: 'Sites', key: 'sites' },
+                  { id: 2, label: 'Status', key: 'status' },
+                  { id: 3, label: 'Created Date', key: 'createdAt' },
+                  { id: 4, label: 'Updated Date', key: 'updatedAt' }
                 ]}
                 tableData={(data) => setTestimonials(data.testimonials)}
                 rows={rows}

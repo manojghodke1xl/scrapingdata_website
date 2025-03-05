@@ -45,13 +45,12 @@ const OrderList = () => {
             <div className="p-1.5 min-w-full align-middle">
               <TableComponent
                 selectable={true}
-                siteModule="orders"
+                siteModule={'orders'}
                 headers={[
-                  { label: 'Customer', key: 'customer' },
-                  // { label: 'Product', key: 'product' },
-                  { label: 'Status', key: 'status' },
-                  { label: 'Created At', key: 'createdAt' },
-                  { label: 'Updated At', key: 'updatedAt' }
+                  { id: 0, label: 'Customer', key: 'customer' },
+                  { id: 1, label: 'Status', key: 'status' },
+                  { id: 2, label: 'Created At', key: 'createdAt' },
+                  { id: 3, label: 'Updated At', key: 'updatedAt' }
                 ]}
                 tableData={(data) => setOrders(data.orders)}
                 rows={rows}

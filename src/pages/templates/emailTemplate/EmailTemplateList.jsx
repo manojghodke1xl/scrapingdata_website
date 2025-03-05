@@ -34,12 +34,12 @@ const EmailTemplateList = () => {
                 selectable={true}
                 siteModule={'email-templates'}
                 headers={[
-                  { label: 'Name', key: 'name' },
-                  { label: 'Subject', key: 'subject' },
-                  { label: 'Body', key: 'body' },
-                  { label: 'Sites', key: 'site' },
-                  { label: 'Created Date', key: 'createdAt' },
-                  { label: 'Updated Date', key: 'updatedAt' }
+                  { id: 0, label: 'Name', key: 'name' },
+                  { id: 1, label: 'Subject', key: 'subject' },
+                  { id: 2, label: 'Body', key: 'body' },
+                  { id: 3, label: 'Sites', key: 'site' },
+                  { id: 4, label: 'Created Date', key: 'createdAt' },
+                  { id: 5, label: 'Updated Date', key: 'updatedAt' }
                 ]}
                 tableData={(data) => setEmailTemplates(data.emailTemplates)}
                 rows={rows}

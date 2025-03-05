@@ -45,14 +45,14 @@ const ClientLogoList = () => {
             <div className="p-1.5 min-w-full align-middle">
               <TableComponent
                 selectable={true}
-                siteModule={'clientlogo'}
                 search={true}
+                siteModule={'clientlogo'}
                 headers={[
-                  { label: 'Client Logo', key: 'image' },
-                  { label: 'Sites', key: 'sites' },
-                  { label: 'Status', key: 'status' },
-                  { label: 'Created Date', key: 'createdAt' },
-                  { label: 'Updated Date', key: 'updatedAt' }
+                  { id: 0, label: 'Client Logo', key: 'image' },
+                  { id: 1, label: 'Sites', key: 'sites' },
+                  { id: 2, label: 'Status', key: 'status' },
+                  { id: 3, label: 'Created Date', key: 'createdAt' },
+                  { id: 4, label: 'Updated Date', key: 'updatedAt' }
                 ]}
                 tableData={(data) => setClientLogos(data.clientlogos)}
                 rows={rows}

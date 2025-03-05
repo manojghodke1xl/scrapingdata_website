@@ -56,21 +56,22 @@ const EnquiryList = () => {
                 selectable={true}
                 siteModule={'enquiry'}
                 headers={[
-                  { label: 'Customer Name', key: 'name' },
-                  { label: 'Email', key: 'email' },
-                  { label: 'Enquiry Service', key: 'service' },
-                  { label: 'Subject', key: 'subject' },
-                  { label: 'Sites', key: 'site' },
-                  { label: 'URL', key: 'url' },
-                  { label: 'Campaign Name', key: 'campaign' },
-                  { label: 'Medium', key: 'medium' },
-                  { label: 'Source', key: 'source' },
-                  { label: 'Content', key: 'content' },
-                  { label: 'Term', key: 'term' },
-                  { label: 'Campaign ID', key: 'campaignId' },
-                  { label: 'Created Date', key: 'createdAt' },
-                  { label: 'Updated Date', key: 'updatedAt' }
+                  { id: 0, label: 'Customer Name', key: 'name' },
+                  { id: 1, label: 'Email', key: 'email' },
+                  { id: 2, label: 'Enquiry Service', key: 'service' },
+                  { id: 3, label: 'Subject', key: 'subject' },
+                  { id: 4, label: 'Sites', key: 'site' },
+                  { id: 5, label: 'URL', key: 'url' },
+                  { id: 6, label: 'Campaign Name', key: 'campaign' },
+                  { id: 7, label: 'Medium', key: 'medium' },
+                  { id: 8, label: 'Source', key: 'source' },
+                  { id: 9, label: 'Content', key: 'content' },
+                  { id: 10, label: 'Term', key: 'term' },
+                  { id: 11, label: 'Campaign ID', key: 'campaignId' },
+                  { id: 12, label: 'Created Date', key: 'createdAt' },
+                  { id: 13, label: 'Updated Date', key: 'updatedAt' }
                 ]}
+                
                 tableData={(data) => setEnquiries(data.enquiries)}
                 exportData={enquiries}
                 rows={rows}

@@ -292,6 +292,7 @@ const AddProduct = () => {
                 id="maximumQuantity"
                 name="maximumQuantity"
                 placeholder="Maximum Quantity"
+                min={0}
                 onChange={(e) => {
                   setProductDetails((prev) => ({ ...prev, maximumQuantity: e.target.value }));
                   if (errors.maximumQuantity) setErrors((prev) => ({ ...prev, maximumQuantity: '' }));
@@ -558,6 +559,7 @@ const AddProduct = () => {
                     id={`price-${currency}`}
                     name={`price-${currency}`}
                     placeholder={`Price (${currency}) is inclusive of tax`}
+                    min={0}
                     onChange={(e) => {
                       setProductDetails((prev) => ({ ...prev, price: { ...prev.price, [currency]: e.target.value } }));
                       if (errors.price?.[currency]) setErrors((prev) => ({ ...prev, price: { ...prev.price, [currency]: '' } }));
@@ -572,6 +574,7 @@ const AddProduct = () => {
                       id={`salePrice-${currency}`}
                       name={`salePrice-${currency}`}
                       placeholder={`Sale Price (${currency})`}
+                      min={0}
                       onChange={(e) => {
                         setProductDetails((prev) => ({ ...prev, salePrice: { ...prev.salePrice, [currency]: e.target.value } }));
                         if (errors.salePrice?.[currency]) setErrors((prev) => ({ ...prev, salePrice: { ...prev.salePrice, [currency]: '' } }));
@@ -624,6 +627,7 @@ const AddProduct = () => {
                                   id={`charges-${shipping.destination}-${currency}`}
                                   name={`charges-${shipping.destination}-${currency}`}
                                   placeholder={`Charges (${currency})`}
+                                  min={0}
                                   onChange={(e) => {
                                     const chargeValue = e.target.value;
                                     setProductDetails((prev) => {
@@ -682,6 +686,7 @@ const AddProduct = () => {
                   id="stock"
                   name="stock"
                   placeholder="Stock"
+                  min={1}
                   onChange={(e) => {
                     setProductDetails((prev) => ({ ...prev, stock: e.target.value }));
                     if (errors.stock) setErrors((prev) => ({ ...prev, stock: '' }));
@@ -695,9 +700,6 @@ const AddProduct = () => {
         </div>
       )}
 
-      {/* <div className="w-full justify-center items-center border-b  border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end ">
-        <NoteComponent note={id ? editFaqCategoryNote : addFaqCategoryNote} />
-      </div> */}
       {!isScrollable && (
         <div className="w-full flex justify-end items-center gap-4 pt-8  border- border-primary">
           <FormButtons to="/products/product-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} loading={isLoading} />

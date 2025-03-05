@@ -23,10 +23,13 @@ const TableFilterActions = ({
   handleDragOver,
   handleDrop,
   handleDragEnd,
-  isDragging
+  isDragging,
+  pinnedColumns,
+  onSaveColumns,
+  onResetColumns
 }) => {
   return (
-    <>
+    <div className="flex items-center gap-2">
       {deleteBtn && selectionState.selectedItems.length > 0 && (
         <button
           onClick={() => setModalState((prev) => ({ ...prev, isDeleteModelOpen: true }))}
@@ -83,6 +86,9 @@ const TableFilterActions = ({
         handleDrop={handleDrop}
         handleDragEnd={handleDragEnd}
         isDragging={isDragging}
+        pinnedColumns={pinnedColumns}
+        onSave={onSaveColumns}
+        onReset={onResetColumns}
       />
       {isFilterActive && (
         <button
@@ -92,7 +98,7 @@ const TableFilterActions = ({
           Clear All
         </button>
       )}
-    </>
+    </div>
   );
 };
 

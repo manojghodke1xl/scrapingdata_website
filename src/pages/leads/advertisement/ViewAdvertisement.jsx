@@ -4,7 +4,6 @@ import useGlobalContext from '../../../hooks/useGlobalContext';
 import { getAdvertisementById } from '../../../apis/leads/advertisement-apis';
 import { showNotification } from '../../../utils/showNotification';
 import CountryFlag from '../../../atoms/common/CountryFlag';
-import { CiCircleInfo } from 'react-icons/ci';
 import { formatDateTime } from '../../../utils/dateFormats';
 
 const ViewAdvertisement = () => {
@@ -43,7 +42,10 @@ const ViewAdvertisement = () => {
           <span className="text-3xl font-semibold text-dark">Advertisement Details</span>
         </div>
         <div className=" w-full flex gap-4 justify-end items-end md:w-fit lg:w-full xl:w-fit">
-          <Link to={'/advertisement/advertisement-list'} className="px-4 py-2 text-primary font-medium bg-inherit hover:bg-hover rounded-xl border border-primary whitespace-nowrap">
+          <Link
+            to={'/advertisement/advertisement-list'}
+            className="px-4 py-2 text-primary font-medium bg-inherit hover:bg-hover rounded-xl border border-primary whitespace-nowrap"
+          >
             Back
           </Link>
         </div>
@@ -57,21 +59,21 @@ const ViewAdvertisement = () => {
           <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div className="mt-5">
               <h1 className="font-semibold text-primary">Customer Name</h1>
-              <p className="text-secondary"> {advertisement?.name || 'No name available'}</p>
+              <p className="text-placeholder font-normal"> {advertisement?.name || 'No name available'}</p>
             </div>
             <div className="mt-5">
               <h1 className="font-semibold text-primary">Email ID</h1>
               {advertisement?.email ? (
-                <a className="text-secondary" href={`mailto:${advertisement.email}`}>
+                <a className="text-placeholder font-normal" href={`mailto:${advertisement.email}`}>
                   {advertisement.email}
                 </a>
               ) : (
-                <p className="text-secondary">No email available</p>
+                <p className="text-placeholder font-normal">No email available</p>
               )}
             </div>
             <div className="mt-5">
               <h1 className="font-semibold text-primary">Country</h1>
-              <p className="text-secondary flex items-center ">
+              <p className="text-placeholder font-normal flex items-center ">
                 <CountryFlag dialingCode={advertisement?.ccode?.startsWith('+') ? advertisement?.ccode.slice(1) : advertisement?.ccode} showName={true} />
               </p>
             </div>
@@ -79,26 +81,30 @@ const ViewAdvertisement = () => {
               <h1 className="font-semibold text-primary">Phone Number</h1>
               {advertisement?.mobile || advertisement?.ccode ? (
                 <a
-                  className="text-secondary"
-                  href={`tel:${(advertisement.ccode ? (advertisement.ccode.startsWith('+') ? advertisement.ccode : '+' + advertisement.ccode) : '') + advertisement.mobile.replace(/\s+/g, '')}`}
+                  className="text-placeholder font-normal"
+                  href={`tel:${
+                    (advertisement.ccode ? (advertisement.ccode.startsWith('+') ? advertisement.ccode : '+' + advertisement.ccode) : '') + advertisement.mobile.replace(/\s+/g, '')
+                  }`}
                 >
-                  {(advertisement.ccode ? (advertisement.ccode.startsWith('+') ? advertisement.ccode : '+' + advertisement.ccode) : '') + ' ' + advertisement.mobile.replace(/\s+/g, '')}
+                  {(advertisement.ccode ? (advertisement.ccode.startsWith('+') ? advertisement.ccode : '+' + advertisement.ccode) : '') +
+                    ' ' +
+                    advertisement.mobile.replace(/\s+/g, '')}
                 </a>
               ) : (
-                <p className="text-secondary">No phone number available</p>
+                <p className="text-placeholder font-normal">No phone number available</p>
               )}
             </div>
             <div className="mt-5">
               <h1 className="font-semibold text-primary">Service</h1>
-              <p className="text-secondary"> {advertisement?.service || 'No service available'}</p>
+              <p className="text-placeholder font-normal"> {advertisement?.service || 'No service available'}</p>
             </div>
             <div className="mt-5">
               <h1 className="font-semibold text-primary">Subject</h1>
-              <p className="text-secondary"> {advertisement?.suject || 'No subject available'}</p>
+              <p className="text-placeholder font-normal"> {advertisement?.suject || 'No subject available'}</p>
             </div>
             <div className="mt-5">
               <h1 className="font-semibold text-primary">IP Address</h1>
-              <p className="text-secondary"> {advertisement?.ipaddress || 'Not Present'}</p>
+              <p className="text-placeholder font-normal"> {advertisement?.ipaddress || 'Not Present'}</p>
             </div>
           </div>
         </div>
@@ -108,20 +114,18 @@ const ViewAdvertisement = () => {
         <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className=" text-primary">
-              <div className="flex items-center gap-2">
-                Additional Information <CiCircleInfo />
-              </div>
+              <div className="flex items-center gap-2">Additional Information</div>
             </span>
           </div>
           <div className="w-full">
             <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div className="mt-5">
                 <h1 className="font-semibold text-primary">Site Name</h1>
-                <p className="text-secondary"> {advertisement?.site?.name || 'No Site Name available'}</p>
+                <p className="text-placeholder font-normal"> {advertisement?.site?.name || 'No Site Name available'}</p>
               </div>
               <div className="mt-5">
                 <h1 className="font-semibold text-primary">Date & Time</h1>
-                <p className="text-secondary"> {formatDateTime(advertisement?.createdAt) || 'No Date & Time available'}</p>
+                <p className="text-placeholder font-normal"> {formatDateTime(advertisement?.createdAt) || 'No Date & Time available'}</p>
               </div>
             </div>
           </div>
@@ -135,7 +139,7 @@ const ViewAdvertisement = () => {
           </div>
           <div className="w-full mt-5">
             <h1 className="font-semibold text-primary">Message</h1>
-            <p className="text-secondary"> {advertisement?.adverstisementMessage || 'Not Present'}</p>
+            <p className="text-placeholder font-normal"> {advertisement?.adverstisementMessage || 'Not Present'}</p>
           </div>
         </div>
       </div>
@@ -144,19 +148,17 @@ const ViewAdvertisement = () => {
         <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className="block text-primary">
-              <div className="flex items-center gap-2">
-                Request Header Details <CiCircleInfo />
-              </div>
+              <div className="flex items-center gap-2">Request Header Details</div>
             </span>
           </div>
           <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div className="mt-5">
               <h1 className="font-semibold text-primary">Request Header</h1>
-              <p className="text-secondary"> {advertisement?.header || 'No header available'}</p>
+              <p className="text-placeholder font-normal"> {advertisement?.header || 'No header available'}</p>
             </div>
             <div className="mt-5">
               <h1 className="font-semibold text-primary">User Agent String</h1>
-              <p className="text-secondary"> {advertisement?.uastring || 'No User Agent String available'}</p>
+              <p className="text-placeholder font-normal"> {advertisement?.uastring || 'No User Agent String available'}</p>
             </div>
           </div>
         </div>
@@ -164,7 +166,10 @@ const ViewAdvertisement = () => {
 
       {!isScrollable && (
         <div className="w-full flex justify-end items-center gap-4 pt-8  border- border-primary">
-          <Link to={'/advertisement/advertisement-list'} className="px-4 py-2 text-primary font-medium bg-inherit hover:bg-hover rounded-xl border border-primary whitespace-nowrap">
+          <Link
+            to={'/advertisement/advertisement-list'}
+            className="px-4 py-2 text-primary font-medium bg-inherit hover:bg-hover rounded-xl border border-primary whitespace-nowrap"
+          >
             Back
           </Link>
         </div>
