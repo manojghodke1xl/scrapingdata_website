@@ -120,8 +120,16 @@ const FileUpload = ({
             <div className="flex gap-1 justify-between relative p-2">
               {renderPreview()}
               <div className="px-1">
-                <button onClick={() => setSelectedFile(null)} className="absolute top-0 right-20" title="Remove File" type="button">
-                  <IoCloseOutline className="text-primary text-xl bg-white rounded-full p-1" size={30} />
+                <button
+                  onClick={() => {
+                    setSelectedFile(null);
+                    setDetails((prev) => ({ ...prev, [fieldName]: undefined }));
+                  }}
+                  className="absolute top-0 right-20"
+                  title="Remove File"
+                  type="button"
+                >
+                  <IoCloseOutline className="text-primary text-xl bg-main rounded-full p-1" size={30} />
                 </button>
                 <input type="file" onChange={handleFileChange} className="hidden" accept={acceptedTypes.join(', ')} ref={fileInputRef} />
                 <Link onClick={() => fileInputRef.current.click()}>

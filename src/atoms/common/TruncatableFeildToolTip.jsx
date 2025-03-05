@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react';
+import { showNotification } from '../../utils/showNotification';
 
 const TruncatableFieldToolTip = ({ content = '', maxLength = 20 }) => {
   const [showTooltip, setShowTooltip] = useState(false);
@@ -11,11 +12,19 @@ const TruncatableFieldToolTip = ({ content = '', maxLength = 20 }) => {
       <span className="flex items-center justify-start">
         {isTruncated ? content.substring(0, maxLength) : content === '' ? '-' : content}
         {isTruncated ? (
-          <button className="btn btn-link p-0 m-0" aria-label="View full content" onMouseEnter={() => setShowTooltip(true)} onMouseLeave={() => setShowTooltip(false)}>
+          <button
+            className="btn btn-link p-0 m-0"
+            aria-label="View full content"
+            onMouseEnter={() => setShowTooltip(true)}
+            onMouseLeave={() => setShowTooltip(false)}
+            onClick={() => {
+              navigator.clipboard.writeText(content);
+              showNotification('success', 'Copied to clipboard!');
+            }}
+          >
             ...
           </button>
         ) : (
-          // <span>{content || '-'}</span>
           <span>{''}</span>
         )}
       </span>

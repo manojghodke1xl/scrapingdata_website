@@ -13,6 +13,8 @@ const OrderPaymentList = () => {
     const {
       _id,
       customer,
+      phoneCode,
+      phone,
       payment: { channel, amount, currency, status, site, coupon },
       products,
       createdAt,
@@ -31,7 +33,8 @@ const OrderPaymentList = () => {
       customer: <TruncatableFieldToolTip content={customer.name} />,
       orderId: orderId || 'N/A',
       site: <TruncatableFieldToolTip content={`${site?.name} (${site?.host})`} />,
-      address: <TruncatableFieldToolTip content={`${address.addressLine1 + ', ' + address.city + ', ' + address.state + ', ' + address.country} `} />,
+      mobile: <TruncatableFieldToolTip content={`${phoneCode ? (phoneCode.startsWith('+') ? phoneCode : `+${phoneCode}`) : ''} ${phone ? phone : '-'}`} />,
+      address: <TruncatableFieldToolTip content={`${address.addressLine1 + ', ' + address.city + ', ' + address.state + ', ' + address.country + ', ' + address.postalCode} `} />,
       amount: <TruncatableFieldToolTip content={amount} />,
       channel: channel === 'razorpay' ? 'Razorpay' : channel === 'stripe' ? 'Stripe' : 'PayPal',
       products: <TruncatableFieldToolTip content={product ?? '-'} />,
@@ -69,21 +72,21 @@ const OrderPaymentList = () => {
                 selectable={true}
                 siteModule={'order-payments'}
                 headers={[
-                  { label: 'Customer Name', key: 'customer' },
-                  { label: 'Site', key: 'site' },
-                  { label: 'Order ID', key: 'orderId' },
-                  { label: 'Address', key: 'address' },
-
-                  { label: 'Products', key: 'products' },
-                  { label: 'Qty', key: 'quantity' },
-                  { label: 'Channel', key: 'channel' },
-                  { label: 'Total Price', key: 'totalPrice' },
-                  { label: 'Total Sale Price', key: 'totalSalePrice' },
-                  { label: 'Amount', key: 'amount' },
-                  { label: 'Coupon', key: 'coupon' },
-                  { label: 'Status', key: 'status' },
-                  { label: 'Created Date', key: 'createdAt' },
-                  { label: 'Updated Date', key: 'updatedAt' }
+                  { id: 0, label: 'Customer Name', key: 'customer' },
+                  { id: 1, label: 'Site', key: 'site' },
+                  { id: 2, label: 'Order ID', key: 'orderId' },
+                  { id: 3, label: 'Mobile Number', key: 'mobile' },
+                  { id: 4, label: 'Address', key: 'address' },
+                  { id: 5, label: 'Products', key: 'products' },
+                  { id: 6, label: 'Qty', key: 'quantity' },
+                  { id: 7, label: 'Channel', key: 'channel' },
+                  { id: 8, label: 'Total Price', key: 'totalPrice' },
+                  { id: 9, label: 'Total Sale Price', key: 'totalSalePrice' },
+                  { id: 10, label: 'Amount', key: 'amount' },
+                  { id: 11, label: 'Coupon', key: 'coupon' },
+                  { id: 12, label: 'Status', key: 'status' },
+                  { id: 13, label: 'Created Date', key: 'createdAt' },
+                  { id: 14, label: 'Updated Date', key: 'updatedAt' }
                 ]}
                 tableData={(data) => setBookingPayments(data.orderPayments)}
                 rows={rows}
