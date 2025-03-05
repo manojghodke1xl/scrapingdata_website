@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react';
 import { showNotification } from '../../utils/showNotification';
+import { FiCopy } from 'react-icons/fi';
 
 const TruncatableFieldToolTip = ({ content = '', maxLength = 20 }) => {
   const [showTooltip, setShowTooltip] = useState(false);
@@ -8,21 +9,20 @@ const TruncatableFieldToolTip = ({ content = '', maxLength = 20 }) => {
   const isTruncated = content.length > maxLength;
 
   return (
-    <div className="relative">
+    <div className="relative" onMouseEnter={() => setShowTooltip(true)} onMouseLeave={() => setShowTooltip(false)}>
       <span className="flex items-center justify-start">
         {isTruncated ? content.substring(0, maxLength) : content === '' ? '-' : content}
         {isTruncated ? (
           <button
-            className="btn btn-link p-0 m-0"
+            className="p-0 m-0 flex items-center"
             aria-label="View full content"
-            onMouseEnter={() => setShowTooltip(true)}
-            onMouseLeave={() => setShowTooltip(false)}
             onClick={() => {
               navigator.clipboard.writeText(content);
               showNotification('success', 'Copied to clipboard!');
             }}
           >
             ...
+            <FiCopy className="text-xl text-primary" />
           </button>
         ) : (
           <span>{''}</span>

@@ -9,8 +9,7 @@ const TruncatableCopyFeild = ({ content }) => {
     <>
       <span className="flex items-center justify-start gap-1">
         <button
-          className="btn btn-link px-1 p-0 m-0"
-          style={{ textDecoration: 'none' }}
+          className="px-1 p-0 m-0"
           aria-label="View full content"
           onMouseEnter={() => setShowTooltip(true)}
           onMouseLeave={() => setShowTooltip(false)}
