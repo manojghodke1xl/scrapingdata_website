@@ -64,15 +64,10 @@ const PaymentList = () => {
                 viewPath={'/payments/payment'}
                 search={true}
                 filter={true}
-                // deleteBtn={true}
                 filterCategory={[
                   { id: 1, name: 'Sites' },
                   { id: 2, name: 'Status' }
                 ]}
-                // statuses={[
-                //   { id: 0, name: 'Active', bgColor: '#ECFDF3', color: '#027948', dotColor: '#12B76A' },
-                //   { id: 2, name: 'Inactive', bgColor: '#F2F4F7', color: '#344054', dotColor: '#667085' }
-                // ]}
                 searchCategory={[{ id: 1, name: 'Channel' }]}
               />
             </div>
