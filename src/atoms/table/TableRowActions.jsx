@@ -40,61 +40,63 @@ const TableRowActions = ({
 
   const availableActions = getActions(row);
 
-  return (
-      <details className="inline-block text-left">
-        <summary
-          className="text-white p-1.5 rounded-xl hover:bg-hover cursor-pointer focus:outline-none"
-          onClick={(e) => {
-            e.stopPropagation();
-            onToggle(row.id);
-          }}
-        >
-          <BsThreeDotsVertical size={20} className="text-secondary hover:text-primary" />
-        </summary>
-        {openDropdownId === row.id && (
-          <ul className={`absolute -mt-2  w-fit rounded-md bg-main shadow-lg border border-primary`}>
-            {availableActions.map((action, i) => (
-              <button
-                key={i}
-                className="w-full flex gap-2 items-center px-4 py-2 text-secondary hover:bg-hover hover:text-primary cursor-pointer focus:outline-none"
-                onClick={async (e) => {
-                  e.stopPropagation();
-                  if (action.type === 'edit') navigate(editPath + '/' + row.id);
-                  if (action.type === 'view') navigate(viewPath + '/' + row.id);
-                  if (action.type === 'apps') navigate(appsPath + '/' + row.id);
-                  if (action.type === 'copy') navigate(copyPath + '/' + row.id);
-                  if (action.type === 'delete') {
-                    setSelectionState((prev) => ({ ...prev, deleteId: row.id }));
-                    setModalState((prev) => ({ ...prev, isDeleteModelOpen: true }));
-                  }
-                  if (action.type === 'managePackage') navigate(`${managePackagePath}?eventId=${row.id}`);
-                  if (action.type === 'sendForApproval') await approvalApi(row.id);
-                  if (action.type === 'sendCertificate') await approvalApi(row.bookingId, false, sendCertificate !== 'ID');
-                  if (action.type === 'sendCertificateUnique') await approvalApi(row.bookingId, true, sendCertificate !== 'ID');
-                }}
-              >
-                {action.type === 'edit' && <MdEdit size={20} />}
-                {action.type === 'view' && <MdRemoveRedEye size={20} />}
-                {action.type === 'apps' && <MdOutlineApps size={20} />}
-                {action.type === 'copy' && <FiCopy size={20} />}
-                {action.type === 'delete' && <MdDeleteForever size={20} />}
-                {action.type === 'managePackage' && <MdOutlineInventory2 size={20} />}
-                {(action.type === 'sendForApproval' || action.type === 'sendCertificate' || action.type === 'sendCertificateUnique') && <MdSend size={20} />}
+  return availableActions.length > 0 ? (
+    <details className="inline-block text-left">
+      <summary
+        className="text-white p-1.5 rounded-xl hover:bg-hover cursor-pointer focus:outline-none"
+        onClick={(e) => {
+          e.stopPropagation();
+          onToggle(row.id);
+        }}
+      >
+        <BsThreeDotsVertical size={20} className="text-secondary hover:text-primary" />
+      </summary>
+      {openDropdownId === row.id && (
+        <ul className={`absolute -mt-2  w-fit rounded-md bg-main shadow-lg border border-primary`}>
+          {availableActions.map((action, i) => (
+            <button
+              key={i}
+              className="w-full flex gap-2 items-center px-4 py-2 text-secondary hover:bg-hover hover:text-primary cursor-pointer focus:outline-none"
+              onClick={async (e) => {
+                e.stopPropagation();
+                if (action.type === 'edit') navigate(editPath + '/' + row.id);
+                if (action.type === 'view') navigate(viewPath + '/' + row.id);
+                if (action.type === 'apps') navigate(appsPath + '/' + row.id);
+                if (action.type === 'copy') navigate(copyPath + '/' + row.id);
+                if (action.type === 'delete') {
+                  setSelectionState((prev) => ({ ...prev, deleteId: row.id }));
+                  setModalState((prev) => ({ ...prev, isDeleteModelOpen: true }));
+                }
+                if (action.type === 'managePackage') navigate(`${managePackagePath}?eventId=${row.id}`);
+                if (action.type === 'sendForApproval') await approvalApi(row.id);
+                if (action.type === 'sendCertificate') await approvalApi(row.bookingId, false, sendCertificate !== 'ID');
+                if (action.type === 'sendCertificateUnique') await approvalApi(row.bookingId, true, sendCertificate !== 'ID');
+              }}
+            >
+              {action.type === 'edit' && <MdEdit size={20} />}
+              {action.type === 'view' && <MdRemoveRedEye size={20} />}
+              {action.type === 'apps' && <MdOutlineApps size={20} />}
+              {action.type === 'copy' && <FiCopy size={20} />}
+              {action.type === 'delete' && <MdDeleteForever size={20} />}
+              {action.type === 'managePackage' && <MdOutlineInventory2 size={20} />}
+              {(action.type === 'sendForApproval' || action.type === 'sendCertificate' || action.type === 'sendCertificateUnique') && <MdSend size={20} />}
 
-                {action.type === 'managePackage'
-                  ? 'Manage Package'
-                  : action.type === 'sendForApproval'
-                  ? 'Send For Approval'
-                  : action.type === 'sendCertificate'
-                  ? 'Send All Certificates'
-                  : action.type === 'sendCertificateUnique'
-                  ? 'Send Unique Certificates'
-                  : action.type.charAt(0).toUpperCase() + action.type.slice(1)}
-              </button>
-            ))}
-          </ul>
-        )}
-      </details>
+              {action.type === 'managePackage'
+                ? 'Manage Package'
+                : action.type === 'sendForApproval'
+                ? 'Send For Approval'
+                : action.type === 'sendCertificate'
+                ? 'Send All Certificates'
+                : action.type === 'sendCertificateUnique'
+                ? 'Send Unique Certificates'
+                : action.type.charAt(0).toUpperCase() + action.type.slice(1)}
+            </button>
+          ))}
+        </ul>
+      )}
+    </details>
+  ) : (
+    'N/A'
   );
 };
 

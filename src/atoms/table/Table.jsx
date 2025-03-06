@@ -116,7 +116,7 @@ const TableComponent = ({
 
   // Sorting state
   const [sortConfig, setSortConfig] = useState({
-    sortBy: 'all',
+    sortBy: 'createdAt',
     sortOrder: 'desc'
   });
 

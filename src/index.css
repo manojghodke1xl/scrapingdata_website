@@ -302,33 +302,39 @@ details[open] .icon-open {
 /* Calendar styling */
 .react-datepicker {
   font-family: 'Inter', sans-serif !important;
-  border: 1px solid #d0d5dd !important;
+  border: 1px solid var(--border-primary) !important;
   border-radius: 8px !important;
   box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1) !important;
-  background-color: white !important;
+  background-color: var(--bg-main) !important;
+  color: var(--text-primary) !important;
 }
 
 .react-datepicker__header {
-  background-color: white !important;
-  border-bottom: 1px solid #f2f4f7 !important;
+  background-color: var(--bg-main) !important;
+  border-bottom: 1px solid var(--border-primary) !important;
   padding-top: 16px !important;
+  color: var(--text-primary) !important;
 }
 
 .react-datepicker__current-month {
   font-weight: 600 !important;
-  color: #101828 !important; /* dark */
+  color: var(--text-dark) !important; /* dark */
   margin-bottom: 8px !important;
+}
+.react-datepicker-time__header{
+  color: var(--text-dark) !important; /* dark */
+
 }
 
 .react-datepicker__day-name {
-  color: #667085 !important; /* secondary */
+  color: var(--text-placeholder) !important; /* secondary */
   font-weight: 500 !important;
   width: 2rem !important;
   margin: 0.2rem !important;
 }
 
 .react-datepicker__day {
-  color: #344054 !important; /* primary */
+  color: var(--text-secondary) !important; /* primary */
   border-radius: 6px !important;
   width: 2rem !important;
   line-height: 2rem !important;
@@ -336,38 +342,40 @@ details[open] .icon-open {
 }
 
 .react-datepicker__day:hover {
-  background-color: #175cd3 !important; /* fadedblue */
+  background-color: var(--bg-primary-hover) !important; /* fadedblue */
   border-radius: 6px !important;
 }
 
 .react-datepicker__day--selected {
-  background-color: #175cd3 !important; /* primary */
-  color: white !important;
+  background-color: var(--bg-primary)!important; /* primary */
+  color: var(--text-primary) !important;
   font-weight: 600 !important;
 }
 
 .react-datepicker__day--keyboard-selected {
-  background-color: #e0eaff !important; /* lightcyan */
-  color: #175cd3 !important; /* primary */
+  background-color: var(--bg-primary)!important; /* primary */
+  color: var(--text-primary) !important;
 }
 
 .react-datepicker__day--disabled {
-  color: #d0d5dd !important; /* darkgray */
+  color: var(--text-placeholder) !important; /* darkgray */
   cursor: not-allowed !important;
 }
 
 .react-datepicker__navigation {
   top: 16px !important;
+  right: 100px !important;
 }
 
 /* Time Container */
 .react-datepicker__time-container {
-  border-left: 1px solid #f2f4f7 !important;
+  border-left: 1px solid var(--border-primary) !important;
   width: 100px !important;
 }
 
 .react-datepicker__time-container .react-datepicker__time {
-  background: white !important;
+  background: var(--bg-main) !important;
+  color: var(--text-primary) !important;
 }
 
 .react-datepicker__time-container .react-datepicker__time .react-datepicker__time-box {
@@ -380,7 +388,7 @@ details[open] .icon-open {
 }
 
 .react-datepicker__time-list-item {
-  color: #344054 !important; /* primary */
+  color: var(--text-primary) !important; /* primary */
   padding: 8px !important;
   height: auto !important;
   display: flex !important;
@@ -389,30 +397,30 @@ details[open] .icon-open {
 }
 
 .react-datepicker__time-list-item:hover {
-  background-color: #eff8ff !important; /* fadedblue */
-  color: #175cd3 !important; /* primary */
+  background-color: var(--bg-primary-hover) !important; /* fadedblue */
+  color: var(--text-primary) !important; /* primary */
 }
 
 .react-datepicker__time-list-item--selected {
-  background-color: #175cd3 !important; /* primary */
-  color: white !important;
+  background-color: var(--bg-primary) !important; /* primary */
+  color: var(--text-primary) !important;
   font-weight: 600 !important;
 }
 
 /* Month and Year Dropdowns */
 .react-datepicker__month-select,
 .react-datepicker__year-select {
-  border: 1px solid #d0d5dd !important;
+  border: 1px solid var(--border-primary) !important;
   border-radius: 6px !important;
   padding: 4px 8px !important;
-  color: #344054 !important; /* primary */
+  color: var(--text-primary) !important; /* primary */
   font-weight: 500 !important;
-  background-color: white !important;
+  background-color: var(--bg-main) !important;
 }
 
 .react-datepicker__month-select:focus,
 .react-datepicker__year-select:focus {
-  border-color: #175cd3 !important; /* primary */
+  border-color: var(--text-brand) !important; /* primary */
   outline: none !important;
 }
 
@@ -424,12 +432,12 @@ details[open] .icon-open {
 
 .react-datepicker__time-list::-webkit-scrollbar-track,
 .react-datepicker__year-select::-webkit-scrollbar {
-  background: #f9fafb !important; /* grey */
+  background: var(--bg-darkgray) !important; /* grey */
 }
 
 .react-datepicker__time-list::-webkit-scrollbar-thumb,
 .react-datepicker__year-select::-webkit-scrollbar {
-  background: #d0d5dd !important; /* darkgray */
+  background: var(--text-placeholder) !important; /* darkgray */
   border-radius: 4px !important;
 }
 
@@ -440,7 +448,7 @@ details[open] .icon-open {
   justify-content: center !important;
   align-items: center !important;
   font-weight: 500 !important;
-  color: #344054 !important; /* primary */
+  color: var(--text-primary) !important; /* primary */
 }
 
 .react-tel-input .form-control {
@@ -455,213 +463,14 @@ details[open] .icon-open {
   left: 0;
   border-radius: 0.75rem 0 0 0.75rem;
   border: none;
-  border-right: 1px solid #d0d5dd !important;
+  border-right: 1px solid var(--border-primary) !important;
 }
 
 .react-tel-input .form-control:focus {
   outline: none !important;
   box-shadow: none !important;
 }
-/* 
-.ql-toolbar {
-  border-top-right-radius: 8px;
-  border-top-left-radius: 8px;
-  border-bottom-left-radius: 0px;
-  border-bottom-right-radius: 0px;
-  color: #344054 !important;
-}
-.ql-editor,
-.ql-blank {
-  font-size: 16px;
-  font-family: 'Inter', sans-serif !important;
-  font-optical-sizing: auto;
-  font-weight: 600;
-  font-style: normal;
-  color: var(--text-dark);
-  letter-spacing: 1px;
-  height: fit-content !important;
-}
-.ql-container {
-  border-bottom-left-radius: 8px !important;
-  border-bottom-right-radius: 8px !important;
-}
 
-.ql-toolbar.ql-snow + .ql-container.ql-snow {
-  min-height: 160px !important;
-} */
-
-/* REACT QUILL STYLES */
-
-/* TOOLBAR STYLES */
-.ql-toolbar {
-  border-top-right-radius: 8px;
-  border-top-left-radius: 8px;
-  border-bottom-left-radius: 0px;
-  border-bottom-right-radius: 0px;
-  border: 1px solid var(--border) !important;
-  box-sizing: border-box;
-  font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
-  padding: 8px;
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.ql-toolbar .ql-formats {
-  margin-right: 8px;
-}
-
-/* EDITOR STYLES */
-.ql-editor,
-.ql-blank {
-  background-color: inherit !important;
-  color: var(--text-primary) !important;
-  font-weight: 400;
-  font-style: normal;
-  letter-spacing: 1px;
-  height: fit-content !important;
-}
-
-.ql-editor.ql-blank::before {
-  color: var(--text-placeholder);
-  content: attr(data-placeholder);
-  font-style: normal !important;
-  /* font-weight: 500 !important; */
-  left: 15px;
-  pointer-events: none;
-  position: absolute;
-  right: 15px;
-}
-
-/* CONTAINER STYLES */
-.ql-container.ql-snow {
-  border-bottom-left-radius: 8px !important;
-  border-bottom-right-radius: 8px !important;
-  min-height: 160px !important;
-  border: 1px solid var(--border) !important;
-}
-
-/* TOOLBAR BUTTON STYLES */
-
-.ql-snow.ql-toolbar button:hover,
-.ql-snow .ql-toolbar button:hover,
-.ql-snow.ql-toolbar button:focus,
-.ql-snow .ql-toolbar button:focus,
-.ql-snow.ql-toolbar button.ql-active,
-.ql-snow .ql-toolbar button.ql-active,
-.ql-snow.ql-toolbar .ql-picker-label:hover,
-.ql-snow .ql-toolbar .ql-picker-label:hover,
-.ql-snow.ql-toolbar .ql-picker-label.ql-active,
-.ql-snow .ql-toolbar .ql-picker-label.ql-active,
-.ql-snow.ql-toolbar .ql-picker-item:hover,
-.ql-snow .ql-toolbar .ql-picker-item:hover,
-.ql-snow.ql-toolbar .ql-picker-item.ql-selected,
-.ql-snow .ql-toolbar .ql-picker-item.ql-selected {
-  color: var(--bg-primary) !important;
-  background-color: var(--bg-primary-faded) !important;
-  border-radius: 5px !important;
-}
-
-.ql-snow.ql-toolbar button:hover .ql-fill,
-.ql-snow .ql-toolbar button:hover .ql-fill,
-.ql-snow.ql-toolbar button:focus .ql-fill,
-.ql-snow .ql-toolbar button:focus .ql-fill,
-.ql-snow.ql-toolbar button.ql-active .ql-fill,
-.ql-snow .ql-toolbar button.ql-active .ql-fill,
-.ql-snow.ql-toolbar .ql-picker-label:hover .ql-fill,
-.ql-snow .ql-toolbar .ql-picker-label:hover .ql-fill,
-.ql-snow.ql-toolbar .ql-picker-label.ql-active .ql-fill,
-.ql-snow .ql-toolbar .ql-picker-label.ql-active .ql-fill,
-.ql-snow.ql-toolbar .ql-picker-item:hover .ql-fill,
-.ql-snow .ql-toolbar .ql-picker-item:hover .ql-fill,
-.ql-snow.ql-toolbar .ql-picker-item.ql-selected .ql-fill,
-.ql-snow .ql-toolbar .ql-picker-item.ql-selected .ql-fill,
-.ql-snow.ql-toolbar button:hover .ql-stroke.ql-fill,
-.ql-snow .ql-toolbar button:hover .ql-stroke.ql-fill,
-.ql-snow.ql-toolbar button:focus .ql-stroke.ql-fill,
-.ql-snow .ql-toolbar button:focus .ql-stroke.ql-fill,
-.ql-snow.ql-toolbar button.ql-active .ql-stroke.ql-fill,
-.ql-snow .ql-toolbar button.ql-active .ql-stroke.ql-fill,
-.ql-snow.ql-toolbar .ql-picker-label:hover .ql-stroke.ql-fill,
-.ql-snow .ql-toolbar .ql-picker-label:hover .ql-stroke.ql-fill,
-.ql-snow.ql-toolbar .ql-picker-label.ql-active .ql-stroke.ql-fill,
-.ql-snow .ql-toolbar .ql-picker-label.ql-active .ql-stroke.ql-fill,
-.ql-snow.ql-toolbar .ql-picker-item:hover .ql-stroke.ql-fill,
-.ql-snow .ql-toolbar .ql-picker-item:hover .ql-stroke.ql-fill,
-.ql-snow.ql-toolbar .ql-picker-item.ql-selected .ql-stroke.ql-fill,
-.ql-snow .ql-toolbar .ql-picker-item.ql-selected .ql-stroke.ql-fill {
-  stroke: var(--bg-primary) !important;
-}
-.ql-snow.ql-toolbar button:hover .ql-stroke,
-.ql-snow .ql-toolbar button:hover .ql-stroke,
-.ql-snow.ql-toolbar button:focus .ql-stroke,
-.ql-snow .ql-toolbar button:focus .ql-stroke,
-.ql-snow.ql-toolbar button.ql-active .ql-stroke,
-.ql-snow .ql-toolbar button.ql-active .ql-stroke,
-.ql-snow.ql-toolbar .ql-picker-label:hover .ql-stroke,
-.ql-snow .ql-toolbar .ql-picker-label:hover .ql-stroke,
-.ql-snow.ql-toolbar .ql-picker-label.ql-active .ql-stroke,
-.ql-snow .ql-toolbar .ql-picker-label.ql-active .ql-stroke,
-.ql-snow.ql-toolbar .ql-picker-item:hover .ql-stroke,
-.ql-snow .ql-toolbar .ql-picker-item:hover .ql-stroke,
-.ql-snow.ql-toolbar .ql-picker-item.ql-selected .ql-stroke,
-.ql-snow .ql-toolbar .ql-picker-item.ql-selected .ql-stroke,
-.ql-snow.ql-toolbar button:hover .ql-stroke-miter,
-.ql-snow .ql-toolbar button:hover .ql-stroke-miter,
-.ql-snow.ql-toolbar button:focus .ql-stroke-miter,
-.ql-snow .ql-toolbar button:focus .ql-stroke-miter,
-.ql-snow.ql-toolbar button.ql-active .ql-stroke-miter,
-.ql-snow .ql-toolbar button.ql-active .ql-stroke-miter,
-.ql-snow.ql-toolbar .ql-picker-label:hover .ql-stroke-miter,
-.ql-snow .ql-toolbar .ql-picker-label:hover .ql-stroke-miter,
-.ql-snow.ql-toolbar .ql-picker-label.ql-active .ql-stroke-miter,
-.ql-snow .ql-toolbar .ql-picker-label.ql-active .ql-stroke-miter,
-.ql-snow.ql-toolbar .ql-picker-item:hover .ql-stroke-miter,
-.ql-snow .ql-toolbar .ql-picker-item:hover .ql-stroke-miter,
-.ql-snow.ql-toolbar .ql-picker-item.ql-selected .ql-stroke-miter,
-.ql-snow .ql-toolbar .ql-picker-item.ql-selected .ql-stroke-miter {
-  stroke: var(--bg-primary) !important;
-}
-
-.ql-snow .ql-stroke {
-  fill: none;
-  stroke: var(--text-main) !important;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-width: 2;
-}
-.ql-snow .ql-stroke-miter {
-  fill: none;
-  stroke: var(--text-main) !important;
-  stroke-miterlimit: 10;
-  stroke-width: 2;
-}
-.ql-snow .ql-fill,
-.ql-snow .ql-stroke.ql-fill {
-  fill: var(--text-main) !important;
-}
-
-.ql-snow .ql-picker {
-  color: var(--text-main) !important;
-  display: inline-block;
-  float: left;
-  font-size: 14px;
-  font-weight: 500;
-  height: 24px;
-  position: relative;
-  vertical-align: middle;
-}
-
-.ql-snow .ql-picker-options {
-  background-color: var(--bg-main) !important;
-  border-radius: 5px !important;
-  border: 1px solid var(--border) !important;
-  margin-top: 5px !important;
-  display: none;
-  min-width: 100%;
-  padding: 4px 8px;
-  position: absolute;
-  white-space: nowrap;
-}
 
 /* REACT PHONE INPUT 2 CUSTOM STYLES */
 
