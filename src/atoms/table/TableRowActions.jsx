@@ -1,3 +1,4 @@
+import { useState, useRef, useEffect } from 'react';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { FiCopy } from 'react-icons/fi';
 import { MdEdit, MdOutlineApps, MdRemoveRedEye, MdOutlineInventory2, MdSend, MdDeleteForever } from 'react-icons/md';
@@ -22,6 +23,41 @@ const TableRowActions = ({
   onToggle
 }) => {
   const navigate = useNavigate();
+  const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0 });
+  const buttonRef = useRef(null);
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (openDropdownId && dropdownRef.current && buttonRef.current && !dropdownRef.current.contains(event.target) && !buttonRef.current.contains(event.target)) {
+        onToggle(null);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [openDropdownId, onToggle]);
+
+  const handleToggle = (id, e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (buttonRef.current) {
+      const rect = buttonRef.current.getBoundingClientRect();
+      const scrollY = window.scrollY;
+      const scrollX = window.scrollX;
+
+      // Calculate position relative to viewport
+      setDropdownPosition({
+        top: rect.bottom + scrollY,
+        left: rect.left + scrollX - 110 // Adjust 150 based on your dropdown width
+      });
+    }
+
+    onToggle(id);
+  };
 
   // Function to count the available actions
   const getActions = (row) => {
@@ -41,18 +77,20 @@ const TableRowActions = ({
   const availableActions = getActions(row);
 
   return availableActions.length > 0 ? (
-    <details className="inline-block text-left">
-      <summary
-        className="text-white p-1.5 rounded-xl hover:bg-hover cursor-pointer focus:outline-none"
-        onClick={(e) => {
-          e.stopPropagation();
-          onToggle(row.id);
-        }}
-      >
+    <div className="relative">
+      <button ref={buttonRef} className="text-white p-1.5 rounded-xl hover:bg-hover cursor-pointer focus:outline-none" onClick={(e) => handleToggle(row.id, e)}>
         <BsThreeDotsVertical size={20} className="text-secondary hover:text-primary" />
-      </summary>
+      </button>
+
       {openDropdownId === row.id && (
-        <ul className={`absolute -mt-2  w-fit rounded-md bg-main shadow-lg border border-primary`}>
+        <ul
+          ref={dropdownRef}
+          className="fixed w-fit rounded-md bg-main shadow-lg border border-primary"
+          style={{
+            top: `${dropdownPosition.top}px`,
+            left: `${dropdownPosition.left}px`
+          }}
+        >
           {availableActions.map((action, i) => (
             <button
               key={i}
@@ -94,7 +132,7 @@ const TableRowActions = ({
           ))}
         </ul>
       )}
-    </details>
+    </div>
   ) : (
     'N/A'
   );

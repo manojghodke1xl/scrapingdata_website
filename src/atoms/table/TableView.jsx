@@ -180,12 +180,12 @@ const TableView = ({
         <thead>
           <tr>
             {selectable && (
-              <th scope="col" className="px-2 py-2 text-left sticky left-0 bg-main z-30 w-[60px]">
+              <th scope="col" className="px-2 py-2 text-left sticky left-0 bg-main z-20 w-[60px]">
                 <Checkbox checked={selectionState.isAllSelected} onChange={handleMasterCheckboxChange} />
               </th>
             )}
 
-            <th scope="col" className="px-2 py-2 whitespace-nowrap text-left font-semibold sticky bg-main z-30 w-[60px]">
+            <th scope="col" style={{ left: selectable ? `${CHECKBOX_WIDTH}px` : 0 }} className="px-2 py-2 whitespace-nowrap text-left font-semibold sticky bg-main z-20 w-[60px]">
               Sr. No.
             </th>
 
@@ -195,7 +195,7 @@ const TableView = ({
             })()}
 
             {actions && (
-              <th scope="col" className="px-2 text-left right-0 font-semibold text-primary sticky bg-main z-30">
+              <th scope="col" className="px-2 text-left right-0 font-semibold text-primary sticky bg-main z-20">
                 Actions
               </th>
             )}
@@ -223,11 +223,11 @@ const TableView = ({
               return (
                 <tr key={row.id} className={`border-b border-primary ${selectionState.selectedItems.includes(row.id) ? 'bg-primary-faded' : 'hover:bg-hover'}`}>
                   {selectable && (
-                    <td className="px-2 py-1 sticky left-0 bg-main z-30 w-[60px]">
+                    <td className="px-2 py-1 sticky left-0 bg-main z-20 w-[60px]">
                       <Checkbox checked={selectionState.selectedItems.includes(row.id)} onChange={() => handleRowCheckboxChange(row.id)} disabled={row.isSuperAdmin} />
                     </td>
                   )}
-                  <td style={{ left: selectable ? `${CHECKBOX_WIDTH}px` : 0 }} className="px-2 py-1 font-normal sticky bg-main z-30 w-[60px]">
+                  <td style={{ left: selectable ? `${CHECKBOX_WIDTH}px` : 0 }} className="px-2 py-1 font-normal sticky bg-main z-20 w-[60px]">
                     {getSerialNumber(index)}
                   </td>
 
@@ -237,7 +237,7 @@ const TableView = ({
                   })()}
 
                   {actions && (
-                    <td className={`bg-main ${openDropdownId === row.id ? 'fixed right-20 pr-9 z-50' : 'sticky right-0'} `}>
+                    <td className={`bg-main sticky right-0 z-50`}>
                       <TableRowActions
                         row={row}
                         editPath={editPath}
