@@ -84,8 +84,25 @@ const AddSite = () => {
 
   const validate = () => {
     const newErrors = {};
-    if (!siteDetails.name.trim()) newErrors.name = 'Name is required';
-    if (!siteDetails.host.trim()) newErrors.host = 'Host is required';
+    const nameRegex = /^[a-zA-Z0-9-_]+( [a-zA-Z0-9-_]+)*$/;
+    const hostRegex = /^(?!:\/\/)([a-zA-Z0-9-_]+(\.[a-zA-Z0-9-_]+)+.*)$/;
+
+    if (!siteDetails.name.trim()) {
+      newErrors.name = 'Name is required';
+    } else if (!nameRegex.test(siteDetails.name)) {
+      newErrors.name = 'Invalid name format';
+    } else if (siteDetails.name.length > 30) {
+      newErrors.name = 'Name must be 30 characters or less';
+    }
+
+    if (!siteDetails.host.trim()) {
+      newErrors.host = 'Host is required';
+    } else if (!hostRegex.test(siteDetails.host)) {
+      newErrors.host = 'Invalid host format';
+    } else if (siteDetails.host.length > 30) {
+      newErrors.host = 'Host must be 30 characters or less';
+    }
+
     if (!siteDetails.smtp) newErrors.smtp = 'SMTP is required';
 
     setErrors(newErrors);

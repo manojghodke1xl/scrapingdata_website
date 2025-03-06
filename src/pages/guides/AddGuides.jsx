@@ -76,7 +76,14 @@ const AddGuides = () => {
 
   const validate = () => {
     const newErrors = {};
-    if (!guideDetails.title.trim()) newErrors.title = 'Title is required';
+    const titleRegex = /^[a-zA-Z0-9-_]+( [a-zA-Z0-9-_]+)*$/;
+    if (!guideDetails.title.trim()) {
+      newErrors.title = 'Title is required';
+    } else if (!titleRegex.test(guideDetails.title)) {
+      newErrors.title = 'Invalid title format';
+    } else if (guideDetails.title.length > 30) {
+      newErrors.title = 'Title must be 30 characters or less';
+    }
     if (guideDetails.sites.length === 0) newErrors.sites = 'At least one site must be selected';
     if (!guideDetails.mailSubject.trim()) newErrors.mailSubject = 'Subject is required';
     if (!guideDetails.mailBody.trim()) newErrors.mailBody = 'Body is required';

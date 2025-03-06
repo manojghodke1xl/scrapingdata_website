@@ -77,7 +77,14 @@ const AddCaseStudy = () => {
 
   const validate = () => {
     const newErrors = {};
-    if (!caseStudyDetails.title.trim()) newErrors.title = 'Title is required.';
+    const titleRegex = /^[a-zA-Z0-9-_]+( [a-zA-Z0-9-_]+)*$/;
+    if (!caseStudyDetails.title.trim()) {
+      newErrors.title = 'Title is required';
+    } else if (!titleRegex.test(caseStudyDetails.title)) {
+      newErrors.title = 'Invalid title format';
+    } else if (caseStudyDetails.title.length > 30) {
+      newErrors.title = 'Title must be 30 characters or less';
+    }
     if (!caseStudyDetails.sites.length) newErrors.sites = 'Minimum one site is required.';
     if (!caseStudyDetails.mailSubject.trim()) newErrors.mailSubject = 'Subject is required.';
     if (!caseStudyDetails.mailBody.trim()) newErrors.mailBody = 'Body is required.';
