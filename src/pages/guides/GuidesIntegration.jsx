@@ -8,7 +8,7 @@ const GuidesIntegration = () => {
     },
     {
       title: 'Endpoint',
-      content: `${import.meta.env.VITE_API_URL}/getguides`
+      content: `${import.meta.env.VITE_API_URL}getguides`
     },
     {
       title: 'Request Body Parameters',

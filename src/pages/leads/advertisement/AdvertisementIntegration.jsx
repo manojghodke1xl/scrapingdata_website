@@ -8,7 +8,7 @@ const AdvertisementIntegration = () => {
     },
     {
       title: 'Endpoint',
-      content: `${import.meta.env.VITE_API_URL}/advertisement`
+      content: `${import.meta.env.VITE_API_URL}advertisement`
     },
     {
       title: 'Request Body Parameters',

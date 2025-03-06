@@ -8,7 +8,7 @@ const FeedbackIntegration = () => {
     },
     {
       title: 'Endpoint',
-      content: `${import.meta.env.VITE_API_URL}/feedback`
+      content: `${import.meta.env.VITE_API_URL}feedback`
     },
     {
       title: 'Request Body Parameters',

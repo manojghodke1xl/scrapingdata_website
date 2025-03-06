@@ -8,7 +8,7 @@ const PopupIntegration = () => {
     },
     {
       title: 'Endpoint',
-      content: `${import.meta.env.VITE_API_URL}/getpopups`
+      content: `${import.meta.env.VITE_API_URL}getpopups`
     },
     {
       title: 'Request Body Parameters',

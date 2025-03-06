@@ -8,7 +8,7 @@ const PaymentIntegration = () => {
     },
     {
       title: 'Endpoint',
-      content: `${import.meta.env.VITE_API_URL}/make-payment`
+      content: `${import.meta.env.VITE_API_URL}make-payment`
     },
     {
       title: 'Request Body Parameters',

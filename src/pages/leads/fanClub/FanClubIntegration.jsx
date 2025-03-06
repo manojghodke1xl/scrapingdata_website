@@ -8,7 +8,7 @@ const FanClubIntegration = () => {
     },
     {
       title: 'Endpoint',
-      content: `${import.meta.env.VITE_API_URL}/fan-club`
+      content: `${import.meta.env.VITE_API_URL}fan-club`
     },
     {
       title: 'Request Body Parameters',

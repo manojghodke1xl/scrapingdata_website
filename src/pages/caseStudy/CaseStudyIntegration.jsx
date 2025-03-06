@@ -8,7 +8,7 @@ const CaseStudyIntegration = () => {
     },
     {
       title: 'Endpoint',
-      content: `${import.meta.env.VITE_API_URL}/getcasestudies`
+      content: `${import.meta.env.VITE_API_URL}getcasestudies`
     },
     {
       title: 'Request Body Parameters',

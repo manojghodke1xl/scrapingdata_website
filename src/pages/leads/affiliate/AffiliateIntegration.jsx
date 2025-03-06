@@ -8,7 +8,7 @@ const AffiliateIntegration = () => {
     },
     {
       title: 'Endpoint',
-      content: `${import.meta.env.VITE_API_URL}/affiliate`
+      content: `${import.meta.env.VITE_API_URL}affiliate`
     },
     {
       title: 'Request Body Parameters',

@@ -8,7 +8,7 @@ const ResellerIntegration = () => {
     },
     {
       title: 'Endpoint',
-      content: `${import.meta.env.VITE_API_URL}/reseller`
+      content: `${import.meta.env.VITE_API_URL}reseller`
     },
     {
       title: 'Request Body Parameters',

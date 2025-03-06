@@ -8,7 +8,7 @@ const VendorIntegration = () => {
     },
     {
       title: 'Endpoint',
-      content: `${import.meta.env.VITE_API_URL}/vendor`
+      content: `${import.meta.env.VITE_API_URL}vendor`
     },
     {
       title: 'Request Body Parameters',

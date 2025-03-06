@@ -8,7 +8,7 @@ const SubscriberIntegration = () => {
     },
     {
       title: 'Endpoint',
-      content: `${import.meta.env.VITE_API_URL}/newsletter`
+      content: `${import.meta.env.VITE_API_URL}newsletter`
     },
     {
       title: 'Request Body Parameters',

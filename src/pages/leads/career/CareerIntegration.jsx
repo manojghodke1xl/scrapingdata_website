@@ -8,7 +8,7 @@ const CareerIntegration = () => {
     },
     {
       title: 'Endpoint',
-      content: `${import.meta.env.VITE_API_URL}/career`
+      content: `${import.meta.env.VITE_API_URL}career`
     },
     {
       title: 'Request Body Parameters',

@@ -8,7 +8,7 @@ const EnquiryIntegration = () => {
     },
     {
       title: 'Endpoint',
-      content: `${import.meta.env.VITE_API_URL}/enquiry`
+      content: `${import.meta.env.VITE_API_URL}enquiry`
     },
     {
       title: 'Request Body Parameters',

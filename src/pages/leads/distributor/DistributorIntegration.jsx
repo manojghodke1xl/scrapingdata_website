@@ -8,7 +8,7 @@ const DistributorIntegration = () => {
     },
     {
       title: 'Endpoint',
-      content: `${import.meta.env.VITE_API_URL}/distributor`
+      content: `${import.meta.env.VITE_API_URL}distributor`
     },
     {
       title: 'Request Body Parameters',
