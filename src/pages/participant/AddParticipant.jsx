@@ -43,6 +43,8 @@ const AddParticipant = () => {
 
   const validate = () => {
     const errors = {};
+    const nameRegex = /^[a-zA-Z0-9-_]+( [a-zA-Z0-9-_]+)*$/;
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!participantDetails.site) {
       errors.site = 'Please select site first before proceeding';
       errors.event = 'Please select site first';
@@ -55,8 +57,20 @@ const AddParticipant = () => {
 
     if (participantDetails.event && !participantDetails.package) errors.package = 'Package is required';
     if (!participantDetails.currency) errors.currency = 'Currency is required';
-    if (!participantDetails.userDetails.name) errors.name = 'Name is required';
-    if (!participantDetails.userDetails.email) errors.email = 'Email is required';
+    if (!participantDetails.userDetails.name.trim()) {
+      errors.name = 'Name is required';
+    } else if (!nameRegex.test(participantDetails.userDetails.name)) {
+      errors.name = 'Invalid name format';
+    } else if (participantDetails.userDetails.name.length > 30) {
+      errors.name = 'Name must be 30 characters or less';
+    }
+    if (!participantDetails.userDetails.email.trim()) {
+      errors.email = 'Email is required';
+    } else if (!emailRegex.test(participantDetails.userDetails.email)) {
+      errors.email = 'Invalid email format';
+    } else if (participantDetails.userDetails.email.length > 30) {
+      errors.email = 'Email must be 30 characters or less';
+    }
     if (!participantDetails.userDetails.phoneNumber) errors.phoneNumber = 'Phone number is required';
     setErrors(errors);
     return Object.keys(errors).length === 0;

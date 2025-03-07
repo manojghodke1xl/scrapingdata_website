@@ -32,8 +32,22 @@ const AddCareer = () => {
 
   const validate = () => {
     const newErrors = {};
-    if (!careerDetails.name.trim()) newErrors.name = 'Name is required';
-    if (!careerDetails.email.trim()) newErrors.email = 'Email is required';
+    const nameRegex = /^[a-zA-Z0-9-_]+( [a-zA-Z0-9-_]+)*$/;
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!careerDetails.name.trim()) {
+      newErrors.name = 'Name is required';
+    } else if (!nameRegex.test(careerDetails.name)) {
+      newErrors.name = 'Invalid name format';
+    } else if (careerDetails.name.length > 30) {
+      newErrors.name = 'Name must be 30 characters or less';
+    }
+    if (!careerDetails.email.trim()) {
+      newErrors.email = 'Email is required';
+    } else if (!emailRegex.test(careerDetails.email)) {
+      newErrors.email = 'Invalid email format';
+    } else if (careerDetails.email.length > 30) {
+      newErrors.email = 'Email must be 30 characters or less';
+    }
     if (!careerDetails.mobile.trim()) newErrors.mobile = 'Mobile is required';
     if (!careerDetails.site) newErrors.site = 'Site is required';
     setErrors(newErrors);

@@ -90,7 +90,14 @@ const AddTestimonial = () => {
 
   const validate = () => {
     const newErrors = {};
-    if (!testimonialDetails.name) newErrors.name = 'Name is required';
+    const nameRegex = /^[a-zA-Z0-9-_]+( [a-zA-Z0-9-_]+)*$/;
+    if (!testimonialDetails.name.trim()) {
+      newErrors.name = 'Name is required';
+    } else if (!nameRegex.test(testimonialDetails.name)) {
+      newErrors.name = 'Invalid name format';
+    } else if (testimonialDetails.name.length > 30) {
+      newErrors.name = 'Name must be 30 characters or less';
+    }
     if (!testimonialDetails.sites.length) newErrors.sites = 'At least one site must be selected';
     if (!testimonialDetails.categories.length) newErrors.categories = 'At least one category must be selected';
     setErrors(newErrors);

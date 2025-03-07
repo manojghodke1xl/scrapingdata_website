@@ -47,7 +47,7 @@ const FeedbackList = () => {
           btn2={true}
           href2={'/feedback/add-feedback'}
           icon2={<IoMdAdd />}
-          btnLabel2={'Add Enquiry'}
+          btnLabel2={'Add Feedback'}
         />
         <div className="flex flex-col">
           <div className="-m-1.5 overflow-x-auto">

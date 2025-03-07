@@ -31,8 +31,22 @@ const AddVendor = () => {
 
   const validate = () => {
     const newErrors = {};
-    if (!vendorDetails.name.trim()) newErrors.name = 'Name is required';
-    if (!vendorDetails.email.trim()) newErrors.email = 'Email is required';
+    const nameRegex = /^[a-zA-Z0-9-_]+( [a-zA-Z0-9-_]+)*$/;
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!vendorDetails.name.trim()) {
+      newErrors.name = 'Name is required';
+    } else if (!nameRegex.test(vendorDetails.name)) {
+      newErrors.name = 'Invalid name format';
+    } else if (vendorDetails.name.length > 30) {
+      newErrors.name = 'Name must be 30 characters or less';
+    }
+    if (!vendorDetails.email.trim()) {
+      newErrors.email = 'Email is required';
+    } else if (!emailRegex.test(vendorDetails.email)) {
+      newErrors.email = 'Invalid email format';
+    } else if (vendorDetails.email.length > 30) {
+      newErrors.email = 'Email must be 30 characters or less';
+    }
     if (!vendorDetails.mobile.trim()) newErrors.mobile = 'Mobile is required';
     if (!vendorDetails.site) newErrors.site = 'Site is required';
     setErrors(newErrors);

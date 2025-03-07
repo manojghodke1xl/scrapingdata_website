@@ -42,7 +42,14 @@ const AddSmtp = () => {
 
   const validate = () => {
     const newErrors = {};
-    if (!smtpDetails.name.trim()) newErrors.name = 'Name is required';
+    const nameRegex = /^[a-zA-Z0-9-_]+( [a-zA-Z0-9-_]+)*$/;
+    if (!smtpDetails.name.trim()) {
+      newErrors.name = 'Name is required';
+    } else if (!nameRegex.test(smtpDetails.name)) {
+      newErrors.name = 'Invalid name format';
+    } else if (smtpDetails.name.length > 30) {
+      newErrors.name = 'Name must be 30 characters or less';
+    }
     if (!smtpDetails.host.trim()) newErrors.host = 'Host is required';
     if (smtpDetails.secure === '') newErrors.secure = 'Security protocol is required.';
     if (!smtpDetails.port) newErrors.port = 'Port is required';

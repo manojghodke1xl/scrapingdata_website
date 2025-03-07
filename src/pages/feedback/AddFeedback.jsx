@@ -32,8 +32,22 @@ const AddFeedback = () => {
 
   const validate = () => {
     const newErrors = {};
-    if (!enquiryDetails.name.trim()) newErrors.name = 'Name is required';
-    if (!enquiryDetails.email.trim()) newErrors.email = 'Email is required';
+    const nameRegex = /^[a-zA-Z0-9-_]+( [a-zA-Z0-9-_]+)*$/;
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!enquiryDetails.name.trim()) {
+      newErrors.name = 'Name is required';
+    } else if (!nameRegex.test(enquiryDetails.name)) {
+      newErrors.name = 'Invalid name format';
+    } else if (enquiryDetails.name.length > 30) {
+      newErrors.name = 'Name must be 30 characters or less';
+    }
+    if (!enquiryDetails.email.trim()) {
+      newErrors.email = 'Email is required';
+    } else if (!emailRegex.test(enquiryDetails.email)) {
+      newErrors.email = 'Invalid email format';
+    } else if (enquiryDetails.email.length > 30) {
+      newErrors.email = 'Email must be 30 characters or less';
+    }
     if (!enquiryDetails.mobile.trim()) newErrors.mobile = 'Mobile is required';
     if (!enquiryDetails.site) newErrors.site = 'Site is required';
     setErrors(newErrors);

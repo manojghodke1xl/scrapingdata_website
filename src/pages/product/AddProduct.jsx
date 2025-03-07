@@ -108,7 +108,14 @@ const AddProduct = () => {
 
   const validate = () => {
     const newErrors = {};
-    if (!productDetails.name.trim()) newErrors.name = 'Name is required.';
+    const nameRegex = /^[a-zA-Z0-9-_]+( [a-zA-Z0-9-_]+)*$/;
+    if (!productDetails.name.trim()) {
+      newErrors.name = 'Name is required';
+    } else if (!nameRegex.test(productDetails.name)) {
+      newErrors.name = 'Invalid name format';
+    } else if (productDetails.name.length > 30) {
+      newErrors.name = 'Name must be 30 characters or less';
+    }
     if (!productDetails.type) newErrors.type = 'Product Type is required.';
     if (!productDetails.site) newErrors.site = 'Site is required.';
     if (productDetails.currencies.length === 0) newErrors.currencies = 'Currencies are required.';

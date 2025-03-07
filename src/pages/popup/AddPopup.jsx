@@ -94,7 +94,14 @@ const AddPopup = () => {
   }, [popupDetails.contentType]);
   const validate = () => {
     const newErrors = {};
-    if (!popupDetails.name) newErrors.name = 'Name is required.';
+    const nameRegex = /^[a-zA-Z0-9-_]+( [a-zA-Z0-9-_]+)*$/;
+    if (!popupDetails.name.trim()) {
+      newErrors.name = 'Name is required';
+    } else if (!nameRegex.test(popupDetails.name)) {
+      newErrors.name = 'Invalid name format';
+    } else if (popupDetails.name.length > 30) {
+      newErrors.name = 'Name must be 30 characters or less';
+    }
     if (!popupDetails.position) newErrors.position = 'Position is required.';
     if (!popupDetails.site) newErrors.site = 'At least one site must be selected.';
     setErrors(newErrors);
