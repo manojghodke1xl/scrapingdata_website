@@ -3,15 +3,7 @@ import SearchComponent from '../common/SearchComponent';
 import Checkbox from '../formFields/Checkbox';
 
 const CustomColumnSelector = ({ customColumns, setSelectedColumns }) => {
-  const [columns, setColumns] = useState(
-    customColumns.length > 0
-      ? Object.keys(customColumns[0]).map((key, index) => ({
-          id: index + 1,
-          label: key,
-          selected: false
-        }))
-      : []
-  );
+  const [columns, setColumns] = useState(customColumns || []);
 
   const [draggingIndex, setDraggingIndex] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
@@ -20,7 +12,7 @@ const CustomColumnSelector = ({ customColumns, setSelectedColumns }) => {
     const updatedColumns = [...columns];
     updatedColumns[index].selected = !updatedColumns[index].selected;
     setColumns(updatedColumns);
-    setSelectedColumns(updatedColumns.filter((column) => column.selected).map((column) => ({ label: column.label, key: column.label })));
+    setSelectedColumns(updatedColumns.filter((column) => column.selected).map((column) => ({ label: column.label, key: column.key })));
   };
 
   const toggleSelectAll = () => {
@@ -62,7 +54,7 @@ const CustomColumnSelector = ({ customColumns, setSelectedColumns }) => {
         {filteredColumns.length > 0 ? (
           filteredColumns.map((column, index) => (
             <div
-              key={column.id}
+              key={`${column.key}-${index}`}
               className={`flex items-center justify-between px-3 py-2 ${draggingIndex === index ? 'bg-gray-100' : ''}`}
               draggable
               onDragStart={() => handleDragStart(index)}

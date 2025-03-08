@@ -18,11 +18,11 @@ const FeedbackList = () => {
     return {
       id: _id,
       exportData: feedback,
-      name: <TruncatableFieldToolTip title={'Customer Name'} content={name} />,
-      email: <TruncatableFieldToolTip title={'Email'} content={email} />,
-      service: <TruncatableFieldToolTip title={'Feedback Service'} content={service} />,
-      subject: <TruncatableFieldToolTip title={'Subject'} content={subject} />,
-      site: <TruncatableFieldToolTip title={'Sites'} content={`${site?.name} (${site?.host})`} />,
+      name: <TruncatableFieldToolTip content={name} />,
+      email: <TruncatableFieldToolTip content={email} />,
+      service: <TruncatableFieldToolTip content={service} />,
+      subject: <TruncatableFieldToolTip content={subject} />,
+      site: <TruncatableFieldToolTip content={`${site?.name} (${site?.host})`} />,
       url: <TruncatableFieldToolTip content={url} />,
       campaign: <TruncatableFieldToolTip content={campaign} />,
       medium: <TruncatableFieldToolTip content={medium} />,
@@ -34,6 +34,23 @@ const FeedbackList = () => {
       updatedAt: formatDateTime(updatedAt)
     };
   });
+
+  const columnConfig = [
+    { id: 0, label: 'Customer Name', key: 'name', dataKey: 'name' },
+    { id: 1, label: 'Email', key: 'email', dataKey: 'email' },
+    { id: 2, label: 'Feedback Service', key: 'service', dataKey: 'service' },
+    { id: 3, label: 'Subject', key: 'subject', dataKey: 'subject' },
+    { id: 4, label: 'Sites', key: 'site', dataKey: 'site', formatForExport: (value) => (value ? `${value?.name} (${value?.host})` : '') },
+    { id: 5, label: 'URL', key: 'url', dataKey: 'url' },
+    { id: 6, label: 'Campaign', key: 'campaign', dataKey: 'campaign' },
+    { id: 7, label: 'Medium', key: 'medium', dataKey: 'medium' },
+    { id: 8, label: 'Source', key: 'source', dataKey: 'source' },
+    { id: 9, label: 'Content', key: 'content', dataKey: 'content' },
+    { id: 10, label: 'Term', key: 'term', dataKey: 'term' },
+    { id: 11, label: 'Campaign ID', key: 'campaignId', dataKey: 'campaignId' },
+    { id: 12, label: 'Created Date', key: 'createdAt', dataKey: 'createdAt', formatForExport: (value) => formatDateTime(value) },
+    { id: 13, label: 'Updated Date', key: 'updatedAt', dataKey: 'updatedAt', formatForExport: (value) => formatDateTime(value) }
+  ];
 
   return (
     <div className="py-5 px-8 overflow-x-hidden mb-10">
@@ -55,22 +72,7 @@ const FeedbackList = () => {
               <TableComponent
                 selectable={true}
                 siteModule={'feedback'}
-                headers={[
-                  { id: 0, label: 'Customer Name', key: 'name' },
-                  { id: 1, label: 'Email', key: 'email' },
-                  { id: 2, label: 'Feedback Service', key: 'service' },
-                  { id: 3, label: 'Subject', key: 'subject' },
-                  { id: 4, label: 'Sites', key: 'site' },
-                  { id: 5, label: 'URL', key: 'url' },
-                  { id: 6, label: 'Campaign Name', key: 'campaign' },
-                  { id: 7, label: 'Medium', key: 'medium' },
-                  { id: 8, label: 'Source', key: 'source' },
-                  { id: 9, label: 'Content', key: 'content' },
-                  { id: 10, label: 'Term', key: 'term' },
-                  { id: 11, label: 'Campaign ID', key: 'campaignId' },
-                  { id: 12, label: 'Created Date', key: 'createdAt' },
-                  { id: 13, label: 'Updated Date', key: 'updatedAt' }
-                ]}
+                headers={columnConfig}
                 tableData={(data) => setFeedbacks(data.feedbacks)}
                 rows={rows}
                 apiUrl={'feedback'}

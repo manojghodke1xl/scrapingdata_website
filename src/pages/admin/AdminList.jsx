@@ -37,7 +37,7 @@ const AdminList = () => {
             isBlocked ? `${isDarkMode ? 'border border-failed ' : 'bg-fadedred'} text-failed` : `${isDarkMode ? 'border border-success' : 'bg-lightgreen'} text-success`
           } px-2 py-1 w-fit flex gap-2 items-center`}
         >
-          <span className={`min-w-[8px] min-h-[8px] rounded-full ${isBlocked ? 'bg-red' : 'bg-green'}`}></span>
+          <span className={`min-w-[8px] min-h-[8px] rounded-full ${isBlocked ? 'bg-red' : 'bg-green'}`} />
           <span>{isBlocked ? 'Blocked' : 'Active'}</span>
         </div>
       ),
@@ -45,6 +45,42 @@ const AdminList = () => {
       updatedAt: formatDateTime(updatedAt)
     };
   });
+
+  const columnConfig = [
+    { id: 0, label: 'Admin Name', key: 'name', dataKey: 'name' },
+    { id: 1, label: 'Admin Email', key: 'email', dataKey: 'email' },
+    {
+      id: 2,
+      label: 'Sites',
+      key: 'sites',
+      dataKey: 'sites',
+      formatForExport: (value, data) => {
+        if (data.isSuperAdmin) return allSites.map((s) => `${s.name} (${s.host})`).join(', ');
+        return value.map((s) => `${s.name} (${s.host})`).join(', ');
+      }
+    },
+    {
+      id: 3,
+      label: 'Status',
+      key: 'status',
+      dataKey: 'isBlocked',
+      formatForExport: (value) => (value ? 'Blocked' : 'Active')
+    },
+    {
+      id: 4,
+      label: 'Created Date',
+      key: 'createdAt',
+      dataKey: 'createdAt',
+      formatForExport: (value) => formatDateTime(value)
+    },
+    {
+      id: 5,
+      label: 'Updated Date',
+      key: 'updatedAt',
+      dataKey: 'updatedAt',
+      formatForExport: (value) => formatDateTime(value)
+    }
+  ];
 
   return (
     <div className="py-5 px-8 overflow-x-hidden mb-10">
@@ -56,14 +92,7 @@ const AdminList = () => {
               <TableComponent
                 selectable={true}
                 siteModule={'admins'}
-                headers={[
-                  { id: 0, label: 'Admin Name', key: 'name' },
-                  { id: 1, label: 'Admin Email', key: 'email' },
-                  { id: 2, label: 'Sites', key: 'sites' },
-                  { id: 3, label: 'Status', key: 'status' },
-                  { id: 4, label: 'Created Date', key: 'createdAt' },
-                  { id: 5, label: 'Updated Date', key: 'updatedAt' }
-                ]}
+                headers={columnConfig}
                 tableData={(data) => setAdmins(data.admins)}
                 rows={rows}
                 apiUrl={'admins'}

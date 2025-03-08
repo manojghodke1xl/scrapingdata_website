@@ -23,16 +23,34 @@ const PackageList = () => {
       hasBooking,
       exportData: userPackage,
       key: <TruncatableCopyFeild content={_id} />,
-      title: <TruncatableFieldToolTip title={'Package Title'} content={title} />,
-      event: <TruncatableFieldToolTip title={'Event'} content={`${event.name} (${event.venue})`} />,
+      title: <TruncatableFieldToolTip content={title} />,
+      event: <TruncatableFieldToolTip content={`${event.name} (${event.venue})`} />,
       date: formatDateTime(event.date),
-      amount: <TruncatableFieldToolTip title={'Price'} content={amount} />,
-      maxLimit: <TruncatableFieldToolTip title={'Max Limit'} content={maxLimit} />,
-      ticketIdPattern: <TruncatableFieldToolTip title={'Ticket ID Pattern'} content={ticketIdPattern} />,
+      amount: <TruncatableFieldToolTip content={amount} />,
+      maxLimit: <TruncatableFieldToolTip content={maxLimit} />,
+      ticketIdPattern: <TruncatableFieldToolTip content={ticketIdPattern} />,
       createdAt: formatDateTime(createdAt),
       updatedAt: formatDateTime(updatedAt)
     };
   });
+
+  const columnConfig = [
+    { id: 0, label: 'Key', key: 'key', dataKey: '_id' },
+    { id: 1, label: 'Package Title', key: 'title', dataKey: 'title' },
+    {
+      id: 2,
+      label: 'Event',
+      key: 'event',
+      dataKey: 'event',
+      formatForExport: (value) => (value ? `${value.name} (${value.venue})` : '')
+    },
+    { id: 3, label: 'Event Date', key: 'date', dataKey: 'event.date', formatForExport: (value) => formatDateTime(value) },
+    { id: 4, label: 'Price', key: 'amount', dataKey: 'amount' },
+    { id: 5, label: 'Max Attendees', key: 'maxLimit', dataKey: 'maxLimit' },
+    { id: 6, label: 'Ticket ID Pattern', key: 'ticketIdPattern', dataKey: 'ticketIdPattern' },
+    { id: 7, label: 'Created Date', key: 'createdAt', dataKey: 'createdAt', formatForExport: (value) => formatDateTime(value) },
+    { id: 8, label: 'Updated Date', key: 'updatedAt', dataKey: 'updatedAt', formatForExport: (value) => formatDateTime(value) }
+  ];
 
   useEffect(() => {
     (async () => {
@@ -52,17 +70,7 @@ const PackageList = () => {
               <TableComponent
                 selectable={true}
                 siteModule={'packages'}
-                headers={[
-                  { id: 0, label: 'Key', key: 'key' },
-                  { id: 1, label: 'Package Title', key: 'title' },
-                  { id: 2, label: 'Event', key: 'event' },
-                  { id: 3, label: 'Event Date', key: 'date' },
-                  { id: 4, label: 'Price', key: 'amount' },
-                  { id: 5, label: 'Max Attendees', key: 'maxLimit' },
-                  { id: 6, label: 'Ticket ID Pattern', key: 'ticketIdPattern' },
-                  { id: 7, label: 'Created Date', key: 'createdAt' },
-                  { id: 8, label: 'Updated Date', key: 'updatedAt' }
-                ]}
+                headers={columnConfig}
                 tableData={(data) => setPackages(data.packages)}
                 rows={rows}
                 apiUrl={'package'}

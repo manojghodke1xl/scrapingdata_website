@@ -20,6 +20,12 @@ const EventTicketList = () => {
     };
   });
 
+  const columnConfig = [
+    { id: 0, label: 'Name', key: 'name', dataKey: 'name' },
+    { id: 1, label: 'Created Date', key: 'createdAt', dataKey: 'createdAt', formatForExport: (value) => (value ? formatDateTime(value) : 'N/A') },
+    { id: 2, label: 'Updated Date', key: 'updatedAt', dataKey: 'updatedAt', formatForExport: (value) => (value ? formatDateTime(value) : 'N/A') }
+  ];
+
   return (
     <div className="py-5 px-8 overflow-x-hidden mb-10">
       <div className=" w-full">
@@ -30,11 +36,7 @@ const EventTicketList = () => {
               <TableComponent
                 selectable={true}
                 siteModule={'ticket'}
-                headers={[
-                  { id: 0, label: 'Name', key: 'name' },
-                  { id: 1, label: 'Created Date', key: 'createdAt' },
-                  { id: 2, label: 'Updated Date', key: 'updatedAt' }
-                ]}
+                headers={columnConfig}
                 tableData={(data) => setEventTickets(data.tickets)}
                 rows={rows}
                 apiUrl={'ticket'}

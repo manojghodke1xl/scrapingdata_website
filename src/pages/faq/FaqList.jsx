@@ -18,16 +18,16 @@ const FaqList = () => {
     return {
       id: _id,
       exportData: faq,
-      sites: <TruncatableFieldToolTip title={'Sites'} content={sites.map((s) => `${s.name} (${s.host})`).join(', ')} />,
-      question: <TruncatableFieldToolTip title={'Question'} content={question} />,
-      answer: <TruncatableFieldToolTip title={'Answer'} content={answer} />,
+      sites: <TruncatableFieldToolTip content={sites.map((s) => `${s.name} (${s.host})`).join(', ')} />,
+      question: <TruncatableFieldToolTip content={question} />,
+      answer: <TruncatableFieldToolTip content={answer} />,
       status: (
         <div
           className={`rounded-xl ${
-            isActive ? `${isDarkMode ? 'border border-[#027948]' : 'bg-[#ECFDF3]'} text-[#027948]` : `${isDarkMode ? 'border border-[#344054]' : 'bg-[#F2F4F7]'} text-[#344054]`
+            isActive ? `${isDarkMode ? 'border border-success' : 'bg-lightgreen'} text-success` : `${isDarkMode ? 'border border-inactive' : 'bg-inactive'} text-inactive`
           } px-2 py-1 w-fit flex gap-2 items-center`}
         >
-          <span className={`min-w-[8px] min-h-[8px] rounded-full ${isActive ? 'bg-[#12B76A]' : 'bg-[#667085]'}`}></span>
+          <span className={`min-w-[8px] min-h-[8px] rounded-full ${isActive ? 'bg-green ' : 'bg-darkgray'}`} />
           <span>{isActive ? 'Active' : 'Inactive'}</span>
         </div>
       ),
@@ -35,6 +35,15 @@ const FaqList = () => {
       updatedAt: formatDateTime(updatedAt)
     };
   });
+
+  const columnConfig = [
+    { id: 0, label: 'Sites', key: 'sites', dataKey: 'sites', formatForExport: (value) => (value ? value.map((s) => `${s.name} (${s.host})`).join(', ') : '') },
+    { id: 1, label: 'Question', key: 'question', dataKey: 'question' },
+    { id: 2, label: 'Answer', key: 'answer', dataKey: 'answer' },
+    { id: 3, label: 'Status', key: 'status', dataKey: 'isActive', formatForExport: (value) => (value ? 'Active' : 'Inactive') },
+    { id: 4, label: 'Created Date', key: 'createdAt', dataKey: 'createdAt', formatForExport: (value) => formatDateTime(value) },
+    { id: 5, label: 'Updated Date', key: 'updatedAt', dataKey: 'updatedAt', formatForExport: (value) => formatDateTime(value) }
+  ];
 
   return (
     <div className="py-5 px-8 overflow-x-hidden mb-10">
@@ -46,14 +55,7 @@ const FaqList = () => {
               <TableComponent
                 selectable={true}
                 siteModule={'faq'}
-                headers={[
-                  { id: 0, label: 'Sites', key: 'sites' },
-                  { id: 1, label: 'Question', key: 'question' },
-                  { id: 2, label: 'Answer', key: 'answer' },
-                  { id: 3, label: 'Status', key: 'status' },
-                  { id: 4, label: 'Created Date', key: 'createdAt' },
-                  { id: 5, label: 'Updated Date', key: 'updatedAt' }
-                ]}
+                headers={columnConfig}
                 tableData={(data) => setFaqs(data.faqs)}
                 rows={rows}
                 apiUrl={'faq'}

@@ -458,8 +458,8 @@ const TableComponent = ({
   ];
 
   const availableSites = modulesArray.includes(siteModule)
-    ? allSites
-    : allSites.filter((site) => site.modules?.some((module) => module[siteModule] === true)).map((site) => ({ name: site.name, _id: site._id }));
+    ? allSites.map((site) => ({ name: site.name, host: site.host, _id: site._id }))
+    : allSites.filter((site) => site.modules?.some((module) => module[siteModule] === true)).map((site) => ({ name: site.name, host: site.host, _id: site._id }));
 
   const handleSaveColumnPreferences = async () => {
     await saveColumnConfig({
@@ -675,7 +675,7 @@ const TableComponent = ({
           apiUrl={apiUrl}
           rows={rows}
           headers={headers}
-          customColumns={rows.map((row) => row.exportData)}
+          fileName={siteModule}
         />
       </div>
     </div>

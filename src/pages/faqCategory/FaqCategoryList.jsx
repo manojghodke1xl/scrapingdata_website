@@ -15,11 +15,17 @@ const FaqCategoryList = () => {
     return {
       id: _id,
       exportData: faqCategory,
-      name: <TruncatableFieldToolTip title={'Name'} content={name} />,
+      name: <TruncatableFieldToolTip content={name} />,
       createdAt: formatDateTime(createdAt),
       updatedAt: formatDateTime(updatedAt)
     };
   });
+
+  const columnConfig = [
+    { id: 0, label: 'Name', key: 'name', dataKey: 'name' },
+    { id: 1, label: 'Created Date', key: 'createdAt', dataKey: 'createdAt', formatForExport: (value) => formatDateTime(value) },
+    { id: 2, label: 'Updated Date', key: 'updatedAt', dataKey: 'updatedAt', formatForExport: (value) => formatDateTime(value) }
+  ];
 
   return (
     <div className="py-5 px-8 overflow-x-hidden mb-10">
@@ -31,11 +37,7 @@ const FaqCategoryList = () => {
               <TableComponent
                 selectable={true}
                 siteModule={'faq-category'}
-                headers={[
-                  { id: 0, label: 'Name', key: 'name' },
-                  { id: 1, label: 'Created Date', key: 'createdAt' },
-                  { id: 2, label: 'Updated Date', key: 'updatedAt' }
-                ]}
+                headers={columnConfig}
                 tableData={(data) => setFaqCategories(data.faqCategories)}
                 rows={rows}
                 apiUrl={'faq-category'}

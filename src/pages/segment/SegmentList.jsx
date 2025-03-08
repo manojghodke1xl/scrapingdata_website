@@ -7,12 +7,14 @@ import useGlobalContext from '../../hooks/useGlobalContext';
 import { updateSiteStatusApi } from '../../apis/site-apis';
 import TruncatableFieldToolTip from '../../atoms/common/TruncatableFeildToolTip';
 import TruncatableCopyFeild from '../../atoms/common/TruncatableCopyFeild';
+import useColorContext from '../../hooks/useColorContext';
 
 const SegmentList = () => {
-  const [sites, setSites] = useState([]);
+  const { isDarkMode } = useColorContext();
   const {
     auth: { isSuperAdmin }
   } = useGlobalContext();
+  const [sites, setSites] = useState([]);
 
   const rows = sites.map((site) => {
     const { _id, name, host, isActive, createdAt, updatedAt } = site;
@@ -20,11 +22,15 @@ const SegmentList = () => {
       id: _id,
       exportData: site,
       keys: <TruncatableCopyFeild content={_id} />,
-      name: <TruncatableFieldToolTip title={'Website Name'} content={name} />,
-      host: <TruncatableFieldToolTip title={'Web Address'} content={host} />,
-      isActive: (
-        <div className={`rounded-xl ${isActive ? 'bg-[#ECFDF3] text-[#027948]' : 'bg-[#F2F4F7] text-[#344054]'} px-2 py-1 w-fit flex gap-2 items-center`}>
-          <span className={`min-w-[8px] min-h-[8px] rounded-full ${isActive ? 'bg-[#12B76A]' : 'bg-[#667085]'}`}></span>
+      name: <TruncatableFieldToolTip content={name} />,
+      host: <TruncatableFieldToolTip content={host} />,
+      status: (
+        <div
+          className={`rounded-xl ${
+            isActive ? `${isDarkMode ? 'border border-success' : 'bg-lightgreen'} text-success` : `${isDarkMode ? 'border border-inactive' : 'bg-inactive'} text-inactive`
+          } px-2 py-1 w-fit flex gap-2 items-center`}
+        >
+          <span className={`min-w-[8px] min-h-[8px] rounded-full ${isActive ? 'bg-green ' : 'bg-darkgray'}`} />
           <span>{isActive ? 'Active' : 'Inactive'}</span>
         </div>
       ),
@@ -32,6 +38,15 @@ const SegmentList = () => {
       updatedAt: formatDateTime(updatedAt)
     };
   });
+
+  const columnConfig = [
+    { id: 0, label: 'Key', key: 'keys', dataKey: '_id' },
+    { id: 1, label: 'Website Name', key: 'name', dataKey: 'name' },
+    { id: 2, label: 'Web Address', key: 'host', dataKey: 'host' },
+    { id: 3, label: 'Status', key: 'status', dataKey: 'isActive', formatForExport: (value) => (value ? 'Active' : 'Inactive') },
+    { id: 4, label: 'Created Date', key: 'createdAt', dataKey: 'createdAt', formatForExport: (value) => formatDateTime(value) },
+    { id: 5, label: 'Updated Date', key: 'updatedAt', dataKey: 'updatedAt', formatForExport: (value) => formatDateTime(value) }
+  ];
 
   return (
     <div className="py-5 px-8 overflow-x-hidden mb-10">
@@ -53,14 +68,7 @@ const SegmentList = () => {
               <TableComponent
                 selectable={true}
                 siteModule={'segment'}
-                headers={[
-                  { id: 0, label: 'Key', key: 'keys' },
-                  { id: 1, label: 'Website Name', key: 'name' },
-                  { id: 2, label: 'Web Address', key: 'host' },
-                  { id: 3, label: 'Status', key: 'isActive' },
-                  { id: 4, label: 'Created Date', key: 'createdAt' },
-                  { id: 5, label: 'Updated Date', key: 'updatedAt' }
-                ]}
+                headers={columnConfig}
                 tableData={(data) => setSites(data.sites)}
                 rows={rows}
                 apiUrl={'sites'}

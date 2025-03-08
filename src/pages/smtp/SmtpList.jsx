@@ -14,12 +14,21 @@ const SmtpList = () => {
     const { _id, name, host, createdAt, updatedAt } = smtp;
     return {
       id: _id,
-      name: <TruncatableFieldToolTip title={'Name'} content={name} />,
-      host: <TruncatableFieldToolTip title={'Host'} content={host} />,
+      exportData: smtp,
+      name: <TruncatableFieldToolTip content={name} />,
+      host: <TruncatableFieldToolTip content={host} />,
       createdAt: formatDateTime(createdAt),
       updatedAt: formatDateTime(updatedAt)
     };
   });
+
+  const columnConfig = [
+    { id: 0, label: 'Name', key: 'name', dataKey: 'name' },
+    { id: 1, label: 'Host', key: 'host', dataKey: 'host' },
+    { id: 2, label: 'Created Date', key: 'createdAt', dataKey: 'createdAt', formatForExport: (value) => formatDateTime(value) },
+    { id: 3, label: 'Updated Date', key: 'updatedAt', dataKey: 'updatedAt', formatForExport: (value) => formatDateTime(value) }
+  ];
+
   return (
     <div className="py-5 px-8 overflow-x-hidden mb-10">
       <div className=" w-full">
@@ -30,12 +39,7 @@ const SmtpList = () => {
               <TableComponent
                 selectable={true}
                 siteModule={'smtp'}
-                headers={[
-                  { id: 0, label: 'Name', key: 'name' },
-                  { id: 1, label: 'Host', key: 'host' },
-                  { id: 2, label: 'Created Date', key: 'createdAt' },
-                  { id: 3, label: 'Updated Date', key: 'updatedAt' }
-                ]}
+                headers={columnConfig}
                 tableData={(data) => setSmtps(data.smtps)}
                 rows={rows}
                 apiUrl={'smtp'}

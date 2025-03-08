@@ -7,17 +7,18 @@ import useColorContext from '../../hooks/useColorContext';
 
 const EmailLogList = () => {
   const { isDarkMode } = useColorContext();
-  const [whatsAppTemplates, setWhatsAppTemplates] = useState([]);
+  const [emailTemplates, setEmailTemplates] = useState([]);
 
-  const rows = whatsAppTemplates?.map((whatsAppTemplate) => {
-    const { _id, from, to, subject, message, statusCode, error, createdAt, updatedAt } = whatsAppTemplate;
+  const rows = emailTemplates?.map((emailTemplate) => {
+    const { _id, from, to, subject, message, statusCode, error, createdAt, updatedAt } = emailTemplate;
 
     return {
       id: _id,
-      from: <TruncatableFieldToolTip title={'From'} content={from} />,
-      to: <TruncatableFieldToolTip title={'To'} content={to} />,
-      subject: <TruncatableFieldToolTip title={'Subject'} content={subject} />,
-      message: <TruncatableFieldToolTip title={'Message'} content={message} />,
+      exportData: emailTemplate,
+      from: <TruncatableFieldToolTip content={from} />,
+      to: <TruncatableFieldToolTip content={to} />,
+      subject: <TruncatableFieldToolTip content={subject} />,
+      message: <TruncatableFieldToolTip content={message} />,
       status: (
         <div
           className={`rounded-xl ${
@@ -34,7 +35,7 @@ const EmailLogList = () => {
       ),
       error: error ? (
         <span className="text-failed">
-          <TruncatableFieldToolTip title={'Error'} content={JSON.stringify(error)} />
+          <TruncatableFieldToolTip content={JSON.stringify(error)} />
         </span>
       ) : (
         <span className="text-secondary">No Error</span>
@@ -43,6 +44,17 @@ const EmailLogList = () => {
       updatedAt: formatDateTime(updatedAt)
     };
   });
+
+  const columnConfig = [
+    { id: 0, label: 'From', key: 'from', dataKey: 'from' },
+    { id: 1, label: 'To', key: 'to', dataKey: 'to' },
+    { id: 2, label: 'Subject', key: 'subject', dataKey: 'subject' },
+    { id: 3, label: 'Message', key: 'message', dataKey: 'message' },
+    { id: 4, label: 'Status', key: 'status', dataKey: 'statusCode' },
+    { id: 5, label: 'Error', key: 'error', dataKey: 'error' },
+    { id: 6, label: 'Created Date', key: 'createdAt', dataKey: 'createdAt', formatForExport: (value) => formatDateTime(value) },
+    { id: 7, label: 'Updated Date', key: 'updatedAt', dataKey: 'updatedAt', formatForExport: (value) => formatDateTime(value) }
+  ];
 
   return (
     <div className="py-5 px-8 overflow-x-hidden mb-10">
@@ -54,23 +66,13 @@ const EmailLogList = () => {
               <TableComponent
                 selectable={true}
                 siteModule={'email-logs'}
-                headers={[
-                  { id: 0, label: 'From', key: 'from' },
-                  { id: 1, label: 'To', key: 'to' },
-                  { id: 2, label: 'Subject', key: 'subject' },
-                  { id: 3, label: 'Message', key: 'message' },
-                  { id: 4, label: 'Status', key: 'status' },
-                  { id: 5, label: 'Error', key: 'error' },
-                  { id: 6, label: 'Created Date', key: 'createdAt' },
-                  { id: 7, label: 'Updated Date', key: 'updatedAt' }
-                ]}
-                tableData={(data) => setWhatsAppTemplates(data.logs)}
+                headers={columnConfig}
+                tableData={(data) => setEmailTemplates(data.logs)}
                 rows={rows}
                 apiUrl={'logs/email'}
                 tableCountLabel={true}
                 pagination={true}
                 search={true}
-                // filter={true}
                 filterCategory={[{ id: 0, name: 'Sites' }]}
                 actions={true}
                 viewPath={'/logs/email-log-preview'}

@@ -20,6 +20,12 @@ const CertificateList = () => {
     };
   });
 
+  const columnConfig = [
+    { id: 0, label: 'Name', key: 'name', dataKey: 'name' },
+    { id: 1, label: 'Created Date', key: 'createdAt', dataKey: 'createdAt', formatForExport: (value) => formatDateTime(value) },
+    { id: 2, label: 'Updated Date', key: 'updatedAt', dataKey: 'updatedAt', formatForExport: (value) => formatDateTime(value) }
+  ];
+
   return (
     <div className="py-5 px-8 overflow-x-hidden mb-10">
       <div className=" w-full">
@@ -30,11 +36,7 @@ const CertificateList = () => {
               <TableComponent
                 selectable={true}
                 siteModule={'certificate'}
-                headers={[
-                  { id: 0, label: 'Name', key: 'name' },
-                  { id: 1, label: 'Created Date', key: 'createdAt' },
-                  { id: 2, label: 'Updated Date', key: 'updatedAt' }
-                ]}
+                headers={columnConfig}
                 tableData={(data) => setCertificates(data.certificates)}
                 rows={rows}
                 apiUrl={'certificate'}

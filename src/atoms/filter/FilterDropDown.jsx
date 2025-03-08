@@ -54,19 +54,19 @@ const FilterDropDown = ({ name, data, selected, setDataId }) => {
         <ul
           className={`absolute end-0 top-11 z-40 mt-1 min-w-[250px] max-w-[300px] max-h-[200px] rounded-xl bg-main text-[12px] md:text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm overflow-y-auto custom-scrollbar`}
         >
-          <div className=" sticky top-0 w-full flex items-center rounded-xl border border-primary px-3">
+          <div className="sticky top-0 z-10 bg-main w-full flex items-center rounded-xl border border-primary px-3">
             <SearchComponent value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
           </div>
           <div className="relative py-2 border-b border-primary">
             {filteredList?.map((site) => (
               <li
                 key={site._id}
-                className={`group relative cursor-default select-none py-2 pl-3 pr-14 text-primary  ${selectedSites?._id === site._id ? 'bg-primary-faded' : 'hover:bg-hover'}`}
+                className={`group relative cursor-default select-none py-1 text-primary ${selectedSites?._id === site._id ? 'bg-primary-faded' : 'hover:bg-hover'}`}
                 onClick={() => handleCheckboxClick(site)}
               >
                 <div className="flex items-center">
-                  <div className={`ml-1 whitespace-nowrap font-normal flex gap-4 items-center ${selectedSites?._id === site._id ? 'font-semibold' : ''}`}>
-                    <div className="px-2 py-1 rounded-lg flex gap-2 items-center">
+                  <div className={`ml-1 whitespace-nowrap font-normal flex items-center ${selectedSites?._id === site._id ? 'font-semibold' : ''}`}>
+                    <div className="py-1 rounded-lg flex items-center">
                       <span className="w-[8px] h-[8px] rounded-full"></span>
                       <span>{site.name}</span>
                     </div>

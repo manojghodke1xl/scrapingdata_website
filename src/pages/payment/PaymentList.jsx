@@ -13,11 +13,11 @@ const PaymentList = () => {
     return {
       id: _id,
       exportData: payment,
-      participant: <TruncatableFieldToolTip title={'Participant'} content={participant.name} />,
-      site: <TruncatableFieldToolTip title={'Sites'} content={`${site?.name} (${site?.host})`} />,
-      event: <TruncatableFieldToolTip title={'Event'} content={event.name} />,
-      amount: <TruncatableFieldToolTip title={'Amount'} content={amount} />,
-      currency: <TruncatableFieldToolTip title={'Currency'} content={currency} />,
+      participant: <TruncatableFieldToolTip content={participant.name} />,
+      site: <TruncatableFieldToolTip content={`${site?.name} (${site?.host})`} />,
+      event: <TruncatableFieldToolTip content={event.name} />,
+      amount: <TruncatableFieldToolTip content={amount} />,
+      currency: <TruncatableFieldToolTip content={currency} />,
       channel: channel === 'razorpay' ? 'Razorpay' : channel === 'stripe' ? 'Stripe' : 'PayPal',
       status: (
         <div
@@ -34,6 +34,36 @@ const PaymentList = () => {
     };
   });
 
+  const columnConfig = [
+    { id: 0, label: 'Participant', key: 'participant', dataKey: 'participant.name' },
+    {
+      id: 1,
+      label: 'Sites',
+      key: 'site',
+      dataKey: 'site',
+      formatForExport: (value) => (value ? `${value?.name} (${value?.host})` : '')
+    },
+    { id: 2, label: 'Event', key: 'event', dataKey: 'event.name' },
+    { id: 3, label: 'Amount', key: 'amount', dataKey: 'amount' },
+    { id: 4, label: 'Currency', key: 'currency', dataKey: 'currency' },
+    {
+      id: 5,
+      label: 'Channel',
+      key: 'channel',
+      dataKey: 'channel',
+      formatForExport: (value) => (value ? (value === 'razorpay' ? 'Razorpay' : value === 'stripe' ? 'Stripe' : 'PayPal') : '')
+    },
+    {
+      id: 6,
+      label: 'Status',
+      key: 'status',
+      dataKey: 'status',
+      formatForExport: (value) => (value === 'success' ? 'Success' : value === 'pending' ? 'Pending' : 'Failed')
+    },
+    { id: 7, label: 'Created Date', key: 'createdAt', dataKey: 'createdAt', formatForExport: (value) => formatDateTime(value) },
+    { id: 8, label: 'Updated Date', key: 'updatedAt', dataKey: 'updatedAt', formatForExport: (value) => formatDateTime(value) }
+  ];
+
   return (
     <div className="py-5 px-8 overflow-x-hidden mb-10">
       <div className=" w-full">
@@ -44,17 +74,7 @@ const PaymentList = () => {
               <TableComponent
                 selectable={true}
                 siteModule={'payment'}
-                headers={[
-                  { label: 'Participant', key: 'participant' },
-                  { label: 'Sites', key: 'site' },
-                  { label: 'Event', key: 'event' },
-                  { label: 'Amount', key: 'amount' },
-                  { label: 'Currency', key: 'currency' },
-                  { label: 'Channel', key: 'channel' },
-                  { label: 'Status', key: 'status' },
-                  { label: 'Created Date', key: 'createdAt' },
-                  { label: 'Updated Date', key: 'updatedAt' }
-                ]}
+                headers={columnConfig}
                 tableData={(data) => setPayments(data.payments)}
                 rows={rows}
                 apiUrl={'payments'}

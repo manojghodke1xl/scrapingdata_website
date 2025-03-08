@@ -24,15 +24,15 @@ const SiteList = () => {
       id: _id,
       exportData: site,
       keys: <TruncatableCopyFeild content={_id} />,
-      name: <TruncatableFieldToolTip title={'Website Name'} content={name} />,
-      host: <TruncatableFieldToolTip title={'Web Address'} content={host} />,
+      name: <TruncatableFieldToolTip content={name} />,
+      host: <TruncatableFieldToolTip content={host} />,
       status: (
         <div
           className={`rounded-xl ${
-            isActive ? `${isDarkMode ? 'border border-[#027948]' : 'bg-[#ECFDF3]'} text-[#027948]` : `${isDarkMode ? 'border border-[#344054]' : 'bg-[#F2F4F7]'} text-[#344054]`
+            isActive ? `${isDarkMode ? 'border border-success' : 'bg-lightgreen'} text-success` : `${isDarkMode ? 'border border-inactive' : 'bg-inactive'} text-inactive`
           } px-2 py-1 w-fit flex gap-2 items-center`}
         >
-          <span className={`min-w-[8px] min-h-[8px] rounded-full ${isActive ? 'bg-[#12B76A]' : 'bg-[#667085]'}`}></span>
+          <span className={`min-w-[8px] min-h-[8px] rounded-full ${isActive ? 'bg-green ' : 'bg-darkgray'}`} />
           <span>{isActive ? 'Active' : 'Inactive'}</span>
         </div>
       ),
@@ -40,6 +40,33 @@ const SiteList = () => {
       updatedAt: formatDateTime(updatedAt)
     };
   });
+
+  const columnConfig = [
+    { id: 0, label: 'Key', key: 'keys', dataKey: '_id' },
+    { id: 1, label: 'Website Name', key: 'name', dataKey: 'name' },
+    { id: 2, label: 'Web Address', key: 'host', dataKey: 'host' },
+    {
+      id: 3,
+      label: 'Created Date',
+      key: 'createdAt',
+      dataKey: 'createdAt',
+      formatForExport: (value) => formatDateTime(value)
+    },
+    {
+      id: 4,
+      label: 'Updated Date',
+      key: 'updatedAt',
+      dataKey: 'updatedAt',
+      formatForExport: (value) => formatDateTime(value)
+    },
+    {
+      id: 5,
+      label: 'Status',
+      key: 'status',
+      dataKey: 'isActive',
+      formatForExport: (value) => (value ? 'Active' : 'Inactive')
+    }
+  ];
 
   return (
     <div className="py-5 px-8 overflow-x-hidden mb-10">
@@ -61,14 +88,7 @@ const SiteList = () => {
               <TableComponent
                 selectable={true}
                 siteModule={'site'}
-                headers={[
-                  { id: 0, label: 'Key', key: 'keys' },
-                  { id: 1, label: 'Website Name', key: 'name' },
-                  { id: 2, label: 'Web Address', key: 'host' },
-                  { id: 3, label: 'Created Date', key: 'createdAt' },
-                  { id: 4, label: 'Updated Date', key: 'updatedAt' },
-                  { id: 5, label: 'Status', key: 'status' }
-                ]}
+                headers={columnConfig}
                 tableData={(data) => setSites(data.sites)}
                 rows={rows}
                 apiUrl={'sites'}

@@ -28,21 +28,16 @@ const BookingPaymentList = () => {
     return {
       id: _id,
       exportData: booking,
-      customer: <TruncatableFieldToolTip title={'Participant'} content={customer.name} />,
-      email: <TruncatableFieldToolTip title={'Email'} content={email} />,
-      phoneNumber: (
-        <TruncatableFieldToolTip
-          title={'Mobile Number'}
-          content={`${phoneCode ? (phoneCode.startsWith('+') ? phoneCode : `+${phoneCode}`) : ''} ${phoneNumber ? phoneNumber : '-'}`}
-        />
-      ),
-      site: <TruncatableFieldToolTip title={'Sites'} content={`${site?.name} (${site?.host})`} />,
-      attendee: <TruncatableFieldToolTip title={'Attendee'} content={attendee ?? ''} />,
+      customer: <TruncatableFieldToolTip content={customer.name} />,
+      email: <TruncatableFieldToolTip content={email} />,
+      phoneNumber: <TruncatableFieldToolTip content={`${phoneCode ? (phoneCode.startsWith('+') ? phoneCode : `+${phoneCode}`) : ''} ${phoneNumber ? phoneNumber : '-'}`} />,
+      site: <TruncatableFieldToolTip content={`${site?.name} (${site?.host})`} />,
+      attendee: <TruncatableFieldToolTip content={attendee ?? ''} />,
       channel: channel === 'razorpay' ? 'Razorpay' : channel === 'stripe' ? 'Stripe' : 'PayPal',
-      price: <TruncatableFieldToolTip title={'Price'} content={`${currencies?.[currency]} ${currency}`} />,
-      salePrice: onSale ? <TruncatableFieldToolTip title={'Discount Price'} content={`${salePrice?.[currency]} ${currency}`} /> : '-',
-      amount: <TruncatableFieldToolTip title={'Paid Amount'} content={amount} />,
-      coupon: <TruncatableFieldToolTip title={'Coupon'} content={coupon?.code ?? ''} />,
+      price: <TruncatableFieldToolTip content={`${currencies?.[currency]} ${currency}`} />,
+      salePrice: onSale ? <TruncatableFieldToolTip content={`${salePrice?.[currency]} ${currency}`} /> : '-',
+      amount: <TruncatableFieldToolTip content={amount} />,
+      coupon: <TruncatableFieldToolTip content={coupon?.code ?? ''} />,
       status: (
         <div
           className={`rounded-xl ${
@@ -53,7 +48,7 @@ const BookingPaymentList = () => {
               : `${isDarkMode ? 'border border-failed ' : 'bg-fadedred'} text-failed`
           } px-2 py-1 w-fit flex gap-2 items-center`}
         >
-          <span className={`min-w-[8px] min-h-[8px] rounded-full ${status === 'success' ? 'bg-green' : status === 'pending' ? 'bg-pending' : 'bg-red'}`}></span>
+          <span className={`min-w-[8px] min-h-[8px] rounded-full ${status === 'success' ? 'bg-green' : status === 'pending' ? 'bg-pending' : 'bg-red'}`} />
           <span>{status === 'success' ? 'Success' : status === 'pending' ? 'Pending' : 'Failed'}</span>
         </div>
       ),
@@ -61,6 +56,52 @@ const BookingPaymentList = () => {
       updatedAt: formatDateTime(updatedAt)
     };
   });
+
+  const columnConfig = [
+    { id: 0, label: 'Customer Name', key: 'customer', dataKey: 'customer.name' },
+    { id: 1, label: 'Email', key: 'email', dataKey: 'email' },
+    {
+      id: 2,
+      label: 'Mobile Number',
+      key: 'phoneNumber',
+      dataKey: 'phoneNumber',
+      formatForExport: (value, data) => `${data.phoneCode ? (data.phoneCode.startsWith('+') ? data.phoneCode : `+${data.phoneCode}`) : ''} ${value ? value : '-'}`
+    },
+    { id: 3, label: 'Sites', key: 'site', dataKey: 'site', formatForExport: (value) => (value ? `${value.name} (${value.host})` : '') },
+    { id: 4, label: 'Qty', key: 'attendee', dataKey: 'attendee' },
+    {
+      id: 5,
+      label: 'Channel',
+      key: 'channel',
+      dataKey: 'channel',
+      formatForExport: (value) => (value ? (value === 'razorpay' ? 'Razorpay' : value === 'stripe' ? 'Stripe' : 'PayPal') : '')
+    },
+    {
+      id: 6,
+      label: 'Price',
+      key: 'price',
+      dataKey: 'payment.currency',
+      formatForExport: (value, data) => (data.package.currencies ? `${data.package.currencies?.[value]} ${value}` : '')
+    },
+    {
+      id: 7,
+      label: 'Discount Price',
+      key: 'salePrice',
+      dataKey: 'payment.currency',
+      formatForExport: (value, data) => (data.package.onSale ? `${data.package.salePrice?.[value]} ${value}` : '')
+    },
+    { id: 8, label: 'Amount', key: 'amount', dataKey: 'payment.amount' },
+    { id: 9, label: 'Coupon Code', key: 'coupon', dataKey: 'coupon.code' },
+    {
+      id: 10,
+      label: 'Status',
+      key: 'status',
+      dataKey: 'payment.status',
+      formatForExport: (value) => (value === 'success' ? 'Success' : value === 'pending' ? 'Pending' : 'Failed')
+    },
+    { id: 11, label: 'Created At', key: 'createdAt', dataKey: 'createdAt', formatForExport: (value) => formatDateTime(value) },
+    { id: 12, label: 'Updated At', key: 'updatedAt', dataKey: 'updatedAt', formatForExport: (value) => formatDateTime(value) }
+  ];
 
   return (
     <div className="py-5 px-8 overflow-x-hidden mb-10">
@@ -72,21 +113,7 @@ const BookingPaymentList = () => {
               <TableComponent
                 selectable={true}
                 siteModule={'booking-payments'}
-                headers={[
-                  { label: 'Customer Name', key: 'customer' },
-                  { label: 'Email', key: 'email' },
-                  { label: 'Mobile Number', key: 'phoneNumber' },
-                  { label: 'Site', key: 'site' },
-                  { label: 'Qty', key: 'attendee' },
-                  { label: 'Channel', key: 'channel' },
-                  { label: 'Price', key: 'price' },
-                  { label: 'Discount Price', key: 'salePrice' },
-                  { label: 'Amount', key: 'amount' },
-                  { label: 'Coupon Code', key: 'coupon' },
-                  { label: 'Status', key: 'status' },
-                  { label: 'Created Date', key: 'createdAt' },
-                  { label: 'Updated Date', key: 'updatedAt' }
-                ]}
+                headers={columnConfig}
                 tableData={(data) => setBookingPayments(data.bookingPayments)}
                 rows={rows}
                 apiUrl={'booking-payments'}

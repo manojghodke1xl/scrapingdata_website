@@ -18,18 +18,18 @@ const CouponList = () => {
     return {
       id: _id,
       exportData: coupon,
-      code: <TruncatableFieldToolTip title={'Coupon Code'} content={code ?? ''} />,
-      type: <TruncatableFieldToolTip title={'Discount Type'} content={type ?? ''} />,
-      value: <TruncatableFieldToolTip title={'Discount Value'} content={value ?? ''} />,
-      minAmount: <TruncatableFieldToolTip title={'Minimum purchase Amount'} content={minAmount ?? ''} />,
-      sites: <TruncatableFieldToolTip title={'Sites'} content={sites?.map((s) => `${s.name} (${s.host})`).join(', ') ?? ''} />,
+      code: <TruncatableFieldToolTip content={code ?? ''} />,
+      type: <TruncatableFieldToolTip content={type ?? ''} />,
+      value: <TruncatableFieldToolTip content={value ?? ''} />,
+      minAmount: <TruncatableFieldToolTip content={minAmount ?? ''} />,
+      sites: <TruncatableFieldToolTip content={sites?.map((s) => `${s.name} (${s.host})`).join(', ') ?? ''} />,
       status: (
         <div
           className={`rounded-xl ${
-            isActive ? `${isDarkMode ? 'border border-[#027948]' : 'bg-[#ECFDF3]'} text-[#027948]` : `${isDarkMode ? 'border border-[#344054]' : 'bg-[#F2F4F7]'} text-[#344054]`
+            isActive ? `${isDarkMode ? 'border border-success' : 'bg-lightgreen'} text-success` : `${isDarkMode ? 'border border-inactive' : 'bg-inactive'} text-inactive`
           } px-2 py-1 w-fit flex gap-2 items-center`}
         >
-          <span className={`min-w-[8px] min-h-[8px] rounded-full ${isActive ? 'bg-[#12B76A]' : 'bg-[#667085]'}`}></span>
+          <span className={`min-w-[8px] min-h-[8px] rounded-full ${isActive ? 'bg-green ' : 'bg-darkgray'}`} />
           <span>{isActive ? 'Active' : 'Inactive'}</span>
         </div>
       ),
@@ -37,6 +37,17 @@ const CouponList = () => {
       updatedAt: formatDateTime(updatedAt)
     };
   });
+
+  const columnConfig = [
+    { id: 4, label: 'Sites', key: 'sites', dataKey: 'sites', formatForExport: (value) => (value ? value?.map((s) => `${s.name} (${s.host})`).join(', ') : '') },
+    { id: 0, label: 'Coupon Code', key: 'code', dataKey: 'code' },
+    { id: 1, label: 'Discount Type', key: 'type', dataKey: 'type' },
+    { id: 2, label: 'Discount Value', key: 'value', dataKey: 'value' },
+    { id: 3, label: 'Minimum purchase Amount', key: 'minAmount', dataKey: 'minAmount' },
+    { id: 5, label: 'Created Date', key: 'createdAt', dataKey: 'createdAt', formatForExport: (value) => formatDateTime(value) },
+    { id: 6, label: 'Updated Date', key: 'updatedAt', dataKey: 'updatedAt', formatForExport: (value) => formatDateTime(value) },
+    { id: 7, label: 'Status', key: 'status', dataKey: 'isActive', formatForExport: (value) => (value ? 'Active' : 'Inactive') }
+  ];
 
   return (
     <div className="py-5 px-8 overflow-x-hidden mb-10">
@@ -48,16 +59,7 @@ const CouponList = () => {
               <TableComponent
                 selectable={true}
                 siteModule={'coupon'}
-                headers={[
-                  { id: 0, label: 'Coupon Code', key: 'code' },
-                  { id: 1, label: 'Discount Type', key: 'type' },
-                  { id: 2, label: 'Discount Value', key: 'value' },
-                  { id: 3, label: 'Minimum purchase Amount', key: 'minAmount' },
-                  { id: 4, label: 'Sites', key: 'sites' },
-                  { id: 5, label: 'Created Date', key: 'createdAt' },
-                  { id: 6, label: 'Updated Date', key: 'updatedAt' },
-                  { id: 7, label: 'Status', key: 'status' }
-                ]}
+                headers={columnConfig}
                 tableData={(data) => setCoupons(data.coupons)}
                 rows={rows}
                 apiUrl={'coupon'}

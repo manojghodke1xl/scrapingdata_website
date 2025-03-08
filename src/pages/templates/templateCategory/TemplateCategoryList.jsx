@@ -15,11 +15,18 @@ const TemplateCategoryList = () => {
       id: _id,
       exportData: templateCategory,
       key: <TruncatableCopyFeild content={_id} />,
-      name: <TruncatableFieldToolTip title={'Name'} content={name} />,
+      name: <TruncatableFieldToolTip content={name} />,
       createdAt: formatDateTime(createdAt),
       updatedAt: formatDateTime(updatedAt)
     };
   });
+
+  const columnConfig = [
+    { id: 0, label: 'Key', key: 'key', dataKey: '_id' },
+    { id: 1, label: 'Name', key: 'name', dataKey: 'name' },
+    { id: 2, label: 'Created Date', key: 'createdAt', dataKey: 'createdAt', formatForExport: (value) => formatDateTime(value) },
+    { id: 3, label: 'Updated Date', key: 'updatedAt', dataKey: 'updatedAt', formatForExport: (value) => formatDateTime(value) }
+  ];
 
   return (
     <div className="py-5 px-8 overflow-x-hidden mb-10">
@@ -31,12 +38,7 @@ const TemplateCategoryList = () => {
               <TableComponent
                 selectable={true}
                 siteModule={'template-category'}
-                headers={[
-                  { id: 0, label: 'Key', key: 'key' },
-                  { id: 1, label: 'Name', key: 'name' },
-                  { id: 2, label: 'Created Date', key: 'createdAt' },
-                  { id: 3, label: 'Updated Date', key: 'updatedAt' }
-                ]}
+                headers={columnConfig}
                 tableData={(data) => setTemplateCategory(data.templateCategories)}
                 rows={rows}
                 apiUrl={'template-category'}

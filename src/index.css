@@ -16,6 +16,7 @@
   --text-failed: #f04438;
   --text-danger: #b32318;
   --text-white: #ffffff;
+  --text-inactive:#344054;
 
   --bg-primary: #175cd3;
   --bg-primary-hover: #1849a9;
@@ -32,8 +33,9 @@
   --bg-lightgreen: #ecfdf3;
   --bg-pending: #f79009;
   --bg-fadeyellow: #fffaeb;
-  --bg-darkgray: #d0d5dd;
+  --bg-darkgray: #667085;
   --bg-grey: #f9fafb;
+  --bg-inactive:#F2F4F7;
 
   --border-primary: #d0d5dd;
   --border-secondary: #175cd3;
@@ -44,6 +46,7 @@
   --border-success: #027948;
   --border-pending: #f79009;
   --border-failed: #f04438;
+  --border-inactive:#344054;
 
   --bg-main: #ffffff;
   --text-main: #000000;

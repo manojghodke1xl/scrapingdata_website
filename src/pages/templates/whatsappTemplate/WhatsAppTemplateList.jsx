@@ -23,12 +23,12 @@ const WhatsAppTemplateList = () => {
 
     return {
       id: _id,
-      whatsAppTemplateName,
       approvedTemplate: status === 'APPROVED',
       exportData: whatsAppTemplate,
-      name: <TruncatableFieldToolTip title={'Name'} content={name} />,
-      message: <TruncatableFieldToolTip title={'Message'} content={message} />,
-      site: <TruncatableFieldToolTip title={'Sites'} content={`${site?.name} (${site?.host})`} />,
+      name: <TruncatableFieldToolTip content={name} />,
+      whatsAppTemplateName: <TruncatableFieldToolTip content={whatsAppTemplateName} />,
+      message: <TruncatableFieldToolTip content={message} />,
+      site: <TruncatableFieldToolTip content={`${site?.name} (${site?.host})`} />,
       status: status ? (
         <div
           className={`rounded-xl ${
@@ -58,6 +58,16 @@ const WhatsAppTemplateList = () => {
     };
   });
 
+  const columnConfig = [
+    { id: 0, label: 'Name', key: 'name', dataKey: 'name' },
+    { id: 1, label: 'WhatsApp Template Name', key: 'whatsAppTemplateName', dataKey: 'whatsAppTemplateName' },
+    { id: 2, label: 'Message', key: 'message', dataKey: 'message' },
+    { id: 3, label: 'Sites', key: 'site', dataKey: 'site', formatForExport: (value) => `${value?.name} (${value?.host})` },
+    { id: 4, label: 'Status', key: 'status', dataKey: 'status' },
+    { id: 5, label: 'Created Date', key: 'createdAt', dataKey: 'createdAt', formatForExport: (value) => formatDateTime(value) },
+    { id: 6, label: 'Updated Date', key: 'updatedAt', dataKey: 'updatedAt', formatForExport: (value) => formatDateTime(value) }
+  ];
+
   return (
     <div className="py-5 px-8 overflow-x-hidden mb-10">
       <div className=" w-full">
@@ -68,15 +78,7 @@ const WhatsAppTemplateList = () => {
               <TableComponent
                 selectable={true}
                 siteModule={'whats-app-templates'}
-                headers={[
-                  { id: 0, label: 'Name', key: 'name' },
-                  { id: 1, label: 'WhatsApp Template Name', key: 'whatsAppTemplateName' },
-                  { id: 2, label: 'Message', key: 'message' },
-                  { id: 3, label: 'Sites', key: 'site' },
-                  { id: 4, label: 'Status', key: 'status' },
-                  { id: 5, label: 'Created Date', key: 'createdAt' },
-                  { id: 6, label: 'Updated Date', key: 'updatedAt' }
-                ]}
+                headers={columnConfig}
                 tableData={(data) => setWhatsAppTemplates(data.whatsappTemplates)}
                 rows={rows}
                 apiUrl={'template/whatsapp'}

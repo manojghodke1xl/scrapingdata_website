@@ -14,14 +14,23 @@ const EmailTemplateList = () => {
     return {
       id: _id,
       exportData: emailTemplate,
-      name: <TruncatableFieldToolTip title={'Name'} content={name} />,
-      subject: <TruncatableFieldToolTip title={'Subject'} content={subject} />,
-      body: <TruncatableFieldToolTip title={'Body'} content={body} />,
-      site: <TruncatableFieldToolTip title={'Sites'} content={`${site?.name} (${site?.host})`} />,
+      name: <TruncatableFieldToolTip content={name} />,
+      subject: <TruncatableFieldToolTip content={subject} />,
+      body: <TruncatableFieldToolTip content={body} />,
+      site: <TruncatableFieldToolTip content={`${site?.name} (${site?.host})`} />,
       createdAt: formatDateTime(createdAt),
       updatedAt: formatDateTime(updatedAt)
     };
   });
+
+  const columnConfig = [
+    { id: 0, label: 'Name', key: 'name', dataKey: 'name' },
+    { id: 1, label: 'Subject', key: 'subject', dataKey: 'subject' },
+    { id: 2, label: 'Body', key: 'body', dataKey: 'body' },
+    { id: 3, label: 'Sites', key: 'site', dataKey: 'site', formatForExport: (value) => (value ? `${value?.name} (${value?.host})` : '') },
+    { id: 4, label: 'Created Date', key: 'createdAt', dataKey: 'createdAt', formatForExport: (value) => formatDateTime(value) },
+    { id: 5, label: 'Updated Date', key: 'updatedAt', dataKey: 'updatedAt', formatForExport: (value) => formatDateTime(value) }
+  ];
 
   return (
     <div className="py-5 px-8 overflow-x-hidden mb-10">
@@ -33,14 +42,7 @@ const EmailTemplateList = () => {
               <TableComponent
                 selectable={true}
                 siteModule={'email-templates'}
-                headers={[
-                  { id: 0, label: 'Name', key: 'name' },
-                  { id: 1, label: 'Subject', key: 'subject' },
-                  { id: 2, label: 'Body', key: 'body' },
-                  { id: 3, label: 'Sites', key: 'site' },
-                  { id: 4, label: 'Created Date', key: 'createdAt' },
-                  { id: 5, label: 'Updated Date', key: 'updatedAt' }
-                ]}
+                headers={columnConfig}
                 tableData={(data) => setEmailTemplates(data.emailTemplates)}
                 rows={rows}
                 apiUrl={'template/email'}

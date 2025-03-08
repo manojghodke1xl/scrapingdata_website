@@ -15,12 +15,38 @@ const BroadcastList = () => {
       exportData: broadcast,
       reminder: <TruncatableFieldToolTip content={refTo.name} />,
       target: <TruncatableFieldToolTip content={target} />,
-      followUps: <TruncatableFieldToolTip content={broadcasts.length} />,
+      broadcasts: <TruncatableFieldToolTip content={broadcasts.length} />,
       site: <TruncatableFieldToolTip content={`${site?.name} (${site?.host})`} />,
       createdAt: formatDateTime(createdAt),
       updatedAt: formatDateTime(updatedAt)
     };
   });
+
+  const columnConfig = [
+    {
+      id: 0,
+      label: 'Reminder',
+      key: 'reminder',
+      dataKey: 'refTo.name'
+    },
+    { id: 1, label: 'Category', key: 'target', dataKey: 'target' },
+    { id: 2, label: 'Follow Ups', key: 'broadcasts', dataKey: 'broadcasts', formatForExport: (value) => value?.length },
+    { id: 3, label: 'Sites', key: 'site', dataKey: 'site', formatForExport: (value) => (value ? `${value?.name} (${value?.host})` : '') },
+    {
+      id: 4,
+      label: 'Created Date',
+      key: 'createdAt',
+      dataKey: 'createdAt',
+      formatForExport: (value) => formatDateTime(value)
+    },
+    {
+      id: 5,
+      label: 'Updated Date',
+      key: 'updatedAt',
+      dataKey: 'updatedAt',
+      formatForExport: (value) => formatDateTime(value)
+    }
+  ];
 
   return (
     <div className="py-5 px-8 overflow-x-hidden mb-10">
@@ -32,14 +58,7 @@ const BroadcastList = () => {
               <TableComponent
                 siteModule={'broadcast'}
                 selectable={true}
-                headers={[
-                  { id: 0, label: 'Reminder', key: 'reminder' },
-                  { id: 1, label: 'Category', key: 'target' },
-                  { id: 2, label: 'Follow Ups', key: 'followUps' },
-                  { id: 3, label: 'Sites', key: 'site' },
-                  { id: 4, label: 'Created Date', key: 'createdAt' },
-                  { id: 5, label: 'Updated Date', key: 'updatedAt' }
-                ]}
+                headers={columnConfig}
                 tableData={(data) => setBroadcasts(data.broadcasts)}
                 rows={rows}
                 apiUrl={'broadcast'}

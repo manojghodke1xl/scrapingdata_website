@@ -22,6 +22,32 @@ const AfterSalesList = () => {
     };
   });
 
+  const columnConfig = [
+    {
+      id: 0,
+      label: 'After Sales',
+      key: 'afterSale',
+      dataKey: 'refTo.name'
+    },
+    { id: 1, label: 'Category', key: 'target', dataKey: 'target' },
+    { id: 2, label: 'Follow Ups', key: 'followUps', dataKey: 'followUps', formatForExport: (value) => value.length },
+    { id: 3, label: 'Sites', key: 'site', dataKey: 'site', formatForExport: (value) => (value ? `${value?.name} (${value?.host})` : '') },
+    {
+      id: 4,
+      label: 'Created Date',
+      key: 'createdAt',
+      dataKey: 'createdAt',
+      formatForExport: (value) => formatDateTime(value)
+    },
+    {
+      id: 5,
+      label: 'Updated Date',
+      key: 'updatedAt',
+      dataKey: 'updatedAt',
+      formatForExport: (value) => formatDateTime(value)
+    }
+  ];
+
   return (
     <div className="py-5 px-8 overflow-x-hidden mb-10">
       <div className="w-full">
@@ -32,14 +58,7 @@ const AfterSalesList = () => {
               <TableComponent
                 siteModule={'after-sales'}
                 selectable={true}
-                headers={[
-                  { id: 0, label: 'After Sales', key: 'afterSale' },
-                  { id: 1, label: 'Category', key: 'target' },
-                  { id: 2, label: 'Follow Ups', key: 'followUps' },
-                  { id: 3, label: 'Sites', key: 'site' },
-                  { id: 4, label: 'Created Date', key: 'createdAt' },
-                  { id: 5, label: 'Updated Date', key: 'updatedAt' }
-                ]}
+                headers={columnConfig}
                 tableData={(data) => setAfterSales(data.afterSales)}
                 rows={rows}
                 apiUrl={'after-sale'}
@@ -56,7 +75,6 @@ const AfterSalesList = () => {
           </div>
         </div>
       </div>
-      {/* <NoteComponent note={adminListNote} /> */}
     </div>
   );
 };

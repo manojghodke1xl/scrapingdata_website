@@ -73,7 +73,12 @@ const TableFilter = ({
               >
                 <IoCloseOutline />
               </div>
-              <FilterDropDowm name={'Sites'} data={allSites} selected={filterState.siteId} setDataId={(id) => setFilterState((prev) => ({ ...prev, siteId: id }))} />
+              <FilterDropDowm
+                name={'Sites'}
+                data={allSites.map((site) => ({ name: `${site.name} (${site.host})`, _id: site._id }))}
+                selected={filterState.siteId}
+                setDataId={(id) => setFilterState((prev) => ({ ...prev, siteId: id }))}
+              />
             </div>
           )}
           {showFilter.event && (

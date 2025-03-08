@@ -18,17 +18,17 @@ const RecaptchaList = () => {
     return {
       id: _id,
       exportData: recaptcha,
-      sites: <TruncatableFieldToolTip title={'Sites'} content={sites.map((s) => `${s.name} (${s.host})`).join(', ')} />,
+      sites: <TruncatableFieldToolTip content={sites.map((s) => `${s.name} (${s.host})`).join(', ')} />,
       version: version,
-      sitekey: <TruncatableFieldToolTip title={'Title'} content={sitekey} />,
-      secretkey: <TruncatableFieldToolTip title={'Title'} content={secretkey} />,
+      sitekey: <TruncatableFieldToolTip content={sitekey} />,
+      secretkey: <TruncatableFieldToolTip content={secretkey} />,
       status: (
         <div
           className={`rounded-xl ${
-            isActive ? `${isDarkMode ? 'border border-[#027948]' : 'bg-[#ECFDF3]'} text-[#027948]` : `${isDarkMode ? 'border border-[#344054]' : 'bg-[#F2F4F7]'} text-[#344054]`
+            isActive ? `${isDarkMode ? 'border border-success' : 'bg-lightgreen'} text-success` : `${isDarkMode ? 'border border-inactive' : 'bg-inactive'} text-inactive`
           } px-2 py-1 w-fit flex gap-2 items-center`}
         >
-          <span className={`min-w-[8px] min-h-[8px] rounded-full ${isActive ? 'bg-[#12B76A]' : 'bg-[#667085]'}`}></span>
+          <span className={`min-w-[8px] min-h-[8px] rounded-full ${isActive ? 'bg-green ' : 'bg-darkgray'}`} />
           <span>{isActive ? 'Active' : 'Inactive'}</span>
         </div>
       ),
@@ -36,6 +36,16 @@ const RecaptchaList = () => {
       updatedAt: formatDateTime(updatedAt)
     };
   });
+
+  const columnConfig = [
+    { id: 0, label: 'Sites', key: 'sites', dataKey: 'sites', formatForExport: (value) => (value ? value.map((s) => `${s.name} (${s.host})`).join(', ') : '') },
+    { id: 1, label: 'Version', key: 'version', dataKey: 'version' },
+    { id: 2, label: 'site Key', key: 'sitekey', dataKey: 'sitekey' },
+    { id: 3, label: 'Secret Key', key: 'secretkey', dataKey: 'secretkey' },
+    { id: 4, label: 'Status', key: 'status', dataKey: 'isActive', formatForExport: (value) => (value ? 'Active' : 'Inactive') },
+    { id: 5, label: 'Created Date', key: 'createdAt', dataKey: 'createdAt', formatForExport: (value) => formatDateTime(value) },
+    { id: 6, label: 'Updated Date', key: 'updatedAt', dataKey: 'updatedAt', formatForExport: (value) => formatDateTime(value) }
+  ];
 
   return (
     <div className="py-5 px-8 overflow-x-hidden mb-10">
@@ -47,15 +57,7 @@ const RecaptchaList = () => {
               <TableComponent
                 selectable={true}
                 siteModule={'recaptcha'}
-                headers={[
-                  { id: 0, label: 'Sites', key: 'sites' },
-                  { id: 1, label: 'Version', key: 'version' },
-                  { id: 2, label: 'site Key', key: 'sitekey' },
-                  { id: 3, label: 'Secret Key', key: 'secretkey' },
-                  { id: 4, label: 'Status', key: 'status' },
-                  { id: 5, label: 'Created Date', key: 'createdAt' },
-                  { id: 6, label: 'Updated Date', key: 'updatedAt' }
-                ]}
+                headers={columnConfig}
                 tableData={(data) => setRecaptchas(data.recaptchas)}
                 rows={rows}
                 apiUrl={'recaptcha'}

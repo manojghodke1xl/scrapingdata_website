@@ -15,12 +15,21 @@ const ReminderList = () => {
       exportData: reminder,
       reminder: <TruncatableFieldToolTip content={refTo.name} />,
       target: <TruncatableFieldToolTip content={target} />,
-      followUps: <TruncatableFieldToolTip content={reminders.length} />,
+      reminders: <TruncatableFieldToolTip content={reminders.length} />,
       site: <TruncatableFieldToolTip content={`${site?.name} (${site?.host})`} />,
       createdAt: formatDateTime(createdAt),
       updatedAt: formatDateTime(updatedAt)
     };
   });
+
+  const columnConfig = [
+    { id: 0, label: 'Reminder', key: 'reminder', dataKey: 'refTo.name' },
+    { id: 1, label: 'Category', key: 'target', dataKey: 'target' },
+    { id: 2, label: 'Follow Ups', key: 'reminders', dataKey: 'reminders', formatForExport: (value) => (value ? value.length : '') },
+    { id: 3, label: 'Sites', key: 'site', dataKey: 'site', formatForExport: (value) => (value ? `${value.name} (${value.host})` : '') },
+    { id: 4, label: 'Created Date', key: 'createdAt', dataKey: 'createdAt', formatForExport: (value) => formatDateTime(value) },
+    { id: 5, label: 'Updated Date', key: 'updatedAt', dataKey: 'updatedAt', formatForExport: (value) => formatDateTime(value) }
+  ];
 
   return (
     <div className="py-5 px-8 overflow-x-hidden mb-10">
@@ -32,14 +41,7 @@ const ReminderList = () => {
               <TableComponent
                 siteModule={'after-sales'}
                 selectable={true}
-                headers={[
-                  { id: 0, label: 'Reminder', key: 'reminder' },
-                  { id: 1, label: 'Category', key: 'target' },
-                  { id: 2, label: 'Follow Ups', key: 'followUps' },
-                  { id: 3, label: 'Sites', key: 'site' },
-                  { id: 4, label: 'Created Date', key: 'createdAt' },
-                  { id: 5, label: 'Updated Date', key: 'updatedAt' }
-                ]}
+                headers={columnConfig}
                 tableData={(data) => setReminders(data.reminders)}
                 rows={rows}
                 apiUrl={'reminder'}
@@ -56,7 +58,6 @@ const ReminderList = () => {
           </div>
         </div>
       </div>
-      {/* <NoteComponent note={adminListNote} /> */}
     </div>
   );
 };

@@ -17,9 +17,9 @@ const SubscribersList = () => {
     return {
       id: _id,
       exportData: list,
-      name: <TruncatableFieldToolTip title={'Name'} content={name} />,
-      email: <TruncatableFieldToolTip title={'Email'} content={email} />,
-      site: <TruncatableFieldToolTip title={'Sites'} content={`${site?.name} (${site?.host})`} />,
+      name: <TruncatableFieldToolTip content={name} />,
+      email: <TruncatableFieldToolTip content={email} />,
+      site: <TruncatableFieldToolTip content={`${site?.name} (${site?.host})`} />,
       url: <TruncatableFieldToolTip content={url} />,
       campaign: <TruncatableFieldToolTip content={campaign} />,
       medium: <TruncatableFieldToolTip content={medium} />,
@@ -31,6 +31,21 @@ const SubscribersList = () => {
       updatedAt: formatDateTime(updatedAt)
     };
   });
+
+  const columnConfig = [
+    { id: 0, label: 'Customer Name', key: 'name', dataKey: 'name' },
+    { id: 1, label: 'Email', key: 'email', dataKey: 'email' },
+    { id: 2, label: 'Sites', key: 'site', dataKey: 'site', formatForExport: (value) => (value ? `${value?.name} (${value?.host})` : '') },
+    { id: 3, label: 'URL', key: 'url', dataKey: 'url' },
+    { id: 4, label: 'Campaign Name', key: 'campaign', dataKey: 'campaign' },
+    { id: 5, label: 'Medium', key: 'medium', dataKey: 'medium' },
+    { id: 6, label: 'Source', key: 'source', dataKey: 'source' },
+    { id: 7, label: 'Content', key: 'content', dataKey: 'content' },
+    { id: 8, label: 'Term', key: 'term', dataKey: 'term' },
+    { id: 9, label: 'Campaign ID', key: 'campaignId', dataKey: 'campaignId' },
+    { id: 10, label: 'Created At', key: 'createdAt', dataKey: 'createdAt', formatForExport: (value) => formatDateTime(value) },
+    { id: 11, label: 'Updated At', key: 'updatedAt', dataKey: 'updatedAt', formatForExport: (value) => formatDateTime(value) }
+  ];
 
   return (
     <div className="py-5 px-8 overflow-x-hidden mb-10">
@@ -52,20 +67,7 @@ const SubscribersList = () => {
               <TableComponent
                 selectable={true}
                 siteModule={'subscriber'}
-                headers={[
-                  { id: 0, label: 'Name', key: 'name' },
-                  { id: 1, label: 'Email', key: 'email' },
-                  { id: 2, label: 'Sites', key: 'site' },
-                  { id: 3, label: 'URL', key: 'url' },
-                  { id: 4, label: 'Campaign Name', key: 'campaign' },
-                  { id: 5, label: 'Medium', key: 'medium' },
-                  { id: 6, label: 'Source', key: 'source' },
-                  { id: 7, label: 'Content', key: 'content' },
-                  { id: 8, label: 'Term', key: 'term' },
-                  { id: 9, label: 'Campaign ID', key: 'campaignId' },
-                  { id: 10, label: 'Created Date', key: 'createdAt' },
-                  { id: 11, label: 'Updated Date', key: 'updatedAt' }
-                ]}
+                headers={columnConfig}
                 tableData={(data) => setLists(data.lists)}
                 rows={rows}
                 apiUrl={'newsletter'}

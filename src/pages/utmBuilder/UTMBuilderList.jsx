@@ -25,6 +25,7 @@ const UTMBuilderList = () => {
 
     return {
       id: _id,
+      exportData: utm,
       url: <TruncatableCopyFeild content={completeUrl} />,
       campaignId: <TruncatableFieldToolTip content={campaignId} />,
       name: <TruncatableFieldToolTip content={name} />,
@@ -38,6 +39,36 @@ const UTMBuilderList = () => {
     };
   });
 
+  const columnConfig = [
+    {
+      id: 0,
+      label: 'URL',
+      key: 'url',
+      dataKey: 'url',
+      formatForExport: (val, data) => {
+        const query = [];
+        if (data.name) query.push(`utm_campaign=${data.name}`);
+        if (data.medium) query.push(`utm_medium=${data.medium}`);
+        if (data.source) query.push(`utm_source=${data.source}`);
+        if (data.content) query.push(`utm_content=${data.content}`);
+        if (data.term) query.push(`utm_term=${data.term}`);
+        if (data.campaignId) query.push(`utm_id=${data.campaignId}`);
+
+        const completeUrl = `${val}${query.length ? `?${query.join('&')}` : ''}`;
+        return completeUrl;
+      }
+    },
+    { id: 1, label: 'Campaign Id', key: 'campaignId', dataKey: 'campaignId' },
+    { id: 2, label: 'Name', key: 'name', dataKey: 'name' },
+    { id: 3, label: 'Host', key: 'host', dataKey: 'host' },
+    { id: 4, label: 'Medium', key: 'medium', dataKey: 'medium' },
+    { id: 5, label: 'Source', key: 'source', dataKey: 'source' },
+    { id: 6, label: 'Content', key: 'content', dataKey: 'content' },
+    { id: 7, label: 'Term', key: 'term', dataKey: 'term' },
+    { id: 8, label: 'Created Date', key: 'createdAt', dataKey: 'createdAt', formatForExport: (value) => formatDateTime(value) },
+    { id: 9, label: 'Updated Date', key: 'updatedAt', dataKey: 'updatedAt', formatForExport: (value) => formatDateTime(value) }
+  ];
+
   return (
     <div className="py-5 px-8 overflow-x-hidden mb-10">
       <div className=" w-full">
@@ -48,18 +79,7 @@ const UTMBuilderList = () => {
               <TableComponent
                 selectable={true}
                 siteModule={'utm-builder'}
-                headers={[
-                  { id: 0, label: 'URL', key: 'url' },
-                  { id: 1, label: 'Campaign Id', key: 'campaignId' },
-                  { id: 2, label: 'Name', key: 'name' },
-                  { id: 3, label: 'Host', key: 'host' },
-                  { id: 4, label: 'Medium', key: 'medium' },
-                  { id: 5, label: 'Source', key: 'source' },
-                  { id: 6, label: 'Content', key: 'content' },
-                  { id: 7, label: 'Term', key: 'term' },
-                  { id: 8, label: 'Created Date', key: 'createdAt' },
-                  { id: 9, label: 'Updated Date', key: 'updatedAt' }
-                ]}
+                headers={columnConfig}
                 tableData={(data) => setUTMList(data.utmBuilders)}
                 rows={rows}
                 apiUrl={'utm-builder'}

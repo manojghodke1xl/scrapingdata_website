@@ -52,7 +52,7 @@ const TableRowActions = ({
       // Calculate position relative to viewport
       setDropdownPosition({
         top: rect.bottom + scrollY,
-        left: rect.left + scrollX - 110 // Adjust 150 based on your dropdown width
+        left: rect.left + scrollX - 110
       });
     }
 

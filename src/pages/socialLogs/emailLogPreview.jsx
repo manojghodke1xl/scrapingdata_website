@@ -37,7 +37,7 @@ const EmailLogPreview = () => {
           </p>
         </div>
 
-        {emailData.attachments && (
+        {emailData.attachments && emailData?.attachments?.length > 0 && (
           <div className="flex flex-col my-4">
             <strong>Download Attachments:</strong>
             {emailData.attachments.map((attachment, i) => (

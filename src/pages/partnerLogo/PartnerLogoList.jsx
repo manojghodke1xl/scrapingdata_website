@@ -20,14 +20,14 @@ const PartnerLogoList = () => {
       id: _id,
       exportData: partnerLogo,
       image: <img src={image.url} alt="Company Logo" className="w-8 h-8 rounded" />,
-      sites: <TruncatableFieldToolTip title={'Sites'} content={sites.map((s) => `${s.name} (${s.host})`).join(', ')} />,
+      sites: <TruncatableFieldToolTip content={sites.map((s) => `${s.name} (${s.host})`).join(', ')} />,
       status: (
         <div
           className={`rounded-xl ${
-            isActive ? `${isDarkMode ? 'border border-[#027948]' : 'bg-[#ECFDF3]'}  text-[#027948]` : `${isDarkMode ? 'border border-[#344054]' : 'bg-[#F2F4F7]'} text-[#344054]`
+            isActive ? `${isDarkMode ? 'border border-success' : 'bg-lightgreen'} text-success` : `${isDarkMode ? 'border border-inactive' : 'bg-inactive'} text-inactive`
           } px-2 py-1 w-fit flex gap-2 items-center`}
         >
-          <span className={`min-w-[8px] min-h-[8px] rounded-full ${isActive ? 'bg-[#12B76A]' : 'bg-[#667085]'}`}></span>
+          <span className={`min-w-[8px] min-h-[8px] rounded-full ${isActive ? 'bg-green ' : 'bg-darkgray'}`} />
           <span>{isActive ? 'Active' : 'Inactive'}</span>
         </div>
       ),
@@ -35,6 +35,14 @@ const PartnerLogoList = () => {
       updatedAt: formatDateTime(updatedAt)
     };
   });
+
+  const columnConfig = [
+    { id: 0, label: 'Image', key: 'image', dataKey: 'image', formatForExport: (value) => (value ? value.url : '') },
+    { id: 1, label: 'Sites', key: 'sites', dataKey: 'sites', formatForExport: (value) => (value ? value.map((s) => `${s.name} (${s.host})`).join(', ') : '') },
+    { id: 2, label: 'Status', key: 'status', dataKey: 'isActive', formatForExport: (value) => (value ? 'Active' : 'Inactive') },
+    { id: 3, label: 'Created Date', key: 'createdAt', dataKey: 'createdAt', formatForExport: (value) => formatDateTime(value) },
+    { id: 4, label: 'Updated Date', key: 'updatedAt', dataKey: 'updatedAt', formatForExport: (value) => formatDateTime(value) }
+  ];
 
   return (
     <div className="py-5 px-8 overflow-x-hidden mb-10">
@@ -47,13 +55,7 @@ const PartnerLogoList = () => {
                 selectable={true}
                 search={true}
                 siteModule={'partnerlogo'}
-                headers={[
-                  { id: 0, label: 'Image', key: 'image' },
-                  { id: 1, label: 'Sites', key: 'sites' },
-                  { id: 2, label: 'Status', key: 'status' },
-                  { id: 3, label: 'Created Date', key: 'createdAt' },
-                  { id: 4, label: 'Updated Date', key: 'updatedAt' }
-                ]}
+                headers={columnConfig}
                 tableData={(data) => setPartnerLogos(data.partnerlogos)}
                 rows={rows}
                 apiUrl={'partner-logo'}

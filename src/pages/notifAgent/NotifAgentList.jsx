@@ -19,7 +19,7 @@ const NotifAgentList = () => {
       name: <TruncatableFieldToolTip content={name} />,
       email: <TruncatableFieldToolTip content={email} />,
       phoneNumber: <TruncatableFieldToolTip content={`${phoneCode ? (phoneCode?.startsWith('+') ? phoneCode : `+${phoneCode}`) : ''} ${phoneNumber ? phoneNumber : '-'}`} />,
-      sites: <TruncatableFieldToolTip title={'Sites'} content={sites.map((s) => `${s.name} (${s.host})`).join(', ')} />,
+      sites: <TruncatableFieldToolTip content={sites.map((s) => `${s.name} (${s.host})`).join(', ')} />,
       status: (
         <div
           className={`rounded-xl ${
@@ -35,6 +35,22 @@ const NotifAgentList = () => {
     };
   });
 
+  const columnConfig = [
+    { id: 0, label: 'Name', key: 'name', dataKey: 'name' },
+    { id: 1, label: 'Email', key: 'email', dataKey: 'email' },
+    {
+      id: 2,
+      label: 'Mobile Number',
+      key: 'phoneNumber',
+      dataKey: 'phoneNumber',
+      formatForExport: (value, data) => `${data.phoneCode ? (data.phoneCode?.startsWith('+') ? data.phoneCode : `+${data.phoneCode}`) : ''} ${value ? value : '-'}`
+    },
+    { id: 3, label: 'Sites', key: 'sites', dataKey: 'sites', formatForExport: (value) => (value ? value.map((s) => `${s.name} (${s.host})`).join(', ') : '') },
+    { id: 4, label: 'Status', key: 'status', dataKey: 'isBlocked', formatForExport: (value) => (value ? 'Blocked' : 'Active') },
+    { id: 5, label: 'Created Date', key: 'createdAt', dataKey: 'createdAt', formatForExport: (value) => formatDateTime(value) },
+    { id: 6, label: 'Updated Date', key: 'updatedAt', dataKey: 'updatedAt', formatForExport: (value) => formatDateTime(value) }
+  ];
+
   return (
     <div className="py-5 px-8 overflow-x-hidden mb-10">
       <div className="w-full">
@@ -45,15 +61,7 @@ const NotifAgentList = () => {
               <TableComponent
                 selectable={true}
                 siteModule={'NotifAgent'}
-                headers={[
-                  { id: 0, label: 'Name', key: 'name' },
-                  { id: 1, label: 'Email', key: 'email' },
-                  { id: 2, label: 'Mobile Number', key: 'phoneNumber' },
-                  { id: 3, label: 'Sites', key: 'sites' },
-                  { id: 4, label: 'Status', key: 'status' },
-                  { id: 5, label: 'Created Date', key: 'createdAt' },
-                  { id: 6, label: 'Updated Date', key: 'updatedAt' }
-                ]}
+                headers={columnConfig}
                 tableData={(data) => setNotifAgents(data.notifAgents)}
                 rows={rows}
                 apiUrl={'notif-agent'}

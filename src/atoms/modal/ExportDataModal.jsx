@@ -5,8 +5,9 @@ import { useState } from 'react';
 import CustomColumnSelector from '../filter/CustomColumnSelector';
 import { exportHandler } from '../../helpers/exportHandler';
 import { showNotification } from '../../utils/showNotification';
+import { createGenericExportMapping } from '../../utils/exportUtils';
 
-const ExportDataModal = ({ isExportModalOpen, setExportModalOpen, label, selectedData, apiUrl, rows, headers, customColumns }) => {
+const ExportDataModal = ({ isExportModalOpen, setExportModalOpen, label, selectedData, apiUrl, rows, headers, fileName }) => {
   const [selectionState, setSelectionState] = useState({
     selectedRecords: 'currentPage',
     selectedColumns: 'visible',
@@ -17,9 +18,24 @@ const ExportDataModal = ({ isExportModalOpen, setExportModalOpen, label, selecte
   const [selectedColumns, setSelectedColumns] = useState([]);
 
   const handleExportTable = (type) =>
-    exportHandler({ type, apiUrl, rows, headers: selectionState.selectedColumns === 'customColumns' ? selectedColumns : headers, selected: selectedData.selectedItems });
+    exportHandler({
+      type,
+      apiUrl,
+      rows,
+      exportMapping: createGenericExportMapping(headers),
+      selectedColumns,
+      selected: selectedData.selectedItems,
+      fileName,
+      fileFormat: selectionState.selectedFileFormat
+    });
 
-  const handleDefaultState = () => setSelectionState({ selectedRecords: 'currentPage', selectedColumns: 'visible', selectedData: 'allData', selectedFileFormat: 'xlsx' });
+  const handleDefaultState = () =>
+    setSelectionState({
+      selectedRecords: 'currentPage',
+      selectedColumns: 'visible',
+      selectedData: 'allData',
+      selectedFileFormat: 'csv'
+    });
 
   const handleExport = () => {
     // Define conditions for the export options
@@ -28,22 +44,22 @@ const ExportDataModal = ({ isExportModalOpen, setExportModalOpen, label, selecte
         selectionState.selectedRecords === 'allRecords' &&
         selectionState.selectedData === 'allData' &&
         selectionState.selectedColumns === 'allColumns' &&
-        selectionState.selectedFileFormat === 'csv',
+        (selectionState.selectedFileFormat === 'csv' || selectionState.selectedFileFormat === 'xlsx'),
       visible:
         selectionState.selectedRecords === 'currentPage' &&
         selectionState.selectedData === 'allData' &&
         selectionState.selectedColumns === 'visible' &&
-        selectionState.selectedFileFormat === 'csv',
+        (selectionState.selectedFileFormat === 'csv' || selectionState.selectedFileFormat === 'xlsx'),
       selected:
         selectionState.selectedRecords === 'selectedRecords' &&
         selectionState.selectedData === 'allData' &&
         selectionState.selectedColumns === 'visible' &&
-        selectionState.selectedFileFormat === 'csv',
+        (selectionState.selectedFileFormat === 'csv' || selectionState.selectedFileFormat === 'xlsx'),
       custom:
         selectionState.selectedRecords === 'currentPage' &&
         selectionState.selectedData === 'allData' &&
         selectionState.selectedColumns === 'customColumns' &&
-        selectionState.selectedFileFormat === 'csv'
+        (selectionState.selectedFileFormat === 'csv' || selectionState.selectedFileFormat === 'xlsx')
     };
 
     // Check which condition matches and execute the corresponding export
@@ -160,20 +176,12 @@ const ExportDataModal = ({ isExportModalOpen, setExportModalOpen, label, selecte
                   label={'Custom Columns'}
                 />
               </div>
-              {selectionState.selectedColumns === 'customColumns' && <CustomColumnSelector customColumns={customColumns} setSelectedColumns={setSelectedColumns} />}
+              {selectionState.selectedColumns === 'customColumns' && <CustomColumnSelector customColumns={headers} setSelectedColumns={setSelectedColumns} />}
             </div>
 
             <div className="border p-4 rounded-xl border-primary flex flex-col gap-2 w-full mt-4">
               <h1 className="text-primary font-semibold">Select File Format</h1>
               <div className="flex justify-start gap-x-5">
-                {/* <RadioField
-                  id="xlsx"
-                  name={'fileFormat'}
-                  value="xlsx"
-                  checked={selectionState.selectedFileFormat === 'xlsx'}
-                  onChange={() => setSelectionState((prev) => ({ ...prev, selectedFileFormat: 'xlsx' }))}
-                  label={'XLSX'}
-                /> */}
                 <RadioField
                   id="csv"
                   name={'fileFormat'}
@@ -182,6 +190,15 @@ const ExportDataModal = ({ isExportModalOpen, setExportModalOpen, label, selecte
                   onChange={() => setSelectionState((prev) => ({ ...prev, selectedFileFormat: 'csv' }))}
                   label={'CSV'}
                 />
+                <RadioField
+                  id="xlsx"
+                  name={'fileFormat'}
+                  value="xlsx"
+                  checked={selectionState.selectedFileFormat === 'xlsx'}
+                  onChange={() => setSelectionState((prev) => ({ ...prev, selectedFileFormat: 'xlsx' }))}
+                  label={'XLSX'}
+                />
+
                 {/* <RadioField
                   id="pdf"
                   name={'fileFormat'}

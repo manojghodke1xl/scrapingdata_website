@@ -10,13 +10,14 @@ const WhatsAppLogList = () => {
   const [whatsAppTemplates, setWhatsAppTemplates] = useState([]);
 
   const rows = whatsAppTemplates?.map((whatsAppTemplate) => {
-    const { _id, statusCode, error, createdAt, updatedAt } = whatsAppTemplate;
+    const { _id, fromNumber, toNumber, message, statusCode, error, createdAt, updatedAt } = whatsAppTemplate;
 
     return {
       id: _id,
-      fromNumber: whatsAppTemplate.fromNumber || '-',
-      toNumber: whatsAppTemplate.toNumber || '-',
-      message: <TruncatableFieldToolTip title={'Message'} content={whatsAppTemplate.message} />,
+      exportData: whatsAppTemplate,
+      fromNumber: fromNumber || '-',
+      toNumber: toNumber || '-',
+      message: <TruncatableFieldToolTip content={message} />,
       status: (
         <div
           className={`rounded-xl ${
@@ -31,11 +32,21 @@ const WhatsAppLogList = () => {
           <span>{statusCode}</span>
         </div>
       ),
-      error: error ? <TruncatableFieldToolTip title={'Error'} content={JSON.stringify(error)} /> : <span className="text-secondary">No Error</span>,
+      error: error ? <TruncatableFieldToolTip content={JSON.stringify(error)} /> : <span className="text-secondary">No Error</span>,
       createdAt: formatDateTime(createdAt),
       updatedAt: formatDateTime(updatedAt)
     };
   });
+
+  const columnConfig = [
+    { id: 0, label: 'From Number', key: 'fromNumber', dataKey: 'fromNumber' },
+    { id: 1, label: 'To Number', key: 'toNumber', dataKey: 'toNumber' },
+    { id: 2, label: 'Message', key: 'message', dataKey: 'message' },
+    { id: 3, label: 'Status', key: 'status', dataKey: 'statusCode' },
+    { id: 4, label: 'Error', key: 'error', dataKey: 'error' },
+    { id: 5, label: 'Created Date', key: 'createdAt', dataKey: 'createdAt', formatForExport: (value) => formatDateTime(value) },
+    { id: 6, label: 'Updated Date', key: 'updatedAt', dataKey: 'updatedAt', formatForExport: (value) => formatDateTime(value) }
+  ];
 
   return (
     <div className="py-5 px-8 overflow-x-hidden mb-10">
@@ -47,22 +58,13 @@ const WhatsAppLogList = () => {
               <TableComponent
                 selectable={true}
                 siteModule={'whats-app-logs'}
-                headers={[
-                  { id: 0, label: 'From Number', key: 'fromNumber' },
-                  { id: 1, label: 'To Number', key: 'toNumber' },
-                  { id: 2, label: 'Message', key: 'message' },
-                  { id: 3, label: 'Status', key: 'status' },
-                  { id: 4, label: 'Error', key: 'error' },
-                  { id: 5, label: 'Created Date', key: 'createdAt' },
-                  { id: 6, label: 'Updated Date', key: 'updatedAt' }
-                ]}
+                headers={columnConfig}
                 tableData={(data) => setWhatsAppTemplates(data.logs)}
                 rows={rows}
                 apiUrl={'logs/whatsapp'}
                 tableCountLabel={true}
                 pagination={true}
                 search={true}
-                // filter={true}
                 filterCategory={[{ id: 0, name: 'Sites' }]}
                 actions={true}
                 viewPath={'/logs/whatsapp-log-preview'}

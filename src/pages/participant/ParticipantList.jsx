@@ -26,18 +26,18 @@ const ParticipantList = () => {
       exportData: participant,
       bookingId,
       certificate: userPackage?.certificate,
-      name: <TruncatableFieldToolTip title={'Name'} content={name ?? ''} />,
-      email: <TruncatableFieldToolTip title={'Email'} content={email ?? ''} />,
-      city: <TruncatableFieldToolTip title={'City'} content={city ?? ''} />,
+      name: <TruncatableFieldToolTip content={name ?? ''} />,
+      email: <TruncatableFieldToolTip content={email ?? ''} />,
+      city: <TruncatableFieldToolTip content={city ?? ''} />,
       country: <CountryFlag divClassName={'justify-center'} dialingCode={phoneCode?.startsWith('+') ? phoneCode?.slice(1) : phoneCode} />,
       phoneNumber: <TruncatableFieldToolTip content={`${phoneCode ? (phoneCode?.startsWith('+') ? phoneCode : `+${phoneCode}`) : ''} ${phoneNumber ? phoneNumber : '-'}`} />,
-      ticketId: <TruncatableFieldToolTip title={'Ticket ID'} content={ticketId ?? ''} />,
-      site: <TruncatableFieldToolTip title={'Sites'} content={`${site?.name} (${site?.host})`} />,
-      event: <TruncatableFieldToolTip title={'Event Name'} content={`${event?.name} (${event?.venue})`} />,
+      ticketId: <TruncatableFieldToolTip content={ticketId ?? ''} />,
+      site: <TruncatableFieldToolTip content={`${site?.name} (${site?.host})`} />,
+      event: <TruncatableFieldToolTip content={`${event?.name} (${event?.venue})`} />,
       eventDate: formatDateTime(event?.date),
-      title: <TruncatableFieldToolTip title={'Package Name'} content={userPackage?.title ?? ''} />,
-      refUser: <TruncatableFieldToolTip title={'Referrer User'} content={refUser?.name ?? '--'} />,
-      couponCode: <TruncatableFieldToolTip title={'Coupon Code'} content={payment?.coupon?.code ?? '--'} />,
+      title: <TruncatableFieldToolTip content={userPackage?.title ?? ''} />,
+      refUser: <TruncatableFieldToolTip content={refUser?.name ?? '--'} />,
+      couponCode: <TruncatableFieldToolTip content={payment?.coupon?.code ?? '--'} />,
       status: (
         <div
           className={`rounded-xl ${
@@ -56,6 +56,37 @@ const ParticipantList = () => {
       updatedAt: formatDateTime(updatedAt)
     };
   });
+
+  const columnConfig = [
+    { id: 0, label: 'Name', key: 'name', dataKey: 'booking.name' },
+    { id: 1, label: 'Email', key: 'email', dataKey: 'booking.email' },
+    { id: 2, label: 'City', key: 'city', dataKey: 'booking.city' },
+    { id: 3, label: 'Country', key: 'country', dataKey: 'booking.phoneCode', formatForExport: (value) => (value ? (value.startsWith('+') ? value : `+${value}`) : '') },
+    {
+      id: 4,
+      label: 'Phone Number',
+      key: 'phoneNumber',
+      dataKey: 'booking',
+      formatForExport: (value) =>
+        `${value.phoneCode ? (value.phoneCode?.startsWith('+') ? value.phoneCode : `+${value.phoneCode}`) : ''} ${value.phoneNumber ? value.phoneNumber : ''}`
+    },
+    { id: 5, label: 'Ticket ID', key: 'ticketId', dataKey: 'ticketId' },
+    { id: 6, label: 'Sites', key: 'site', dataKey: 'booking.site', formatForExport: (value) => (value ? `${value.name} (${value.host})` : '') },
+    { id: 7, label: 'Event', key: 'event', dataKey: 'booking.event', formatForExport: (value) => (value ? `${value.name} (${value.venue})` : '') },
+    { id: 8, label: 'Event Date', key: 'eventDate', dataKey: 'booking.event.date', formatForExport: (value) => formatDateTime(value) },
+    { id: 9, label: 'Package', key: 'title', dataKey: 'booking.package.title' },
+    { id: 10, label: 'Coupon Code', key: 'couponCode', dataKey: 'booking.payment.coupon.code' },
+    { id: 11, label: 'Referrer User', key: 'refUser', dataKey: 'booking.refUser.name' },
+    {
+      id: 12,
+      label: 'Status',
+      key: 'status',
+      dataKey: 'booking.status',
+      formatForExport: (value) => (value === 'success' ? 'Confirmed' : value === 'pending' ? 'Pending' : value === 'cancelled' ? 'Cancelled' : 'Failed')
+    },
+    { id: 13, label: 'Created At', key: 'createdAt', dataKey: 'createdAt', formatForExport: (value) => formatDateTime(value) },
+    { id: 14, label: 'Updated At', key: 'updatedAt', dataKey: 'updatedAt', formatForExport: (value) => formatDateTime(value) }
+  ];
 
   useEffect(() => {
     (async () => {
@@ -86,23 +117,7 @@ const ParticipantList = () => {
                 selectable={true}
                 siteModule={'participant'}
                 actions={true}
-                headers={[
-                  { id: 0, label: 'Name', key: 'name' },
-                  { id: 1, label: 'Email', key: 'email' },
-                  { id: 2, label: 'City', key: 'city' },
-                  { id: 3, label: 'Country', key: 'country' },
-                  { id: 4, label: 'Mobile Number', key: 'phoneNumber' },
-                  { id: 5, label: 'Ticket ID', key: 'ticketId' },
-                  { id: 6, label: 'Sites', key: 'site' },
-                  { id: 7, label: 'Event', key: 'event' },
-                  { id: 8, label: 'Event Date', key: 'eventDate' },
-                  { id: 9, label: 'Package', key: 'title' },
-                  { id: 10, label: 'Coupon Code', key: 'couponCode' },
-                  { id: 11, label: 'Referrer User', key: 'refUser' },
-                  { id: 12, label: 'Status', key: 'status' },
-                  { id: 13, label: 'Created Date', key: 'createdAt' },
-                  { id: 14, label: 'Updated Date', key: 'updatedAt' }
-                ]}
+                headers={columnConfig}
                 tableData={(data) => setParticipants(data.participants)}
                 rows={rows}
                 apiUrl={'participant'}

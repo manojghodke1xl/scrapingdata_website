@@ -39,7 +39,7 @@ const DropDown = ({ mt = '', width = 'w-full', name, label, SummaryChild, dropdo
         <summary className="cursor-pointer py-2.5 pr-8 text-left text-primary list-none focus:outline-none focus:ring-0 focus:border-0">
           <span className="flex items-center">
             <span className="block font-medium whitespace-nowrap text-[16px]">
-              <TruncatableFieldToolTip title={label} content={dropdownList.find((item) => item.name === selected)?.showName || SummaryChild} />
+              <TruncatableFieldToolTip content={dropdownList.find((item) => item.name === selected)?.showName || SummaryChild} />
             </span>
           </span>
           <span className="absolute inset-y-0 right-0 ml-3 flex items-center pr-2">

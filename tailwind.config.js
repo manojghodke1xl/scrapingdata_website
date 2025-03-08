@@ -24,6 +24,7 @@ export default {
         success: 'var(--text-success)',
         pending: 'var(--text-pending)',
         failed: 'var(--text-failed)',
+        inactive: 'var(--text-inactive)',
         danger: 'var(--text-danger)',
         white: 'var(--text-white)'
       },
@@ -42,7 +43,8 @@ export default {
         danger: 'var(--border-danger)',
         success: 'var(--border-success)',
         pending: 'var(--border-pending)',
-        failed: 'var(--border-failed)'
+        failed: 'var(--border-failed)',
+        inactive: 'var(--border-inactive)'
       },
 
       backgroundColor: {
@@ -77,6 +79,7 @@ export default {
         lightgreen: 'var(--bg-lightgreen)',
         pending: 'var(--bg-pending)',
         fadeyellow: 'var(--bg-fadeyellow)',
+        inactive: 'var(--bg-inactive)',
         darkgray: 'var(--bg-darkgray)',
         grey: 'var(--bg-grey)',
         main: 'var(--bg-main)'

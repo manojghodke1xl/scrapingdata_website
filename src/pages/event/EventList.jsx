@@ -18,10 +18,10 @@ const EventList = () => {
       exportData: event,
       bookingId: _id,
       Keys: <TruncatableCopyFeild content={_id} />,
-      name: <TruncatableFieldToolTip title={'Event Name'} content={name} />,
-      site: <TruncatableFieldToolTip title={'Sites'} content={`${site?.name} (${site?.host})`} />,
-      venue: <TruncatableFieldToolTip title={'Venue'} content={venue} />,
-      timeZone: <TruncatableFieldToolTip title={'Timezone'} content={timeZone?.label} />,
+      name: <TruncatableFieldToolTip content={name} />,
+      site: <TruncatableFieldToolTip content={`${site?.name} (${site?.host})`} />,
+      venue: <TruncatableFieldToolTip content={venue} />,
+      timeZone: <TruncatableFieldToolTip content={timeZone?.label} />,
       date: formatDateTime(date, timeZone || null),
       endDate: formatDateTime(endDate, timeZone || null),
       lastBookingDate: formatDateTime(lastBookingDate, timeZone || null),
@@ -30,6 +30,25 @@ const EventList = () => {
       certificate
     };
   });
+
+  const columnConfig = [
+    { id: 0, label: 'Keys', key: 'Keys', dataKey: '_id' },
+    { id: 1, label: 'Event Name', key: 'name', dataKey: 'name' },
+    { id: 2, label: 'Sites', key: 'site', dataKey: 'site', formatForExport: (value) => (value ? `${value.name} (${value.host})` : 'N/A') },
+    { id: 3, label: 'Venue', key: 'venue', dataKey: 'venue' },
+    { id: 4, label: 'Timezone', key: 'timeZone', dataKey: 'timeZone.label', formatForExport: (value) => value || 'N/A' },
+    { id: 5, label: 'Start Date', key: 'date', dataKey: 'date', formatForExport: (value, data) => (value ? formatDateTime(value, data.timeZone || null) : 'N/A') },
+    { id: 6, label: 'End Date', key: 'endDate', dataKey: 'endDate', formatForExport: (value, data) => (value ? formatDateTime(value, data.timeZone || null) : 'N/A') },
+    {
+      id: 7,
+      label: 'Last Booking Date',
+      key: 'lastBookingDate',
+      dataKey: 'lastBookingDate',
+      formatForExport: (value, data) => (value ? formatDateTime(value, data.timeZone || null) : 'N/A')
+    },
+    { id: 8, label: 'Created Date', key: 'createdAt', dataKey: 'createdAt', formatForExport: (value) => (value ? formatDateTime(value) : 'N/A') },
+    { id: 9, label: 'Updated Date', key: 'updatedAt', dataKey: 'updatedAt', formatForExport: (value) => (value ? formatDateTime(value) : 'N/A') }
+  ];
 
   return (
     <div className="py-5 px-8 overflow-x-hidden mb-10">
@@ -41,18 +60,7 @@ const EventList = () => {
               <TableComponent
                 selectable={true}
                 siteModule={'events'}
-                headers={[
-                  { id: 0, label: 'Keys', key: 'Keys' },
-                  { id: 1, label: 'Event Name', key: 'name' },
-                  { id: 2, label: 'Sites', key: 'site' },
-                  { id: 3, label: 'Venue', key: 'venue' },
-                  { id: 4, label: 'Timezone', key: 'timeZone' },
-                  { id: 5, label: 'Start Date', key: 'date' },
-                  { id: 6, label: 'End Date', key: 'endDate' },
-                  { id: 7, label: 'Last Booking Date', key: 'lastBookingDate' },
-                  { id: 8, label: 'Created Date', key: 'createdAt' },
-                  { id: 9, label: 'Updated Date', key: 'updatedAt' }
-                ]}
+                headers={columnConfig}
                 tableData={(data) => setEvents(data.events)}
                 rows={rows}
                 apiUrl={'events'}

@@ -19,17 +19,17 @@ const PopupList = () => {
     return {
       id: _id,
       exportData: popup,
-      name: <TruncatableFieldToolTip title={'Name'} content={name} />,
-      site: <TruncatableFieldToolTip title={'Sites'} content={`${site?.name} (${site?.host}) `} maxLength={20} />,
+      name: <TruncatableFieldToolTip content={name} />,
+      site: <TruncatableFieldToolTip content={`${site?.name} (${site?.host}) `} maxLength={20} />,
       showOnDeviceType: showOnDeviceType === 'mobile' ? 'Mobile' : showOnDeviceType === 'desktop' ? 'Desktop' : 'All',
       contentType: contentType === 'guide' ? 'Guide' : contentType === 'casestudy' ? 'Case Study' : 'Basic',
       status: (
         <div
           className={`rounded-xl ${
-            isActive ? `${isDarkMode ? 'border border-[#027948]' : 'bg-[#ECFDF3]'} text-[#027948]` : `${isDarkMode ? 'border border-[#344054]' : 'bg-[#F2F4F7]'} text-[#344054]`
+            isActive ? `${isDarkMode ? 'border border-success' : 'bg-lightgreen'} text-success` : `${isDarkMode ? 'border border-inactive' : 'bg-inactive'} text-inactive`
           } px-2 py-1 w-fit flex gap-2 items-center`}
         >
-          <span className={`min-w-[8px] min-h-[8px] rounded-full ${isActive ? 'bg-[#12B76A]' : 'bg-[#667085]'}`}></span>
+          <span className={`min-w-[8px] min-h-[8px] rounded-full ${isActive ? 'bg-green ' : 'bg-darkgray'}`} />
           <span>{isActive ? 'Active' : 'Inactive'}</span>
         </div>
       ),
@@ -37,6 +37,22 @@ const PopupList = () => {
       updatedAt: formatDateTime(updatedAt)
     };
   });
+
+  const columnConfig = [
+    { id: 0, label: 'Name', key: 'name', dataKey: 'name' },
+    { id: 1, label: 'Sites', key: 'site', dataKey: 'site', formatForExport: (value) => (value ? `${value.name} (${value.host})` : '') },
+    { id: 2, label: 'Device Type', key: 'showOnDeviceType', dataKey: 'showOnDeviceType' },
+    {
+      id: 3,
+      label: 'Type',
+      key: 'contentType',
+      dataKey: 'contentType',
+      formatForExport: (value) => (value === 'guide' ? 'Guide' : value === 'casestudy' ? 'Case Study' : 'Basic')
+    },
+    { id: 4, label: 'Status', key: 'status', dataKey: 'isActive', formatForExport: (value) => (value ? 'Active' : 'Inactive') },
+    { id: 5, label: 'Created At', key: 'createdAt', dataKey: 'createdAt', formatForExport: (value) => formatDateTime(value) },
+    { id: 6, label: 'Updated At', key: 'updatedAt', dataKey: 'updatedAt', formatForExport: (value) => formatDateTime(value) }
+  ];
 
   return (
     <div className="py-5 px-8 overflow-x-hidden mb-10">
@@ -58,15 +74,7 @@ const PopupList = () => {
               <TableComponent
                 selectable={true}
                 siteModule={'popup'}
-                headers={[
-                  { id: 0, label: 'Name', key: 'name' },
-                  { id: 1, label: 'Sites', key: 'site' },
-                  { id: 2, label: 'Device Type', key: 'showOnDeviceType' },
-                  { id: 3, label: 'Type', key: 'contentType' },
-                  { id: 4, label: 'Created Date', key: 'createdAt' },
-                  { id: 5, label: 'Updated Date', key: 'updatedAt' },
-                  { id: 6, label: 'Status', key: 'status' }
-                ]}
+                headers={columnConfig}
                 tableData={(data) => setPopups(data.popups)}
                 rows={rows}
                 apiUrl={'popups'}

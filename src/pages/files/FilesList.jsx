@@ -13,12 +13,20 @@ const FilesList = () => {
     const { _id, site, attachments, createdAt, updatedAt } = files;
     return {
       id: _id,
-      attachments: <TruncatableFieldToolTip title={'File Name'} content={attachments.map((a) => `${a.name}`).join(', ')} />,
-      site: <TruncatableFieldToolTip title={'Sites'} content={`${site.name} (${site.host})}`} />,
+      exportData: files,
+      attachments: <TruncatableFieldToolTip content={attachments.map((a) => `${a.name}`).join(', ')} />,
+      site: <TruncatableFieldToolTip content={`${site.name} (${site.host})}`} />,
       createdAt: formatDateTime(createdAt),
       updatedAt: formatDateTime(updatedAt)
     };
   });
+
+  const columnConfig = [
+    { id: 0, label: 'File Name', key: 'attachments', dataKey: 'attachments', formatForExport: (value) => (value ? value.map((a) => `${a.name} (${a.url})`).join(', ') : '') },
+    { id: 1, label: 'Sites', key: 'site', dataKey: 'site', formatForExport: (value) => (value ? `${value.name} (${value.host})` : '') },
+    { id: 2, label: 'Created Date', key: 'createdAt', dataKey: 'createdAt', formatForExport: (value) => formatDateTime(value) },
+    { id: 3, label: 'Updated Date', key: 'updatedAt', dataKey: 'updatedAt', formatForExport: (value) => formatDateTime(value) }
+  ];
 
   return (
     <div className="py-5 px-8 overflow-x-hidden mb-10">
@@ -30,12 +38,7 @@ const FilesList = () => {
               <TableComponent
                 selectable={true}
                 siteModule={'files'}
-                headers={[
-                  { id: 0, label: 'File Name', key: 'attachments' },
-                  { id: 1, label: 'Sites', key: 'site' },
-                  { id: 2, label: 'Created Date', key: 'createdAt' },
-                  { id: 3, label: 'Updated Date', key: 'updatedAt' }
-                ]}
+                headers={columnConfig}
                 tableData={(data) => setFiles(data.files)}
                 rows={rows}
                 apiUrl={'file'}

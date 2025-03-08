@@ -16,7 +16,7 @@ const OrderList = () => {
       id: _id,
       exportData: order,
       Keys: _id,
-      customer: <TruncatableFieldToolTip title={'Customer Name'} content={customer.name} />,
+      customer: <TruncatableFieldToolTip content={customer.name} />,
       status: (
         <div
           className={`rounded-xl ${
@@ -36,6 +36,13 @@ const OrderList = () => {
     };
   });
 
+  const columnConfig = [
+    { id: 0, label: 'Customer', key: 'customer', dataKey: 'customer.name' },
+    { id: 1, label: 'Status', key: 'status', dataKey: 'status', formatForExport: (value) => (value === 'success' ? 'Success' : value === 'pending' ? 'Pending' : 'Failed') },
+    { id: 2, label: 'Created At', key: 'createdAt', dataKey: 'createdAt', formatForExport: (value) => formatDateTime(value) },
+    { id: 3, label: 'Updated At', key: 'updatedAt', dataKey: 'updatedAt', formatForExport: (value) => formatDateTime(value) }
+  ];
+
   return (
     <div className="py-5 px-8 overflow-x-hidden mb-10">
       <div className=" w-full">
@@ -46,12 +53,7 @@ const OrderList = () => {
               <TableComponent
                 selectable={true}
                 siteModule={'orders'}
-                headers={[
-                  { id: 0, label: 'Customer', key: 'customer' },
-                  { id: 1, label: 'Status', key: 'status' },
-                  { id: 2, label: 'Created At', key: 'createdAt' },
-                  { id: 3, label: 'Updated At', key: 'updatedAt' }
-                ]}
+                headers={columnConfig}
                 tableData={(data) => setOrders(data.orders)}
                 rows={rows}
                 apiUrl={'order'}
@@ -63,7 +65,6 @@ const OrderList = () => {
           </div>
         </div>
       </div>
-      {/* <NoteComponent note={casestudyListNote} /> */}
     </div>
   );
 };

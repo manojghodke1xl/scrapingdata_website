@@ -16,13 +16,23 @@ const ProductList = () => {
       id: _id,
       exportData: product,
       key: <TruncatableCopyFeild content={_id} />,
-      name: <TruncatableFieldToolTip title={'Product Name'} content={name} />,
-      type: <TruncatableFieldToolTip title={'Product Type'} content={type} />,
-      site: <TruncatableFieldToolTip title={'Sites'} content={`${site.name} (${site.host})}`} />,
+      name: <TruncatableFieldToolTip content={name} />,
+      type: <TruncatableFieldToolTip content={type} />,
+      site: <TruncatableFieldToolTip content={`${site.name} (${site.host})}`} />,
       createdAt: formatDateTime(createdAt),
       updatedAt: formatDateTime(updatedAt)
     };
   });
+
+  const columnConfig = [
+    { id: 0, label: 'Key', key: 'key', dataKey: '_id' },
+    { id: 1, label: 'Product Name', key: 'name', dataKey: 'name' },
+    { id: 2, label: 'Product Type', key: 'type', dataKey: 'type' },
+    { id: 3, label: 'Sites', key: 'site', dataKey: 'site', formatForExport: (value) => (value ? `${value.name} (${value.host})` : '') },
+    { id: 4, label: 'Created Date', key: 'createdAt', dataKey: 'createdAt', formatForExport: (value) => formatDateTime(value) },
+    { id: 5, label: 'Updated Date', key: 'updatedAt', dataKey: 'updatedAt', formatForExport: (value) => formatDateTime(value) }
+  ];
+
   return (
     <div className="py-5 px-8 overflow-x-hidden mb-10">
       <div className=" w-full">
@@ -33,14 +43,7 @@ const ProductList = () => {
               <TableComponent
                 selectable={true}
                 siteModule={'products'}
-                headers={[
-                  { id: 0, label: 'Key', key: 'key' },
-                  { id: 1, label: 'Product Name', key: 'name' },
-                  { id: 2, label: 'Product Type', key: 'type' },
-                  { id: 3, label: 'Sites', key: 'site' },
-                  { id: 4, label: 'Created Date', key: 'createdAt' },
-                  { id: 5, label: 'Updated Date', key: 'updatedAt' }
-                ]}
+                headers={columnConfig}
                 tableData={(data) => setProducts(data.products)}
                 rows={rows}
                 apiUrl={'products'}
