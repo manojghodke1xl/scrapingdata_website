@@ -66,11 +66,10 @@ const MailerMagixIntegration = () => {
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className=" text-primary">Basic Information</span>
           </div>
-          <div className="w-full">
-            <div className="-mb-4 text-primary">Select Site</div>
+          <div className="w-full flex flex-col gap-y-5">
             <DropDown
-              mt="mt-5"
               name="Sites"
+              label={'Select Site'}
               dropdownList={allSites
                 // ?.filter((site) => site?.modules?.some((module) => module.zoom === true))
                 ?.map((site) => ({ id: site?._id, showName: `${site?.name} (${site?.host})`, name: site?._id }))}
@@ -80,7 +79,6 @@ const MailerMagixIntegration = () => {
               commonFunction={(e) => setSiteData(e)}
             />
             <FormField
-              divClassName={'mt-5'}
               label="API Token"
               type="text"
               id="api_token"
@@ -94,7 +92,6 @@ const MailerMagixIntegration = () => {
               errorMessage={errors.api_token}
             />
             <FormField
-              divClassName={'mt-5'}
               label="List ID"
               type="text"
               id="list_uid"
@@ -108,8 +105,8 @@ const MailerMagixIntegration = () => {
               errorMessage={errors.list_uid}
             />
 
-            {/* <FormField divClassName={'mt-5'} label="Frontend URI" type="text" placeholder="Frontend URI" disabled={true} value={import.meta.env.VITE_URL} />
-            <FormField divClassName={'mt-5'} label="Redirect URI" type="text" placeholder="Redirect URI" disabled={true} value={`${import.meta.env.VITE_API_URL}/zohocallback`} /> */}
+            {/* <FormField  label="Frontend URI" type="text" placeholder="Frontend URI" disabled={true} value={import.meta.env.VITE_URL} />
+            <FormField  label="Redirect URI" type="text" placeholder="Redirect URI" disabled={true} value={`${import.meta.env.VITE_API_URL}/zohocallback`} /> */}
           </div>
         </div>
       </div>

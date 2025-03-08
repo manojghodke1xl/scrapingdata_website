@@ -93,9 +93,10 @@ const StripeIntegration = () => {
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className=" text-primary">Basic Information</span>
           </div>
-          <div className="w-full">
+          <div className="w-full flex flex-col gap-y-5">
             <DropDown
               name="environment"
+              label="Select Environment"
               SummaryChild={<h5 className="p-0 m-0 text-primary">Select Environment</h5>}
               dropdownList={[
                 { id: 0, showName: 'Development', name: 'development' },
@@ -107,7 +108,6 @@ const StripeIntegration = () => {
               error={errors.environment}
             />
             <FormField
-              divClassName={'mt-5'}
               label="Public Key"
               type="text"
               id="publicKey"
@@ -121,7 +121,6 @@ const StripeIntegration = () => {
               errorMessage={errors.publicKey}
             />
             <FormField
-              divClassName={'mt-5'}
               label="Secret Key"
               type="text"
               id="secretKey"
@@ -175,7 +174,7 @@ const StripeIntegration = () => {
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className=" text-primary">Redirect URL Details</span>
           </div>
-          <div className="w-full">
+          <div className="w-full flex flex-col gap-y-5">
             <FormField
               label="Success URL"
               type="url"
@@ -190,7 +189,6 @@ const StripeIntegration = () => {
               errorMessage={errors.redirectUrlsuccess}
             />
             <FormField
-              divClassName={'mt-5'}
               label="Failure URL"
               type="url"
               id="failure"

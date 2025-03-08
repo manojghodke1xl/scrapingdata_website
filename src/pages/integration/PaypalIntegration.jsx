@@ -93,9 +93,10 @@ const PaypalIntegration = () => {
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className=" text-primary">Basic Information</span>
           </div>
-          <div className="w-full">
+          <div className="w-full flex flex-col gap-y-5">
             <DropDown
               name="environment"
+              label={'Select Environment'}
               SummaryChild={<h5 className="p-0 m-0 text-primary">Select Environment</h5>}
               dropdownList={[
                 { id: 0, showName: 'Development', name: 'development' },
@@ -107,7 +108,6 @@ const PaypalIntegration = () => {
               error={errors.environment}
             />
             <FormField
-              divClassName={'mt-5'}
               label="Client Id"
               type="text"
               id="clientId"
@@ -121,7 +121,6 @@ const PaypalIntegration = () => {
               errorMessage={errors.clientId}
             />
             <FormField
-              divClassName={'mt-5'}
               label="Client Secret"
               type="text"
               id="clientSecret"
@@ -174,7 +173,7 @@ const PaypalIntegration = () => {
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className=" text-primary">Redirect URL Details</span>
           </div>
-          <div className="w-full">
+          <div className="w-full flex flex-col gap-y-5">
             <FormField
               label="Success URL"
               type="url"
@@ -189,7 +188,6 @@ const PaypalIntegration = () => {
               errorMessage={errors.redirectUrlsuccess}
             />
             <FormField
-              divClassName={'mt-5'}
               label="Failure URL"
               type="url"
               id="failure"

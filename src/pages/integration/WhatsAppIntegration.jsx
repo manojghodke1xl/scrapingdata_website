@@ -112,14 +112,14 @@ const WhatsAppIntegration = () => {
             </div>
             <div className="w-full">
               <span className="text-lg font-semibold">Callback URL:</span>
-              <div className="bg-gray-100 dark:bg-gray-800 p-2 rounded-md mb-5">
+              <div className="bg-grey p-2 rounded-md mb-5">
                 <span className="text-primary">
                   {import.meta.env.VITE_API_URL}/whatsapp/webhook/{state?.siteId}
                 </span>
               </div>
               <div className="mt-2">
                 <span className="text-lg font-semibold">Verify Token:</span>
-                <div className="bg-gray-100 dark:bg-gray-800 p-2 rounded-md">
+                <div className="bg-grey p-2 rounded-md">
                   <span className="text-primary">{state?.integrationData?.webhook?.whatsapp?.verify_token}</span>
                 </div>
               </div>
@@ -195,12 +195,12 @@ const WhatsAppIntegration = () => {
                   onChange={(e) => handleVariableChange(index, 'accessToken', e.target.value)}
                   errorMessage={errors[index]?.accessToken}
                 />
-                <button type="button" onClick={() => removeVariable(index)} className="px-4 py-2 mt-5 bg-red text-white rounded-xl">
+                <button type="button" onClick={() => removeVariable(index)} className="px-4 py-2 mt-5 bg-red text- rounded-xl">
                   Remove
                 </button>
               </div>
             ))}
-            <button type="button" onClick={addVariable} className="px-4 py-2 mt-5 bg-primary text-white rounded-xl hover:bg-blue-600">
+            <button type="button" onClick={addVariable} className="px-4 py-2 mt-5 bg-primary text-white rounded-xl hover:bg-hover">
               Add New
             </button>
           </div>

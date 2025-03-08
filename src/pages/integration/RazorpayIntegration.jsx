@@ -93,7 +93,7 @@ const RazorpayIntegration = () => {
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className=" text-primary">Basic Information</span>
           </div>
-          <div className="w-full">
+          <div className="w-full flex flex-col gap-y-5">
             <DropDown
               name="environment"
               SummaryChild={<h5 className="p-0 m-0 text-primary">Select Environment</h5>}
@@ -107,7 +107,6 @@ const RazorpayIntegration = () => {
               error={errors.environment}
             />
             <FormField
-              divClassName={'mt-5'}
               label="Key Id"
               type="text"
               id="keyId"
@@ -121,7 +120,6 @@ const RazorpayIntegration = () => {
               errorMessage={errors.keyId}
             />
             <FormField
-              divClassName={'mt-5'}
               label="Key Secret"
               type="text"
               id="keySecret"
@@ -190,7 +188,6 @@ const RazorpayIntegration = () => {
               errorMessage={errors.redirectUrlsuccess}
             />
             <FormField
-              divClassName={'mt-5'}
               label="Failure URL"
               type="url"
               id="failure"

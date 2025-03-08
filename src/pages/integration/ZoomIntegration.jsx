@@ -66,11 +66,10 @@ const ZoomIntegration = () => {
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className=" text-primary">Basic Information</span>
           </div>
-          <div className="w-full">
-            <div className="-mb-4 text-primary">Select Site</div>
+          <div className="w-full flex flex-col gap-y-5">
             <DropDown
-              mt="mt-5"
               name="Sites"
+              label="select Sites"
               dropdownList={allSites
                 // ?.filter((site) => site?.modules?.some((module) => module.zoom === true))
                 ?.map((site) => ({ id: site?._id, showName: `${site?.name} (${site?.host})`, name: site?._id }))}
@@ -80,7 +79,6 @@ const ZoomIntegration = () => {
               commonFunction={(e) => setSiteData(e)}
             />
             <FormField
-              divClassName={'mt-5'}
               label="Account ID"
               type="text"
               id="accountId"
@@ -94,7 +92,6 @@ const ZoomIntegration = () => {
               errorMessage={errors.accountId}
             />
             <FormField
-              divClassName={'mt-5'}
               label="Client ID"
               type="text"
               id="clientId"
@@ -108,7 +105,6 @@ const ZoomIntegration = () => {
               errorMessage={errors.clientId}
             />
             <FormField
-              divClassName={'mt-5'}
               label="Client Secret"
               type="text"
               id="clientSecret"
@@ -121,8 +117,8 @@ const ZoomIntegration = () => {
               value={zoomDetails?.clientSecret}
               errorMessage={errors.clientSecret}
             />
-            {/* <FormField divClassName={'mt-5'} label="Frontend URI" type="text" placeholder="Frontend URI" disabled={true} value={import.meta.env.VITE_URL} />
-            <FormField divClassName={'mt-5'} label="Redirect URI" type="text" placeholder="Redirect URI" disabled={true} value={`${import.meta.env.VITE_API_URL}/zohocallback`} /> */}
+            {/* <FormField  label="Frontend URI" type="text" placeholder="Frontend URI" disabled={true} value={import.meta.env.VITE_URL} />
+            <FormField  label="Redirect URI" type="text" placeholder="Redirect URI" disabled={true} value={`${import.meta.env.VITE_API_URL}/zohocallback`} /> */}
           </div>
         </div>
       </div>

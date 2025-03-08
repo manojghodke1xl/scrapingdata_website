@@ -2,23 +2,17 @@ import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import FormButtons from '../../atoms/formFields/FormButtons';
 import FormField from '../../atoms/formFields/InputField';
-import DropDown from '../../atoms/formFields/DropDown';
 import useGlobalContext from '../../hooks/useGlobalContext';
 import { updatePaymentIntegrationApi } from '../../apis/payment-integration-apis';
 import { showNotification } from '../../utils/showNotification';
 
 const ZohocrmIntegration = () => {
-  const {
-    auth: { allSites },
-    setLoading,
-    isLoading
-  } = useGlobalContext();
+  const { setLoading, isLoading } = useGlobalContext();
   const navigate = useNavigate();
   const { state } = useLocation();
 
   const [zohocrmDetails, setZohocrmDetails] = useState(state?.integrationData?.crm?.zoho || {});
   const [errors, setErrors] = useState({});
-  const [siteData, setSiteData] = useState({ id: state?.siteId, name: state?.siteId, showName: '' });
 
   const validate = () => {
     const newErrors = {};
@@ -33,7 +27,7 @@ const ZohocrmIntegration = () => {
     if (!validate()) return;
     setLoading(true);
     try {
-      const { status, data } = await updatePaymentIntegrationApi(siteData.id, undefined, { zoho: zohocrmDetails });
+      const { status, data } = await updatePaymentIntegrationApi(state.siteId, undefined, { zoho: zohocrmDetails });
       if (data.link) window.open(data.link);
       if (status) navigate('/apps/app');
       else showNotification('warn', data);
@@ -66,21 +60,8 @@ const ZohocrmIntegration = () => {
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className=" text-primary">Basic Information</span>
           </div>
-          <div className="w-full">
-            <div className="-mb-4 text-primary">Select Site</div>
-            <DropDown
-              mt="mt-5"
-              name="Sites"
-              dropdownList={allSites
-                ?.filter((site) => site?.modules?.some((module) => module.zoho === true))
-                ?.map((site) => ({ id: site?._id, showName: `${site?.name} (${site?.host})`, name: site?._id }))}
-              SummaryChild={<h5 className="p-0 m-0 text-primary">{siteData?.showName || 'Sites'}</h5>}
-              search={true}
-              selected={siteData?.name}
-              commonFunction={(e) => setSiteData(e)}
-            />
+          <div className="w-full flex flex-col gap-y-5">
             <FormField
-              divClassName={'mt-5'}
               label="Client Id"
               type="text"
               id="clientId"
@@ -94,7 +75,6 @@ const ZohocrmIntegration = () => {
               errorMessage={errors.clientId}
             />
             <FormField
-              divClassName={'mt-5'}
               label="Client Secret"
               type="text"
               id="clientSecret"
@@ -107,8 +87,8 @@ const ZohocrmIntegration = () => {
               value={zohocrmDetails?.clientSecret}
               errorMessage={errors.clientSecret}
             />
-            <FormField divClassName={'mt-5'} label="Frontend URI" type="text" placeholder="Frontend URI" disabled={true} value={import.meta.env.VITE_URL} />
-            <FormField divClassName={'mt-5'} label="Redirect URI" type="text" placeholder="Redirect URI" disabled={true} value={`${import.meta.env.VITE_API_URL}/zohocallback`} />
+            <FormField label="Frontend URI" type="text" placeholder="Frontend URI" disabled={true} value={import.meta.env.VITE_URL} />
+            <FormField label="Redirect URI" type="text" placeholder="Redirect URI" disabled={true} value={`${import.meta.env.VITE_API_URL}/zohocallback`} />
           </div>
         </div>
       </div>
