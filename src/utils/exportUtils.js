@@ -6,7 +6,6 @@ export const generateBulkExport = ({ data, exportMapping, selectedColumns, fileN
   // Get headers from the first mapped item to ensure consistent structure
   const sampleMappedData = exportMapping(data[0], selectedColumns);
   const headers = Object.keys(sampleMappedData);
-
   // Map data rows using the exportMapping function
   const rows = data.map((item) => {
     const mappedItem = exportMapping(item, selectedColumns);

@@ -42,23 +42,23 @@ const ExportDataModal = ({ isExportModalOpen, setExportModalOpen, label, selecte
     const exportConditions = {
       all:
         selectionState.selectedRecords === 'allRecords' &&
-        selectionState.selectedData === 'allData' &&
-        selectionState.selectedColumns === 'allColumns' &&
+        // selectionState.selectedData === 'allData' &&
+        // selectionState.selectedColumns === 'allColumns' &&
         (selectionState.selectedFileFormat === 'csv' || selectionState.selectedFileFormat === 'xlsx'),
       visible:
         selectionState.selectedRecords === 'currentPage' &&
-        selectionState.selectedData === 'allData' &&
-        selectionState.selectedColumns === 'visible' &&
+        // selectionState.selectedData === 'allData' &&
+        // selectionState.selectedColumns === 'visible' &&
         (selectionState.selectedFileFormat === 'csv' || selectionState.selectedFileFormat === 'xlsx'),
       selected:
         selectionState.selectedRecords === 'selectedRecords' &&
-        selectionState.selectedData === 'allData' &&
-        selectionState.selectedColumns === 'visible' &&
+        // selectionState.selectedData === 'allData' &&
+        // selectionState.selectedColumns === 'visible' &&
         (selectionState.selectedFileFormat === 'csv' || selectionState.selectedFileFormat === 'xlsx'),
       custom:
         selectionState.selectedRecords === 'currentPage' &&
-        selectionState.selectedData === 'allData' &&
-        selectionState.selectedColumns === 'customColumns' &&
+        // selectionState.selectedData === 'allData' &&
+        // selectionState.selectedColumns === 'customColumns' &&
         (selectionState.selectedFileFormat === 'csv' || selectionState.selectedFileFormat === 'xlsx')
     };
 
