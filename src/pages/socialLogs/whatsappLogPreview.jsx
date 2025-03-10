@@ -33,7 +33,7 @@ const WhatsappLogPreview = () => {
     return { __html: formattedMessage };
   };
 
-  console.log('whatsappData', whatsappData);
+  
 
   return (
     <div className="container mx-auto my-8">
