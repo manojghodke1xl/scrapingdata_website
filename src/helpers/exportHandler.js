@@ -52,7 +52,9 @@ export const exportHandler = ({ type, apiUrl, rows, exportMapping, selectedColum
           testimonial: 'testimonials',
           'testimonial-category': 'categories',
           order: 'orders',
-          booking: 'bookings'
+          booking: 'bookings',
+          'logs/whatsapp': 'logs',
+          'logs/email': 'logs'
         };
         const allData = data[apiUrlMapping[apiUrl] || apiUrl];
         generateBulkExport({ data: allData, exportMapping, selectedColumns, fileName: `view_all_${fileName}_details`, fileFormat });
