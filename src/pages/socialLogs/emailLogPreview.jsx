@@ -18,6 +18,10 @@ const EmailLogPreview = () => {
     fetchData();
   }, [id]);
 
+  console.log('emailData', emailData);
+
+  const errMessage = emailData?.error?.message.split(':')[0] || 'There was an error sending the email';
+
   return (
     <div className="container mx-auto my-8 mb-20">
       <div className="max-w-2xl mx-auto bg-inherit shadow-lg rounded-lg p-6">
@@ -25,7 +29,7 @@ const EmailLogPreview = () => {
           <h2 className="text-xl font-semibold text-primary">{emailData.subject}</h2>
           <p className="text-sm text-primary">{new Date(emailData.createdAt).toLocaleString()}</p>
         </div>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="flex flex-col items-start justify-center  gap-2">
           <p>
             <strong>From:</strong> {emailData.from}
           </p>
@@ -55,6 +59,7 @@ const EmailLogPreview = () => {
           <h3 className="font-semibold">Message:</h3>
           <div className="mt-2 p-4 border rounded bg-gray-100" dangerouslySetInnerHTML={{ __html: emailData.message }} />
         </div>
+        {errMessage && <p className="text-red-500 font-semibold">Error: {errMessage}</p>}
       </div>
     </div>
   );

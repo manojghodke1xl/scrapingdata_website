@@ -19,9 +19,25 @@ const WhatsappLogPreview = () => {
     fetchData();
   }, [id]);
 
+  const errMessage = whatsappData?.error?.error_data?.details || whatsappData?.error?.message;
+  const formatMessage = (msg) => {
+    if (!msg) return { __html: '' }; // Return empty content if msg is undefined
+
+    const formattedMessage = msg
+      .replace(/\*(.*?)\*/g, '<strong>$1</strong>') // Bold (*text*)
+      .replace(/_(.*?)_/g, '<em>$1</em>') // Italic (_text_)
+      .replace(/~(.*?)~/g, '<del>$1</del>') // Strikethrough (~text~)
+      .replace(/`(.*?)`/g, '<code>$1</code>') // Monospace (`text`)
+      .replace(/\n/g, '<br />'); // Newlines
+
+    return { __html: formattedMessage };
+  };
+
+  console.log('whatsappData', whatsappData);
+
   return (
     <div className="container mx-auto my-8">
-      <div className="max-w-lg mx-auto bg-white shadow-lg rounded-lg p-6 border border-gray-200">
+      <div className="max-w-lg mx-auto bg-white shadow-lg rounded-lg p-6 border border-gray-200 space-y-2">
         <h2 className="text-xl font-semibold text-gray-800 mb-4">WhatsApp Message Details</h2>
         <div className="text-gray-600">
           <p>
@@ -42,9 +58,11 @@ const WhatsappLogPreview = () => {
           <p>
             <strong>Message:</strong>
           </p>
-          <pre className="whitespace-pre-wrap bg-gray-100 p-3 rounded-md text-sm">{whatsappData?.message}</pre>
-          {whatsappData?.error && <p className="text-red-500 font-semibold">{JSON.stringify(whatsappData?.error, null, 2)}</p>}
+          <div className="w-full justify-end flex h-fit font-normal whitespace-pre-wrap bg-gray-950 p-4 rounded-lg">
+            <div className="w-full text-dark h-fit bg-grey p-3 rounded-md" dangerouslySetInnerHTML={formatMessage(whatsappData?.message)} />
+          </div>
         </div>
+        {whatsappData?.error && <p className="text-red-500 font-semibold">Error: {errMessage}</p>}
       </div>
     </div>
   );
