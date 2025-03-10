@@ -454,7 +454,8 @@ const TableComponent = ({
     'distributors',
     'fan-club',
     'reseller',
-    'broadcast'
+    'broadcast',
+    'orders'
   ];
 
   const availableSites = modulesArray.includes(siteModule)

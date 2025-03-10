@@ -237,7 +237,7 @@ const TableView = ({
                   })()}
 
                   {actions && (
-                    <td className={`bg-main sticky right-0 z-50`}>
+                    <td className={`bg-main sticky right-0 z-20`}>
                       <TableRowActions
                         row={row}
                         editPath={editPath}

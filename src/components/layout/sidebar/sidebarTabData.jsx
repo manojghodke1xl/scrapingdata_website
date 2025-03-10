@@ -57,7 +57,6 @@ export const marketingPath = [{ title: 'Coupons', to: ['/coupon/coupon-list', '/
 
 export const productsPath = [
   { title: 'Products', to: ['/products/product-list', '/products/add-product', '/products/edit-product', '/products/duplicate-product'] },
-  { title: 'Orders', to: ['/orders/order-list'] },
   { title: 'Order Payments', to: ['/payments/order-payment-list'] }
 ];
 
@@ -123,7 +122,7 @@ export const logsPath = [
 export const adminNavLinks = [
   { title: 'Admins', to: ['/admin/admin-list', '/admin/add-admin', '/admin/edit-admin'], icon: <RiAdminLine /> },
   {
-    title: 'Notification Agent',
+    title: 'Notification Agents',
     to: [
       '/notification-agent/notification-agent-list',
       '/notification-agent/add-notification-agent',

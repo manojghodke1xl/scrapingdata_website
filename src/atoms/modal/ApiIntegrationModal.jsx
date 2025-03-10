@@ -11,7 +11,7 @@ const ApiIntegrationModal = ({ isIntegrationModalOpen, setIntegrationModalOpen, 
   };
 
   return (
-    <div className="fixed inset-0 z-10 overflow-y-auto">
+    <div className="fixed inset-0 z-50 overflow-y-auto">
       <div className="fixed inset-0 bg-black bg-opacity-50 transition-opacity" onClick={() => setIntegrationModalOpen(false)}></div>
       <div className="flex items-start justify-center w-full min-h-screen px-2 text-center lg:absolute lg:top-[12%]">
         <div className={`bg-main rounded-2xl text-left overflow-hidden shadow-xl transform transition-all w-[95%] sm:w-[80%] md:w-[580px] px-6 2xl:px-8 py-6`}>

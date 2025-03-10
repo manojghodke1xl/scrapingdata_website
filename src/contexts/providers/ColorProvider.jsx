@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useState } from "react";
-import useGlobalContext from "../../hooks/useGlobalContext";
-import { ColorContext } from "../contexts/ColorContext";
+import { useCallback, useEffect, useState } from 'react';
+import useGlobalContext from '../../hooks/useGlobalContext';
+import { ColorContext } from '../contexts/ColorContext';
 
 export const ColorProvider = ({ children }) => {
   const { auth } = useGlobalContext();

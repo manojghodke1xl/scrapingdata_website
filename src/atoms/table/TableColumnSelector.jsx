@@ -72,7 +72,6 @@ const TableColumnSelector = ({
 
   return (
     <div ref={dropdownRef}>
-      {' '}
       {/* Change from button to div */}
       <button onClick={() => setIsOpen(!isOpen)} className="px-4 py-2 bg-inherit border border-primary rounded-xl shadow focus:outline-none focus:ring-0">
         <span className="flex flex-row items-center gap-x-2">
@@ -81,7 +80,6 @@ const TableColumnSelector = ({
       </button>
       {isOpen && (
         <div className="absolute transform -translate-x-28 translate-y-4 z-50 border border-primary rounded-xl shadow-lg bg-main w-[280px]" onClick={(e) => e.stopPropagation()}>
-          {' '}
           {/* Add stopPropagation */}
           <div className="p-4">
             <SearchComponent value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="mb-3" />
@@ -114,7 +112,7 @@ const TableColumnSelector = ({
               ))}
             </div>
             <div className="flex justify-end gap-2 mt-4 pt-2 border-t border-primary">
-              <button onClick={handleReset} className="px-3 py-1 text-sm bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors">
+              <button onClick={handleReset} className="px-3 py-1 text-sm bg-red text-white rounded-lg hover:bg-red-600 transition-colors">
                 Reset
               </button>
               <button onClick={handleSave} className="px-3 py-1 text-sm bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors">

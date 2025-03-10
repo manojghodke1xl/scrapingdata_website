@@ -119,7 +119,7 @@ const AddWhatsAppTemplate = () => {
 
       const newPlaceholders = Object.fromEntries(Object.entries(whatsAppTemplate.placeholders).filter(([key]) => placeholders.includes(key)));
 
-      const payload = { ...whatsAppTemplate, files: [...whatsAppTemplate.files, ...fileIds], fileId: files._id, placeholders: newPlaceholders };
+      const payload = { ...whatsAppTemplate, files: [...whatsAppTemplate.files, ...fileIds], fileId: files?._id, placeholders: newPlaceholders };
       const { status, data } = await (id ? (isDuplicate ? addWhatsAppTemplateApi(payload) : updateWhatsAppTemplateApi(id, payload)) : addWhatsAppTemplateApi(payload));
       if (status) {
         showNotification('success', data.message);
@@ -283,8 +283,8 @@ const AddWhatsAppTemplate = () => {
               <div className="mt-5 w-full">
                 <label className="block text-sm font-medium text-primary">Placeholders</label>
                 <div className="border border-primary rounded-xl mt-2 p-4 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-                  {variables.map((variable) => (
-                    <div className="flex items-center justify-start" key={variable.key}>
+                  {variables.map((variable, index) => (
+                    <div className="flex items-center justify-start" key={`${variable.key}-${index}`}>
                       <p className="text-primary">{variable.label} : </p> &nbsp;
                       <p className="text-brand">{`{${variable.name}}`}</p>
                     </div>

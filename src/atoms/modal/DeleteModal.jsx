@@ -4,7 +4,7 @@ const DeleteModal = ({ isDeleteModalOpen, onConfirm, setDeleteModalOpen, label, 
   if (!isDeleteModalOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-10 overflow-y-auto">
+    <div className="fixed inset-0 z-50 overflow-y-auto">
       <div
         className="fixed inset-0 bg-black bg-opacity-50 transition-opacity"
         onClick={() => setDeleteModalOpen((prev) => ({ ...prev, isDeleteModelOpen: false, deleteBoolean: false }))}

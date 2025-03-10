@@ -9,9 +9,14 @@ import { PiMoonStarsLight } from 'react-icons/pi';
 import MaterialSidebar from './sidebar/MaterialSidebar';
 import useGlobalContext from '../../hooks/useGlobalContext';
 import useColorContext from '../../hooks/useColorContext';
+import { updateAdminThemeApi } from '../../apis/admin-apis';
+import { showNotification } from '../../utils/showNotification';
 
 const Navbar = () => {
-  const { dispatch } = useGlobalContext();
+  const {
+    dispatch,
+    auth: { id }
+  } = useGlobalContext();
   const { isDarkMode, toggleDarkMode } = useColorContext();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -46,6 +51,17 @@ const Navbar = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [handleClickOutside, isSidebarOpen]);
 
+  const handleDarkModeToggle = async () => {
+    toggleDarkMode();
+    try {
+      const payload = { darkMode: !isDarkMode };
+      const { status, data } = await updateAdminThemeApi(id, payload);
+      if (!status) showNotification('warn', data);
+    } catch (error) {
+      showNotification('error', error.message);
+    }
+  };
+
   return (
     <>
       <div className="w-screen py-2 px-4 sm:px-6 flex justify-between border-b border-primary">
@@ -54,7 +70,7 @@ const Navbar = () => {
         </Link>
 
         <div className="flex gap-5  items-center pr-6">
-          <button type="button" onClick={toggleDarkMode} className="sm:p-1 hover:bg-hover rounded-full">
+          <button type="button" onClick={handleDarkModeToggle} className="sm:p-1 hover:bg-hover rounded-full">
             {isDarkMode ? <GrSun size={28} strokeWidth={1.667} className="text-secondary" /> : <PiMoonStarsLight size={28} strokeWidth={1.667} className="text-secondary" />}
           </button>
           <img src={Person} alt="Person" className="cursor-pointer w-8 h-8 " onClick={() => setIsDropdownOpen(!isDropdownOpen)} />
