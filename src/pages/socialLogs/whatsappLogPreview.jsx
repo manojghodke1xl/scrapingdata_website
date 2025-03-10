@@ -37,26 +37,26 @@ const WhatsappLogPreview = () => {
 
   return (
     <div className="container mx-auto my-8">
-      <div className="max-w-lg mx-auto bg-white shadow-lg rounded-lg p-6 border border-gray-200 space-y-2">
-        <h2 className="text-xl font-semibold text-gray-800 mb-4">WhatsApp Message Details</h2>
-        <div className="text-gray-600">
-          <p>
-            <strong>From:</strong> {whatsappData?.fromNumber}
+      <div className="max-w-lg mx-auto bg-main text-dark shadow-lg rounded-lg p-6 border border-primary space-y-2">
+        <h2 className="text-xl font-semibold text-dark mb-4">WhatsApp Message Details</h2>
+        <div className="text-dark">
+          <p className="font-normal text-secondary">
+            <span className="font-semibold text-dark">From:</span> {whatsappData?.fromNumber}
           </p>
-          <p>
-            <strong>To:</strong> {whatsappData?.toNumber}
+          <p className="font-normal text-secondary">
+            <span className="font-semibold text-dark">To:</span> {whatsappData?.toNumber}
           </p>
-          <p>
-            <strong>Status Code:</strong> {whatsappData?.statusCode}
+          <p className="font-normal text-secondary">
+            <span className="font-semibold text-dark">Status Code:</span> {whatsappData?.statusCode}
           </p>
-          <p>
-            <strong>Created At:</strong> {new Date(whatsappData?.createdAt).toLocaleString()}
+          <p className="font-normal text-secondary">
+            <span className="font-semibold text-dark">Created At:</span> {new Date(whatsappData?.createdAt).toLocaleString()}
           </p>
-          <p>
-            <strong>Updated At:</strong> {new Date(whatsappData?.updatedAt).toLocaleString()}
+          <p className="font-normal text-secondary">
+            <span className="font-semibold text-dark">Updated At:</span> {new Date(whatsappData?.updatedAt).toLocaleString()}
           </p>
-          <p>
-            <strong>Message:</strong>
+          <p className="font-normal text-secondary">
+            <span className="font-semibold text-dark">Message:</span>
           </p>
           <div className="w-full justify-end flex h-fit font-normal whitespace-pre-wrap bg-gray-950 p-4 rounded-lg">
             <div className="w-full text-dark h-fit bg-grey p-3 rounded-md" dangerouslySetInnerHTML={formatMessage(whatsappData?.message)} />

@@ -57,7 +57,7 @@ const EmailLogPreview = () => {
 
         <div className="mt-4">
           <h3 className="font-semibold">Message:</h3>
-          <div className="mt-2 p-4 border rounded bg-gray-100" dangerouslySetInnerHTML={{ __html: emailData.message }} />
+          <div className="mt-2 p-4 border border-primary rounded bg-main" dangerouslySetInnerHTML={{ __html: emailData.message }} />
         </div>
         {errMessage && <p className="text-red-500 font-semibold">Error: {errMessage}</p>}
       </div>
