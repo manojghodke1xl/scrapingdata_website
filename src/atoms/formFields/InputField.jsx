@@ -15,6 +15,7 @@ const FormField = ({
   errorMessage = '',
   onChange,
   value,
+  previewLabel,
   preview = false,
   required
 }) => {
@@ -57,7 +58,7 @@ const FormField = ({
       {errorMessage && <p className="text-danger mt-1 text-sm">{errorMessage}</p>}
       {preview && (
         <p className="text-secondary mt-1 text-sm">
-          <span className="text-primary font-semibold">Ticket preview:</span> {preview}
+          <span className="text-primary font-semibold">{previewLabel}:</span> {preview}
         </p>
       )}
     </div>

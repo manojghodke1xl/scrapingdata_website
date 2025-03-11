@@ -73,6 +73,7 @@ const EmailLogList = () => {
                 tableCountLabel={true}
                 pagination={true}
                 search={true}
+                filter={true}
                 filterCategory={[{ id: 0, name: 'Sites' }]}
                 actions={true}
                 viewPath={'/logs/email-log-preview'}

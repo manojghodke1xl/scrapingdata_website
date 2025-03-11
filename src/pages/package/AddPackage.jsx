@@ -280,6 +280,7 @@ const AddPackage = () => {
                   if (errors.ticketIdPattern) setErrors((prev) => ({ ...prev, ticketIdPattern: '' }));
                 }}
                 value={packageDetails.ticketIdPattern}
+                previewLabel={'Ticket preview'}
                 preview={packageDetails.ticketIdPattern ? `${packageDetails.ticketIdPattern}_001` : ''}
                 errorMessage={errors.ticketIdPattern}
               />

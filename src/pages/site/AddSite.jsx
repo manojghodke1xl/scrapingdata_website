@@ -44,6 +44,7 @@ const AddSite = () => {
     host: '',
     isActive: true,
     smtp: '',
+    orderId: '',
     enquiryWebhookUrl: '',
     mailinglistWebhookUrl: '',
     modules: moduleOptions.map((option) => ({ [option._id]: true }))
@@ -87,24 +88,16 @@ const AddSite = () => {
     const nameRegex = /^[a-zA-Z0-9-_]+( [a-zA-Z0-9-_]+)*$/;
     const hostRegex = /^(?!:\/\/)([a-zA-Z0-9-_]+(\.[a-zA-Z0-9-_]+)+.*)$/;
 
-    if (!siteDetails.name.trim()) {
-      newErrors.name = 'Name is required';
-    } else if (!nameRegex.test(siteDetails.name)) {
-      newErrors.name = 'Invalid name format';
-    } else if (siteDetails.name.length > 30) {
-      newErrors.name = 'Name must be 30 characters or less';
-    }
+    if (!siteDetails.name.trim()) newErrors.name = 'Name is required';
+    else if (!nameRegex.test(siteDetails.name)) newErrors.name = 'Invalid name format';
+    else if (siteDetails.name.length > 30) newErrors.name = 'Name must be 30 characters or less';
 
-    if (!siteDetails.host.trim()) {
-      newErrors.host = 'Host is required';
-    } else if (!hostRegex.test(siteDetails.host)) {
-      newErrors.host = 'Invalid host format';
-    } else if (siteDetails.host.length > 30) {
-      newErrors.host = 'Host must be 30 characters or less';
-    }
+    if (!siteDetails.host.trim()) newErrors.host = 'Host is required';
+    else if (!hostRegex.test(siteDetails.host)) newErrors.host = 'Invalid host format';
+    else if (siteDetails.host.length > 30) newErrors.host = 'Host must be 30 characters or less';
 
     if (!siteDetails.smtp) newErrors.smtp = 'SMTP is required';
-
+    if (!siteDetails.orderId) newErrors.orderId = 'Product Order Id is required';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -186,7 +179,7 @@ const AddSite = () => {
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className=" text-primary">Integration Settings</span>
           </div>
-          <div className="w-full">
+          <div className="w-full flex flex-col gap-y-5">
             <DropDown
               name="SMTP"
               label={'Select SMTP'}
@@ -196,6 +189,23 @@ const AddSite = () => {
               search={true}
               commonFunction={(e) => setSiteDetails((prev) => ({ ...prev, smtp: e.id, smtpObj: e }))}
               error={errors.smtp}
+            />
+            <FormField
+              label={'Product Order Id'}
+              type="text"
+              id="orderId"
+              name="orderId"
+              required
+              placeholder="Product Order Id"
+              onChange={(e) => {
+                const value = e.target.value.toUpperCase();
+                setSiteDetails((prev) => ({ ...prev, orderId: value }));
+                if (errors.orderId) setErrors((prev) => ({ ...prev, orderId: '' }));
+              }}
+              previewLabel={'Order Id'}
+              preview={siteDetails.orderId ? siteDetails.orderId : ''}
+              value={siteDetails.orderId}
+              errorMessage={errors.orderId}
             />
           </div>
         </div>

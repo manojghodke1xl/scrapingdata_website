@@ -20,8 +20,24 @@ const TableFilter = ({
   setShowFilter,
   statuses,
   allSites,
-  events
+  events,
+  bulkSiteOpenAction
 }) => {
+  const openMultipleSites = (sites) => {
+    const openSite = (url) => {
+      const anchor = document.createElement('a');
+      anchor.href = url;
+      anchor.target = '_blank';
+      anchor.rel = 'noopener noreferrer';
+      anchor.click();
+    };
+
+    sites.forEach((site) => {
+      const url = site.startsWith('http') ? site : `https://${site}`;
+      openSite(url);
+    });
+  };
+
   return (
     <div className="flex gap-4 flex-wrap sm:flex-nowrap justify-start items-center">
       {search && (
@@ -51,7 +67,7 @@ const TableFilter = ({
           {showFilter.status && (
             <div className="relative">
               <div
-                className="absolute -top-2 -right-2 bg-white rounded-full border border-secondary text-black font-bold cursor-pointer z-10 w-6 h-6 flex items-center justify-center"
+                className="absolute -top-2 -right-2 bg-main rounded-full border border-secondary text-primary font-bold cursor-pointer z-10 w-6 h-6 flex items-center justify-center"
                 onClick={() => {
                   setShowFilter((prev) => ({ ...prev, status: false }));
                   setFilterState((prev) => ({ ...prev, statusFilter: '' }));
@@ -65,7 +81,7 @@ const TableFilter = ({
           {showFilter.sites && (
             <div className="relative">
               <div
-                className="absolute -top-2 -right-2 bg-white rounded-full border border-secondary text-black font-bold cursor-pointer z-10 w-6 h-6 flex items-center justify-center"
+                className="absolute -top-2 -right-2 bg-main rounded-full border border-secondary text-primary font-bold cursor-pointer z-10 w-6 h-6 flex items-center justify-center"
                 onClick={() => {
                   setShowFilter((prev) => ({ ...prev, sites: false }));
                   setFilterState((prev) => ({ ...prev, siteId: '' }));
@@ -84,7 +100,7 @@ const TableFilter = ({
           {showFilter.event && (
             <div className="relative">
               <div
-                className="absolute -top-2 -right-2 bg-white rounded-full border border-secondary text-black font-bold cursor-pointer z-10 w-6 h-6 flex items-center justify-center"
+                className="absolute -top-2 -right-2 bg-main rounded-full border border-secondary text-primary font-bold cursor-pointer z-10 w-6 h-6 flex items-center justify-center"
                 onClick={() => {
                   setShowFilter((prev) => ({ ...prev, event: false }));
                   setFilterState((prev) => ({ ...prev, eventId: '' }));
@@ -99,6 +115,18 @@ const TableFilter = ({
                 setDataId={(id) => setFilterState((prev) => ({ ...prev, eventId: id }))}
               />
             </div>
+          )}
+
+          {bulkSiteOpenAction.length > 0 && (
+            <button
+              className="text-red border border-primary px-2 py-2.5 text-primary rounded-xl font-normal bg-inherit whitespace-nowrap"
+              onClick={(e) => {
+                e.preventDefault();
+                openMultipleSites(bulkSiteOpenAction);
+              }}
+            >
+              Bulk Open sites
+            </button>
           )}
         </>
       )}

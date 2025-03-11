@@ -60,7 +60,8 @@ const TableComponent = ({
   itemsPerPage,
   totalCount,
   onPageChange,
-  onItemsPerPageChange
+  onItemsPerPageChange,
+  bulkSiteOpenAction = []
 }) => {
   const {
     auth: { allSites },
@@ -455,7 +456,9 @@ const TableComponent = ({
     'fan-club',
     'reseller',
     'broadcast',
-    'orders'
+    'orders',
+    'whats-app-logs',
+    'email-logs'
   ];
 
   const availableSites = modulesArray.includes(siteModule)
@@ -516,6 +519,7 @@ const TableComponent = ({
             statuses={statuses}
             allSites={availableSites}
             events={events}
+            bulkSiteOpenAction={bulkSiteOpenAction}
           />
           <div
             className={`w-full xl:w-fit flex ${

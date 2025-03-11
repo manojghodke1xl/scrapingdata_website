@@ -107,6 +107,7 @@ const SiteList = () => {
                 searchCategory={[{ id: 1, name: 'Name' }]}
                 modifyStatus={true}
                 modifyStatusApi={updateSiteStatusApi}
+                bulkSiteOpenAction={sites.map((site) => site.host)}
               />
             </div>
           </div>

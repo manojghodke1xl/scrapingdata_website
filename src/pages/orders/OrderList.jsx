@@ -60,6 +60,8 @@ const OrderList = () => {
                 tableCountLabel={true}
                 pagination={true}
                 search={true}
+                filter={true}
+                filterCategory={[{ id: 1, name: 'Sites' }]}
               />
             </div>
           </div>

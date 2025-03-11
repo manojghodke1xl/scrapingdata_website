@@ -54,6 +54,7 @@ const ProductList = () => {
                 search={true}
                 filter={true}
                 deleteBtn={true}
+                deleteAction={true}
                 filterCategory={[{ id: 0, name: 'Sites' }]}
                 searchCategory={[{ id: 1, name: 'Name' }]}
                 deleteLabel={'Delete Product'}

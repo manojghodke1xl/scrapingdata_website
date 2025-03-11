@@ -65,6 +65,7 @@ const WhatsAppLogList = () => {
                 tableCountLabel={true}
                 pagination={true}
                 search={true}
+                filter={true}
                 filterCategory={[{ id: 0, name: 'Sites' }]}
                 actions={true}
                 viewPath={'/logs/whatsapp-log-preview'}

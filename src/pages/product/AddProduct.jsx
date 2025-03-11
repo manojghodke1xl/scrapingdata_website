@@ -41,6 +41,7 @@ const AddProduct = () => {
     description: '',
     shortDescription: '',
     saleEndDate: '',
+    sku: '',
     inStock: false,
     manageInventry: false,
     onSale: false,
@@ -109,13 +110,10 @@ const AddProduct = () => {
   const validate = () => {
     const newErrors = {};
     const nameRegex = /^[a-zA-Z0-9-_]+( [a-zA-Z0-9-_]+)*$/;
-    if (!productDetails.name.trim()) {
-      newErrors.name = 'Name is required';
-    } else if (!nameRegex.test(productDetails.name)) {
-      newErrors.name = 'Invalid name format';
-    } else if (productDetails.name.length > 30) {
-      newErrors.name = 'Name must be 30 characters or less';
-    }
+    if (!productDetails.name.trim()) newErrors.name = 'Name is required';
+    else if (!nameRegex.test(productDetails.name)) newErrors.name = 'Invalid name format';
+    else if (productDetails.name.length > 30) newErrors.name = 'Name must be 30 characters or less';
+    if (!productDetails.sku.trim()) newErrors.sku = 'Product SKU is required';
     if (!productDetails.type) newErrors.type = 'Product Type is required.';
     if (!productDetails.site) newErrors.site = 'Site is required.';
     if (productDetails.currencies.length === 0) newErrors.currencies = 'Currencies are required.';
@@ -270,6 +268,20 @@ const AddProduct = () => {
                 }}
                 value={productDetails.name}
                 errorMessage={errors.name}
+              />
+              <FormField
+                label={'Product SKU'}
+                type="text"
+                id="sku"
+                name="sku"
+                required
+                placeholder="Product SKU"
+                onChange={(e) => {
+                  setProductDetails((prev) => ({ ...prev, sku: e.target.value }));
+                  if (errors.sku) setErrors((prev) => ({ ...prev, sku: '' }));
+                }}
+                value={productDetails.sku}
+                errorMessage={errors.sku}
               />
 
               <TextareaComponent
