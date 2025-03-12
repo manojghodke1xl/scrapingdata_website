@@ -140,6 +140,8 @@ const OrderPaymentList = () => {
                 tableCountLabel={true}
                 pagination={true}
                 search={true}
+                actions={true}
+                viewPath={'/orders/view-order'}
               />
             </div>
           </div>
