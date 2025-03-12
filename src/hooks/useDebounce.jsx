@@ -19,7 +19,7 @@ const useSetTimeout = (apiUrl, page, limit, sortBy, sortOrder, val, key, a, site
     timeOutRef.current = setTimeout(async () => {
       try {
         const res = await fetch(
-          `${import.meta.env.VITE_API_URL}/${apiUrl}?p=${page}&n=${limit}&sortBy=${sortBy}&sortOrder=${sortOrder}&s=${val}&k=${key}&a=${a}&ws=${site}&event=${event}`,
+          `${import.meta.env.VITE_API_URL}/${apiUrl}?p=${page}&n=${limit}&sortBy=${sortBy}&sortOrder=${sortOrder}&s=${val}&k=${key}&a=${a}&${site && `ws=${site}`}&event=${event}`,
           {
             method: 'GET',
             headers: { Authorization: localStorage.getItem('auth') }

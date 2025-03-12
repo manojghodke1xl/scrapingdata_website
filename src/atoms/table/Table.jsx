@@ -458,7 +458,8 @@ const TableComponent = ({
     'broadcast',
     'orders',
     'whats-app-logs',
-    'email-logs'
+    'email-logs',
+    'webinar-links'
   ];
 
   const availableSites = modulesArray.includes(siteModule)
