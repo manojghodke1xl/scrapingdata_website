@@ -70,6 +70,7 @@ const CouponList = () => {
                 copyPath={'/coupon/duplicate-coupon'}
                 search={true}
                 filter={true}
+                deleteAction={true}
                 deleteBtn={true}
                 filterCategory={[
                   { id: 0, name: 'Status' },

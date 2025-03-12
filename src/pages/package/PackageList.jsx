@@ -80,12 +80,12 @@ const PackageList = () => {
                 actions={true}
                 editPath={'/packages/edit-package'}
                 copyPath={'/packages/duplicate-package'}
-                deleteAction={true}
                 search={true}
                 filter={true}
                 filterCategory={[{ id: 1, name: 'Event' }]}
                 searchCategory={[{ id: 1, name: 'Name' }]}
                 deleteBtn={true}
+                deleteAction={true}
                 eventId={eventId}
                 deleteApi={deletePackageApi}
                 deleteLabel={'Delete Package'}

@@ -78,6 +78,7 @@ const PartnerLogoList = () => {
                 modifySite={true}
                 modifySiteApi={updatePartnerLogoSitesApi}
                 deleteBtn={true}
+                deleteAction={true}
                 deleteApi={deletePartnerLogoApi}
                 deleteLabel={'Delete Partner Logo'}
                 deleteMessage={'Are you sure you want to delete this partner logo?'}

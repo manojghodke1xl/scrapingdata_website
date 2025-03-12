@@ -86,6 +86,7 @@ const RecaptchaList = () => {
                 modifySite={true}
                 modifySiteApi={updateRecaptchaSitesApi}
                 deleteBtn={true}
+                deleteAction={true}
                 deleteApi={deleteRecaptchaApi}
                 deleteLabel={'Delete reCAPTCHA'}
                 deleteMessage={'Are you sure you want to delete this reCAPTCHA?'}

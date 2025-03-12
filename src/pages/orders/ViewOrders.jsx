@@ -162,19 +162,27 @@ const ViewOrders = () => {
           <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div>
               <h1 className="font-semibold text-primary">Product Cost</h1>
-              <p className="text-placeholder font-normal"> {order?.payment?.productAmount || 'N/A'}</p>
+              <p className="text-placeholder font-normal">
+                {order?.payment?.productAmount} {order?.payment?.currency}
+              </p>
             </div>
             <div>
               <h1 className="font-semibold text-primary">Dilivery Cost</h1>
-              <p className="text-placeholder font-normal"> {order?.payment?.shippingCharges || 'N/A'}</p>
+              <p className="text-placeholder font-normal">
+                {order?.payment?.shippingCharges} {order?.payment?.currency}
+              </p>
             </div>
             <div>
               <h1 className="font-semibold text-primary">Discount Applied</h1>
-              <p className="text-placeholder font-normal"> {order?.payment?.discount || 'N/A'}</p>
+              <p className="text-placeholder font-normal">
+                {order?.payment?.discount} {order?.payment?.currency}
+              </p>
             </div>
             <div>
               <h1 className="font-semibold text-primary">Total Amount Paid</h1>
-              <p className="text-placeholder font-normal"> {order?.payment?.amount || 'N/A'}</p>
+              <p className="text-placeholder font-normal">
+                {order?.payment?.amount} {order?.payment?.currency}
+              </p>
             </div>
 
             <div>

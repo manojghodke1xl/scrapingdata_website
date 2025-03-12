@@ -121,6 +121,7 @@ const BookingPaymentList = () => {
                 pagination={true}
                 search={true}
                 filter={true}
+                deleteAction={true}
                 deleteBtn={true}
                 filterCategory={[{ id: 1, name: 'Sites' }]}
               />

@@ -47,6 +47,7 @@ const FilesList = () => {
                 actions={true}
                 editPath={'/files/edit-file'}
                 deleteBtn={true}
+                deleteAction={true}
                 deleteApi={deleteFileApi}
                 deleteMessage="Are you sure you want to delete this file?"
                 deleteLabel={'Delete File'}

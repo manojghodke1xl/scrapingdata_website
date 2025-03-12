@@ -94,6 +94,7 @@ const PopupList = () => {
                   { id: 2, name: 'Inactive', bgColor: '#F2F4F7', color: '#344054', dotColor: '#667085' }
                 ]}
                 searchCategory={[{ id: 1, name: 'Name' }]}
+                deleteAction={true}
                 deleteBtn={true}
                 deleteApi={deletePopupApi}
                 deleteLabel={'Delete Pop-up'}

@@ -83,6 +83,7 @@ const FaqList = () => {
                 modifySite={true}
                 modifySiteApi={updateFaqSitesApi}
                 deleteBtn={true}
+                deleteAction={true}
                 deleteLabel={'Delete FAQ'}
                 deleteMessage={'Are you sure you want to delete this FAQ?'}
                 deleteApi={deleteFaqApi}

@@ -78,6 +78,7 @@ const GalleryList = () => {
                 modifySite={true}
                 modifySiteApi={updateGallerySitesApi}
                 deleteBtn={true}
+                deleteAction={true}
                 deleteApi={deleteGalleryApi}
                 deleteLabel={'Delete Gallery'}
                 deleteMessage={'Are you sure you want to delete this Gallery?'}

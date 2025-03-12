@@ -78,6 +78,7 @@ const ClientLogoList = () => {
                 modifySite={true}
                 modifySiteApi={updateClientLogoSitesApi}
                 deleteBtn={true}
+                deleteAction={true}
                 deleteApi={deleteClientLogoApi}
                 deleteLabel={'Delete Client Logo'}
                 deleteMessage={'Are you sure you want to delete this Client Logo?'}
