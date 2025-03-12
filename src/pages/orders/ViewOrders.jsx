@@ -34,7 +34,7 @@ const ViewOrders = () => {
           <span className="text-3xl font-semibold text-dark">Order Details</span>
         </div>
         <div className=" w-full flex gap-4 justify-end items-end md:w-fit lg:w-full xl:w-fit">
-          <Link to={'/orders/order-list'} className="px-4 py-2 text-primary font-medium bg-inherit hover:bg-hover rounded-xl border border-primary whitespace-nowrap">
+          <Link to={'/payments/order-payment-list'} className="px-4 py-2 text-primary font-medium bg-inherit hover:bg-hover rounded-xl border border-primary whitespace-nowrap">
             Back
           </Link>
         </div>

@@ -141,7 +141,7 @@ const OrderPaymentList = () => {
                 pagination={true}
                 search={true}
                 actions={true}
-                viewPath={'/orders/view-order'}
+                viewPath={'/payments/view-order'}
               />
             </div>
           </div>
