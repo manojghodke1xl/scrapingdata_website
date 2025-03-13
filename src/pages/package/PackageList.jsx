@@ -17,7 +17,7 @@ const PackageList = () => {
   const [event, setEvent] = useState([]);
 
   const rows = packages.map((userPackage) => {
-    const { _id, title, amount, maxLimit, hasBooking, event, createdAt, updatedAt, ticketIdPattern } = userPackage;
+    const { _id, title, amount, maxLimit, hasBooking, event, site, createdAt, updatedAt, ticketIdPattern } = userPackage;
     return {
       id: _id,
       hasBooking,
@@ -25,6 +25,7 @@ const PackageList = () => {
       key: <TruncatableCopyFeild content={_id} />,
       title: <TruncatableFieldToolTip content={title} />,
       event: <TruncatableFieldToolTip content={`${event.name} (${event.venue})`} />,
+      site: <TruncatableFieldToolTip content={`${site.name} (${site.host})`} />,
       date: formatDateTime(event.date),
       amount: <TruncatableFieldToolTip content={amount} />,
       maxLimit: <TruncatableFieldToolTip content={maxLimit} />,
@@ -44,6 +45,7 @@ const PackageList = () => {
       dataKey: 'event',
       formatForExport: (value) => (value ? `${value.name} (${value.venue})` : '')
     },
+    { id: 9, label: 'Sites', key: 'site', dataKey: 'site', formatForExport: (value) => (value ? `${value.name} (${value.host})` : '') },
     { id: 3, label: 'Event Date', key: 'date', dataKey: 'event.date', formatForExport: (value) => formatDateTime(value) },
     { id: 4, label: 'Price', key: 'amount', dataKey: 'amount' },
     { id: 5, label: 'Max Attendees', key: 'maxLimit', dataKey: 'maxLimit' },
@@ -82,7 +84,10 @@ const PackageList = () => {
                 copyPath={'/packages/duplicate-package'}
                 search={true}
                 filter={true}
-                filterCategory={[{ id: 1, name: 'Event' }]}
+                filterCategory={[
+                  { id: 0, name: 'Event' },
+                  { id: 1, name: 'Sites' }
+                ]}
                 searchCategory={[{ id: 1, name: 'Name' }]}
                 deleteBtn={true}
                 deleteAction={true}

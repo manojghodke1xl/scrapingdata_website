@@ -25,8 +25,6 @@ const ViewOrders = () => {
       .finally(() => setLoading(false));
   }, [id, setLoading]);
 
-  console.log('order', order);
-
   return (
     <div className="py-8 p-4 sm:p-8 overflow-x-hidden mb-20">
       <div className="w-full pb-8 border-b border-primary gap-y-4 gap-2 flex flex-col items-start md:flex-row lg:flex-col xl:flex-row justify-between lg:items-start md:items-end xl:items-end">
@@ -71,7 +69,7 @@ const ViewOrders = () => {
           </div>
           <div className="w-full grid grid-cols-1 gap-y-5">
             {order?.products?.map((product) => (
-              <div key={product.id} className="w-full grid grid-cols-1 sm:grid-cols-2 gap-y-5">
+              <div key={product.id} className="w-full grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <div>
                   <h1 className="font-semibold text-primary">Product Name</h1>
                   <p className="text-placeholder font-normal"> {product?.name || 'No name available'}</p>
