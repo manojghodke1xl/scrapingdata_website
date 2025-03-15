@@ -1,4 +1,4 @@
-import { RiAdminLine, RiNotificationBadgeLine, RiTaskLine } from 'react-icons/ri';
+import { RiAdminLine, RiContactsLine, RiNotificationBadgeLine, RiTaskLine } from 'react-icons/ri';
 import { RxDashboard } from 'react-icons/rx';
 import { TbApps, TbWorld } from 'react-icons/tb';
 
@@ -121,6 +121,7 @@ export const logsPath = [
 
 export const adminNavLinks = [
   { title: 'Admins', to: ['/admin/admin-list', '/admin/add-admin', '/admin/edit-admin'], icon: <RiAdminLine /> },
+  { title: 'Contacts', to: ['/contact/contact-list', '/contact/add-contact', '/contact/edit-contact'], icon: <RiContactsLine /> },
   {
     title: 'Notification Agents',
     to: [

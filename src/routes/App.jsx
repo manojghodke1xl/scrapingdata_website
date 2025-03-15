@@ -58,6 +58,7 @@ import BroadcastRoutes from './private-routes/BroadcastRoutes';
 import NotifAgentRoutes from './private-routes/NotifAgentRoutes';
 import TaskRoutes from './private-routes/taskRoutes';
 import Layout_SEO from '../layouts/LayoutSeo';
+import ContactRoutes from './private-routes/ContactRoutes';
 
 const ZohoStatus = lazy(() => import('../pages/integration/ZohoStatus'));
 
@@ -99,16 +100,17 @@ const privateRoutes = [
   { path: 'broadcast/*', Component: BroadcastRoutes },
   { path: 'logs/*', Component: LogRoutes },
   { path: 'advertisement/*', Component: AdvertisementRoutes },
-  { path: '/vendor/*', Component: VendorRoutes },
-  { path: '/distributor/*', Component: DistributorRoutes },
-  { path: '/reseller/*', Component: ResellerRoutes },
+  { path: 'vendor/*', Component: VendorRoutes },
+  { path: 'distributor/*', Component: DistributorRoutes },
+  { path: 'reseller/*', Component: ResellerRoutes },
   { path: 'affiliate/*', Component: AffiliateRoutes },
   { path: 'fan-club/*', Component: FanClubRoutes },
   { path: 'career/*', Component: CareerRoutes },
   { path: 'webinar/*', Component: WebinarRoutes },
   { path: 'utm-builder/*', Component: UTMBuilderRoutes },
   { path: 'notification-agent/*', Component: NotifAgentRoutes },
-  { path: 'task/*', Component: TaskRoutes }
+  { path: 'task/*', Component: TaskRoutes },
+  { path: 'contact/*', Component: ContactRoutes }
 ];
 
 const App = () => {

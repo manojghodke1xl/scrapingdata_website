@@ -54,7 +54,8 @@ export const exportHandler = ({ type, apiUrl, rows, exportMapping, selectedColum
           order: 'orders',
           booking: 'bookings',
           'logs/whatsapp': 'logs',
-          'logs/email': 'logs'
+          'logs/email': 'logs',
+          contact: 'contacts'
         };
         const allData = data[apiUrlMapping[apiUrl] || apiUrl];
         generateBulkExport({ data: allData, exportMapping, selectedColumns, fileName: `view_all_${fileName}_details`, fileFormat });
