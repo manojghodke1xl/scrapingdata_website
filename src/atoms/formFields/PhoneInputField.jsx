@@ -4,7 +4,7 @@ import PhoneInput from 'react-phone-input-2';
 const PhoneInputField = ({ divClassName = '', label, name, value, handlePhoneChange, phoneError, country = 'in', placeholder, disabled, required }) => {
   const [isFocused, setIsFocused] = useState(false);
   return (
-    <div className={`${divClassName} mb-6 bg-transparent `}>
+    <div className={`${divClassName} bg-transparent `}>
       <label className="block text-sm font-medium text-primary">
         {label} {required && <span className="text-danger text-lg">*</span>}
       </label>

@@ -81,46 +81,42 @@ const AddCertificate = () => {
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className=" text-primary ">Certificate Details</span>
           </div>
-          <div className="w-full">
-            <div>
-              <FormField
-                label="Certificate Name"
-                type="text"
-                id="name"
-                name="name"
-                required
-                placeholder="Certificate Name"
-                onChange={(e) => {
-                  setCertificate((prev) => ({ ...prev, name: e.target.value }));
-                  if (errors.name) setErrors((prev) => ({ ...prev, name: '' }));
-                }}
-                value={certificate.name}
-                errorMessage={errors.name}
-              />
+          <div className="w-full flex flex-col gap-y-5">
+            <FormField
+              label="Certificate Name"
+              type="text"
+              id="name"
+              name="name"
+              required
+              placeholder="Certificate Name"
+              onChange={(e) => {
+                setCertificate((prev) => ({ ...prev, name: e.target.value }));
+                if (errors.name) setErrors((prev) => ({ ...prev, name: '' }));
+              }}
+              value={certificate.name}
+              errorMessage={errors.name}
+            />
 
-              <TextareaComponent
-                divClassName="mt-5"
-                label="Description"
-                placeholder="Enter a description..."
-                id="description"
-                name="description"
-                value={certificate?.description}
-                onChange={(e) => setCertificate((prev) => ({ ...prev, description: e.target.value }))}
-              />
+            <TextareaComponent
+              label="Description"
+              placeholder="Enter a description..."
+              id="description"
+              name="description"
+              value={certificate?.description}
+              onChange={(e) => setCertificate((prev) => ({ ...prev, description: e.target.value }))}
+            />
 
-              <FileUpload
-                divClassName={'mt-5'}
-                label={'Certificate SVG'}
-                logo={<FaRegImage className="text-primary text-2xl" />}
-                error={errors.image}
-                setErrors={setErrors}
-                acceptedTypes={['.svg']}
-                fieldName="image"
-                isImage
-                setDetails={setCertificate}
-                imagePreviewUrl={certificate?.imageFile?.url}
-              />
-            </div>
+            <FileUpload
+              label={'Certificate SVG'}
+              logo={<FaRegImage className="text-primary text-2xl" />}
+              error={errors.image}
+              setErrors={setErrors}
+              acceptedTypes={['.svg']}
+              fieldName="image"
+              isImage
+              setDetails={setCertificate}
+              imagePreviewUrl={certificate?.imageFile?.url}
+            />
           </div>
         </div>
       </div>

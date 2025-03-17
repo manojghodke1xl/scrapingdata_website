@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { showNotification } from '../../utils/showNotification';
 import { getMethodCall } from '../../apis/api-handler';
@@ -32,8 +32,6 @@ const WhatsappLogPreview = () => {
 
     return { __html: formattedMessage };
   };
-
-  
 
   return (
     <div className="container mx-auto my-8">

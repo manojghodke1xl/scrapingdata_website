@@ -71,7 +71,7 @@ const OrderPaymentList = () => {
     { id: 2, label: 'Order ID', key: 'orderId', dataKey: 'orderId' },
     {
       id: 3,
-      label: 'Mobile Number',
+      label: 'Contact Number',
       key: 'mobile',
       dataKey: 'phone',
       formatForExport: (value, data) => `${data.phoneCode ? (data.phoneCode.startsWith('+') ? data.phoneCode : `+${data.phoneCode}`) : ''} ${value ? value : '-'}`

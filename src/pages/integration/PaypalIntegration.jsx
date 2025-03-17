@@ -162,7 +162,6 @@ const PaypalIntegration = () => {
                 .filter(([, value]) => value)
                 .map(([key]) => key)}
               error={errors?.supports}
-              divClassName="mb-4"
             />
           </div>
         </div>

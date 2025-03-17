@@ -62,7 +62,7 @@ const AddContact = () => {
     if (!customerSite.email.trim()) newErrors.email = 'Email is required';
     if (!customerSite.name.trim()) newErrors.name = 'Name is required';
     if (customerSite.sites.length === 0) newErrors.sites = 'At least one site must be selected';
-    if (!customerSite.phone) newErrors.phone = 'Phone number is required';
+    if (!customerSite.phone) newErrors.phone = 'Contact number is required';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -155,8 +155,8 @@ const AddContact = () => {
               errorMessage={errors.email}
             />
             <PhoneInputField
-              label="Mobile Number"
-              placeholder="Mobile Number"
+              label="Contact Number"
+              placeholder="Contact Number"
               name="mobile"
               required
               value={customerSite.phoneCode + customerSite.phone}

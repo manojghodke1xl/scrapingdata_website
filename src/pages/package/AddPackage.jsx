@@ -244,71 +244,68 @@ const AddPackage = () => {
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className=" text-primary">Package Details</span>
           </div>
-          <div className="w-full">
-            <div className="flex flex-col gap-5">
-              <FormField
-                label="Title"
-                type="text"
-                id="title"
-                name="title"
-                placeholder="Title"
-                required
-                onChange={(e) => {
-                  setPackageDetails((prev) => ({ ...prev, title: e.target.value }));
-                  if (errors.title) setErrors((prev) => ({ ...prev, title: '' }));
+          <div className="w-full flex flex-col gap-y-5">
+            <FormField
+              label="Title"
+              type="text"
+              id="title"
+              name="title"
+              placeholder="Title"
+              required
+              onChange={(e) => {
+                setPackageDetails((prev) => ({ ...prev, title: e.target.value }));
+                if (errors.title) setErrors((prev) => ({ ...prev, title: '' }));
+              }}
+              value={packageDetails.title}
+              errorMessage={errors.title}
+            />
+            <TextareaComponent
+              label="Description"
+              placeholder="Enter a description..."
+              id="description"
+              name="description"
+              value={packageDetails?.description}
+              onChange={(e) => setPackageDetails((prev) => ({ ...prev, description: e.target.value }))}
+            />
+
+            <FormField
+              label="Ticket ID Pattern"
+              type="text"
+              id="ticketIdPattern"
+              name="ticketIdPattern"
+              placeholder="Ticket ID Pattern"
+              onChange={(e) => {
+                setPackageDetails((prev) => ({ ...prev, ticketIdPattern: e.target.value.replace(/[^a-zA-Z0-9]/g, '').toUpperCase() }));
+                if (errors.ticketIdPattern) setErrors((prev) => ({ ...prev, ticketIdPattern: '' }));
+              }}
+              value={packageDetails.ticketIdPattern}
+              previewLabel={'Ticket preview'}
+              preview={packageDetails.ticketIdPattern ? `${packageDetails.ticketIdPattern}_001` : ''}
+              errorMessage={errors.ticketIdPattern}
+            />
+            {id && <p className="text-secondary text-sm mt-4"> If you change ticket pattern it won&apos;t any impact on existing tickets already generated in this package.</p>}
+
+            <ToggleComponent
+              label={'Package on Sale ?'}
+              isEnableState={packageDetails.onSale}
+              tooltipContent={'If you enable this option, then you can set the product on sale.'}
+              setIsEnableState={(e) => setPackageDetails((prev) => ({ ...prev, onSale: e, salePrice: {}, saleEndDate: '' }))}
+              errorMessage={errors.onSale}
+            />
+
+            {packageDetails.onSale && (
+              <DateTimePicker
+                id={'saleEndDate'}
+                label="Sale End Date"
+                placeholder={formatDateTime(new Date())}
+                selectedDateTime={packageDetails.saleEndDate}
+                setSelectedDateTime={(date) => {
+                  setPackageDetails((prev) => ({ ...prev, saleEndDate: date }));
+                  if (errors.saleEndDate) setErrors((prev) => ({ ...prev, saleEndDate: '' }));
                 }}
-                value={packageDetails.title}
-                errorMessage={errors.title}
+                errorMessage={errors.saleEndDate}
               />
-              <TextareaComponent
-                label="Description"
-                placeholder="Enter a description..."
-                id="description"
-                name="description"
-                value={packageDetails?.description}
-                onChange={(e) => setPackageDetails((prev) => ({ ...prev, description: e.target.value }))}
-              />
-
-              <FormField
-                label="Ticket ID Pattern"
-                type="text"
-                id="ticketIdPattern"
-                name="ticketIdPattern"
-                placeholder="Ticket ID Pattern"
-                onChange={(e) => {
-                  setPackageDetails((prev) => ({ ...prev, ticketIdPattern: e.target.value.replace(/[^a-zA-Z0-9]/g, '').toUpperCase() }));
-                  if (errors.ticketIdPattern) setErrors((prev) => ({ ...prev, ticketIdPattern: '' }));
-                }}
-                value={packageDetails.ticketIdPattern}
-                previewLabel={'Ticket preview'}
-                preview={packageDetails.ticketIdPattern ? `${packageDetails.ticketIdPattern}_001` : ''}
-                errorMessage={errors.ticketIdPattern}
-              />
-              {id && <p className="text-secondary text-sm mt-4"> If you change ticket pattern it won&apos;t any impact on existing tickets already generated in this package.</p>}
-
-              <ToggleComponent
-                label={'Product on Sale ?'}
-                isEnableState={packageDetails.onSale}
-                tooltipContent={'If you enable this option, then you can set the product on sale.'}
-                setIsEnableState={(e) => setPackageDetails((prev) => ({ ...prev, onSale: e, salePrice: {}, saleEndDate: '' }))}
-                errorMessage={errors.onSale}
-              />
-
-              {packageDetails.onSale && (
-                <DateTimePicker
-                  divClassName={'mt-5'}
-                  id={'saleEndDate'}
-                  label="Sale End Date"
-                  placeholder={formatDateTime(new Date())}
-                  selectedDateTime={packageDetails.saleEndDate}
-                  setSelectedDateTime={(date) => {
-                    setPackageDetails((prev) => ({ ...prev, saleEndDate: date }));
-                    if (errors.saleEndDate) setErrors((prev) => ({ ...prev, saleEndDate: '' }));
-                  }}
-                  errorMessage={errors.saleEndDate}
-                />
-              )}
-            </div>
+            )}
           </div>
         </div>
       </div>
@@ -320,36 +317,34 @@ const AddPackage = () => {
               <div className="sm:w-7/12 w-full flex flex-col">
                 <span className=" text-primary">Template Details</span>
               </div>
-              <div className="w-full">
-                <div className="flex flex-col gap-5">
-                  <DropDown
-                    label={'Select Email Template'}
-                    name="Template"
-                    dropdownList={templates?.map((template) => ({ name: template._id, showName: template.name, id: template._id }))}
-                    SummaryChild={<h5 className="p-0 m-0 text-primary">Email Templates</h5>}
-                    search={true}
-                    selected={packageDetails.template}
-                    commonFunction={(e) => {
-                      setPackageDetails((prev) => ({ ...prev, template: e.name }));
-                      if (errors.template) setErrors((prev) => ({ ...prev, template: '' }));
-                    }}
-                    error={errors.template}
-                  />
+              <div className="w-full flex flex-col gap-y-5">
+                <DropDown
+                  label={'Select Email Template'}
+                  name="Template"
+                  dropdownList={templates?.map((template) => ({ name: template._id, showName: template.name, id: template._id }))}
+                  SummaryChild={<h5 className="p-0 m-0 text-primary">Email Templates</h5>}
+                  search={true}
+                  selected={packageDetails.template}
+                  commonFunction={(e) => {
+                    setPackageDetails((prev) => ({ ...prev, template: e.name }));
+                    if (errors.template) setErrors((prev) => ({ ...prev, template: '' }));
+                  }}
+                  error={errors.template}
+                />
 
-                  <DropDown
-                    label={'Select WhatsApp Template'}
-                    name="whatsappTemplate"
-                    dropdownList={whatsappTemplates?.map((template) => ({ name: template._id, showName: template.name, id: template._id }))}
-                    SummaryChild={<h5 className="p-0 m-0 text-primary">WhatsApp Templates</h5>}
-                    search={true}
-                    selected={packageDetails.whatsAppTemplate}
-                    commonFunction={(e) => {
-                      setPackageDetails((prev) => ({ ...prev, whatsAppTemplate: e.name }));
-                      if (errors.whatsAppTemplate) setErrors((prev) => ({ ...prev, whatsAppTemplate: '' }));
-                    }}
-                    error={errors.whatsAppTemplate}
-                  />
-                </div>
+                <DropDown
+                  label={'Select WhatsApp Template'}
+                  name="whatsappTemplate"
+                  dropdownList={whatsappTemplates?.map((template) => ({ name: template._id, showName: template.name, id: template._id }))}
+                  SummaryChild={<h5 className="p-0 m-0 text-primary">WhatsApp Templates</h5>}
+                  search={true}
+                  selected={packageDetails.whatsAppTemplate}
+                  commonFunction={(e) => {
+                    setPackageDetails((prev) => ({ ...prev, whatsAppTemplate: e.name }));
+                    if (errors.whatsAppTemplate) setErrors((prev) => ({ ...prev, whatsAppTemplate: '' }));
+                  }}
+                  error={errors.whatsAppTemplate}
+                />
               </div>
             </div>
           </div>
@@ -359,228 +354,226 @@ const AddPackage = () => {
               <div className="sm:w-7/12 w-full flex flex-col">
                 <span className=" text-primary">Additional Details</span>
               </div>
-              <div className="w-full">
-                <div className="flex flex-col gap-5">
-                  <MultiSelectCheckbox
-                    options={[
-                      { _id: 'INR', name: 'INR' },
-                      { _id: 'AED', name: 'AED' },
-                      { _id: 'USD', name: 'USD' }
-                    ]}
-                    formLabel="Currencies"
-                    label="Select Currencies"
-                    onChange={(selected) => {
-                      let error = '';
-                      const updatedCurrencyNotes = {};
-                      const updatedCurrencies = { ...packageDetails.currencies };
-                      const updatedSalePrice = { ...packageDetails.salePrice };
+              <div className="w-full flex flex-col gap-y-5">
+                <MultiSelectCheckbox
+                  options={[
+                    { _id: 'INR', name: 'INR' },
+                    { _id: 'AED', name: 'AED' },
+                    { _id: 'USD', name: 'USD' }
+                  ]}
+                  formLabel="Currencies"
+                  label="Select Currencies"
+                  onChange={(selected) => {
+                    let error = '';
+                    const updatedCurrencyNotes = {};
+                    const updatedCurrencies = { ...packageDetails.currencies };
+                    const updatedSalePrice = { ...packageDetails.salePrice };
 
-                      const supportedCurrencies = {
-                        INR: paymentData?.razorpay?.supports?.INR || paymentData?.stripe?.supports?.INR || paymentData?.paypal?.supports?.INR,
-                        AED: paymentData?.razorpay?.supports?.AED || paymentData?.stripe?.supports?.AED || paymentData?.paypal?.supports?.AED,
-                        USD: paymentData?.razorpay?.supports?.USD || paymentData?.stripe?.supports?.USD || paymentData?.paypal?.supports?.USD
-                      };
+                    const supportedCurrencies = {
+                      INR: paymentData?.razorpay?.supports?.INR || paymentData?.stripe?.supports?.INR || paymentData?.paypal?.supports?.INR,
+                      AED: paymentData?.razorpay?.supports?.AED || paymentData?.stripe?.supports?.AED || paymentData?.paypal?.supports?.AED,
+                      USD: paymentData?.razorpay?.supports?.USD || paymentData?.stripe?.supports?.USD || paymentData?.paypal?.supports?.USD
+                    };
 
-                      selected.forEach((currency) => {
-                        if (supportedCurrencies[currency]) updatedCurrencyNotes[currency] = true;
-                        else error = `Please add support for ${currency} currency in your payment gateway configuration`;
-                      });
+                    selected.forEach((currency) => {
+                      if (supportedCurrencies[currency]) updatedCurrencyNotes[currency] = true;
+                      else error = `Please add support for ${currency} currency in your payment gateway configuration`;
+                    });
 
-                      Object.keys(packageDetails.currencies).forEach((currency) => {
-                        if (!selected.includes(currency)) {
-                          updatedCurrencies[currency] = 0;
-                          updatedSalePrice[currency] = 0;
-                        }
-                      });
+                    Object.keys(packageDetails.currencies).forEach((currency) => {
+                      if (!selected.includes(currency)) {
+                        updatedCurrencies[currency] = 0;
+                        updatedSalePrice[currency] = 0;
+                      }
+                    });
 
-                      setErrors((prev) => ({ ...prev, currencyNotes: error }));
-                      setPackageDetails((prevDetails) => ({
-                        ...prevDetails,
-                        currencyNotes: updatedCurrencyNotes,
-                        currencies: updatedCurrencies,
-                        salePrice: updatedSalePrice
-                      }));
+                    setErrors((prev) => ({ ...prev, currencyNotes: error }));
+                    setPackageDetails((prevDetails) => ({
+                      ...prevDetails,
+                      currencyNotes: updatedCurrencyNotes,
+                      currencies: updatedCurrencies,
+                      salePrice: updatedSalePrice
+                    }));
 
-                      if (!error) setErrors((prev) => ({ ...prev, currencyNotes: '' }));
-                    }}
-                    selected={Object.entries(packageDetails?.currencyNotes ?? {})
-                      .filter(([, value]) => value)
-                      .map(([key]) => key)}
-                    error={errors?.currencyNotes}
-                  />
-                  {(paymentData?.razorpay?.supports?.INR || paymentData?.stripe?.supports?.INR || paymentData?.paypal?.supports?.INR) && packageDetails?.currencyNotes?.INR && (
-                    <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-                      <FormField
-                        label="Price (in INR) is inclusive of tax"
-                        type="number"
-                        id="currencies-INR"
-                        name="currencies-INR"
-                        min={0}
-                        placeholder="Price (in INR) is inclusive of tax"
-                        onChange={(e) => {
-                          setPackageDetails((prev) => ({ ...prev, currencies: { ...prev.currencies, INR: e.target.value } }));
-                          if (errors.currencies?.INR) setErrors((prev) => ({ ...prev, currencies: { INR: '' } }));
-                        }}
-                        value={packageDetails.currencies?.INR}
-                        errorMessage={errors.currencies?.INR}
-                      />
-                      {packageDetails.onSale && (
-                        <FormField
-                          label={`Sale Price (in INR)`}
-                          type="number"
-                          id={`salePrice-INR`}
-                          name={`salePrice-INR`}
-                          min={0}
-                          placeholder={`Sale Price (INR)`}
-                          onChange={(e) => {
-                            setPackageDetails((prev) => ({ ...prev, salePrice: { ...prev.salePrice, INR: e.target.value } }));
-                            if (errors.salePrice?.INR) setErrors((prev) => ({ ...prev, salePrice: { ...prev.salePrice, INR: '' } }));
-                          }}
-                          value={packageDetails.salePrice?.INR ?? ''}
-                          errorMessage={errors.salePrice?.INR}
-                        />
-                      )}
-                    </div>
-                  )}
-                  {(paymentData?.razorpay?.supports?.AED || paymentData?.stripe?.supports?.AED || paymentData?.paypal?.supports?.AED) && packageDetails?.currencyNotes?.AED && (
-                    <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-                      <FormField
-                        label="Price (in AED) is inclusive of tax"
-                        type="number"
-                        id="currencies-AED"
-                        name="currencies-AED"
-                        min={0}
-                        placeholder="Price (in AED) is inclusive of tax"
-                        onChange={(e) => {
-                          setPackageDetails((prev) => ({ ...prev, currencies: { ...prev.currencies, AED: e.target.value } }));
-                          if (errors.currencies) setErrors((prev) => ({ ...prev, currencies: { AED: '' } }));
-                        }}
-                        value={packageDetails.currencies?.AED}
-                        errorMessage={errors.currencies?.AED}
-                      />
-
-                      {packageDetails.onSale && (
-                        <FormField
-                          label={`Sale Price (in AED)`}
-                          type="number"
-                          id={`salePrice-AED`}
-                          name={`salePrice-AED`}
-                          min={0}
-                          placeholder={`Sale Price (AED)`}
-                          onChange={(e) => {
-                            setPackageDetails((prev) => ({ ...prev, salePrice: { ...prev.salePrice, AED: e.target.value } }));
-                            if (errors.salePrice?.AED) setErrors((prev) => ({ ...prev, salePrice: { ...prev.salePrice, AED: '' } }));
-                          }}
-                          value={packageDetails.salePrice?.AED ?? ''}
-                          errorMessage={errors.salePrice?.AED}
-                        />
-                      )}
-                    </div>
-                  )}
-                  {(paymentData?.razorpay?.supports?.USD || paymentData?.stripe?.supports?.USD || paymentData?.paypal?.supports?.USD) && packageDetails?.currencyNotes?.USD && (
-                    <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-                      <FormField
-                        label="Price (in USD) is inclusive of tax"
-                        type="number"
-                        id="currencies-USD"
-                        name="currencies-USD"
-                        min={0}
-                        placeholder="Price (in USD) is inclusive of tax"
-                        onChange={(e) => {
-                          setPackageDetails((prev) => ({ ...prev, currencies: { ...prev.currencies, USD: e.target.value } }));
-                          if (errors.currencies) setErrors((prev) => ({ ...prev, currencies: { USD: '' } }));
-                        }}
-                        value={packageDetails.currencies?.USD}
-                        errorMessage={errors.currencies?.USD}
-                      />
-
-                      {packageDetails.onSale && (
-                        <FormField
-                          label={`Sale Price (in USD)`}
-                          type="number"
-                          id={`salePrice-USD`}
-                          name={`salePrice-USD`}
-                          min={0}
-                          placeholder={`Sale Price (USD)`}
-                          onChange={(e) => {
-                            setPackageDetails((prev) => ({ ...prev, salePrice: { ...prev.salePrice, USD: e.target.value } }));
-                            if (errors.salePrice?.USD) setErrors((prev) => ({ ...prev, salePrice: { ...prev.salePrice, USD: '' } }));
-                          }}
-                          value={packageDetails.salePrice?.USD ?? ''}
-                          errorMessage={errors.salePrice?.USD}
-                        />
-                      )}
-                    </div>
-                  )}
-                  {(packageDetails?.currencyNotes?.INR || packageDetails?.currencyNotes?.AED || packageDetails?.currencyNotes?.USD) && (
+                    if (!error) setErrors((prev) => ({ ...prev, currencyNotes: '' }));
+                  }}
+                  selected={Object.entries(packageDetails?.currencyNotes ?? {})
+                    .filter(([, value]) => value)
+                    .map(([key]) => key)}
+                  error={errors?.currencyNotes}
+                />
+                {(paymentData?.razorpay?.supports?.INR || paymentData?.stripe?.supports?.INR || paymentData?.paypal?.supports?.INR) && packageDetails?.currencyNotes?.INR && (
+                  <div className="flex flex-col md:flex-row items-center justify-between gap-4">
                     <FormField
-                      label="Max Limit"
+                      label="Price (in INR) is inclusive of tax"
                       type="number"
-                      id="maxLimit"
-                      name="maxLimit"
-                      placeholder="Max Limit"
+                      id="currencies-INR"
+                      name="currencies-INR"
                       min={0}
+                      placeholder="Price (in INR) is inclusive of tax"
                       onChange={(e) => {
-                        setPackageDetails((prev) => ({ ...prev, maxLimit: e.target.value }));
-                        if (errors.maxLimit) setErrors((prev) => ({ ...prev, maxLimit: '' }));
+                        setPackageDetails((prev) => ({ ...prev, currencies: { ...prev.currencies, INR: e.target.value } }));
+                        if (errors.currencies?.INR) setErrors((prev) => ({ ...prev, currencies: { INR: '' } }));
                       }}
-                      value={packageDetails.maxLimit}
-                      errorMessage={errors.maxLimit}
+                      value={packageDetails.currencies?.INR}
+                      errorMessage={errors.currencies?.INR}
                     />
-                  )}
+                    {packageDetails.onSale && (
+                      <FormField
+                        label={`Sale Price (in INR)`}
+                        type="number"
+                        id={`salePrice-INR`}
+                        name={`salePrice-INR`}
+                        min={0}
+                        placeholder={`Sale Price (INR)`}
+                        onChange={(e) => {
+                          setPackageDetails((prev) => ({ ...prev, salePrice: { ...prev.salePrice, INR: e.target.value } }));
+                          if (errors.salePrice?.INR) setErrors((prev) => ({ ...prev, salePrice: { ...prev.salePrice, INR: '' } }));
+                        }}
+                        value={packageDetails.salePrice?.INR ?? ''}
+                        errorMessage={errors.salePrice?.INR}
+                      />
+                    )}
+                  </div>
+                )}
+                {(paymentData?.razorpay?.supports?.AED || paymentData?.stripe?.supports?.AED || paymentData?.paypal?.supports?.AED) && packageDetails?.currencyNotes?.AED && (
+                  <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+                    <FormField
+                      label="Price (in AED) is inclusive of tax"
+                      type="number"
+                      id="currencies-AED"
+                      name="currencies-AED"
+                      min={0}
+                      placeholder="Price (in AED) is inclusive of tax"
+                      onChange={(e) => {
+                        setPackageDetails((prev) => ({ ...prev, currencies: { ...prev.currencies, AED: e.target.value } }));
+                        if (errors.currencies) setErrors((prev) => ({ ...prev, currencies: { AED: '' } }));
+                      }}
+                      value={packageDetails.currencies?.AED}
+                      errorMessage={errors.currencies?.AED}
+                    />
 
-                  <DropDown
-                    label={'Select Certificate'}
-                    name="certificate"
-                    dropdownList={certificates?.map((template) => ({ name: template._id, showName: template.name, id: template._id }))}
-                    SummaryChild={<h5 className="p-0 m-0 text-primary">Certificates</h5>}
-                    search={true}
-                    selected={packageDetails.certificate}
-                    commonFunction={(e) => {
-                      setPackageDetails((prev) => ({ ...prev, certificate: e.name }));
-                      if (errors.certificate) setErrors((prev) => ({ ...prev, certificate: '' }));
+                    {packageDetails.onSale && (
+                      <FormField
+                        label={`Sale Price (in AED)`}
+                        type="number"
+                        id={`salePrice-AED`}
+                        name={`salePrice-AED`}
+                        min={0}
+                        placeholder={`Sale Price (AED)`}
+                        onChange={(e) => {
+                          setPackageDetails((prev) => ({ ...prev, salePrice: { ...prev.salePrice, AED: e.target.value } }));
+                          if (errors.salePrice?.AED) setErrors((prev) => ({ ...prev, salePrice: { ...prev.salePrice, AED: '' } }));
+                        }}
+                        value={packageDetails.salePrice?.AED ?? ''}
+                        errorMessage={errors.salePrice?.AED}
+                      />
+                    )}
+                  </div>
+                )}
+                {(paymentData?.razorpay?.supports?.USD || paymentData?.stripe?.supports?.USD || paymentData?.paypal?.supports?.USD) && packageDetails?.currencyNotes?.USD && (
+                  <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+                    <FormField
+                      label="Price (in USD) is inclusive of tax"
+                      type="number"
+                      id="currencies-USD"
+                      name="currencies-USD"
+                      min={0}
+                      placeholder="Price (in USD) is inclusive of tax"
+                      onChange={(e) => {
+                        setPackageDetails((prev) => ({ ...prev, currencies: { ...prev.currencies, USD: e.target.value } }));
+                        if (errors.currencies) setErrors((prev) => ({ ...prev, currencies: { USD: '' } }));
+                      }}
+                      value={packageDetails.currencies?.USD}
+                      errorMessage={errors.currencies?.USD}
+                    />
+
+                    {packageDetails.onSale && (
+                      <FormField
+                        label={`Sale Price (in USD)`}
+                        type="number"
+                        id={`salePrice-USD`}
+                        name={`salePrice-USD`}
+                        min={0}
+                        placeholder={`Sale Price (USD)`}
+                        onChange={(e) => {
+                          setPackageDetails((prev) => ({ ...prev, salePrice: { ...prev.salePrice, USD: e.target.value } }));
+                          if (errors.salePrice?.USD) setErrors((prev) => ({ ...prev, salePrice: { ...prev.salePrice, USD: '' } }));
+                        }}
+                        value={packageDetails.salePrice?.USD ?? ''}
+                        errorMessage={errors.salePrice?.USD}
+                      />
+                    )}
+                  </div>
+                )}
+                {(packageDetails?.currencyNotes?.INR || packageDetails?.currencyNotes?.AED || packageDetails?.currencyNotes?.USD) && (
+                  <FormField
+                    label="Max Limit"
+                    type="number"
+                    id="maxLimit"
+                    name="maxLimit"
+                    placeholder="Max Limit"
+                    min={0}
+                    onChange={(e) => {
+                      setPackageDetails((prev) => ({ ...prev, maxLimit: e.target.value }));
+                      if (errors.maxLimit) setErrors((prev) => ({ ...prev, maxLimit: '' }));
                     }}
-                    error={errors.certificate}
+                    value={packageDetails.maxLimit}
+                    errorMessage={errors.maxLimit}
                   />
+                )}
 
-                  {packageDetails.certificate && (
-                    <DropDown
-                      label={'Select Certificate Email Template'}
-                      name="CertificateTemplate"
-                      dropdownList={templates?.map((template) => ({ name: template._id, showName: template.name, id: template._id }))}
-                      SummaryChild={<h5 className="p-0 m-0 text-primary">Email Templates</h5>}
-                      search={true}
-                      selected={packageDetails.certificateTemplate}
-                      commonFunction={(e) => {
-                        setPackageDetails((prev) => ({ ...prev, certificateTemplate: e.name }));
-                        if (errors.certificateTemplate) setErrors((prev) => ({ ...prev, certificateTemplate: '' }));
-                      }}
-                      error={errors.certificateTemplate}
-                    />
-                  )}
+                <DropDown
+                  label={'Select Certificate'}
+                  name="certificate"
+                  dropdownList={certificates?.map((template) => ({ name: template._id, showName: template.name, id: template._id }))}
+                  SummaryChild={<h5 className="p-0 m-0 text-primary">Certificates</h5>}
+                  search={true}
+                  selected={packageDetails.certificate}
+                  commonFunction={(e) => {
+                    setPackageDetails((prev) => ({ ...prev, certificate: e.name }));
+                    if (errors.certificate) setErrors((prev) => ({ ...prev, certificate: '' }));
+                  }}
+                  error={errors.certificate}
+                />
 
-                  <ToggleComponent
-                    label={'Do you want to add ticket?'}
-                    isEnableState={showTicket}
-                    tooltipContent={'If checked, then you can add a ticket'}
-                    setIsEnableState={(e) => setShowTicket(e)}
+                {packageDetails.certificate && (
+                  <DropDown
+                    label={'Select Certificate Email Template'}
+                    name="CertificateTemplate"
+                    dropdownList={templates?.map((template) => ({ name: template._id, showName: template.name, id: template._id }))}
+                    SummaryChild={<h5 className="p-0 m-0 text-primary">Email Templates</h5>}
+                    search={true}
+                    selected={packageDetails.certificateTemplate}
+                    commonFunction={(e) => {
+                      setPackageDetails((prev) => ({ ...prev, certificateTemplate: e.name }));
+                      if (errors.certificateTemplate) setErrors((prev) => ({ ...prev, certificateTemplate: '' }));
+                    }}
+                    error={errors.certificateTemplate}
                   />
-                  {showTicket && (
-                    <DropDown
-                      name="Tickets"
-                      label={'Select Ticket'}
-                      dropdownList={tickets?.map((event) => ({ name: event._id, showName: event.name, id: event._id }))}
-                      SummaryChild={<h5 className="p-0 m-0 text-primary">Ticket</h5>}
-                      search={true}
-                      selected={packageDetails.ticket}
-                      commonFunction={(e) => {
-                        setPackageDetails((prev) => ({ ...prev, ticket: e.name }));
-                        if (errors.ticket) setErrors((prev) => ({ ...prev, ticket: '' }));
-                      }}
-                      error={errors.ticket}
-                    />
-                  )}
-                </div>
+                )}
+
+                <ToggleComponent
+                  label={'Do you want to add ticket?'}
+                  isEnableState={showTicket}
+                  tooltipContent={'If checked, then you can add a ticket'}
+                  setIsEnableState={(e) => setShowTicket(e)}
+                />
+                {showTicket && (
+                  <DropDown
+                    name="Tickets"
+                    label={'Select Ticket'}
+                    dropdownList={tickets?.map((event) => ({ name: event._id, showName: event.name, id: event._id }))}
+                    SummaryChild={<h5 className="p-0 m-0 text-primary">Ticket</h5>}
+                    search={true}
+                    selected={packageDetails.ticket}
+                    commonFunction={(e) => {
+                      setPackageDetails((prev) => ({ ...prev, ticket: e.name }));
+                      if (errors.ticket) setErrors((prev) => ({ ...prev, ticket: '' }));
+                    }}
+                    error={errors.ticket}
+                  />
+                )}
               </div>
             </div>
           </div>

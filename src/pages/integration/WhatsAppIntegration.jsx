@@ -30,8 +30,8 @@ const WhatsAppIntegration = () => {
   const validate = () => {
     const newErrors = {};
     whatsappDetails.forEach((whatsapp, index) => {
-      if (!whatsapp.phoneNumber) newErrors[index] = { ...newErrors[index], phoneNumber: 'Mobile number is required.' };
-      if (!whatsapp.phoneNumberId) newErrors[index] = { ...newErrors[index], phoneNumberId: 'Mobile ID is required.' };
+      if (!whatsapp.phoneNumber) newErrors[index] = { ...newErrors[index], phoneNumber: 'Contact number is required.' };
+      if (!whatsapp.phoneNumberId) newErrors[index] = { ...newErrors[index], phoneNumberId: 'Contact ID is required.' };
       if (!whatsapp.accessToken) newErrors[index] = { ...newErrors[index], accessToken: 'Token is required.' };
     });
     setErrors(newErrors);
@@ -71,7 +71,7 @@ const WhatsAppIntegration = () => {
       ...prevErrors,
       [index]: {
         ...prevErrors[index],
-        number: numericValue.length < minLength ? `Mobile number must be at least ${minLength} digits` : ''
+        number: numericValue.length < minLength ? `Contact number must be at least ${minLength} digits` : ''
       }
     }));
   };
@@ -135,20 +135,18 @@ const WhatsAppIntegration = () => {
           </div>
           <div className="w-full">
             {whatsappDetails.map((whatsapp, index) => (
-              <div key={index}>
+              <div key={index} className="flex flex-col gap-y-5">
                 <PhoneInputField
-                  divClassName="mt-5"
-                  label="Mobile Number"
-                  placeholder="Mobile number"
+                  label="Contact Number"
+                  placeholder="Contact number"
                   name="phoneNumber"
                   phoneError={errors[index]?.phoneNumber}
                   handlePhoneChange={(value, countryData) => handlePhoneChange(index, value, countryData)}
                   value={`+${whatsapp.ccode}${whatsapp.phoneNumber}`}
                 />
                 <FormField
-                  divClassName={'mt-5'}
-                  label="Mobile Number ID"
-                  placeholder="Mobile Number ID"
+                  label="Contact Number ID"
+                  placeholder="Contact Number ID"
                   type="text"
                   name="phoneNumberId"
                   value={whatsapp.phoneNumberId}
@@ -156,7 +154,6 @@ const WhatsAppIntegration = () => {
                   errorMessage={errors[index]?.phoneNumberId}
                 />
                 <FormField
-                  divClassName={'mt-5'}
                   label="WhatsApp Business ID"
                   placeholder="WhatsApp Business ID"
                   type="text"
@@ -166,7 +163,6 @@ const WhatsAppIntegration = () => {
                   errorMessage={errors[index]?.waBusinessId}
                 />
                 <FormField
-                  divClassName={'mt-5'}
                   label="App ID"
                   placeholder="App ID"
                   type="text"
@@ -176,7 +172,6 @@ const WhatsAppIntegration = () => {
                   errorMessage={errors[index]?.appId}
                 />
                 <FormField
-                  divClassName={'mt-5'}
                   label="App Secret"
                   placeholder="App Secret"
                   type="text"
@@ -186,7 +181,6 @@ const WhatsAppIntegration = () => {
                   errorMessage={errors[index]?.appSecret}
                 />
                 <FormField
-                  divClassName={'mt-5'}
                   label="Access Token"
                   placeholder="Access Token"
                   type="text"
@@ -195,7 +189,7 @@ const WhatsAppIntegration = () => {
                   onChange={(e) => handleVariableChange(index, 'accessToken', e.target.value)}
                   errorMessage={errors[index]?.accessToken}
                 />
-                <button type="button" onClick={() => removeVariable(index)} className="px-4 py-2 mt-5 bg-red text- rounded-xl">
+                <button type="button" onClick={() => removeVariable(index)} className="w-fit px-4 py-2  bg-red text- rounded-xl">
                   Remove
                 </button>
               </div>

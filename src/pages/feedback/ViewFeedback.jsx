@@ -77,7 +77,7 @@ const ViewFeedback = () => {
               </p>
             </div>
             <div className="mt-5">
-              <h1 className="font-semibold text-primary">Phone Number</h1>
+              <h1 className="font-semibold text-primary">Contact Number</h1>
               {feedback?.mobile || feedback?.ccode ? (
                 <a
                   className="text-placeholder font-normal"
@@ -86,7 +86,7 @@ const ViewFeedback = () => {
                   {(feedback.ccode ? (feedback.ccode.startsWith('+') ? feedback.ccode : '+' + feedback.ccode) : '') + ' ' + feedback.mobile.replace(/\s+/g, '')}
                 </a>
               ) : (
-                <p className="text-placeholder font-normal">No phone number available</p>
+                <p className="text-placeholder font-normal">No contact number available</p>
               )}
             </div>
             <div className="mt-5">

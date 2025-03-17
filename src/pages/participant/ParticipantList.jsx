@@ -64,7 +64,7 @@ const ParticipantList = () => {
     { id: 3, label: 'Country', key: 'country', dataKey: 'booking.phoneCode', formatForExport: (value) => (value ? (value.startsWith('+') ? value : `+${value}`) : '') },
     {
       id: 4,
-      label: 'Phone Number',
+      label: 'Contact Number',
       key: 'phoneNumber',
       dataKey: 'booking',
       formatForExport: (value) =>
@@ -108,7 +108,7 @@ const ParticipantList = () => {
           btn2={true}
           icon2={<CiExport strokeWidth={0.5} />}
           btnLabel2={'Import Participants'}
-          href2={'/participants/bulk-import'}
+          href2={'/participants/import-participants'}
         />
         <div className="flex flex-col">
           <div className="-m-1.5 overflow-x-auto">

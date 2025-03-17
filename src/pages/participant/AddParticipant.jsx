@@ -71,7 +71,7 @@ const AddParticipant = () => {
     } else if (participantDetails.userDetails.email.length > 30) {
       errors.email = 'Email must be 30 characters or less';
     }
-    if (!participantDetails.userDetails.phoneNumber) errors.phoneNumber = 'Phone number is required';
+    if (!participantDetails.userDetails.phoneNumber) errors.phoneNumber = 'Contact number is required';
     setErrors(errors);
     return Object.keys(errors).length === 0;
   };
@@ -247,8 +247,8 @@ const AddParticipant = () => {
                 errorMessage={errors.email}
               />
               <PhoneInputField
-                label="Mobile Number"
-                placeholder="Mobile number"
+                label="Contact Number"
+                placeholder="Contact number"
                 required
                 name="phoneNumber"
                 phoneError={errors.phoneNumber}

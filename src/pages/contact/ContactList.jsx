@@ -4,6 +4,8 @@ import { formatDateTime } from '../../utils/dateFormats';
 import TableHeader from '../../atoms/table/TableHeader';
 import { IoMdAdd } from 'react-icons/io';
 import TableComponent from '../../atoms/table/Table';
+import CountryFlag from '../../atoms/common/CountryFlag';
+import { CiExport } from 'react-icons/ci';
 
 const ContactList = () => {
   const [contacts, setContacts] = useState([]);
@@ -15,6 +17,7 @@ const ContactList = () => {
       exportData: contact,
       name: <TruncatableFieldToolTip content={name} />,
       email: <TruncatableFieldToolTip content={email} />,
+      phoneCode: <CountryFlag dialingCode={phoneCode?.startsWith('+') ? phoneCode.slice(1) : phoneCode} />,
       phone: <TruncatableFieldToolTip content={`${phoneCode ? (phoneCode?.startsWith('+') ? phoneCode : `+${phoneCode}`) : ''} ${phone ? phone : '-'}`} />,
       sites: <TruncatableFieldToolTip content={sites.map((s) => `${s.name} (${s.host})`).join(', ')} />,
       createdAt: formatDateTime(createdAt),
@@ -25,9 +28,10 @@ const ContactList = () => {
   const columnConfig = [
     { id: 0, label: 'Name', key: 'name', dataKey: 'name' },
     { id: 1, label: 'Email', key: 'email', dataKey: 'email' },
+    { id: 6, label: 'Country', key: 'phoneCode', dataKey: 'phoneCode' },
     {
       id: 2,
-      label: 'Mobile Number',
+      label: 'Contact Number',
       key: 'phone',
       dataKey: 'phone',
       formatForExport: (value, data) => `${data.phoneCode ? (data.phoneCode?.startsWith('+') ? data.phoneCode : `+${data.phoneCode}`) : ''} ${value ? value : '-'}`
@@ -40,7 +44,17 @@ const ContactList = () => {
   return (
     <div className="py-5 px-8 overflow-x-hidden mb-10">
       <div className="w-full">
-        <TableHeader heading={'Contacts'} btn1={true} href1={'/contact/add-contact'} icon1={<IoMdAdd />} btnLabel1={'Add Contact'} />
+        <TableHeader
+          heading={'Contacts'}
+          btn1={true}
+          href1={'/contact/add-contact'}
+          icon1={<IoMdAdd />}
+          btnLabel1={'Add Contact'}
+          btn2={true}
+          href2={'/contact/import-contacts'}
+          icon2={<CiExport strokeWidth={0.5} />}
+          btnLabel2={'Import Contacts'}
+        />
         <div className="flex flex-col">
           <div className="-m-1.5 overflow-x-auto">
             <div className="p-1.5 min-w-full align-middle">

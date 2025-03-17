@@ -103,7 +103,7 @@ const AddWhatsAppTemplate = () => {
     if (!whatsAppTemplate.message) newErrors.message = 'Message is required';
     if (!whatsAppTemplate.site) {
       newErrors.phoneNumberId = 'Site is required';
-      if (!whatsAppTemplate.phoneNumberId) newErrors.phoneNumberId = 'Phone number is required';
+      if (!whatsAppTemplate.phoneNumberId) newErrors.phoneNumberId = 'Contact number is required';
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -266,8 +266,8 @@ const AddWhatsAppTemplate = () => {
 
               <DropDown
                 name={'phoneNumberId'}
-                label={'Phone Number'}
-                SummaryChild={<h5 className="text-primary p-0 m-0">Phone Number</h5>}
+                label={'Contact Number'}
+                SummaryChild={<h5 className="text-primary p-0 m-0">Contact Number</h5>}
                 dropdownList={phoneNumbers.map((phoneNumber) => ({ id: phoneNumber.phoneNumberId, showName: phoneNumber.phoneNumber, name: phoneNumber.phoneNumberId }))}
                 selected={whatsAppTemplate.phoneNumberId}
                 search={true}

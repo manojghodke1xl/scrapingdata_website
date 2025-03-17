@@ -11,7 +11,7 @@ const ParticipantRoutes = () => {
     <Routes>
       <Route path="/participant-list" element={<ParticipantList />} />
       <Route path="/add-participant" element={<AddParticipant />} />
-      <Route path="/bulk-import" element={<ParticipantBulkImport />} />
+      <Route path="/import-participants" element={<ParticipantBulkImport />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );

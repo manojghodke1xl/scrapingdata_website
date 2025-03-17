@@ -49,7 +49,7 @@ const AddNotifAgent = () => {
     if (!notifAgentDetials.email.trim()) newErrors.email = 'Email is required';
     if (!notifAgentDetials.name.trim()) newErrors.name = 'Name is required';
     if (notifAgentDetials.sites.length === 0) newErrors.sites = 'At least one site must be selected';
-    if (!notifAgentDetials.phoneNumber) newErrors.phoneNumber = 'Phone number is required';
+    if (!notifAgentDetials.phoneNumber) newErrors.phoneNumber = 'Contact number is required';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -139,8 +139,8 @@ const AddNotifAgent = () => {
               errorMessage={errors.email}
             />
             <PhoneInputField
-              label="Mobile Number"
-              placeholder="Mobile Number"
+              label="Contact Number"
+              placeholder="Contact Number"
               name="mobile"
               required
               value={notifAgentDetials.phoneCode + notifAgentDetials.phoneNumber}

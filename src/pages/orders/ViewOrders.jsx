@@ -110,7 +110,7 @@ const ViewOrders = () => {
           </div>
           <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div>
-              <h1 className="font-semibold text-primary">Phone Number</h1>
+              <h1 className="font-semibold text-primary">Contact Number</h1>
               {order?.phoneCode && order?.phone ? (
                 <a
                   className="text-placeholder font-normal"
@@ -119,7 +119,7 @@ const ViewOrders = () => {
                   {(order.phoneCode ? (order.phoneCode.startsWith('+') ? order.phoneCode : '+' + order.phoneCode) : '') + ' ' + order.phone.replace(/\s+/g, '')}
                 </a>
               ) : (
-                <p className="text-placeholder font-normal">No phone number available</p>
+                <p className="text-placeholder font-normal">No contact number available</p>
               )}
             </div>
             <div>

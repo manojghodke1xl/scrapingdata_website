@@ -1,6 +1,5 @@
 import { useState, useRef } from 'react';
 import { showNotification } from '../../utils/showNotification';
-import { FiCopy } from 'react-icons/fi';
 
 const TruncatableFieldToolTip = ({ content = '', maxLength = 20 }) => {
   const [showTooltip, setShowTooltip] = useState(false);
@@ -22,7 +21,6 @@ const TruncatableFieldToolTip = ({ content = '', maxLength = 20 }) => {
             }}
           >
             ...
-            <FiCopy className="text-xl text-primary" />
           </button>
         )}
       </span>

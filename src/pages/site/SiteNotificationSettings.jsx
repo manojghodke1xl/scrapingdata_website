@@ -75,10 +75,10 @@ const SitesNotificationSettings = () => {
     const newErrors = {};
     if (!siteNotification.site) newErrors.site = 'Please select a site.';
     if (siteNotification.adminEnquiryEmailTemplate && siteNotification.adminEnquiryEmails.length === 0) newErrors.forwardEmails = 'Please enter at least one email.';
-    if (siteNotification.adminEnquiryWhatsAppTemplate && siteNotification.adminEnquiryPhoneNumber.length === 0) newErrors.phoneError = 'Please enter at least one phone number.';
+    if (siteNotification.adminEnquiryWhatsAppTemplate && siteNotification.adminEnquiryPhoneNumber.length === 0) newErrors.phoneError = 'Please enter at least one contact number.';
     if (siteNotification.adminSubscriberEmailTemplate && siteNotification.adminSubscriberEmails.length === 0) newErrors.forwardEmails = 'Please enter at least one email.';
     if (siteNotification.adminSubscriberWhatsAppTemplate && siteNotification.adminSubscriberPhoneNumber.length === 0)
-      newErrors.phoneError = 'Please enter at least one phone number.';
+      newErrors.phoneError = 'Please enter at least one contact number.';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -444,14 +444,14 @@ const SitesNotificationSettings = () => {
                       />
 
                       <MultiSelectCheckbox
-                        formLabel={'Select Admin Enquiry Mobile Numbers'}
+                        formLabel={'Select Admin Enquiry Contact Numbers'}
                         options={templateState.notificationAgent?.map((agent) => ({
                           name: `${agent.name} (${agent.phoneCode ? (agent.phoneCode?.startsWith('+') ? agent.phoneCode : `+${agent.phoneCode}`) : ''} ${
                             agent.phoneNumber ? agent.phoneNumber : '-'
                           })`,
                           _id: agent._id
                         }))}
-                        label="Select Mobile Number"
+                        label="Select Contact Number"
                         onChange={(selected) => {
                           setSiteNotification((prev) => ({ ...prev, adminEnquiryPhoneNumber: selected }));
                           if (errors.adminEnquiryPhoneNumber) setErrors((prev) => ({ ...prev, adminEnquiryPhoneNumber: '' }));
@@ -533,14 +533,14 @@ const SitesNotificationSettings = () => {
                       />
 
                       <MultiSelectCheckbox
-                        formLabel={'Select Admin Subscriber Mobile Numbers'}
+                        formLabel={'Select Admin Subscriber Contact Numbers'}
                         options={templateState.notificationAgent?.map((agent) => ({
                           name: `${agent.name} (${agent.phoneCode ? (agent.phoneCode?.startsWith('+') ? agent.phoneCode : `+${agent.phoneCode}`) : ''} ${
                             agent.phoneNumber ? agent.phoneNumber : '-'
                           })`,
                           _id: agent._id
                         }))}
-                        label="Select Mobile Number"
+                        label="Select Contact Number"
                         onChange={(selected) => {
                           setSiteNotification((prev) => ({ ...prev, adminSubscriberPhoneNumber: selected }));
                           if (errors.adminSubscriberPhoneNumber) setErrors((prev) => ({ ...prev, adminSubscriberPhoneNumber: '' }));
@@ -622,14 +622,14 @@ const SitesNotificationSettings = () => {
                       />
 
                       <MultiSelectCheckbox
-                        formLabel={'Select Admin Subscriber Mobile Numbers'}
+                        formLabel={'Select Admin Subscriber Contact Numbers'}
                         options={templateState.notificationAgent?.map((agent) => ({
                           name: `${agent.name} (${agent.phoneCode ? (agent.phoneCode?.startsWith('+') ? agent.phoneCode : `+${agent.phoneCode}`) : ''} ${
                             agent.phoneNumber ? agent.phoneNumber : '-'
                           })`,
                           _id: agent._id
                         }))}
-                        label="Select Mobile Number"
+                        label="Select Contact Number"
                         onChange={(selected) => {
                           setSiteNotification((prev) => ({ ...prev, adminProductPhoneNumber: selected }));
                           if (errors.adminProductPhoneNumber) setErrors((prev) => ({ ...prev, adminProductPhoneNumber: '' }));

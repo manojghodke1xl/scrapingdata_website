@@ -57,7 +57,7 @@ const BookingList = () => {
     { id: 3, label: 'Country', key: 'phoneCode', dataKey: 'phoneCode', formatForExport: (value) => (value.startsWith('+') ? value : `+${value}`) },
     {
       id: 4,
-      label: 'Mobile Number',
+      label: 'Contact Number',
       key: 'phoneNumber',
       dataKey: 'phoneNumber',
       formatForExport: (value, data) => `${data.phoneCode ? (data.phoneCode?.startsWith('+') ? data.phoneCode : `+${data.phoneCode}`) : ''} ${value ? value : '-'}`

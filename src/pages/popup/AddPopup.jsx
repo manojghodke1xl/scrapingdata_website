@@ -186,103 +186,97 @@ const AddPopup = () => {
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className=" text-primary">Popup Details</span>
           </div>
-          <div className="w-full">
-            <div>
-              <FormField
-                label="Name"
-                type="text"
-                id="title"
-                name="title"
-                required
-                placeholder="Name"
-                onChange={(e) => {
-                  setPopupDetails((prev) => ({ ...prev, name: e.target.value }));
-                  if (errors.name) setErrors((prev) => ({ ...prev, name: '' }));
-                }}
-                value={popupDetails.name}
-                errorMessage={errors.name}
-              />
-              <DropDown
-                mt="mt-5"
-                name="position"
-                label={'Position'}
-                SummaryChild={<h5 className="p-0 m-0 text-primary">{popupDetails.positionObj ? popupDetails.positionObj.showName : 'Position'}</h5>}
-                dropdownList={[
-                  { id: 0, showName: 'Center-popup', name: 'center-popup' },
-                  { id: 1, showName: 'Topbar-Notifications', name: 'topbar-notifications' }
-                ]}
-                selected={popupDetails.position}
-                search={true}
-                commonFunction={(e) => {
-                  setPopupDetails((prev) => ({ ...prev, position: e.name, positionObj: e }));
-                  if (errors.position) setErrors((prev) => ({ ...prev, position: '' }));
-                }}
-                error={errors.position}
-              />
+          <div className="w-full flex flex-col gap-y-5">
+            <FormField
+              label="Name"
+              type="text"
+              id="title"
+              name="title"
+              required
+              placeholder="Name"
+              onChange={(e) => {
+                setPopupDetails((prev) => ({ ...prev, name: e.target.value }));
+                if (errors.name) setErrors((prev) => ({ ...prev, name: '' }));
+              }}
+              value={popupDetails.name}
+              errorMessage={errors.name}
+            />
+            <DropDown
+              name="position"
+              label={'Position'}
+              SummaryChild={<h5 className="p-0 m-0 text-primary">{popupDetails.positionObj ? popupDetails.positionObj.showName : 'Position'}</h5>}
+              dropdownList={[
+                { id: 0, showName: 'Center-popup', name: 'center-popup' },
+                { id: 1, showName: 'Topbar-Notifications', name: 'topbar-notifications' }
+              ]}
+              selected={popupDetails.position}
+              search={true}
+              commonFunction={(e) => {
+                setPopupDetails((prev) => ({ ...prev, position: e.name, positionObj: e }));
+                if (errors.position) setErrors((prev) => ({ ...prev, position: '' }));
+              }}
+              error={errors.position}
+            />
 
-              <DropDown
-                mt="mt-5"
-                label={'Content Type'}
-                name="contentType"
-                SummaryChild={<h5 className="p-0 m-0 text-primary">{popupDetails.contentObj ? popupDetails.contentObj.showName : 'Basic'}</h5>}
-                dropdownList={[
-                  { id: 0, showName: 'Basic', name: 'basic' },
-                  { id: 1, showName: 'Guide', name: 'guide' },
-                  { id: 2, showName: 'Case Study', name: 'casestudy' }
-                ]}
-                selected={popupDetails.contentType}
-                search={true}
-                commonFunction={(e) =>
-                  setPopupDetails((prev) => ({
-                    ...prev,
-                    contentType: e.name,
-                    contentObj: e,
-                    ...(e.name === 'casestudy'
-                      ? { allGlobalGuides: false, allSiteGuides: false, moreGuides: [], image: undefined, imageFile: null }
-                      : e.name === 'guide'
-                      ? { allGlobalCaseStudy: false, allSiteCaseStudy: false, moreCaseStudies: [], image: undefined, imageFile: null }
-                      : {
-                          allGlobalGuides: false,
-                          allSiteGuides: false,
-                          moreGuides: [],
-                          allGlobalCaseStudy: false,
-                          allSiteCaseStudy: false,
-                          moreCaseStudies: []
-                        })
-                  }))
-                }
-              />
+            <DropDown
+              label={'Content Type'}
+              name="contentType"
+              SummaryChild={<h5 className="p-0 m-0 text-primary">{popupDetails.contentObj ? popupDetails.contentObj.showName : 'Basic'}</h5>}
+              dropdownList={[
+                { id: 0, showName: 'Basic', name: 'basic' },
+                { id: 1, showName: 'Guide', name: 'guide' },
+                { id: 2, showName: 'Case Study', name: 'casestudy' }
+              ]}
+              selected={popupDetails.contentType}
+              search={true}
+              commonFunction={(e) =>
+                setPopupDetails((prev) => ({
+                  ...prev,
+                  contentType: e.name,
+                  contentObj: e,
+                  ...(e.name === 'casestudy'
+                    ? { allGlobalGuides: false, allSiteGuides: false, moreGuides: [], image: undefined, imageFile: null }
+                    : e.name === 'guide'
+                    ? { allGlobalCaseStudy: false, allSiteCaseStudy: false, moreCaseStudies: [], image: undefined, imageFile: null }
+                    : {
+                        allGlobalGuides: false,
+                        allSiteGuides: false,
+                        moreGuides: [],
+                        allGlobalCaseStudy: false,
+                        allSiteCaseStudy: false,
+                        moreCaseStudies: []
+                      })
+                }))
+              }
+            />
 
-              {popupDetails.contentType === 'basic' && (
-                <div>
-                  <FormField
-                    divClassName="mt-5"
-                    label="Title"
-                    type="text"
-                    id="title"
-                    name="title"
-                    placeholder="Title"
-                    onChange={(e) => {
-                      setPopupDetails((prev) => ({ ...prev, title: e.target.value }));
-                      if (errors.title) setErrors((prev) => ({ ...prev, title: '' }));
-                    }}
-                    value={popupDetails.title}
-                    errorMessage={errors.title}
-                  />
-                  <FileUpload
-                    divClassName={'mt-5'}
-                    logo={<FaRegImage className="text-primary text-2xl" />}
-                    error={errors.image}
-                    setErrors={setErrors}
-                    acceptedTypes={['.jpeg', '.png']}
-                    fieldName="image"
-                    isImage
-                    setDetails={setPopupDetails}
-                    imagePreviewUrl={popupDetails.imageFile?.url}
-                  />
-                </div>
-              )}
-            </div>
+            {popupDetails.contentType === 'basic' && (
+              <>
+                <FormField
+                  label="Title"
+                  type="text"
+                  id="title"
+                  name="title"
+                  placeholder="Title"
+                  onChange={(e) => {
+                    setPopupDetails((prev) => ({ ...prev, title: e.target.value }));
+                    if (errors.title) setErrors((prev) => ({ ...prev, title: '' }));
+                  }}
+                  value={popupDetails.title}
+                  errorMessage={errors.title}
+                />
+                <FileUpload
+                  logo={<FaRegImage className="text-primary text-2xl" />}
+                  error={errors.image}
+                  setErrors={setErrors}
+                  acceptedTypes={['.jpeg', '.png']}
+                  fieldName="image"
+                  isImage
+                  setDetails={setPopupDetails}
+                  imagePreviewUrl={popupDetails.imageFile?.url}
+                />
+              </>
+            )}
           </div>
         </div>
       </div>
@@ -292,57 +286,52 @@ const AddPopup = () => {
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className="block text-primary">Trigger Conditions</span>
           </div>
-          <div className="w-full">
-            <div className="w-full">
-              <FormField
-                label="After Page Load"
-                type="number"
-                id="afterPageLoad "
-                name="afterPageLoad "
-                placeholder="After Page Load"
-                min={0}
-                onChange={(e) => setPopupDetails((prev) => ({ ...prev, afterPageLoad: e.target.value }))}
-                value={popupDetails.afterPageLoad}
-              />
-              <FormField
-                divClassName={'mt-5'}
-                label="At Page Scroll"
-                type="number"
-                id="atPageScroll"
-                name="atPageScroll"
-                placeholder="At Page Scroll"
-                min={0}
-                onChange={(e) => setPopupDetails((prev) => ({ ...prev, atPageScroll: e.target.value }))}
-                value={popupDetails.atPageScroll}
-              />
+          <div className="w-full flex flex-col gap-y-5">
+            <FormField
+              label="After Page Load"
+              type="number"
+              id="afterPageLoad "
+              name="afterPageLoad "
+              placeholder="After Page Load"
+              min={0}
+              onChange={(e) => setPopupDetails((prev) => ({ ...prev, afterPageLoad: e.target.value }))}
+              value={popupDetails.afterPageLoad}
+            />
+            <FormField
+              label="At Page Scroll"
+              type="number"
+              id="atPageScroll"
+              name="atPageScroll"
+              placeholder="At Page Scroll"
+              min={0}
+              onChange={(e) => setPopupDetails((prev) => ({ ...prev, atPageScroll: e.target.value }))}
+              value={popupDetails.atPageScroll}
+            />
 
-              <FormField
-                divClassName={'mt-5'}
-                label="Again when Cancelled"
-                type="number"
-                id="againWhenCanceled"
-                name="againWhenCanceled"
-                placeholder="Again when Cancelled"
-                min={0}
-                onChange={(e) => setPopupDetails((prev) => ({ ...prev, againWhenCanceled: e.target.value }))}
-                value={popupDetails.againWhenCanceled}
-              />
+            <FormField
+              label="Again when Cancelled"
+              type="number"
+              id="againWhenCanceled"
+              name="againWhenCanceled"
+              placeholder="Again when Cancelled"
+              min={0}
+              onChange={(e) => setPopupDetails((prev) => ({ ...prev, againWhenCanceled: e.target.value }))}
+              value={popupDetails.againWhenCanceled}
+            />
 
-              <DropDown
-                mt="mt-5"
-                label={'Show on Device Type'}
-                name="type"
-                SummaryChild={<h5 className="p-0 m-0 text-primary">{popupDetails.deviceObj ? popupDetails.deviceObj.showName : 'All'}</h5>}
-                dropdownList={[
-                  { id: 0, showName: 'All', name: 'all' },
-                  { id: 1, showName: 'Desktop', name: 'desktop' },
-                  { id: 2, showName: 'Mobile', name: 'mobile' }
-                ]}
-                selected={popupDetails.showOnDeviceType}
-                search={true}
-                commonFunction={(e) => setPopupDetails((prev) => ({ ...prev, showOnDeviceType: e.name, deviceObj: e }))}
-              />
-            </div>
+            <DropDown
+              label={'Show on Device Type'}
+              name="type"
+              SummaryChild={<h5 className="p-0 m-0 text-primary">{popupDetails.deviceObj ? popupDetails.deviceObj.showName : 'All'}</h5>}
+              dropdownList={[
+                { id: 0, showName: 'All', name: 'all' },
+                { id: 1, showName: 'Desktop', name: 'desktop' },
+                { id: 2, showName: 'Mobile', name: 'mobile' }
+              ]}
+              selected={popupDetails.showOnDeviceType}
+              search={true}
+              commonFunction={(e) => setPopupDetails((prev) => ({ ...prev, showOnDeviceType: e.name, deviceObj: e }))}
+            />
           </div>
         </div>
       </div>
@@ -352,29 +341,26 @@ const AddPopup = () => {
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className="block text-primary">Content Settings</span>
           </div>
-          <div className="w-full">
-            <div className="w-full">
-              <MultiSelectCheckbox formLabel="Settings" options={getOptions()} label="Select Settings" onChange={handleSettingsChange} selected={getSelectedSettings()} />
+          <div className="w-full flex flex-col gap-y-5">
+            <MultiSelectCheckbox formLabel="Settings" options={getOptions()} label="Select Settings" onChange={handleSettingsChange} selected={getSelectedSettings()} />
 
-              {popupDetails.contentType === 'guide' || popupDetails.contentType === 'casestudy' ? (
-                <MultiSelectCheckbox
-                  divClassName={'mt-5'}
-                  formLabel={`Additional ${popupDetails.contentType === 'guide' ? 'Guides' : 'Case Studies'}`}
-                  options={contentDetials.map((content) => ({
-                    _id: content._id,
-                    name: content.title
-                  }))}
-                  label={`Select ${popupDetails.contentType === 'guide' ? 'Guides' : 'Case Studies'}`}
-                  onChange={(selected) => {
-                    setPopupDetails((prev) => ({
-                      ...prev,
-                      [popupDetails.contentType === 'guide' ? 'moreGuides' : 'moreCaseStudies']: selected
-                    }));
-                  }}
-                  selected={popupDetails.contentType === 'guide' ? popupDetails.moreGuides : popupDetails.moreCaseStudies}
-                />
-              ) : null}
-            </div>
+            {popupDetails.contentType === 'guide' || popupDetails.contentType === 'casestudy' ? (
+              <MultiSelectCheckbox
+                formLabel={`Additional ${popupDetails.contentType === 'guide' ? 'Guides' : 'Case Studies'}`}
+                options={contentDetials.map((content) => ({
+                  _id: content._id,
+                  name: content.title
+                }))}
+                label={`Select ${popupDetails.contentType === 'guide' ? 'Guides' : 'Case Studies'}`}
+                onChange={(selected) => {
+                  setPopupDetails((prev) => ({
+                    ...prev,
+                    [popupDetails.contentType === 'guide' ? 'moreGuides' : 'moreCaseStudies']: selected
+                  }));
+                }}
+                selected={popupDetails.contentType === 'guide' ? popupDetails.moreGuides : popupDetails.moreCaseStudies}
+              />
+            ) : null}
           </div>
         </div>
       </div>
@@ -384,24 +370,21 @@ const AddPopup = () => {
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className="block text-primary">Date & Time Settings</span>
           </div>
-          <div className="w-full">
-            <div className="w-full">
-              <DateTimePicker
-                id={'publishDate'}
-                label={'Publish Date'}
-                placeholder={formatDateTime(new Date())}
-                selectedDateTime={popupDetails.publishDate}
-                setSelectedDateTime={(e) => setPopupDetails((prev) => ({ ...prev, publishDate: e }))}
-              />
-              <DateTimePicker
-                divClassName={'mt-5'}
-                id={'archiveDate'}
-                label={'Archive Date'}
-                placeholder={formatDateTime(new Date())}
-                selectedDateTime={popupDetails.archiveDate}
-                setSelectedDateTime={(e) => setPopupDetails((prev) => ({ ...prev, archiveDate: e }))}
-              />
-            </div>
+          <div className="w-full flex flex-col gap-y-5">
+            <DateTimePicker
+              id={'publishDate'}
+              label={'Publish Date'}
+              placeholder={formatDateTime(new Date())}
+              selectedDateTime={popupDetails.publishDate}
+              setSelectedDateTime={(e) => setPopupDetails((prev) => ({ ...prev, publishDate: e }))}
+            />
+            <DateTimePicker
+              id={'archiveDate'}
+              label={'Archive Date'}
+              placeholder={formatDateTime(new Date())}
+              selectedDateTime={popupDetails.archiveDate}
+              setSelectedDateTime={(e) => setPopupDetails((prev) => ({ ...prev, archiveDate: e }))}
+            />
           </div>
         </div>
       </div>
@@ -411,45 +394,42 @@ const AddPopup = () => {
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className="block text-primary">Site & Status</span>
           </div>
-          <div className="w-full">
-            <div className="w-full">
-              <DropDown
-                name="Sites"
-                label={'Select Site'}
-                dropdownList={availableSites
-                  .filter((site) => site.modules?.some((module) => module.popup === true))
-                  .map((site) => ({ id: site._id, showName: `${site.name} (${site.host})`, name: site._id }))}
-                SummaryChild={<h5 className="p-0 m-0 text-primary">{popupDetails.siteObj ? popupDetails.siteObj.showName : 'Sites'}</h5>}
-                search={true}
-                selected={popupDetails.site}
-                commonFunction={(e) => {
-                  setPopupDetails((prev) => ({ ...prev, site: e.name, siteObj: e }));
-                  if (errors.site) setErrors((prev) => ({ ...prev, site: '' }));
+          <div className="w-full flex flex-col gap-y-5">
+            <DropDown
+              name="Sites"
+              label={'Select Site'}
+              dropdownList={availableSites
+                .filter((site) => site.modules?.some((module) => module.popup === true))
+                .map((site) => ({ id: site._id, showName: `${site.name} (${site.host})`, name: site._id }))}
+              SummaryChild={<h5 className="p-0 m-0 text-primary">{popupDetails.siteObj ? popupDetails.siteObj.showName : 'Sites'}</h5>}
+              search={true}
+              selected={popupDetails.site}
+              commonFunction={(e) => {
+                setPopupDetails((prev) => ({ ...prev, site: e.name, siteObj: e }));
+                if (errors.site) setErrors((prev) => ({ ...prev, site: '' }));
+              }}
+              error={errors.site}
+            />
+
+            {popupDetails.contentType === 'basic' && (
+              <TextareaComponent
+                label="Description"
+                id="description"
+                name="description"
+                placeholder="Enter a description..."
+                onChange={(e) => {
+                  setPopupDetails((prev) => ({ ...prev, desc: e.target.value }));
                 }}
-                error={errors.site}
+                value={popupDetails.desc}
               />
+            )}
 
-              {popupDetails.contentType === 'basic' && (
-                <TextareaComponent
-                  divClassName={'mt-5'}
-                  label="Description"
-                  id="description"
-                  name="description"
-                  placeholder="Enter a description..."
-                  onChange={(e) => {
-                    setPopupDetails((prev) => ({ ...prev, desc: e.target.value }));
-                  }}
-                  value={popupDetails.desc}
-                />
-              )}
-
-              <ToggleComponent
-                label={'Is Popup Active?'}
-                isEnableState={popupDetails.isActive}
-                tooltipContent={'If popup is active, it will be visible on the website.'}
-                setIsEnableState={(value) => setPopupDetails((prev) => ({ ...prev, isActive: value }))}
-              />
-            </div>
+            <ToggleComponent
+              label={'Is Popup Active?'}
+              isEnableState={popupDetails.isActive}
+              tooltipContent={'If popup is active, it will be visible on the website.'}
+              setIsEnableState={(value) => setPopupDetails((prev) => ({ ...prev, isActive: value }))}
+            />
           </div>
         </div>
       </div>

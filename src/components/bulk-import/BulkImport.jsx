@@ -166,7 +166,7 @@ const BulkImport = ({ config }) => {
                     <h4 className="text-lg font-medium">Valid Data</h4>
                     <TableComponent
                       headers={headers}
-                      rows={getPaginatedData(importData.validData, paginationState.validDataPage, paginationState.validDataItemsPerPage)}
+                      rows={getPaginatedData(rows(importData.validData), paginationState.validDataPage, paginationState.validDataItemsPerPage)}
                       tableData={() => {}}
                       exportBtn={false}
                       shouldFetchData={false}

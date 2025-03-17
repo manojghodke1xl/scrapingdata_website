@@ -81,7 +81,7 @@ const AddAdvertisement = () => {
     const numericValue = value.replace(/\D/g, '');
     const requiredLength = countryData.format.replace(/[^.]/g, '').length;
     if (numericValue.length < requiredLength)
-      setErrors((prevErrors) => ({ ...prevErrors, mobile: `Mobile number must be at least ${requiredLength - countryData.dialCode.length} digits` }));
+      setErrors((prevErrors) => ({ ...prevErrors, mobile: `Contact number must be at least ${requiredLength - countryData.dialCode.length} digits` }));
     else setErrors((prevErrors) => ({ ...prevErrors, mobile: '' }));
 
     const mobile = numericValue.slice(countryData.dialCode.length);
@@ -141,9 +141,8 @@ const AddAdvertisement = () => {
               />
 
               <PhoneInputField
-                divClassName="mt-5"
-                label="Mobile Number"
-                placeholder="Mobile Number"
+                label="Contact Number"
+                placeholder="Contact Number"
                 name="mobile"
                 required
                 value={advertisementDetails.ccode + advertisementDetails.mobile}
@@ -184,23 +183,21 @@ const AddAdvertisement = () => {
             <span className=" text-primary">Additional Information</span>
           </div>
           <div className="w-full">
-            <div>
-              <DropDown
-                name="Sites"
-                label={'Select Site'}
-                dropdownList={availableSites
-                  .filter((site) => site.modules?.some((module) => module.events === true))
-                  .map((site) => ({ id: site._id, showName: `${site.name} (${site.host})`, name: site._id }))}
-                SummaryChild={<h5 className="p-0 m-0 text-primary">Sites</h5>}
-                search={true}
-                selected={advertisementDetails.site}
-                commonFunction={(e) => {
-                  setAdvertisementDetails((prev) => ({ ...prev, site: e.name }));
-                  if (errors.site) setErrors((prev) => ({ ...prev, site: '' }));
-                }}
-                error={errors.site}
-              />
-            </div>
+            <DropDown
+              name="Sites"
+              label={'Select Site'}
+              dropdownList={availableSites
+                .filter((site) => site.modules?.some((module) => module.events === true))
+                .map((site) => ({ id: site._id, showName: `${site.name} (${site.host})`, name: site._id }))}
+              SummaryChild={<h5 className="p-0 m-0 text-primary">Sites</h5>}
+              search={true}
+              selected={advertisementDetails.site}
+              commonFunction={(e) => {
+                setAdvertisementDetails((prev) => ({ ...prev, site: e.name }));
+                if (errors.site) setErrors((prev) => ({ ...prev, site: '' }));
+              }}
+              error={errors.site}
+            />
           </div>
         </div>
       </div>
@@ -211,18 +208,15 @@ const AddAdvertisement = () => {
             <span className=" text-primary">Advertisement Message</span>
           </div>
           <div className="w-full">
-            <div>
-              <TextareaComponent
-                divClassName="mt-5"
-                label="Message"
-                maxLength={100}
-                placeholder="Enter a message..."
-                id="adverstisementMessage"
-                name="adverstisementMessage"
-                value={advertisementDetails.adverstisementMessage}
-                onChange={(e) => setAdvertisementDetails((prev) => ({ ...prev, adverstisementMessage: e.target.value }))}
-              />
-            </div>
+            <TextareaComponent
+              label="Message"
+              maxLength={100}
+              placeholder="Enter a message..."
+              id="adverstisementMessage"
+              name="adverstisementMessage"
+              value={advertisementDetails.adverstisementMessage}
+              onChange={(e) => setAdvertisementDetails((prev) => ({ ...prev, adverstisementMessage: e.target.value }))}
+            />
           </div>
         </div>
       </div>

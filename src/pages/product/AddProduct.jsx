@@ -222,28 +222,26 @@ const AddProduct = () => {
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className=" text-primary ">Site Association</span>
           </div>
-          <div className="w-full">
-            <div>
-              {id && !isDuplicate ? (
-                <h1 className="text-xl flex items-center gap-2 font-bold ">
-                  <span className="text-primary">Site:</span>
-                  <span className="text-primary font-semibold">{`${productDetails?.siteData?.name} ( ${productDetails?.siteData?.host} )`}</span>
-                </h1>
-              ) : (
-                <DropDown
-                  name="Sites"
-                  dropdownList={availableSites.map((site) => ({ id: site._id, showName: `${site.name} (${site.host})`, name: site._id }))}
-                  SummaryChild={<h5 className="p-0 m-0 text-primary">Sites</h5>}
-                  search={true}
-                  selected={productDetails.site}
-                  commonFunction={(e) => {
-                    setProductDetails((prev) => ({ ...prev, site: e.name }));
-                    if (errors.site) setErrors((prev) => ({ ...prev, site: '' }));
-                  }}
-                  error={errors.site}
-                />
-              )}
-            </div>
+          <div className="w-full flex flex-col gap-y-5">
+            {id && !isDuplicate ? (
+              <h1 className="text-xl flex items-center gap-2 font-bold ">
+                <span className="text-primary">Site:</span>
+                <span className="text-primary font-semibold">{`${productDetails?.siteData?.name} ( ${productDetails?.siteData?.host} )`}</span>
+              </h1>
+            ) : (
+              <DropDown
+                name="Sites"
+                dropdownList={availableSites.map((site) => ({ id: site._id, showName: `${site.name} (${site.host})`, name: site._id }))}
+                SummaryChild={<h5 className="p-0 m-0 text-primary">Sites</h5>}
+                search={true}
+                selected={productDetails.site}
+                commonFunction={(e) => {
+                  setProductDetails((prev) => ({ ...prev, site: e.name }));
+                  if (errors.site) setErrors((prev) => ({ ...prev, site: '' }));
+                }}
+                error={errors.site}
+              />
+            )}
           </div>
         </div>
       </div>
@@ -253,73 +251,71 @@ const AddProduct = () => {
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className=" text-primary">Product Information</span>
           </div>
-          <div className="w-full">
-            <div className="flex flex-col gap-y-5">
-              <FormField
-                label="Product Name"
-                type="text"
-                id="name"
-                name="name"
-                required
-                placeholder="Product Name"
-                onChange={(e) => {
-                  setProductDetails((prev) => ({ ...prev, name: e.target.value }));
-                  if (errors.name) setErrors((prev) => ({ ...prev, name: '' }));
-                }}
-                value={productDetails.name}
-                errorMessage={errors.name}
-              />
-              <FormField
-                label={'Product SKU'}
-                type="text"
-                id="sku"
-                name="sku"
-                required
-                placeholder="Product SKU"
-                onChange={(e) => {
-                  setProductDetails((prev) => ({ ...prev, sku: e.target.value }));
-                  if (errors.sku) setErrors((prev) => ({ ...prev, sku: '' }));
-                }}
-                value={productDetails.sku}
-                errorMessage={errors.sku}
-              />
+          <div className="w-full flex flex-col gap-y-5">
+            <FormField
+              label="Product Name"
+              type="text"
+              id="name"
+              name="name"
+              required
+              placeholder="Product Name"
+              onChange={(e) => {
+                setProductDetails((prev) => ({ ...prev, name: e.target.value }));
+                if (errors.name) setErrors((prev) => ({ ...prev, name: '' }));
+              }}
+              value={productDetails.name}
+              errorMessage={errors.name}
+            />
+            <FormField
+              label={'Product SKU'}
+              type="text"
+              id="sku"
+              name="sku"
+              required
+              placeholder="Product SKU"
+              onChange={(e) => {
+                setProductDetails((prev) => ({ ...prev, sku: e.target.value }));
+                if (errors.sku) setErrors((prev) => ({ ...prev, sku: '' }));
+              }}
+              value={productDetails.sku}
+              errorMessage={errors.sku}
+            />
 
-              <TextareaComponent
-                label="Short Description"
-                placeholder="Enter a description..."
-                id="shortDescription"
-                name="shortDescription"
-                value={productDetails.shortDescription}
-                onChange={(e) => setProductDetails((prev) => ({ ...prev, shortDescription: e.target.value }))}
-                errorMessage={errors.shortDescription}
-                maxLength={100}
-              />
+            <TextareaComponent
+              label="Short Description"
+              placeholder="Enter a description..."
+              id="shortDescription"
+              name="shortDescription"
+              value={productDetails.shortDescription}
+              onChange={(e) => setProductDetails((prev) => ({ ...prev, shortDescription: e.target.value }))}
+              errorMessage={errors.shortDescription}
+              maxLength={100}
+            />
 
-              <TextareaComponent
-                label="Description"
-                placeholder="Enter a description..."
-                id="info"
-                name="info"
-                value={productDetails.description}
-                onChange={(e) => setProductDetails((prev) => ({ ...prev, description: e.target.value }))}
-                errorMessage={errors.description}
-              />
+            <TextareaComponent
+              label="Description"
+              placeholder="Enter a description..."
+              id="info"
+              name="info"
+              value={productDetails.description}
+              onChange={(e) => setProductDetails((prev) => ({ ...prev, description: e.target.value }))}
+              errorMessage={errors.description}
+            />
 
-              <FormField
-                label="Maximum Quantity of Product purchase per order"
-                type="number"
-                id="maximumQuantity"
-                name="maximumQuantity"
-                placeholder="Maximum Quantity"
-                min={0}
-                onChange={(e) => {
-                  setProductDetails((prev) => ({ ...prev, maximumQuantity: e.target.value }));
-                  if (errors.maximumQuantity) setErrors((prev) => ({ ...prev, maximumQuantity: '' }));
-                }}
-                value={productDetails.maximumQuantity}
-                errorMessage={errors.maximumQuantity}
-              />
-            </div>
+            <FormField
+              label="Maximum Quantity of Product purchase per order"
+              type="number"
+              id="maximumQuantity"
+              name="maximumQuantity"
+              placeholder="Maximum Quantity"
+              min={0}
+              onChange={(e) => {
+                setProductDetails((prev) => ({ ...prev, maximumQuantity: e.target.value }));
+                if (errors.maximumQuantity) setErrors((prev) => ({ ...prev, maximumQuantity: '' }));
+              }}
+              value={productDetails.maximumQuantity}
+              errorMessage={errors.maximumQuantity}
+            />
           </div>
         </div>
       </div>
@@ -418,7 +414,6 @@ const AddProduct = () => {
 
             {productDetails.crossSell && (
               <MultiSelectCheckbox
-                divClassName={'mt-5'}
                 label={'Select cross-sell Products'}
                 options={relatedProducts}
                 selected={productDetails.crossSellProducts}
@@ -615,69 +610,64 @@ const AddProduct = () => {
             <div className="sm:w-7/12 w-full flex flex-col">
               <span className=" text-primary">Shipping Charges</span>
             </div>
-            <div className="w-full">
-              <div>
-                <div>
-                  {productDetails.shippingDetails.map((shipping) => (
-                    <div key={shipping.destination}>
-                      <Accordion
-                        open={isOpen === shipping.destination}
-                        icon={<IoIosArrowDown className={`${isOpen === shipping.destination ? 'rotate-180' : ''} h-4 w-4 transition-transform`} />}
-                        className={`bg-transparent text-base mt-5 ${isOpen === shipping.destination ? 'bg-grey border border-primary' : ''}  rounded-xl`}
-                      >
-                        <AccordionHeader
-                          onClick={() => setIsOpen(isOpen === shipping.destination ? null : shipping.destination)}
-                          className={`py-2.5 px-3 text-left text-base flex gap-2 items-center border ${
-                            isOpen === shipping.destination ? 'rounded-t-xl' : 'rounded-xl'
-                          } border-primary shadow-none focus:outline-none bg-inherit text-primary`}
-                        >
-                          <div className="flex gap-4 items-center">
-                            <span>{capitalizeFirstLetter(shipping.destination === 'restOfTheWorld' ? 'Rest of the World' : shipping.destination)}</span>
-                          </div>
-                        </AccordionHeader>
-                        <AccordionBody className="space-y-1 p-4">
-                          <div className="flex md:flex-row flex-col items-center justify-between md:gap-5">
-                            {productDetails.currencies.map((currency) => (
-                              <div key={currency}>
-                                <FormField
-                                  divClassName={'mt-2'}
-                                  label={`Charges (${currency})`}
-                                  type="number"
-                                  id={`charges-${shipping.destination}-${currency}`}
-                                  name={`charges-${shipping.destination}-${currency}`}
-                                  placeholder={`Charges (${currency})`}
-                                  min={0}
-                                  onChange={(e) => {
-                                    const chargeValue = e.target.value;
-                                    setProductDetails((prev) => {
-                                      const updatedShippingDetails = prev.shippingDetails.map((detail) => {
-                                        if (detail.destination === shipping.destination) {
-                                          return {
-                                            ...detail,
-                                            charges: {
-                                              ...detail.charges,
-                                              [currency]: chargeValue
-                                            }
-                                          };
+            <div className="w-full flex flex-col gap-y-5">
+              {productDetails.shippingDetails.map((shipping) => (
+                <div key={shipping.destination}>
+                  <Accordion
+                    open={isOpen === shipping.destination}
+                    icon={<IoIosArrowDown className={`${isOpen === shipping.destination ? 'rotate-180' : ''} h-4 w-4 transition-transform`} />}
+                    className={`bg-transparent text-base ${isOpen === shipping.destination ? 'bg-grey border border-primary' : ''}  rounded-xl`}
+                  >
+                    <AccordionHeader
+                      onClick={() => setIsOpen(isOpen === shipping.destination ? null : shipping.destination)}
+                      className={`py-2.5 px-3 text-left text-base flex gap-2 items-center border ${
+                        isOpen === shipping.destination ? 'rounded-t-xl' : 'rounded-xl'
+                      } border-primary shadow-none focus:outline-none bg-inherit text-primary`}
+                    >
+                      <div className="flex gap-4 items-center">
+                        <span>{capitalizeFirstLetter(shipping.destination === 'restOfTheWorld' ? 'Rest of the World' : shipping.destination)}</span>
+                      </div>
+                    </AccordionHeader>
+                    <AccordionBody className="space-y-1 p-4">
+                      <div className="flex md:flex-row flex-col items-center justify-between md:gap-5">
+                        {productDetails.currencies.map((currency) => (
+                          <div key={currency} className="flex flex-col gap-y-5">
+                            <FormField
+                              label={`Charges (${currency})`}
+                              type="number"
+                              id={`charges-${shipping.destination}-${currency}`}
+                              name={`charges-${shipping.destination}-${currency}`}
+                              placeholder={`Charges (${currency})`}
+                              min={0}
+                              onChange={(e) => {
+                                const chargeValue = e.target.value;
+                                setProductDetails((prev) => {
+                                  const updatedShippingDetails = prev.shippingDetails.map((detail) => {
+                                    if (detail.destination === shipping.destination) {
+                                      return {
+                                        ...detail,
+                                        charges: {
+                                          ...detail.charges,
+                                          [currency]: chargeValue
                                         }
-                                        return detail;
-                                      });
-                                      return { ...prev, shippingDetails: updatedShippingDetails };
-                                    });
-                                    if (errors.charges?.[currency]) setErrors((prev) => ({ ...prev, charges: { ...prev.charges, [currency]: '' } }));
-                                  }}
-                                  value={productDetails.shippingDetails.find((detail) => detail.destination === shipping.destination)?.charges?.[currency] ?? 0}
-                                  errorMessage={errors.charges?.[currency]}
-                                />
-                              </div>
-                            ))}
+                                      };
+                                    }
+                                    return detail;
+                                  });
+                                  return { ...prev, shippingDetails: updatedShippingDetails };
+                                });
+                                if (errors.charges?.[currency]) setErrors((prev) => ({ ...prev, charges: { ...prev.charges, [currency]: '' } }));
+                              }}
+                              value={productDetails.shippingDetails.find((detail) => detail.destination === shipping.destination)?.charges?.[currency] ?? 0}
+                              errorMessage={errors.charges?.[currency]}
+                            />
                           </div>
-                        </AccordionBody>
-                      </Accordion>
-                    </div>
-                  ))}
+                        ))}
+                      </div>
+                    </AccordionBody>
+                  </Accordion>
                 </div>
-              </div>
+              ))}
             </div>
           </div>
         </div>
@@ -689,31 +679,28 @@ const AddProduct = () => {
             <div className="sm:w-7/12 w-full flex flex-col">
               <span className=" text-primary">Stock and Availability</span>
             </div>
-            <div className="w-full">
-              <div>
-                <ToggleComponent
-                  label={'In Stock'}
-                  isEnableState={productDetails.inStock}
-                  tooltipContent={'If product is in stock, it will be visible to the users.'}
-                  setIsEnableState={(e) => setProductDetails((prev) => ({ ...prev, inStock: e }))}
-                  errorMessage={errors.inStock}
-                />
-                <FormField
-                  divClassName={'mt-5'}
-                  label="Stock"
-                  type="number"
-                  id="stock"
-                  name="stock"
-                  placeholder="Stock"
-                  min={1}
-                  onChange={(e) => {
-                    setProductDetails((prev) => ({ ...prev, stock: e.target.value }));
-                    if (errors.stock) setErrors((prev) => ({ ...prev, stock: '' }));
-                  }}
-                  value={productDetails.stock}
-                  errorMessage={errors.stock}
-                />
-              </div>
+            <div className="w-full flex flex-col gap-y-5">
+              <ToggleComponent
+                label={'In Stock'}
+                isEnableState={productDetails.inStock}
+                tooltipContent={'If product is in stock, it will be visible to the users.'}
+                setIsEnableState={(e) => setProductDetails((prev) => ({ ...prev, inStock: e }))}
+                errorMessage={errors.inStock}
+              />
+              <FormField
+                label="Stock"
+                type="number"
+                id="stock"
+                name="stock"
+                placeholder="Stock"
+                min={1}
+                onChange={(e) => {
+                  setProductDetails((prev) => ({ ...prev, stock: e.target.value }));
+                  if (errors.stock) setErrors((prev) => ({ ...prev, stock: '' }));
+                }}
+                value={productDetails.stock}
+                errorMessage={errors.stock}
+              />
             </div>
           </div>
         </div>

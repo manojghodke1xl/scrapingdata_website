@@ -234,7 +234,6 @@ const AddGuides = () => {
               errorMessage={errors.mailSubject}
             />
             <TextareaComponent
-              divClassName="mt-5"
               label="Body"
               placeholder="Body"
               id="mailBody"

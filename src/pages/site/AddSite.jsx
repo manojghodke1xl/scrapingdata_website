@@ -216,7 +216,7 @@ const AddSite = () => {
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className=" text-primary">Module Information</span>
           </div>
-          <div className="w-full">
+          <div className="w-full flex flex-col gap-y-5">
             <MultiSelectCheckbox
               options={moduleOptions}
               label={'Select Modules'}
@@ -234,7 +234,7 @@ const AddSite = () => {
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className=" text-primary">Webhook URLs</span>
           </div>
-          <div className="w-full">
+          <div className="w-full flex flex-col gap-y-5">
             <FormField
               label="Enquiry Webhook URL"
               type="url"
@@ -244,11 +244,10 @@ const AddSite = () => {
               onChange={(e) => setSiteDetails((prev) => ({ ...prev, enquiryWebhookUrl: e.target.value }))}
               value={siteDetails.enquiryWebhookUrl}
             />
-            <button onClick={() => setEnquiryModalOpen(true)} className="w-fit whitespace-nowrap rounded-xl bg-primary hover:bg-primary-hover text-white p-2 mt-2">
+            <button onClick={() => setEnquiryModalOpen(true)} className="w-fit whitespace-nowrap rounded-xl bg-primary hover:bg-primary-hover text-white p-2">
               Preview Data
             </button>
             <FormField
-              divClassName={'mt-5'}
               label="Mailing List Webhook URL"
               type="url"
               id="mailinglistWebhookUrl"
@@ -257,7 +256,7 @@ const AddSite = () => {
               onChange={(e) => setSiteDetails((prev) => ({ ...prev, mailinglistWebhookUrl: e.target.value }))}
               value={siteDetails.mailinglistWebhookUrl}
             />
-            <button onClick={() => setMailingListModalOpen(true)} className="w-fit whitespace-nowrap rounded-xl bg-primary hover:bg-primary-hover text-white p-2 mt-2">
+            <button onClick={() => setMailingListModalOpen(true)} className="w-fit whitespace-nowrap rounded-xl bg-primary hover:bg-primary-hover text-white p-2">
               Preview Data
             </button>
           </div>

@@ -81,7 +81,7 @@ const AddFanClub = () => {
     const numericValue = value.replace(/\D/g, '');
     const requiredLength = countryData.format.replace(/[^.]/g, '').length;
     if (numericValue.length < requiredLength)
-      setErrors((prevErrors) => ({ ...prevErrors, mobile: `Mobile number must be at least ${requiredLength - countryData.dialCode.length} digits` }));
+      setErrors((prevErrors) => ({ ...prevErrors, mobile: `Contact number must be at least ${requiredLength - countryData.dialCode.length} digits` }));
     else setErrors((prevErrors) => ({ ...prevErrors, mobile: '' }));
 
     const mobile = numericValue.slice(countryData.dialCode.length);
@@ -108,72 +108,69 @@ const AddFanClub = () => {
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className=" text-primary">Customer Details</span>
           </div>
-          <div className="w-full">
-            <div className="flex flex-col gap-y-5">
-              <FormField
-                label="Name"
-                type="text"
-                id="name"
-                name="name"
-                required
-                placeholder="Name"
-                onChange={(e) => {
-                  setAdvertisementDetails((prev) => ({ ...prev, name: e.target.value }));
-                  if (errors.name) setErrors((prev) => ({ ...prev, name: '' }));
-                }}
-                value={advertisementDetails.name}
-                errorMessage={errors.name}
-              />
+          <div className="w-full flex flex-col gap-y-5">
+            <FormField
+              label="Name"
+              type="text"
+              id="name"
+              name="name"
+              required
+              placeholder="Name"
+              onChange={(e) => {
+                setAdvertisementDetails((prev) => ({ ...prev, name: e.target.value }));
+                if (errors.name) setErrors((prev) => ({ ...prev, name: '' }));
+              }}
+              value={advertisementDetails.name}
+              errorMessage={errors.name}
+            />
 
-              <FormField
-                label="Email ID"
-                type="email"
-                id="email"
-                name="email"
-                required
-                placeholder="Email ID"
-                onChange={(e) => {
-                  setAdvertisementDetails((prev) => ({ ...prev, email: e.target.value }));
-                  if (errors.email) setErrors((prev) => ({ ...prev, email: '' }));
-                }}
-                value={advertisementDetails.email}
-                errorMessage={errors.email}
-              />
+            <FormField
+              label="Email ID"
+              type="email"
+              id="email"
+              name="email"
+              required
+              placeholder="Email ID"
+              onChange={(e) => {
+                setAdvertisementDetails((prev) => ({ ...prev, email: e.target.value }));
+                if (errors.email) setErrors((prev) => ({ ...prev, email: '' }));
+              }}
+              value={advertisementDetails.email}
+              errorMessage={errors.email}
+            />
 
-              <PhoneInputField
-                divClassName="mt-5"
-                label="Mobile Number"
-                placeholder="Mobile Number"
-                name="mobile"
-                required
-                value={advertisementDetails.ccode + advertisementDetails.mobile}
-                handlePhoneChange={handlePhoneChange}
-                phoneError={errors.mobile}
-              />
+            <PhoneInputField
+              label="Contact Number"
+              placeholder="Contact Number"
+              name="mobile"
+              required
+              value={advertisementDetails.ccode + advertisementDetails.mobile}
+              handlePhoneChange={handlePhoneChange}
+              phoneError={errors.mobile}
+            />
 
-              <FormField
-                label="Subject"
-                type="text"
-                id="subject"
-                name="subject"
-                placeholder="Subject"
-                onChange={(e) => {
-                  setAdvertisementDetails((prev) => ({ ...prev, subject: e.target.value }));
-                  if (errors.subject) setErrors((prev) => ({ ...prev, subject: '' }));
-                }}
-                value={advertisementDetails.subject}
-                errorMessage={errors.subject}
-              />
+            <FormField
+              label="Subject"
+              type="text"
+              id="subject"
+              name="subject"
+              placeholder="Subject"
+              onChange={(e) => {
+                setAdvertisementDetails((prev) => ({ ...prev, subject: e.target.value }));
+                if (errors.subject) setErrors((prev) => ({ ...prev, subject: '' }));
+              }}
+              value={advertisementDetails.subject}
+              errorMessage={errors.subject}
+            />
 
-              <TextareaComponent
-                label="Service"
-                placeholder="Enter a service..."
-                id="service"
-                name="service"
-                value={advertisementDetails.service}
-                onChange={(e) => setAdvertisementDetails((prev) => ({ ...prev, service: e.target.value }))}
-              />
-            </div>
+            <TextareaComponent
+              label="Service"
+              placeholder="Enter a service..."
+              id="service"
+              name="service"
+              value={advertisementDetails.service}
+              onChange={(e) => setAdvertisementDetails((prev) => ({ ...prev, service: e.target.value }))}
+            />
           </div>
         </div>
       </div>
@@ -184,23 +181,21 @@ const AddFanClub = () => {
             <span className=" text-primary">Additional Information</span>
           </div>
           <div className="w-full">
-            <div>
-              <DropDown
-                name="Sites"
-                label={'Select Site'}
-                dropdownList={availableSites
-                  .filter((site) => site.modules?.some((module) => module.events === true))
-                  .map((site) => ({ id: site._id, showName: `${site.name} (${site.host})`, name: site._id }))}
-                SummaryChild={<h5 className="p-0 m-0 text-primary">Sites</h5>}
-                search={true}
-                selected={advertisementDetails.site}
-                commonFunction={(e) => {
-                  setAdvertisementDetails((prev) => ({ ...prev, site: e.name }));
-                  if (errors.site) setErrors((prev) => ({ ...prev, site: '' }));
-                }}
-                error={errors.site}
-              />
-            </div>
+            <DropDown
+              name="Sites"
+              label={'Select Site'}
+              dropdownList={availableSites
+                .filter((site) => site.modules?.some((module) => module.events === true))
+                .map((site) => ({ id: site._id, showName: `${site.name} (${site.host})`, name: site._id }))}
+              SummaryChild={<h5 className="p-0 m-0 text-primary">Sites</h5>}
+              search={true}
+              selected={advertisementDetails.site}
+              commonFunction={(e) => {
+                setAdvertisementDetails((prev) => ({ ...prev, site: e.name }));
+                if (errors.site) setErrors((prev) => ({ ...prev, site: '' }));
+              }}
+              error={errors.site}
+            />
           </div>
         </div>
       </div>
@@ -211,18 +206,15 @@ const AddFanClub = () => {
             <span className=" text-primary">Fan Club Message</span>
           </div>
           <div className="w-full">
-            <div>
-              <TextareaComponent
-                divClassName="mt-5"
-                label="Message"
-                maxLength={100}
-                placeholder="Enter a message..."
-                id="fanClubMessage"
-                name="fanClubMessage"
-                value={advertisementDetails.fanClubMessage}
-                onChange={(e) => setAdvertisementDetails((prev) => ({ ...prev, fanClubMessage: e.target.value }))}
-              />
-            </div>
+            <TextareaComponent
+              label="Message"
+              maxLength={100}
+              placeholder="Enter a message..."
+              id="fanClubMessage"
+              name="fanClubMessage"
+              value={advertisementDetails.fanClubMessage}
+              onChange={(e) => setAdvertisementDetails((prev) => ({ ...prev, fanClubMessage: e.target.value }))}
+            />
           </div>
         </div>
       </div>

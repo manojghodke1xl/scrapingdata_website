@@ -62,7 +62,7 @@ const BookingPaymentList = () => {
     { id: 1, label: 'Email', key: 'email', dataKey: 'email' },
     {
       id: 2,
-      label: 'Mobile Number',
+      label: 'Contact Number',
       key: 'phoneNumber',
       dataKey: 'phoneNumber',
       formatForExport: (value, data) => `${data.phoneCode ? (data.phoneCode.startsWith('+') ? data.phoneCode : `+${data.phoneCode}`) : ''} ${value ? value : '-'}`

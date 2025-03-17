@@ -86,7 +86,7 @@ const AddEnquiry = () => {
     const numericValue = value.replace(/\D/g, '');
     const requiredLength = countryData.format.replace(/[^.]/g, '').length;
     if (numericValue.length < requiredLength)
-      setErrors((prevErrors) => ({ ...prevErrors, mobile: `Mobile number must be at least ${requiredLength - countryData.dialCode.length} digits` }));
+      setErrors((prevErrors) => ({ ...prevErrors, mobile: `Contact number must be at least ${requiredLength - countryData.dialCode.length} digits` }));
     else setErrors((prevErrors) => ({ ...prevErrors, mobile: '' }));
 
     const mobile = numericValue.slice(countryData.dialCode.length);
@@ -140,9 +140,8 @@ const AddEnquiry = () => {
               />
 
               <PhoneInputField
-                divClassName="mt-5"
-                label="Mobile Number"
-                placeholder="Mobile Number"
+                label="Contact Number"
+                placeholder="Contact Number"
                 name="mobile"
                 required
                 value={enquiryDetails.ccode + enquiryDetails.mobile}
@@ -182,24 +181,22 @@ const AddEnquiry = () => {
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className=" text-primary">Additional Information</span>
           </div>
-          <div className="w-full">
-            <div>
-              <DropDown
-                name="Sites"
-                label={'Select Site'}
-                dropdownList={availableSites
-                  .filter((site) => site.modules?.some((module) => module.events === true))
-                  .map((site) => ({ id: site._id, showName: `${site.name} (${site.host})`, name: site._id }))}
-                SummaryChild={<h5 className="p-0 m-0 text-primary">Sites</h5>}
-                search={true}
-                selected={enquiryDetails.site}
-                commonFunction={(e) => {
-                  setEnquiryDetails((prev) => ({ ...prev, site: e.name }));
-                  if (errors.site) setErrors((prev) => ({ ...prev, site: '' }));
-                }}
-                error={errors.site}
-              />
-            </div>
+          <div className="w-full flex flex-col gap-y-5">
+            <DropDown
+              name="Sites"
+              label={'Select Site'}
+              dropdownList={availableSites
+                .filter((site) => site.modules?.some((module) => module.events === true))
+                .map((site) => ({ id: site._id, showName: `${site.name} (${site.host})`, name: site._id }))}
+              SummaryChild={<h5 className="p-0 m-0 text-primary">Sites</h5>}
+              search={true}
+              selected={enquiryDetails.site}
+              commonFunction={(e) => {
+                setEnquiryDetails((prev) => ({ ...prev, site: e.name }));
+                if (errors.site) setErrors((prev) => ({ ...prev, site: '' }));
+              }}
+              error={errors.site}
+            />
           </div>
         </div>
       </div>
@@ -209,26 +206,20 @@ const AddEnquiry = () => {
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className=" text-primary">Enquiry Message</span>
           </div>
-          <div className="w-full">
-            <div>
-              <TextareaComponent
-                divClassName="mt-5"
-                label="Message"
-                maxLength={100}
-                placeholder="Enter a message..."
-                id="message"
-                name="message"
-                value={enquiryDetails.message}
-                onChange={(e) => setEnquiryDetails((prev) => ({ ...prev, message: e.target.value }))}
-              />
-            </div>
+          <div className="w-full flex flex-col gap-y-5">
+            <TextareaComponent
+              label="Message"
+              maxLength={100}
+              placeholder="Enter a message..."
+              id="message"
+              name="message"
+              value={enquiryDetails.message}
+              onChange={(e) => setEnquiryDetails((prev) => ({ ...prev, message: e.target.value }))}
+            />
           </div>
         </div>
       </div>
 
-      {/* <div className="w-full justify-center items-center border-b  border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end ">
-        <NoteComponent note={id ? editCouponNote : addCouponNote} />
-      </div> */}
       {!isScrollable && (
         <div className="w-full flex justify-end items-center gap-4 pt-8  border- border-primary">
           <FormButtons to="/enquiry/enquiry-list" type="submit" onClick={handleSubmit} btnLebal={'Add'} loading={isLoading} />

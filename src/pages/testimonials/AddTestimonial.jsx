@@ -280,7 +280,6 @@ const AddTestimonial = () => {
             />
 
             <MultiSelectCheckbox
-              divClassName={'mt-5'}
               options={availableCategories}
               label="Select Categories"
               formLabel={'Select Categories'}
@@ -300,21 +299,19 @@ const AddTestimonial = () => {
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className="block text-primary">Status Settings</span>
           </div>
-          <div className="w-full">
-            <div className="w-full flex flex-col gap-y-5">
-              <ToggleComponent
-                label={'Is Testimonial Active?'}
-                isEnableState={testimonialDetails.isActive}
-                tooltipContent={'If Testimonial is active, it will be displayed on the site.'}
-                setIsEnableState={(value) => setTestimonialDetails((prev) => ({ ...prev, isActive: value }))}
-              />
-              <ToggleComponent
-                label={'Is Testimonial Global?'}
-                isEnableState={testimonialDetails.isGlobal}
-                tooltipContent={'If Testimonial is global, it will be displayed on all sites.'}
-                setIsEnableState={(value) => setTestimonialDetails((prev) => ({ ...prev, isGlobal: value }))}
-              />
-            </div>
+          <div className="w-full flex flex-col gap-y-5">
+            <ToggleComponent
+              label={'Is Testimonial Active?'}
+              isEnableState={testimonialDetails.isActive}
+              tooltipContent={'If Testimonial is active, it will be displayed on the site.'}
+              setIsEnableState={(value) => setTestimonialDetails((prev) => ({ ...prev, isActive: value }))}
+            />
+            <ToggleComponent
+              label={'Is Testimonial Global?'}
+              isEnableState={testimonialDetails.isGlobal}
+              tooltipContent={'If Testimonial is global, it will be displayed on all sites.'}
+              setIsEnableState={(value) => setTestimonialDetails((prev) => ({ ...prev, isGlobal: value }))}
+            />
           </div>
         </div>
       </div>

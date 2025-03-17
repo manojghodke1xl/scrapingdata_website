@@ -80,7 +80,7 @@ const AddVendor = () => {
     const numericValue = value.replace(/\D/g, '');
     const requiredLength = countryData.format.replace(/[^.]/g, '').length;
     if (numericValue.length < requiredLength)
-      setErrors((prevErrors) => ({ ...prevErrors, mobile: `Mobile number must be at least ${requiredLength - countryData.dialCode.length} digits` }));
+      setErrors((prevErrors) => ({ ...prevErrors, mobile: `Contact number must be at least ${requiredLength - countryData.dialCode.length} digits` }));
     else setErrors((prevErrors) => ({ ...prevErrors, mobile: '' }));
 
     const mobile = numericValue.slice(countryData.dialCode.length);
@@ -107,75 +107,69 @@ const AddVendor = () => {
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className=" text-primary">Customer Details</span>
           </div>
-          <div className="w-full">
-            <div>
-              <FormField
-                label="Name"
-                type="text"
-                id="name"
-                name="name"
-                required
-                placeholder="Name"
-                onChange={(e) => {
-                  setVendorDetails((prev) => ({ ...prev, name: e.target.value }));
-                  if (errors.name) setErrors((prev) => ({ ...prev, name: '' }));
-                }}
-                value={vendorDetails.name}
-                errorMessage={errors.name}
-              />
+          <div className="w-full flex flex-col gap-y-5">
+            <FormField
+              label="Name"
+              type="text"
+              id="name"
+              name="name"
+              required
+              placeholder="Name"
+              onChange={(e) => {
+                setVendorDetails((prev) => ({ ...prev, name: e.target.value }));
+                if (errors.name) setErrors((prev) => ({ ...prev, name: '' }));
+              }}
+              value={vendorDetails.name}
+              errorMessage={errors.name}
+            />
 
-              <FormField
-                divClassName={'mt-5'}
-                label="Email ID"
-                type="email"
-                id="email"
-                name="email"
-                required
-                placeholder="Email ID"
-                onChange={(e) => {
-                  setVendorDetails((prev) => ({ ...prev, email: e.target.value }));
-                  if (errors.email) setErrors((prev) => ({ ...prev, email: '' }));
-                }}
-                value={vendorDetails.email}
-                errorMessage={errors.email}
-              />
+            <FormField
+              label="Email ID"
+              type="email"
+              id="email"
+              name="email"
+              required
+              placeholder="Email ID"
+              onChange={(e) => {
+                setVendorDetails((prev) => ({ ...prev, email: e.target.value }));
+                if (errors.email) setErrors((prev) => ({ ...prev, email: '' }));
+              }}
+              value={vendorDetails.email}
+              errorMessage={errors.email}
+            />
 
-              <PhoneInputField
-                divClassName="mt-5"
-                label="Mobile Number"
-                placeholder="Mobile Number"
-                name="mobile"
-                required
-                value={vendorDetails.ccode + vendorDetails.mobile}
-                handlePhoneChange={handlePhoneChange}
-                phoneError={errors.mobile}
-              />
+            <PhoneInputField
+              label="Contact Number"
+              placeholder="Contact Number"
+              name="mobile"
+              required
+              value={vendorDetails.ccode + vendorDetails.mobile}
+              handlePhoneChange={handlePhoneChange}
+              phoneError={errors.mobile}
+            />
 
-              <FormField
-                divClassName={'mt-5'}
-                label="Subject"
-                type="text"
-                id="subject"
-                name="subject"
-                placeholder="Subject"
-                onChange={(e) => {
-                  setVendorDetails((prev) => ({ ...prev, subject: e.target.value }));
-                  if (errors.subject) setErrors((prev) => ({ ...prev, subject: '' }));
-                }}
-                value={vendorDetails.subject}
-                errorMessage={errors.subject}
-              />
+            <FormField
+              label="Subject"
+              type="text"
+              id="subject"
+              name="subject"
+              placeholder="Subject"
+              onChange={(e) => {
+                setVendorDetails((prev) => ({ ...prev, subject: e.target.value }));
+                if (errors.subject) setErrors((prev) => ({ ...prev, subject: '' }));
+              }}
+              value={vendorDetails.subject}
+              errorMessage={errors.subject}
+            />
 
-              <TextareaComponent
-                divClassName="mt-5"
-                label="Service"
-                placeholder="Enter a service..."
-                id="service"
-                name="service"
-                value={vendorDetails.service}
-                onChange={(e) => setVendorDetails((prev) => ({ ...prev, service: e.target.value }))}
-              />
-            </div>
+            <TextareaComponent
+              label="Service"
+              placeholder="Enter a service..."
+              id="service"
+              name="service"
+              value={vendorDetails.service}
+              onChange={(e) => setVendorDetails((prev) => ({ ...prev, service: e.target.value }))}
+            />
           </div>
         </div>
       </div>
@@ -186,23 +180,21 @@ const AddVendor = () => {
             <span className=" text-primary">Additional Information</span>
           </div>
           <div className="w-full">
-            <div>
-              <DropDown
-                name="Sites"
-                label={'Select Site'}
-                dropdownList={availableSites
-                  .filter((site) => site.modules?.some((module) => module.events === true))
-                  .map((site) => ({ id: site._id, showName: `${site.name} (${site.host})`, name: site._id }))}
-                SummaryChild={<h5 className="p-0 m-0 text-primary">Sites</h5>}
-                search={true}
-                selected={vendorDetails.site}
-                commonFunction={(e) => {
-                  setVendorDetails((prev) => ({ ...prev, site: e.name }));
-                  if (errors.site) setErrors((prev) => ({ ...prev, site: '' }));
-                }}
-                error={errors.site}
-              />
-            </div>
+            <DropDown
+              name="Sites"
+              label={'Select Site'}
+              dropdownList={availableSites
+                .filter((site) => site.modules?.some((module) => module.events === true))
+                .map((site) => ({ id: site._id, showName: `${site.name} (${site.host})`, name: site._id }))}
+              SummaryChild={<h5 className="p-0 m-0 text-primary">Sites</h5>}
+              search={true}
+              selected={vendorDetails.site}
+              commonFunction={(e) => {
+                setVendorDetails((prev) => ({ ...prev, site: e.name }));
+                if (errors.site) setErrors((prev) => ({ ...prev, site: '' }));
+              }}
+              error={errors.site}
+            />
           </div>
         </div>
       </div>
@@ -213,18 +205,15 @@ const AddVendor = () => {
             <span className=" text-primary">Vendor Message</span>
           </div>
           <div className="w-full">
-            <div>
-              <TextareaComponent
-                divClassName="mt-5"
-                label="Message"
-                maxLength={100}
-                placeholder="Enter a message..."
-                id="vendorMessage"
-                name="vendorMessage"
-                value={vendorDetails.vendorMessage}
-                onChange={(e) => setVendorDetails((prev) => ({ ...prev, vendorMessage: e.target.value }))}
-              />
-            </div>
+            <TextareaComponent
+              label="Message"
+              maxLength={100}
+              placeholder="Enter a message..."
+              id="vendorMessage"
+              name="vendorMessage"
+              value={vendorDetails.vendorMessage}
+              onChange={(e) => setVendorDetails((prev) => ({ ...prev, vendorMessage: e.target.value }))}
+            />
           </div>
         </div>
       </div>

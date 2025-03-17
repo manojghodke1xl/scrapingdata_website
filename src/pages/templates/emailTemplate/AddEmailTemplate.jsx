@@ -238,8 +238,6 @@ const AddEmailTemplate = () => {
                 name="mailBody"
                 value={emailTemplate.body}
                 onChange={(e) => setEmailTemplate((prev) => ({ ...prev, body: e.target.value }))}
-                // value={emailContent}
-                // onChange={(e) => setEmailContent(e.target.value)}
                 errorMessage={errors.body}
               />
             </div>
@@ -256,7 +254,7 @@ const AddEmailTemplate = () => {
             <span className="block text-primary">Attached Document</span>
           </div>
           <div className="w-full">
-            <div className="w-full sm:w-1/2">
+            <div className="w-full sm:w-1/2 flex flex-col gap-y-5">
               {files && files.attachments && files.attachments.length > 0 && (
                 <MultiSelectCheckbox
                   options={files.attachments || []}
@@ -267,7 +265,6 @@ const AddEmailTemplate = () => {
                 />
               )}
               <DocumentFileUpload
-                divClassName={'mt-5'}
                 label={'Attachment Files'}
                 isMultiple
                 files={attachments}

@@ -148,36 +148,33 @@ const AddTemplateCategory = () => {
           <div className="sm:w-7/12 w-full flex flex-col">
             <span className=" text-primary ">Category Details</span>
           </div>
-          <div className="w-full">
-            <div>
-              <FormField
-                label="Category Name"
-                type="text"
-                id="fqaCategoryName"
-                name="fqaCategoryName"
-                placeholder="Category Name"
-                onChange={(e) => {
-                  setTemplateCategory((prev) => ({ ...prev, name: e.target.value }));
-                  if (errors.name) setErrors((prev) => ({ ...prev, name: '' }));
-                }}
-                value={templateCategory.name}
-                errorMessage={errors.name}
-              />
-              <FormField
-                divClassName={'mt-5'}
-                label="Module"
-                type="text"
-                id="fqaModule"
-                name="fqaModule"
-                placeholder="Module"
-                onChange={(e) => {
-                  setTemplateCategory((prev) => ({ ...prev, module: e.target.value }));
-                  if (errors.module) setErrors((prev) => ({ ...prev, module: '' }));
-                }}
-                value={templateCategory.module}
-                errorMessage={errors.module}
-              />
-            </div>
+          <div className="w-full flex flex-col gap-y-5">
+            <FormField
+              label="Category Name"
+              type="text"
+              id="fqaCategoryName"
+              name="fqaCategoryName"
+              placeholder="Category Name"
+              onChange={(e) => {
+                setTemplateCategory((prev) => ({ ...prev, name: e.target.value }));
+                if (errors.name) setErrors((prev) => ({ ...prev, name: '' }));
+              }}
+              value={templateCategory.name}
+              errorMessage={errors.name}
+            />
+            <FormField
+              label="Module"
+              type="text"
+              id="fqaModule"
+              name="fqaModule"
+              placeholder="Module"
+              onChange={(e) => {
+                setTemplateCategory((prev) => ({ ...prev, module: e.target.value }));
+                if (errors.module) setErrors((prev) => ({ ...prev, module: '' }));
+              }}
+              value={templateCategory.module}
+              errorMessage={errors.module}
+            />
           </div>
         </div>
       </div>
@@ -204,9 +201,8 @@ const AddTemplateCategory = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {templateCategory?.variableMap?.map((variable, index) => (
                   <div key={index} className="p-4 rounded-lg shadow-sm border border-gray-400">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <FormField
-                        divClassName="w-full"
                         label="Variable Label"
                         type="text"
                         id="variableLabel"
@@ -216,7 +212,6 @@ const AddTemplateCategory = () => {
                         value={variable.label}
                       />
                       <FormField
-                        divClassName="w-full"
                         label="Variable Model"
                         type="text"
                         id="variableModel"
@@ -226,7 +221,6 @@ const AddTemplateCategory = () => {
                         value={variable.model}
                       />
                       <FormField
-                        divClassName="w-full"
                         label="Variable Key"
                         type="text"
                         id="variableKey"
@@ -236,7 +230,6 @@ const AddTemplateCategory = () => {
                         value={variable.key}
                       />
                       <FormField
-                        divClassName="w-full"
                         label="Variable Name"
                         type="text"
                         id="variableName"
@@ -246,7 +239,6 @@ const AddTemplateCategory = () => {
                         value={variable.name}
                       />
                       <DropDown
-                        mt="w-full"
                         name="variableDataType"
                         label="Variable Data Type"
                         SummaryChild={<h5 className="text-primary p-0 m-0">{variable.dataType || 'Select Data Type'}</h5>}
@@ -278,9 +270,6 @@ const AddTemplateCategory = () => {
         </div>
       </div>
 
-      {/* <div className="w-full justify-center items-center border-b  border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end ">
-        <NoteComponent note={id ? editFaqCategoryNote : addFaqCategoryNote} />
-      </div> */}
       {!isScrollable && (
         <div className="w-full flex justify-end items-center gap-4 pt-8  border-t border-primary">
           <FormButtons to="/template-category/template-category-list" type="submit" onClick={handleSubmit} btnLebal={id ? 'Save Changes' : 'Add'} loading={isLoading} />
