@@ -5,6 +5,7 @@ import Filters from '../filter/Filters';
 import SearchFilter from '../filter/SearchFilter';
 import StatusFilter from '../filter/StatusFilter';
 import { formatDateTime } from '../../utils/dateFormats';
+import { showNotification } from '../../utils/showNotification';
 
 const TableFilter = ({
   search,
@@ -24,17 +25,10 @@ const TableFilter = ({
   bulkSiteOpenAction
 }) => {
   const openMultipleSites = (sites) => {
-    const openSite = (url) => {
-      const anchor = document.createElement('a');
-      anchor.href = url;
-      anchor.target = '_blank';
-      anchor.rel = 'noopener noreferrer';
-      anchor.click();
-    };
-
     sites.forEach((site) => {
       const url = site.startsWith('http') ? site : `https://${site}`;
-      openSite(url);
+      const newWindow = window.open(url);
+      if (!newWindow) showNotification('error', 'Unable to open site in new tab. Please check your browser settings to allow popups.');
     });
   };
 

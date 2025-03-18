@@ -266,7 +266,10 @@ const TableComponent = ({
   const handleDragEnd = async (e) => {
     e.preventDefault();
     setIsDragging(false);
-    await saveColumnConfig();
+    await saveColumnConfig({
+      ...columnPreferences,
+      pinnedColumns: pinnedColumns
+    });
   };
 
   // Sorting handler

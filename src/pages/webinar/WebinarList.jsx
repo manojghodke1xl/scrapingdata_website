@@ -38,6 +38,7 @@ const WebinarList = () => {
               <TableComponent
                 selectable={true}
                 headers={columnConfig}
+                siteModule={'webinar'}
                 tableData={(data) => setWebinars(data.webinars)}
                 rows={rows}
                 apiUrl={'webinar'}
