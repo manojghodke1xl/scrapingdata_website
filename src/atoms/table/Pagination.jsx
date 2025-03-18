@@ -121,7 +121,7 @@ const Pagination = ({ currentPage, totalPages, totalRecords, itemsPerPage, setIt
               onChange={(e) => setItems(e.target.value)}
               value={items}
               className={`h-8 min-w-[2.5rem] px-2 text-sm rounded-xl border border-primary text-center font-normal focus:outline-none focus:ring-0 focus:border-secondary placeholder:text-gray-400 text-dark bg-transparent transition-all`}
-              style={{ width: `${Math.max(2.5, items.toString().length * 0.7)}rem` }}
+              style={{ width: `${Math.max(3, items.toString().length * 1)}rem` }}
             />
           </div>
         </div>
@@ -170,7 +170,7 @@ const Pagination = ({ currentPage, totalPages, totalRecords, itemsPerPage, setIt
               onChange={(e) => setPage(e.target.value)}
               value={page}
               className={`h-8 min-w-[2.5rem] px-2 text-sm rounded-xl border border-primary text-center font-normal focus:outline-none focus:ring-0 focus:border-secondary placeholder:text-placeholder text-dark bg-transparent transition-all`}
-              style={{ width: `${Math.max(2.5, page.toString().length * 0.7)}rem` }}
+              style={{ width: `${Math.max(3, page.toString().length * 1)}rem` }}
             />
             &nbsp;of {totalPages}
           </span>

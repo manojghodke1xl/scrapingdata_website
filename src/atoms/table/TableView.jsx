@@ -185,9 +185,7 @@ const TableView = ({
               </th>
             )}
 
-            <th scope="col" style={{ left: selectable ? `${CHECKBOX_WIDTH}px` : 0 }} className="px-2 py-2 whitespace-nowrap text-left font-semibold sticky bg-main z-20 w-[60px]">
-              Sr. No.
-            </th>
+            <th scope="col" style={{ left: selectable ? `${CHECKBOX_WIDTH}px` : 0 }} className="px-2 py-2 whitespace-nowrap text-left font-semibold sticky bg-main z-20 w-[60px]" />
 
             {(() => {
               const { leftPinned, unpinned, rightPinned } = groupHeaders(headers);
@@ -204,7 +202,7 @@ const TableView = ({
         <tbody>
           {isLoading ? (
             <tr>
-              <td colSpan={headers.length + (selectable ? 1 : 0) + (actions ? 1 : 0)}>
+              <td colSpan={headers.length + (selectable ? 1 : 0) + (actions ? 1 : 0) + 1}>
                 <div role="status" className="w-full border border-primary divide-y divide-primary rounded shadow animate-pulse ">
                   {[...Array(10)].map((_, idx) => (
                     <div key={idx} className="flex items-center justify-between w-full px-4 py-1">

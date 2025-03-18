@@ -14,34 +14,28 @@ export const navLinks = [
 ];
 
 export const leadsPath = [
-  { title: 'Enquiry', to: ['/enquiry/enquiry-list', '/enquiry/view-enquiry', '/enquiry/enquiry-integration'] },
+  { title: 'Enquiry', to: ['/enquiry/enquiry-list', '/enquiry/view-enquiry', '/enquiry/enquiry-integration', '/enquiry/add-enquiry'] },
   {
     title: 'Newsletter Subscribers',
-    to: ['/subscriber/subscriber-list', '/subscriber/view-subscriber', '/subscriber/subscriber-integration', '/subscriber/add-subscriber', '/subscriber/edit-subscriber']
+    to: ['/subscriber/subscriber-list', '/subscriber/view-subscriber', '/subscriber/subscriber-integration', '/subscriber/add-subscriber']
   },
-  { title: 'Feedbacks', to: ['/feedback/feedback-list', '/feedback/view-feedback', '/feedback/feedback-integration', '/feedback/add-feedback', '/feedback/edit-feedback'] },
+  { title: 'Feedbacks', to: ['/feedback/feedback-list', '/feedback/view-feedback', '/feedback/feedback-integration', '/feedback/add-feedback'] },
   {
     title: 'Advertisements',
-    to: [
-      '/advertisement/advertisement-list',
-      '/advertisement/add-advertisement',
-      '/advertisement/advertisement-integration',
-      'advertisement/view-advertisement',
-      '/advertisement/edit-advertisement'
-    ]
+    to: ['/advertisement/advertisement-list', '/advertisement/add-advertisement', '/advertisement/advertisement-integration', '/advertisement/view-advertisement']
   },
-  { title: 'Vendors', to: ['/vendor/vendor-list', '/vendor/add-vendor', '/vendor/view-vendor', '/vendor/vendor-integration', '/vendor/edit-vendor'] },
+  { title: 'Vendors', to: ['/vendor/vendor-list', '/vendor/add-vendor', '/vendor/view-vendor', '/vendor/vendor-integration'] },
   {
     title: 'Distributors',
-    to: ['/distributor/distributor-list', '/distributor/add-distributor', '/distributor/view-distributor', '/distributor/distributor-integration', '/distributor/edit-distributor']
+    to: ['/distributor/distributor-list', '/distributor/add-distributor', '/distributor/view-distributor', '/distributor/distributor-integration']
   },
-  { title: 'Resellers', to: ['/reseller/reseller-list', '/reseller/add-reseller', '/reseller/view-reseller', '/reseller/reseller-integration', '/reseller/edit-reseller'] },
+  { title: 'Resellers', to: ['/reseller/reseller-list', '/reseller/add-reseller', '/reseller/view-reseller', '/reseller/reseller-integration'] },
   {
     title: 'Affiliates',
-    to: ['/affiliate/affiliate-list', '/affiliate/add-affiliate', '/affiliate/view-affiliate', '/affiliate/affiliate-integration', '/affiliate/edit-affiliate']
+    to: ['/affiliate/affiliate-list', '/affiliate/add-affiliate', '/affiliate/view-affiliate', '/affiliate/affiliate-integration']
   },
-  { title: 'Fan Clubs', to: ['/fan-club/fan-club-list', '/fan-club/add-fan-club', '/fan-club/view-fan-club', '/fan-club/fan-club-integration', '/fan-club/edit-fan-club'] },
-  { title: 'Career', to: ['/career/career-list', '/career/add-career', '/career/view-career', '/career/career-integration', '/career/edit-career'] }
+  { title: 'Fan Clubs', to: ['/fan-club/fan-club-list', '/fan-club/add-fan-club', '/fan-club/view-fan-club', '/fan-club/fan-club-integration'] },
+  { title: 'Career', to: ['/career/career-list', '/career/add-career', '/career/view-career', '/career/career-integration'] }
 ];
 
 export const contentsPath = [
@@ -50,19 +44,19 @@ export const contentsPath = [
     to: ['/case-study/case-study-list', '/case-study/add-case-study', '/case-study/edit-case-study', '/case-study/case-study-integration', '/case-study/duplicate-case-study']
   },
   { title: 'Guides', to: ['/guides/guides-list', '/guides/add-guide', '/guides/edit-guide', '/guides/guides-integration', '/guides/duplicate-guide'] },
-  { title: 'Pop-ups', to: ['/pop-up/pop-up-list', '/pop-up/add-pop-up', '/pop-up/edit-pop-up'] }
+  { title: 'Pop-ups', to: ['/pop-up/pop-up-list', '/pop-up/add-pop-up', '/pop-up/edit-pop-up', '/pop-up/pop-up-integration', '/pop-up/duplicate-pop-up'] }
 ];
 
 export const marketingPath = [{ title: 'Coupons', to: ['/coupon/coupon-list', '/coupon/add-coupon', '/coupon/edit-coupon', '/coupon/duplicate-coupon'] }];
 
 export const productsPath = [
   { title: 'Products', to: ['/products/product-list', '/products/add-product', '/products/edit-product', '/products/duplicate-product'] },
-  { title: 'Order Payments', to: ['/payments/order-payment-list'] }
+  { title: 'Order Payments', to: ['/payments/order-payment-list', '/payments/view-order'] }
 ];
 
 export const siteSettingsPath = [
   { title: 'Admin Settings', to: ['/admin/admin-settings'] },
-  { title: 'SMTP Settings', to: ['/smtp/smtp-list', '/smtp/add-smtp', '/smtp/edit-smtp'] },
+  { title: 'SMTP Settings', to: ['/smtp/smtp-list', '/smtp/add-smtp', '/smtp/edit-smtp', '/smtp/duplicate-smtp'] },
   { title: 'reCAPTCHA Settings', to: ['/recaptcha/recaptcha-list', '/recaptcha/add-recaptcha', '/recaptcha/edit-recaptcha', '/recaptcha/duplicate-recaptcha'] },
   { title: 'Site Notifications', to: ['/site/site-settings'] }
 ];
@@ -77,7 +71,16 @@ export const filesPath = [{ title: 'Files', to: ['/files/file-list', '/files/add
 
 export const eventsPath = [
   { title: 'Events', to: ['/events/event-list', '/events/add-event', '/events/edit-event', '/events/duplicate-event', '/events/view-event'] },
-  { title: 'Participants', to: ['/participants/participant-list', '/participants/add-participant', '/participants/edit-participant', '/participants/duplicate-participant'] },
+  {
+    title: 'Participants',
+    to: [
+      '/participants/participant-list',
+      '/participants/add-participant',
+      '/participants/edit-participant',
+      '/participants/duplicate-participant',
+      '/participants/import-participants'
+    ]
+  },
   { title: 'Packages', to: ['/packages/package-list', '/packages/add-package', '/packages/edit-package', '/packages/duplicate-package'] },
   { title: 'Tickets', to: ['/tickets/ticket-list', '/tickets/add-ticket', '/tickets/edit-ticket'] },
   { title: 'Booking Payments', to: ['/payments/booking-payment-list'] },
@@ -86,9 +89,9 @@ export const eventsPath = [
 
 export const afterSalesPath = [
   { title: 'Event Default Settings', to: ['/after-sales/event-default-settings'] },
-  { title: 'After Sales', to: ['/after-sales/after-sales-list', '/after-sales/add-after-sales', '/after-sales/edit-after-sales', '/after-sales/duplicate-after-sales'] },
-  { title: 'Reminders', to: ['/reminder/reminder-list', '/reminder/add-reminder', '/after-sales/edit-after-sales', '/after-sales/duplicate-after-sales'] },
-  { title: 'Broadcast', to: ['/broadcast/broadcast-list', '/broadcast/add-broadcast', '/after-sales/edit-after-sales', '/after-sales/duplicate-after-sales'] }
+  { title: 'After Sales', to: ['/after-sales/after-sales-list', '/after-sales/add-after-sale', '/after-sales/edit-after-sale', '/after-sales/duplicate-after-sale'] },
+  { title: 'Reminders', to: ['/reminder/reminder-list', '/reminder/add-reminder', '/reminder/edit-reminder', '/reminder/duplicate-reminder'] },
+  { title: 'Broadcast', to: ['/broadcast/broadcast-list', '/broadcast/add-broadcast', '/broadcast/edit-broadcast', '/broadcast/duplicate-broadcast'] }
 ];
 
 export const faqsPath = [
@@ -114,14 +117,14 @@ export const templatePath = [
 ];
 
 export const logsPath = [
-  { title: 'Whatsapp Logs', to: ['/logs/whatsapp-log-list', '/logs/add-whatsapp-log', '/logs/edit-whatsapp-log', '/logs/duplicate-whatsapp-log'] },
-  { title: 'Email Logs', to: ['/logs/email-log-list', '/logs/add-email-log', '/logs/edit-email-log', '/logs/duplicate-email-log'] },
-  { title: 'SMS Logs', to: ['/logs/sms-log-list', '/logs/add-sms-log', '/logs/edit-sms-log', '/logs/duplicate-sms-log'] }
+  { title: 'Whatsapp Logs', to: ['/logs/whatsapp-log-list', '/logs/whatsapp-log-preview'] },
+  { title: 'Email Logs', to: ['/logs/email-log-list', '/logs/email-log-preview'] },
+  { title: 'SMS Logs', to: ['/logs/sms-log-list'] }
 ];
 
 export const adminNavLinks = [
   { title: 'Admins', to: ['/admin/admin-list', '/admin/add-admin', '/admin/edit-admin'], icon: <RiAdminLine /> },
-  { title: 'Contacts', to: ['/contact/contact-list', '/contact/add-contact', '/contact/edit-contact'], icon: <RiContactsLine /> },
+  { title: 'Contacts', to: ['/contact/contact-list', '/contact/add-contact', '/contact/edit-contact', '/contact/import-contacts'], icon: <RiContactsLine /> },
   {
     title: 'Notification Agents',
     to: [
