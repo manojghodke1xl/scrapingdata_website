@@ -1,12 +1,13 @@
 import { IoSearchOutline } from 'react-icons/io5';
 
-const SearchComponent = ({ onChange, disabled, value, divClassName }) => {
+const SearchComponent = ({ onChange, disabled, value, divClassName, inputRef }) => {
   return (
     <div className={`${divClassName} bg-main flex items-center gap-2`} onClick={(e) => e.stopPropagation()}>
       <span className="py-2">
         <IoSearchOutline className="text-secondary text-xl" />
       </span>
       <input
+        ref={inputRef}
         type="text"
         name="search"
         id="search"

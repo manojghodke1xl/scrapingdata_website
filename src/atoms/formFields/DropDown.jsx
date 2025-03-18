@@ -6,6 +6,7 @@ import TruncatableFieldToolTip from '../common/TruncatableFeildToolTip';
 
 const DropDown = ({ mt = '', width = 'w-full', name, label, SummaryChild, dropdownList = [], commonFunction, search, selected, add = false, setIsNewSegment, error }) => {
   const dropdownRef = useRef(null);
+  const searchInputRef = useRef(null);
   const [searchQuery, setSearchQuery] = useState('');
 
   const filteredList = dropdownList.filter((item) => item.showName.toLowerCase().includes(searchQuery.toLowerCase()));
@@ -18,6 +19,18 @@ const DropDown = ({ mt = '', width = 'w-full', name, label, SummaryChild, dropdo
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [handleClickOutside]);
+
+  useEffect(() => {
+    const details = dropdownRef.current;
+    const handleToggle = () => {
+      if (details.hasAttribute('open') && searchInputRef.current) {
+        searchInputRef.current.focus();
+      }
+    };
+    details.addEventListener('toggle', handleToggle);
+    return () => details.removeEventListener('toggle', handleToggle);
+  }, []);
+
   useEffect(() => {
     window.addEventListener('resize', () => {
       const { height } = dropdownRef.current.getBoundingClientRect();
@@ -53,7 +66,7 @@ const DropDown = ({ mt = '', width = 'w-full', name, label, SummaryChild, dropdo
         >
           {search && (
             <div className="w-full flex items-center rounded-t-lg border border-primary px-3 bg-main sticky top-0 z-10">
-              <SearchComponent value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
+              <SearchComponent value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} inputRef={searchInputRef} />
             </div>
           )}
           <div className="w-full relative overflow-y-auto custom-scrollbar" style={{ maxHeight: 'calc(192px - 40px)' }}>

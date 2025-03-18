@@ -18,6 +18,13 @@ const MultiSelectCheckbox = ({
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const dropdownRef = useRef(null);
+  const searchInputRef = useRef(null);
+
+  useEffect(() => {
+    if (isOpen && searchInputRef.current) {
+      searchInputRef.current.focus();
+    }
+  }, [isOpen]);
 
   // Filter options based on the search query
   const filteredOptions = options.filter((option) => option.name.toLowerCase().includes(searchQuery.toLowerCase()));
@@ -96,7 +103,7 @@ const MultiSelectCheckbox = ({
         <div className={`absolute z-10 w-full mt-1 bg-main border border-primary rounded-lg shadow-md`}>
           {/* Search Box */}
           <div className="px-2 border-b border-primary">
-            <SearchComponent value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
+            <SearchComponent value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} inputRef={searchInputRef} />
           </div>
 
           {/* Options List */}
