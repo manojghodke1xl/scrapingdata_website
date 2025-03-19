@@ -13,12 +13,13 @@ const EnquiryList = () => {
   const [enquiries, setEnquiries] = useState([]);
 
   const rows = enquiries.map((enquiry) => {
-    const { _id, name, email, service, subject, createdAt, updatedAt, site, url, campaign, medium, source, content, term, campaignId } = enquiry;
+    const { _id, name, email, service, subject, createdAt, updatedAt, site, url, campaign, medium, source, content, term, campaignId, mobile, ccode } = enquiry;
 
     return {
       id: _id,
       exportData: enquiry,
       name: <TruncatableFieldToolTip content={name} />,
+      number: <TruncatableFieldToolTip content={`${ccode ? ccode : ''} ${mobile}`} />,
       email: <TruncatableFieldToolTip content={email} />,
       service: <TruncatableFieldToolTip content={service} />,
       subject: <TruncatableFieldToolTip content={subject} />,
@@ -39,17 +40,18 @@ const EnquiryList = () => {
     { id: 0, label: 'Customer Name', key: 'name', dataKey: 'name' },
     { id: 1, label: 'Email', key: 'email', dataKey: 'email' },
     { id: 2, label: 'Service', key: 'service', dataKey: 'service' },
-    { id: 3, label: 'Subject', key: 'subject', dataKey: 'subject' },
-    { id: 4, label: 'Sites', key: 'site', dataKey: 'site', formatForExport: (value) => (value ? `${value?.name} (${value?.host})` : '') },
-    { id: 5, label: 'URL', key: 'url', dataKey: 'url' },
-    { id: 6, label: 'Campaign Name', key: 'campaign', dataKey: 'campaign' },
-    { id: 7, label: 'Medium', key: 'medium', dataKey: 'medium' },
-    { id: 8, label: 'Source', key: 'source', dataKey: 'source' },
-    { id: 9, label: 'Content', key: 'content', dataKey: 'content' },
-    { id: 10, label: 'Term', key: 'term', dataKey: 'term' },
-    { id: 11, label: 'Campaign ID', key: 'campaignId', dataKey: 'campaignId' },
-    { id: 12, label: 'Created At', key: 'createdAt', dataKey: 'createdAt', formatForExport: (value) => formatDateTime(value) },
-    { id: 13, label: 'Updated At', key: 'updatedAt', dataKey: 'updatedAt', formatForExport: (value) => formatDateTime(value) }
+    { id: 3, label: 'Contact Number', key: 'number', dataKey: 'number' },
+    { id: 4, label: 'Subject', key: 'subject', dataKey: 'subject' },
+    { id: 5, label: 'Sites', key: 'site', dataKey: 'site', formatForExport: (value) => (value ? `${value?.name} (${value?.host})` : '') },
+    { id: 6, label: 'URL', key: 'url', dataKey: 'url' },
+    { id: 7, label: 'Campaign Name', key: 'campaign', dataKey: 'campaign' },
+    { id: 8, label: 'Medium', key: 'medium', dataKey: 'medium' },
+    { id: 9, label: 'Source', key: 'source', dataKey: 'source' },
+    { id: 10, label: 'Content', key: 'content', dataKey: 'content' },
+    { id: 11, label: 'Term', key: 'term', dataKey: 'term' },
+    { id: 12, label: 'Campaign ID', key: 'campaignId', dataKey: 'campaignId' },
+    { id: 13, label: 'Created At', key: 'createdAt', dataKey: 'createdAt', formatForExport: (value) => formatDateTime(value) },
+    { id: 14, label: 'Updated At', key: 'updatedAt', dataKey: 'updatedAt', formatForExport: (value) => formatDateTime(value) }
   ];
 
   return (
