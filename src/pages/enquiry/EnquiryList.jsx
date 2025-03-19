@@ -19,7 +19,7 @@ const EnquiryList = () => {
       id: _id,
       exportData: enquiry,
       name: <TruncatableFieldToolTip content={name} />,
-      number: <TruncatableFieldToolTip content={`${ccode ? ccode : ''} ${mobile}`} />,
+      number: <TruncatableFieldToolTip content={`${ccode ?? ''} ${mobile}`} />,
       email: <TruncatableFieldToolTip content={email} />,
       service: <TruncatableFieldToolTip content={service} />,
       subject: <TruncatableFieldToolTip content={subject} />,
