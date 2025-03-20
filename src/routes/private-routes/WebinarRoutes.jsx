@@ -1,23 +1,25 @@
 import { lazy } from 'react';
-import { Route, Routes } from 'react-router-dom';
 
+// Lazy load the WebinarList component
 const WebinarList = lazy(() => import('../../pages/webinar/WebinarList'));
+// Lazy load the AddWebinar component
 const AddWebinar = lazy(() => import('../../pages/webinar/AddWebinar'));
+// Lazy load the WebinarLinkList component
 const WebinarLinkList = lazy(() => import('../../pages/webinar/WebinarLinkList'));
 
-const PageNotFound = lazy(() => import('../../pages/common/PageNotFound'));
+// Define routes for the webinars feature
+const WebinarRoutes = [
+  // Route for listing webinars
+  { path: 'webinar/webinar-list', Component: WebinarList },
+  // Route for adding a new webinar
+  { path: 'webinar/add-webinar', Component: AddWebinar },
+  // Route for editing a specific webinar by ID
+  { path: 'webinar/edit-webinar/:id', Component: AddWebinar },
+  // Route for duplicating a specific webinar by ID
+  { path: 'webinar/duplicate-webinar/:id', Component: AddWebinar },
+  // Route for listing webinar links
+  { path: 'webinar/webinar-link', Component: WebinarLinkList }
+];
 
-const WebinarRoutes = () => {
-  return (
-    <Routes>
-      <Route path="/webinar-list" element={<WebinarList />} />
-      <Route path="/add-webinar" element={<AddWebinar />} />
-      <Route path="/edit-webinar/:id" element={<AddWebinar />} />
-      <Route path="/duplicate-webinar/:id" element={<AddWebinar />} />
-      <Route path="/webinar-link" element={<WebinarLinkList />} />
-      <Route path="*" element={<PageNotFound />} />
-    </Routes>
-  );
-};
-
+// Export the WebinarRoutes array as the default export
 export default WebinarRoutes;

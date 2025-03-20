@@ -1,9 +1,6 @@
 import { lazy } from 'react';
-import { Route, Routes } from 'react-router-dom';
-import ZoomIntegration from '../../pages/integration/ZoomIntegration';
-import MailerMagixIntegration from '../../pages/integration/MailerMagixIntegration';
-import PhonepeIntegration from '../../pages/integration/PhonepeIntegration';
 
+// Lazy load integration components
 const Apps = lazy(() => import('../../pages/integration/Apps'));
 const IntegrationHub = lazy(() => import('../../pages/integration/IntegrationHub'));
 const RazorpayIntegration = lazy(() => import('../../pages/integration/RazorpayIntegration'));
@@ -12,26 +9,27 @@ const PaypalIntegration = lazy(() => import('../../pages/integration/PaypalInteg
 const ZohocrmIntegration = lazy(() => import('../../pages/integration/ZohocrmIntegration'));
 const WhatsAppIntegration = lazy(() => import('../../pages/integration/WhatsAppIntegration'));
 const SMSIntegration = lazy(() => import('../../pages/integration/SMSIntegration'));
-const PageNotFound = lazy(() => import('../../pages/common/PageNotFound'));
+const ZoomIntegration = lazy(() => import('../../pages/integration/ZoomIntegration'));
+const MailerMagixIntegration = lazy(() => import('../../pages/integration/MailerMagixIntegration'));
+const PhonepeIntegration = lazy(() => import('../../pages/integration/PhonepeIntegration'));
 
-const IntegrationRoutes = () => {
-  return (
-    <Routes>
-      <Route path="/app" element={<Apps />} />
-      <Route path="/integration/:id" element={<IntegrationHub />} />
-      <Route path="/integration/razorpay" element={<RazorpayIntegration />} />
-      <Route path="/integration/stripe" element={<StripeIntegration />} />
-      <Route path="/integration/paypal" element={<PaypalIntegration />} />
-      <Route path="/integration/zohocrm" element={<ZohocrmIntegration />} />
-      <Route path="/integration/whatsapp" element={<WhatsAppIntegration />} />
-      <Route path="/integration/sms" element={<SMSIntegration />} />
-      <Route path="/integration/zoom" element={<ZoomIntegration />} />
-      <Route path="/integration/mailerMagix" element={<MailerMagixIntegration />} />
-      <Route path="/integration/phonepe" element={<PhonepeIntegration />} />
+// Define integration routes
+const IntegrationRoutes = [
+  // Route for the list of apps
+  { path: 'apps/app', Component: Apps },
+  // Route for the integration hub
+  { path: 'apps/integration/:id', Component: IntegrationHub },
+  // Routes for specific integrations
+  { path: 'apps/integration/razorpay', Component: RazorpayIntegration },
+  { path: 'apps/integration/stripe', Component: StripeIntegration },
+  { path: 'apps/integration/paypal', Component: PaypalIntegration },
+  { path: 'apps/integration/zohocrm', Component: ZohocrmIntegration },
+  { path: 'apps/integration/whatsapp', Component: WhatsAppIntegration },
+  { path: 'apps/integration/sms', Component: SMSIntegration },
+  { path: 'apps/integration/zoom', Component: ZoomIntegration },
+  { path: 'apps/integration/mailerMagix', Component: MailerMagixIntegration },
+  { path: 'apps/integration/phonepe', Component: PhonepeIntegration }
+];
 
-      <Route path="*" element={<PageNotFound />} />
-    </Routes>
-  );
-};
-
+// Export integration routes
 export default IntegrationRoutes;

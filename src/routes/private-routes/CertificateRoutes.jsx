@@ -1,20 +1,22 @@
 import { lazy } from 'react';
-import { Route, Routes } from 'react-router-dom';
 
+// Lazy load the AddCertificate component
 const AddCertificate = lazy(() => import('../../pages/certificate/AddCertificate'));
+// Lazy load the CertificateList component
 const CertificateList = lazy(() => import('../../pages/certificate/CertificateList'));
-const PageNotFound = lazy(() => import('../../pages/common/PageNotFound'));
 
-const CertificateRoutes = () => {
-  return (
-    <Routes>
-      <Route path="/certificate-list" element={<CertificateList />} />
-      <Route path="/add-certificate" element={<AddCertificate />} />
-      <Route path="/edit-certificate/:id" element={<AddCertificate />} />
-      <Route path="/duplicate-certificate/:id" element={<AddCertificate />} />
-      <Route path="*" element={<PageNotFound />} />
-    </Routes>
-  );
-};
+// Define the routes for the certificate feature
+const CertificateRoutes = [
+  // Route for listing certificates
+  { path: 'certificates/certificate-list', Component: CertificateList },
+  // Route for adding a new certificate
+  { path: 'certificates/add-certificate', Component: AddCertificate },
+  // Route for editing an existing certificate by ID
+  { path: 'certificates/edit-certificate/:id', Component: AddCertificate },
+  // Route for duplicating an existing certificate by ID
+  { path: 'certificates/duplicate-certificate/:id', Component: AddCertificate }
+];
 
+// Export the CertificateRoutes array as the default export
 export default CertificateRoutes;
+

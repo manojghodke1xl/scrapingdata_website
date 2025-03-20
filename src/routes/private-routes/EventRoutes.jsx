@@ -1,22 +1,26 @@
 import { lazy } from 'react';
-import { Route, Routes } from 'react-router-dom';
 
+// Lazy load the EventList component
 const EventList = lazy(() => import('../../pages/event/EventList'));
+// Lazy load the AddEvent component
 const AddEvent = lazy(() => import('../../pages/event/AddEvent'));
+// Lazy load the EventDetails component
 const EventDetails = lazy(() => import('../../pages/event/EventDetails'));
-const PageNotFound = lazy(() => import('../../pages/common/PageNotFound'));
 
-const EventRoutes = () => {
-  return (
-    <Routes>
-      <Route path="/event-list" element={<EventList />} />
-      <Route path="/add-event" element={<AddEvent />} />
-      <Route path="/edit-event/:id" element={<AddEvent />} />
-      <Route path="/view-event/:id" element={<EventDetails />} />
-      <Route path="/duplicate-event/:id" element={<AddEvent />} />
-      <Route path="*" element={<PageNotFound />} />
-    </Routes>
-  );
-};
+// Define routes for event-related pages
+const EventRoutes = [
+  // Route for listing events
+  { path: 'events/event-list', Component: EventList },
+  // Route for adding a new event
+  { path: 'events/add-event', Component: AddEvent },
+  // Route for editing a specific event by ID
+  { path: 'events/edit-event/:id', Component: AddEvent },
+  // Route for viewing a specific event by ID
+  { path: 'events/view-event/:id', Component: EventDetails },
+  // Route for duplicating a specific event by ID
+  { path: 'events/duplicate-event/:id', Component: AddEvent }
+];
 
+// Export the EventRoutes array as the default export
 export default EventRoutes;
+

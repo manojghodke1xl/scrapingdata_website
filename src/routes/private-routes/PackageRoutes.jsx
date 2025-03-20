@@ -1,19 +1,20 @@
 import { lazy } from 'react';
-import { Route, Routes } from 'react-router-dom';
 
+// Lazy load the components
 const PackageList = lazy(() => import('../../pages/package/PackageList'));
 const AddPackage = lazy(() => import('../../pages/package/AddPackage'));
-const PageNotFound = lazy(() => import('../../pages/common/PageNotFound'));
 
-const PackageRoutes = () => {
-  return (
-    <Routes>
-      <Route path="/package-list" element={<PackageList />} />
-      <Route path="/add-package" element={<AddPackage />} />
-      <Route path="/edit-package/:id" element={<AddPackage />} />
-      <Route path="/duplicate-package/:id" element={<AddPackage />} />
-      <Route path="*" element={<PageNotFound />} />
-    </Routes>
-  );
-};
+// Define the routes for the packages
+const PackageRoutes = [
+  // Route to display the list of packages
+  { path: 'packages/package-list', Component: PackageList },
+  // Route to add a new package
+  { path: 'packages/add-package', Component: AddPackage },
+  // Route to edit an existing package
+  { path: 'packages/edit-package/:id', Component: AddPackage },
+  // Route to duplicate an existing package
+  { path: 'packages/duplicate-package/:id', Component: AddPackage }
+];
+
+// Export the PackageRoutes array as the default export
 export default PackageRoutes;

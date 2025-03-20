@@ -1,21 +1,25 @@
 import { lazy } from 'react';
-import { Route, Routes } from 'react-router-dom';
 
+// Lazy load the ResellerList component
 const ResellerList = lazy(() => import('../../../pages/leads/reseller/ResellerList'));
+// Lazy load the AddReseller component
 const AddReseller = lazy(() => import('../../../pages/leads/reseller/AddReseller'));
+// Lazy load the ViewReseller component
 const ViewReseller = lazy(() => import('../../../pages/leads/reseller/ViewReseller'));
+// Lazy load the ResellerIntegration component
 const ResellerIntegration = lazy(() => import('../../../pages/leads/reseller/ResellerIntegration'));
-const PageNotFound = lazy(() => import('../../../pages/common/PageNotFound'));
 
-const ResellerRoutes = () => {
-  return (
-    <Routes>
-      <Route path="/reseller-list" element={<ResellerList />} />
-      <Route path="/add-reseller" element={<AddReseller />} />
-      <Route path="/view-reseller/:id" element={<ViewReseller />} />
-      <Route path="reseller-integration" element={<ResellerIntegration />} />
-      <Route path="*" element={<PageNotFound />} />
-    </Routes>
-  );
-};
+// Define routes for reseller-related pages
+const ResellerRoutes = [
+  // Route for listing resellers
+  { path: 'reseller/reseller-list', Component: ResellerList },
+  // Route for adding a new reseller
+  { path: 'reseller/add-reseller', Component: AddReseller },
+  // Route for viewing a specific reseller by ID
+  { path: 'reseller/view-reseller/:id', Component: ViewReseller },
+  // Route for reseller integrations
+  { path: 'reseller/reseller-integration', Component: ResellerIntegration }
+];
+
+// Export the ResellerRoutes array as the default export
 export default ResellerRoutes;

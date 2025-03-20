@@ -1,19 +1,19 @@
 import { lazy } from 'react';
-import { Route, Routes } from 'react-router-dom';
 
+// Lazy load the AddTestimonialCategory component to add or edit a testimonial category
 const AddTestimonialCategory = lazy(() => import('../../pages/testimonialCategory/AddTestimonialCategory'));
+// Lazy load the TestimonialCategoryList component to display a list of testimonial categories
 const TestimonialCategoryList = lazy(() => import('../../pages/testimonialCategory/TestimonialCategoryList'));
-const PageNotFound = lazy(() => import('../../pages/common/PageNotFound'));
 
-const TestimonialCategoryRoutes = () => {
-  return (
-    <Routes>
-      <Route path="/testimonial-category-list" element={<TestimonialCategoryList />} />
-      <Route path="/add-testimonial-category" element={<AddTestimonialCategory />} />
-      <Route path="/edit-testimonial-category/:id" element={<AddTestimonialCategory />} />
-      <Route path="*" element={<PageNotFound />} />
-    </Routes>
-  );
-};
+// Define routes for testimonial category-related pages
+const TestimonialCategoryRoutes = [
+  // Route to display a list of testimonial categories
+  { path: 'testimonial-category/testimonial-category-list', Component: TestimonialCategoryList },
+  // Route to add a new testimonial category
+  { path: 'testimonial-category/add-testimonial-category', Component: AddTestimonialCategory },
+  // Route to edit an existing testimonial category by ID
+  { path: 'testimonial-category/edit-testimonial-category/:id', Component: AddTestimonialCategory }
+];
 
+// Export the TestimonialCategoryRoutes array as the default export
 export default TestimonialCategoryRoutes;

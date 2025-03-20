@@ -10,6 +10,7 @@ import StructuredLayout from '../layouts/StructuredLayout';
 import Dashboard from '../pages/common/Dashboard';
 import PageNotFound from '../pages/common/PageNotFound';
 
+// Importing all private routes
 import AdminRoutes from './private-routes/AdminRoutes';
 import SmtpRoutes from './private-routes/SmtpRoutes';
 import CaseStudyRoutes from './private-routes/CaseStudyRoutes';
@@ -62,55 +63,56 @@ import ContactRoutes from './private-routes/ContactRoutes';
 
 const ZohoStatus = lazy(() => import('../pages/integration/ZohoStatus'));
 
+// Combining all private routes into one array
 const privateRoutes = [
-  { path: 'admin/*', Component: AdminRoutes },
-  { path: 'smtp/*', Component: SmtpRoutes },
-  { path: 'case-study/*', Component: CaseStudyRoutes },
-  { path: 'guides/*', Component: GuidesRoutes },
-  { path: 'testimonials/*', Component: TestimonialRoutes },
-  { path: 'testimonial-category/*', Component: TestimonialCategoryRoutes },
-  { path: 'recaptcha/*', Component: RecaptchaRoutes },
-  { path: 'faq/*', Component: FaqRoutes },
-  { path: 'faq-category/*', Component: FaqCategoryRoutes },
-  { path: 'enquiry/*', Component: EnquiryRoutes },
-  { path: 'subscriber/*', Component: SubscribersRoutes },
-  { path: 'feedback/*', Component: FeedbackRoutes },
-  { path: 'site/*', Component: SiteRoutes },
-  { path: 'pop-up/*', Component: PopupRoutes },
-  { path: 'client-logo/*', Component: ClientLogoRoutes },
-  { path: 'gallery/*', Component: GalleryRoutes },
-  { path: 'partner-logo/*', Component: PartnerLogoRoutes },
-  { path: 'coupon/*', Component: CouponRoutes },
-  { path: 'participants/*', Component: ParticipantRoutes },
-  { path: 'events/*', Component: EventRoutes },
-  { path: 'bookings/*', Component: BookingRoutes },
-  { path: 'payments/*', Component: PaymentRoutes },
-  { path: 'apps/*', Component: IntegrationRoutes },
-  { path: 'packages/*', Component: PackageRoutes },
-  { path: 'products/*', Component: ProductRoutes },
-  { path: 'orders/*', Component: OrderRoutes },
-  { path: 'templates/*', Component: TemplateRoutes },
-  { path: 'template-category/*', Component: TemplateCategoryRoutes },
-  { path: 'files/*', Component: FilesRoutes },
-  { path: 'tickets/*', Component: EventTicketRoutes },
-  { path: 'after-sales/*', Component: AfterSalesRoutes },
-  { path: 'segments/*', Component: SegmentRoutes },
-  { path: 'certificates/*', Component: CertificateRoutes },
-  { path: 'reminder/*', Component: ReminderRoutes },
-  { path: 'broadcast/*', Component: BroadcastRoutes },
-  { path: 'logs/*', Component: LogRoutes },
-  { path: 'advertisement/*', Component: AdvertisementRoutes },
-  { path: 'vendor/*', Component: VendorRoutes },
-  { path: 'distributor/*', Component: DistributorRoutes },
-  { path: 'reseller/*', Component: ResellerRoutes },
-  { path: 'affiliate/*', Component: AffiliateRoutes },
-  { path: 'fan-club/*', Component: FanClubRoutes },
-  { path: 'career/*', Component: CareerRoutes },
-  { path: 'webinar/*', Component: WebinarRoutes },
-  { path: 'utm-builder/*', Component: UTMBuilderRoutes },
-  { path: 'notification-agent/*', Component: NotifAgentRoutes },
-  { path: 'task/*', Component: TaskRoutes },
-  { path: 'contact/*', Component: ContactRoutes }
+  ...WebinarRoutes,
+  ...UTMBuilderRoutes,
+  ...TestimonialRoutes,
+  ...TestimonialCategoryRoutes,
+  ...TaskRoutes,
+  ...SubscribersRoutes,
+  ...SmtpRoutes,
+  ...SiteRoutes,
+  ...SegmentRoutes,
+  ...ReminderRoutes,
+  ...RecaptchaRoutes,
+  ...ProductRoutes,
+  ...PopupRoutes,
+  ...PaymentRoutes,
+  ...PartnerLogoRoutes,
+  ...ParticipantRoutes,
+  ...PackageRoutes,
+  ...OrderRoutes,
+  ...NotifAgentRoutes,
+  ...LogRoutes,
+  ...IntegrationRoutes,
+  ...GuidesRoutes,
+  ...GalleryRoutes,
+  ...FilesRoutes,
+  ...FeedbackRoutes,
+  ...FaqRoutes,
+  ...FaqCategoryRoutes,
+  ...EventTicketRoutes,
+  ...EventRoutes,
+  ...EnquiryRoutes,
+  ...CouponRoutes,
+  ...ContactRoutes,
+  ...ClientLogoRoutes,
+  ...CertificateRoutes,
+  ...CaseStudyRoutes,
+  ...BroadcastRoutes,
+  ...BookingRoutes,
+  ...AfterSalesRoutes,
+  ...AdminRoutes,
+  ...TemplateRoutes,
+  ...TemplateCategoryRoutes,
+  ...VendorRoutes,
+  ...ResellerRoutes,
+  ...FanClubRoutes,
+  ...DistributorRoutes,
+  ...CareerRoutes,
+  ...AffiliateRoutes,
+  ...AdvertisementRoutes
 ];
 
 const App = () => {
@@ -132,11 +134,13 @@ const App = () => {
                     <Route element={<StructuredLayout />}>
                       <Route path="/dashboard" element={<Dashboard />} />
                       <Route path="/auth-status/:id" element={<ZohoStatus />} />
+                      {/* Looping over private routes and rendering them */}
                       {privateRoutes.map(({ path, Component }) => (
                         <Route key={path} path={`/${path}`} element={<Component />} />
                       ))}
                     </Route>
                   </Route>
+
                   <Route path="*" element={<PageNotFound />} />
                 </Routes>
               </Suspense>
@@ -150,3 +154,4 @@ const App = () => {
 };
 
 export default App;
+

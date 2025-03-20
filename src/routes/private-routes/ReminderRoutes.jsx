@@ -1,20 +1,21 @@
 import { lazy } from 'react';
-import { Route, Routes } from 'react-router-dom';
 
+// Lazy load the ReminderList component
 const ReminderList = lazy(() => import('../../pages/reminder/ReminderList'));
+// Lazy load the AddReminder component
 const AddReminder = lazy(() => import('../../pages/reminder/AddReminder'));
-const PageNotFound = lazy(() => import('../../pages/common/PageNotFound'));
 
-const ReminderRoutes = () => {
-  return (
-    <Routes>
-      <Route path="/reminder-list" element={<ReminderList />} />
-      <Route path="/add-reminder" element={<AddReminder />} />
-      <Route path="/edit-reminder/:id" element={<AddReminder />} />
-      <Route path="/duplicate-reminder/:id" element={<AddReminder />} />
-      <Route path="*" element={<PageNotFound />} />
-    </Routes>
-  );
-};
+// Define the routes for the reminder feature
+const ReminderRoutes = [
+  // Route for listing reminders
+  { path: 'reminder/reminder-list', Component: ReminderList },
+  // Route for adding a new reminder
+  { path: 'reminder/add-reminder', Component: AddReminder },
+  // Route for editing an existing reminder
+  { path: 'reminder/edit-reminder/:id', Component: AddReminder },
+  // Route for duplicating an existing reminder
+  { path: 'reminder/duplicate-reminder/:id', Component: AddReminder }
+];
 
+// Export the ReminderRoutes array as the default export
 export default ReminderRoutes;

@@ -1,16 +1,13 @@
 import { lazy } from 'react';
-import { Route, Routes } from 'react-router-dom';
 
+// The OrderList component displays a list of orders.
 const OrderList = lazy(() => import('../../pages/orders/OrderList'));
-const PageNotFound = lazy(() => import('../../pages/common/PageNotFound'));
 
-const OrderRoutes = () => {
-  return (
-    <Routes>
-      <Route path="/order-list" element={<OrderList />} />
-      <Route path="*" element={<PageNotFound />} />
-    </Routes>
-  );
-};
+// The OrderRoutes array defines the routes for the orders feature.
+const OrderRoutes = [
+  // Route to display a list of orders
+  { path: 'orders/order-list', Component: OrderList }
+];
 
+// The default export is the OrderRoutes array.
 export default OrderRoutes;
