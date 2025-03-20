@@ -1,22 +1,26 @@
 import { lazy } from 'react';
-import { Route, Routes } from 'react-router-dom';
-import EmailLogPreview from '../../pages/socialLogs/emailLogPreview';
-import WhatsappLogPreview from '../../pages/socialLogs/whatsappLogPreview';
 
+// Lazy load the WhatsAppLogList component
 const WhatsAppLogList = lazy(() => import('../../pages/socialLogs/whatsappList'));
+// Lazy load the EmailLogList component
 const EmailLogList = lazy(() => import('../../pages/socialLogs/emailList'));
-const PageNotFound = lazy(() => import('../../pages/common/PageNotFound'));
+// Lazy load the WhatsappLogPreview component
+const WhatsappLogPreview = lazy(() => import('../../pages/socialLogs/whatsappLogPreview'));
+// Lazy load the EmailLogPreview component
+const EmailLogPreview = lazy(() => import('../../pages/socialLogs/emailLogPreview'));
 
-const LogRoutes = () => {
-  return (
-    <Routes>
-      <Route path="/whatsapp-log-list" element={<WhatsAppLogList />} />
-      <Route path="/email-log-list" element={<EmailLogList />} />
-      <Route path="/whatsapp-log-preview/:id" element={<WhatsappLogPreview />} />
-      <Route path="/email-log-preview/:id" element={<EmailLogPreview />} />
-      <Route path="*" element={<PageNotFound />} />
-    </Routes>
-  );
-};
+// Define routes for log-related pages
+const LogRoutes = [
+  // Route for listing WhatsApp logs
+  { path: 'logs/whatsapp-log-list', Component: WhatsAppLogList },
+  // Route for listing email logs
+  { path: 'logs/email-log-list', Component: EmailLogList },
+  // Route for previewing a specific WhatsApp log by ID
+  { path: 'logs/whatsapp-log-preview/:id', Component: WhatsappLogPreview },
+  // Route for previewing a specific email log by ID
+  { path: 'logs/email-log-preview/:id', Component: EmailLogPreview }
+];
 
+// Export the LogRoutes array as the default export
 export default LogRoutes;
+

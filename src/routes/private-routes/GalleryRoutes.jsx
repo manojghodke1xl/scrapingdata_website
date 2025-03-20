@@ -1,20 +1,22 @@
 import { lazy } from 'react';
-import { Route, Routes } from 'react-router-dom';
 
+// Lazy load the GalleryList component to display a list of galleries
 const GalleryList = lazy(() => import('../../pages/gallery/GalleryList'));
+// Lazy load the AddGallery component to add or edit a gallery
 const AddGallery = lazy(() => import('../../pages/gallery/AddGallery'));
-const PageNotFound = lazy(() => import('../../pages/common/PageNotFound'));
 
-const GalleryRoutes = () => {
-  return (
-    <Routes>
-      <Route path="/gallery-list" element={<GalleryList />} />
-      <Route path="/add-gallery" element={<AddGallery />} />
-      <Route path="/edit-gallery/:id" element={<AddGallery />} />
-      <Route path="/duplicate-gallery/:id" element={<AddGallery />} />
-      <Route path="*" element={<PageNotFound />} />
-    </Routes>
-  );
-};
+// Define routes for the gallery feature
+const GalleryRoutes = [
+  // Route to display a list of galleries
+  { path: 'gallery/gallery-list', Component: GalleryList },
+  // Route to add a new gallery
+  { path: 'gallery/add-gallery', Component: AddGallery },
+  // Route to edit an existing gallery by ID
+  { path: 'gallery/edit-gallery/:id', Component: AddGallery },
+  // Route to duplicate an existing gallery by ID
+  { path: 'gallery/duplicate-gallery/:id', Component: AddGallery }
+];
 
+// Export the GalleryRoutes array as the default export
 export default GalleryRoutes;
+

@@ -1,19 +1,19 @@
 import { lazy } from 'react';
-import { Route, Routes } from 'react-router-dom';
 
+// Lazy load the EventTicketList component
 const EventTicketList = lazy(() => import('../../pages/eventTicket/EventTicketList'));
+// Lazy load the AddEventTicket component
 const AddEventTicket = lazy(() => import('../../pages/eventTicket/AddEventTicket'));
-const PageNotFound = lazy(() => import('../../pages/common/PageNotFound'));
 
-const EventTicketRoutes = () => {
-  return (
-    <Routes>
-      <Route path="/ticket-list" element={<EventTicketList />} />
-      <Route path="/add-ticket" element={<AddEventTicket />} />
-      <Route path="/edit-ticket/:id" element={<AddEventTicket />} />
-      <Route path="*" element={<PageNotFound />} />
-    </Routes>
-  );
-};
+// Define the routes for event tickets
+const EventTicketRoutes = [
+  // Route for listing all event tickets
+  { path: 'tickets/ticket-list', Component: EventTicketList },
+  // Route for adding a new event ticket
+  { path: 'tickets/add-ticket', Component: AddEventTicket },
+  // Route for editing an existing event ticket by ID
+  { path: 'tickets/edit-ticket/:id', Component: AddEventTicket }
+];
 
+// Export the EventTicketRoutes array as the default export
 export default EventTicketRoutes;

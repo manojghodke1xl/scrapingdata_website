@@ -1,20 +1,21 @@
 import { lazy } from 'react';
-import { Route, Routes } from 'react-router-dom';
 
+// The component to render for the Notification Agent list
 const NotifAgentList = lazy(() => import('../../pages/notifAgent/NotifAgentList'));
+// The component to render for adding a new Notification Agent
 const AddNotifAgent = lazy(() => import('../../pages/notifAgent/AddNotifAgent'));
-const PageNotFound = lazy(() => import('../../pages/common/PageNotFound'));
 
-const NotifAgentRoutes = () => {
-  return (
-    <Routes>
-      <Route path="/notification-agent-list" element={<NotifAgentList />} />
-      <Route path="/add-notification-agent" element={<AddNotifAgent />} />
-      <Route path="/edit-notification-agent/:id" element={<AddNotifAgent />} />
-      <Route path="/duplicate-notification-agent/:id" element={<AddNotifAgent />} />
-      <Route path="*" element={<PageNotFound />} />
-    </Routes>
-  );
-};
+// The routes for the Notification Agent feature
+const NotifAgentRoutes = [
+  // The route for the Notification Agent list
+  { path: 'notification-agent/notification-agent-list', Component: NotifAgentList },
+  // The route for adding a new Notification Agent
+  { path: 'notification-agent/add-notification-agent', Component: AddNotifAgent },
+  // The route for editing an existing Notification Agent
+  { path: 'notification-agent/edit-notification-agent/:id', Component: AddNotifAgent },
+  // The route for duplicating an existing Notification Agent
+  { path: 'notification-agent/duplicate-notification-agent/:id', Component: AddNotifAgent }
+];
 
+// Export the routes for the Notification Agent feature
 export default NotifAgentRoutes;

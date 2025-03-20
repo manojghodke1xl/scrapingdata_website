@@ -1,20 +1,21 @@
 import { lazy } from 'react';
-import { Route, Routes } from 'react-router-dom';
 
+// Lazy load the PartnerLogoList component
 const PartnerLogoList = lazy(() => import('../../pages/partnerLogo/PartnerLogoList'));
+// Lazy load the AddPartnerLogo component
 const AddPartnerLogo = lazy(() => import('../../pages/partnerLogo/AddPartnerLogo'));
-const PageNotFound = lazy(() => import('../../pages/common/PageNotFound'));
 
-const PartnerLoogoRoutes = () => {
-  return (
-    <Routes>
-      <Route path="/partner-logo-list" element={<PartnerLogoList />} />
-      <Route path="/add-partner-logo" element={<AddPartnerLogo />} />
-      <Route path="/edit-partner-logo/:id" element={<AddPartnerLogo />} />
-      <Route path="/duplicate-partner-logo/:id" element={<AddPartnerLogo />} />
-      <Route path="*" element={<PageNotFound />} />
-    </Routes>
-  );
-};
+// Define the routes for the PartnerLogo module
+const PartnerLogoRoutes = [
+  // Route for listing partner logos
+  { path: 'partner-logo/partner-logo-list', Component: PartnerLogoList },
+  // Route for adding a new partner logo
+  { path: 'partner-logo/add-partner-logo', Component: AddPartnerLogo },
+  // Route for editing an existing partner logo
+  { path: 'partner-logo/edit-partner-logo/:id', Component: AddPartnerLogo },
+  // Route for duplicating an existing partner logo
+  { path: 'partner-logo/duplicate-partner-logo/:id', Component: AddPartnerLogo }
+];
 
-export default PartnerLoogoRoutes;
+// Export the PartnerLogoRoutes array as the default export
+export default PartnerLogoRoutes;

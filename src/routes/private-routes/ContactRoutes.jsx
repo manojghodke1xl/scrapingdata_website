@@ -1,21 +1,23 @@
 import { lazy } from 'react';
-import { Route, Routes } from 'react-router-dom';
 
+// Lazy load the AddContact component
 const AddContact = lazy(() => import('../../pages/contact/AddContact'));
+// Lazy load the ContactList component
 const ContactList = lazy(() => import('../../pages/contact/ContactList'));
+// Lazy load the ContactBulkImport component
 const ContactBulkImport = lazy(() => import('../../pages/contact/ContactBulkImport'));
-const PageNotFound = lazy(() => import('../../pages/common/PageNotFound'));
 
-const ContactRoutes = () => {
-  return (
-    <Routes>
-      <Route path="/contact-list" element={<ContactList />} />
-      <Route path="/add-contact" element={<AddContact />} />
-      <Route path="/edit-contact/:id" element={<AddContact />} />
-      <Route path="/import-contacts" element={<ContactBulkImport />} />
-      <Route path="*" element={<PageNotFound />} />
-    </Routes>
-  );
-};
+// Define routes for contact-related pages
+const ContactRoutes = [
+  // Route for listing contacts
+  { path: 'contact/contact-list', Component: ContactList },
+  // Route for adding a new contact
+  { path: 'contact/add-contact', Component: AddContact },
+  // Route for editing a specific contact by ID
+  { path: 'contact/edit-contact/:id', Component: AddContact },
+  // Route for importing contacts
+  { path: 'contact/import-contacts', Component: ContactBulkImport }
+];
 
+// Export the ContactRoutes array as the default export
 export default ContactRoutes;

@@ -1,24 +1,38 @@
 import { useState, useEffect } from 'react';
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa';
 
+/**
+ * Pagination component to handle page navigation and items per page selection.
+ *
+ * @param {number} currentPage - The current page number.
+ * @param {number} totalPages - The total number of pages.
+ * @param {number} totalRecords - The total number of records.
+ * @param {number} itemsPerPage - The number of items per page.
+ * @param {Function} setItemsPerPage - Function to set items per page.
+ * @param {Function} handlePageChange - Function to handle page change.
+ */
 const Pagination = ({ currentPage, totalPages, totalRecords, itemsPerPage, setItemsPerPage, handlePageChange }) => {
   const [page, setPage] = useState(currentPage);
   const [items, setItems] = useState(itemsPerPage);
 
-  // Update local state when props change
+  // Update local state when currentPage prop changes
   useEffect(() => {
     setPage(currentPage);
   }, [currentPage]);
 
+  // Update local state when itemsPerPage prop changes
   useEffect(() => {
     setItems(itemsPerPage);
   }, [itemsPerPage]);
 
+  /**
+   * Handle items per page change.
+   * Updates state and calls setItemsPerPage function.
+   */
   const handleItemsPerPageChange = (value) => {
     const newValue = parseInt(value, 10) || 1;
     setItems(newValue);
 
-    // Handle both API and client-side pagination
     if (typeof setItemsPerPage === 'function') {
       setItemsPerPage(newValue);
     } else if (setItemsPerPage && typeof setItemsPerPage === 'object') {
@@ -26,19 +40,24 @@ const Pagination = ({ currentPage, totalPages, totalRecords, itemsPerPage, setIt
     }
   };
 
+  /**
+   * Handle page input change.
+   * Updates state and calls handlePageChange function.
+   */
   const handlePageInputChange = (value) => {
     const newPage = Math.min(Math.max(1, parseInt(value, 10) || 1), totalPages);
     setPage(newPage);
 
-    // Handle both API and client-side pagination
-    if (typeof setItemsPerPage === 'function') {
-      handlePageChange(newPage);
-    } else {
+    if (typeof setItemsPerPage === 'function') handlePageChange(newPage);
+    else {
       setItemsPerPage((prev) => ({ ...prev, currentPage: newPage }));
       handlePageChange(newPage);
     }
   };
 
+  /**
+   * Render pagination links with ellipsis if needed.
+   */
   const renderPaginationLinks = () => {
     const paginationArray = [];
 
@@ -109,6 +128,7 @@ const Pagination = ({ currentPage, totalPages, totalRecords, itemsPerPage, setIt
   return (
     <div className="flex items-center justify-between bg-inherit px-2 sm:px-6 gap-4">
       <div className="w-full flex flex-col sm:flex-row gap-y-5 justify-center xl:justify-between flex-wrap xl:flex-nowrap py-2 items-center gap-4">
+        {/* Records per page input */}
         <div className="flex gap-3 items-start">
           <div className="w-full sm:min-w-[200px] sm:max-w-[260px] flex gap-3 items-center order-1 lg:order-1 xl:order-1">
             <span className="text-secondary whitespace-nowrap">Records Per Page:</span>
@@ -126,6 +146,7 @@ const Pagination = ({ currentPage, totalPages, totalRecords, itemsPerPage, setIt
           </div>
         </div>
 
+        {/* Pagination controls */}
         <div className="flex flex-col items-start justify-between gap-2 order-2">
           <div className="flex flex-col gap-3 items-center justify-center">
             <div className="flex gap-3 items-center justify-center">
@@ -157,6 +178,7 @@ const Pagination = ({ currentPage, totalPages, totalRecords, itemsPerPage, setIt
           </div>
         </div>
 
+        {/* Page input */}
         <div className="flex gap-3 items-center order-3">
           <span className="flex items-center text-[15px] font-medium px-4 py-2 rounded-xl text-primary">
             Page &nbsp;

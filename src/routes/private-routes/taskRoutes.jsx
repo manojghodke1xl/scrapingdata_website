@@ -1,16 +1,18 @@
 import { lazy } from 'react';
-import { Route, Routes } from 'react-router-dom';
 
+// Lazy load the TaskList component
 const TaskList = lazy(() => import('../../pages/task/TaskList'));
-const PageNotFound = lazy(() => import('../../pages/common/PageNotFound'));
 
-const TaskRoutes = () => {
-  return (
-    <Routes>
-      <Route path="/task-list" element={<TaskList />} />
-      <Route path="*" element={<PageNotFound />} />
-    </Routes>
-  );
-};
+// Define the routes for the task feature
+const TaskRoutes = [
+  {
+    // Route to display the list of tasks
+    path: 'task/task-list',
+    // Component to render for this route
+    Component: TaskList
+  }
+];
 
+// Export the TaskRoutes array as the default export
 export default TaskRoutes;
+

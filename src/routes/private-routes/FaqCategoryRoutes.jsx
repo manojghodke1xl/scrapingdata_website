@@ -1,19 +1,19 @@
 import { lazy } from 'react';
-import { Route, Routes } from 'react-router-dom';
 
+// Lazy load the FaqCategoryList component to display a list of FAQ categories.
 const FaqCategoryList = lazy(() => import('../../pages/faqCategory/FaqCategoryList'));
+// Lazy load the AddFaqCategory component to add a new FAQ category.
 const AddFaqCategory = lazy(() => import('../../pages/faqCategory/AddFaqCategory'));
-const PageNotFound = lazy(() => import('../../pages/common/PageNotFound'));
 
-const FaqCategoryRoutes = () => {
-  return (
-    <Routes>
-      <Route path="/faq-category-list" element={<FaqCategoryList />} />
-      <Route path="/add-faq-category" element={<AddFaqCategory />} />
-      <Route path="/edit-faq-category/:id" element={<AddFaqCategory />} />
-      <Route path="*" element={<PageNotFound />} />
-    </Routes>
-  );
-};
+// Define the routes for the FAQ category feature.
+const FaqCategoryRoutes = [
+  // Route to display a list of FAQ categories.
+  { path: 'faq-category/faq-category-list', Component: FaqCategoryList },
+  // Route to add a new FAQ category.
+  { path: 'faq-category/add-faq-category', Component: AddFaqCategory },
+  // Route to edit an existing FAQ category.
+  { path: 'faq-category/edit-faq-category/:id', Component: AddFaqCategory }
+];
 
+// Export the FaqCategoryRoutes array as the default export.
 export default FaqCategoryRoutes;

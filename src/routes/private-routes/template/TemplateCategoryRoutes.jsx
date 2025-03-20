@@ -1,20 +1,19 @@
 import { lazy } from 'react';
-import { Route, Routes } from 'react-router-dom';
 
+// Lazy load the AddTemplateCategory component
 const AddTemplateCategory = lazy(() => import('../../../pages/templates/templateCategory/AddTemplateCategory'));
+// Lazy load the TemplateCategoryList component
 const TemplateCategoryList = lazy(() => import('../../../pages/templates/templateCategory/TemplateCategoryList'));
-const PageNotFound = lazy(() => import('../../../pages/common/PageNotFound'));
 
-const TemplateCategoryRoutes = () => {
-  return (
-    <Routes>
-      <Route path="/add-template-category" element={<AddTemplateCategory />} />
-      <Route path="/edit-template-category/:id" element={<AddTemplateCategory />} />
-      <Route path="/template-category-list" element={<TemplateCategoryList />} />
+// Define the routes for template categories
+const TemplateCategoryRoutes = [
+  // Route for listing template categories
+  { path: 'template-category/template-category-list', Component: TemplateCategoryList },
+  // Route for adding a new template category
+  { path: 'template-category/add-template-category', Component: AddTemplateCategory },
+  // Route for editing an existing template category by ID
+  { path: 'template-category/edit-template-category/:id', Component: AddTemplateCategory }
+];
 
-      <Route path="*" element={<PageNotFound />} />
-    </Routes>
-  );
-};
-
+// Export the TemplateCategoryRoutes array as the default export
 export default TemplateCategoryRoutes;

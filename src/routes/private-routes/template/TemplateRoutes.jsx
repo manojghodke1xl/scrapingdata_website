@@ -1,41 +1,36 @@
 import { lazy } from 'react';
-import { Route, Routes } from 'react-router-dom';
 
+// Email Template Routes
 const EmailTemplateList = lazy(() => import('../../../pages/templates/emailTemplate/EmailTemplateList'));
 const AddEmailTemplate = lazy(() => import('../../../pages/templates/emailTemplate/AddEmailTemplate'));
 
+// SMS Template Routes
 const AddSMSTemplate = lazy(() => import('../../../pages/templates/smsTemplate/AddSMSTemplate'));
 const SMSTemplateList = lazy(() => import('../../../pages/templates/smsTemplate/SMSTemplateList'));
 
+// WhatsApp Template Routes
 const AddWhatsAppTemplate = lazy(() => import('../../../pages/templates/whatsappTemplate/AddWhatsAppTemplate'));
 const WhatsAppTemplateList = lazy(() => import('../../../pages/templates/whatsappTemplate/WhatsAppTemplateList'));
 
-const PageNotFound = lazy(() => import('../../../pages/common/PageNotFound'));
+const TemplateRoutes = [
+  // Email Template Routes
+  { path: 'templates/email-template-list', Component: EmailTemplateList },
+  { path: 'templates/add-email-template', Component: AddEmailTemplate },
+  { path: 'templates/edit-email-template/:id', Component: AddEmailTemplate },
+  { path: 'templates/duplicate-email-template/:id?', Component: AddEmailTemplate },
 
-const TemplateRoutes = () => {
-  return (
-    <Routes>
-      {/* Email Template Routes */}
-      <Route path="/email-template-list" element={<EmailTemplateList />} />
-      <Route path="/add-email-template" element={<AddEmailTemplate />} />
-      <Route path="/edit-email-template/:id" element={<AddEmailTemplate />} />
-      <Route path="/duplicate-email-template/:id?" element={<AddEmailTemplate />} />
+  // SMS Template Routes
+  { path: 'templates/sms-template-list', Component: SMSTemplateList },
+  { path: 'templates/add-sms-template', Component: AddSMSTemplate },
+  { path: 'templates/edit-sms-template/:id', Component: AddSMSTemplate },
+  { path: 'templates/duplicate-sms-template/:id', Component: AddSMSTemplate },
 
-      {/* SMS Template Routes */}
-      <Route path="/sms-template-list" element={<SMSTemplateList />} />
-      <Route path="/add-sms-template" element={<AddSMSTemplate />} />
-      <Route path="/edit-sms-template/:id" element={<AddSMSTemplate />} />
-      <Route path="/duplicate-sms-template/:id" element={<AddSMSTemplate />} />
-
-      {/* WhatsApp Template Routes */}
-      <Route path="/whatsapp-template-list" element={<WhatsAppTemplateList />} />
-      <Route path="/add-whatsapp-template" element={<AddWhatsAppTemplate />} />
-      <Route path="/edit-whatsapp-template/:id" element={<AddWhatsAppTemplate />} />
-      <Route path='/duplicate-whatsapp-template/:id' element={<AddWhatsAppTemplate />} />
-
-      <Route path="*" element={<PageNotFound />} />
-    </Routes>
-  );
-};
+  // WhatsApp Template Routes
+  { path: 'templates/whatsapp-template-list', Component: WhatsAppTemplateList },
+  { path: 'templates/add-whatsapp-template', Component: AddWhatsAppTemplate },
+  { path: 'templates/edit-whatsapp-template/:id', Component: AddWhatsAppTemplate },
+  { path: 'templates/duplicate-whatsapp-template/:id', Component: AddWhatsAppTemplate }
+];
 
 export default TemplateRoutes;
+

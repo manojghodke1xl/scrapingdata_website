@@ -1,16 +1,13 @@
 import { lazy } from 'react';
-import { Route, Routes } from 'react-router-dom';
 
+// Lazy load the BookingList component
 const BookingList = lazy(() => import('../../pages/booking/BookingList'));
-const PageNotFound = lazy(() => import('../../pages/common/PageNotFound'));
 
-const BookingRoutes = () => {
-  return (
-    <Routes>
-      <Route path="/booking-list" element={<BookingList />} />
-      <Route path="*" element={<PageNotFound />} />
-    </Routes>
-  );
-};
+// Define the routes for the booking feature
+const BookingRoutes = [
+  // Route to display the list of bookings
+  { path: 'bookings/booking-list', Component: BookingList }
+];
 
+// Export the BookingRoutes array as the default export
 export default BookingRoutes;
