@@ -495,7 +495,7 @@ const AddProduct = () => {
                 ]}
                 onChange={(selected) => {
                   const supportedRegions = {
-                    INR: paymentData?.razorpay?.supports?.INR || paymentData?.stripe?.supports?.INR || paymentData?.paypal?.supports?.INR,
+                    INR: paymentData?.razorpay?.supports?.INR || paymentData?.stripe?.supports?.INR || paymentData?.paypal?.supports?.INR || paymentData?.phonepe?.supports?.INR,
                     AED: paymentData?.razorpay?.supports?.AED || paymentData?.stripe?.supports?.AED || paymentData?.paypal?.supports?.AED,
                     USD: paymentData?.razorpay?.supports?.USD || paymentData?.stripe?.supports?.USD || paymentData?.paypal?.supports?.USD
                   };
