@@ -78,14 +78,14 @@ const TableRowActions = ({
 
   return availableActions.length > 0 ? (
     <div className="relative">
-      <button ref={buttonRef} className="text-white p-1.5 rounded-xl hover:bg-hover cursor-pointer focus:outline-none" onClick={(e) => handleToggle(row.id, e)}>
-        <BsThreeDotsVertical size={20} className="text-secondary hover:text-primary" />
+      <button ref={buttonRef} className="bg-main text-white pl-1.5 z-20 hover:bg-hover cursor-pointer focus:outline-none" onClick={(e) => handleToggle(row.id, e)}>
+        <BsThreeDotsVertical className="text-secondary hover:text-primary text-base" />
       </button>
 
       {openDropdownId === row.id && (
         <ul
           ref={dropdownRef}
-          className="fixed w-fit rounded-md bg-main shadow-lg border border-primary"
+          className="fixed w-fit z-50 whitespace-nowrap rounded-md bg-main border border-primary"
           style={{
             top: `${dropdownPosition.top}px`,
             left: `${dropdownPosition.left}px`
@@ -94,7 +94,7 @@ const TableRowActions = ({
           {availableActions.map((action, i) => (
             <button
               key={i}
-              className="w-full flex gap-2 items-center px-4 py-2 text-secondary hover:bg-hover hover:text-primary cursor-pointer focus:outline-none"
+              className="w-full flex gap-1.5 items-center p-1.5 text-secondary text-sm hover:bg-hover hover:text-primary cursor-pointer focus:outline-none"
               onClick={async (e) => {
                 e.stopPropagation();
                 if (action.type === 'edit') navigate(editPath + '/' + row.id);
@@ -111,13 +111,13 @@ const TableRowActions = ({
                 if (action.type === 'sendCertificateUnique') await approvalApi(row.bookingId, true, sendCertificate !== 'ID');
               }}
             >
-              {action.type === 'edit' && <MdEdit size={20} />}
-              {action.type === 'view' && <MdRemoveRedEye size={20} />}
-              {action.type === 'apps' && <MdOutlineApps size={20} />}
-              {action.type === 'copy' && <FiCopy size={20} />}
-              {action.type === 'delete' && <MdDeleteForever size={20} />}
-              {action.type === 'managePackage' && <MdOutlineInventory2 size={20} />}
-              {(action.type === 'sendForApproval' || action.type === 'sendCertificate' || action.type === 'sendCertificateUnique') && <MdSend size={20} />}
+              {action.type === 'edit' && <MdEdit />}
+              {action.type === 'view' && <MdRemoveRedEye />}
+              {action.type === 'apps' && <MdOutlineApps />}
+              {action.type === 'copy' && <FiCopy />}
+              {action.type === 'delete' && <MdDeleteForever />}
+              {action.type === 'managePackage' && <MdOutlineInventory2 />}
+              {(action.type === 'sendForApproval' || action.type === 'sendCertificate' || action.type === 'sendCertificateUnique') && <MdSend />}
 
               {action.type === 'managePackage'
                 ? 'Manage Package'

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { TbFileSearch, TbTemplate, TbUsersGroup } from 'react-icons/tb';
 import { IoSettingsOutline } from 'react-icons/io5';
 import { MdMessage } from 'react-icons/md';
@@ -29,6 +29,7 @@ import {
 import ReusableAccordion from '../../../atoms/sidebar/ReusableAccordion';
 import useGlobalContext from '../../../hooks/useGlobalContext';
 import { AiOutlineProduct } from 'react-icons/ai';
+import LinkComponent from '../../../atoms/sidebar/LinkComponent';
 // import SearchComponent from '../../../atoms/common/SearchComponent';
 
 const MaterialSidebar = ({ handleToggleSidebar = () => {} }) => {
@@ -44,24 +45,15 @@ const MaterialSidebar = ({ handleToggleSidebar = () => {} }) => {
   };
 
   return (
-    <div className="w-[320px] h-full px-3 py-4 sm:py-6 relative">
+    <div className="w-full h-full p-1 relative">
       <div className="w-full">
-        <div className="flex flex-col space-y-2 h-screen lg:h-screen-minus-240 overflow-x-hidden overflow-y-auto scrollbar-hide">
+        <div className="flex flex-col h-screen lg:h-screen-minus-240 overflow-x-hidden overflow-y-auto scrollbar-hide">
           {/* <div className="w-full flex items-center rounded-xl border border-primary px-3 focus:border-hover mb-4">
             <SearchComponent />
           </div> */}
           {/* Map through navLinks to render NavLinks */}
-          {navLinks.map(({ to, title, icon }) => (
-            <Link
-              key={title}
-              to={to[0]}
-              onClick={handleLinkClick}
-              className={`py-2.5 px-3 rounded-xl flex gap-3 items-center ${isActive(to) ? 'bg-primary-faded text-brand' : 'text-primary hover:bg-hover bg-inherit'}`}
-            >
-              <span className="text-3xl">{icon}</span>
-              <span>{title}</span>
-            </Link>
-          ))}
+
+          <LinkComponent navLinks={navLinks} onClick={handleLinkClick} isActive={isActive} />
 
           <ReusableAccordion
             title="Contents"
@@ -196,19 +188,7 @@ const MaterialSidebar = ({ handleToggleSidebar = () => {} }) => {
             handleToggleSidebar={handleToggleSidebar}
           />
 
-          {adminNavLinks
-            .filter(({ title }) => auth.isSuperAdmin || title !== 'Admins')
-            .map(({ to, title, icon }) => (
-              <Link
-                key={title}
-                to={to[0]}
-                onClick={handleLinkClick}
-                className={`py-2.5 px-3 rounded-xl flex gap-3 items-center ${isActive(to) ? 'bg-primary-faded text-brand' : 'text-primary hover:bg-hover bg-inherit'}`}
-              >
-                <span className="text-3xl">{icon}</span>
-                <span>{title}</span>
-              </Link>
-            ))}
+          <LinkComponent navLinks={adminNavLinks.filter(({ title }) => auth.isSuperAdmin || title !== 'Admins')} onClick={handleLinkClick} isActive={isActive} />
         </div>
       </div>
     </div>

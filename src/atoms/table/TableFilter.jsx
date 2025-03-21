@@ -33,11 +33,12 @@ const TableFilter = ({
   };
 
   return (
-    <div className="flex gap-4 flex-wrap sm:flex-nowrap justify-start items-center">
+    <div className="flex gap-2 flex-wrap sm:flex-nowrap justify-start items-center text-sm">
       {search && (
         <>
-          <div className={`px-2 rounded-xl border border-primary flex gap-2 items-center w-full md:w-[210px] h-fit`}>
+          <div className={`px-2 rounded-xl border border-primary flex gap-2 items-center h-fit`}>
             <SearchComponent
+              divClassName={'w-24'}
               value={filterState.searchTerm}
               onChange={(e) => setFilterState((prev) => ({ ...prev, searchTerm: e.target.value }))}
               placeholder={`Search by ${filterState.searchKey || '...'}`}
@@ -55,13 +56,13 @@ const TableFilter = ({
       )}
       {filter && (
         <>
-          <div className="gap-2">
+          <div className="gap-1">
             <Filters categories={filterCategory} onCategorySelect={handleCategorySelect} setSelectedCategory={setSelectedCategory} selectedCategory={selectedCategory} />
           </div>
           {showFilter.status && (
             <div className="relative">
               <div
-                className="absolute -top-2 -right-2 bg-main rounded-full border border-secondary text-primary font-bold cursor-pointer z-10 w-6 h-6 flex items-center justify-center"
+                className="absolute text-sm -top-2 -right-2 bg-main rounded-full border border-secondary text-primary font-bold cursor-pointer z-10 w-5 h-5 flex items-center justify-center"
                 onClick={() => {
                   setShowFilter((prev) => ({ ...prev, status: false }));
                   setFilterState((prev) => ({ ...prev, statusFilter: '' }));
@@ -113,7 +114,7 @@ const TableFilter = ({
 
           {bulkSiteOpenAction.length > 0 && (
             <button
-              className="text-red border border-primary px-2 py-2.5 text-primary rounded-xl font-normal bg-inherit whitespace-nowrap"
+              className="text-red border border-primary px-1 py-2 text-sm text-primary rounded-xl font-normal bg-inherit whitespace-nowrap"
               onClick={(e) => {
                 e.preventDefault();
                 openMultipleSites(bulkSiteOpenAction);

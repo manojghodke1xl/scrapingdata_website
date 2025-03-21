@@ -54,9 +54,9 @@ const OrderPaymentList = () => {
               : status === 'pending'
               ? `${isDarkMode ? 'border border-pending' : 'bg-fadeyellow'} text-pending`
               : `${isDarkMode ? 'border border-failed ' : 'bg-fadedred'} text-failed`
-          } px-2 py-1 w-fit flex gap-2 items-center`}
+          } p-0.5 text-sm w-fit flex gap-2 items-center`}
         >
-          <span className={`min-w-[8px] min-h-[8px] rounded-full ${status === 'success' ? 'bg-green' : 'bg-pending'}`} />
+          <span className={`w-2 h-2 rounded-full ${status === 'success' ? 'bg-green' : 'bg-pending'}`} />
           <span>{status === 'success' ? 'Success' : status === 'pending' ? 'Pending' : 'Failed'}</span>
         </div>
       ),
@@ -128,29 +128,25 @@ const OrderPaymentList = () => {
   ];
 
   return (
-    <div className="py-5 px-8 overflow-x-hidden mb-10">
-      <div className=" w-full">
+    <div className="p-1 overflow-x-hidden mb-12">
+      <div className="w-full">
         <TableHeader heading={'Order Payments'} />
-        <div className="flex flex-col">
-          <div className="-m-1.5 overflow-x-auto">
-            <div className="p-1.5 min-w-full align-middle">
-              <TableComponent
-                selectable={true}
-                siteModule={'order-payments'}
-                headers={columnConfig}
-                tableData={(data) => setOrderPayments(data.orderPayments)}
-                rows={rows}
-                apiUrl={'order-payments'}
-                tableCountLabel={true}
-                pagination={true}
-                search={true}
-                filter={true}
-                filterCategory={[{ id: 0, name: 'Sites' }]}
-                actions={true}
-                viewPath={'/payments/view-order'}
-              />
-            </div>
-          </div>
+        <div className="flex flex-col min-w-full align-middle overflow-x-auto">
+          <TableComponent
+            selectable={true}
+            siteModule={'order-payments'}
+            headers={columnConfig}
+            tableData={(data) => setOrderPayments(data.orderPayments)}
+            rows={rows}
+            apiUrl={'order-payments'}
+            tableCountLabel={true}
+            pagination={true}
+            search={true}
+            filter={true}
+            filterCategory={[{ id: 0, name: 'Sites' }]}
+            actions={true}
+            viewPath={'/payments/view-order'}
+          />
         </div>
       </div>
     </div>

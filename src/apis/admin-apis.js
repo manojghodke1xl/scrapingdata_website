@@ -23,3 +23,11 @@ export const updateAdminThemeApi = async (id, theme) => {
 export const getAdminThemeApi = async (id) => {
   return await getMethodCall(`${import.meta.env.VITE_API_URL}/admin-theme/${id}`);
 };
+
+export const updateAdminLayoutApi = async (id, layout) => {
+  return await putMethodCall(`${import.meta.env.VITE_API_URL}/admin-layout/${id}`, layout);
+};
+
+export const getAdminLayoutApi = async (id) => {
+  return await getMethodCall(`${import.meta.env.VITE_API_URL}/admin-layout/${id}`);
+};

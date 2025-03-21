@@ -141,7 +141,6 @@ export const contactImportConfig = {
   rows: (data) => {
     return data.map((item, index) => {
       const { name, email, phoneCode, phone, sites, error } = item;
-      console.log('item', item);
       return {
         id: index,
         name,

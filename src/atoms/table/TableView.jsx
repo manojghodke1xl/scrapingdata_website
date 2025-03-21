@@ -53,17 +53,17 @@ const TableView = ({
   const isPinnedRight = (colId) => pinnedColumns.right.includes(String(colId)) || colId === 'status';
   const isHidden = (colId) => hiddenColumns.includes(String(colId));
 
-  const defaultPinnedWidth = 80;
+  const defaultPinnedWidth = 40;
 
-  const CHECKBOX_WIDTH = 36;
-  const SERIAL_WIDTH = 40;
+  const CHECKBOX_WIDTH = 24;
+  const SERIAL_WIDTH = 24;
   const getInitialOffset = () => (selectable ? CHECKBOX_WIDTH + SERIAL_WIDTH : SERIAL_WIDTH);
 
   const computePinnedOffsets = () => {
     const leftOffsets = {};
     const rightOffsets = {};
     let leftPosition = getInitialOffset();
-    let rightPosition = actions ? 68 : 0;
+    let rightPosition = actions ? 55 : 0;
 
     headers.forEach((header) => {
       if (isPinnedLeft(header.id)) {
@@ -101,6 +101,7 @@ const TableView = ({
 
     let pinnedStyle = {};
     let pinnedClass = '';
+    let displayLabel = header.key === 'country' ? '#' : header.label;
 
     if (isPinnedLeft(header.id)) {
       pinnedStyle = { left: `${leftOffsets[header.key]}px` };
@@ -120,18 +121,12 @@ const TableView = ({
         onDrop={(e) => handleDrop(e, header.id)}
         onDragEnd={handleDragEnd}
         style={pinnedStyle}
-        className={`px-2 text-left font-semibold text-primary ${pinnedClass}`}
+        className={`px-1 text-left text-primary ${pinnedClass}`}
       >
         <div className="flex items-center gap-1">
-          <span className="whitespace-nowrap">{header.label}</span>
+          <span className="whitespace-nowrap">{displayLabel}</span>
           {header.sortable !== false && (
-            <RxCaretSort
-              size={20}
-              strokeWidth="0.5"
-              fill="none"
-              onClick={() => onSort(header.key)}
-              className={`cursor-pointer ${sortConfig.key === header.key ? 'text-brand' : ''}`}
-            />
+            <RxCaretSort strokeWidth="0.5" onClick={() => onSort(header.key)} className={`text-base cursor-pointer ${sortConfig.sortBy === header.key ? 'text-brand' : ''}`} />
           )}
           {!['status'].includes(header.key) && (
             <button
@@ -142,9 +137,9 @@ const TableView = ({
               }}
             >
               {isPinnedLeft(String(header.id)) || isPinnedRight(String(header.id)) ? (
-                <MdPushPin className="text-primary text-lg" />
+                <MdPushPin className="text-primary text-base" />
               ) : (
-                <MdOutlinePushPin className="text-primary text-lg" />
+                <MdOutlinePushPin className="text-primary text-base" />
               )}
             </button>
           )}
@@ -168,24 +163,26 @@ const TableView = ({
     }
 
     return (
-      <td key={header.key} style={pinnedStyle} className={`whitespace-nowrap px-2 py-1 font-normal ${pinnedClass}`}>
+      <td key={header.key} style={pinnedStyle} className={`whitespace-nowrap px-1  font-normal ${pinnedClass}`}>
         {row[header.key]}
       </td>
     );
   };
 
   return (
-    <div className="overflow-x-auto">
-      <table className="min-w-full divide-y divide-primary text-sm font-semibold text-primary">
-        <thead>
+    <div className="overflow-x-auto overflow-y-hidden">
+      <table className="min-w-full divide-y divide-primary text-sm text-primary">
+        <thead className="font-semibold">
           <tr>
             {selectable && (
-              <th scope="col" className="px-2 py-2 text-left sticky left-0 bg-main z-20 w-[60px]">
+              <th scope="col" className="p-1 text-left sticky left-0 bg-main z-20 w-[30px]">
                 <Checkbox checked={selectionState.isAllSelected} onChange={handleMasterCheckboxChange} />
               </th>
             )}
 
-            <th scope="col" style={{ left: selectable ? `${CHECKBOX_WIDTH}px` : 0 }} className="px-2 py-2 whitespace-nowrap text-left font-semibold sticky bg-main z-20 w-[60px]" />
+            <th scope="col" style={{ left: selectable ? `${CHECKBOX_WIDTH}px` : 0 }} className="p-1 whitespace-nowrap text-left font-semibold sticky bg-main z-20 w-[30px]">
+              #
+            </th>
 
             {(() => {
               const { leftPinned, unpinned, rightPinned } = groupHeaders(headers);
@@ -193,7 +190,7 @@ const TableView = ({
             })()}
 
             {actions && (
-              <th scope="col" className="px-2 text-left right-0 font-semibold text-primary sticky bg-main z-20">
+              <th scope="col" className="p-1 text-sm text-left right-0 text-primary sticky bg-main z-20">
                 Actions
               </th>
             )}
@@ -221,11 +218,11 @@ const TableView = ({
               return (
                 <tr key={row.id} className={`border-b border-primary ${selectionState.selectedItems.includes(row.id) ? 'bg-primary-faded' : 'hover:bg-hover'}`}>
                   {selectable && (
-                    <td className="px-2 py-1 sticky left-0 bg-main z-20 w-[60px]">
+                    <td className="p-1 sticky left-0 bg-main z-20 w-[30px]">
                       <Checkbox checked={selectionState.selectedItems.includes(row.id)} onChange={() => handleRowCheckboxChange(row.id)} disabled={row.isSuperAdmin} />
                     </td>
                   )}
-                  <td style={{ left: selectable ? `${CHECKBOX_WIDTH}px` : 0 }} className="px-2 py-1 font-normal sticky bg-main z-20 w-[60px]">
+                  <td style={{ left: selectable ? `${CHECKBOX_WIDTH}px` : 0 }} className="p-1 font-normal sticky bg-main z-20 w-[30px]">
                     {getSerialNumber(index)}
                   </td>
 

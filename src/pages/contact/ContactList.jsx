@@ -17,7 +17,7 @@ const ContactList = () => {
       exportData: contact,
       name: <TruncatableFieldToolTip content={name} />,
       email: <TruncatableFieldToolTip content={email} />,
-      phoneCode: <CountryFlag dialingCode={phoneCode?.startsWith('+') ? phoneCode.slice(1) : phoneCode} />,
+      country: <CountryFlag dialingCode={phoneCode?.startsWith('+') ? phoneCode.slice(1) : phoneCode} />,
       phone: <TruncatableFieldToolTip content={`${phoneCode ? (phoneCode?.startsWith('+') ? phoneCode : `+${phoneCode}`) : ''} ${phone ? phone : '-'}`} />,
       sites: <TruncatableFieldToolTip content={sites.map((s) => `${s.name} (${s.host})`).join(', ')} />,
       createdAt: formatDateTime(createdAt),
@@ -28,7 +28,7 @@ const ContactList = () => {
   const columnConfig = [
     { id: 0, label: 'Name', key: 'name', dataKey: 'name' },
     { id: 1, label: 'Email', key: 'email', dataKey: 'email' },
-    { id: 6, label: 'Country', key: 'phoneCode', dataKey: 'phoneCode' },
+    { id: 6, label: 'Country', key: 'country', dataKey: 'phoneCode' },
     {
       id: 2,
       label: 'Contact Number',

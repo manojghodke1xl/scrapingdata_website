@@ -2,12 +2,13 @@ import { useCallback, useEffect, useReducer, useRef, useState } from 'react';
 import { GlobalContext } from '../contexts/GlobalContext';
 import { getAllSitesApi } from '../../apis/site-apis';
 import { showNotification } from '../../utils/showNotification';
-import { getAdminThemeApi } from '../../apis/admin-apis';
+import { getAdminThemeApi, getAdminLayoutApi } from '../../apis/admin-apis';
 
 const defaultState = {
   id: '',
   isSuperAdmin: false,
   theme: {},
+  layoutPreference: 'medium',
   exp: 0,
   iat: 0,
   allSites: []
@@ -56,6 +57,10 @@ const authReducer = (state, action) => {
       return { ...state, theme: payload };
     }
 
+    case 'SET_LAYOUT_PREFERENCE': {
+      return { ...state, layoutPreference: payload };
+    }
+
     default:
       return state;
   }
@@ -65,6 +70,7 @@ export const GlobalProvider = ({ children }) => {
   const [auth, dispatch] = useReducer(authReducer, authState);
   const [isLoading, setLoading] = useState(false);
   const themeFetched = useRef(false);
+  const layoutFetched = useRef(false);
 
   const fetchData = useCallback(
     async (apiCall, successAction, id) => {
@@ -93,12 +99,21 @@ export const GlobalProvider = ({ children }) => {
       themeFetched.current = true;
     }
   }, [auth.id, fetchData]);
+
+  const fetchLayout = useCallback(() => {
+    if (auth.id) {
+      fetchData(getAdminLayoutApi, (data) => ({ type: 'SET_LAYOUT_PREFERENCE', payload: data.layoutSize }), auth.id);
+      layoutFetched.current = true;
+    }
+  }, [auth.id, fetchData]);
+
   useEffect(() => {
     if (auth.id) {
       fetchSites();
       fetchTheme();
+      fetchLayout();
     }
-  }, [auth.id, fetchSites, fetchTheme]);
+  }, [auth.id, fetchSites, fetchTheme, fetchLayout]);
 
   return <GlobalContext.Provider value={{ auth, dispatch, setLoading, isLoading }}>{children}</GlobalContext.Provider>;
 };

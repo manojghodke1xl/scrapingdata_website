@@ -27,9 +27,9 @@ const PopupList = () => {
         <div
           className={`rounded-xl ${
             isActive ? `${isDarkMode ? 'border border-success' : 'bg-lightgreen'} text-success` : `${isDarkMode ? 'border border-inactive' : 'bg-inactive'} text-inactive`
-          } px-2 py-1 w-fit flex gap-2 items-center`}
+          } p-0.5 text-sm w-fit flex gap-1 items-center`}
         >
-          <span className={`min-w-[8px] min-h-[8px] rounded-full ${isActive ? 'bg-green ' : 'bg-darkgray'}`} />
+          <span className={`w-2 h-2 rounded-full ${isActive ? 'bg-green ' : 'bg-darkgray'}`} />
           <span>{isActive ? 'Active' : 'Inactive'}</span>
         </div>
       ),
@@ -55,8 +55,8 @@ const PopupList = () => {
   ];
 
   return (
-    <div className="py-5 px-8 overflow-x-hidden mb-10">
-      <div className=" w-full">
+    <div className="p-1 overflow-x-hidden mb-12">
+      <div className="w-full">
         <TableHeader
           heading={'Pop-ups'}
           btn1={true}
@@ -68,44 +68,40 @@ const PopupList = () => {
           icon2={<IoMdAdd />}
           btnLabel2={'Add Pop-up'}
         />
-        <div className="flex flex-col">
-          <div className="-m-1.5 overflow-x-auto">
-            <div className="p-1.5 min-w-full align-middle">
-              <TableComponent
-                selectable={true}
-                siteModule={'popup'}
-                headers={columnConfig}
-                tableData={(data) => setPopups(data.popups)}
-                rows={rows}
-                apiUrl={'popups'}
-                tableCountLabel={true}
-                pagination={true}
-                actions={true}
-                editPath={'/pop-up/edit-pop-up'}
-                copyPath={'/pop-up/duplicate-pop-up'}
-                search={true}
-                filter={true}
-                filterCategory={[
-                  { id: 1, name: 'Sites' },
-                  { id: 2, name: 'Status' }
-                ]}
-                statuses={[
-                  { id: 0, name: 'Active', bgColor: '#ECFDF3', color: '#027948', dotColor: '#12B76A' },
-                  { id: 2, name: 'Inactive', bgColor: '#F2F4F7', color: '#344054', dotColor: '#667085' }
-                ]}
-                searchCategory={[{ id: 1, name: 'Name' }]}
-                deleteAction={true}
-                deleteBtn={true}
-                deleteApi={deletePopupApi}
-                deleteLabel={'Delete Pop-up'}
-                deleteMessage={'Are you sure you want to delete this pop-up?'}
-                modifyStatus={true}
-                modifyStatusApi={updatePopupStatusApi}
-                duplicateBtn={true}
-                duplicateApi={duplicatePopupApi}
-              />
-            </div>
-          </div>
+        <div className="flex flex-col min-w-full align-middle overflow-x-auto">
+          <TableComponent
+            selectable={true}
+            siteModule={'popup'}
+            headers={columnConfig}
+            tableData={(data) => setPopups(data.popups)}
+            rows={rows}
+            apiUrl={'popups'}
+            tableCountLabel={true}
+            pagination={true}
+            actions={true}
+            editPath={'/pop-up/edit-pop-up'}
+            copyPath={'/pop-up/duplicate-pop-up'}
+            search={true}
+            filter={true}
+            filterCategory={[
+              { id: 1, name: 'Sites' },
+              { id: 2, name: 'Status' }
+            ]}
+            statuses={[
+              { id: 0, name: 'Active', bgColor: '#ECFDF3', color: '#027948', dotColor: '#12B76A' },
+              { id: 2, name: 'Inactive', bgColor: '#F2F4F7', color: '#344054', dotColor: '#667085' }
+            ]}
+            searchCategory={[{ id: 1, name: 'Name' }]}
+            deleteAction={true}
+            deleteBtn={true}
+            deleteApi={deletePopupApi}
+            deleteLabel={'Delete Pop-up'}
+            deleteMessage={'Are you sure you want to delete this pop-up?'}
+            modifyStatus={true}
+            modifyStatusApi={updatePopupStatusApi}
+            duplicateBtn={true}
+            duplicateApi={duplicatePopupApi}
+          />
         </div>
       </div>
       <NoteComponent note={listPopupNote} />

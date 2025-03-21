@@ -27,9 +27,9 @@ const CouponList = () => {
         <div
           className={`rounded-xl ${
             isActive ? `${isDarkMode ? 'border border-success' : 'bg-lightgreen'} text-success` : `${isDarkMode ? 'border border-inactive' : 'bg-inactive'} text-inactive`
-          } px-2 py-1 w-fit flex gap-2 items-center`}
+          } p-0.5 w-fit text-sm flex gap-2 items-center`}
         >
-          <span className={`min-w-[8px] min-h-[8px] rounded-full ${isActive ? 'bg-green ' : 'bg-darkgray'}`} />
+          <span className={`w-2 h-2 rounded-full ${isActive ? 'bg-green ' : 'bg-darkgray'}`} />
           <span>{isActive ? 'Active' : 'Inactive'}</span>
         </div>
       ),
@@ -50,42 +50,38 @@ const CouponList = () => {
   ];
 
   return (
-    <div className="py-5 px-8 overflow-x-hidden mb-10">
-      <div className=" w-full">
+    <div className="p-1 overflow-x-hidden mb-12">
+      <div className="w-full">
         <TableHeader heading={'Coupons'} btn1={true} href1={'/coupon/add-coupon'} icon1={<IoMdAdd />} btnLabel1={'Add Coupon'} />
-        <div className="flex flex-col">
-          <div className="-m-1.5 overflow-x-auto">
-            <div className="p-1.5 min-w-full align-middle">
-              <TableComponent
-                selectable={true}
-                siteModule={'coupon'}
-                headers={columnConfig}
-                tableData={(data) => setCoupons(data.coupons)}
-                rows={rows}
-                apiUrl={'coupon'}
-                tableCountLabel={true}
-                pagination={true}
-                actions={true}
-                editPath={'/coupon/edit-coupon'}
-                copyPath={'/coupon/duplicate-coupon'}
-                search={true}
-                filter={true}
-                deleteAction={true}
-                deleteBtn={true}
-                filterCategory={[
-                  { id: 0, name: 'Status' },
-                  { id: 1, name: 'Sites' }
-                ]}
-                statuses={[
-                  { id: 0, name: 'Active', bgColor: '#ECFDF3', color: '#027948', dotColor: '#12B76A' },
-                  { id: 2, name: 'Inactive', bgColor: '#F2F4F7', color: '#344054', dotColor: '#667085' }
-                ]}
-                deleteLabel={'Delete Coupon'}
-                deleteMessage={'Are you sure you want to delete this coupon?'}
-                deleteApi={deleteCouponApi}
-              />
-            </div>
-          </div>
+        <div className="flex flex-col min-w-full align-middle overflow-x-auto">
+          <TableComponent
+            selectable={true}
+            siteModule={'coupon'}
+            headers={columnConfig}
+            tableData={(data) => setCoupons(data.coupons)}
+            rows={rows}
+            apiUrl={'coupon'}
+            tableCountLabel={true}
+            pagination={true}
+            actions={true}
+            editPath={'/coupon/edit-coupon'}
+            copyPath={'/coupon/duplicate-coupon'}
+            search={true}
+            filter={true}
+            deleteAction={true}
+            deleteBtn={true}
+            filterCategory={[
+              { id: 0, name: 'Status' },
+              { id: 1, name: 'Sites' }
+            ]}
+            statuses={[
+              { id: 0, name: 'Active', bgColor: '#ECFDF3', color: '#027948', dotColor: '#12B76A' },
+              { id: 2, name: 'Inactive', bgColor: '#F2F4F7', color: '#344054', dotColor: '#667085' }
+            ]}
+            deleteLabel={'Delete Coupon'}
+            deleteMessage={'Are you sure you want to delete this coupon?'}
+            deleteApi={deleteCouponApi}
+          />
         </div>
       </div>
       <NoteComponent note={couponListNote} />
