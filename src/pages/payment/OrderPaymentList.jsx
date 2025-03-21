@@ -40,7 +40,7 @@ const OrderPaymentList = () => {
         <TruncatableFieldToolTip content={`${address?.addressLine1 + ', ' + address?.city + ', ' + address?.state + ', ' + address?.country + ', ' + address?.postalCode} `} />
       ),
       amount: <TruncatableFieldToolTip content={amount} />,
-      channel: channel === 'razorpay' ? 'Razorpay' : channel === 'stripe' ? 'Stripe' : 'PayPal',
+      channel: channel === 'razorpay' ? 'Razorpay' : channel === 'stripe' ? 'Stripe' : channel === 'phonepe' ? 'PhonePe' : 'PayPal',
       products: <TruncatableFieldToolTip content={products?.map((p) => p.name).join(', ') ?? ''} />,
       quantity: <TruncatableFieldToolTip content={products.reduce((sum, p) => sum + p.quantity, 0) ?? '-'} />,
       totalPrice: <TruncatableFieldToolTip content={totalPrice ? `${totalPrice} ${currency}` : '-'} />,

@@ -162,9 +162,9 @@ const PhonepeIntegration = () => {
           <div className="w-full">
             <MultiSelectCheckbox
               options={[
-                { _id: 'INR', name: 'INR' },
-                { _id: 'AED', name: 'AED' },
-                { _id: 'USD', name: 'USD' }
+                { _id: 'INR', name: 'INR' }
+                // { _id: 'AED', name: 'AED' },
+                // { _id: 'USD', name: 'USD' }
               ]}
               formLabel="Supported Currencies"
               label="Select Currencies"
