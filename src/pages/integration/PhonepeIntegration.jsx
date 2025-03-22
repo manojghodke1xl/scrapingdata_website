@@ -16,7 +16,6 @@ const PhonepeIntegration = () => {
   const [phonepeDetails, setPhonepeDetails] = useState(
     state?.integrationData?.payment?.phonepe || {
       merchantId: '',
-      keyIndex: '',
       saltKey: '',
       environment: 'development',
       supports: {
@@ -33,7 +32,6 @@ const PhonepeIntegration = () => {
   const validate = () => {
     const newErrors = {};
     if (!phonepeDetails.merchantId) newErrors.merchantId = 'Merchant Id is required.';
-    if (!phonepeDetails.keyIndex) newErrors.keyIndex = 'Key Index is required.';
     if (!phonepeDetails.saltKey) newErrors.saltKey = 'Salt Key is required.';
     if (!phonepeDetails.environment) newErrors.environment = 'Environment is required.';
     if (!phonepeDetails.redirectUrl?.success) newErrors.redirectUrlsuccess = 'Succes URL is required.';
@@ -117,19 +115,7 @@ const PhonepeIntegration = () => {
               value={phonepeDetails?.merchantId}
               errorMessage={errors.merchantId}
             />
-            <FormField
-              label="Key Index"
-              type="number"
-              id="keyIndex"
-              name="keyIndex"
-              placeholder="Merchant Id"
-              onChange={(e) => {
-                setPhonepeDetails((prev) => ({ ...prev, keyIndex: e.target.value }));
-                if (errors.keyIndex) setErrors((prev) => ({ ...prev, keyIndex: '' }));
-              }}
-              value={phonepeDetails?.keyIndex}
-              errorMessage={errors.keyIndex}
-            />
+
             <FormField
               label="Key Secret"
               type="text"
