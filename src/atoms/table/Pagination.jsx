@@ -65,7 +65,7 @@ const Pagination = ({ currentPage, totalPages, totalRecords, itemsPerPage, setIt
     paginationArray.push(
       <span
         key={1}
-        className={`rounded-xl mx-1 items-center justify-center h-fit py-1.5 px-3.5 border border-primary font-medium ${
+        className={`rounded-xl mx-1 items-center justify-center h-fit py-1 px-2 tet-sm border border-primary font-medium ${
           1 === currentPage ? 'z-10 bg-primary-faded text-brand' : 'text-primary hover:bg-hover focus:z-20 focus:outline-offset-0 cursor-pointer'
         }`}
         onClick={() => handlePageChange(1)}
@@ -77,7 +77,7 @@ const Pagination = ({ currentPage, totalPages, totalRecords, itemsPerPage, setIt
     // Add ellipsis if needed
     if (currentPage > 2) {
       paginationArray.push(
-        <span key="ellipsis1" className="px-3">
+        <span key="ellipsis1" className="px-1">
           ...
         </span>
       );
@@ -88,7 +88,7 @@ const Pagination = ({ currentPage, totalPages, totalRecords, itemsPerPage, setIt
       paginationArray.push(
         <span
           key={i}
-          className={`rounded-xl mx-1 items-center justify-center h-fit py-1.5 px-3.5 border border-primary font-medium ${
+          className={`rounded-xl mx-1 items-center justify-center h-fit py-1 px-2 border border-primary font-medium ${
             i === currentPage ? 'z-10 bg-primary-faded text-brand' : 'text-primary hover:bg-hover focus:z-20 focus:outline-offset-0 cursor-pointer'
           }`}
           onClick={() => handlePageChange(i)}
@@ -101,7 +101,7 @@ const Pagination = ({ currentPage, totalPages, totalRecords, itemsPerPage, setIt
     // Add ellipsis if needed
     if (currentPage < totalPages - 1) {
       paginationArray.push(
-        <span key="ellipsis2" className="px-3">
+        <span key="ellipsis2" className="px-1">
           ...
         </span>
       );
@@ -112,8 +112,8 @@ const Pagination = ({ currentPage, totalPages, totalRecords, itemsPerPage, setIt
       paginationArray.push(
         <span
           key={totalPages}
-          className={`rounded-xl mx-1 items-center justify-center h-fit py-1.5 px-3.5 font-medium ${
-            totalPages === currentPage ? 'z-10 bg-primary-faded text-brand border border-primary' : 'text-primary hover:bg-hover focus:z-20 focus:outline-offset-0 cursor-pointer'
+          className={`rounded-xl items-center justify-center h-fit py-1 px-2 border border-primary font-medium ${
+            totalPages === currentPage ? 'z-10 bg-primary-faded text-brand' : 'text-primary hover:bg-hover focus:z-20 focus:outline-offset-0 cursor-pointer'
           }`}
           onClick={() => handlePageChange(totalPages)}
         >
@@ -126,12 +126,12 @@ const Pagination = ({ currentPage, totalPages, totalRecords, itemsPerPage, setIt
   };
 
   return (
-    <div className="flex items-center justify-between bg-inherit px-2 sm:px-6 gap-4">
-      <div className="w-full flex flex-col sm:flex-row gap-y-5 justify-center xl:justify-between flex-wrap xl:flex-nowrap py-2 items-center gap-4">
+    <div className="flex items-center justify-between bg-inherit px-2 gap-1">
+      <div className="w-full flex flex-col sm:flex-row gap-y-1 justify-center xl:justify-between flex-wrap xl:flex-nowrap py-1 items-center ">
         {/* Records per page input */}
-        <div className="flex gap-3 items-start">
-          <div className="w-full sm:min-w-[200px] sm:max-w-[260px] flex gap-3 items-center order-1 lg:order-1 xl:order-1">
-            <span className="text-secondary whitespace-nowrap">Records Per Page:</span>
+        <div className="flex gap-2 items-start">
+          <div className="w-full sm:min-w-[200px] sm:max-w-[260px] flex gap-2 items-center order-1">
+            <span className="text-secondary whitespace-nowrap text-sm">Records Per Page:</span>
             <input
               type="number"
               min="1"
@@ -140,7 +140,7 @@ const Pagination = ({ currentPage, totalPages, totalRecords, itemsPerPage, setIt
               onBlur={(e) => handleItemsPerPageChange(e.target.value)}
               onChange={(e) => setItems(e.target.value)}
               value={items}
-              className={`h-8 min-w-[2.5rem] px-2 text-sm rounded-xl border border-primary text-center font-normal focus:outline-none focus:ring-0 focus:border-secondary placeholder:text-gray-400 text-dark bg-transparent transition-all`}
+              className={`h-8 min-w-[2rem] px-1 text-sm rounded-xl border border-primary text-center font-normal focus:outline-none focus:ring-0 focus:border-secondary placeholder:text-placeholder text-dark bg-transparent transition-all`}
               style={{ width: `${Math.max(3, items.toString().length * 1)}rem` }}
             />
           </div>
@@ -148,15 +148,15 @@ const Pagination = ({ currentPage, totalPages, totalRecords, itemsPerPage, setIt
 
         {/* Pagination controls */}
         <div className="flex flex-col items-start justify-between gap-2 order-2">
-          <div className="flex flex-col gap-3 items-center justify-center">
-            <div className="flex gap-3 items-center justify-center">
+          <div className="flex flex-col gap-1 items-center justify-center">
+            <div className="flex gap-1 items-center justify-center">
               <span
-                className={`inline-flex items-center rounded-xl border border-primary h-fit bg-inherit px-2 py-2 text-sm font-medium text-primary hover:bg-hover ${
+                className={`inline-flex items-center rounded-xl border border-primary h-fit bg-inherit px-1 py-1 text-sm font-medium text-primary hover:bg-hover ${
                   currentPage === 1 ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'
                 }`}
                 onClick={() => currentPage > 1 && handlePageChange(currentPage - 1)}
               >
-                <FaAngleLeft size={20} />
+                <FaAngleLeft className="text-xl" />
               </span>
 
               <nav className="isolate inline-flex rounded-md justify-center" aria-label="Pagination">
@@ -164,12 +164,12 @@ const Pagination = ({ currentPage, totalPages, totalRecords, itemsPerPage, setIt
               </nav>
 
               <span
-                className={`inline-flex items-center rounded-xl border border-primary h-fit bg-inherit px-2 py-2 text-sm font-medium text-primary hover:bg-hover ${
+                className={`inline-flex items-center rounded-xl border border-primary h-fit bg-inherit px-1 py-1 text-sm font-medium text-primary hover:bg-hover ${
                   currentPage === totalPages ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'
                 }`}
                 onClick={() => currentPage < totalPages && handlePageChange(currentPage + 1)}
               >
-                <FaAngleRight size={20} />
+                <FaAngleRight className="text-xl" />
               </span>
             </div>
             <div className="flex items-center justify-center">
@@ -179,8 +179,8 @@ const Pagination = ({ currentPage, totalPages, totalRecords, itemsPerPage, setIt
         </div>
 
         {/* Page input */}
-        <div className="flex gap-3 items-center order-3">
-          <span className="flex items-center text-[15px] font-medium px-4 py-2 rounded-xl text-primary">
+        <div className="flex gap-2 items-center order-3">
+          <span className="flex items-center text-sm font-medium rounded-xl text-primary">
             Page &nbsp;
             <input
               type="number"
@@ -191,8 +191,8 @@ const Pagination = ({ currentPage, totalPages, totalRecords, itemsPerPage, setIt
               onBlur={(e) => handlePageInputChange(e.target.value)}
               onChange={(e) => setPage(e.target.value)}
               value={page}
-              className={`h-8 min-w-[2.5rem] px-2 text-sm rounded-xl border border-primary text-center font-normal focus:outline-none focus:ring-0 focus:border-secondary placeholder:text-placeholder text-dark bg-transparent transition-all`}
-              style={{ width: `${Math.max(3, page.toString().length * 1)}rem` }}
+              className={`h-8 min-w-[2rem] px-1 text-sm rounded-xl border border-primary text-center font-normal focus:outline-none focus:ring-0 focus:border-secondary placeholder:text-placeholder text-dark bg-transparent transition-all`}
+              style={{ width: `${Math.max(2.5, page.toString().length * 1)}rem` }}
             />
             &nbsp;of {totalPages}
           </span>

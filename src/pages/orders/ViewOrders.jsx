@@ -165,7 +165,7 @@ const ViewOrders = () => {
               </p>
             </div>
             <div>
-              <h1 className="font-semibold text-primary">Dilivery Cost</h1>
+              <h1 className="font-semibold text-primary">Delivery Cost</h1>
               <p className="text-placeholder font-normal">
                 {order?.payment?.shippingCharges} {order?.payment?.currency}
               </p>

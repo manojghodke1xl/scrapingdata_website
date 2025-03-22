@@ -73,49 +73,51 @@ const TableColumnSelector = ({
   return (
     <div ref={dropdownRef}>
       {/* Change from button to div */}
-      <button onClick={() => setIsOpen(!isOpen)} className="px-4 py-2 bg-inherit border border-primary rounded-xl shadow focus:outline-none focus:ring-0">
-        <span className="flex flex-row items-center gap-x-2">
-          <FiColumns className="text-xl text-primary" /> Select Columns
-        </span>
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="flex flex-row items-center gap-1 p-2 bg-inherit border border-primary rounded-xl shadow focus:outline-none focus:ring-0 font-normal"
+      >
+        <FiColumns className="text-base text-primary" />
+        <span className="text-sm">Select Columns</span>
       </button>
       {isOpen && (
-        <div className="absolute transform -translate-x-28 translate-y-4 z-50 border border-primary rounded-xl shadow-lg bg-main w-[280px]" onClick={(e) => e.stopPropagation()}>
+        <div className="absolute  transform -translate-x-40 translate-y-4 z-50 border border-primary rounded-xl shadow-lg bg-main w-[280px]" onClick={(e) => e.stopPropagation()}>
           {/* Add stopPropagation */}
-          <div className="p-4">
-            <SearchComponent value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="mb-3" />
-            <div className="mt-2 border-b border-primary pb-2">
-              <div className="flex items-center gap-x-2 p-2 hover:bg-hover rounded-lg">
+          <div className="p-1">
+            <SearchComponent value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
+            <div className="border-b border-primary">
+              <div className="flex items-center gap-x-1 p-1 hover:bg-hover rounded-xl">
                 <Checkbox id="select-all" checked={isAllSelected} onChange={handleSelectAll} />
-                <label className="text-primary font-medium cursor-pointer select-none">Select All</label>
+                <label className="text-primary font-medium text-sm cursor-pointer select-none">Select All</label>
               </div>
             </div>
-            <div className="max-h-[280px] overflow-y-auto custom-scrollbar mt-2">
+            <div className="max-h-[280px] overflow-y-auto custom-scrollbar">
               {filteredColumns.map((col) => (
                 <div
                   key={col.id}
-                  className={`flex items-center justify-start gap-x-2 py-2 hover:bg-hover rounded-lg px-2 ${isPinnedLeft(col.id) || isPinnedRight(col.id) ? 'opacity-50' : ''}`}
+                  className={`flex items-center justify-start gap-x-1 py-1 hover:bg-hover rounded-lg ${isPinnedLeft(col.id) || isPinnedRight(col.id) ? 'opacity-50' : ''}`}
                   draggable={!isPinnedLeft(col.id) && !isPinnedRight(col.id)}
                   onDragStart={(e) => handleDragStart(e, col.id)}
                   onDragOver={handleDragOver}
                   onDrop={(e) => handleDrop(e, col.id)}
                   onDragEnd={handleDragEnd}
                 >
-                  <MdDragIndicator className={`text-primary text-xl ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`} />
+                  <MdDragIndicator className={`text-primary text-base ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`} />
                   <Checkbox
                     id={`col-${col.id}`}
                     checked={!hiddenColumns.includes(String(col.id))}
                     onChange={(e) => handleCheckboxChange(e, col.id)}
                     disabled={col.pinned === 'left' || col.pinned === 'right' || col.key === 'status'}
                   />
-                  <label className="flex items-center text-primary cursor-pointer select-none">{col.label}</label>
+                  <label className="flex items-center text-primary text-sm font-normal cursor-pointer select-none whitespace-nowrap">{col.label}</label>
                 </div>
               ))}
             </div>
-            <div className="flex justify-end gap-2 mt-4 pt-2 border-t border-primary">
-              <button onClick={handleReset} className="px-3 py-1 text-sm bg-red text-white rounded-lg hover:bg-red-600 transition-colors">
+            <div className="flex justify-end gap-x-2 pt-1 border-t border-primary">
+              <button onClick={handleReset} className="px-1 py-1 text-sm bg-red text-white rounded-lg hover:bg-red-600 transition-colors">
                 Reset
               </button>
-              <button onClick={handleSave} className="px-3 py-1 text-sm bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors">
+              <button onClick={handleSave} className="px-1 py-1 text-sm bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors">
                 Save
               </button>
             </div>

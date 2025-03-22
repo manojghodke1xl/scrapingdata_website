@@ -30,7 +30,7 @@ const BookingList = () => {
       Keys: <TruncatableCopyFeild content={_id} />,
       name: <TruncatableFieldToolTip content={name} />,
       email: <TruncatableFieldToolTip content={email} />,
-      phoneCode: <CountryFlag dialingCode={phoneCode?.startsWith('+') ? phoneCode.slice(1) : phoneCode} />,
+      country: <CountryFlag dialingCode={phoneCode?.startsWith('+') ? phoneCode.slice(1) : phoneCode} />,
       phoneNumber: <TruncatableFieldToolTip content={`${phoneCode ? (phoneCode.startsWith('+') ? phoneCode : `+${phoneCode}`) : ''} ${phoneNumber ? phoneNumber : '-'}`} />,
       event: <TruncatableFieldToolTip content={`${event.name} (${event.venue})`} />,
       title: <TruncatableFieldToolTip content={title} />,
@@ -54,7 +54,7 @@ const BookingList = () => {
     { id: 0, label: 'Keys', key: 'Keys', dataKey: '_id' },
     { id: 1, label: 'Customer Name', key: 'name', dataKey: 'name' },
     { id: 2, label: 'Email', key: 'email', dataKey: 'email' },
-    { id: 3, label: 'Country', key: 'phoneCode', dataKey: 'phoneCode', formatForExport: (value) => (value.startsWith('+') ? value : `+${value}`) },
+    { id: 3, label: 'Country', key: 'country', dataKey: 'phoneCode', formatForExport: (value) => (value.startsWith('+') ? value : `+${value}`) },
     {
       id: 4,
       label: 'Contact Number',

@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import { GlobalProvider } from '../contexts/providers/GlobalProvider';
 import { ColorProvider } from '../contexts/providers/ColorProvider';
+import { LayoutProvider } from '../contexts/providers/LayoutProvider';
 import DeAuthComponent from '../components/authentication/DeAuthComponent';
 import Login from '../pages/authentication/Login';
 import AuthComponent from '../components/authentication/AuthComponent';
@@ -118,40 +119,41 @@ const privateRoutes = [
 const App = () => {
   return (
     <GlobalProvider>
-      <ColorProvider>
-        <div className="w-screen inter-unique overflow-x-hidden">
-          <BrowserRouter>
-            <Layout_SEO>
-              <Suspense fallback={<></>}>
-                <Routes>
-                  {/* Public Routes */}
-                  <Route element={<DeAuthComponent />}>
-                    <Route path="/" element={<Login />} />
-                  </Route>
-
-                  {/* Private Routes */}
-                  <Route element={<AuthComponent />}>
-                    <Route element={<StructuredLayout />}>
-                      <Route path="/dashboard" element={<Dashboard />} />
-                      <Route path="/auth-status/:id" element={<ZohoStatus />} />
-                      {/* Looping over private routes and rendering them */}
-                      {privateRoutes.map(({ path, Component }) => (
-                        <Route key={path} path={`/${path}`} element={<Component />} />
-                      ))}
+      <LayoutProvider>
+        <ColorProvider>
+          <div className="w-screen inter-unique overflow-x-hidden">
+            <BrowserRouter>
+              <Layout_SEO>
+                <Suspense fallback={<></>}>
+                  <Routes>
+                    {/* Public Routes */}
+                    <Route element={<DeAuthComponent />}>
+                      <Route path="/" element={<Login />} />
                     </Route>
-                  </Route>
 
-                  <Route path="*" element={<PageNotFound />} />
-                </Routes>
-              </Suspense>
-            </Layout_SEO>
-          </BrowserRouter>
-          <ToastContainer />
-        </div>
-      </ColorProvider>
+                    {/* Private Routes */}
+                    <Route element={<AuthComponent />}>
+                      <Route element={<StructuredLayout />}>
+                        <Route path="/dashboard" element={<Dashboard />} />
+                        <Route path="/auth-status/:id" element={<ZohoStatus />} />
+                        {/* Looping over private routes and rendering them */}
+                        {privateRoutes.map(({ path, Component }) => (
+                          <Route key={path} path={`/${path}`} element={<Component />} />
+                        ))}
+                      </Route>
+                    </Route>
+
+                    <Route path="*" element={<PageNotFound />} />
+                  </Routes>
+                </Suspense>
+              </Layout_SEO>
+            </BrowserRouter>
+            <ToastContainer />
+          </div>
+        </ColorProvider>
+      </LayoutProvider>
     </GlobalProvider>
   );
 };
 
 export default App;
-

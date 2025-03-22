@@ -53,6 +53,7 @@
   --text-dark: #101828;
   --text-secondary: #344054;
   --bg-secondary: #f8f9fa;
+  --sidebar-width: 220px;
 }
 
 .dark-mode {
@@ -138,6 +139,11 @@ details summary {
 
 .sidebaar-showww {
   display: none;
+  width: var(--sidebar-width);
+}
+.mobile-sidebar-showww {
+  width: var(--sidebar-width);
+
 }
 
 .dash-width-1 {
@@ -170,7 +176,7 @@ details summary {
 
 @media screen and (min-width: 1024px) {
   .calcc-widthhh {
-    width: calc(100vw - 322px);
+    width: calc(100vw - var(--sidebar-width));
   }
 
   .sidebaar-showww {

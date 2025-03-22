@@ -506,9 +506,9 @@ const TableComponent = ({
   };
 
   return (
-    <div className="overflow-hidden">
-      <div className="my-4 rounded-xl border border-primary overflow-hidden">
-        <div className="w-full flex flex-row sm:flex-row flex-wrap gap-y-4 justify-between items-center px-3 sm:px-6 py-4 border-b border-primary">
+    <div className="overflow-hidden text-sm">
+      <div className="my-1 rounded-xl border border-primary overflow-hidden">
+        <div className="w-full flex flex-row sm:flex-row flex-wrap gap-y-2 justify-between items-center px-1 py-1 border-b border-primary">
           <TableFilter
             search={search}
             filterState={filterState}
@@ -561,10 +561,10 @@ const TableComponent = ({
           </div>
         </div>
         {tableCountLabel && selectionState.selectedItems.length > 0 && (
-          <div className="w-full py-2 text-center bg-grey border-b border-primary ">
+          <div className="w-full py-1 text-center text-sm bg-grey border-b border-primary">
             <p className="text-secondary">
-              {selectionState.selectedItems.length === tableState.totalCount && 'All'} {selectionState.selectedItems.length} record from this page are selected.
-              <span className="text-brand pl-2">Select all {tableState.totalCount} records from this table.</span>
+              {selectionState.selectedItems.length === tableState.totalCount && 'All'} {selectionState.selectedItems.length} record from this page are selected.&nbsp;
+              <span className="text-brand"> Select all {tableState.totalCount} records from this table.</span>
             </p>
           </div>
         )}
@@ -611,7 +611,7 @@ const TableComponent = ({
           />
         </div>
         <div className="w-full">
-          <div className="w-full py-1">
+          <div className="w-full">
             {pagination && (
               <Pagination
                 currentPage={activePage}

@@ -25,9 +25,9 @@ const GuidesList = () => {
         <div
           className={`rounded-xl ${
             isActive ? `${isDarkMode ? 'border border-success' : 'bg-lightgreen'} text-success` : `${isDarkMode ? 'border border-inactive' : 'bg-inactive'} text-inactive`
-          } px-2 py-1 w-fit flex gap-2 items-center`}
+          } p-0.5 w-fit text-sm flex gap-1 items-center`}
         >
-          <span className={`min-w-[8px] min-h-[8px] rounded-full ${isActive ? 'bg-green ' : 'bg-darkgray'}`} />
+          <span className={`w-2 h-2 rounded-full ${isActive ? 'bg-green ' : 'bg-darkgray'}`} />
           <span>{isActive ? 'Active' : 'Inactive'}</span>
         </div>
       ),
@@ -45,7 +45,7 @@ const GuidesList = () => {
   ];
 
   return (
-    <div className="py-5 px-8 overflow-x-hidden mb-10">
+    <div className="p-1 overflow-x-hidden mb-12">
       <div className=" w-full">
         <TableHeader
           heading={'Guides'}
@@ -58,39 +58,35 @@ const GuidesList = () => {
           icon2={<IoMdAdd />}
           btnLabel2={'Add Guide'}
         />
-        <div className="flex flex-col">
-          <div className="-m-1.5 overflow-x-auto">
-            <div className="p-1.5 min-w-full align-middle">
-              <TableComponent
-                selectable={true}
-                siteModule={'guide'}
-                headers={columnConfig}
-                tableData={(data) => setGuides(data.guides)}
-                rows={rows}
-                apiUrl={'guides'}
-                tableCountLabel={true}
-                pagination={true}
-                actions={true}
-                editPath={'/guides/edit-guide'}
-                copyPath={'/guides/duplicate-guide'}
-                search={true}
-                filter={true}
-                filterCategory={[
-                  { id: 0, name: 'Sites' },
-                  { id: 1, name: 'Status' }
-                ]}
-                statuses={[
-                  { id: 0, name: 'Active', bgColor: '#ECFDF3', color: '#027948', dotColor: '#12B76A' },
-                  { id: 1, name: 'Inactive', bgColor: '#F2F4F7', color: '#344054', dotColor: '#667085' }
-                ]}
-                searchCategory={[{ id: 0, name: 'Title' }]}
-                modifyStatus={true}
-                modifyStatusApi={updateGuideStatusApi}
-                modifySite={true}
-                modifySiteApi={updateGuideSitesApi}
-              />
-            </div>
-          </div>
+        <div className="flex flex-col min-w-full align-middle overflow-x-auto">
+          <TableComponent
+            selectable={true}
+            siteModule={'guide'}
+            headers={columnConfig}
+            tableData={(data) => setGuides(data.guides)}
+            rows={rows}
+            apiUrl={'guides'}
+            tableCountLabel={true}
+            pagination={true}
+            actions={true}
+            editPath={'/guides/edit-guide'}
+            copyPath={'/guides/duplicate-guide'}
+            search={true}
+            filter={true}
+            filterCategory={[
+              { id: 0, name: 'Sites' },
+              { id: 1, name: 'Status' }
+            ]}
+            statuses={[
+              { id: 0, name: 'Active', bgColor: '#ECFDF3', color: '#027948', dotColor: '#12B76A' },
+              { id: 1, name: 'Inactive', bgColor: '#F2F4F7', color: '#344054', dotColor: '#667085' }
+            ]}
+            searchCategory={[{ id: 0, name: 'Title' }]}
+            modifyStatus={true}
+            modifyStatusApi={updateGuideStatusApi}
+            modifySite={true}
+            modifySiteApi={updateGuideSitesApi}
+          />
         </div>
       </div>
       <NoteComponent note={guideListNote} />

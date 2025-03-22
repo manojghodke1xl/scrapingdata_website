@@ -46,9 +46,9 @@ const ParticipantList = () => {
               : status === 'pending'
               ? `${isDarkMode ? 'border border-pending' : 'bg-fadeyellow'} text-pending`
               : `${isDarkMode ? 'border border-failed' : 'bg-fadedred'} text-failed`
-          } px-2 py-1 w-fit flex gap-2 items-center`}
+          } p-0.5 w-fit text-sm flex gap-1 items-center`}
         >
-          <span className={`min-w-[8px] min-h-[8px] rounded-full ${status === 'success' ? 'bg-green' : 'bg-pending'}`}></span>
+          <span className={`w-2 h-2 rounded-full ${status === 'success' ? 'bg-green' : 'bg-pending'}`}></span>
           <span>{status === 'success' ? 'Confirmed' : status === 'pending' ? 'Pending' : status === 'cancelled' ? 'Cancelled' : 'Failed'}</span>
         </div>
       ),
@@ -97,7 +97,7 @@ const ParticipantList = () => {
   }, []);
 
   return (
-    <div className="py-5 px-8 overflow-x-hidden mb-10">
+    <div className="p-1 overflow-x-hidden mb-12">
       <div className="w-full">
         <TableHeader
           heading={'Participants'}
@@ -110,35 +110,31 @@ const ParticipantList = () => {
           btnLabel2={'Import Participants'}
           href2={'/participants/import-participants'}
         />
-        <div className="flex flex-col">
-          <div className="-m-1.5 overflow-x-auto">
-            <div className="p-1.5 min-w-full align-middle">
-              <TableComponent
-                selectable={true}
-                siteModule={'participant'}
-                actions={true}
-                headers={columnConfig}
-                tableData={(data) => setParticipants(data.participants)}
-                rows={rows}
-                apiUrl={'participant'}
-                tableCountLabel={true}
-                pagination={true}
-                search={true}
-                filter={true}
-                filterCategory={[
-                  { id: 0, name: 'Sites' },
-                  { id: 1, name: 'Event' }
-                ]}
-                events={event}
-                searchCategory={[
-                  { id: 1, name: 'Name' },
-                  { id: 2, name: 'Email' }
-                ]}
-                sendCertificate={true}
-                approvalApi={sendCertificateApi}
-              />
-            </div>
-          </div>
+        <div className="flex flex-col min-w-full align-middle overflow-x-auto">
+          <TableComponent
+            selectable={true}
+            siteModule={'participant'}
+            actions={true}
+            headers={columnConfig}
+            tableData={(data) => setParticipants(data.participants)}
+            rows={rows}
+            apiUrl={'participant'}
+            tableCountLabel={true}
+            pagination={true}
+            search={true}
+            filter={true}
+            filterCategory={[
+              { id: 0, name: 'Sites' },
+              { id: 1, name: 'Event' }
+            ]}
+            events={event}
+            searchCategory={[
+              { id: 1, name: 'Name' },
+              { id: 2, name: 'Email' }
+            ]}
+            sendCertificate={true}
+            approvalApi={sendCertificateApi}
+          />
         </div>
       </div>
     </div>

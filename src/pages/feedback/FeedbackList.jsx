@@ -53,8 +53,8 @@ const FeedbackList = () => {
   ];
 
   return (
-    <div className="py-5 px-8 overflow-x-hidden mb-10">
-      <div className=" w-full">
+    <div className="p-1 overflow-x-hidden mb-12">
+      <div className="w-full">
         <TableHeader
           heading={'Feedbacks'}
           btn1={true}
@@ -66,38 +66,34 @@ const FeedbackList = () => {
           icon2={<IoMdAdd />}
           btnLabel2={'Add Feedback'}
         />
-        <div className="flex flex-col">
-          <div className="-m-1.5 overflow-x-auto">
-            <div className="p-1.5 min-w-full align-middle">
-              <TableComponent
-                selectable={true}
-                siteModule={'feedback'}
-                headers={columnConfig}
-                tableData={(data) => setFeedbacks(data.feedbacks)}
-                rows={rows}
-                apiUrl={'feedback'}
-                tableCountLabel={true}
-                pagination={true}
-                actions={true}
-                viewPath={'/feedback/view-feedback'}
-                search={true}
-                filter={true}
-                filterCategory={[{ id: 0, name: 'Sites' }]}
-                searchCategory={[
-                  { id: 0, name: 'Name' },
-                  { id: 1, name: 'Email' },
-                  { id: 2, name: 'Service' },
-                  { id: 3, name: 'Subject' },
-                  { id: 4, name: 'Site' }
-                ]}
-                deleteBtn={true}
-                deleteAction={true}
-                deleteLabel={'Delete Feedback'}
-                deleteMessage={'Are you sure you want to delete this feedback?'}
-                deleteApi={deleteFeedbackApi}
-              />
-            </div>
-          </div>
+        <div className="flex flex-col min-w-full align-middle overflow-x-auto">
+          <TableComponent
+            selectable={true}
+            siteModule={'feedback'}
+            headers={columnConfig}
+            tableData={(data) => setFeedbacks(data.feedbacks)}
+            rows={rows}
+            apiUrl={'feedback'}
+            tableCountLabel={true}
+            pagination={true}
+            actions={true}
+            viewPath={'/feedback/view-feedback'}
+            search={true}
+            filter={true}
+            filterCategory={[{ id: 0, name: 'Sites' }]}
+            searchCategory={[
+              { id: 0, name: 'Name' },
+              { id: 1, name: 'Email' },
+              { id: 2, name: 'Service' },
+              { id: 3, name: 'Subject' },
+              { id: 4, name: 'Site' }
+            ]}
+            deleteBtn={true}
+            deleteAction={true}
+            deleteLabel={'Delete Feedback'}
+            deleteMessage={'Are you sure you want to delete this feedback?'}
+            deleteApi={deleteFeedbackApi}
+          />
         </div>
       </div>
       <NoteComponent note={feedbackListNote} />
