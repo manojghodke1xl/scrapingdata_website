@@ -330,7 +330,7 @@ const AddProduct = () => {
               logo={<FaRegImage className="text-primary text-2xl" />}
               error={errors.image}
               setErrors={setErrors}
-              acceptedTypes={['.jpeg', '.png']}
+              acceptedTypes={['.jpeg', '.jpg', '.png']}
               fieldName="image"
               isImage
               setDetails={setProductDetails}
@@ -348,8 +348,8 @@ const AddProduct = () => {
               selected={productDetails.galleryFile ?? []}
               isMultiple
               label="Upload Gallery"
-              allowedTypes={['image/jpeg', 'image/png', 'image/gif', 'image/svg+xml', 'video/mp4', 'video/quicktime']}
-              allowedFileTypes={['.jpeg', '.png', '.gif', '.svg', '.mp4', '.mov']}
+              allowedTypes={['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/svg+xml', 'video/mp4', 'video/quicktime']}
+              allowedFileTypes={['.jpeg', '.jpg', '.png', '.gif', '.svg', '.mp4', '.mov']}
               setLoading={setLoading}
               error={errors.gallery}
             />
