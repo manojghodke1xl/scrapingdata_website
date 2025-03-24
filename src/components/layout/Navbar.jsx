@@ -9,7 +9,7 @@ import { PiMoonStarsLight } from 'react-icons/pi';
 import MaterialSidebar from './sidebar/MaterialSidebar';
 import useGlobalContext from '../../hooks/useGlobalContext';
 import useColorContext from '../../hooks/useColorContext';
-import { updateAdminThemeApi } from '../../apis/admin-apis';
+import { updateAdminPreferencesApi } from '../../apis/admin-apis';
 import { showNotification } from '../../utils/showNotification';
 import LayoutDropdown from '../../atoms/common/LayoutDropdown';
 import useLayout from '../../hooks/useLayout';
@@ -58,7 +58,7 @@ const Navbar = () => {
     toggleDarkMode();
     try {
       const payload = { darkMode: !isDarkMode };
-      const { status, data } = await updateAdminThemeApi(id, payload);
+      const { status, data } = await updateAdminPreferencesApi(id, payload);
       if (!status) showNotification('warn', data);
     } catch (error) {
       showNotification('error', error.message);
