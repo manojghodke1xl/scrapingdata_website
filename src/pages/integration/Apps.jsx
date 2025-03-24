@@ -4,11 +4,13 @@ import BGImg from '../../assets/images/site-apps.png';
 import { useNavigate } from 'react-router-dom';
 import useGlobalContext from '../../hooks/useGlobalContext';
 import { showNotification } from '../../utils/showNotification';
+import useLayout from '../../hooks/useLayout';
 
 const Apps = () => {
   const {
     auth: { allSites }
   } = useGlobalContext();
+  const { layoutSize } = useLayout();
   const [siteData, setSiteData] = useState({});
   const navigate = useNavigate();
 
@@ -18,27 +20,34 @@ const Apps = () => {
   };
 
   return (
-    <div className="py-8 p-4 sm:p-8 mb-20">
-      <div className="flex flex-col gap-4">
-        <div className="w-full pb-8 border-b border-primary gap-y-4 gap-2 flex flex-col items-start md:flex-row lg:flex-col xl:flex-row justify-between lg:items-start md:items-end xl:items-end">
-          <div>
-            <span className="text-3xl font-semibold text-dark">Apps</span>
-          </div>
+    <div className={`${layoutSize === 'small' ? 'p-1' : layoutSize === 'large' ? 'p-8' : 'p-4'}`}>
+      <div className={`flex flex-col ${layoutSize === 'small' ? 'gap-1' : layoutSize === 'large' ? 'gap-4' : 'gap-2'}`}>
+        <div
+          className={`w-full border-b border-primary gap-y-4  flex flex-col items-start md:flex-row lg:flex-col xl:flex-row justify-between lg:items-start md:items-end xl:items-end ${
+            layoutSize === 'small' ? 'pb-1 gap-1 text-xl' : layoutSize === 'large' ? 'pb-8 gap-4 text-3xl' : 'pb-4 gap-2 text-2xl'
+          }`}
+        >
+          <span className="font-semibold text-dark">Apps</span>
         </div>
-        <div className="flex flex-col items-center gap-2 border border-dashed border-secondary p-4 rounded-xl">
+        <div
+          className={`flex flex-col items-center border border-dashed border-secondary rounded-xl ${
+            layoutSize === 'small' ? 'gap-2 p-2' : layoutSize === 'large' ? 'gap-6 p-6' : 'gap-4 p-4'
+          }`}
+        >
           <div>
-            <img src={BGImg} alt="Site Selectioin for Integration" className="w-72" />
+            <img src={BGImg} alt="Site Selectioin for Integration" className={`${layoutSize === 'small' ? 'w-40' : layoutSize === 'large' ? 'w-72' : 'w-52'}`} />
           </div>
-          <h1 className="text-3xl font-semibold">To set up integrations, please select a site from the dropdown menu.</h1>
-          <div className="md:w-1/2 font-normal text-primary text-center">
+          <h1 className={`font-semibold ${layoutSize === 'small' ? 'text-xl' : layoutSize === 'large' ? 'text-3xl' : 'text-2xl'}`}>
+            To set up integrations, please select a site from the dropdown menu.
+          </h1>
+          <p className={`md:w-1/2 font-normal text-primary text-center ${layoutSize === 'small' ? 'text-sm' : layoutSize === 'large' ? 'text-lg' : 'text-base'}`}>
             Select a site from the dropdown menu to begin setting up your integrations. This will help streamline your workflow and ensure seamless connectivity across your
             selected platform.
-          </div>
-          <div className="w-1/4 min-w-fit mt-5">
-            <div className="-mb-4 text-primary">Select Site</div>
+          </p>
+          <div className="w-1/4 min-w-fit">
             <DropDown
-              mt="mt-5"
               name="Sites"
+              label={'Select Sites'}
               dropdownList={allSites
                 .filter((site) => site.modules?.some((module) => module.apps === true))
                 .map((site) => ({ id: site._id, showName: `${site.name} (${site.host})`, name: site._id }))}
@@ -48,8 +57,13 @@ const Apps = () => {
               commonFunction={(e) => setSiteData(e)}
             />
           </div>
-          <div className="flex justify-center gap-4 mt-5">
-            <button onClick={handleProceed} className="flex gap-2 h-fit items-center px-2.5 md:px-2 sm:px-4 rounded-xl py-2.5 bg-primary hover:bg-primary-hover text-white">
+          <div className="flex justify-center">
+            <button
+              onClick={handleProceed}
+              className={`flex h-fit items-center rounded-xl bg-primary hover:bg-primary-hover text-white ${
+                layoutSize === 'small' ? 'text-sm p-1.5' : layoutSize === 'large p-2' ? 'text-xl' : 'text-base p-2'
+              }`}
+            >
               Proceed
             </button>
           </div>

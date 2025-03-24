@@ -6,6 +6,7 @@ import NoteComponent from '../../atoms/common/NoteComponent';
 import { listSMTPNote } from './SmtpNotes';
 import TruncatableFieldToolTip from '../../atoms/common/TruncatableFeildToolTip';
 import TableHeader from '../../atoms/table/TableHeader';
+import { deleteSmtpApi } from '../../apis/smtp-apis';
 
 const SmtpList = () => {
   const [smtps, setSmtps] = useState([]);
@@ -53,6 +54,11 @@ const SmtpList = () => {
                   { id: 0, name: 'Name' },
                   { id: 1, name: 'Host' }
                 ]}
+                deleteBtn={true}
+                deleteAction={true}
+                deleteApi={deleteSmtpApi}
+                deleteLabel={'Delete SMTP'}
+                deleteMessage={'Are you sure you want to delete this SMTP?'}
               />
             </div>
           </div>

@@ -44,6 +44,24 @@ const MaterialSidebar = ({ handleToggleSidebar = () => {} }) => {
     handleToggleSidebar();
   };
 
+  const accordianLinks = [
+    { title: 'Contents', links: contentsPath, icon: <TbFileSearch /> },
+    { title: 'Marketing', links: marketingPath, icon: <FaBullhorn /> },
+    { title: 'Products', links: productsPath, icon: <AiOutlineProduct /> },
+    { title: 'leads', links: leadsPath, icon: <TbUsersGroup /> },
+    { title: 'Site Settings', links: siteSettingsPath, icon: <IoSettingsOutline /> },
+    { title: 'Media', links: mediaPath, icon: <FaRegImage /> },
+    { title: 'Files', links: filesPath, icon: <FaRegFile /> },
+    { title: 'Events', links: eventsPath, icon: <FiCalendar /> },
+    { title: 'After Sales', links: afterSalesPath, icon: <FaChartLine /> },
+    { title: 'FAQs', links: faqsPath, icon: <FaRegQuestionCircle /> },
+    { title: 'Testimonials', links: testimonialsPath, icon: <MdMessage /> },
+    { title: 'Webinars', links: webinarsPath, icon: <PiVideoConferenceLight /> },
+    { title: 'Templates', links: templatePath, icon: <TbTemplate /> },
+    { title: 'Utilities', links: utilitiesPath, icon: <LuLink /> },
+    { title: 'Logs', links: logsPath, icon: <LuLogs /> }
+  ];
+
   return (
     <div className="w-full h-full p-1 relative">
       <div className="w-full">
@@ -55,138 +73,17 @@ const MaterialSidebar = ({ handleToggleSidebar = () => {} }) => {
 
           <LinkComponent navLinks={navLinks} onClick={handleLinkClick} isActive={isActive} />
 
-          <ReusableAccordion
-            title="Contents"
-            links={contentsPath}
-            icon={<TbFileSearch />}
-            isOpen={openAccordion === 'Contents'}
-            onToggle={() => setOpenAccordion(openAccordion === 'Contents' ? null : 'Contents')}
-            handleToggleSidebar={handleToggleSidebar}
-          />
-
-          <ReusableAccordion
-            title="Marketing"
-            links={marketingPath}
-            icon={<FaBullhorn />}
-            isOpen={openAccordion === 'Marketing'}
-            onToggle={() => setOpenAccordion(openAccordion === 'Marketing' ? null : 'Marketing')}
-            handleToggleSidebar={handleToggleSidebar}
-          />
-
-          <ReusableAccordion
-            title="Products"
-            links={productsPath}
-            icon={<AiOutlineProduct />}
-            isOpen={openAccordion === 'Products'}
-            onToggle={() => setOpenAccordion(openAccordion === 'Products' ? null : 'Products')}
-            handleToggleSidebar={handleToggleSidebar}
-          />
-
-          <ReusableAccordion
-            title="Leads"
-            links={leadsPath}
-            icon={<TbUsersGroup />}
-            isOpen={openAccordion === 'Leads'}
-            onToggle={() => setOpenAccordion(openAccordion === 'Leads' ? null : 'Leads')}
-            handleToggleSidebar={handleToggleSidebar}
-          />
-
-          <ReusableAccordion
-            title="Site Settings"
-            links={siteSettingsPath}
-            icon={<IoSettingsOutline />}
-            isOpen={openAccordion === 'Site Settings'}
-            onToggle={() => setOpenAccordion(openAccordion === 'Site Settings' ? null : 'Site Settings')}
-            handleToggleSidebar={handleToggleSidebar}
-          />
-
-          <ReusableAccordion
-            title="Media"
-            links={mediaPath}
-            icon={<FaRegImage />}
-            isOpen={openAccordion === 'Media'}
-            onToggle={() => setOpenAccordion(openAccordion === 'Media' ? null : 'Media')}
-            handleToggleSidebar={handleToggleSidebar}
-          />
-
-          <ReusableAccordion
-            title="Files"
-            links={filesPath}
-            icon={<FaRegFile />}
-            isOpen={openAccordion === 'Files'}
-            onToggle={() => setOpenAccordion(openAccordion === 'Files' ? null : 'Files')}
-            handleToggleSidebar={handleToggleSidebar}
-          />
-
-          <ReusableAccordion
-            title="Events"
-            links={eventsPath}
-            icon={<FiCalendar />}
-            isOpen={openAccordion === 'Events'}
-            onToggle={() => setOpenAccordion(openAccordion === 'Events' ? null : 'Events')}
-            handleToggleSidebar={handleToggleSidebar}
-          />
-
-          <ReusableAccordion
-            title="After Sales"
-            links={afterSalesPath}
-            icon={<FaChartLine />}
-            isOpen={openAccordion === 'Sales'}
-            onToggle={() => setOpenAccordion(openAccordion === 'Sales' ? null : 'Sales')}
-            handleToggleSidebar={handleToggleSidebar}
-          />
-
-          <ReusableAccordion
-            title="FAQs"
-            links={faqsPath}
-            icon={<FaRegQuestionCircle />}
-            isOpen={openAccordion === 'FAQs'}
-            onToggle={() => setOpenAccordion(openAccordion === 'FAQs' ? null : 'FAQs')}
-            handleToggleSidebar={handleToggleSidebar}
-          />
-
-          <ReusableAccordion
-            title="Testimonials"
-            links={testimonialsPath}
-            icon={<MdMessage />}
-            isOpen={openAccordion === 'Testimonials'}
-            onToggle={() => setOpenAccordion(openAccordion === 'Testimonials' ? null : 'Testimonials')}
-            handleToggleSidebar={handleToggleSidebar}
-          />
-          <ReusableAccordion
-            title="Webinars"
-            links={webinarsPath}
-            icon={<PiVideoConferenceLight />}
-            isOpen={openAccordion === 'Webinars'}
-            onToggle={() => setOpenAccordion(openAccordion === 'Webinars' ? null : 'Webinars')}
-            handleToggleSidebar={handleToggleSidebar}
-          />
-
-          <ReusableAccordion
-            title="Templates"
-            links={templatePath}
-            icon={<TbTemplate />}
-            isOpen={openAccordion === 'Templates'}
-            onToggle={() => setOpenAccordion(openAccordion === 'Templates' ? null : 'Templates')}
-            handleToggleSidebar={handleToggleSidebar}
-          />
-          <ReusableAccordion
-            title="Utilities"
-            links={utilitiesPath}
-            icon={<LuLink />}
-            isOpen={openAccordion === 'Utilities"'}
-            onToggle={() => setOpenAccordion(openAccordion === 'Utilities"' ? null : 'Utilities"')}
-            handleToggleSidebar={handleToggleSidebar}
-          />
-
-          <ReusableAccordion
-            title="Logs"
-            links={logsPath}
-            icon={<LuLogs />}
-            isOpen={openAccordion === 'Logs'}
-            onToggle={() => setOpenAccordion(openAccordion === 'Logs' ? null : 'Logs')}
-            handleToggleSidebar={handleToggleSidebar}
-          />
+          {accordianLinks.map(({ title, links, icon }) => (
+            <ReusableAccordion
+              key={title}
+              title={title}
+              links={links}
+              icon={icon}
+              isOpen={openAccordion === title}
+              onToggle={() => setOpenAccordion(openAccordion === title ? null : title)}
+              handleToggleSidebar={handleToggleSidebar}
+            />
+          ))}
 
           <LinkComponent navLinks={adminNavLinks.filter(({ title }) => auth.isSuperAdmin || title !== 'Admins')} onClick={handleLinkClick} isActive={isActive} />
         </div>

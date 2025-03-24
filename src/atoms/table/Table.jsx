@@ -13,6 +13,19 @@ import ExportDataModal from '../modal/ExportDataModal';
 import Checkbox from '../formFields/Checkbox';
 import { createAndUpdateTableColumnApi, getTableColumnApi } from '../../apis/table-apis';
 
+/**
+ * TableComponent - A reusable table component with advanced features
+ *
+ * Features:
+ * - Selectable rows with shift-select functionality
+ * - Sortable columns
+ * - Pinnable columns
+ * - Drag and drop column reordering
+ * - Column visibility toggle
+ * - Server-side pagination
+ * - Export functionality
+ * - Bulk actions (delete, status update, site update)
+ */
 const TableComponent = ({
   selectable,
   siteModule,
@@ -88,7 +101,8 @@ const TableComponent = ({
     status: '',
     deleteId: '',
     deleteBoolean: false,
-    selectedCategory: null
+    selectedCategory: null,
+    lastSelectedItem: null // Add this line
   });
   const [filterState, setFilterState] = useState({
     searchTerm: '',
@@ -144,6 +158,10 @@ const TableComponent = ({
   // Add state to track original header order
   const [originalHeaders] = useState([...headers]);
 
+  /**
+   * Handles saving column configuration to backend
+   * Includes column order, hidden columns, and pinned columns
+   */
   const saveColumnConfig = useCallback(
     async (newPreferences) => {
       const payload = {
@@ -168,6 +186,10 @@ const TableComponent = ({
   // Add state to track column positions before pinning
   const [previousPositions, setPreviousPositions] = useState({});
 
+  /**
+   * Handles pinning/unpinning columns
+   * Stores previous position to restore column when unpinned
+   */
   const handleTogglePin = useCallback(
     (columnId) => {
       const stringColumnId = String(columnId);
@@ -369,6 +391,10 @@ const TableComponent = ({
     } else if (err) showNotification('warn', err.message);
   }, [data, err, tableData]);
 
+  /**
+   * Handles master checkbox selection
+   * Selects all non-superAdmin rows
+   */
   const handleMasterCheckboxChange = () => {
     const nonSuperAdminIds = rows.filter((row) => !row.isSuperAdmin).map((row) => row.id);
     const newChecked = !selectionState.isAllSelected;
@@ -380,14 +406,48 @@ const TableComponent = ({
     }));
   };
 
-  const handleRowCheckboxChange = (id) => {
+  /**
+   * Handles row checkbox selection with shift-select functionality
+   * @param {string|number} id - Row ID
+   * @param {boolean} shiftKey - Whether shift key was pressed
+   */
+  const handleRowCheckboxChange = (id, shiftKey) => {
     setSelectionState((prev) => {
-      const updatedSelected = prev.selectedItems.includes(id) ? prev.selectedItems.filter((itemId) => itemId !== id) : [...prev.selectedItems, id];
+      const isSelected = prev.selectedItems.includes(id);
+      let updatedSelected = [...prev.selectedItems];
+
+      if (shiftKey && prev.lastSelectedItem !== null) {
+        const currentIndex = rows.findIndex((row) => row.id === id);
+        const lastIndex = rows.findIndex((row) => row.id === prev.lastSelectedItem);
+
+        const start = Math.min(currentIndex, lastIndex);
+        const end = Math.max(currentIndex, lastIndex);
+
+        const itemsToSelect = rows
+          .slice(start, end + 1)
+          .filter((row) => !row.isSuperAdmin)
+          .map((row) => row.id);
+
+        // If current item is being deselected, deselect the range
+        if (isSelected) {
+          updatedSelected = updatedSelected.filter((item) => !itemsToSelect.includes(item));
+        } else {
+          // Add all items in range that aren't already selected
+          itemsToSelect.forEach((item) => {
+            if (!updatedSelected.includes(item)) updatedSelected.push(item);
+          });
+        }
+      } else {
+        if (isSelected) updatedSelected = updatedSelected.filter((itemId) => itemId !== id);
+        else updatedSelected.push(id);
+      }
+
       return {
         ...prev,
         selectedItems: updatedSelected,
-        isAllSelected: updatedSelected.length === rows.length,
-        status: ''
+        isAllSelected: updatedSelected.length === rows.filter((row) => !row.isSuperAdmin).length,
+        status: '',
+        lastSelectedItem: id
       };
     });
   };

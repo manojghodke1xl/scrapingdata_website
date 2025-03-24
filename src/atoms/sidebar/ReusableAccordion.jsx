@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { IoIosArrowDown } from 'react-icons/io';
 import useLayout from '../../hooks/useLayout';
 
-const ReusableAccordion = ({ title, links, icon, isOpen, onToggle, handleToggleSidebar }) => {
+const ReusableAccordion = ({ key, title, links, icon, isOpen, onToggle, handleToggleSidebar }) => {
   const { pathname } = useLocation();
   const { layoutSize } = useLayout();
 
@@ -11,6 +11,7 @@ const ReusableAccordion = ({ title, links, icon, isOpen, onToggle, handleToggleS
 
   return (
     <Accordion
+      key={key}
       open={isOpen}
       icon={
         <IoIosArrowDown

@@ -22,7 +22,7 @@ const TruncatableCopyFeild = ({ content }) => {
         </button>
       </span>
       {showTooltip && (
-        <div className={`absolute z-10  bg-main  border border-primary rounded-xl shadow-lg p-2 whitespace-normal`}>
+        <div className={`absolute z-10 bg-main border border-primary rounded-xl shadow-lg p-2 whitespace-normal`}>
           <p className="text-primary overflow-hidden text-ellipsis">{content}</p>
         </div>
       )}

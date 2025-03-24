@@ -5,6 +5,16 @@ import TableRowActions from './TableRowActions';
 import Checkbox from '../formFields/Checkbox';
 import useColorContext from '../../hooks/useColorContext';
 
+/**
+ * TableView - Handles the presentation layer of the table
+ *
+ * Features:
+ * - Renders table header and body
+ * - Handles pinned columns positioning
+ * - Manages loading states
+ * - Renders row actions
+ * - Handles column drag and drop visualization
+ */
 const TableView = ({
   selectable,
   selectionState,
@@ -43,12 +53,20 @@ const TableView = ({
   const { isDarkMode } = useColorContext();
   const [openDropdownId, setOpenDropdownId] = useState(null);
 
+  /**
+   * Calculates serial number for each row based on current page and items per page
+   * @param {number} index - Row index
+   * @returns {string} Formatted serial number
+   */
   const getSerialNumber = (index) => {
     const activePage = currentPage || tableState.currentPage;
     const activeItemsPerPage = itemsPerPage || tableState.itemsPerPage;
     return ((activePage - 1) * activeItemsPerPage + (index + 1)).toString().padStart(3, '0');
   };
 
+  /**
+   * Utility functions to check column states
+   */
   const isPinnedLeft = (colId) => pinnedColumns.left.includes(String(colId));
   const isPinnedRight = (colId) => pinnedColumns.right.includes(String(colId)) || colId === 'status';
   const isHidden = (colId) => hiddenColumns.includes(String(colId));
@@ -59,6 +77,11 @@ const TableView = ({
   const SERIAL_WIDTH = 24;
   const getInitialOffset = () => (selectable ? CHECKBOX_WIDTH + SERIAL_WIDTH : SERIAL_WIDTH);
 
+  /**
+   * Computes offsets for pinned columns
+   * Used for sticky positioning of pinned columns
+   * @returns {Object} Left and right offset positions
+   */
   const computePinnedOffsets = () => {
     const leftOffsets = {};
     const rightOffsets = {};
@@ -84,6 +107,11 @@ const TableView = ({
 
   const { leftOffsets, rightOffsets } = computePinnedOffsets();
 
+  /**
+   * Groups headers into pinned and unpinned sections
+   * @param {Array} headers - Table headers
+   * @returns {Object} Grouped headers
+   */
   const groupHeaders = (headers) => {
     return headers.reduce(
       (acc, header) => {
@@ -96,6 +124,11 @@ const TableView = ({
     );
   };
 
+  /**
+   * Renders a table header cell with sort and pin functionality
+   * @param {Object} header - Header configuration
+   * @returns {JSX.Element} Header cell
+   */
   const renderHeaderCell = (header) => {
     if (isHidden(header.id)) return null;
 
@@ -148,6 +181,12 @@ const TableView = ({
     );
   };
 
+  /**
+   * Renders a table data cell with proper positioning
+   * @param {Object} row - Row data
+   * @param {Object} header - Header configuration
+   * @returns {JSX.Element} Data cell
+   */
   const renderDataCell = (row, header) => {
     if (isHidden(header.id)) return null;
 
@@ -216,10 +255,14 @@ const TableView = ({
           ) : rows.length > 0 ? (
             rows?.map((row, index) => {
               return (
-                <tr key={row.id} className={`border-b border-primary ${selectionState.selectedItems.includes(row.id) ? 'bg-primary-faded' : 'hover:bg-hover'}`}>
+                <tr key={row.id} className={`${selectionState.selectedItems.includes(row.id) ? 'bg-primary-faded' : 'hover:bg-hover'}`}>
                   {selectable && (
                     <td className="p-1 sticky left-0 bg-main z-20 w-[30px]">
-                      <Checkbox checked={selectionState.selectedItems.includes(row.id)} onChange={() => handleRowCheckboxChange(row.id)} disabled={row.isSuperAdmin} />
+                      <Checkbox
+                        checked={selectionState.selectedItems.includes(row.id)}
+                        onChange={(e) => handleRowCheckboxChange(row.id, e.nativeEvent.shiftKey)}
+                        disabled={row.isSuperAdmin}
+                      />
                     </td>
                   )}
                   <td style={{ left: selectable ? `${CHECKBOX_WIDTH}px` : 0 }} className="p-1 font-normal sticky bg-main z-20 w-[30px]">

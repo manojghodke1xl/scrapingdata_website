@@ -126,7 +126,7 @@ const Pagination = ({ currentPage, totalPages, totalRecords, itemsPerPage, setIt
   };
 
   return (
-    <div className="flex items-center justify-between bg-inherit px-2 gap-1">
+    <div className="flex items-center justify-between bg-inherit px-2 gap-1 border-t border-primary">
       <div className="w-full flex flex-col sm:flex-row gap-y-1 justify-center xl:justify-between flex-wrap xl:flex-nowrap py-1 items-center ">
         {/* Records per page input */}
         <div className="flex gap-2 items-start">
