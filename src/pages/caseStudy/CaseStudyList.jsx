@@ -64,49 +64,45 @@ const CaseStudyList = () => {
 
   return (
     <div className="p-1 overflow-x-hidden mb-12">
-      <div className=" w-full">
-        <TableHeader
-          heading={'Case Studies'}
-          btn2={true}
-          href2={'/case-study/add-case-study'}
-          icon2={<IoMdAdd />}
-          btnLabel2={'Add Case Study'}
-          btn1={true}
-          href1={'/case-study/case-study-integration'}
-          icon1={<AiOutlineApi />}
-          btnLabel1={'Integration Guide PDF'}
-        />
-        <div className="flex flex-col min-w-full align-middle overflow-x-auto">
-          <TableComponent
-            selectable={true}
-            siteModule={'casestudy'}
-            headers={columnConfig}
-            tableData={(data) => setCaseStudies(data.casestudies)}
-            rows={rows}
-            apiUrl={'casestudies'}
-            tableCountLabel={true}
-            pagination={true}
-            actions={true}
-            editPath={'/case-study/edit-case-study'}
-            copyPath={'/case-study/duplicate-case-study'}
-            search={true}
-            filter={true}
-            filterCategory={[
-              { id: 1, name: 'Sites' },
-              { id: 2, name: 'Status' }
-            ]}
-            statuses={[
-              { id: 0, name: 'Active', bgColor: '#ECFDF3', color: '#027948', dotColor: '#12B76A' },
-              { id: 2, name: 'Inactive', bgColor: '#F2F4F7', color: '#344054', dotColor: '#667085' }
-            ]}
-            searchCategory={[{ id: 1, name: 'Title' }]}
-            modifyStatus={true}
-            modifyStatusApi={updateCaseStudyStatusApi}
-            modifySite={true}
-            modifySiteApi={updateCaseStudySitesApi}
-          />
-        </div>
-      </div>
+      <TableHeader
+        heading={'Case Studies'}
+        btn2={true}
+        href2={'/case-study/add-case-study'}
+        icon2={<IoMdAdd />}
+        btnLabel2={'Add Case Study'}
+        btn1={true}
+        href1={'/case-study/case-study-integration'}
+        icon1={<AiOutlineApi />}
+        btnLabel1={'Integration Guide PDF'}
+      />
+      <TableComponent
+        selectable={true}
+        siteModule={'casestudy'}
+        headers={columnConfig}
+        tableData={(data) => setCaseStudies(data.casestudies)}
+        rows={rows}
+        apiUrl={'casestudies'}
+        tableCountLabel={true}
+        pagination={true}
+        actions={true}
+        editPath={'/case-study/edit-case-study'}
+        copyPath={'/case-study/duplicate-case-study'}
+        search={true}
+        filter={true}
+        filterCategory={[
+          { id: 0, name: 'Sites' },
+          { id: 1, name: 'Status' }
+        ]}
+        statuses={[
+          { id: 0, name: 'Active', bgColor: '#ECFDF3', color: '#027948', dotColor: '#12B76A' },
+          { id: 1, name: 'Inactive', bgColor: '#F2F4F7', color: '#344054', dotColor: '#667085' }
+        ]}
+        searchCategory={[{ id: 0, name: 'Title' }]}
+        modifyStatus={true}
+        modifyStatusApi={updateCaseStudyStatusApi}
+        modifySite={true}
+        modifySiteApi={updateCaseStudySitesApi}
+      />
       <NoteComponent note={casestudyListNote} />
     </div>
   );

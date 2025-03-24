@@ -25,27 +25,19 @@ const TaskList = () => {
   ];
 
   return (
-    <div className="py-5 px-8 overflow-x-hidden mb-10">
-      <div className=" w-full">
-        <TableHeader heading={'Tasks'} />
-        <div className="flex flex-col">
-          <div className="-m-1.5 overflow-x-auto">
-            <div className="p-1.5 min-w-full align-middle">
-              <TableComponent
-                selectable={true}
-                siteModule={'task'}
-                headers={columnConfig}
-                tableData={(data) => setTasks(data.tasks)}
-                rows={rows}
-                apiUrl={'agenda-tasks'}
-                tableCountLabel={true}
-                pagination={true}
-                search={true}
-              />
-            </div>
-          </div>
-        </div>
-      </div>
+    <div className="p-1 overflow-x-hidden mb-12">
+      <TableHeader heading={'Tasks'} />
+      <TableComponent
+        selectable={true}
+        siteModule={'task'}
+        headers={columnConfig}
+        tableData={(data) => setTasks(data.tasks)}
+        rows={rows}
+        apiUrl={'agenda-tasks'}
+        tableCountLabel={true}
+        pagination={true}
+        search={true}
+      />
     </div>
   );
 };

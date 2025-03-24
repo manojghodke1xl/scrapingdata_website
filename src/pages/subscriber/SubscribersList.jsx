@@ -49,45 +49,41 @@ const SubscribersList = () => {
 
   return (
     <div className="p-1 overflow-x-hidden mb-12">
-      <div className="w-full">
-        <TableHeader
-          heading="Newsletter Subscribers"
-          btn1={true}
-          href1={'/subscriber/subscriber-integration'}
-          icon1={<AiOutlineApi />}
-          btnLabel1={'API Integration'}
-          btn2={true}
-          href2={'/subscriber/add-subscriber'}
-          icon2={<IoMdAdd />}
-          btnLabel2={'Add Newsletter Subscriber'}
-        />
-        <div className="flex flex-col min-w-full align-middle overflow-x-auto">
-          <TableComponent
-            selectable={true}
-            siteModule={'subscriber'}
-            headers={columnConfig}
-            tableData={(data) => setLists(data.lists)}
-            rows={rows}
-            apiUrl={'newsletter'}
-            tableCountLabel={true}
-            pagination={true}
-            actions={true}
-            viewPath={'/subscriber/view-subscriber'}
-            search={true}
-            filter={true}
-            filterCategory={[{ id: 0, name: 'Sites' }]}
-            searchCategory={[
-              { id: 0, name: 'Name' },
-              { id: 1, name: 'Email' }
-            ]}
-            deleteBtn={true}
-            deleteAction={true}
-            deleteLabel={'Delete Mailing List'}
-            deleteMessage={'Are you sure you want to delete this subscriber list?'}
-            deleteApi={deleteSubscriberApi}
-          />
-        </div>
-      </div>
+      <TableHeader
+        heading="Newsletter Subscribers"
+        btn1={true}
+        href1={'/subscriber/subscriber-integration'}
+        icon1={<AiOutlineApi />}
+        btnLabel1={'API Integration'}
+        btn2={true}
+        href2={'/subscriber/add-subscriber'}
+        icon2={<IoMdAdd />}
+        btnLabel2={'Add Newsletter Subscriber'}
+      />
+      <TableComponent
+        selectable={true}
+        siteModule={'subscriber'}
+        headers={columnConfig}
+        tableData={(data) => setLists(data.lists)}
+        rows={rows}
+        apiUrl={'newsletter'}
+        tableCountLabel={true}
+        pagination={true}
+        actions={true}
+        viewPath={'/subscriber/view-subscriber'}
+        search={true}
+        filter={true}
+        filterCategory={[{ id: 0, name: 'Sites' }]}
+        searchCategory={[
+          { id: 0, name: 'Name' },
+          { id: 1, name: 'Email' }
+        ]}
+        deleteBtn={true}
+        deleteAction={true}
+        deleteLabel={'Delete Mailing List'}
+        deleteMessage={'Are you sure you want to delete this subscriber list?'}
+        deleteApi={deleteSubscriberApi}
+      />
       <NoteComponent note={mailingListNote} />
     </div>
   );

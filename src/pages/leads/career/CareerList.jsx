@@ -51,51 +51,43 @@ const CareerList = () => {
   ];
 
   return (
-    <div className="py-5 px-8 overflow-x-hidden mb-10">
-      <div className=" w-full">
-        <TableHeader
-          heading="Career"
-          btn2={true}
-          btn1={true}
-          href1={'/career/career-integration'}
-          href2={'/career/add-career'}
-          icon1={<AiOutlineApi />}
-          icon2={<IoMdAdd />}
-          btnLabel1={'API Integration'}
-          btnLabel2={'Add Career'}
-        />
-        <div className="flex flex-col">
-          <div className="-m-1.5 overflow-x-auto">
-            <div className="p-1.5 min-w-full align-middle">
-              <TableComponent
-                selectable={true}
-                siteModule={'career'}
-                headers={columnConfig}
-                tableData={(data) => setCareers(data.careers)}
-                exportData={careers}
-                rows={rows}
-                apiUrl={'career'}
-                tableCountLabel={true}
-                pagination={true}
-                actions={true}
-                viewPath={'/career/view-career'}
-                search={true}
-                filter={true}
-                filterCategory={[{ id: 0, name: 'Sites' }]}
-                searchCategory={[
-                  { id: 0, name: 'Name' },
-                  { id: 1, name: 'Email' }
-                ]}
-                deleteBtn={true}
-                deleteAction={true}
-                deleteLabel="Delete Career"
-                deleteMessage="Are you sure you want to delete this Career?"
-                deleteApi={deleteCareerApi}
-              />
-            </div>
-          </div>
-        </div>
-      </div>
+    <div className="p-1 overflow-x-hidden mb-12">
+      <TableHeader
+        heading="Career"
+        btn2={true}
+        btn1={true}
+        href1={'/career/career-integration'}
+        href2={'/career/add-career'}
+        icon1={<AiOutlineApi />}
+        icon2={<IoMdAdd />}
+        btnLabel1={'API Integration'}
+        btnLabel2={'Add Career'}
+      />
+      <TableComponent
+        selectable={true}
+        siteModule={'career'}
+        headers={columnConfig}
+        tableData={(data) => setCareers(data.careers)}
+        exportData={careers}
+        rows={rows}
+        apiUrl={'career'}
+        tableCountLabel={true}
+        pagination={true}
+        actions={true}
+        viewPath={'/career/view-career'}
+        search={true}
+        filter={true}
+        filterCategory={[{ id: 0, name: 'Sites' }]}
+        searchCategory={[
+          { id: 0, name: 'Name' },
+          { id: 1, name: 'Email' }
+        ]}
+        deleteBtn={true}
+        deleteAction={true}
+        deleteLabel="Delete Career"
+        deleteMessage="Are you sure you want to delete this Career?"
+        deleteApi={deleteCareerApi}
+      />
     </div>
   );
 };

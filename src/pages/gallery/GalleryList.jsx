@@ -45,48 +45,40 @@ const GalleryList = () => {
   ];
 
   return (
-    <div className="py-5 px-8 overflow-x-hidden mb-10">
-      <div className=" w-full">
-        <TableHeader heading={'Gallery'} btn1={true} href1={'/gallery/add-gallery'} icon1={<IoMdAdd />} btnLabel1={'Add Gallery'} />
-        <div className="flex flex-col">
-          <div className="-m-1.5 overflow-x-auto">
-            <div className="p-1.5 min-w-full align-middle">
-              <TableComponent
-                selectable={true}
-                search={true}
-                siteModule={'gallery'}
-                headers={columnConfig}
-                tableData={(data) => setGalleries(data.galleries)}
-                rows={rows}
-                apiUrl={'gallery'}
-                tableCountLabel={true}
-                pagination={true}
-                actions={true}
-                editPath={'/gallery/edit-gallery'}
-                copyPath={'/gallery/duplicate-gallery'}
-                filter={true}
-                filterCategory={[
-                  { id: 1, name: 'Sites' },
-                  { id: 2, name: 'Status' }
-                ]}
-                statuses={[
-                  { id: 0, name: 'Active', bgColor: '#ECFDF3', color: '#027948', dotColor: '#12B76A' },
-                  { id: 2, name: 'Inactive', bgColor: '#F2F4F7', color: '#344054', dotColor: '#667085' }
-                ]}
-                modifyStatus={true}
-                modifyStatusApi={updateGalleryStatusApi}
-                modifySite={true}
-                modifySiteApi={updateGallerySitesApi}
-                deleteBtn={true}
-                deleteAction={true}
-                deleteApi={deleteGalleryApi}
-                deleteLabel={'Delete Gallery'}
-                deleteMessage={'Are you sure you want to delete this Gallery?'}
-              />
-            </div>
-          </div>
-        </div>
-      </div>
+    <div className="p-1 overflow-x-hidden mb-12">
+      <TableHeader heading={'Gallery'} btn1={true} href1={'/gallery/add-gallery'} icon1={<IoMdAdd />} btnLabel1={'Add Gallery'} />
+      <TableComponent
+        selectable={true}
+        search={true}
+        siteModule={'gallery'}
+        headers={columnConfig}
+        tableData={(data) => setGalleries(data.galleries)}
+        rows={rows}
+        apiUrl={'gallery'}
+        tableCountLabel={true}
+        pagination={true}
+        actions={true}
+        editPath={'/gallery/edit-gallery'}
+        copyPath={'/gallery/duplicate-gallery'}
+        filter={true}
+        filterCategory={[
+          { id: 1, name: 'Sites' },
+          { id: 2, name: 'Status' }
+        ]}
+        statuses={[
+          { id: 0, name: 'Active', bgColor: '#ECFDF3', color: '#027948', dotColor: '#12B76A' },
+          { id: 2, name: 'Inactive', bgColor: '#F2F4F7', color: '#344054', dotColor: '#667085' }
+        ]}
+        modifyStatus={true}
+        modifyStatusApi={updateGalleryStatusApi}
+        modifySite={true}
+        modifySiteApi={updateGallerySitesApi}
+        deleteBtn={true}
+        deleteAction={true}
+        deleteApi={deleteGalleryApi}
+        deleteLabel={'Delete Gallery'}
+        deleteMessage={'Are you sure you want to delete this Gallery?'}
+      />
       <NoteComponent note={galleryListNote} />
     </div>
   );

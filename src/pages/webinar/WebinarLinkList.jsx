@@ -29,29 +29,21 @@ const WebinarLinkList = () => {
   ];
 
   return (
-    <div className="py-5 px-8 overflow-x-hidden mb-10">
-      <div className=" w-full">
-        <TableHeader heading={'Webinar Links'} />
-        <div className="flex flex-col">
-          <div className="-m-1.5 overflow-x-auto">
-            <div className="p-1.5 min-w-full align-middle">
-              <TableComponent
-                selectable={true}
-                siteModule={'webinar-links'}
-                headers={columnConfig}
-                tableData={(data) => setWebinarLinks(data.webinarLinks)}
-                rows={rows}
-                apiUrl={'webinar/links'}
-                tableCountLabel={true}
-                pagination={true}
-                search={true}
-                filter={true}
-                filterCategory={[{ id: 0, name: 'Sites' }]}
-              />
-            </div>
-          </div>
-        </div>
-      </div>
+    <div className="p-1 overflow-x-hidden mb-12">
+      <TableHeader heading={'Webinar Links'} />
+      <TableComponent
+        selectable={true}
+        siteModule={'webinar-links'}
+        headers={columnConfig}
+        tableData={(data) => setWebinarLinks(data.webinarLinks)}
+        rows={rows}
+        apiUrl={'webinar/links'}
+        tableCountLabel={true}
+        pagination={true}
+        search={true}
+        filter={true}
+        filterCategory={[{ id: 0, name: 'Sites' }]}
+      />
     </div>
   );
 };

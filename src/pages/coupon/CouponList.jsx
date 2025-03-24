@@ -51,39 +51,35 @@ const CouponList = () => {
 
   return (
     <div className="p-1 overflow-x-hidden mb-12">
-      <div className="w-full">
-        <TableHeader heading={'Coupons'} btn1={true} href1={'/coupon/add-coupon'} icon1={<IoMdAdd />} btnLabel1={'Add Coupon'} />
-        <div className="flex flex-col min-w-full align-middle overflow-x-auto">
-          <TableComponent
-            selectable={true}
-            siteModule={'coupon'}
-            headers={columnConfig}
-            tableData={(data) => setCoupons(data.coupons)}
-            rows={rows}
-            apiUrl={'coupon'}
-            tableCountLabel={true}
-            pagination={true}
-            actions={true}
-            editPath={'/coupon/edit-coupon'}
-            copyPath={'/coupon/duplicate-coupon'}
-            search={true}
-            filter={true}
-            deleteAction={true}
-            deleteBtn={true}
-            filterCategory={[
-              { id: 0, name: 'Status' },
-              { id: 1, name: 'Sites' }
-            ]}
-            statuses={[
-              { id: 0, name: 'Active', bgColor: '#ECFDF3', color: '#027948', dotColor: '#12B76A' },
-              { id: 2, name: 'Inactive', bgColor: '#F2F4F7', color: '#344054', dotColor: '#667085' }
-            ]}
-            deleteLabel={'Delete Coupon'}
-            deleteMessage={'Are you sure you want to delete this coupon?'}
-            deleteApi={deleteCouponApi}
-          />
-        </div>
-      </div>
+      <TableHeader heading={'Coupons'} btn1={true} href1={'/coupon/add-coupon'} icon1={<IoMdAdd />} btnLabel1={'Add Coupon'} />
+      <TableComponent
+        selectable={true}
+        siteModule={'coupon'}
+        headers={columnConfig}
+        tableData={(data) => setCoupons(data.coupons)}
+        rows={rows}
+        apiUrl={'coupon'}
+        tableCountLabel={true}
+        pagination={true}
+        actions={true}
+        editPath={'/coupon/edit-coupon'}
+        copyPath={'/coupon/duplicate-coupon'}
+        search={true}
+        filter={true}
+        deleteAction={true}
+        deleteBtn={true}
+        filterCategory={[
+          { id: 0, name: 'Status' },
+          { id: 1, name: 'Sites' }
+        ]}
+        statuses={[
+          { id: 0, name: 'Active', bgColor: '#ECFDF3', color: '#027948', dotColor: '#12B76A' },
+          { id: 2, name: 'Inactive', bgColor: '#F2F4F7', color: '#344054', dotColor: '#667085' }
+        ]}
+        deleteLabel={'Delete Coupon'}
+        deleteMessage={'Are you sure you want to delete this coupon?'}
+        deleteApi={deleteCouponApi}
+      />
       <NoteComponent note={couponListNote} />
     </div>
   );

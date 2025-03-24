@@ -65,35 +65,27 @@ const PaymentList = () => {
   ];
 
   return (
-    <div className="py-5 px-8 overflow-x-hidden mb-10">
-      <div className=" w-full">
-        <TableHeader heading="Payments" btn1={true} href1={'/payments/payment-integration'} icon1={<AiOutlineApi />} btnLabel1={'API Integration'} />
-        <div className="flex flex-col">
-          <div className="-m-1.5 overflow-x-auto">
-            <div className="p-1.5 min-w-full align-middle">
-              <TableComponent
-                selectable={true}
-                siteModule={'payment'}
-                headers={columnConfig}
-                tableData={(data) => setPayments(data.payments)}
-                rows={rows}
-                apiUrl={'payments'}
-                tableCountLabel={true}
-                pagination={true}
-                actions={true}
-                viewPath={'/payments/payment'}
-                search={true}
-                filter={true}
-                filterCategory={[
-                  { id: 1, name: 'Sites' },
-                  { id: 2, name: 'Status' }
-                ]}
-                searchCategory={[{ id: 1, name: 'Channel' }]}
-              />
-            </div>
-          </div>
-        </div>
-      </div>
+    <div className="p-1 overflow-x-hidden mb-12">
+      <TableHeader heading="Payments" btn1={true} href1={'/payments/payment-integration'} icon1={<AiOutlineApi />} btnLabel1={'API Integration'} />
+      <TableComponent
+        selectable={true}
+        siteModule={'payment'}
+        headers={columnConfig}
+        tableData={(data) => setPayments(data.payments)}
+        rows={rows}
+        apiUrl={'payments'}
+        tableCountLabel={true}
+        pagination={true}
+        actions={true}
+        viewPath={'/payments/payment'}
+        search={true}
+        filter={true}
+        filterCategory={[
+          { id: 1, name: 'Sites' },
+          { id: 2, name: 'Status' }
+        ]}
+        searchCategory={[{ id: 1, name: 'Channel' }]}
+      />
     </div>
   );
 };

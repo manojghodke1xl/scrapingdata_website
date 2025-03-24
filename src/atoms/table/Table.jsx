@@ -12,6 +12,7 @@ import TableFilterActions from './TableFilterActions';
 import ExportDataModal from '../modal/ExportDataModal';
 import Checkbox from '../formFields/Checkbox';
 import { createAndUpdateTableColumnApi, getTableColumnApi } from '../../apis/table-apis';
+import useLayout from '../../hooks/useLayout';
 
 /**
  * TableComponent - A reusable table component with advanced features
@@ -81,6 +82,8 @@ const TableComponent = ({
     setLoading,
     isLoading
   } = useGlobalContext();
+
+  const { layoutSize } = useLayout();
 
   const [modalState, setModalState] = useState({
     isDuplicateModelOpen: false,
@@ -566,7 +569,7 @@ const TableComponent = ({
   };
 
   return (
-    <div className="overflow-hidden text-sm">
+    <div className={`overflow-hidden text-sm ${layoutSize === 'small' ? 'px-1' : layoutSize === 'large' ? 'px-8' : 'px-4'}`}>
       <div className="my-1 rounded-xl border border-primary overflow-hidden">
         <div className="w-full flex flex-row sm:flex-row flex-wrap gap-y-2 justify-between items-center px-1 py-1 border-b border-primary">
           <TableFilter

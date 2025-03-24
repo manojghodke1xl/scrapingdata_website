@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import useGlobalContext from '../../hooks/useGlobalContext';
-import { updateAdminLayoutApi } from '../../apis/admin-apis';
+import { updateAdminPreferencesApi } from '../../apis/admin-apis';
 import { showNotification } from '../../utils/showNotification';
 import { LayoutContext } from '../contexts/LayoutContext';
 
@@ -20,10 +20,9 @@ export const LayoutProvider = ({ children }) => {
   const updateLayoutSize = async (size) => {
     setLayoutSize(size);
     try {
-      const payload = { layoutSize: size };
-      const { status, data } = await updateAdminLayoutApi(id, payload);
+      const { status, data } = await updateAdminPreferencesApi(id, { layoutSize: size });
       if (status) {
-        dispatch({ type: 'SET_LAYOUT_PREFERENCE', payload: size });
+        dispatch({ type: 'SET_PREFERENCES', payload: { layoutSize: size } });
       } else {
         showNotification('warn', data);
       }

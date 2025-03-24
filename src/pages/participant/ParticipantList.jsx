@@ -98,45 +98,41 @@ const ParticipantList = () => {
 
   return (
     <div className="p-1 overflow-x-hidden mb-12">
-      <div className="w-full">
-        <TableHeader
-          heading={'Participants'}
-          btn1={true}
-          href1={'/participants/add-participant'}
-          icon1={<IoMdAdd />}
-          btnLabel1={'Add Participant'}
-          btn2={true}
-          icon2={<CiExport strokeWidth={0.5} />}
-          btnLabel2={'Import Participants'}
-          href2={'/participants/import-participants'}
-        />
-        <div className="flex flex-col min-w-full align-middle overflow-x-auto">
-          <TableComponent
-            selectable={true}
-            siteModule={'participant'}
-            actions={true}
-            headers={columnConfig}
-            tableData={(data) => setParticipants(data.participants)}
-            rows={rows}
-            apiUrl={'participant'}
-            tableCountLabel={true}
-            pagination={true}
-            search={true}
-            filter={true}
-            filterCategory={[
-              { id: 0, name: 'Sites' },
-              { id: 1, name: 'Event' }
-            ]}
-            events={event}
-            searchCategory={[
-              { id: 1, name: 'Name' },
-              { id: 2, name: 'Email' }
-            ]}
-            sendCertificate={true}
-            approvalApi={sendCertificateApi}
-          />
-        </div>
-      </div>
+      <TableHeader
+        heading={'Participants'}
+        btn1={true}
+        href1={'/participants/add-participant'}
+        icon1={<IoMdAdd />}
+        btnLabel1={'Add Participant'}
+        btn2={true}
+        icon2={<CiExport strokeWidth={0.5} />}
+        btnLabel2={'Import Participants'}
+        href2={'/participants/import-participants'}
+      />
+      <TableComponent
+        selectable={true}
+        siteModule={'participant'}
+        actions={true}
+        headers={columnConfig}
+        tableData={(data) => setParticipants(data.participants)}
+        rows={rows}
+        apiUrl={'participant'}
+        tableCountLabel={true}
+        pagination={true}
+        search={true}
+        filter={true}
+        filterCategory={[
+          { id: 0, name: 'Sites' },
+          { id: 1, name: 'Event' }
+        ]}
+        events={event}
+        searchCategory={[
+          { id: 1, name: 'Name' },
+          { id: 2, name: 'Email' }
+        ]}
+        sendCertificate={true}
+        approvalApi={sendCertificateApi}
+      />
     </div>
   );
 };

@@ -16,18 +16,10 @@ export const updateAdminStatusApi = async (ids, isBlocked) => {
   return await putMethodCall(`${import.meta.env.VITE_API_URL}/admin-status`, { ids, isBlocked });
 };
 
-export const updateAdminThemeApi = async (id, theme) => {
-  return await putMethodCall(`${import.meta.env.VITE_API_URL}/admin-theme/${id}`, theme);
+export const updateAdminPreferencesApi = async (id, preferences) => {
+  return await putMethodCall(`${import.meta.env.VITE_API_URL}/admin-preferences/${id}`, preferences);
 };
 
-export const getAdminThemeApi = async (id) => {
-  return await getMethodCall(`${import.meta.env.VITE_API_URL}/admin-theme/${id}`);
-};
-
-export const updateAdminLayoutApi = async (id, layout) => {
-  return await putMethodCall(`${import.meta.env.VITE_API_URL}/admin-layout/${id}`, layout);
-};
-
-export const getAdminLayoutApi = async (id) => {
-  return await getMethodCall(`${import.meta.env.VITE_API_URL}/admin-layout/${id}`);
+export const getAdminPreferencesApi = async (id) => {
+  return await getMethodCall(`${import.meta.env.VITE_API_URL}/admin-preferences/${id}`);
 };

@@ -31,39 +31,31 @@ const SmtpList = () => {
   ];
 
   return (
-    <div className="py-5 px-8 overflow-x-hidden mb-10">
-      <div className=" w-full">
-        <TableHeader heading={'SMTP Settings'} btn1={true} href1={'/smtp/add-smtp'} icon1={<IoMdAdd />} btnLabel1={'Add SMTP'} />
-        <div className="flex flex-col">
-          <div className="-m-1.5 overflow-x-auto">
-            <div className="p-1.5 min-w-full align-middle">
-              <TableComponent
-                selectable={true}
-                siteModule={'smtp'}
-                headers={columnConfig}
-                tableData={(data) => setSmtps(data.smtps)}
-                rows={rows}
-                apiUrl={'smtp'}
-                tableCountLabel={true}
-                pagination={true}
-                actions={true}
-                editPath={'/smtp/edit-smtp'}
-                copyPath={'/smtp/duplicate-smtp'}
-                search={true}
-                searchCategory={[
-                  { id: 0, name: 'Name' },
-                  { id: 1, name: 'Host' }
-                ]}
-                deleteBtn={true}
-                deleteAction={true}
-                deleteApi={deleteSmtpApi}
-                deleteLabel={'Delete SMTP'}
-                deleteMessage={'Are you sure you want to delete this SMTP?'}
-              />
-            </div>
-          </div>
-        </div>
-      </div>
+    <div className="p-1 overflow-x-hidden mb-12">
+      <TableHeader heading={'SMTP Settings'} btn1={true} href1={'/smtp/add-smtp'} icon1={<IoMdAdd />} btnLabel1={'Add SMTP'} />
+      <TableComponent
+        selectable={true}
+        siteModule={'smtp'}
+        headers={columnConfig}
+        tableData={(data) => setSmtps(data.smtps)}
+        rows={rows}
+        apiUrl={'smtp'}
+        tableCountLabel={true}
+        pagination={true}
+        actions={true}
+        editPath={'/smtp/edit-smtp'}
+        copyPath={'/smtp/duplicate-smtp'}
+        search={true}
+        searchCategory={[
+          { id: 0, name: 'Name' },
+          { id: 1, name: 'Host' }
+        ]}
+        deleteBtn={true}
+        deleteAction={true}
+        deleteApi={deleteSmtpApi}
+        deleteLabel={'Delete SMTP'}
+        deleteMessage={'Are you sure you want to delete this SMTP?'}
+      />
       <NoteComponent note={listSMTPNote} />
     </div>
   );

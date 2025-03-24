@@ -51,51 +51,43 @@ const EventList = () => {
   ];
 
   return (
-    <div className="py-5 px-8 overflow-x-hidden mb-10">
-      <div className=" w-full">
-        <TableHeader heading={'Events'} btn1={'Add Event'} href1={'/events/add-event'} icon1={<IoMdAdd />} btnLabel1={'Add Event'} />
-        <div className="flex flex-col">
-          <div className="-m-1.5 overflow-x-auto">
-            <div className="min-w-full align-middle">
-              <TableComponent
-                selectable={true}
-                siteModule={'events'}
-                headers={columnConfig}
-                tableData={(data) => setEvents(data.events)}
-                rows={rows}
-                apiUrl={'events'}
-                tableCountLabel={true}
-                pagination={true}
-                actions={true}
-                editPath={'/events/edit-event'}
-                viewPath={'/events/view-event'}
-                copyPath={'/events/duplicate-event'}
-                managePackage={true}
-                managePackagePath={'/packages/package-list'}
-                search={true}
-                filter={true}
-                filterCategory={[
-                  { id: 0, name: 'Status' },
-                  { id: 1, name: 'Sites' }
-                ]}
-                statuses={[
-                  { id: 0, name: 'Active', bgColor: '#ECFDF3', color: '#027948', dotColor: '#12B76A' },
-                  { id: 2, name: 'Inactive', bgColor: '#F2F4F7', color: '#344054', dotColor: '#667085' }
-                ]}
-                searchCategory={[{ id: 1, name: 'Name' }]}
-                deleteBtn={true}
-                deleteAction={true}
-                deleteApi={deleteEventApi}
-                deleteLabel={'Delete Event'}
-                deleteMessage={'Are you sure you want to delete this event?'}
-                sendCertificate={'ID'}
-                sendCertificateUnique={true}
-                approvalApi={sendCertificateApi}
-              />
-            </div>
-          </div>
-        </div>
-      </div>
+    <div className="p-1 overflow-x-hidden mb-12">
+      <TableHeader heading={'Events'} btn1={'Add Event'} href1={'/events/add-event'} icon1={<IoMdAdd />} btnLabel1={'Add Event'} />
+      <TableComponent
+        selectable={true}
+        siteModule={'events'}
+        headers={columnConfig}
+        tableData={(data) => setEvents(data.events)}
+        rows={rows}
+        apiUrl={'events'}
+        tableCountLabel={true}
+        pagination={true}
+        actions={true}
+        editPath={'/events/edit-event'}
+        viewPath={'/events/view-event'}
+        copyPath={'/events/duplicate-event'}
+        managePackage={true}
+        managePackagePath={'/packages/package-list'}
+        search={true}
+        filter={true}
+        filterCategory={[
+          { id: 0, name: 'Status' },
+          { id: 1, name: 'Sites' }
+        ]}
+        statuses={[
+          { id: 0, name: 'Active', bgColor: '#ECFDF3', color: '#027948', dotColor: '#12B76A' },
+          { id: 2, name: 'Inactive', bgColor: '#F2F4F7', color: '#344054', dotColor: '#667085' }
+        ]}
+        searchCategory={[{ id: 1, name: 'Name' }]}
+        deleteBtn={true}
+        deleteAction={true}
+        deleteApi={deleteEventApi}
+        deleteLabel={'Delete Event'}
+        deleteMessage={'Are you sure you want to delete this event?'}
+        sendCertificate={'ID'}
+        sendCertificateUnique={true}
+        approvalApi={sendCertificateApi}
+      />
     </div>
   );
 };

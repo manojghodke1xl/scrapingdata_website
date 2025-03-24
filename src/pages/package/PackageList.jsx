@@ -63,43 +63,35 @@ const PackageList = () => {
   }, []);
 
   return (
-    <div className="py-5 px-8 overflow-x-hidden mb-10">
-      <div className=" w-full">
-        <TableHeader heading={'Packages'} btn1={'Add Package'} href1={'/packages/add-package'} icon1={<IoMdAdd />} btnLabel1={'Add Package'} />
-        <div className="flex flex-col">
-          <div className="-m-1.5 overflow-x-auto">
-            <div className="p-1.5 min-w-full align-middle">
-              <TableComponent
-                selectable={true}
-                siteModule={'packages'}
-                headers={columnConfig}
-                tableData={(data) => setPackages(data.packages)}
-                rows={rows}
-                apiUrl={'package'}
-                events={event}
-                tableCountLabel={true}
-                pagination={true}
-                actions={true}
-                editPath={'/packages/edit-package'}
-                copyPath={'/packages/duplicate-package'}
-                search={true}
-                filter={true}
-                filterCategory={[
-                  { id: 0, name: 'Event' },
-                  { id: 1, name: 'Sites' }
-                ]}
-                searchCategory={[{ id: 1, name: 'Name' }]}
-                deleteBtn={true}
-                deleteAction={true}
-                eventId={eventId}
-                deleteApi={deletePackageApi}
-                deleteLabel={'Delete Package'}
-                deleteMessage={'Are you sure you want to delete this package?'}
-              />
-            </div>
-          </div>
-        </div>
-      </div>
+    <div className="p-1 overflow-x-hidden mb-12">
+      <TableHeader heading={'Packages'} btn1={'Add Package'} href1={'/packages/add-package'} icon1={<IoMdAdd />} btnLabel1={'Add Package'} />
+      <TableComponent
+        selectable={true}
+        siteModule={'packages'}
+        headers={columnConfig}
+        tableData={(data) => setPackages(data.packages)}
+        rows={rows}
+        apiUrl={'package'}
+        events={event}
+        tableCountLabel={true}
+        pagination={true}
+        actions={true}
+        editPath={'/packages/edit-package'}
+        copyPath={'/packages/duplicate-package'}
+        search={true}
+        filter={true}
+        filterCategory={[
+          { id: 0, name: 'Event' },
+          { id: 1, name: 'Sites' }
+        ]}
+        searchCategory={[{ id: 1, name: 'Name' }]}
+        deleteBtn={true}
+        deleteAction={true}
+        eventId={eventId}
+        deleteApi={deletePackageApi}
+        deleteLabel={'Delete Package'}
+        deleteMessage={'Are you sure you want to delete this package?'}
+      />
     </div>
   );
 };

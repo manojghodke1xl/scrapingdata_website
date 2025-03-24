@@ -104,31 +104,23 @@ const BookingPaymentList = () => {
   ];
 
   return (
-    <div className="py-5 px-8 overflow-x-hidden mb-10">
-      <div className=" w-full">
-        <TableHeader heading={'Booking Payments'} />
-        <div className="flex flex-col">
-          <div className="-m-1.5 overflow-x-auto">
-            <div className="p-1.5 min-w-full align-middle">
-              <TableComponent
-                selectable={true}
-                siteModule={'booking-payments'}
-                headers={columnConfig}
-                tableData={(data) => setBookingPayments(data.bookingPayments)}
-                rows={rows}
-                apiUrl={'booking-payments'}
-                tableCountLabel={true}
-                pagination={true}
-                search={true}
-                filter={true}
-                deleteAction={true}
-                deleteBtn={true}
-                filterCategory={[{ id: 1, name: 'Sites' }]}
-              />
-            </div>
-          </div>
-        </div>
-      </div>
+    <div className="p-1 overflow-x-hidden mb-12">
+      <TableHeader heading={'Booking Payments'} />
+      <TableComponent
+        selectable={true}
+        siteModule={'booking-payments'}
+        headers={columnConfig}
+        tableData={(data) => setBookingPayments(data.bookingPayments)}
+        rows={rows}
+        apiUrl={'booking-payments'}
+        tableCountLabel={true}
+        pagination={true}
+        search={true}
+        filter={true}
+        deleteAction={true}
+        deleteBtn={true}
+        filterCategory={[{ id: 1, name: 'Sites' }]}
+      />
     </div>
   );
 };

@@ -28,29 +28,21 @@ const FaqCategoryList = () => {
   ];
 
   return (
-    <div className="py-5 px-8 overflow-x-hidden mb-10">
-      <div className=" w-full">
-        <TableHeader heading={'FAQ Categories'} btn1={true} href1={'/faq-category/add-faq-category'} icon1={<IoMdAdd />} btnLabel1={'Add FAQ Category'} />
-        <div className="flex flex-col">
-          <div className="-m-1.5 overflow-x-auto">
-            <div className="p-1.5 min-w-full align-middle">
-              <TableComponent
-                selectable={true}
-                siteModule={'faq-category'}
-                headers={columnConfig}
-                tableData={(data) => setFaqCategories(data.faqCategories)}
-                rows={rows}
-                apiUrl={'faq-category'}
-                tableCountLabel={true}
-                pagination={true}
-                actions={true}
-                editPath={'/faq-category/edit-faq-category'}
-                search={true}
-              />
-            </div>
-          </div>
-        </div>
-      </div>
+    <div className="p-1 overflow-x-hidden mb-12">
+      <TableHeader heading={'FAQ Categories'} btn1={true} href1={'/faq-category/add-faq-category'} icon1={<IoMdAdd />} btnLabel1={'Add FAQ Category'} />
+      <TableComponent
+        selectable={true}
+        siteModule={'faq-category'}
+        headers={columnConfig}
+        tableData={(data) => setFaqCategories(data.faqCategories)}
+        rows={rows}
+        apiUrl={'faq-category'}
+        tableCountLabel={true}
+        pagination={true}
+        actions={true}
+        editPath={'/faq-category/edit-faq-category'}
+        search={true}
+      />
       <NoteComponent note={faqCategoryListNotes} />
     </div>
   );

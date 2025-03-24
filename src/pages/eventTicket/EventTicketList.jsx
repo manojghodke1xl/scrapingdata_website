@@ -27,34 +27,26 @@ const EventTicketList = () => {
   ];
 
   return (
-    <div className="py-5 px-8 overflow-x-hidden mb-10">
-      <div className=" w-full">
-        <TableHeader heading={'Tickets'} btn1={true} href1={'/tickets/add-ticket'} icon1={<IoMdAdd />} btnLabel1={'Add Ticket'} />
-        <div className="flex flex-col">
-          <div className="-m-1.5 overflow-x-auto">
-            <div className="p-1.5 min-w-full align-middle">
-              <TableComponent
-                selectable={true}
-                siteModule={'ticket'}
-                headers={columnConfig}
-                tableData={(data) => setEventTickets(data.tickets)}
-                rows={rows}
-                apiUrl={'ticket'}
-                tableCountLabel={true}
-                pagination={true}
-                actions={true}
-                editPath={'/tickets/edit-ticket'}
-                deleteBtn={true}
-                deleteAction={true}
-                deleteLabel={'Delete Ticket'}
-                deleteMessage={'Are you sure you want to delete this ticket?'}
-                deleteApi={deleteEventTicketApi}
-                search={true}
-              />
-            </div>
-          </div>
-        </div>
-      </div>
+    <div className="p-1 overflow-x-hidden mb-12">
+      <TableHeader heading={'Tickets'} btn1={true} href1={'/tickets/add-ticket'} icon1={<IoMdAdd />} btnLabel1={'Add Ticket'} />
+      <TableComponent
+        selectable={true}
+        siteModule={'ticket'}
+        headers={columnConfig}
+        tableData={(data) => setEventTickets(data.tickets)}
+        rows={rows}
+        apiUrl={'ticket'}
+        tableCountLabel={true}
+        pagination={true}
+        actions={true}
+        editPath={'/tickets/edit-ticket'}
+        deleteBtn={true}
+        deleteAction={true}
+        deleteLabel={'Delete Ticket'}
+        deleteMessage={'Are you sure you want to delete this ticket?'}
+        deleteApi={deleteEventTicketApi}
+        search={true}
+      />
     </div>
   );
 };

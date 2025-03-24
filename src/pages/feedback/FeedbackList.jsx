@@ -54,48 +54,44 @@ const FeedbackList = () => {
 
   return (
     <div className="p-1 overflow-x-hidden mb-12">
-      <div className="w-full">
-        <TableHeader
-          heading={'Feedbacks'}
-          btn1={true}
-          href1={'/feedback/feedback-integration'}
-          icon1={<AiOutlineApi />}
-          btnLabel1={'API Integration'}
-          btn2={true}
-          href2={'/feedback/add-feedback'}
-          icon2={<IoMdAdd />}
-          btnLabel2={'Add Feedback'}
-        />
-        <div className="flex flex-col min-w-full align-middle overflow-x-auto">
-          <TableComponent
-            selectable={true}
-            siteModule={'feedback'}
-            headers={columnConfig}
-            tableData={(data) => setFeedbacks(data.feedbacks)}
-            rows={rows}
-            apiUrl={'feedback'}
-            tableCountLabel={true}
-            pagination={true}
-            actions={true}
-            viewPath={'/feedback/view-feedback'}
-            search={true}
-            filter={true}
-            filterCategory={[{ id: 0, name: 'Sites' }]}
-            searchCategory={[
-              { id: 0, name: 'Name' },
-              { id: 1, name: 'Email' },
-              { id: 2, name: 'Service' },
-              { id: 3, name: 'Subject' },
-              { id: 4, name: 'Site' }
-            ]}
-            deleteBtn={true}
-            deleteAction={true}
-            deleteLabel={'Delete Feedback'}
-            deleteMessage={'Are you sure you want to delete this feedback?'}
-            deleteApi={deleteFeedbackApi}
-          />
-        </div>
-      </div>
+      <TableHeader
+        heading={'Feedbacks'}
+        btn1={true}
+        href1={'/feedback/feedback-integration'}
+        icon1={<AiOutlineApi />}
+        btnLabel1={'API Integration'}
+        btn2={true}
+        href2={'/feedback/add-feedback'}
+        icon2={<IoMdAdd />}
+        btnLabel2={'Add Feedback'}
+      />
+      <TableComponent
+        selectable={true}
+        siteModule={'feedback'}
+        headers={columnConfig}
+        tableData={(data) => setFeedbacks(data.feedbacks)}
+        rows={rows}
+        apiUrl={'feedback'}
+        tableCountLabel={true}
+        pagination={true}
+        actions={true}
+        viewPath={'/feedback/view-feedback'}
+        search={true}
+        filter={true}
+        filterCategory={[{ id: 0, name: 'Sites' }]}
+        searchCategory={[
+          { id: 0, name: 'Name' },
+          { id: 1, name: 'Email' },
+          { id: 2, name: 'Service' },
+          { id: 3, name: 'Subject' },
+          { id: 4, name: 'Site' }
+        ]}
+        deleteBtn={true}
+        deleteAction={true}
+        deleteLabel={'Delete Feedback'}
+        deleteMessage={'Are you sure you want to delete this feedback?'}
+        deleteApi={deleteFeedbackApi}
+      />
       <NoteComponent note={feedbackListNote} />
     </div>
   );

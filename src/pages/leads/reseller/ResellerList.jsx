@@ -51,51 +51,43 @@ const ResellerList = () => {
   ];
 
   return (
-    <div className="py-5 px-8 overflow-x-hidden mb-10">
-      <div className=" w-full">
-        <TableHeader
-          heading="Resellers"
-          btn2={true}
-          btn1={true}
-          href1={'/reseller/reseller-integration'}
-          href2={'/reseller/add-reseller'}
-          icon1={<AiOutlineApi />}
-          icon2={<IoMdAdd />}
-          btnLabel1={'API Integration'}
-          btnLabel2={'Add Reseller'}
-        />
-        <div className="flex flex-col">
-          <div className="-m-1.5 overflow-x-auto">
-            <div className="p-1.5 min-w-full align-middle">
-              <TableComponent
-                selectable={true}
-                siteModule={'reseller'}
-                headers={columnConfig}
-                tableData={(data) => setResellers(data.resellers)}
-                exportData={resellers}
-                rows={rows}
-                apiUrl={'reseller'}
-                tableCountLabel={true}
-                pagination={true}
-                actions={true}
-                viewPath={'/reseller/view-reseller'}
-                search={true}
-                filter={true}
-                filterCategory={[{ id: 0, name: 'Sites' }]}
-                searchCategory={[
-                  { id: 0, name: 'Name' },
-                  { id: 1, name: 'Email' }
-                ]}
-                deleteBtn={true}
-                deleteAction={true}
-                deleteLabel="Delete Reseller"
-                deleteMessage="Are you sure you want to delete this Reseller?"
-                deleteApi={deleteResellerApi}
-              />
-            </div>
-          </div>
-        </div>
-      </div>
+    <div className="p-1 overflow-x-hidden mb-12">
+      <TableHeader
+        heading="Resellers"
+        btn2={true}
+        btn1={true}
+        href1={'/reseller/reseller-integration'}
+        href2={'/reseller/add-reseller'}
+        icon1={<AiOutlineApi />}
+        icon2={<IoMdAdd />}
+        btnLabel1={'API Integration'}
+        btnLabel2={'Add Reseller'}
+      />
+      <TableComponent
+        selectable={true}
+        siteModule={'reseller'}
+        headers={columnConfig}
+        tableData={(data) => setResellers(data.resellers)}
+        exportData={resellers}
+        rows={rows}
+        apiUrl={'reseller'}
+        tableCountLabel={true}
+        pagination={true}
+        actions={true}
+        viewPath={'/reseller/view-reseller'}
+        search={true}
+        filter={true}
+        filterCategory={[{ id: 0, name: 'Sites' }]}
+        searchCategory={[
+          { id: 0, name: 'Name' },
+          { id: 1, name: 'Email' }
+        ]}
+        deleteBtn={true}
+        deleteAction={true}
+        deleteLabel="Delete Reseller"
+        deleteMessage="Are you sure you want to delete this Reseller?"
+        deleteApi={deleteResellerApi}
+      />
     </div>
   );
 };

@@ -6,11 +6,9 @@ import { AiOutlineApi } from 'react-icons/ai';
 import { IoMdAdd } from 'react-icons/io';
 import TableComponent from '../../../atoms/table/Table';
 import { deleteAdvertisementApi } from '../../../apis/leads/advertisement-apis';
-import useLayout from '../../../hooks/useLayout';
 
 const AdvertisementList = () => {
   const [advertisements, setAdvertisements] = useState([]);
-  const { layoutSize } = useLayout();
 
   const rows = advertisements.map((advertisement) => {
     const { _id, name, email, service, subject, createdAt, updatedAt, site, url, campaign, medium, source, content, term, campaignId } = advertisement;
@@ -53,47 +51,43 @@ const AdvertisementList = () => {
   ];
 
   return (
-    <div className={`p-1 overflow-x-hidden mb-12 ${layoutSize === 'small' ? 'text-sm' : layoutSize === 'large' ? '!text-lg' : '!text-base'}`}>
-      <div className=" w-full">
-        <TableHeader
-          heading="Advertisements"
-          btn2={true}
-          btn1={true}
-          href1={'/advertisement/advertisement-integration'}
-          href2={'/advertisement/add-advertisement'}
-          icon1={<AiOutlineApi />}
-          icon2={<IoMdAdd />}
-          btnLabel1={'API Integration'}
-          btnLabel2={'Add Advertisement'}
-        />
-        <div className="flex flex-col min-w-full align-middle overflow-x-auto">
-          <TableComponent
-            selectable={true}
-            siteModule={'advertisement'}
-            headers={columnConfig}
-            tableData={(data) => setAdvertisements(data.advertisements)}
-            exportData={advertisements}
-            rows={rows}
-            apiUrl={'advertisement'}
-            tableCountLabel={true}
-            pagination={true}
-            actions={true}
-            viewPath={'/advertisement/view-advertisement'}
-            search={true}
-            filter={true}
-            filterCategory={[{ id: 0, name: 'Sites' }]}
-            searchCategory={[
-              { id: 0, name: 'Name' },
-              { id: 1, name: 'Email' }
-            ]}
-            deleteBtn={true}
-            deleteAction={true}
-            deleteLabel="Delete Advertisement"
-            deleteMessage="Are you sure you want to delete this Advertisement?"
-            deleteApi={deleteAdvertisementApi}
-          />
-        </div>
-      </div>
+    <div className={`p-1 overflow-x-hidden mb-12`}>
+      <TableHeader
+        heading="Advertisements"
+        btn2={true}
+        btn1={true}
+        href1={'/advertisement/advertisement-integration'}
+        href2={'/advertisement/add-advertisement'}
+        icon1={<AiOutlineApi />}
+        icon2={<IoMdAdd />}
+        btnLabel1={'API Integration'}
+        btnLabel2={'Add Advertisement'}
+      />
+      <TableComponent
+        selectable={true}
+        siteModule={'advertisement'}
+        headers={columnConfig}
+        tableData={(data) => setAdvertisements(data.advertisements)}
+        exportData={advertisements}
+        rows={rows}
+        apiUrl={'advertisement'}
+        tableCountLabel={true}
+        pagination={true}
+        actions={true}
+        viewPath={'/advertisement/view-advertisement'}
+        search={true}
+        filter={true}
+        filterCategory={[{ id: 0, name: 'Sites' }]}
+        searchCategory={[
+          { id: 0, name: 'Name' },
+          { id: 1, name: 'Email' }
+        ]}
+        deleteBtn={true}
+        deleteAction={true}
+        deleteLabel="Delete Advertisement"
+        deleteMessage="Are you sure you want to delete this Advertisement?"
+        deleteApi={deleteAdvertisementApi}
+      />
     </div>
   );
 };

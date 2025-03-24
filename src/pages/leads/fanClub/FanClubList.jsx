@@ -51,51 +51,43 @@ const FanClubList = () => {
   ];
 
   return (
-    <div className="py-5 px-8 overflow-x-hidden mb-10">
-      <div className=" w-full">
-        <TableHeader
-          heading="Fan Clubs"
-          btn2={true}
-          btn1={true}
-          href1={'/fan-club/fan-club-integration'}
-          href2={'/fan-club/add-fan-club'}
-          icon1={<AiOutlineApi />}
-          icon2={<IoMdAdd />}
-          btnLabel1={'API Integration'}
-          btnLabel2={'Add Fan Club'}
-        />
-        <div className="flex flex-col">
-          <div className="-m-1.5 overflow-x-auto">
-            <div className="p-1.5 min-w-full align-middle">
-              <TableComponent
-                selectable={true}
-                siteModule={'fan-club'}
-                headers={columnConfig}
-                tableData={(data) => setFanClubs(data.fanClubs)}
-                exportData={fanClubs}
-                rows={rows}
-                apiUrl={'fan-club'}
-                tableCountLabel={true}
-                pagination={true}
-                actions={true}
-                viewPath={'/fan-club/view-fan-club'}
-                search={true}
-                filter={true}
-                filterCategory={[{ id: 0, name: 'Sites' }]}
-                searchCategory={[
-                  { id: 0, name: 'Name' },
-                  { id: 1, name: 'Email' }
-                ]}
-                deleteBtn={true}
-                deleteAction={true}
-                deleteLabel="Delete Fan Club"
-                deleteMessage="Are you sure you want to delete this Fan Club?"
-                deleteApi={deleteFanClubApi}
-              />
-            </div>
-          </div>
-        </div>
-      </div>
+    <div className="p-1 overflow-x-hidden mb-12">
+      <TableHeader
+        heading="Fan Clubs"
+        btn2={true}
+        btn1={true}
+        href1={'/fan-club/fan-club-integration'}
+        href2={'/fan-club/add-fan-club'}
+        icon1={<AiOutlineApi />}
+        icon2={<IoMdAdd />}
+        btnLabel1={'API Integration'}
+        btnLabel2={'Add Fan Club'}
+      />
+      <TableComponent
+        selectable={true}
+        siteModule={'fan-club'}
+        headers={columnConfig}
+        tableData={(data) => setFanClubs(data.fanClubs)}
+        exportData={fanClubs}
+        rows={rows}
+        apiUrl={'fan-club'}
+        tableCountLabel={true}
+        pagination={true}
+        actions={true}
+        viewPath={'/fan-club/view-fan-club'}
+        search={true}
+        filter={true}
+        filterCategory={[{ id: 0, name: 'Sites' }]}
+        searchCategory={[
+          { id: 0, name: 'Name' },
+          { id: 1, name: 'Email' }
+        ]}
+        deleteBtn={true}
+        deleteAction={true}
+        deleteLabel="Delete Fan Club"
+        deleteMessage="Are you sure you want to delete this Fan Club?"
+        deleteApi={deleteFanClubApi}
+      />
     </div>
   );
 };

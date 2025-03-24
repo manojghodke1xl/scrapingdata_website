@@ -29,36 +29,28 @@ const FilesList = () => {
   ];
 
   return (
-    <div className="py-5 px-8 overflow-x-hidden mb-10">
-      <div className=" w-full">
-        <TableHeader heading={'Files'} btn1={true} href1={'/files/add-file'} icon1={<IoMdAdd />} btnLabel1={'Add File'} />
-        <div className="flex flex-col">
-          <div className="-m-1.5 overflow-x-auto">
-            <div className="p-1.5 min-w-full align-middle">
-              <TableComponent
-                selectable={true}
-                siteModule={'files'}
-                headers={columnConfig}
-                tableData={(data) => setFiles(data.files)}
-                rows={rows}
-                apiUrl={'file'}
-                tableCountLabel={true}
-                pagination={true}
-                actions={true}
-                editPath={'/files/edit-file'}
-                deleteBtn={true}
-                deleteAction={true}
-                deleteApi={deleteFileApi}
-                deleteMessage="Are you sure you want to delete this file?"
-                deleteLabel={'Delete File'}
-                search={true}
-                filter={true}
-                filterCategory={[{ id: 1, name: 'Sites' }]}
-              />
-            </div>
-          </div>
-        </div>
-      </div>
+    <div className="p-1 overflow-x-hidden mb-12">
+      <TableHeader heading={'Files'} btn1={true} href1={'/files/add-file'} icon1={<IoMdAdd />} btnLabel1={'Add File'} />
+      <TableComponent
+        selectable={true}
+        siteModule={'files'}
+        headers={columnConfig}
+        tableData={(data) => setFiles(data.files)}
+        rows={rows}
+        apiUrl={'file'}
+        tableCountLabel={true}
+        pagination={true}
+        actions={true}
+        editPath={'/files/edit-file'}
+        deleteBtn={true}
+        deleteAction={true}
+        deleteApi={deleteFileApi}
+        deleteMessage="Are you sure you want to delete this file?"
+        deleteLabel={'Delete File'}
+        search={true}
+        filter={true}
+        filterCategory={[{ id: 1, name: 'Sites' }]}
+      />
     </div>
   );
 };

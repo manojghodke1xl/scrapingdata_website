@@ -46,49 +46,45 @@ const GuidesList = () => {
 
   return (
     <div className="p-1 overflow-x-hidden mb-12">
-      <div className=" w-full">
-        <TableHeader
-          heading={'Guides'}
-          btn1={true}
-          href1={'/guides/guides-integration'}
-          icon1={<AiOutlineApi />}
-          btnLabel1={'Integration Guide PDF'}
-          btn2={true}
-          href2={'/guides/add-guide'}
-          icon2={<IoMdAdd />}
-          btnLabel2={'Add Guide'}
-        />
-        <div className="flex flex-col min-w-full align-middle overflow-x-auto">
-          <TableComponent
-            selectable={true}
-            siteModule={'guide'}
-            headers={columnConfig}
-            tableData={(data) => setGuides(data.guides)}
-            rows={rows}
-            apiUrl={'guides'}
-            tableCountLabel={true}
-            pagination={true}
-            actions={true}
-            editPath={'/guides/edit-guide'}
-            copyPath={'/guides/duplicate-guide'}
-            search={true}
-            filter={true}
-            filterCategory={[
-              { id: 0, name: 'Sites' },
-              { id: 1, name: 'Status' }
-            ]}
-            statuses={[
-              { id: 0, name: 'Active', bgColor: '#ECFDF3', color: '#027948', dotColor: '#12B76A' },
-              { id: 1, name: 'Inactive', bgColor: '#F2F4F7', color: '#344054', dotColor: '#667085' }
-            ]}
-            searchCategory={[{ id: 0, name: 'Title' }]}
-            modifyStatus={true}
-            modifyStatusApi={updateGuideStatusApi}
-            modifySite={true}
-            modifySiteApi={updateGuideSitesApi}
-          />
-        </div>
-      </div>
+      <TableHeader
+        heading={'Guides'}
+        btn1={true}
+        href1={'/guides/guides-integration'}
+        icon1={<AiOutlineApi />}
+        btnLabel1={'Integration Guide PDF'}
+        btn2={true}
+        href2={'/guides/add-guide'}
+        icon2={<IoMdAdd />}
+        btnLabel2={'Add Guide'}
+      />
+      <TableComponent
+        selectable={true}
+        siteModule={'guide'}
+        headers={columnConfig}
+        tableData={(data) => setGuides(data.guides)}
+        rows={rows}
+        apiUrl={'guides'}
+        tableCountLabel={true}
+        pagination={true}
+        actions={true}
+        editPath={'/guides/edit-guide'}
+        copyPath={'/guides/duplicate-guide'}
+        search={true}
+        filter={true}
+        filterCategory={[
+          { id: 0, name: 'Sites' },
+          { id: 1, name: 'Status' }
+        ]}
+        statuses={[
+          { id: 0, name: 'Active', bgColor: '#ECFDF3', color: '#027948', dotColor: '#12B76A' },
+          { id: 1, name: 'Inactive', bgColor: '#F2F4F7', color: '#344054', dotColor: '#667085' }
+        ]}
+        searchCategory={[{ id: 0, name: 'Title' }]}
+        modifyStatus={true}
+        modifyStatusApi={updateGuideStatusApi}
+        modifySite={true}
+        modifySiteApi={updateGuideSitesApi}
+      />
       <NoteComponent note={guideListNote} />
     </div>
   );

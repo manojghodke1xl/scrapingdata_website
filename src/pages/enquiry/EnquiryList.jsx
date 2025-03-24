@@ -56,46 +56,42 @@ const EnquiryList = () => {
 
   return (
     <div className="p-1 overflow-x-hidden mb-12">
-      <div className=" w-full">
-        <TableHeader
-          heading="Enquiry"
-          btn2={true}
-          btn1={true}
-          href1={'/enquiry/enquiry-integration'}
-          href2={'/enquiry/add-enquiry'}
-          icon1={<AiOutlineApi />}
-          icon2={<IoMdAdd />}
-          btnLabel1={'API Integration'}
-          btnLabel2={'Add Enquiry'}
-        />
-        <div className="flex flex-col min-w-full align-middle overflow-x-auto">
-          <TableComponent
-            selectable={true}
-            siteModule={'enquiry'}
-            headers={columnConfig}
-            tableData={(data) => setEnquiries(data.enquiries)}
-            exportData={enquiries}
-            rows={rows}
-            apiUrl={'enquiry'}
-            tableCountLabel={true}
-            pagination={true}
-            actions={true}
-            viewPath={'/enquiry/view-enquiry'}
-            search={true}
-            filter={true}
-            filterCategory={[{ id: 0, name: 'Sites' }]}
-            searchCategory={[
-              { id: 0, name: 'Name' },
-              { id: 1, name: 'Email' }
-            ]}
-            deleteBtn={true}
-            deleteAction={true}
-            deleteLabel="Delete Enquiry"
-            deleteMessage="Are you sure you want to delete this enquiry?"
-            deleteApi={deleteEnquiryApi}
-          />
-        </div>
-      </div>
+      <TableHeader
+        heading="Enquiry"
+        btn2={true}
+        btn1={true}
+        href1={'/enquiry/enquiry-integration'}
+        href2={'/enquiry/add-enquiry'}
+        icon1={<AiOutlineApi />}
+        icon2={<IoMdAdd />}
+        btnLabel1={'API Integration'}
+        btnLabel2={'Add Enquiry'}
+      />
+      <TableComponent
+        selectable={true}
+        siteModule={'enquiry'}
+        headers={columnConfig}
+        tableData={(data) => setEnquiries(data.enquiries)}
+        exportData={enquiries}
+        rows={rows}
+        apiUrl={'enquiry'}
+        tableCountLabel={true}
+        pagination={true}
+        actions={true}
+        viewPath={'/enquiry/view-enquiry'}
+        search={true}
+        filter={true}
+        filterCategory={[{ id: 0, name: 'Sites' }]}
+        searchCategory={[
+          { id: 0, name: 'Name' },
+          { id: 1, name: 'Email' }
+        ]}
+        deleteBtn={true}
+        deleteAction={true}
+        deleteLabel="Delete Enquiry"
+        deleteMessage="Are you sure you want to delete this enquiry?"
+        deleteApi={deleteEnquiryApi}
+      />
       <NoteComponent note={enquiryListNote} />
     </div>
   );

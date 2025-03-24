@@ -35,32 +35,28 @@ const ProductList = () => {
 
   return (
     <div className="p-1 overflow-x-hidden mb-12">
-      <div className="w-full">
-        <TableHeader heading={'Products'} btn1={true} href1={'/products/add-product'} icon1={<IoMdAdd />} btnLabel1={'Add Product'} />
-        <div className="flex flex-col min-w-full align-middle overflow-x-auto">
-          <TableComponent
-            selectable={true}
-            siteModule={'products'}
-            headers={columnConfig}
-            tableData={(data) => setProducts(data.products)}
-            rows={rows}
-            apiUrl={'products'}
-            tableCountLabel={true}
-            pagination={true}
-            actions={true}
-            editPath={'/products/edit-product'}
-            search={true}
-            filter={true}
-            deleteBtn={true}
-            deleteAction={true}
-            filterCategory={[{ id: 0, name: 'Sites' }]}
-            searchCategory={[{ id: 1, name: 'Name' }]}
-            deleteLabel={'Delete Product'}
-            deleteMessage={'Are you sure you want to delete this product?'}
-            deleteApi={deleteProductApi}
-          />
-        </div>
-      </div>
+      <TableHeader heading={'Products'} btn1={true} href1={'/products/add-product'} icon1={<IoMdAdd />} btnLabel1={'Add Product'} />
+      <TableComponent
+        selectable={true}
+        siteModule={'products'}
+        headers={columnConfig}
+        tableData={(data) => setProducts(data.products)}
+        rows={rows}
+        apiUrl={'products'}
+        tableCountLabel={true}
+        pagination={true}
+        actions={true}
+        editPath={'/products/edit-product'}
+        search={true}
+        filter={true}
+        deleteBtn={true}
+        deleteAction={true}
+        filterCategory={[{ id: 0, name: 'Sites' }]}
+        searchCategory={[{ id: 1, name: 'Name' }]}
+        deleteLabel={'Delete Product'}
+        deleteMessage={'Are you sure you want to delete this product?'}
+        deleteApi={deleteProductApi}
+      />
     </div>
   );
 };

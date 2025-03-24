@@ -2,7 +2,7 @@ import { useCallback, useEffect, useReducer, useRef, useState } from 'react';
 import { GlobalContext } from '../contexts/GlobalContext';
 import { getAllSitesApi } from '../../apis/site-apis';
 import { showNotification } from '../../utils/showNotification';
-import { getAdminThemeApi, getAdminLayoutApi } from '../../apis/admin-apis';
+import { getAdminPreferencesApi } from '../../apis/admin-apis';
 
 const defaultState = {
   id: '',
@@ -61,6 +61,17 @@ const authReducer = (state, action) => {
       return { ...state, layoutPreference: payload };
     }
 
+    case 'SET_PREFERENCES': {
+      return {
+        ...state,
+        theme: {
+          isDarkMode: payload.isDarkMode,
+          primaryColor: payload.primaryColor
+        },
+        layoutPreference: payload.layoutSize
+      };
+    }
+
     default:
       return state;
   }
@@ -69,8 +80,7 @@ const authReducer = (state, action) => {
 export const GlobalProvider = ({ children }) => {
   const [auth, dispatch] = useReducer(authReducer, authState);
   const [isLoading, setLoading] = useState(false);
-  const themeFetched = useRef(false);
-  const layoutFetched = useRef(false);
+  const preferencesFetched = useRef(false);
 
   const fetchData = useCallback(
     async (apiCall, successAction, id) => {
@@ -93,27 +103,19 @@ export const GlobalProvider = ({ children }) => {
     if (auth.id && auth.allSites.length === 0) fetchData(getAllSitesApi, (data) => ({ type: 'SET_ALL_SITES', payload: data.sites }), null);
   }, [auth.allSites.length, auth.id, fetchData]);
 
-  const fetchTheme = useCallback(() => {
-    if (auth.id && !themeFetched.current) {
-      fetchData(getAdminThemeApi, (data) => ({ type: 'SET_THEME', payload: data.theme }), auth.id);
-      themeFetched.current = true;
-    }
-  }, [auth.id, fetchData]);
-
-  const fetchLayout = useCallback(() => {
-    if (auth.id) {
-      fetchData(getAdminLayoutApi, (data) => ({ type: 'SET_LAYOUT_PREFERENCE', payload: data.layoutSize }), auth.id);
-      layoutFetched.current = true;
+  const fetchPreferences = useCallback(() => {
+    if (auth.id && !preferencesFetched.current) {
+      fetchData(getAdminPreferencesApi, (data) => ({ type: 'SET_PREFERENCES', payload: data.preferences }), auth.id);
+      preferencesFetched.current = true;
     }
   }, [auth.id, fetchData]);
 
   useEffect(() => {
     if (auth.id) {
       fetchSites();
-      fetchTheme();
-      fetchLayout();
+      fetchPreferences();
     }
-  }, [auth.id, fetchSites, fetchTheme, fetchLayout]);
+  }, [auth.id, fetchSites, fetchPreferences]);
 
   return <GlobalContext.Provider value={{ auth, dispatch, setLoading, isLoading }}>{children}</GlobalContext.Provider>;
 };

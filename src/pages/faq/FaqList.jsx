@@ -46,52 +46,44 @@ const FaqList = () => {
   ];
 
   return (
-    <div className="py-5 px-8 overflow-x-hidden mb-10">
-      <div className=" w-full">
-        <TableHeader heading={'FAQs'} btn1={true} href1={'/faq/add-faq'} icon1={<IoMdAdd />} btnLabel1={'Add FAQ'} />
-        <div className="flex flex-col">
-          <div className="-m-1.5 overflow-x-auto">
-            <div className="p-1.5 min-w-full align-middle">
-              <TableComponent
-                selectable={true}
-                siteModule={'faq'}
-                headers={columnConfig}
-                tableData={(data) => setFaqs(data.faqs)}
-                rows={rows}
-                apiUrl={'faq'}
-                tableCountLabel={true}
-                pagination={true}
-                actions={true}
-                editPath={'/faq/edit-faq'}
-                copyPath={'/faq/duplicate-faq'}
-                search={true}
-                filter={true}
-                filterCategory={[
-                  { id: 0, name: 'Sites' },
-                  { id: 1, name: 'Status' }
-                ]}
-                statuses={[
-                  { id: 0, name: 'Active', bgColor: '#ECFDF3', color: '#027948', dotColor: '#12B76A' },
-                  { id: 1, name: 'Inactive', bgColor: '#F2F4F7', color: '#344054', dotColor: '#667085' }
-                ]}
-                searchCategory={[
-                  { id: 0, name: 'Question' },
-                  { id: 1, name: 'Answer' }
-                ]}
-                modifyStatus={true}
-                modifyStatusApi={updateFaqStatusApi}
-                modifySite={true}
-                modifySiteApi={updateFaqSitesApi}
-                deleteBtn={true}
-                deleteAction={true}
-                deleteLabel={'Delete FAQ'}
-                deleteMessage={'Are you sure you want to delete this FAQ?'}
-                deleteApi={deleteFaqApi}
-              />
-            </div>
-          </div>
-        </div>
-      </div>
+    <div className="p-1 overflow-x-hidden mb-12">
+      <TableHeader heading={'FAQs'} btn1={true} href1={'/faq/add-faq'} icon1={<IoMdAdd />} btnLabel1={'Add FAQ'} />
+      <TableComponent
+        selectable={true}
+        siteModule={'faq'}
+        headers={columnConfig}
+        tableData={(data) => setFaqs(data.faqs)}
+        rows={rows}
+        apiUrl={'faq'}
+        tableCountLabel={true}
+        pagination={true}
+        actions={true}
+        editPath={'/faq/edit-faq'}
+        copyPath={'/faq/duplicate-faq'}
+        search={true}
+        filter={true}
+        filterCategory={[
+          { id: 0, name: 'Sites' },
+          { id: 1, name: 'Status' }
+        ]}
+        statuses={[
+          { id: 0, name: 'Active', bgColor: '#ECFDF3', color: '#027948', dotColor: '#12B76A' },
+          { id: 1, name: 'Inactive', bgColor: '#F2F4F7', color: '#344054', dotColor: '#667085' }
+        ]}
+        searchCategory={[
+          { id: 0, name: 'Question' },
+          { id: 1, name: 'Answer' }
+        ]}
+        modifyStatus={true}
+        modifyStatusApi={updateFaqStatusApi}
+        modifySite={true}
+        modifySiteApi={updateFaqSitesApi}
+        deleteBtn={true}
+        deleteAction={true}
+        deleteLabel={'Delete FAQ'}
+        deleteMessage={'Are you sure you want to delete this FAQ?'}
+        deleteApi={deleteFaqApi}
+      />
       <NoteComponent note={faqListNote} />
     </div>
   );

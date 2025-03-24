@@ -45,48 +45,40 @@ const ClientLogoList = () => {
   ];
 
   return (
-    <div className="py-5 px-8 overflow-x-hidden mb-10">
-      <div className=" w-full">
-        <TableHeader heading={'Client Logos'} btn1={true} href1={'/client-logo/add-client-logo'} icon1={<IoMdAdd />} btnLabel1={'Add Client Logo'} />
-        <div className="flex flex-col">
-          <div className="-m-1.5 overflow-x-auto">
-            <div className="p-1.5 min-w-full align-middle">
-              <TableComponent
-                selectable={true}
-                search={true}
-                siteModule={'clientlogo'}
-                headers={columnConfig}
-                tableData={(data) => setClientLogos(data.clientlogos)}
-                rows={rows}
-                apiUrl={'client-logo'}
-                tableCountLabel={true}
-                pagination={true}
-                actions={true}
-                editPath={'/client-logo/edit-client-logo'}
-                copyPath={'/client-logo/duplicate-client-logo'}
-                filter={true}
-                filterCategory={[
-                  { id: 1, name: 'Sites' },
-                  { id: 2, name: 'Status' }
-                ]}
-                statuses={[
-                  { id: 0, name: 'Active', bgColor: '#ECFDF3', color: '#027948', dotColor: '#12B76A' },
-                  { id: 2, name: 'Inactive', bgColor: '#F2F4F7', color: '#344054', dotColor: '#667085' }
-                ]}
-                modifyStatus={true}
-                modifyStatusApi={updateClientLogoStatusApi}
-                modifySite={true}
-                modifySiteApi={updateClientLogoSitesApi}
-                deleteBtn={true}
-                deleteAction={true}
-                deleteApi={deleteClientLogoApi}
-                deleteLabel={'Delete Client Logo'}
-                deleteMessage={'Are you sure you want to delete this Client Logo?'}
-              />
-            </div>
-          </div>
-        </div>
-      </div>
+    <div className="p-1 overflow-x-hidden mb-12">
+      <TableHeader heading={'Client Logos'} btn1={true} href1={'/client-logo/add-client-logo'} icon1={<IoMdAdd />} btnLabel1={'Add Client Logo'} />
+      <TableComponent
+        selectable={true}
+        search={true}
+        siteModule={'clientlogo'}
+        headers={columnConfig}
+        tableData={(data) => setClientLogos(data.clientlogos)}
+        rows={rows}
+        apiUrl={'client-logo'}
+        tableCountLabel={true}
+        pagination={true}
+        actions={true}
+        editPath={'/client-logo/edit-client-logo'}
+        copyPath={'/client-logo/duplicate-client-logo'}
+        filter={true}
+        filterCategory={[
+          { id: 0, name: 'Sites' },
+          { id: 1, name: 'Status' }
+        ]}
+        statuses={[
+          { id: 0, name: 'Active', bgColor: '#ECFDF3', color: '#027948', dotColor: '#12B76A' },
+          { id: 1, name: 'Inactive', bgColor: '#F2F4F7', color: '#344054', dotColor: '#667085' }
+        ]}
+        modifyStatus={true}
+        modifyStatusApi={updateClientLogoStatusApi}
+        modifySite={true}
+        modifySiteApi={updateClientLogoSitesApi}
+        deleteBtn={true}
+        deleteAction={true}
+        deleteApi={deleteClientLogoApi}
+        deleteLabel={'Delete Client Logo'}
+        deleteMessage={'Are you sure you want to delete this Client Logo?'}
+      />
       <NoteComponent note={clientLogoListNote} />
     </div>
   );

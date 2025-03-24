@@ -1,7 +1,9 @@
 import { useState, useRef } from 'react';
 import { showNotification } from '../../utils/showNotification';
+// import useLayout from '../../hooks/useLayout';
 
 const TruncatableFieldToolTip = ({ content = '', maxLength = 20 }) => {
+  // const { layoutSize } = useLayout();
   const [showTooltip, setShowTooltip] = useState(false);
   const tooltipRef = useRef(null);
 
@@ -9,7 +11,8 @@ const TruncatableFieldToolTip = ({ content = '', maxLength = 20 }) => {
 
   return (
     <div className="relative" onMouseEnter={() => isTruncated && setShowTooltip(true)} onMouseLeave={() => setShowTooltip(false)}>
-      <span className="flex items-center justify-start">
+      {/* this css for span tag to modify text based on layout ${layoutSize === 'small' ? 'text-sm' : layoutSize === 'large' ? 'text-xl' : 'text-base'} */}
+      <span className={`flex items-center justify-start`}>
         {isTruncated ? content.substring(0, maxLength) : content === '' ? '-' : content}
         {isTruncated && (
           <button
@@ -26,8 +29,9 @@ const TruncatableFieldToolTip = ({ content = '', maxLength = 20 }) => {
       </span>
 
       {isTruncated && showTooltip && (
-        <div ref={tooltipRef} className="absolute transform -translate-y-full -mt-2 z-50 bg-main border border-primary rounded-xl shadow-lg p-1 whitespace-nowrap">
-          <p className="text-primary text-sm overflow-hidden text-ellipsis">{content}</p>
+        <div ref={tooltipRef} className="absolute transform -translate-y-full -mt-8 z-50 bg-main border border-primary rounded-xl shadow-lg p-1 whitespace-nowrap">
+          {/* this css for p tag to modify text based on layout ==  ${layoutSize === 'small' ? 'text-sm' : layoutSize === 'large' ? 'text-xl' : 'text-base'} */}
+          <p className={`text-primary overflow-hidden text-ellipsis`}>{content}</p>
         </div>
       )}
     </div>

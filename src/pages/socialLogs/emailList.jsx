@@ -57,31 +57,23 @@ const EmailLogList = () => {
   ];
 
   return (
-    <div className="py-5 px-8 overflow-x-hidden mb-10">
-      <div className=" w-full">
-        <TableHeader heading={'Email Logs'} />
-        <div className="flex flex-col">
-          <div className="-m-1.5 overflow-x-auto">
-            <div className="p-1.5 min-w-full align-middle">
-              <TableComponent
-                selectable={true}
-                siteModule={'email-logs'}
-                headers={columnConfig}
-                tableData={(data) => setEmailTemplates(data.logs)}
-                rows={rows}
-                apiUrl={'logs/email'}
-                tableCountLabel={true}
-                pagination={true}
-                search={true}
-                filter={true}
-                filterCategory={[{ id: 0, name: 'Sites' }]}
-                actions={true}
-                viewPath={'/logs/email-log-preview'}
-              />
-            </div>
-          </div>
-        </div>
-      </div>
+    <div className="p-1 overflow-x-hidden mb-12">
+      <TableHeader heading={'Email Logs'} />
+      <TableComponent
+        selectable={true}
+        siteModule={'email-logs'}
+        headers={columnConfig}
+        tableData={(data) => setEmailTemplates(data.logs)}
+        rows={rows}
+        apiUrl={'logs/email'}
+        tableCountLabel={true}
+        pagination={true}
+        search={true}
+        filter={true}
+        filterCategory={[{ id: 0, name: 'Sites' }]}
+        actions={true}
+        viewPath={'/logs/email-log-preview'}
+      />
     </div>
   );
 };

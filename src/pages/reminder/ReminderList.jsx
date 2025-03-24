@@ -32,32 +32,24 @@ const ReminderList = () => {
   ];
 
   return (
-    <div className="py-5 px-8 overflow-x-hidden mb-10">
-      <div className="w-full">
-        <TableHeader heading={'Reminders'} btn1={true} href1={'/reminder/add-reminder'} icon1={<IoMdAdd />} btnLabel1={'Add Reminders'} />
-        <div className="flex flex-col">
-          <div className="-m-1.5 overflow-x-auto">
-            <div className="p-1.5 min-w-full align-middle">
-              <TableComponent
-                siteModule={'after-sales'}
-                selectable={true}
-                headers={columnConfig}
-                tableData={(data) => setReminders(data.reminders)}
-                rows={rows}
-                apiUrl={'reminder'}
-                tableCountLabel={true}
-                pagination={true}
-                actions={true}
-                editPath={'/reminder/edit-reminder'}
-                copyPath={'/reminder/duplicate-reminder'}
-                search={true}
-                filter={true}
-                filterCategory={[{ id: 0, name: 'Sites' }]}
-              />
-            </div>
-          </div>
-        </div>
-      </div>
+    <div className="p-1 overflow-x-hidden mb-12">
+      <TableHeader heading={'Reminders'} btn1={true} href1={'/reminder/add-reminder'} icon1={<IoMdAdd />} btnLabel1={'Add Reminders'} />
+      <TableComponent
+        siteModule={'after-sales'}
+        selectable={true}
+        headers={columnConfig}
+        tableData={(data) => setReminders(data.reminders)}
+        rows={rows}
+        apiUrl={'reminder'}
+        tableCountLabel={true}
+        pagination={true}
+        actions={true}
+        editPath={'/reminder/edit-reminder'}
+        copyPath={'/reminder/duplicate-reminder'}
+        search={true}
+        filter={true}
+        filterCategory={[{ id: 0, name: 'Sites' }]}
+      />
     </div>
   );
 };

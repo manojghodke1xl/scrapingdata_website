@@ -71,27 +71,19 @@ const BookingList = () => {
   ];
 
   return (
-    <div className="py-5 px-8 overflow-x-hidden mb-10">
-      <div className="w-full">
-        <TableHeader heading={'Bookings'} />
-        <div className="flex flex-col">
-          <div className="-m-1.5 overflow-x-auto">
-            <div className="p-1.5 min-w-full align-middle">
-              <TableComponent
-                selectable={true}
-                siteModule={'booking'}
-                headers={columnConfig}
-                tableData={(data) => setBookings(data.bookings)}
-                rows={rows}
-                apiUrl={'booking'}
-                tableCountLabel={true}
-                pagination={true}
-                search={true}
-              />
-            </div>
-          </div>
-        </div>
-      </div>
+    <div className="p-1 overflow-x-hidden mb-12">
+      <TableHeader heading={'Bookings'} />
+      <TableComponent
+        selectable={true}
+        siteModule={'booking'}
+        headers={columnConfig}
+        tableData={(data) => setBookings(data.bookings)}
+        rows={rows}
+        apiUrl={'booking'}
+        tableCountLabel={true}
+        pagination={true}
+        search={true}
+      />
     </div>
   );
 };

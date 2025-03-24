@@ -69,42 +69,34 @@ const WhatsAppTemplateList = () => {
   ];
 
   return (
-    <div className="py-5 px-8 overflow-x-hidden mb-10">
-      <div className=" w-full">
-        <TableHeader heading={'WhatsApp Templates'} btn1={true} href1={'/templates/add-whatsapp-template'} icon1={<IoMdAdd />} btnLabel1={'Add WhatsApp Template'} />
-        <div className="flex flex-col">
-          <div className="-m-1.5 overflow-x-auto">
-            <div className="p-1.5 min-w-full align-middle">
-              <TableComponent
-                selectable={true}
-                siteModule={'whats-app-templates'}
-                headers={columnConfig}
-                tableData={(data) => setWhatsAppTemplates(data.whatsappTemplates)}
-                rows={rows}
-                apiUrl={'template/whatsapp'}
-                tableCountLabel={true}
-                pagination={true}
-                search={true}
-                searchCategory={[{ id: 0, name: 'Name' }]}
-                filter={true}
-                filterCategory={[{ id: 0, name: 'Sites' }]}
-                actions={true}
-                editPath={'/templates/edit-whatsapp-template'}
-                copyPath={'/templates/duplicate-whatsapp-template'}
-                deleteBtn={true}
-                deleteAction={true}
-                deleteApi={deleteWhatsAppTemplateApi}
-                deleteLabel={'Delete WhatsApp Template'}
-                deleteMessage={'Are you sure you want to delete this WhatsApp template?'}
-                sendForApproval={true}
-                approvalApi={getWhatsAppTemplateApprovalApi}
-                fetchRefresh={fetchRefresh}
-                isWhatsAppTemplate={true}
-              />
-            </div>
-          </div>
-        </div>
-      </div>
+    <div className="p-1 overflow-x-hidden mb-12">
+      <TableHeader heading={'WhatsApp Templates'} btn1={true} href1={'/templates/add-whatsapp-template'} icon1={<IoMdAdd />} btnLabel1={'Add WhatsApp Template'} />
+      <TableComponent
+        selectable={true}
+        siteModule={'whats-app-templates'}
+        headers={columnConfig}
+        tableData={(data) => setWhatsAppTemplates(data.whatsappTemplates)}
+        rows={rows}
+        apiUrl={'template/whatsapp'}
+        tableCountLabel={true}
+        pagination={true}
+        search={true}
+        searchCategory={[{ id: 0, name: 'Name' }]}
+        filter={true}
+        filterCategory={[{ id: 0, name: 'Sites' }]}
+        actions={true}
+        editPath={'/templates/edit-whatsapp-template'}
+        copyPath={'/templates/duplicate-whatsapp-template'}
+        deleteBtn={true}
+        deleteAction={true}
+        deleteApi={deleteWhatsAppTemplateApi}
+        deleteLabel={'Delete WhatsApp Template'}
+        deleteMessage={'Are you sure you want to delete this WhatsApp template?'}
+        sendForApproval={true}
+        approvalApi={getWhatsAppTemplateApprovalApi}
+        fetchRefresh={fetchRefresh}
+        isWhatsAppTemplate={true}
+      />
     </div>
   );
 };

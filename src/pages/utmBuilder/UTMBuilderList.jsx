@@ -70,35 +70,27 @@ const UTMBuilderList = () => {
   ];
 
   return (
-    <div className="py-5 px-8 overflow-x-hidden mb-10">
-      <div className=" w-full">
-        <TableHeader heading={'UTM Builder'} btn1={true} href1={'/utm-builder/add-utm-builder'} icon1={<IoMdAdd />} btnLabel1={'Add UTM Builder'} />
-        <div className="flex flex-col">
-          <div className="-m-1.5 overflow-x-auto">
-            <div className="p-1.5 min-w-full align-middle">
-              <TableComponent
-                selectable={true}
-                siteModule={'utm-builder'}
-                headers={columnConfig}
-                tableData={(data) => setUTMList(data.utmBuilders)}
-                rows={rows}
-                apiUrl={'utm-builder'}
-                tableCountLabel={true}
-                pagination={true}
-                actions={true}
-                editPath={'/utm-builder/edit-utm-builder'}
-                copyPath={'/utm-builder/duplicate-utm-builder'}
-                search={true}
-                deleteBtn={true}
-                deleteAction={true}
-                deleteApi={deleteUtmBuildersApi}
-                deleteLabel={'Delete UTM Builder'}
-                deleteMessage={'Are you sure you want to delete this UTM Builder?'}
-              />
-            </div>
-          </div>
-        </div>
-      </div>
+    <div className="p-1 overflow-x-hidden mb-12">
+      <TableHeader heading={'UTM Builder'} btn1={true} href1={'/utm-builder/add-utm-builder'} icon1={<IoMdAdd />} btnLabel1={'Add UTM Builder'} />
+      <TableComponent
+        selectable={true}
+        siteModule={'utm-builder'}
+        headers={columnConfig}
+        tableData={(data) => setUTMList(data.utmBuilders)}
+        rows={rows}
+        apiUrl={'utm-builder'}
+        tableCountLabel={true}
+        pagination={true}
+        actions={true}
+        editPath={'/utm-builder/edit-utm-builder'}
+        copyPath={'/utm-builder/duplicate-utm-builder'}
+        search={true}
+        deleteBtn={true}
+        deleteAction={true}
+        deleteApi={deleteUtmBuildersApi}
+        deleteLabel={'Delete UTM Builder'}
+        deleteMessage={'Are you sure you want to delete this UTM Builder?'}
+      />
     </div>
   );
 };

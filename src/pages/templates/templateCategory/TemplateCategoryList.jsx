@@ -29,29 +29,21 @@ const TemplateCategoryList = () => {
   ];
 
   return (
-    <div className="py-5 px-8 overflow-x-hidden mb-10">
-      <div className=" w-full">
-        <TableHeader heading={'Template Categories'} btn1={true} href1={'/template-category/add-template-category'} icon1={<IoMdAdd />} btnLabel1={'Add Template Category'} />
-        <div className="flex flex-col">
-          <div className="-m-1.5 overflow-x-auto">
-            <div className="p-1.5 min-w-full align-middle">
-              <TableComponent
-                selectable={true}
-                siteModule={'template-category'}
-                headers={columnConfig}
-                tableData={(data) => setTemplateCategory(data.templateCategories)}
-                rows={rows}
-                apiUrl={'template-category'}
-                tableCountLabel={true}
-                pagination={true}
-                actions={true}
-                editPath={'/template-category/edit-template-category'}
-                search={true}
-              />
-            </div>
-          </div>
-        </div>
-      </div>
+    <div className="p-1 overflow-x-hidden mb-12">
+      <TableHeader heading={'Template Categories'} btn1={true} href1={'/template-category/add-template-category'} icon1={<IoMdAdd />} btnLabel1={'Add Template Category'} />
+      <TableComponent
+        selectable={true}
+        siteModule={'template-category'}
+        headers={columnConfig}
+        tableData={(data) => setTemplateCategory(data.templateCategories)}
+        rows={rows}
+        apiUrl={'template-category'}
+        tableCountLabel={true}
+        pagination={true}
+        actions={true}
+        editPath={'/template-category/edit-template-category'}
+        search={true}
+      />
     </div>
   );
 };

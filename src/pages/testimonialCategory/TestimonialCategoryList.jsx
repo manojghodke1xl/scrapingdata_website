@@ -28,35 +28,27 @@ const TestimonialCategoryList = () => {
   ];
 
   return (
-    <div className="py-5 px-8 overflow-x-hidden mb-10">
-      <div className=" w-full">
-        <TableHeader
-          heading={'Testimonials Categories'}
-          btn1={true}
-          href1={'/testimonial-category/add-testimonial-category'}
-          icon1={<IoMdAdd />}
-          btnLabel1={'Add Testimonials Category'}
-        />
-        <div className="flex flex-col">
-          <div className="-m-1.5 overflow-x-auto">
-            <div className="p-1.5 min-w-full align-middle">
-              <TableComponent
-                selectable={true}
-                siteModule={'testimonial-category'}
-                headers={columnConfig}
-                tableData={(data) => setTestimonialCategories(data.categories)}
-                rows={rows}
-                apiUrl={'testimonial-category'}
-                tableCountLabel={true}
-                pagination={true}
-                actions={true}
-                editPath={'/testimonial-category/edit-testimonial-category'}
-                search={true}
-              />
-            </div>
-          </div>
-        </div>
-      </div>
+    <div className="p-1 overflow-x-hidden mb-12">
+      <TableHeader
+        heading={'Testimonials Categories'}
+        btn1={true}
+        href1={'/testimonial-category/add-testimonial-category'}
+        icon1={<IoMdAdd />}
+        btnLabel1={'Add Testimonials Category'}
+      />
+      <TableComponent
+        selectable={true}
+        siteModule={'testimonial-category'}
+        headers={columnConfig}
+        tableData={(data) => setTestimonialCategories(data.categories)}
+        rows={rows}
+        apiUrl={'testimonial-category'}
+        tableCountLabel={true}
+        pagination={true}
+        actions={true}
+        editPath={'/testimonial-category/edit-testimonial-category'}
+        search={true}
+      />
       <NoteComponent note={testimonialCategoryListNote} />
     </div>
   );

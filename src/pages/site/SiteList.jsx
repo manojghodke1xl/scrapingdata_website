@@ -70,35 +70,31 @@ const SiteList = () => {
 
   return (
     <div className="p-1 overflow-x-hidden mb-12">
-      <div className="w-full">
-        <TableHeader heading={'All Sites'} btn1={true} href1={'/site/add-site'} icon1={<IoMdAdd />} btnLabel1={'Add Site'} isSuperAdmin={isSuperAdmin} />
-        <div className="flex flex-col min-w-full align-middle overflow-x-auto">
-          <TableComponent
-            selectable={true}
-            siteModule={'site'}
-            headers={columnConfig}
-            tableData={(data) => setSites(data.sites)}
-            rows={rows}
-            apiUrl={'sites'}
-            tableCountLabel={true}
-            pagination={true}
-            actions={true}
-            editPath={'/site/edit-site'}
-            appsPath={'/apps/integration'}
-            search={true}
-            filter={true}
-            filterCategory={[{ id: 2, name: 'Status' }]}
-            statuses={[
-              { id: 0, name: 'Active', bgColor: '#ECFDF3', color: '#027948', dotColor: '#12B76A' },
-              { id: 2, name: 'Inactive', bgColor: '#F2F4F7', color: '#344054', dotColor: '#667085' }
-            ]}
-            searchCategory={[{ id: 1, name: 'Name' }]}
-            modifyStatus={true}
-            modifyStatusApi={updateSiteStatusApi}
-            bulkSiteOpenAction={sites.map((site) => site.host)}
-          />
-        </div>
-      </div>
+      <TableHeader heading={'All Sites'} btn1={true} href1={'/site/add-site'} icon1={<IoMdAdd />} btnLabel1={'Add Site'} isSuperAdmin={isSuperAdmin} />
+      <TableComponent
+        selectable={true}
+        siteModule={'site'}
+        headers={columnConfig}
+        tableData={(data) => setSites(data.sites)}
+        rows={rows}
+        apiUrl={'sites'}
+        tableCountLabel={true}
+        pagination={true}
+        actions={true}
+        editPath={'/site/edit-site'}
+        appsPath={'/apps/integration'}
+        search={true}
+        filter={true}
+        filterCategory={[{ id: 2, name: 'Status' }]}
+        statuses={[
+          { id: 0, name: 'Active', bgColor: '#ECFDF3', color: '#027948', dotColor: '#12B76A' },
+          { id: 2, name: 'Inactive', bgColor: '#F2F4F7', color: '#344054', dotColor: '#667085' }
+        ]}
+        searchCategory={[{ id: 1, name: 'Name' }]}
+        modifyStatus={true}
+        modifyStatusApi={updateSiteStatusApi}
+        bulkSiteOpenAction={sites.map((site) => site.host)}
+      />
       <NoteComponent note={websiteListNote} />
     </div>
   );

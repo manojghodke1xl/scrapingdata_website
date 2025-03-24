@@ -49,31 +49,23 @@ const WhatsAppLogList = () => {
   ];
 
   return (
-    <div className="py-5 px-8 overflow-x-hidden mb-10">
-      <div className=" w-full">
-        <TableHeader heading={'WhatsApp Logs'} />
-        <div className="flex flex-col">
-          <div className="-m-1.5 overflow-x-auto">
-            <div className="p-1.5 min-w-full align-middle">
-              <TableComponent
-                selectable={true}
-                siteModule={'whats-app-logs'}
-                headers={columnConfig}
-                tableData={(data) => setWhatsAppTemplates(data.logs)}
-                rows={rows}
-                apiUrl={'logs/whatsapp'}
-                tableCountLabel={true}
-                pagination={true}
-                search={true}
-                filter={true}
-                filterCategory={[{ id: 0, name: 'Sites' }]}
-                actions={true}
-                viewPath={'/logs/whatsapp-log-preview'}
-              />
-            </div>
-          </div>
-        </div>
-      </div>
+    <div className="p-1 overflow-x-hidden mb-12">
+      <TableHeader heading={'WhatsApp Logs'} />
+      <TableComponent
+        selectable={true}
+        siteModule={'whats-app-logs'}
+        headers={columnConfig}
+        tableData={(data) => setWhatsAppTemplates(data.logs)}
+        rows={rows}
+        apiUrl={'logs/whatsapp'}
+        tableCountLabel={true}
+        pagination={true}
+        search={true}
+        filter={true}
+        filterCategory={[{ id: 0, name: 'Sites' }]}
+        actions={true}
+        viewPath={'/logs/whatsapp-log-preview'}
+      />
     </div>
   );
 };

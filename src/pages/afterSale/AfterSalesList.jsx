@@ -49,32 +49,24 @@ const AfterSalesList = () => {
   ];
 
   return (
-    <div className="py-5 px-8 overflow-x-hidden mb-10">
-      <div className="w-full">
-        <TableHeader heading={'After Sales'} btn1={true} href1={'/after-sales/add-after-sale'} icon1={<IoMdAdd />} btnLabel1={'Add After Sales'} />
-        <div className="flex flex-col">
-          <div className="-m-1.5 overflow-x-auto">
-            <div className="p-1.5 min-w-full align-middle">
-              <TableComponent
-                siteModule={'after-sales'}
-                selectable={true}
-                headers={columnConfig}
-                tableData={(data) => setAfterSales(data.afterSales)}
-                rows={rows}
-                apiUrl={'after-sale'}
-                tableCountLabel={true}
-                pagination={true}
-                actions={true}
-                editPath={'/after-sales/edit-after-sale'}
-                copyPath={'/after-sales/duplicate-after-sale'}
-                search={true}
-                filter={true}
-                filterCategory={[{ id: 0, name: 'Sites' }]}
-              />
-            </div>
-          </div>
-        </div>
-      </div>
+    <div className="p-1 overflow-x-hidden mb-12">
+      <TableHeader heading={'After Sales'} btn1={true} href1={'/after-sales/add-after-sale'} icon1={<IoMdAdd />} btnLabel1={'Add After Sales'} />
+      <TableComponent
+        siteModule={'after-sales'}
+        selectable={true}
+        headers={columnConfig}
+        tableData={(data) => setAfterSales(data.afterSales)}
+        rows={rows}
+        apiUrl={'after-sale'}
+        tableCountLabel={true}
+        pagination={true}
+        actions={true}
+        editPath={'/after-sales/edit-after-sale'}
+        copyPath={'/after-sales/duplicate-after-sale'}
+        search={true}
+        filter={true}
+        filterCategory={[{ id: 0, name: 'Sites' }]}
+      />
     </div>
   );
 };

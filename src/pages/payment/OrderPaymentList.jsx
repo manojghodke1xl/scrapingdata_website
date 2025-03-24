@@ -129,26 +129,22 @@ const OrderPaymentList = () => {
 
   return (
     <div className="p-1 overflow-x-hidden mb-12">
-      <div className="w-full">
-        <TableHeader heading={'Order Payments'} />
-        <div className="flex flex-col min-w-full align-middle overflow-x-auto">
-          <TableComponent
-            selectable={true}
-            siteModule={'order-payments'}
-            headers={columnConfig}
-            tableData={(data) => setOrderPayments(data.orderPayments)}
-            rows={rows}
-            apiUrl={'order-payments'}
-            tableCountLabel={true}
-            pagination={true}
-            search={true}
-            filter={true}
-            filterCategory={[{ id: 0, name: 'Sites' }]}
-            actions={true}
-            viewPath={'/payments/view-order'}
-          />
-        </div>
-      </div>
+      <TableHeader heading={'Order Payments'} />
+      <TableComponent
+        selectable={true}
+        siteModule={'order-payments'}
+        headers={columnConfig}
+        tableData={(data) => setOrderPayments(data.orderPayments)}
+        rows={rows}
+        apiUrl={'order-payments'}
+        tableCountLabel={true}
+        pagination={true}
+        search={true}
+        filter={true}
+        filterCategory={[{ id: 0, name: 'Sites' }]}
+        actions={true}
+        viewPath={'/payments/view-order'}
+      />
     </div>
   );
 };

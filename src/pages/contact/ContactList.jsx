@@ -42,46 +42,38 @@ const ContactList = () => {
   ];
 
   return (
-    <div className="py-5 px-8 overflow-x-hidden mb-10">
-      <div className="w-full">
-        <TableHeader
-          heading={'Contacts'}
-          btn1={true}
-          href1={'/contact/add-contact'}
-          icon1={<IoMdAdd />}
-          btnLabel1={'Add Contact'}
-          btn2={true}
-          href2={'/contact/import-contacts'}
-          icon2={<CiExport strokeWidth={0.5} />}
-          btnLabel2={'Import Contacts'}
-        />
-        <div className="flex flex-col">
-          <div className="-m-1.5 overflow-x-auto">
-            <div className="p-1.5 min-w-full align-middle">
-              <TableComponent
-                selectable={true}
-                siteModule={'contact'}
-                headers={columnConfig}
-                tableData={(data) => setContacts(data.contacts)}
-                rows={rows}
-                apiUrl={'contact'}
-                tableCountLabel={true}
-                pagination={true}
-                actions={true}
-                editPath={'/contact/edit-contact'}
-                search={true}
-                filter={true}
-                filterCategory={[{ id: 1, name: 'Sites' }]}
-                searchCategory={[
-                  { id: 1, name: 'Name' },
-                  { id: 2, name: 'Email' }
-                ]}
-                adminStatus={true}
-              />
-            </div>
-          </div>
-        </div>
-      </div>
+    <div className="p-1 overflow-x-hidden mb-12">
+      <TableHeader
+        heading={'Contacts'}
+        btn1={true}
+        href1={'/contact/add-contact'}
+        icon1={<IoMdAdd />}
+        btnLabel1={'Add Contact'}
+        btn2={true}
+        href2={'/contact/import-contacts'}
+        icon2={<CiExport strokeWidth={0.5} />}
+        btnLabel2={'Import Contacts'}
+      />
+      <TableComponent
+        selectable={true}
+        siteModule={'contact'}
+        headers={columnConfig}
+        tableData={(data) => setContacts(data.contacts)}
+        rows={rows}
+        apiUrl={'contact'}
+        tableCountLabel={true}
+        pagination={true}
+        actions={true}
+        editPath={'/contact/edit-contact'}
+        search={true}
+        filter={true}
+        filterCategory={[{ id: 1, name: 'Sites' }]}
+        searchCategory={[
+          { id: 1, name: 'Name' },
+          { id: 2, name: 'Email' }
+        ]}
+        adminStatus={true}
+      />
     </div>
   );
 };
