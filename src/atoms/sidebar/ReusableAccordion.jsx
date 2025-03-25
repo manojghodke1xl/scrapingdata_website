@@ -3,15 +3,26 @@ import { Link, useLocation } from 'react-router-dom';
 import { IoIosArrowDown } from 'react-icons/io';
 import useLayout from '../../hooks/useLayout';
 
-const ReusableAccordion = ({ key, title, links, icon, isOpen, onToggle, handleToggleSidebar }) => {
+/**
+ * ReusableAccordion Component
+ * A reusable accordion component for sidebar navigation
+ * @param {Object} props - Component props
+ * @param {string} props.title - Title of the accordion section
+ * @param {Array} props.links - Array of link objects containing route and title
+ * @param {ReactNode} props.icon - Icon element to display
+ * @param {boolean} props.isOpen - Controls accordion open state
+ * @param {Function} props.onToggle - Handler for toggle events
+ * @param {Function} props.handleToggleSidebar - Handler for sidebar toggle
+ */
+const ReusableAccordion = ({ title, links, icon, isOpen, onToggle, handleToggleSidebar }) => {
   const { pathname } = useLocation();
   const { layoutSize } = useLayout();
 
+  // Check if current path matches any of the menu paths
   const isActive = (menuPaths) => menuPaths.some((path) => pathname.startsWith(path));
 
   return (
     <Accordion
-      key={key}
       open={isOpen}
       icon={
         <IoIosArrowDown

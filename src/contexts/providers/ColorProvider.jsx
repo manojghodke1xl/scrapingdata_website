@@ -2,21 +2,27 @@ import { useCallback, useEffect, useState } from 'react';
 import useGlobalContext from '../../hooks/useGlobalContext';
 import { ColorContext } from '../contexts/ColorContext';
 
+/**
+ * ColorProvider Component
+ * Manages theme colors and dark mode functionality for the application
+ */
 export const ColorProvider = ({ children }) => {
   const { auth } = useGlobalContext();
 
+  // Theme state management
   const [isDarkMode, setIsDarkMode] = useState(false);
 
+  // Default color configuration with both light and dark mode values
   const [primaryColor, setPrimaryColor] = useState(
     auth.theme?.primaryColor || {
       name: 'Blue',
-      //light mode colors
+      // Light mode colors
       bgColor: '#2563EB',
       fadedColor: '#eff8ff',
       textColor: '#2563EB',
       brandHoverColor: '#1E4DB7',
       borderColor: '#2563EB',
-      //dark mode colors
+      // Dark mode colors
       bgColorDark: '#2E90FA',
       fadedColorDark: '#19418566',
       textColorDark: '#53B1FD',
@@ -25,6 +31,11 @@ export const ColorProvider = ({ children }) => {
     }
   );
 
+  /**
+   * Updates CSS variables for theme colors
+   * @param {Object} color - Color configuration object
+   * @param {boolean} darkMode - Current dark mode state
+   */
   const updateColors = (color, darkMode) => {
     document.documentElement.style.setProperty('--bg-primary', darkMode ? color?.bgColorDark : color?.bgColor);
     document.documentElement.style.setProperty('--text-brand', darkMode ? color?.textColorDark : color?.textColor);
@@ -43,12 +54,16 @@ export const ColorProvider = ({ children }) => {
     document.documentElement.style.setProperty('--bg-grey', darkMode ? '#101318' : '#f3f4f6');
   };
 
+  // Effect to handle dark mode changes
   useEffect(() => {
     if (isDarkMode) document.documentElement.classList.add('dark');
     else document.documentElement.classList.remove('dark');
     updateColors(primaryColor, isDarkMode);
   }, [isDarkMode, primaryColor]);
 
+  /**
+   * Toggles dark mode and updates theme colors
+   */
   const toggleDarkMode = () => {
     const newMode = !isDarkMode;
     setIsDarkMode(newMode);
@@ -57,11 +72,18 @@ export const ColorProvider = ({ children }) => {
     updateColors(primaryColor, newMode);
   };
 
+  /**
+   * Updates primary color scheme
+   * @param {Object} color - New color configuration
+   */
   const handleColorChange = (color) => {
     setPrimaryColor(color);
     updateColors(color, isDarkMode);
   };
 
+  /**
+   * Fetches and applies user theme preferences
+   */
   const fetchTheme = useCallback(async () => {
     if (auth.id && auth.theme) {
       setIsDarkMode(auth.theme.isDarkMode);
@@ -70,6 +92,7 @@ export const ColorProvider = ({ children }) => {
     }
   }, [auth]);
 
+  // Fetch theme preferences on component mount
   useEffect(() => {
     fetchTheme();
   }, [auth, fetchTheme]);

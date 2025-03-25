@@ -7,7 +7,7 @@ import { LayoutContext } from '../contexts/LayoutContext';
 export const LayoutProvider = ({ children }) => {
   const [layoutSize, setLayoutSize] = useState('medium');
   const {
-    auth: { id, layoutPreference },
+    auth: { theme, id, layoutPreference },
     dispatch
   } = useGlobalContext();
 
@@ -20,9 +20,13 @@ export const LayoutProvider = ({ children }) => {
   const updateLayoutSize = async (size) => {
     setLayoutSize(size);
     try {
-      const { status, data } = await updateAdminPreferencesApi(id, { layoutSize: size });
+      const { status, data } = await updateAdminPreferencesApi(id, {
+        layoutSize: size,
+        darkMode: theme.isDarkMode, // Include current theme settings
+        workspaceColors: theme.primaryColor
+      });
       if (status) {
-        dispatch({ type: 'SET_PREFERENCES', payload: { layoutSize: size } });
+        dispatch({ type: 'SET_LAYOUT_PREFERENCE', payload: size });
       } else {
         showNotification('warn', data);
       }

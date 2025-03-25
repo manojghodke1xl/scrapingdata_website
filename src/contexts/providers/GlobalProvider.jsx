@@ -4,6 +4,9 @@ import { getAllSitesApi } from '../../apis/site-apis';
 import { showNotification } from '../../utils/showNotification';
 import { getAdminPreferencesApi } from '../../apis/admin-apis';
 
+/**
+ * Default state for authentication and preferences
+ */
 const defaultState = {
   id: '',
   isSuperAdmin: false,
@@ -29,11 +32,18 @@ const authState = storage
     })()
   : defaultState;
 
+/**
+ * Auth reducer function
+ * Handles various authentication and preference related actions
+ * @param {Object} state - Current state
+ * @param {Object} action - Action object with type and payload
+ */
 const authReducer = (state, action) => {
   const { type, payload } = action;
 
   switch (type) {
     case 'SIGNIN': {
+      // Handle sign in and token decoding
       localStorage.setItem('auth', `Bearer ${payload}`);
       try {
         const decoded = JSON.parse(window.atob(payload.split('.')[1]));
@@ -45,6 +55,7 @@ const authReducer = (state, action) => {
     }
 
     case 'SIGNOUT': {
+      // Clear auth state and local storage
       localStorage.removeItem('auth');
       return { ...defaultState };
     }
@@ -65,10 +76,11 @@ const authReducer = (state, action) => {
       return {
         ...state,
         theme: {
-          isDarkMode: payload.isDarkMode,
-          primaryColor: payload.primaryColor
+          ...state.theme,
+          isDarkMode: payload.isDarkMode !== undefined ? payload.isDarkMode : state.theme.isDarkMode,
+          primaryColor: payload.primaryColor !== undefined ? payload.primaryColor : state.theme.primaryColor
         },
-        layoutPreference: payload.layoutSize
+        layoutPreference: payload.layoutSize !== undefined ? payload.layoutSize : state.layoutPreference
       };
     }
 
@@ -77,11 +89,21 @@ const authReducer = (state, action) => {
   }
 };
 
+/**
+ * GlobalProvider Component
+ * Provides global state management for authentication and application preferences
+ */
 export const GlobalProvider = ({ children }) => {
   const [auth, dispatch] = useReducer(authReducer, authState);
   const [isLoading, setLoading] = useState(false);
   const preferencesFetched = useRef(false);
 
+  /**
+   * Generic data fetching function
+   * @param {Function} apiCall - API function to call
+   * @param {Function} successAction - Action to dispatch on success
+   * @param {string} id - Optional ID parameter
+   */
   const fetchData = useCallback(
     async (apiCall, successAction, id) => {
       setLoading(true);
