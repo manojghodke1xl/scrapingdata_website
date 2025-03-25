@@ -16,6 +16,7 @@ import DateTimePicker from '../../atoms/formFields/DateTimePicker';
 import { formatDateTime } from '../../utils/dateFormats';
 import { getAllTicketsApi } from '../../apis/event-ticket-apis';
 import { getAllCertificatesApi } from '../../apis/certificate-apis';
+import CurrencyInputGroup from '../../atoms/formFields/CurrencyInputGroup';
 
 const AddPackage = () => {
   const navigate = useNavigate();
@@ -214,6 +215,35 @@ const AddPackage = () => {
     if (packageDetails.event) getIntegration();
   }, [getIntegration, packageDetails.event, setLoading]);
 
+  const renderCurrencyInput = (currency) => {
+    const isSupported =
+      paymentData?.razorpay?.supports?.[currency] ||
+      paymentData?.stripe?.supports?.[currency] ||
+      paymentData?.paypal?.supports?.[currency] ||
+      (currency === 'INR' && paymentData?.phonepe?.supports?.INR);
+
+    if (!isSupported || !packageDetails?.currencyNotes?.[currency]) return null;
+
+    return (
+      <CurrencyInputGroup
+        key={currency}
+        currency={currency}
+        price={packageDetails.currencies?.[currency]}
+        onPriceChange={(currency, value) => {
+          setPackageDetails((prev) => ({ ...prev, currencies: { ...prev.currencies, [currency]: value } }));
+          if (errors.currencies?.[currency]) setErrors((prev) => ({ ...prev, currencies: { ...prev.currencies, [currency]: '' } }));
+        }}
+        salePrice={packageDetails.salePrice?.[currency]}
+        onSalePriceChange={(currency, value) => {
+          setPackageDetails((prev) => ({ ...prev, salePrice: { ...prev.salePrice, [currency]: value } }));
+          if (errors.salePrice?.[currency]) setErrors((prev) => ({ ...prev, salePrice: { ...prev.salePrice, [currency]: '' } }));
+        }}
+        showSalePrice={packageDetails.onSale}
+        errors={errors}
+      />
+    );
+  };
+
   return (
     <div className="py-8 p-4 sm:p-8 overflow-x-hidden mb-20">
       <div className="w-full pb-8 border-b border-primary gap-y-4 gap-2 flex flex-col items-start md:flex-row lg:flex-col xl:flex-row justify-between lg:items-start md:items-end xl:items-end">
@@ -368,7 +398,10 @@ const AddPackage = () => {
                   options={[
                     { _id: 'INR', name: 'INR' },
                     { _id: 'AED', name: 'AED' },
-                    { _id: 'USD', name: 'USD' }
+                    { _id: 'USD', name: 'USD' },
+                    { _id: 'EUR', name: 'EUR' },
+                    { _id: 'JPY', name: 'JPY' },
+                    { _id: 'GBP', name: 'GBP' }
                   ]}
                   formLabel="Currencies"
                   label="Select Currencies"
@@ -411,110 +444,7 @@ const AddPackage = () => {
                     .map(([key]) => key)}
                   error={errors?.currencyNotes}
                 />
-                {(paymentData?.razorpay?.supports?.INR || paymentData?.stripe?.supports?.INR || paymentData?.paypal?.supports?.INR) && packageDetails?.currencyNotes?.INR && (
-                  <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-                    <FormField
-                      label="Price (in INR) is inclusive of tax"
-                      type="number"
-                      id="currencies-INR"
-                      name="currencies-INR"
-                      min={0}
-                      placeholder="Price (in INR) is inclusive of tax"
-                      onChange={(e) => {
-                        setPackageDetails((prev) => ({ ...prev, currencies: { ...prev.currencies, INR: e.target.value } }));
-                        if (errors.currencies?.INR) setErrors((prev) => ({ ...prev, currencies: { INR: '' } }));
-                      }}
-                      value={packageDetails.currencies?.INR}
-                      errorMessage={errors.currencies?.INR}
-                    />
-                    {packageDetails.onSale && (
-                      <FormField
-                        label={`Sale Price (in INR)`}
-                        type="number"
-                        id={`salePrice-INR`}
-                        name={`salePrice-INR`}
-                        min={0}
-                        placeholder={`Sale Price (INR)`}
-                        onChange={(e) => {
-                          setPackageDetails((prev) => ({ ...prev, salePrice: { ...prev.salePrice, INR: e.target.value } }));
-                          if (errors.salePrice?.INR) setErrors((prev) => ({ ...prev, salePrice: { ...prev.salePrice, INR: '' } }));
-                        }}
-                        value={packageDetails.salePrice?.INR ?? ''}
-                        errorMessage={errors.salePrice?.INR}
-                      />
-                    )}
-                  </div>
-                )}
-                {(paymentData?.razorpay?.supports?.AED || paymentData?.stripe?.supports?.AED || paymentData?.paypal?.supports?.AED) && packageDetails?.currencyNotes?.AED && (
-                  <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-                    <FormField
-                      label="Price (in AED) is inclusive of tax"
-                      type="number"
-                      id="currencies-AED"
-                      name="currencies-AED"
-                      min={0}
-                      placeholder="Price (in AED) is inclusive of tax"
-                      onChange={(e) => {
-                        setPackageDetails((prev) => ({ ...prev, currencies: { ...prev.currencies, AED: e.target.value } }));
-                        if (errors.currencies) setErrors((prev) => ({ ...prev, currencies: { AED: '' } }));
-                      }}
-                      value={packageDetails.currencies?.AED}
-                      errorMessage={errors.currencies?.AED}
-                    />
-
-                    {packageDetails.onSale && (
-                      <FormField
-                        label={`Sale Price (in AED)`}
-                        type="number"
-                        id={`salePrice-AED`}
-                        name={`salePrice-AED`}
-                        min={0}
-                        placeholder={`Sale Price (AED)`}
-                        onChange={(e) => {
-                          setPackageDetails((prev) => ({ ...prev, salePrice: { ...prev.salePrice, AED: e.target.value } }));
-                          if (errors.salePrice?.AED) setErrors((prev) => ({ ...prev, salePrice: { ...prev.salePrice, AED: '' } }));
-                        }}
-                        value={packageDetails.salePrice?.AED ?? ''}
-                        errorMessage={errors.salePrice?.AED}
-                      />
-                    )}
-                  </div>
-                )}
-                {(paymentData?.razorpay?.supports?.USD || paymentData?.stripe?.supports?.USD || paymentData?.paypal?.supports?.USD) && packageDetails?.currencyNotes?.USD && (
-                  <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-                    <FormField
-                      label="Price (in USD) is inclusive of tax"
-                      type="number"
-                      id="currencies-USD"
-                      name="currencies-USD"
-                      min={0}
-                      placeholder="Price (in USD) is inclusive of tax"
-                      onChange={(e) => {
-                        setPackageDetails((prev) => ({ ...prev, currencies: { ...prev.currencies, USD: e.target.value } }));
-                        if (errors.currencies) setErrors((prev) => ({ ...prev, currencies: { USD: '' } }));
-                      }}
-                      value={packageDetails.currencies?.USD}
-                      errorMessage={errors.currencies?.USD}
-                    />
-
-                    {packageDetails.onSale && (
-                      <FormField
-                        label={`Sale Price (in USD)`}
-                        type="number"
-                        id={`salePrice-USD`}
-                        name={`salePrice-USD`}
-                        min={0}
-                        placeholder={`Sale Price (USD)`}
-                        onChange={(e) => {
-                          setPackageDetails((prev) => ({ ...prev, salePrice: { ...prev.salePrice, USD: e.target.value } }));
-                          if (errors.salePrice?.USD) setErrors((prev) => ({ ...prev, salePrice: { ...prev.salePrice, USD: '' } }));
-                        }}
-                        value={packageDetails.salePrice?.USD ?? ''}
-                        errorMessage={errors.salePrice?.USD}
-                      />
-                    )}
-                  </div>
-                )}
+                {['INR', 'AED', 'USD', 'EUR', 'JPY', 'GBP'].map((currency) => renderCurrencyInput(currency))}
                 {(packageDetails?.currencyNotes?.INR || packageDetails?.currencyNotes?.AED || packageDetails?.currencyNotes?.USD) && (
                   <FormField
                     label="Max Limit"

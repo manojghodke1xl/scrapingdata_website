@@ -189,7 +189,7 @@ const WhatsAppIntegration = () => {
                   onChange={(e) => handleVariableChange(index, 'accessToken', e.target.value)}
                   errorMessage={errors[index]?.accessToken}
                 />
-                <button type="button" onClick={() => removeVariable(index)} className="w-fit px-4 py-2  bg-red text- rounded-xl">
+                <button type="button" onClick={() => removeVariable(index)} className="w-fit px-4 py-2  bg-red text-white rounded-xl">
                   Remove
                 </button>
               </div>

@@ -1,4 +1,29 @@
+/**
+ * TableFilterActions Component
+ *
+ * Provides action buttons and filters for table operations including:
+ * - Table expansion/collapse
+ * - Bulk deletion
+ * - Status modification
+ * - Site modification
+ * - Export functionality
+ * - Column management
+ *
+ * @param {Object} props Component props
+ * @param {boolean} props.deleteBtn Flag to show delete button
+ * @param {boolean} props.exportBtn Flag to show export button
+ * @param {boolean} props.modifySite Flag to show site modification button
+ * @param {boolean} props.modifyStatus Flag to show status modification options
+ * @param {boolean} props.isFilterActive Flag indicating if any filters are active
+ * @param {Object} props.selectionState State object containing selected items
+ * @param {Function} props.handleStatusChange Handler for status changes
+ * @param {Function} props.handleClearFilter Handler to clear all filters
+ * @param {boolean} props.isExpanded Flag indicating if table is in expanded view
+ * @param {Function} props.onToggleExpand Handler for toggling expanded view
+ */
+
 import { MdDeleteForever } from 'react-icons/md';
+import { IoExpandOutline, IoContractOutline } from 'react-icons/io5';
 import StatusFilter from '../filter/StatusFilter';
 import { CiImport } from 'react-icons/ci';
 import TableColumnSelector from './TableColumnSelector';
@@ -26,10 +51,22 @@ const TableFilterActions = ({
   isDragging,
   pinnedColumns,
   onSaveColumns,
-  onResetColumns
+  onResetColumns,
+  isExpanded,
+  onToggleExpand
 }) => {
   return (
     <div className="flex items-center justify-between gap-2">
+      {/* Expand/Collapse Toggle Button */}
+      <button
+        onClick={onToggleExpand}
+        className="sm:w-fit text-primary font-normal hover:bg-hover rounded-xl border border-primary p-2 whitespace-nowrap flex items-center justify-between gap-1"
+        title={isExpanded ? 'Collapse table' : 'Expand table'}
+      >
+        {isExpanded ? <IoContractOutline className="text-base" /> : <IoExpandOutline className="text-base" />}
+      </button>
+
+      {/* Bulk Delete Button */}
       {deleteBtn && selectionState.selectedItems.length > 0 && (
         <button
           onClick={() => setModalState((prev) => ({ ...prev, isDeleteModelOpen: true }))}
@@ -39,6 +76,8 @@ const TableFilterActions = ({
           <span className="text-sm">Delete</span>
         </button>
       )}
+
+      {/* Status Modification Controls */}
       {modifyStatus && selectionState.selectedItems.length > 0 && (
         <>
           <StatusFilter statuses={statuses} setStatusFilter={(e) => setSelectionState((prev) => ({ ...prev, status: e }))} />
@@ -52,6 +91,8 @@ const TableFilterActions = ({
           )}
         </>
       )}
+
+      {/* Site Modification Button */}
       {modifySite && selectionState.selectedItems.length > 0 && (
         <button
           onClick={() => setModalState((prev) => ({ ...prev, isSitesModelOpen: true }))}
@@ -60,6 +101,8 @@ const TableFilterActions = ({
           Modify Site
         </button>
       )}
+
+      {/* Duplicate Button */}
       {duplicateBtn && selectionState.selectedItems.length > 0 && (
         <button
           onClick={() => setModalState((prev) => ({ ...prev, isDuplicateModelOpen: true }))}
@@ -68,6 +111,8 @@ const TableFilterActions = ({
           Duplicate Popups
         </button>
       )}
+
+      {/* Export Button */}
       {exportBtn && (
         <button
           onClick={() => setModalState((prev) => ({ ...prev, isExportModelOpen: true }))}
@@ -77,6 +122,8 @@ const TableFilterActions = ({
           <span className="text-sm">Export</span>
         </button>
       )}
+
+      {/* Column Management Component */}
       <TableColumnSelector
         allColumns={headers}
         hiddenColumns={hiddenColumns}
@@ -90,6 +137,8 @@ const TableFilterActions = ({
         onSave={onSaveColumns}
         onReset={onResetColumns}
       />
+
+      {/* Clear Filters Button */}
       {isFilterActive && (
         <button className="sm:w-fit text-primary font-normal hover:bg-hover rounded-xl border border-primary p-2 whitespace-nowrap sm:gap-2 text-sm" onClick={handleClearFilter}>
           Clear All

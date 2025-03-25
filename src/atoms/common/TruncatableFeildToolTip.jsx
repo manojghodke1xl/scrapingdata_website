@@ -29,7 +29,7 @@ const TruncatableFieldToolTip = ({ content = '', maxLength = 20 }) => {
       </span>
 
       {isTruncated && showTooltip && (
-        <div ref={tooltipRef} className="absolute transform -translate-y-full -mt-8 z-50 bg-main border border-primary rounded-xl shadow-lg p-1 whitespace-nowrap">
+        <div ref={tooltipRef} className="absolute transform -translate-y-full -mt-2 z-50 bg-main border border-primary rounded-xl shadow-lg p-1 whitespace-nowrap">
           {/* this css for p tag to modify text based on layout ==  ${layoutSize === 'small' ? 'text-sm' : layoutSize === 'large' ? 'text-xl' : 'text-base'} */}
           <p className={`text-primary overflow-hidden text-ellipsis`}>{content}</p>
         </div>
