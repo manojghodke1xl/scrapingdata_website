@@ -6,15 +6,24 @@ import Checkbox from '../formFields/Checkbox';
 import useColorContext from '../../hooks/useColorContext';
 
 /**
- * TableView - Handles the presentation layer of the table
+ * TableView Component
+ *
+ * Core table rendering component that handles:
+ * - Header and row rendering
+ * - Column pinning and positioning
+ * - Sorting functionality
+ * - Row selection
+ * - Loading states
+ * - Expandable view
  *
  * Features:
- * - Renders table header and body
- * - Handles pinned columns positioning
- * - Manages loading states
- * - Renders row actions
- * - Handles column drag and drop visualization
+ * - Sticky headers and columns
+ * - Drag and drop column reordering
+ * - Column pinning
+ * - Row actions
+ * - Bulk selection
  */
+
 const TableView = ({
   selectable,
   selectionState,
@@ -48,7 +57,8 @@ const TableView = ({
   itemsPerPage,
   pinnedColumns,
   hiddenColumns,
-  handleTogglePin
+  handleTogglePin,
+  isExpanded
 }) => {
   const { isDarkMode } = useColorContext();
   const [openDropdownId, setOpenDropdownId] = useState(null);
@@ -65,17 +75,26 @@ const TableView = ({
   };
 
   /**
-   * Utility functions to check column states
+   * Layout Configuration
+   * Defines core layout measurements and utilities for table structure
+   */
+  const defaultPinnedWidth = 40;
+  const CHECKBOX_WIDTH = 24;
+  const SERIAL_WIDTH = 24;
+
+  /**
+   * Computes initial offset for pinned columns
+   * Accounts for checkbox and serial number columns if present
+   */
+  const getInitialOffset = () => (selectable ? CHECKBOX_WIDTH + SERIAL_WIDTH : SERIAL_WIDTH);
+
+  /**
+   * Column Management Functions
+   * Handle column positioning, pinning, and visibility
    */
   const isPinnedLeft = (colId) => pinnedColumns.left.includes(String(colId));
   const isPinnedRight = (colId) => pinnedColumns.right.includes(String(colId)) || colId === 'status';
   const isHidden = (colId) => hiddenColumns.includes(String(colId));
-
-  const defaultPinnedWidth = 40;
-
-  const CHECKBOX_WIDTH = 24;
-  const SERIAL_WIDTH = 24;
-  const getInitialOffset = () => (selectable ? CHECKBOX_WIDTH + SERIAL_WIDTH : SERIAL_WIDTH);
 
   /**
    * Computes offsets for pinned columns
@@ -209,8 +228,10 @@ const TableView = ({
   };
 
   return (
-    <div className="overflow-x-auto overflow-y-hidden">
-      <table className="min-w-full divide-y divide-primary text-sm text-primary">
+    <div className={`overflow-x-auto overflow-y-hidden ${isExpanded ? 'h-full' : ''}`}>
+      <table className={`w-full divide-y divide-primary text-sm text-primary ${isExpanded ? 'h-full' : ''}`}>
+        {/* Structure components with clear section comments */}
+        {/* Header Section */}
         <thead className="font-semibold">
           <tr>
             {selectable && (
@@ -235,6 +256,8 @@ const TableView = ({
             )}
           </tr>
         </thead>
+
+        {/* Body Section */}
         <tbody>
           {isLoading ? (
             <tr>
@@ -311,6 +334,32 @@ const TableView = ({
             )
           )}
         </tbody>
+
+        {/* Footer Section */}
+        <tfoot className="font-semibold border-t border-primary">
+          <tr>
+            {selectable && (
+              <th scope="col" className="p-1 text-left sticky left-0 bg-main z-20 w-[30px]">
+                <Checkbox checked={selectionState.isAllSelected} onChange={handleMasterCheckboxChange} />
+              </th>
+            )}
+
+            <th scope="col" style={{ left: selectable ? `${CHECKBOX_WIDTH}px` : 0 }} className="p-1 whitespace-nowrap text-left font-semibold sticky bg-main z-20 w-[30px]">
+              #
+            </th>
+
+            {(() => {
+              const { leftPinned, unpinned, rightPinned } = groupHeaders(headers);
+              return [...leftPinned, ...unpinned, ...rightPinned].map(renderHeaderCell);
+            })()}
+
+            {actions && (
+              <th scope="col" className="p-1 text-sm text-left right-0 text-primary sticky bg-main z-20">
+                Actions
+              </th>
+            )}
+          </tr>
+        </tfoot>
       </table>
     </div>
   );

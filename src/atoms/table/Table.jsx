@@ -131,6 +131,7 @@ const TableComponent = ({
   const [updatedHeaders, setUpdatedHeaders] = useState(headers);
   const [isDragging, setIsDragging] = useState(false);
   const [hiddenColumns, setHiddenColumns] = useState([]);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   // Sorting state
   const [sortConfig, setSortConfig] = useState({
@@ -568,9 +569,16 @@ const TableComponent = ({
     showNotification('success', 'Column preferences reset to default');
   };
 
+  // Add toggle handler
+  const handleToggleExpand = () => setIsExpanded((prev) => !prev);
+
   return (
-    <div className={`overflow-hidden text-sm ${layoutSize === 'small' ? 'px-1' : layoutSize === 'large' ? 'px-8' : 'px-4'}`}>
-      <div className="my-1 rounded-xl border border-primary overflow-hidden">
+    <div
+      className={`overflow-hidden text-sm transition-all duration-300 ${
+        isExpanded ? 'fixed inset-0 z-50 bg-main p-4 overflow-y-auto' : layoutSize === 'small' ? 'px-1' : layoutSize === 'large' ? 'px-8' : 'px-4'
+      }`}
+    >
+      <div className={`my-1 rounded-xl border border-primary overflow-hidden ${isExpanded ? 'flex flex-col' : ''}`}>
         <div className="w-full flex flex-row sm:flex-row flex-wrap gap-y-2 justify-between items-center px-1 py-1 border-b border-primary">
           <TableFilter
             search={search}
@@ -620,6 +628,8 @@ const TableComponent = ({
               pinnedColumns={pinnedColumns}
               onSaveColumns={handleSaveColumnPreferences}
               onResetColumns={handleResetColumnPreferences}
+              isExpanded={isExpanded}
+              onToggleExpand={handleToggleExpand}
             />
           </div>
         </div>
@@ -632,7 +642,7 @@ const TableComponent = ({
           </div>
         )}
 
-        <div className="overflow-x-auto custom-scrollbar">
+        <div className={`overflow-x-auto custom-scrollbar ${isExpanded ? 'flex-grow' : ''}`}>
           <TableView
             selectable={selectable}
             selectionState={selectionState}
@@ -671,6 +681,7 @@ const TableComponent = ({
             handleTogglePin={handleTogglePin}
             pinnedColumns={pinnedColumns}
             hiddenColumns={hiddenColumns}
+            isExpanded={isExpanded}
           />
         </div>
         <div className="w-full">
