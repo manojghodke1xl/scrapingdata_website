@@ -1,5 +1,14 @@
 import * as XLSX from 'xlsx';
 
+/**
+ * Generates bulk export file from data
+ * @param {Object} params Export parameters
+ * @param {Array} params.data - Data to export
+ * @param {Function} params.exportMapping - Function to map data for export
+ * @param {Array} params.selectedColumns - Columns to include
+ * @param {string} params.fileName - Output file name
+ * @param {string} params.fileFormat - Export format (csv/xlsx)
+ */
 export const generateBulkExport = ({ data, exportMapping, selectedColumns, fileName, fileFormat = 'csv' }) => {
   if (!data?.length) return;
 
@@ -19,7 +28,18 @@ export const generateBulkExport = ({ data, exportMapping, selectedColumns, fileN
   else exportToCSV(rows, headers, fileName);
 };
 
+/**
+ * Creates a generic export mapping function based on column configuration
+ * @param {Array} columnConfig - Table column configuration
+ * @returns {Function} Mapping function that transforms data for export
+ */
 export const createGenericExportMapping = (columnConfig) => {
+  /**
+   * Gets nested object value using dot notation
+   * @param {Object} obj - Source object
+   * @param {string} path - Dot notation path
+   * @returns {*} Value at path
+   */
   const getNestedValue = (obj, path) => {
     if (!path) return obj;
     return path.split('.').reduce((current, key) => current?.[key], obj);
@@ -59,6 +79,12 @@ export const createGenericExportMapping = (columnConfig) => {
   };
 };
 
+/**
+ * Exports data to Excel format
+ * @param {Array} rows - Data rows
+ * @param {Array} headers - Column headers
+ * @param {string} fileName - Output file name
+ */
 const exportToExcel = (rows, headers, fileName) => {
   const worksheet = XLSX.utils.json_to_sheet(rows, { header: headers });
   const workbook = XLSX.utils.book_new();
@@ -66,6 +92,12 @@ const exportToExcel = (rows, headers, fileName) => {
   XLSX.writeFile(workbook, `${fileName}.xlsx`);
 };
 
+/**
+ * Exports data to CSV format
+ * @param {Array} rows - Data rows
+ * @param {Array} headers - Column headers
+ * @param {string} fileName - Output file name
+ */
 const exportToCSV = (rows, headers, fileName) => {
   // Create header row
   const headerRow = headers.map((header) => `"${header}"`).join(',');
@@ -78,6 +110,12 @@ const exportToCSV = (rows, headers, fileName) => {
   downloadFile(csvContent, fileName, 'csv');
 };
 
+/**
+ * Triggers file download in browser
+ * @param {string} content - File content
+ * @param {string} fileName - Output file name
+ * @param {string} format - File format
+ */
 const downloadFile = (content, fileName, format) => {
   if (format === 'csv') {
     const blob = new Blob(['\ufeff' + content], { type: 'text/csv;charset=utf-8;' });
@@ -92,7 +130,11 @@ const downloadFile = (content, fileName, format) => {
   }
 };
 
-// Helper to format cell values based on their type
+/**
+ * Formats cell values for CSV export
+ * @param {*} value - Cell value to format
+ * @returns {string} Formatted value
+ */
 const formatCellValue = (value) => {
   if (value === null || value === undefined) return '""';
   if (typeof value === 'boolean') return value ? 'true' : 'false';

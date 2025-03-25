@@ -2,6 +2,18 @@ import { showNotification } from '../utils/showNotification';
 import { generateBulkExport } from '../utils/exportUtils';
 import { bulkExportTableApi } from '../apis/table-apis';
 
+/**
+ * Handles different types of data export operations
+ * @param {Object} params Export configuration parameters
+ * @param {string} params.type - Export type ('visible', 'selected', or 'all')
+ * @param {string} params.apiUrl - API endpoint for fetching data
+ * @param {Array} params.rows - Current table rows
+ * @param {Function} params.exportMapping - Function to map data for export
+ * @param {Array} params.selectedColumns - Columns to include in export
+ * @param {Array} params.selected - Selected item IDs
+ * @param {string} params.fileName - Base name for export file
+ * @param {string} params.fileFormat - Export format (csv/xlsx)
+ */
 export const exportHandler = ({ type, apiUrl, rows, exportMapping, selectedColumns, selected, fileName, fileFormat }) => {
   if (!exportMapping) {
     showNotification('error', 'Export mapping function is required');
@@ -18,7 +30,10 @@ export const exportHandler = ({ type, apiUrl, rows, exportMapping, selectedColum
     (async () => {
       const { status, data } = await bulkExportTableApi(apiUrl);
       if (status) {
+        // API URL mapping for different modules
         const apiUrlMapping = {
+          // Mapping configuration for different API endpoints
+          // Format: 'endpoint-path': 'data-key'
           recaptcha: 'recaptchas',
           'faq-category': 'faqCategories',
           faq: 'faqs',

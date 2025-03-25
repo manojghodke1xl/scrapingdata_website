@@ -4,7 +4,7 @@ import ColorPalette from '../../atoms/common/ColorPalette';
 import useColorContext from '../../hooks/useColorContext';
 import useGlobalContext from '../../hooks/useGlobalContext';
 import { showNotification } from '../../utils/showNotification';
-import { updateAdminThemeApi } from '../../apis/admin-apis';
+import { updateAdminPreferencesApi } from '../../apis/admin-apis';
 import FormButtons from '../../atoms/formFields/FormButtons';
 
 const AdminSettings = () => {
@@ -24,7 +24,7 @@ const AdminSettings = () => {
     setLoading(true);
     try {
       const payload = { darkMode: isDarkMode, workspaceColors };
-      const { status, data } = await updateAdminThemeApi(id, payload);
+      const { status, data } = await updateAdminPreferencesApi(id, payload);
       if (status) {
         showNotification('success', data.message);
         dispatch({ type: 'SET_THEME', payload: { isDarkMode, primaryColor: workspaceColors } });
