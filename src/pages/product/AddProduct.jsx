@@ -515,8 +515,14 @@ const AddProduct = () => {
                   setProductDetails((prev) => ({
                     ...prev,
                     currencies: selected,
-                    price: selected.reduce((acc, currency) => ({ ...acc, [currency]: '' }), {}),
-                    salePrice: selected.reduce((acc, currency) => ({ ...acc, [currency]: '' }), {})
+                    price: {
+                      ...prev.price,
+                      ...selected.reduce((acc, currency) => ({ ...acc, [currency]: prev.price?.[currency] || '' }), {})
+                    },
+                    salePrice: {
+                      ...prev.salePrice,
+                      ...selected.reduce((acc, currency) => ({ ...acc, [currency]: prev.salePrice?.[currency] || '' }), {})
+                    }
                   }));
                   if (errors.currencies) setErrors({ ...errors, currencies: '' });
                 }}
