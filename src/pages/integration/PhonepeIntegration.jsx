@@ -19,7 +19,12 @@ const PhonepeIntegration = () => {
       saltKey: '',
       environment: 'development',
       supports: {
-        INR: false
+        INR: false,
+        AED: false,
+        USD: false,
+        EUR: false,
+        JPY: false,
+        GBP: false
       },
       redirectUrl: {
         success: '',
@@ -148,9 +153,12 @@ const PhonepeIntegration = () => {
           <div className="w-full">
             <MultiSelectCheckbox
               options={[
-                { _id: 'INR', name: 'INR' }
-                // { _id: 'AED', name: 'AED' },
-                // { _id: 'USD', name: 'USD' }
+                { _id: 'INR', name: 'INR' },
+                { _id: 'AED', name: 'AED' },
+                { _id: 'USD', name: 'USD' },
+                { _id: 'EUR', name: 'EUR' },
+                { _id: 'JPY', name: 'JPY' },
+                { _id: 'GBP', name: 'GBP' }
               ]}
               formLabel="Supported Currencies"
               label="Select Currencies"

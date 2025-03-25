@@ -491,13 +491,19 @@ const AddProduct = () => {
                 options={[
                   { _id: 'INR', name: 'INR' },
                   { _id: 'AED', name: 'AED' },
-                  { _id: 'USD', name: 'USD' }
+                  { _id: 'USD', name: 'USD' },
+                  { _id: 'EUR', name: 'EUR' },
+                  { _id: 'JPY', name: 'JPY' },
+                  { _id: 'GBP', name: 'GBP' }
                 ]}
                 onChange={(selected) => {
                   const supportedRegions = {
                     INR: paymentData?.razorpay?.supports?.INR || paymentData?.stripe?.supports?.INR || paymentData?.paypal?.supports?.INR || paymentData?.phonepe?.supports?.INR,
                     AED: paymentData?.razorpay?.supports?.AED || paymentData?.stripe?.supports?.AED || paymentData?.paypal?.supports?.AED,
-                    USD: paymentData?.razorpay?.supports?.USD || paymentData?.stripe?.supports?.USD || paymentData?.paypal?.supports?.USD
+                    USD: paymentData?.razorpay?.supports?.USD || paymentData?.stripe?.supports?.USD || paymentData?.paypal?.supports?.USD,
+                    EUR: paymentData?.razorpay?.supports?.EUR || paymentData?.stripe?.supports?.EUR || paymentData?.paypal?.supports?.EUR,
+                    JPY: paymentData?.razorpay?.supports?.JPY || paymentData?.stripe?.supports?.JPY || paymentData?.paypal?.supports?.JPY,
+                    GBP: paymentData?.razorpay?.supports?.GBP || paymentData?.stripe?.supports?.GBP || paymentData?.paypal?.supports?.GBP
                   };
 
                   if (!selected.every((currency) => supportedRegions[currency])) {

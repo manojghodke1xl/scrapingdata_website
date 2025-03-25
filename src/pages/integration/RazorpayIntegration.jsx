@@ -21,7 +21,10 @@ const RazorpayIntegration = () => {
       supports: {
         INR: false,
         AED: false,
-        USD: false
+        USD: false,
+        EUR: false,
+        JPY: false,
+        GBP: false
       },
       redirectUrl: {
         success: '',
@@ -49,7 +52,10 @@ const RazorpayIntegration = () => {
         ...prevDetails.supports,
         INR: selected.includes('INR'),
         AED: selected.includes('AED'),
-        USD: selected.includes('USD')
+        USD: selected.includes('USD'),
+        EUR: selected.includes('EUR'),
+        JPY: selected.includes('JPY'),
+        GBP: selected.includes('GBP')
       }
     }));
   };
@@ -153,7 +159,10 @@ const RazorpayIntegration = () => {
               options={[
                 { _id: 'INR', name: 'INR' },
                 { _id: 'AED', name: 'AED' },
-                { _id: 'USD', name: 'USD' }
+                { _id: 'USD', name: 'USD' },
+                { _id: 'EUR', name: 'EUR' },
+                { _id: 'JPY', name: 'JPY' },
+                { _id: 'GBP', name: 'GBP' }
               ]}
               formLabel="Supported Currencies"
               label="Select Currencies"
