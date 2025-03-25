@@ -40,17 +40,26 @@ const AddPackage = () => {
     currencyNotes: {
       INR: false,
       AED: false,
-      USD: false
+      USD: false,
+      EUR: false,
+      JPY: false,
+      GBP: false
     },
     currencies: {
       INR: 0,
       AED: 0,
-      USD: 0
+      USD: 0,
+      EUR: 0,
+      JPY: 0,
+      GBP: 0
     },
     salePrice: {
       INR: 0,
       AED: 0,
-      USD: 0
+      USD: 0,
+      EUR: 0,
+      JPY: 0,
+      GBP: 0
     },
     maxLimit: '',
     event: ''
@@ -370,7 +379,7 @@ const AddPackage = () => {
                     const updatedSalePrice = { ...packageDetails.salePrice };
 
                     const supportedCurrencies = {
-                      INR: paymentData?.razorpay?.supports?.INR || paymentData?.stripe?.supports?.INR || paymentData?.paypal?.supports?.INR,
+                      INR: paymentData?.razorpay?.supports?.INR || paymentData?.stripe?.supports?.INR || paymentData?.paypal?.supports?.INR || paymentData?.phonepe?.supports?.INR,
                       AED: paymentData?.razorpay?.supports?.AED || paymentData?.stripe?.supports?.AED || paymentData?.paypal?.supports?.AED,
                       USD: paymentData?.razorpay?.supports?.USD || paymentData?.stripe?.supports?.USD || paymentData?.paypal?.supports?.USD
                     };
