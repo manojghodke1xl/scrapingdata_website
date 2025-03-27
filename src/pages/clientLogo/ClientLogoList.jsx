@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { formatDateTime } from '../../utils/dateFormats';
 import { IoMdAdd } from 'react-icons/io';
 import TableComponent from '../../atoms/table/Table';
@@ -10,6 +11,7 @@ import TableHeader from '../../atoms/table/TableHeader';
 import useColorContext from '../../hooks/useColorContext';
 
 const ClientLogoList = () => {
+  const navigate = useNavigate();
   const { isDarkMode } = useColorContext();
   const [clientlogos, setClientLogos] = useState([]);
 
@@ -19,7 +21,7 @@ const ClientLogoList = () => {
     return {
       id: _id,
       exportData: clientlogo,
-      image: <img src={image.url} alt="Company Logo" className="w-8 h-8 rounded" />,
+      image: <img src={image.url} alt="Company Logo" className="w-6 h-6 rounded" />,
       sites: <TruncatableFieldToolTip content={sites.map((s) => `${s.name} (${s.host})`).join(', ')} />,
       status: (
         <div
@@ -44,6 +46,12 @@ const ClientLogoList = () => {
     { id: 4, label: 'Updated Date', key: 'updatedAt', dataKey: 'updatedAt', formatForExport: (value) => formatDateTime(value) }
   ];
 
+  const actionItems = [
+    { id: 0, label: 'Edit', icon: 'edit', handler: (row) => navigate(`/client-logo/edit-client-logo/${row.id}`) },
+    { id: 1, label: 'Copy', icon: 'copy', handler: (row) => navigate(`/client-logo/duplicate-client-logo/${row.id}`) },
+    { id: 2, label: 'Delete', icon: 'delete', deleteAction: true }
+  ];
+
   return (
     <div className="p-1 overflow-x-hidden mb-12">
       <TableHeader heading={'Client Logos'} btn1={true} href1={'/client-logo/add-client-logo'} icon1={<IoMdAdd />} btnLabel1={'Add Client Logo'} />
@@ -55,11 +63,7 @@ const ClientLogoList = () => {
         tableData={(data) => setClientLogos(data.clientlogos)}
         rows={rows}
         apiUrl={'client-logo'}
-        tableCountLabel={true}
         pagination={true}
-        actions={true}
-        editPath={'/client-logo/edit-client-logo'}
-        copyPath={'/client-logo/duplicate-client-logo'}
         filter={true}
         filterCategory={[
           { id: 0, name: 'Sites' },
@@ -74,10 +78,10 @@ const ClientLogoList = () => {
         modifySite={true}
         modifySiteApi={updateClientLogoSitesApi}
         deleteBtn={true}
-        deleteAction={true}
         deleteApi={deleteClientLogoApi}
         deleteLabel={'Delete Client Logo'}
         deleteMessage={'Are you sure you want to delete this Client Logo?'}
+        actionItems={actionItems}
       />
       <NoteComponent note={clientLogoListNote} />
     </div>

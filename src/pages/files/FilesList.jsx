@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import TableComponent from '../../atoms/table/Table';
 import { IoMdAdd } from 'react-icons/io';
 import { formatDateTime } from '../../utils/dateFormats';
@@ -7,6 +8,7 @@ import TruncatableFieldToolTip from '../../atoms/common/TruncatableFeildToolTip'
 import TableHeader from '../../atoms/table/TableHeader';
 
 const FilesList = () => {
+  const navigate = useNavigate();
   const [files, setFiles] = useState([]);
 
   const rows = files.map((files) => {
@@ -28,28 +30,30 @@ const FilesList = () => {
     { id: 3, label: 'Updated Date', key: 'updatedAt', dataKey: 'updatedAt', formatForExport: (value) => formatDateTime(value) }
   ];
 
+  const actionItems = [
+    { id: 0, label: 'Edit', icon: 'edit', handler: (row) => navigate(`/files/edit-file/${row.id}`) },
+    { id: 1, label: 'Delete', icon: 'delete', deleteAction: true }
+  ];
+
   return (
     <div className="p-1 overflow-x-hidden mb-12">
       <TableHeader heading={'Files'} btn1={true} href1={'/files/add-file'} icon1={<IoMdAdd />} btnLabel1={'Add File'} />
       <TableComponent
         selectable={true}
+        search={true}
+        filter={true}
+        pagination={true}
         siteModule={'files'}
         headers={columnConfig}
         tableData={(data) => setFiles(data.files)}
         rows={rows}
         apiUrl={'file'}
-        tableCountLabel={true}
-        pagination={true}
-        actions={true}
-        editPath={'/files/edit-file'}
+        filterCategory={[{ id: 1, name: 'Sites' }]}
         deleteBtn={true}
-        deleteAction={true}
         deleteApi={deleteFileApi}
         deleteMessage="Are you sure you want to delete this file?"
         deleteLabel={'Delete File'}
-        search={true}
-        filter={true}
-        filterCategory={[{ id: 1, name: 'Sites' }]}
+        actionItems={actionItems}
       />
     </div>
   );

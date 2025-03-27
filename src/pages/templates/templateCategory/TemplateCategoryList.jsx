@@ -1,12 +1,14 @@
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { IoMdAdd } from 'react-icons/io';
 import TableComponent from '../../../atoms/table/Table';
-import { useState } from 'react';
 import { formatDateTime } from '../../../utils/dateFormats';
 import TruncatableFieldToolTip from '../../../atoms/common/TruncatableFeildToolTip';
 import TableHeader from '../../../atoms/table/TableHeader';
 import TruncatableCopyFeild from '../../../atoms/common/TruncatableCopyFeild';
 
 const TemplateCategoryList = () => {
+  const navigate = useNavigate();
   const [templateCategory, setTemplateCategory] = useState([]);
 
   const rows = templateCategory.map((templateCategory) => {
@@ -28,6 +30,8 @@ const TemplateCategoryList = () => {
     { id: 3, label: 'Updated Date', key: 'updatedAt', dataKey: 'updatedAt', formatForExport: (value) => formatDateTime(value) }
   ];
 
+  const actionItems = [{ id: 0, label: 'Edit', icon: 'edit', handler: (row) => navigate(`/template-category/edit-template-category/${row.id}`) }];
+
   return (
     <div className="p-1 overflow-x-hidden mb-12">
       <TableHeader heading={'Template Categories'} btn1={true} href1={'/template-category/add-template-category'} icon1={<IoMdAdd />} btnLabel1={'Add Template Category'} />
@@ -38,11 +42,9 @@ const TemplateCategoryList = () => {
         tableData={(data) => setTemplateCategory(data.templateCategories)}
         rows={rows}
         apiUrl={'template-category'}
-        tableCountLabel={true}
         pagination={true}
-        actions={true}
-        editPath={'/template-category/edit-template-category'}
         search={true}
+        actionItems={actionItems}
       />
     </div>
   );

@@ -1,11 +1,13 @@
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { IoMdAdd } from 'react-icons/io';
 import TableHeader from '../../atoms/table/TableHeader';
 import TableComponent from '../../atoms/table/Table';
-import { useState } from 'react';
 import { formatDateTime } from '../../utils/dateFormats';
 import TruncatableFieldToolTip from '../../atoms/common/TruncatableFeildToolTip';
 
 const AfterSalesList = () => {
+  const navigate = useNavigate();
   const [afterSales, setAfterSales] = useState([]);
 
   const rows = afterSales.map((afterSale) => {
@@ -48,6 +50,11 @@ const AfterSalesList = () => {
     }
   ];
 
+  const actionItems = [
+    { id: 0, label: 'Edit', icon: 'edit', handler: (row) => navigate(`/after-sales/edit-after-sale/${row.id}`) },
+    { id: 1, label: 'Copy', icon: 'copy', handler: (row) => navigate(`/after-sales/duplicate-after-sale/${row.id}`) }
+  ];
+
   return (
     <div className="p-1 overflow-x-hidden mb-12">
       <TableHeader heading={'After Sales'} btn1={true} href1={'/after-sales/add-after-sale'} icon1={<IoMdAdd />} btnLabel1={'Add After Sales'} />
@@ -58,14 +65,11 @@ const AfterSalesList = () => {
         tableData={(data) => setAfterSales(data.afterSales)}
         rows={rows}
         apiUrl={'after-sale'}
-        tableCountLabel={true}
         pagination={true}
-        actions={true}
-        editPath={'/after-sales/edit-after-sale'}
-        copyPath={'/after-sales/duplicate-after-sale'}
         search={true}
         filter={true}
         filterCategory={[{ id: 0, name: 'Sites' }]}
+        actionItems={actionItems}
       />
     </div>
   );

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { formatDateTime } from '../../utils/dateFormats';
 import { IoMdAdd } from 'react-icons/io';
 import TableComponent from '../../atoms/table/Table';
@@ -10,6 +11,7 @@ import TableHeader from '../../atoms/table/TableHeader';
 import useColorContext from '../../hooks/useColorContext';
 
 const FaqList = () => {
+  const navigate = useNavigate();
   const { isDarkMode } = useColorContext();
   const [faqs, setFaqs] = useState([]);
 
@@ -45,6 +47,12 @@ const FaqList = () => {
     { id: 5, label: 'Updated Date', key: 'updatedAt', dataKey: 'updatedAt', formatForExport: (value) => formatDateTime(value) }
   ];
 
+  const actionItems = [
+    { id: 0, label: 'Edit', icon: 'edit', handler: (row) => navigate(`/faq/edit-faq/${row.id}`) },
+    { id: 1, label: 'Copy', icon: 'copy', handler: (row) => navigate(`/faq/duplicate-faq/${row.id}`) },
+    { id: 2, label: 'Delete', icon: 'delete', deleteAction: true }
+  ];
+
   return (
     <div className="p-1 overflow-x-hidden mb-12">
       <TableHeader heading={'FAQs'} btn1={true} href1={'/faq/add-faq'} icon1={<IoMdAdd />} btnLabel1={'Add FAQ'} />
@@ -55,11 +63,7 @@ const FaqList = () => {
         tableData={(data) => setFaqs(data.faqs)}
         rows={rows}
         apiUrl={'faq'}
-        tableCountLabel={true}
         pagination={true}
-        actions={true}
-        editPath={'/faq/edit-faq'}
-        copyPath={'/faq/duplicate-faq'}
         search={true}
         filter={true}
         filterCategory={[
@@ -79,10 +83,10 @@ const FaqList = () => {
         modifySite={true}
         modifySiteApi={updateFaqSitesApi}
         deleteBtn={true}
-        deleteAction={true}
         deleteLabel={'Delete FAQ'}
         deleteMessage={'Are you sure you want to delete this FAQ?'}
         deleteApi={deleteFaqApi}
+        actionItems={actionItems}
       />
       <NoteComponent note={faqListNote} />
     </div>

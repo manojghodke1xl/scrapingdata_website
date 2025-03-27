@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { formatDateTime } from '../../utils/dateFormats';
 import { IoMdAdd } from 'react-icons/io';
 import TableComponent from '../../atoms/table/Table';
@@ -8,6 +9,7 @@ import TruncatableCopyFeild from '../../atoms/common/TruncatableCopyFeild';
 import TableHeader from '../../atoms/table/TableHeader';
 
 const ProductList = () => {
+  const navigate = useNavigate();
   const [products, setProducts] = useState([]);
 
   const rows = products.map((product) => {
@@ -33,6 +35,11 @@ const ProductList = () => {
     { id: 5, label: 'Updated Date', key: 'updatedAt', dataKey: 'updatedAt', formatForExport: (value) => formatDateTime(value) }
   ];
 
+  const actionItems = [
+    { id: 0, label: 'Edit', icon: 'edit', handler: (row) => navigate(`/products/edit-product/${row.id}`) },
+    { id: 1, label: 'Delete', icon: 'delete', deleteAction: true }
+  ];
+
   return (
     <div className="p-1 overflow-x-hidden mb-12">
       <TableHeader heading={'Products'} btn1={true} href1={'/products/add-product'} icon1={<IoMdAdd />} btnLabel1={'Add Product'} />
@@ -43,19 +50,16 @@ const ProductList = () => {
         tableData={(data) => setProducts(data.products)}
         rows={rows}
         apiUrl={'products'}
-        tableCountLabel={true}
         pagination={true}
-        actions={true}
-        editPath={'/products/edit-product'}
         search={true}
         filter={true}
         deleteBtn={true}
-        deleteAction={true}
         filterCategory={[{ id: 0, name: 'Sites' }]}
         searchCategory={[{ id: 1, name: 'Name' }]}
         deleteLabel={'Delete Product'}
         deleteMessage={'Are you sure you want to delete this product?'}
         deleteApi={deleteProductApi}
+        actionItems={actionItems}
       />
     </div>
   );

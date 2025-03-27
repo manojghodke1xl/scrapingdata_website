@@ -34,7 +34,6 @@ const TaskList = () => {
         tableData={(data) => setTasks(data.tasks)}
         rows={rows}
         apiUrl={'agenda-tasks'}
-        tableCountLabel={true}
         pagination={true}
         search={true}
       />

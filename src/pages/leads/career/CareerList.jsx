@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { deleteCareerApi } from '../../../apis/leads/career-apis';
 import TruncatableFieldToolTip from '../../../atoms/common/TruncatableFeildToolTip';
 import { formatDateTime } from '../../../utils/dateFormats';
@@ -8,6 +9,7 @@ import { IoMdAdd } from 'react-icons/io';
 import TableComponent from '../../../atoms/table/Table';
 
 const CareerList = () => {
+  const navigate = useNavigate();
   const [careers, setCareers] = useState([]);
 
   const rows = careers.map((career) => {
@@ -50,6 +52,11 @@ const CareerList = () => {
     { id: 13, label: 'Updated At', key: 'updatedAt', dataKey: 'updatedAt', formatForExport: (value) => formatDateTime(value) }
   ];
 
+  const actionItems = [
+    { id: 0, label: 'View', icon: 'view', handler: (row) => navigate(`/career/view-career/${row.id}`) },
+    { id: 1, label: 'Delete', icon: 'delete', deleteAction: true }
+  ];
+
   return (
     <div className="p-1 overflow-x-hidden mb-12">
       <TableHeader
@@ -71,10 +78,7 @@ const CareerList = () => {
         exportData={careers}
         rows={rows}
         apiUrl={'career'}
-        tableCountLabel={true}
         pagination={true}
-        actions={true}
-        viewPath={'/career/view-career'}
         search={true}
         filter={true}
         filterCategory={[{ id: 0, name: 'Sites' }]}
@@ -83,10 +87,10 @@ const CareerList = () => {
           { id: 1, name: 'Email' }
         ]}
         deleteBtn={true}
-        deleteAction={true}
         deleteLabel="Delete Career"
         deleteMessage="Are you sure you want to delete this Career?"
         deleteApi={deleteCareerApi}
+        actionItems={actionItems}
       />
     </div>
   );

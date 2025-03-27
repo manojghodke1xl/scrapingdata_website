@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import TruncatableFieldToolTip from '../../atoms/common/TruncatableFeildToolTip';
 import { formatDateTime } from '../../utils/dateFormats';
 import TableHeader from '../../atoms/table/TableHeader';
@@ -8,6 +9,7 @@ import CountryFlag from '../../atoms/common/CountryFlag';
 import { CiExport } from 'react-icons/ci';
 
 const ContactList = () => {
+  const navigate = useNavigate();
   const [contacts, setContacts] = useState([]);
 
   const rows = contacts.map((contact) => {
@@ -41,6 +43,8 @@ const ContactList = () => {
     { id: 5, label: 'Updated At', key: 'updatedAt', dataKey: 'updatedAt', formatForExport: (value) => formatDateTime(value) }
   ];
 
+  const actionItems = [{ id: 0, label: 'Edit', icon: 'edit', handler: (row) => navigate(`/contact/edit-contact/${row.id}`) }];
+
   return (
     <div className="p-1 overflow-x-hidden mb-12">
       <TableHeader
@@ -61,10 +65,7 @@ const ContactList = () => {
         tableData={(data) => setContacts(data.contacts)}
         rows={rows}
         apiUrl={'contact'}
-        tableCountLabel={true}
         pagination={true}
-        actions={true}
-        editPath={'/contact/edit-contact'}
         search={true}
         filter={true}
         filterCategory={[{ id: 1, name: 'Sites' }]}
@@ -73,6 +74,7 @@ const ContactList = () => {
           { id: 2, name: 'Email' }
         ]}
         adminStatus={true}
+        actionItems={actionItems}
       />
     </div>
   );

@@ -1,5 +1,5 @@
 import { IoMdAdd } from 'react-icons/io';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import TableComponent from '../../atoms/table/Table';
 import { useEffect, useState } from 'react';
 import { formatDateTime } from '../../utils/dateFormats';
@@ -11,6 +11,7 @@ import TruncatableCopyFeild from '../../atoms/common/TruncatableCopyFeild';
 import TableHeader from '../../atoms/table/TableHeader';
 
 const PackageList = () => {
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const eventId = searchParams.get('eventId');
   const [packages, setPackages] = useState([]);
@@ -62,6 +63,12 @@ const PackageList = () => {
     })().catch((error) => showNotification('error', error.message));
   }, []);
 
+  const actionItems = [
+    { id: 0, label: 'Edit', icon: 'edit', handler: (row) => navigate(`/packages/edit-package/${row.id}`) },
+    { id: 1, label: 'Copy', icon: 'copy', handler: (row) => navigate(`/packages/duplicate-package/${row.id}`) },
+    { id: 2, label: 'Delete', icon: 'delete', deleteAction: true }
+  ];
+
   return (
     <div className="p-1 overflow-x-hidden mb-12">
       <TableHeader heading={'Packages'} btn1={'Add Package'} href1={'/packages/add-package'} icon1={<IoMdAdd />} btnLabel1={'Add Package'} />
@@ -73,11 +80,7 @@ const PackageList = () => {
         rows={rows}
         apiUrl={'package'}
         events={event}
-        tableCountLabel={true}
         pagination={true}
-        actions={true}
-        editPath={'/packages/edit-package'}
-        copyPath={'/packages/duplicate-package'}
         search={true}
         filter={true}
         filterCategory={[
@@ -86,11 +89,11 @@ const PackageList = () => {
         ]}
         searchCategory={[{ id: 1, name: 'Name' }]}
         deleteBtn={true}
-        deleteAction={true}
         eventId={eventId}
         deleteApi={deletePackageApi}
         deleteLabel={'Delete Package'}
         deleteMessage={'Are you sure you want to delete this package?'}
+        actionItems={actionItems}
       />
     </div>
   );

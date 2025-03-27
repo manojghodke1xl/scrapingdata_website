@@ -43,8 +43,8 @@ const LayoutDropdown = ({ layoutSize, updateLayoutSize }) => {
       name="tone"
       open={isOpen}
       // Dynamic classes based on layout size for responsive styling
-      className={`relative w-full cursor-default rounded-xl bg-inherit text-left text-primary shadow-sm border border-primary focus:outline-none focus:ring-0 sm:text-lg sm:leading-6 ${
-        layoutSize === 'small' ? 'text-sm py-1 px-3' : layoutSize === 'large' ? 'py-2 px-4' : 'text-base py-2 px-4'
+      className={`relative w-full cursor-default rounded-xl bg-inherit text-left text-primary shadow-sm border border-primary focus:outline-none focus:ring-0 sm:text-lg sm:leading-6 p-2 ${
+        layoutSize === 'small' ? 'text-sm' : layoutSize === 'large' ? 'text-lg' : 'text-base'
       }`}
       onToggle={handleToggle}
     >

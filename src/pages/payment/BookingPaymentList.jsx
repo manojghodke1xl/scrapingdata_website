@@ -113,12 +113,9 @@ const BookingPaymentList = () => {
         tableData={(data) => setBookingPayments(data.bookingPayments)}
         rows={rows}
         apiUrl={'booking-payments'}
-        tableCountLabel={true}
         pagination={true}
         search={true}
         filter={true}
-        deleteAction={true}
-        deleteBtn={true}
         filterCategory={[{ id: 1, name: 'Sites' }]}
       />
     </div>

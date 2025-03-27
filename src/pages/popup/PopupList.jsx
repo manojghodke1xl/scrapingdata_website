@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { IoMdAdd } from 'react-icons/io';
 import { AiOutlineApi } from 'react-icons/ai';
 import { formatDateTime } from '../../utils/dateFormats';
@@ -11,6 +12,7 @@ import TableHeader from '../../atoms/table/TableHeader';
 import useColorContext from '../../hooks/useColorContext';
 
 const PopupList = () => {
+  const navigate = useNavigate();
   const { isDarkMode } = useColorContext();
   const [popups, setPopups] = useState([]);
 
@@ -54,6 +56,12 @@ const PopupList = () => {
     { id: 6, label: 'Updated At', key: 'updatedAt', dataKey: 'updatedAt', formatForExport: (value) => formatDateTime(value) }
   ];
 
+  const actionItems = [
+    { id: 0, label: 'Edit', icon: 'edit', handler: (row) => navigate(`/pop-up/edit-pop-up/${row.id}`) },
+    { id: 2, label: 'Copy', icon: 'copy', handler: (row) => navigate(`/pop-up/duplicate-pop-up/${row.id}`) },
+    { id: 3, label: 'Delete', icon: 'delete', deleteAction: true }
+  ];
+
   return (
     <div className="p-1 overflow-x-hidden mb-12">
       <TableHeader
@@ -74,11 +82,7 @@ const PopupList = () => {
         tableData={(data) => setPopups(data.popups)}
         rows={rows}
         apiUrl={'popups'}
-        tableCountLabel={true}
         pagination={true}
-        actions={true}
-        editPath={'/pop-up/edit-pop-up'}
-        copyPath={'/pop-up/duplicate-pop-up'}
         search={true}
         filter={true}
         filterCategory={[
@@ -90,7 +94,6 @@ const PopupList = () => {
           { id: 2, name: 'Inactive', bgColor: '#F2F4F7', color: '#344054', dotColor: '#667085' }
         ]}
         searchCategory={[{ id: 1, name: 'Name' }]}
-        deleteAction={true}
         deleteBtn={true}
         deleteApi={deletePopupApi}
         deleteLabel={'Delete Pop-up'}
@@ -99,6 +102,7 @@ const PopupList = () => {
         modifyStatusApi={updatePopupStatusApi}
         duplicateBtn={true}
         duplicateApi={duplicatePopupApi}
+        actionItems={actionItems}
       />
       <NoteComponent note={listPopupNote} />
     </div>

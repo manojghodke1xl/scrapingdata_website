@@ -96,6 +96,17 @@ const ParticipantList = () => {
     })().catch((error) => showNotification('error', error.message));
   }, []);
 
+  const actionItems = [
+    {
+      id: 0,
+      label: 'Send All Certificates',
+      icon: 'send',
+      handler: async (row) => {
+        if (row.certificate) await sendCertificateApi(row.id, false, row.bookingId);
+      }
+    }
+  ];
+
   return (
     <div className="p-1 overflow-x-hidden mb-12">
       <TableHeader
@@ -112,12 +123,10 @@ const ParticipantList = () => {
       <TableComponent
         selectable={true}
         siteModule={'participant'}
-        actions={true}
         headers={columnConfig}
         tableData={(data) => setParticipants(data.participants)}
         rows={rows}
         apiUrl={'participant'}
-        tableCountLabel={true}
         pagination={true}
         search={true}
         filter={true}
@@ -130,8 +139,7 @@ const ParticipantList = () => {
           { id: 1, name: 'Name' },
           { id: 2, name: 'Email' }
         ]}
-        sendCertificate={true}
-        approvalApi={sendCertificateApi}
+        actionItems={actionItems}
       />
     </div>
   );

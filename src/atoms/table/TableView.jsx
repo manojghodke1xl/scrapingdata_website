@@ -4,6 +4,7 @@ import { MdOutlinePushPin, MdPushPin } from 'react-icons/md';
 import TableRowActions from './TableRowActions';
 import Checkbox from '../formFields/Checkbox';
 import useColorContext from '../../hooks/useColorContext';
+import { BsThreeDotsVertical } from 'react-icons/bs';
 
 /**
  * TableView Component
@@ -32,21 +33,9 @@ const TableView = ({
   handleRowCheckboxChange,
   headers,
   rows,
-  actions,
   isLoading,
-  editPath,
-  viewPath,
-  appsPath,
-  copyPath,
-  deleteAction,
   tableState,
   setModalState,
-  managePackage,
-  managePackagePath,
-  sendForApproval,
-  sendCertificate,
-  sendCertificateUnique,
-  approvalApi,
   handleDragStart,
   handleDragOver,
   handleDrop,
@@ -58,7 +47,8 @@ const TableView = ({
   pinnedColumns,
   hiddenColumns,
   handleTogglePin,
-  isExpanded
+  isExpanded,
+  actionItems
 }) => {
   const { isDarkMode } = useColorContext();
   const [openDropdownId, setOpenDropdownId] = useState(null);
@@ -105,7 +95,7 @@ const TableView = ({
     const leftOffsets = {};
     const rightOffsets = {};
     let leftPosition = getInitialOffset();
-    let rightPosition = actions ? 55 : 0;
+    let rightPosition = actionItems.length > 0 ? 55 : 0;
 
     headers.forEach((header) => {
       if (isPinnedLeft(header.id)) {
@@ -249,7 +239,7 @@ const TableView = ({
               return [...leftPinned, ...unpinned, ...rightPinned].map(renderHeaderCell);
             })()}
 
-            {actions && (
+            {actionItems.length > 0 && (
               <th scope="col" className="p-1 text-sm text-left right-0 text-primary sticky bg-main z-20">
                 Actions
               </th>
@@ -261,7 +251,7 @@ const TableView = ({
         <tbody>
           {isLoading ? (
             <tr>
-              <td colSpan={headers.length + (selectable ? 1 : 0) + (actions ? 1 : 0) + 1}>
+              <td colSpan={headers.length + (selectable ? 1 : 0) + (actionItems.length > 0 ? 1 : 0) + 1}>
                 <div role="status" className="w-full border border-primary divide-y divide-primary rounded shadow animate-pulse ">
                   {[...Array(10)].map((_, idx) => (
                     <div key={idx} className="flex items-center justify-between w-full px-4 py-1">
@@ -297,29 +287,28 @@ const TableView = ({
                     return [...leftPinned, ...unpinned, ...rightPinned].map((header) => renderDataCell(row, header));
                   })()}
 
-                  {actions && (
-                    <td className={`bg-main sticky right-0 z-20`}>
-                      <TableRowActions
-                        row={row}
-                        editPath={editPath}
-                        viewPath={viewPath}
-                        appsPath={appsPath}
-                        copyPath={copyPath}
-                        deleteAction={deleteAction}
-                        setSelectionState={setSelectionState}
-                        setModalState={setModalState}
-                        managePackage={managePackage}
-                        managePackagePath={managePackagePath}
-                        sendForApproval={sendForApproval}
-                        sendCertificate={sendCertificate}
-                        sendCertificateUnique={sendCertificateUnique}
-                        approvalApi={approvalApi}
-                        isOpen={openDropdownId === row.id}
-                        openDropdownId={openDropdownId}
-                        onToggle={(id) => setOpenDropdownId(openDropdownId === id ? null : id)}
-                      />
+                  {actionItems.length > 0 && (
+                    <td className="bg-main sticky right-0 z-20">
+                      {row.isSuperAdmin ? (
+                        <BsThreeDotsVertical className="text-placeholder text-base cursor-not-allowed" />
+                      ) : (
+                        <BsThreeDotsVertical
+                          className="text-primary hover:text-secondary text-base cursor-pointer"
+                          onClick={() => setOpenDropdownId(openDropdownId === row.id ? null : row.id)}
+                        />
+                      )}
                     </td>
                   )}
+                  <TableRowActions
+                    row={row}
+                    setSelectionState={setSelectionState}
+                    setModalState={setModalState}
+                    actionItems={actionItems}
+                    isOpen={openDropdownId === row.id}
+                    rowIndex={index}
+                    totalRows={rows.length}
+                    onToggle={() => setOpenDropdownId(null)}
+                  />
                 </tr>
               );
             })
@@ -327,7 +316,7 @@ const TableView = ({
             !isLoading &&
             rows.length === 0 && (
               <tr>
-                <td colSpan={headers.length + (selectable ? 1 : 0) + (actions ? 1 : 0)} className="text-center ">
+                <td colSpan={headers.length + (selectable ? 1 : 0) + (actionItems.length > 0 ? 1 : 0)} className="text-center ">
                   <p className="text-secondary p-4 border-b border-primary">No Data Available</p>
                 </td>
               </tr>
@@ -353,7 +342,7 @@ const TableView = ({
               return [...leftPinned, ...unpinned, ...rightPinned].map(renderHeaderCell);
             })()}
 
-            {actions && (
+            {actionItems.length > 0 && (
               <th scope="col" className="p-1 text-sm text-left right-0 text-primary sticky bg-main z-20">
                 Actions
               </th>

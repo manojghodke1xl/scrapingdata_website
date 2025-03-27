@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { IoMdAdd } from 'react-icons/io';
 import TruncatableFieldToolTip from '../../atoms/common/TruncatableFeildToolTip';
 import { formatDateTime } from '../../utils/dateFormats';
@@ -8,6 +9,7 @@ import TableComponent from '../../atoms/table/Table';
 import { deleteNotifAgentApi, updateNotifAgentStatusApi } from '../../apis/notif-agent-apis';
 
 const NotifAgentList = () => {
+  const navigate = useNavigate();
   const { isDarkMode } = useColorContext();
   const [notifAgents, setNotifAgents] = useState([]);
 
@@ -51,6 +53,12 @@ const NotifAgentList = () => {
     { id: 6, label: 'Updated Date', key: 'updatedAt', dataKey: 'updatedAt', formatForExport: (value) => formatDateTime(value) }
   ];
 
+  const actionItems = [
+    { id: 0, label: 'Edit', icon: 'edit', handler: (row) => navigate(`/notification-agent/edit-notification-agent/${row.id}`) },
+    { id: 1, label: 'Copy', icon: 'copy', handler: (row) => navigate(`/notification-agent/duplicate-notification-agent/${row.id}`) },
+    { id: 1, label: 'Delete', icon: 'delete', deleteAction: true }
+  ];
+
   return (
     <div className="p-1 overflow-x-hidden mb-12">
       <TableHeader heading={'Notification Agents'} btn1={true} href1={'/notification-agent/add-notification-agent'} icon1={<IoMdAdd />} btnLabel1={'Add Notification Agent'} />
@@ -61,11 +69,7 @@ const NotifAgentList = () => {
         tableData={(data) => setNotifAgents(data.notifAgents)}
         rows={rows}
         apiUrl={'notif-agent'}
-        tableCountLabel={true}
         pagination={true}
-        actions={true}
-        editPath={'/notification-agent/edit-notification-agent'}
-        copyPath={'/notification-agent/duplicate-notification-agent'}
         search={true}
         filter={true}
         filterCategory={[
@@ -84,10 +88,10 @@ const NotifAgentList = () => {
         modifyStatus={true}
         modifyStatusApi={updateNotifAgentStatusApi}
         deleteBtn={true}
-        deleteAction={true}
         deleteApi={deleteNotifAgentApi}
         deleteLabel={'Delete Notification Agent'}
         deleteMessage={'Are you sure you want to delete this Notification Agent?'}
+        actionItems={actionItems}
       />
     </div>
   );

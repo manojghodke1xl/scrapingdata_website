@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { formatDateTime } from '../../utils/dateFormats';
 import { IoMdAdd } from 'react-icons/io';
 import TableComponent from '../../atoms/table/Table';
@@ -8,6 +9,7 @@ import TruncatableFieldToolTip from '../../atoms/common/TruncatableFeildToolTip'
 import TableHeader from '../../atoms/table/TableHeader';
 
 const FaqCategoryList = () => {
+  const navigate = useNavigate();
   const [faqCategories, setFaqCategories] = useState([]);
 
   const rows = faqCategories.map((faqCategory) => {
@@ -27,6 +29,8 @@ const FaqCategoryList = () => {
     { id: 2, label: 'Updated Date', key: 'updatedAt', dataKey: 'updatedAt', formatForExport: (value) => formatDateTime(value) }
   ];
 
+  const actionItems = [{ id: 0, label: 'Edit', icon: 'edit', handler: (row) => navigate(`/faq-category/edit-faq-category/${row.id}`) }];
+
   return (
     <div className="p-1 overflow-x-hidden mb-12">
       <TableHeader heading={'FAQ Categories'} btn1={true} href1={'/faq-category/add-faq-category'} icon1={<IoMdAdd />} btnLabel1={'Add FAQ Category'} />
@@ -37,11 +41,9 @@ const FaqCategoryList = () => {
         tableData={(data) => setFaqCategories(data.faqCategories)}
         rows={rows}
         apiUrl={'faq-category'}
-        tableCountLabel={true}
         pagination={true}
-        actions={true}
-        editPath={'/faq-category/edit-faq-category'}
         search={true}
+        actionItems={actionItems}
       />
       <NoteComponent note={faqCategoryListNotes} />
     </div>

@@ -1,11 +1,13 @@
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { IoMdAdd } from 'react-icons/io';
 import TableHeader from '../../atoms/table/TableHeader';
 import TableComponent from '../../atoms/table/Table';
-import { useState } from 'react';
 import { formatDateTime } from '../../utils/dateFormats';
 import TruncatableFieldToolTip from '../../atoms/common/TruncatableFeildToolTip';
 
 const BroadcastList = () => {
+  const navigate = useNavigate();
   const [broadcasts, setBroadcasts] = useState([]);
 
   const rows = broadcasts.map((broadcast) => {
@@ -48,6 +50,11 @@ const BroadcastList = () => {
     }
   ];
 
+  const actionItems = [
+    { id: 0, label: 'Edit', icon: 'edit', handler: (row) => navigate(`/broadcast/edit-broadcast/${row.id}`) },
+    { id: 1, label: 'Copy', icon: 'copy', handler: (row) => navigate(`/broadcast/duplicate-broadcast/${row.id}`) }
+  ];
+
   return (
     <div className="p-1 overflow-x-hidden mb-12">
       <TableHeader heading={'Broadcast'} btn1={true} href1={'/broadcast/add-broadcast'} icon1={<IoMdAdd />} btnLabel1={'Add Broadcast'} />
@@ -58,14 +65,11 @@ const BroadcastList = () => {
         tableData={(data) => setBroadcasts(data.broadcasts)}
         rows={rows}
         apiUrl={'broadcast'}
-        tableCountLabel={true}
         pagination={true}
-        actions={true}
-        editPath={'/broadcast/edit-broadcast'}
-        copyPath={'/broadcast/duplicate-broadcast'}
         search={true}
         filter={true}
         filterCategory={[{ id: 0, name: 'Sites' }]}
+        actionItems={actionItems}
       />
     </div>
   );

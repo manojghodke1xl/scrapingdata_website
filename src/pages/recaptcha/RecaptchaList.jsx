@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { IoMdAdd } from 'react-icons/io';
 import { formatDateTime } from '../../utils/dateFormats';
 import TableComponent from '../../atoms/table/Table';
@@ -10,6 +11,7 @@ import TableHeader from '../../atoms/table/TableHeader';
 import useColorContext from '../../hooks/useColorContext';
 
 const RecaptchaList = () => {
+  const navigate = useNavigate();
   const { isDarkMode } = useColorContext();
   const [recaptchas, setRecaptchas] = useState([]);
 
@@ -47,6 +49,12 @@ const RecaptchaList = () => {
     { id: 6, label: 'Updated Date', key: 'updatedAt', dataKey: 'updatedAt', formatForExport: (value) => formatDateTime(value) }
   ];
 
+  const actionItems = [
+    { id: 0, label: 'Edit', icon: 'edit', handler: (row) => navigate(`/recaptcha/edit-recaptcha/${row.id}`) },
+    { id: 1, label: 'Copy', icon: 'copy', handler: (row) => navigate(`/recaptcha/duplicate-recaptcha/${row.id}`) },
+    { id: 2, label: 'Delete', icon: 'delete', deleteAction: true }
+  ];
+
   return (
     <div className="p-1 overflow-x-hidden mb-12">
       <TableHeader heading="reCAPTCHA Settings" btn1="Add reCAPTCHA" href1="/recaptcha/add-recaptcha" icon1={<IoMdAdd />} btnLabel1="Add reCAPTCHA" />
@@ -57,11 +65,7 @@ const RecaptchaList = () => {
         tableData={(data) => setRecaptchas(data.recaptchas)}
         rows={rows}
         apiUrl={'recaptcha'}
-        tableCountLabel={true}
         pagination={true}
-        actions={true}
-        editPath={'/recaptcha/edit-recaptcha'}
-        copyPath={'/recaptcha/duplicate-recaptcha'}
         search={true}
         filter={true}
         filterCategory={[
@@ -82,10 +86,10 @@ const RecaptchaList = () => {
         modifySite={true}
         modifySiteApi={updateRecaptchaSitesApi}
         deleteBtn={true}
-        deleteAction={true}
         deleteApi={deleteRecaptchaApi}
         deleteLabel={'Delete reCAPTCHA'}
         deleteMessage={'Are you sure you want to delete this reCAPTCHA?'}
+        actionItems={actionItems}
       />
       <NoteComponent note={recaptchaListNote} />
     </div>

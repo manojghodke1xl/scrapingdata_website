@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { formatDateTime } from '../../utils/dateFormats';
 import TableComponent from '../../atoms/table/Table';
 import { IoMdAdd } from 'react-icons/io';
@@ -10,6 +11,7 @@ import TableHeader from '../../atoms/table/TableHeader';
 import useColorContext from '../../hooks/useColorContext';
 
 const CouponList = () => {
+  const navigate = useNavigate();
   const { isDarkMode } = useColorContext();
   const [coupons, setCoupons] = useState([]);
 
@@ -49,6 +51,12 @@ const CouponList = () => {
     { id: 7, label: 'Status', key: 'status', dataKey: 'isActive', formatForExport: (value) => (value ? 'Active' : 'Inactive') }
   ];
 
+  const actionItems = [
+    { id: 0, label: 'Edit', icon: 'edit', handler: (row) => navigate(`/coupon/edit-coupon/${row.id}`) },
+    { id: 1, label: 'Copy', icon: 'copy', handler: (row) => navigate(`/coupon/duplicate-coupon/${row.id}`) },
+    { id: 2, label: 'Delete', icon: 'delete', deleteAction: true }
+  ];
+
   return (
     <div className="p-1 overflow-x-hidden mb-12">
       <TableHeader heading={'Coupons'} btn1={true} href1={'/coupon/add-coupon'} icon1={<IoMdAdd />} btnLabel1={'Add Coupon'} />
@@ -59,14 +67,9 @@ const CouponList = () => {
         tableData={(data) => setCoupons(data.coupons)}
         rows={rows}
         apiUrl={'coupon'}
-        tableCountLabel={true}
         pagination={true}
-        actions={true}
-        editPath={'/coupon/edit-coupon'}
-        copyPath={'/coupon/duplicate-coupon'}
         search={true}
         filter={true}
-        deleteAction={true}
         deleteBtn={true}
         filterCategory={[
           { id: 0, name: 'Status' },
@@ -79,6 +82,7 @@ const CouponList = () => {
         deleteLabel={'Delete Coupon'}
         deleteMessage={'Are you sure you want to delete this coupon?'}
         deleteApi={deleteCouponApi}
+        actionItems={actionItems}
       />
       <NoteComponent note={couponListNote} />
     </div>

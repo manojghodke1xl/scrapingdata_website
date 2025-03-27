@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import TableComponent from '../../atoms/table/Table';
 import { formatDateTime } from '../../utils/dateFormats';
 import { IoMdAdd } from 'react-icons/io';
@@ -11,6 +12,7 @@ import TableHeader from '../../atoms/table/TableHeader';
 import useColorContext from '../../hooks/useColorContext';
 
 const GuidesList = () => {
+  const navigate = useNavigate();
   const { isDarkMode } = useColorContext();
   const [guides, setGuides] = useState([]);
 
@@ -44,6 +46,11 @@ const GuidesList = () => {
     { id: 4, label: 'Status', key: 'status', dataKey: 'status', formatForExport: (value) => (value ? 'Active' : 'Inactive') }
   ];
 
+  const actionItems = [
+    { id: 0, label: 'Edit', icon: 'edit', handler: (row) => navigate(`/guides/edit-guide/${row.id}`) },
+    { id: 1, label: 'Copy', icon: 'copy', handler: (row) => navigate(`/guides/duplicate-guide/${row.id}`) }
+  ];
+
   return (
     <div className="p-1 overflow-x-hidden mb-12">
       <TableHeader
@@ -64,11 +71,8 @@ const GuidesList = () => {
         tableData={(data) => setGuides(data.guides)}
         rows={rows}
         apiUrl={'guides'}
-        tableCountLabel={true}
         pagination={true}
         actions={true}
-        editPath={'/guides/edit-guide'}
-        copyPath={'/guides/duplicate-guide'}
         search={true}
         filter={true}
         filterCategory={[
@@ -84,6 +88,7 @@ const GuidesList = () => {
         modifyStatusApi={updateGuideStatusApi}
         modifySite={true}
         modifySiteApi={updateGuideSitesApi}
+        actionItems={actionItems}
       />
       <NoteComponent note={guideListNote} />
     </div>

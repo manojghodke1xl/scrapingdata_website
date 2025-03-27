@@ -3,13 +3,27 @@ import { IoIosArrowDown } from 'react-icons/io';
 import TruncatableFieldToolTip from '../common/TruncatableFeildToolTip';
 import SearchComponent from '../common/SearchComponent';
 
+/**
+ * FilterDropDown Component
+ * A reusable dropdown component with search functionality for filtering and selecting items
+ *
+ * @param {string} name - The label/title of the dropdown
+ * @param {Array} data - Array of objects containing items to display in dropdown
+ * @param {string} selected - Currently selected item's ID
+ * @param {Function} setDataId - Callback function to update selected item's ID
+ */
 const FilterDropDown = ({ name, data, selected, setDataId }) => {
+  // State for controlling dropdown open/close
   const [isOpen, setIsOpen] = useState(false);
+  // State for tracking selected item
   const [selectedSites, setSelectedSites] = useState(null);
+  // State for search functionality
   const [searchQuery, setSearchQuery] = useState('');
 
+  // Filter data based on search query
   const filteredList = data.filter((item) => item.name.toLowerCase().includes(searchQuery.toLowerCase()));
 
+  // Update selected item when props change
   useEffect(() => {
     if (selected) {
       const selectedItem = data?.find((item) => item._id === selected);
@@ -19,6 +33,10 @@ const FilterDropDown = ({ name, data, selected, setDataId }) => {
     }
   }, [selected, data]);
 
+  /**
+   * Handle item selection in dropdown
+   * Toggles selection state and updates parent component
+   */
   const handleCheckboxClick = (site) => {
     if (selectedSites?._id === site._id) {
       setSelectedSites(null);

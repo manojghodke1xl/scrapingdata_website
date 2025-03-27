@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { IoMdAdd } from 'react-icons/io';
 import TableHeader from '../../atoms/table/TableHeader';
 import TableComponent from '../../atoms/table/Table';
@@ -8,6 +9,7 @@ import TruncatableCopyFeild from '../../atoms/common/TruncatableCopyFeild';
 import { deleteUtmBuildersApi } from '../../apis/utm-builder-apis';
 
 const UTMBuilderList = () => {
+  const navigate = useNavigate();
   const [UTMList, setUTMList] = useState([]);
 
   const rows = UTMList.map((utm) => {
@@ -69,6 +71,12 @@ const UTMBuilderList = () => {
     { id: 9, label: 'Updated Date', key: 'updatedAt', dataKey: 'updatedAt', formatForExport: (value) => formatDateTime(value) }
   ];
 
+  const actionItems = [
+    { id: 0, label: 'Edit', icon: 'edit', handler: (row) => navigate(`/utm-builder/edit-utm-builder/${row.id}`) },
+    { id: 1, label: 'Copy', icon: 'copy', handler: (row) => navigate(`/utm-builder/duplicate-utm-builder/${row.id}`) },
+    { id: 2, label: 'Delete', icon: 'delete', deleteAction: true }
+  ];
+
   return (
     <div className="p-1 overflow-x-hidden mb-12">
       <TableHeader heading={'UTM Builder'} btn1={true} href1={'/utm-builder/add-utm-builder'} icon1={<IoMdAdd />} btnLabel1={'Add UTM Builder'} />
@@ -79,17 +87,13 @@ const UTMBuilderList = () => {
         tableData={(data) => setUTMList(data.utmBuilders)}
         rows={rows}
         apiUrl={'utm-builder'}
-        tableCountLabel={true}
         pagination={true}
-        actions={true}
-        editPath={'/utm-builder/edit-utm-builder'}
-        copyPath={'/utm-builder/duplicate-utm-builder'}
         search={true}
         deleteBtn={true}
-        deleteAction={true}
         deleteApi={deleteUtmBuildersApi}
         deleteLabel={'Delete UTM Builder'}
         deleteMessage={'Are you sure you want to delete this UTM Builder?'}
+        actionItems={actionItems}
       />
     </div>
   );

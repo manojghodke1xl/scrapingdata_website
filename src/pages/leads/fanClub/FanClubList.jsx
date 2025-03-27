@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { deleteFanClubApi } from '../../../apis/leads/fanClub-apis';
 import TruncatableFieldToolTip from '../../../atoms/common/TruncatableFeildToolTip';
 import { formatDateTime } from '../../../utils/dateFormats';
@@ -8,6 +9,7 @@ import { IoMdAdd } from 'react-icons/io';
 import TableComponent from '../../../atoms/table/Table';
 
 const FanClubList = () => {
+  const navigate = useNavigate();
   const [fanClubs, setFanClubs] = useState([]);
 
   const rows = fanClubs.map((fanClub) => {
@@ -50,6 +52,11 @@ const FanClubList = () => {
     { id: 13, label: 'Updated At', key: 'updatedAt', dataKey: 'updatedAt', formatForExport: (value) => formatDateTime(value) }
   ];
 
+  const actionItems = [
+    { id: 0, label: 'View', icon: 'view', handler: (row) => navigate(`/fan-club/view-fan-club/${row.id}`) },
+    { id: 1, label: 'Delete', icon: 'delete', deleteAction: true }
+  ];
+
   return (
     <div className="p-1 overflow-x-hidden mb-12">
       <TableHeader
@@ -71,10 +78,7 @@ const FanClubList = () => {
         exportData={fanClubs}
         rows={rows}
         apiUrl={'fan-club'}
-        tableCountLabel={true}
         pagination={true}
-        actions={true}
-        viewPath={'/fan-club/view-fan-club'}
         search={true}
         filter={true}
         filterCategory={[{ id: 0, name: 'Sites' }]}
@@ -83,10 +87,10 @@ const FanClubList = () => {
           { id: 1, name: 'Email' }
         ]}
         deleteBtn={true}
-        deleteAction={true}
         deleteLabel="Delete Fan Club"
         deleteMessage="Are you sure you want to delete this Fan Club?"
         deleteApi={deleteFanClubApi}
+        actionItems={actionItems}
       />
     </div>
   );

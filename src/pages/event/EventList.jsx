@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { formatDateTime } from '../../utils/dateFormats';
 import { IoMdAdd } from 'react-icons/io';
 import TableComponent from '../../atoms/table/Table';
@@ -9,6 +10,7 @@ import TableHeader from '../../atoms/table/TableHeader';
 import { sendCertificateApi } from '../../apis/participant-apis';
 
 const EventList = () => {
+  const navigate = useNavigate();
   const [events, setEvents] = useState([]);
 
   const rows = events.map((event) => {
@@ -16,7 +18,6 @@ const EventList = () => {
     return {
       id: _id,
       exportData: event,
-      bookingId: _id,
       Keys: <TruncatableCopyFeild content={_id} />,
       name: <TruncatableFieldToolTip content={name} />,
       site: <TruncatableFieldToolTip content={`${site?.name} (${site?.host})`} />,
@@ -50,6 +51,30 @@ const EventList = () => {
     { id: 9, label: 'Updated Date', key: 'updatedAt', dataKey: 'updatedAt', formatForExport: (value) => (value ? formatDateTime(value) : 'N/A') }
   ];
 
+  const actionItems = [
+    { id: 0, label: 'Edit', icon: 'edit', handler: (row) => navigate(`/events/edit-event/${row.id}`) },
+    { id: 1, label: 'View', icon: 'view', handler: (row) => navigate(`/events/view-event/${row.id}`) },
+    { id: 2, label: 'Copy', icon: 'copy', handler: (row) => navigate(`/events/duplicate-event/${row.id}`) },
+    { id: 3, label: 'Delete', icon: 'delete', deleteAction: true },
+    { id: 4, label: 'Manage Package', icon: 'managePackage', handler: (row) => navigate(`/packages/package-list/${row.id}`) },
+    {
+      id: 5,
+      label: 'Send All Certificates',
+      icon: 'send',
+      handler: async (row) => {
+        if (row.certificate) await sendCertificateApi(row.id, false);
+      }
+    },
+    {
+      id: 6,
+      label: 'Send Unique Certificates',
+      icon: 'send',
+      handler: async (row) => {
+        if (row.certificate) await sendCertificateApi(row.id, true);
+      }
+    }
+  ];
+
   return (
     <div className="p-1 overflow-x-hidden mb-12">
       <TableHeader heading={'Events'} btn1={'Add Event'} href1={'/events/add-event'} icon1={<IoMdAdd />} btnLabel1={'Add Event'} />
@@ -60,14 +85,7 @@ const EventList = () => {
         tableData={(data) => setEvents(data.events)}
         rows={rows}
         apiUrl={'events'}
-        tableCountLabel={true}
         pagination={true}
-        actions={true}
-        editPath={'/events/edit-event'}
-        viewPath={'/events/view-event'}
-        copyPath={'/events/duplicate-event'}
-        managePackage={true}
-        managePackagePath={'/packages/package-list'}
         search={true}
         filter={true}
         filterCategory={[
@@ -80,13 +98,10 @@ const EventList = () => {
         ]}
         searchCategory={[{ id: 1, name: 'Name' }]}
         deleteBtn={true}
-        deleteAction={true}
         deleteApi={deleteEventApi}
         deleteLabel={'Delete Event'}
         deleteMessage={'Are you sure you want to delete this event?'}
-        sendCertificate={'ID'}
-        sendCertificateUnique={true}
-        approvalApi={sendCertificateApi}
+        actionItems={actionItems}
       />
     </div>
   );

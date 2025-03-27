@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { deleteVendorApi } from '../../../apis/leads/vendor-apis';
 import TruncatableFieldToolTip from '../../../atoms/common/TruncatableFeildToolTip';
 import { formatDateTime } from '../../../utils/dateFormats';
@@ -8,6 +9,7 @@ import { IoMdAdd } from 'react-icons/io';
 import TableComponent from '../../../atoms/table/Table';
 
 const VendorList = () => {
+  const navigate = useNavigate();
   const [vendors, setVendors] = useState([]);
 
   const rows = vendors.map((vendor) => {
@@ -50,6 +52,11 @@ const VendorList = () => {
     { id: 13, label: 'Updated At', key: 'updatedAt', dataKey: 'updatedAt', formatForExport: (value) => formatDateTime(value) }
   ];
 
+  const actionItems = [
+    { id: 0, label: 'View', icon: 'view', handler: (row) => navigate(`/vendor/view-vendor/${row.id}`) },
+    { id: 1, label: 'Delete', icon: 'delete', deleteAction: true }
+  ];
+
   return (
     <div className="p-1 overflow-x-hidden mb-12">
       <TableHeader
@@ -71,10 +78,7 @@ const VendorList = () => {
         exportData={vendors}
         rows={rows}
         apiUrl={'vendor'}
-        tableCountLabel={true}
         pagination={true}
-        actions={true}
-        viewPath={'/vendor/view-vendor'}
         search={true}
         filter={true}
         filterCategory={[{ id: 0, name: 'Sites' }]}
@@ -83,10 +87,10 @@ const VendorList = () => {
           { id: 1, name: 'Email' }
         ]}
         deleteBtn={true}
-        deleteAction={true}
         deleteLabel="Delete Vendor"
         deleteMessage="Are you sure you want to delete this vendor?"
         deleteApi={deleteVendorApi}
+        actionItems={actionItems}
       />
     </div>
   );

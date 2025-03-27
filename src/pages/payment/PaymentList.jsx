@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import TruncatableFieldToolTip from '../../atoms/modal/TruncatableFeildModel';
 import { formatDateTime } from '../../utils/dateFormats';
 import TableComponent from '../../atoms/table/Table';
@@ -6,6 +7,7 @@ import { AiOutlineApi } from 'react-icons/ai';
 import TableHeader from '../../atoms/table/TableHeader';
 
 const PaymentList = () => {
+  const navigate = useNavigate();
   const [payments, setPayments] = useState([]);
 
   const rows = payments.map((payment) => {
@@ -64,6 +66,8 @@ const PaymentList = () => {
     { id: 8, label: 'Updated Date', key: 'updatedAt', dataKey: 'updatedAt', formatForExport: (value) => formatDateTime(value) }
   ];
 
+  const actionItems = [{ id: 0, label: 'View', icon: 'view', handler: (row) => navigate(`/payments/payment/${row.id}`) }];
+
   return (
     <div className="p-1 overflow-x-hidden mb-12">
       <TableHeader heading="Payments" btn1={true} href1={'/payments/payment-integration'} icon1={<AiOutlineApi />} btnLabel1={'API Integration'} />
@@ -74,10 +78,7 @@ const PaymentList = () => {
         tableData={(data) => setPayments(data.payments)}
         rows={rows}
         apiUrl={'payments'}
-        tableCountLabel={true}
         pagination={true}
-        actions={true}
-        viewPath={'/payments/payment'}
         search={true}
         filter={true}
         filterCategory={[
@@ -85,6 +86,7 @@ const PaymentList = () => {
           { id: 2, name: 'Status' }
         ]}
         searchCategory={[{ id: 1, name: 'Channel' }]}
+        actionItems={actionItems}
       />
     </div>
   );

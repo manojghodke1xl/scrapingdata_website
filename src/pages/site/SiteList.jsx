@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { formatDateTime } from '../../utils/dateFormats';
 import { IoMdAdd } from 'react-icons/io';
 import TableComponent from '../../atoms/table/Table';
@@ -12,6 +13,7 @@ import useColorContext from '../../hooks/useColorContext';
 import TableHeader from '../../atoms/table/TableHeader';
 
 const SiteList = () => {
+  const navigate = useNavigate();
   const { isDarkMode } = useColorContext();
   const [sites, setSites] = useState([]);
   const {
@@ -68,6 +70,11 @@ const SiteList = () => {
     }
   ];
 
+  const actionItems = [
+    { id: 0, label: 'Edit', icon: 'edit', handler: (row) => navigate(`/site/edit-site/${row.id}`) },
+    { id: 1, label: 'Apps', icon: 'apps', handler: (row) => navigate(`/apps/integration/${row.id}`) }
+  ];
+
   return (
     <div className="p-1 overflow-x-hidden mb-12">
       <TableHeader heading={'All Sites'} btn1={true} href1={'/site/add-site'} icon1={<IoMdAdd />} btnLabel1={'Add Site'} isSuperAdmin={isSuperAdmin} />
@@ -78,11 +85,7 @@ const SiteList = () => {
         tableData={(data) => setSites(data.sites)}
         rows={rows}
         apiUrl={'sites'}
-        tableCountLabel={true}
         pagination={true}
-        actions={true}
-        editPath={'/site/edit-site'}
-        appsPath={'/apps/integration'}
         search={true}
         filter={true}
         filterCategory={[{ id: 2, name: 'Status' }]}
@@ -94,6 +97,7 @@ const SiteList = () => {
         modifyStatus={true}
         modifyStatusApi={updateSiteStatusApi}
         bulkSiteOpenAction={sites.map((site) => site.host)}
+        actionItems={actionItems}
       />
       <NoteComponent note={websiteListNote} />
     </div>

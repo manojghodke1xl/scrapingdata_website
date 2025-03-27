@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { formatDateTime } from '../../utils/dateFormats';
 import TableComponent from '../../atoms/table/Table';
 import NoteComponent from '../../atoms/common/NoteComponent';
@@ -10,6 +11,7 @@ import TableHeader from '../../atoms/table/TableHeader';
 import { deleteEnquiryApi } from '../../apis/leads/enquiry-apis';
 
 const EnquiryList = () => {
+  const navigate = useNavigate();
   const [enquiries, setEnquiries] = useState([]);
 
   const rows = enquiries.map((enquiry) => {
@@ -54,6 +56,11 @@ const EnquiryList = () => {
     { id: 14, label: 'Updated At', key: 'updatedAt', dataKey: 'updatedAt', formatForExport: (value) => formatDateTime(value) }
   ];
 
+  const actionItems = [
+    { id: 0, label: 'View', icon: 'view', handler: (row) => navigate(`/enquiry/view-enquiry/${row.id}`) },
+    { id: 1, label: 'Delete', icon: 'delete', deleteAction: true }
+  ];
+
   return (
     <div className="p-1 overflow-x-hidden mb-12">
       <TableHeader
@@ -75,10 +82,7 @@ const EnquiryList = () => {
         exportData={enquiries}
         rows={rows}
         apiUrl={'enquiry'}
-        tableCountLabel={true}
         pagination={true}
-        actions={true}
-        viewPath={'/enquiry/view-enquiry'}
         search={true}
         filter={true}
         filterCategory={[{ id: 0, name: 'Sites' }]}
@@ -87,10 +91,10 @@ const EnquiryList = () => {
           { id: 1, name: 'Email' }
         ]}
         deleteBtn={true}
-        deleteAction={true}
         deleteLabel="Delete Enquiry"
         deleteMessage="Are you sure you want to delete this enquiry?"
         deleteApi={deleteEnquiryApi}
+        actionItems={actionItems}
       />
       <NoteComponent note={enquiryListNote} />
     </div>

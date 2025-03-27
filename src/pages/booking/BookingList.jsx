@@ -80,7 +80,6 @@ const BookingList = () => {
         tableData={(data) => setBookings(data.bookings)}
         rows={rows}
         apiUrl={'booking'}
-        tableCountLabel={true}
         pagination={true}
         search={true}
       />

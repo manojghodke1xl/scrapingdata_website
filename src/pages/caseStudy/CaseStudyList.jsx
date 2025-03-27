@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { formatDateTime } from '../../utils/dateFormats';
 import { IoMdAdd } from 'react-icons/io';
 import TableComponent from '../../atoms/table/Table';
@@ -11,6 +12,7 @@ import TableHeader from '../../atoms/table/TableHeader';
 import useColorContext from '../../hooks/useColorContext';
 
 const CaseStudyList = () => {
+  const navigate = useNavigate();
   const { isDarkMode } = useColorContext();
   const [caseStudies, setCaseStudies] = useState([]);
 
@@ -62,6 +64,11 @@ const CaseStudyList = () => {
     { id: 4, label: 'Status', key: 'status', dataKey: 'isActive', formatForExport: (value) => (value ? 'Active' : 'Inactive') }
   ];
 
+  const actionItems = [
+    { id: 0, label: 'Edit', icon: 'edit', handler: (row) => navigate(`/case-study/edit-case-study/${row.id}`) },
+    { id: 1, label: 'Copy', icon: 'copy', handler: (row) => navigate(`/case-study/duplicate-case-study/${row.id}`) }
+  ];
+
   return (
     <div className="p-1 overflow-x-hidden mb-12">
       <TableHeader
@@ -82,11 +89,7 @@ const CaseStudyList = () => {
         tableData={(data) => setCaseStudies(data.casestudies)}
         rows={rows}
         apiUrl={'casestudies'}
-        tableCountLabel={true}
         pagination={true}
-        actions={true}
-        editPath={'/case-study/edit-case-study'}
-        copyPath={'/case-study/duplicate-case-study'}
         search={true}
         filter={true}
         filterCategory={[
@@ -102,6 +105,7 @@ const CaseStudyList = () => {
         modifyStatusApi={updateCaseStudyStatusApi}
         modifySite={true}
         modifySiteApi={updateCaseStudySitesApi}
+        actionItems={actionItems}
       />
       <NoteComponent note={casestudyListNote} />
     </div>

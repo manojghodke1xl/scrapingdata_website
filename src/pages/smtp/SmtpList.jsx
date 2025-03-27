@@ -1,6 +1,7 @@
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { IoMdAdd } from 'react-icons/io';
 import TableComponent from '../../atoms/table/Table';
-import { useState } from 'react';
 import { formatDateTime } from '../../utils/dateFormats';
 import NoteComponent from '../../atoms/common/NoteComponent';
 import { listSMTPNote } from './SmtpNotes';
@@ -9,6 +10,7 @@ import TableHeader from '../../atoms/table/TableHeader';
 import { deleteSmtpApi } from '../../apis/smtp-apis';
 
 const SmtpList = () => {
+  const navigate = useNavigate();
   const [smtps, setSmtps] = useState([]);
 
   const rows = smtps.map((smtp) => {
@@ -30,6 +32,12 @@ const SmtpList = () => {
     { id: 3, label: 'Updated Date', key: 'updatedAt', dataKey: 'updatedAt', formatForExport: (value) => formatDateTime(value) }
   ];
 
+  const actionItems = [
+    { id: 0, label: 'Edit', icon: 'edit', handler: (row) => navigate(`/smtp/edit-smtp/${row.id}`) },
+    { id: 1, label: 'Copy', icon: 'copy', handler: (row) => navigate(`/smtp/duplicate-smtp/${row.id}`) },
+    { id: 2, label: 'Delete', icon: 'delete', deleteAction: true }
+  ];
+
   return (
     <div className="p-1 overflow-x-hidden mb-12">
       <TableHeader heading={'SMTP Settings'} btn1={true} href1={'/smtp/add-smtp'} icon1={<IoMdAdd />} btnLabel1={'Add SMTP'} />
@@ -40,21 +48,17 @@ const SmtpList = () => {
         tableData={(data) => setSmtps(data.smtps)}
         rows={rows}
         apiUrl={'smtp'}
-        tableCountLabel={true}
         pagination={true}
-        actions={true}
-        editPath={'/smtp/edit-smtp'}
-        copyPath={'/smtp/duplicate-smtp'}
         search={true}
         searchCategory={[
           { id: 0, name: 'Name' },
           { id: 1, name: 'Host' }
         ]}
         deleteBtn={true}
-        deleteAction={true}
         deleteApi={deleteSmtpApi}
         deleteLabel={'Delete SMTP'}
         deleteMessage={'Are you sure you want to delete this SMTP?'}
+        actionItems={actionItems}
       />
       <NoteComponent note={listSMTPNote} />
     </div>

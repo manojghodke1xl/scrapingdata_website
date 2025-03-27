@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { IoMdAdd } from 'react-icons/io';
 import { IoMdRefresh } from 'react-icons/io';
 import TableComponent from '../../../atoms/table/Table';
@@ -9,6 +10,7 @@ import TableHeader from '../../../atoms/table/TableHeader';
 import useColorContext from '../../../hooks/useColorContext';
 
 const WhatsAppTemplateList = () => {
+  const navigate = useNavigate();
   const { isDarkMode } = useColorContext();
   const [whatsAppTemplates, setWhatsAppTemplates] = useState([]);
   const [fetchRefresh, setFetchRefresh] = useState(false);
@@ -68,6 +70,12 @@ const WhatsAppTemplateList = () => {
     { id: 6, label: 'Updated Date', key: 'updatedAt', dataKey: 'updatedAt', formatForExport: (value) => formatDateTime(value) }
   ];
 
+  const actionItems = [
+    { id: 0, label: 'Edit', icon: 'edit', handler: (row) => navigate(`/templates/edit-whatsapp-template/${row.id}`) },
+    { id: 1, label: 'Copy', icon: 'copy', handler: (row) => navigate(`/templates/duplicate-whatsapp-template/${row.id}`) },
+    { id: 2, label: 'Delete', icon: 'delete', deleteAction: true }
+  ];
+
   return (
     <div className="p-1 overflow-x-hidden mb-12">
       <TableHeader heading={'WhatsApp Templates'} btn1={true} href1={'/templates/add-whatsapp-template'} icon1={<IoMdAdd />} btnLabel1={'Add WhatsApp Template'} />
@@ -78,17 +86,12 @@ const WhatsAppTemplateList = () => {
         tableData={(data) => setWhatsAppTemplates(data.whatsappTemplates)}
         rows={rows}
         apiUrl={'template/whatsapp'}
-        tableCountLabel={true}
         pagination={true}
         search={true}
         searchCategory={[{ id: 0, name: 'Name' }]}
         filter={true}
         filterCategory={[{ id: 0, name: 'Sites' }]}
-        actions={true}
-        editPath={'/templates/edit-whatsapp-template'}
-        copyPath={'/templates/duplicate-whatsapp-template'}
         deleteBtn={true}
-        deleteAction={true}
         deleteApi={deleteWhatsAppTemplateApi}
         deleteLabel={'Delete WhatsApp Template'}
         deleteMessage={'Are you sure you want to delete this WhatsApp template?'}
@@ -96,6 +99,7 @@ const WhatsAppTemplateList = () => {
         approvalApi={getWhatsAppTemplateApprovalApi}
         fetchRefresh={fetchRefresh}
         isWhatsAppTemplate={true}
+        actionItems={actionItems}
       />
     </div>
   );

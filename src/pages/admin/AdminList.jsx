@@ -1,6 +1,7 @@
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { IoMdAdd } from 'react-icons/io';
 import TableComponent from '../../atoms/table/Table';
-import { useState } from 'react';
 import TruncatableFieldToolTip from '../../atoms/common/TruncatableFeildToolTip';
 import { formatDateTime } from '../../utils/dateFormats';
 import useGlobalContext from '../../hooks/useGlobalContext';
@@ -15,6 +16,7 @@ const AdminList = () => {
   const {
     auth: { allSites }
   } = useGlobalContext();
+  const navigate = useNavigate();
   const [admins, setAdmins] = useState([]);
 
   const rows = admins.map((admin) => {
@@ -82,6 +84,8 @@ const AdminList = () => {
     }
   ];
 
+  const actionItems = [{ id: 0, label: 'Edit', icon: 'edit', handler: (row) => navigate(`/admin/edit-admin${row.id}`) }];
+
   return (
     <div className="p-1 overflow-x-hidden mb-12">
       <TableHeader heading={'Admins'} btn1={true} href1={'/admin/add-admin'} icon1={<IoMdAdd />} btnLabel1={'Add Admin'} />
@@ -92,10 +96,7 @@ const AdminList = () => {
         tableData={(data) => setAdmins(data.admins)}
         rows={rows}
         apiUrl={'admins'}
-        tableCountLabel={true}
         pagination={true}
-        actions={true}
-        editPath={'/admin/edit-admin'}
         search={true}
         filter={true}
         filterCategory={[
@@ -113,6 +114,7 @@ const AdminList = () => {
         adminStatus={true}
         modifyStatus={true}
         modifyStatusApi={updateAdminStatusApi}
+        actionItems={actionItems}
       />
       <NoteComponent note={adminListNote} />
     </div>

@@ -38,7 +38,6 @@ const WebinarLinkList = () => {
         tableData={(data) => setWebinarLinks(data.webinarLinks)}
         rows={rows}
         apiUrl={'webinar/links'}
-        tableCountLabel={true}
         pagination={true}
         search={true}
         filter={true}

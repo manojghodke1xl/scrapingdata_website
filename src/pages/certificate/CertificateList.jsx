@@ -5,8 +5,10 @@ import TableHeader from '../../atoms/table/TableHeader';
 import { IoMdAdd } from 'react-icons/io';
 import TableComponent from '../../atoms/table/Table';
 import { deleteCertificatesApi } from '../../apis/certificate-apis';
+import { useNavigate } from 'react-router-dom';
 
 const CertificateList = () => {
+  const navigate = useNavigate();
   const [certificates, setCertificates] = useState([]);
 
   const rows = certificates.map((cetificate) => {
@@ -26,6 +28,12 @@ const CertificateList = () => {
     { id: 2, label: 'Updated Date', key: 'updatedAt', dataKey: 'updatedAt', formatForExport: (value) => formatDateTime(value) }
   ];
 
+  const actionItems = [
+    { id: 0, label: 'Edit', icon: 'edit', handler: (row) => navigate(`/certificates/edit-certificate/${row.id}`) },
+    { id: 1, label: 'Copy', icon: 'copy', handler: (row) => navigate(`/certificates/duplicate-certificate/${row.id}`) },
+    { id: 2, label: 'Delete', icon: 'delete', deleteAction: true }
+  ];
+
   return (
     <div className="p-1 overflow-x-hidden mb-12">
       <TableHeader heading={'Certificates'} btn1={true} href1={'/certificates/add-certificate'} icon1={<IoMdAdd />} btnLabel1={'Add Certificate'} />
@@ -36,17 +44,13 @@ const CertificateList = () => {
         tableData={(data) => setCertificates(data.certificates)}
         rows={rows}
         apiUrl={'certificate'}
-        tableCountLabel={true}
         pagination={true}
-        actions={true}
-        editPath={'/certificates/edit-certificate'}
-        copyPath={'/certificates/duplicate-certificate'}
         deleteBtn={true}
-        deleteAction={true}
         deleteLabel={'Delete Certificate'}
         deleteMessage={'Are you sure you want to delete this Certificate?'}
         deleteApi={deleteCertificatesApi}
         search={true}
+        actionItems={actionItems}
       />
     </div>
   );

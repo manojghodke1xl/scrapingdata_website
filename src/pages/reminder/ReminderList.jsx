@@ -1,11 +1,13 @@
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { IoMdAdd } from 'react-icons/io';
 import TableHeader from '../../atoms/table/TableHeader';
 import TableComponent from '../../atoms/table/Table';
-import { useState } from 'react';
 import { formatDateTime } from '../../utils/dateFormats';
 import TruncatableFieldToolTip from '../../atoms/common/TruncatableFeildToolTip';
 
 const ReminderList = () => {
+  const navigate = useNavigate();
   const [reminders, setReminders] = useState([]);
 
   const rows = reminders.map((reminder) => {
@@ -31,6 +33,11 @@ const ReminderList = () => {
     { id: 5, label: 'Updated Date', key: 'updatedAt', dataKey: 'updatedAt', formatForExport: (value) => formatDateTime(value) }
   ];
 
+  const actionItems = [
+    { id: 0, label: 'Edit', icon: 'edit', handler: (row) => navigate(`/reminder/edit-reminder/${row.id}`) },
+    { id: 2, label: 'Copy', icon: 'copy', handler: (row) => navigate(`/reminder/duplicate-reminder/${row.id}`) }
+  ];
+
   return (
     <div className="p-1 overflow-x-hidden mb-12">
       <TableHeader heading={'Reminders'} btn1={true} href1={'/reminder/add-reminder'} icon1={<IoMdAdd />} btnLabel1={'Add Reminders'} />
@@ -41,14 +48,11 @@ const ReminderList = () => {
         tableData={(data) => setReminders(data.reminders)}
         rows={rows}
         apiUrl={'reminder'}
-        tableCountLabel={true}
         pagination={true}
-        actions={true}
-        editPath={'/reminder/edit-reminder'}
-        copyPath={'/reminder/duplicate-reminder'}
         search={true}
         filter={true}
         filterCategory={[{ id: 0, name: 'Sites' }]}
+        actionItems={actionItems}
       />
     </div>
   );

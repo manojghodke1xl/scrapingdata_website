@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { IoMdAdd } from 'react-icons/io';
 import { formatDateTime } from '../../utils/dateFormats';
 import TableComponent from '../../atoms/table/Table';
@@ -10,6 +11,7 @@ import TableHeader from '../../atoms/table/TableHeader';
 import useColorContext from '../../hooks/useColorContext';
 
 const TestimonialList = () => {
+  const navigate = useNavigate();
   const { isDarkMode } = useColorContext();
   const [testimonials, setTestimonials] = useState([]);
 
@@ -43,6 +45,11 @@ const TestimonialList = () => {
     { id: 4, label: 'Updated Date', key: 'updatedAt', dataKey: 'updatedAt', formatForExport: (value) => formatDateTime(value) }
   ];
 
+  const actionItems = [
+    { id: 0, label: 'Edit', icon: 'edit', handler: (row) => navigate(`/testimonials/edit-testimonial/${row.id}`) },
+    { id: 1, label: 'Copy', icon: 'copy', handler: (row) => navigate(`/testimonials/duplicate-testimonial/${row.id}`) }
+  ];
+
   return (
     <div className="p-1 overflow-x-hidden mb-12">
       <TableHeader heading={'Testimonials'} btn1={true} href1={'/testimonials/add-testimonial'} icon1={<IoMdAdd />} btnLabel1={'Add Testimonial'} />
@@ -53,11 +60,7 @@ const TestimonialList = () => {
         tableData={(data) => setTestimonials(data.testimonials)}
         rows={rows}
         apiUrl={'testimonial'}
-        tableCountLabel={true}
         pagination={true}
-        actions={true}
-        editPath={'/testimonials/edit-testimonial'}
-        copyPath={'/testimonials/duplicate-testimonial'}
         search={true}
         filter={true}
         filterCategory={[
@@ -66,13 +69,14 @@ const TestimonialList = () => {
         ]}
         statuses={[
           { id: 0, name: 'Active', bgColor: '#ECFDF3', color: '#027948', dotColor: '#12B76A' },
-          { id: 2, name: 'Inactive', bgColor: '#F2F4F7', color: '#344054', dotColor: '#667085' }
+          { id: 1, name: 'Inactive', bgColor: '#F2F4F7', color: '#344054', dotColor: '#667085' }
         ]}
-        searchCategory={[{ id: 1, name: 'Name' }]}
+        searchCategory={[{ id: 0, name: 'Name' }]}
         modifyStatus={true}
         modifyStatusApi={updateTestimonialStatusApi}
         modifySite={true}
         modifySiteApi={updateTestimonialSitesApi}
+        actionItems={actionItems}
       />
       <NoteComponent note={testimonialListNote} />
     </div>

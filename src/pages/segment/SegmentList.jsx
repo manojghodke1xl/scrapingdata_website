@@ -53,11 +53,7 @@ const SegmentList = () => {
         tableData={(data) => setSites(data.sites)}
         rows={rows}
         apiUrl={'sites'}
-        tableCountLabel={true}
         pagination={true}
-        actions={true}
-        editPath={'/site/edit-site'}
-        appsPath={'/apps/integration'}
         search={true}
         filter={true}
         filterCategory={[{ id: 2, name: 'Status' }]}

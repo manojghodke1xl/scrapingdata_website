@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { formatDateTime } from '../../utils/dateFormats';
 import TableComponent from '../../atoms/table/Table';
 import TruncatableFieldToolTip from '../../atoms/common/TruncatableFeildToolTip';
@@ -6,6 +7,7 @@ import TableHeader from '../../atoms/table/TableHeader';
 import useColorContext from '../../hooks/useColorContext';
 
 const OrderPaymentList = () => {
+  const navigate = useNavigate();
   const { isDarkMode } = useColorContext();
   const [orderPayments, setOrderPayments] = useState([]);
 
@@ -127,6 +129,8 @@ const OrderPaymentList = () => {
     { id: 14, label: 'Updated Date', key: 'updatedAt', dataKey: 'updatedAt', formatForExport: (value) => formatDateTime(value) }
   ];
 
+  const actionItems = [{ id: 0, label: 'View', icon: 'view', handler: (row) => navigate(`/payments/view-order/${row.id}`) }];
+
   return (
     <div className="p-1 overflow-x-hidden mb-12">
       <TableHeader heading={'Order Payments'} />
@@ -137,13 +141,11 @@ const OrderPaymentList = () => {
         tableData={(data) => setOrderPayments(data.orderPayments)}
         rows={rows}
         apiUrl={'order-payments'}
-        tableCountLabel={true}
         pagination={true}
         search={true}
         filter={true}
         filterCategory={[{ id: 0, name: 'Sites' }]}
-        actions={true}
-        viewPath={'/payments/view-order'}
+        actionItems={actionItems}
       />
     </div>
   );

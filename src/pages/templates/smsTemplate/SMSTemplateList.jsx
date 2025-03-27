@@ -1,12 +1,14 @@
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { IoMdAdd } from 'react-icons/io';
 import TableComponent from '../../../atoms/table/Table';
-import { useState } from 'react';
 import { formatDateTime } from '../../../utils/dateFormats';
 import { deleteSmsTemplateApi } from '../../../apis/templates/template-apis';
 import TruncatableFieldToolTip from '../../../atoms/common/TruncatableFeildToolTip';
 import TableHeader from '../../../atoms/table/TableHeader';
 
 const SMSTemplateList = () => {
+  const navigate = useNavigate();
   const [SMSTemplates, setSMSTemplates] = useState([]);
 
   const rows = SMSTemplates.map((smsTemplate) => {
@@ -28,6 +30,12 @@ const SMSTemplateList = () => {
     { id: 3, label: 'Updated Date', key: 'updatedAt', dataKey: 'updatedAt', formatForExport: (value) => formatDateTime(value) }
   ];
 
+  const actionItems = [
+    { id: 0, label: 'Edit', icon: 'edit', handler: (row) => navigate(`/templates/edit-sms-template/${row.id}`) },
+    { id: 1, label: 'Copy', icon: 'copy', handler: (row) => navigate(`/templates/duplicate-sms-template/${row.id}`) },
+    { id: 2, label: 'Delete', icon: 'delete', deleteAction: true }
+  ];
+
   return (
     <div className="p-1 overflow-x-hidden mb-12">
       <TableHeader heading={'SMS Templates'} btn1={true} href1={'/templates/add-sms-template'} icon1={<IoMdAdd />} btnLabel1={'Add SMS Template'} />
@@ -38,20 +46,16 @@ const SMSTemplateList = () => {
         tableData={(data) => setSMSTemplates(data.smsTemplates)}
         rows={rows}
         apiUrl={'template/sms'}
-        tableCountLabel={true}
         pagination={true}
         search={true}
         searchCategory={[{ id: 0, name: 'Name' }]}
         filter={true}
         filterCategory={[{ id: 0, name: 'Sites' }]}
-        actions={true}
-        editPath={'/templates/edit-sms-template'}
-        copyPath={'/templates/duplicate-sms-template'}
         deleteBtn={true}
-        deleteAction={true}
         deleteApi={deleteSmsTemplateApi}
         deleteLabel={'Delete SMS Template'}
         deleteMessage={'Are you sure you want to delete this SMS template?'}
+        actionItems={actionItems}
       />
     </div>
   );

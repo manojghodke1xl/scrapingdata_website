@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import TruncatableFieldToolTip from '../../../atoms/common/TruncatableFeildToolTip';
 import { formatDateTime } from '../../../utils/dateFormats';
 import TableHeader from '../../../atoms/table/TableHeader';
@@ -8,6 +9,7 @@ import TableComponent from '../../../atoms/table/Table';
 import { deleteAdvertisementApi } from '../../../apis/leads/advertisement-apis';
 
 const AdvertisementList = () => {
+  const navigate = useNavigate();
   const [advertisements, setAdvertisements] = useState([]);
 
   const rows = advertisements.map((advertisement) => {
@@ -50,6 +52,11 @@ const AdvertisementList = () => {
     { id: 13, label: 'Updated At', key: 'updatedAt', dataKey: 'updatedAt', formatForExport: (value) => formatDateTime(value) }
   ];
 
+  const actionItems = [
+    { id: 0, label: 'View', icon: 'view', handler: (row) => navigate(`/advertisement/view-advertisement/${row.id}`) },
+    { id: 1, label: 'Delete', icon: 'delete', deleteAction: true }
+  ];
+
   return (
     <div className={`p-1 overflow-x-hidden mb-12`}>
       <TableHeader
@@ -71,10 +78,7 @@ const AdvertisementList = () => {
         exportData={advertisements}
         rows={rows}
         apiUrl={'advertisement'}
-        tableCountLabel={true}
         pagination={true}
-        actions={true}
-        viewPath={'/advertisement/view-advertisement'}
         search={true}
         filter={true}
         filterCategory={[{ id: 0, name: 'Sites' }]}
@@ -83,10 +87,10 @@ const AdvertisementList = () => {
           { id: 1, name: 'Email' }
         ]}
         deleteBtn={true}
-        deleteAction={true}
         deleteLabel="Delete Advertisement"
         deleteMessage="Are you sure you want to delete this Advertisement?"
         deleteApi={deleteAdvertisementApi}
+        actionItems={actionItems}
       />
     </div>
   );

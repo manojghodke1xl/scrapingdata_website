@@ -25,29 +25,16 @@ import useLayout from '../../hooks/useLayout';
  * - Column visibility toggle
  * - Server-side pagination
  * - Export functionality
- * - Bulk actions (delete, status update, site update)
  */
 const TableComponent = ({
   selectable,
   siteModule,
   tableData,
   apiUrl,
-  tableCountLabel,
+  tableCountLabel = true,
   headers,
   rows,
-  actions,
   pagination,
-  editPath,
-  viewPath,
-  appsPath,
-  copyPath,
-  managePackage,
-  managePackagePath,
-  sendForApproval,
-  sendCertificate,
-  sendCertificateUnique,
-  approvalApi,
-  deleteAction,
   search,
   filter,
   exportBtn = true,
@@ -75,7 +62,8 @@ const TableComponent = ({
   totalCount,
   onPageChange,
   onItemsPerPageChange,
-  bulkSiteOpenAction = []
+  bulkSiteOpenAction = [],
+  actionItems = []
 }) => {
   const {
     auth: { allSites },
@@ -574,11 +562,11 @@ const TableComponent = ({
 
   return (
     <div
-      className={`overflow-hidden text-sm transition-all duration-300 ${
+      className={`text-sm transition-all duration-300 ${
         isExpanded ? 'fixed inset-0 z-50 bg-main p-4 overflow-y-auto' : layoutSize === 'small' ? 'px-1' : layoutSize === 'large' ? 'px-8' : 'px-4'
       }`}
     >
-      <div className={`my-1 rounded-xl border border-primary overflow-hidden ${isExpanded ? 'flex flex-col' : ''}`}>
+      <div className={`my-1 rounded-xl border border-primary ${isExpanded ? 'flex flex-col' : ''}`}>
         <div className="w-full flex flex-row sm:flex-row flex-wrap gap-y-2 justify-between items-center px-1 py-1 border-b border-primary">
           <TableFilter
             search={search}
@@ -651,24 +639,12 @@ const TableComponent = ({
             handleRowCheckboxChange={handleRowCheckboxChange}
             headers={updatedHeaders}
             rows={rows}
-            actions={actions}
             isLoading={isLoading}
-            editPath={editPath}
-            viewPath={viewPath}
-            appsPath={appsPath}
-            copyPath={copyPath}
-            deleteAction={deleteAction}
             tableState={tableState}
             modalState={modalState}
             setModalState={setModalState}
             deleteLabel={deleteLabel}
             deleteMessage={deleteMessage}
-            managePackage={managePackage}
-            managePackagePath={managePackagePath}
-            sendForApproval={sendForApproval}
-            sendCertificate={sendCertificate}
-            sendCertificateUnique={sendCertificateUnique}
-            approvalApi={approvalApi}
             handleDragStart={handleDragStart}
             handleDragOver={handleDragOver}
             handleDrop={handleDrop}
@@ -682,6 +658,7 @@ const TableComponent = ({
             pinnedColumns={pinnedColumns}
             hiddenColumns={hiddenColumns}
             isExpanded={isExpanded}
+            actionItems={actionItems}
           />
         </div>
         <div className="w-full">

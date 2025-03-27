@@ -1,7 +1,7 @@
 import { getMethodCall, postMethodCall } from './api-handler';
 
 export const sendCertificateApi = async (id, unique, bookingId) => {
-  return await getMethodCall(`${import.meta.env.VITE_API_URL}/event/send-certificates/${id}?${bookingId ? `bookingId=${id}` : ''}&unique=${unique}`);
+  return await getMethodCall(`${import.meta.env.VITE_API_URL}/event/send-certificates/${id}?${bookingId ? `bookingId=${bookingId}` : ''}&unique=${unique}`);
 };
 
 export const addParticipantApi = async (data) => {

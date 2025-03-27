@@ -3,13 +3,29 @@ import { FaEye } from 'react-icons/fa';
 import DropDown from '../formFields/DropDown';
 import MultiSelectCheckbox from '../formFields/MultiSelectCheckBox';
 
+/**
+ * FollowUpItem Component
+ * Renders a follow-up configuration item with options for timing, channels, and templates
+ *
+ * @param {Object} props
+ * @param {Object} props.item - The follow-up item data
+ * @param {number} props.index - Index of the follow-up item in the list
+ * @param {Function} props.removeVariable - Function to remove this follow-up item
+ * @param {Function} props.handleVariableChange - Function to handle changes in follow-up configuration
+ * @param {Function} props.handleCustomScheduleChange - Function to handle custom schedule changes
+ * @param {Function} props.handleFindTemplate - Function to view selected template
+ * @param {Object} props.formState - Contains email and WhatsApp templates
+ */
+
 const FollowUpItem = ({ item, index, removeVariable, handleVariableChange, handleCustomScheduleChange, handleFindTemplate, formState }) => {
   return (
     <div className="flex flex-col border border-primary bg-grey p-4 rounded-xl mt-5">
+      {/* Remove button */}
       <div className="flex justify-end items-center">
         <IoCloseSharp className="cursor-pointer" onClick={() => removeVariable(index)} />
       </div>
 
+      {/* Follow-up timing configuration */}
       <DropDown
         name="when"
         label="When to send follow-up"
@@ -24,6 +40,7 @@ const FollowUpItem = ({ item, index, removeVariable, handleVariableChange, handl
         commonFunction={(e) => handleVariableChange(index, 'when', e.name)}
       />
 
+      {/* Communication channels selection */}
       <MultiSelectCheckbox
         divClassName={'mt-5'}
         formLabel="Channels Available"
@@ -37,6 +54,7 @@ const FollowUpItem = ({ item, index, removeVariable, handleVariableChange, handl
         selected={item.channels}
       />
 
+      {/* Schedule configuration */}
       <DropDown
         mt="mt-5"
         name="schedule"
@@ -63,8 +81,10 @@ const FollowUpItem = ({ item, index, removeVariable, handleVariableChange, handl
         SummaryChild={<h5 className="p-0 m-0 text-primary">Custom</h5>}
       />
 
+      {/* Custom duration input fields */}
       {(item.delay.custom === 'custom' || item.delay.value) && (
         <div className="mt-5">
+          {/* Custom duration number input and unit selection */}
           <label className="block text-sm font-medium text-primary mb-2">Custom Duration</label>
           <div className="flex gap-2 items-center mt-1 rounded-xl border border-primary bg-inherit overflow-hidden">
             <input
@@ -96,6 +116,7 @@ const FollowUpItem = ({ item, index, removeVariable, handleVariableChange, handl
         </div>
       )}
 
+      {/* Participant type selection */}
       <DropDown
         mt="mt-5"
         name="when"
@@ -111,20 +132,25 @@ const FollowUpItem = ({ item, index, removeVariable, handleVariableChange, handl
         commonFunction={(e) => handleVariableChange(index, 'when', e.name)}
       />
 
+      {/* Template selection for each selected channel */}
       {item.channels.length > 0 && (
         <div>
           {item.channels.map((channel, channelIndex) => (
             <div key={channelIndex} className="mt-5 relative">
+              {/* Template preview button */}
               {item[`${channel}Template`] && (
                 <button type="button" className="absolute right-2" onClick={() => handleFindTemplate(channel, item[`${channel}Template`])}>
                   <FaEye size={20} />
                 </button>
               )}
+
+              {/* Channel-specific template selection */}
               <DropDown
                 mt="mt-5"
                 name={`${channel}Template`}
                 label={`Select ${channel.charAt(0).toUpperCase() + channel.slice(1)} Template`}
                 dropdownList={
+                  // Dynamic template list based on channel type
                   channel === 'email'
                     ? formState.emailTemplate.map((template) => ({
                         id: template._id,

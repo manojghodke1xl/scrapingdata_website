@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { formatDateTime } from '../../utils/dateFormats';
 import TableComponent from '../../atoms/table/Table';
 import { deleteFeedbackApi } from '../../apis/leads/feedback-apis';
@@ -10,6 +11,7 @@ import TruncatableFieldToolTip from '../../atoms/common/TruncatableFeildToolTip'
 import TableHeader from '../../atoms/table/TableHeader';
 
 const FeedbackList = () => {
+  const navigate = useNavigate();
   const [feedbacks, setFeedbacks] = useState([]);
 
   const rows = feedbacks.map((feedback) => {
@@ -52,6 +54,11 @@ const FeedbackList = () => {
     { id: 13, label: 'Updated Date', key: 'updatedAt', dataKey: 'updatedAt', formatForExport: (value) => formatDateTime(value) }
   ];
 
+  const actionItems = [
+    { id: 0, label: 'View', icon: 'view', handler: (row) => navigate(`/feedback/view-feedback/${row.id}`) },
+    { id: 1, label: 'Delete', icon: 'delete', deleteAction: true }
+  ];
+
   return (
     <div className="p-1 overflow-x-hidden mb-12">
       <TableHeader
@@ -72,10 +79,7 @@ const FeedbackList = () => {
         tableData={(data) => setFeedbacks(data.feedbacks)}
         rows={rows}
         apiUrl={'feedback'}
-        tableCountLabel={true}
         pagination={true}
-        actions={true}
-        viewPath={'/feedback/view-feedback'}
         search={true}
         filter={true}
         filterCategory={[{ id: 0, name: 'Sites' }]}
@@ -87,10 +91,10 @@ const FeedbackList = () => {
           { id: 4, name: 'Site' }
         ]}
         deleteBtn={true}
-        deleteAction={true}
         deleteLabel={'Delete Feedback'}
         deleteMessage={'Are you sure you want to delete this feedback?'}
         deleteApi={deleteFeedbackApi}
+        actionItems={actionItems}
       />
       <NoteComponent note={feedbackListNote} />
     </div>

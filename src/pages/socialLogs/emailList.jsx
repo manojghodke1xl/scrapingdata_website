@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import TableComponent from '../../atoms/table/Table';
 import { formatDateTime } from '../../utils/dateFormats';
 import TruncatableFieldToolTip from '../../atoms/common/TruncatableFeildToolTip';
@@ -6,6 +7,7 @@ import TableHeader from '../../atoms/table/TableHeader';
 import useColorContext from '../../hooks/useColorContext';
 
 const EmailLogList = () => {
+  const navigate = useNavigate();
   const { isDarkMode } = useColorContext();
   const [emailTemplates, setEmailTemplates] = useState([]);
 
@@ -56,6 +58,8 @@ const EmailLogList = () => {
     { id: 7, label: 'Updated Date', key: 'updatedAt', dataKey: 'updatedAt', formatForExport: (value) => formatDateTime(value) }
   ];
 
+  const actionItems = [{ id: 0, label: 'View', icon: 'view', handler: (row) => navigate(`/logs/email-log-preview/${row.id}`) }];
+
   return (
     <div className="p-1 overflow-x-hidden mb-12">
       <TableHeader heading={'Email Logs'} />
@@ -66,13 +70,11 @@ const EmailLogList = () => {
         tableData={(data) => setEmailTemplates(data.logs)}
         rows={rows}
         apiUrl={'logs/email'}
-        tableCountLabel={true}
         pagination={true}
         search={true}
         filter={true}
         filterCategory={[{ id: 0, name: 'Sites' }]}
-        actions={true}
-        viewPath={'/logs/email-log-preview'}
+        actionItems={actionItems}
       />
     </div>
   );
