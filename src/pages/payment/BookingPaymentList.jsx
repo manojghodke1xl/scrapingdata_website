@@ -36,7 +36,7 @@ const BookingPaymentList = () => {
       channel: channel === 'razorpay' ? 'Razorpay' : channel === 'stripe' ? 'Stripe' : 'PayPal',
       price: <TruncatableFieldToolTip content={`${currencies?.[currency]} ${currency}`} />,
       salePrice: onSale ? <TruncatableFieldToolTip content={`${salePrice?.[currency]} ${currency}`} /> : '-',
-      amount: <TruncatableFieldToolTip content={amount} />,
+      amount: <TruncatableFieldToolTip content={`${amount} ${currency}`} />,
       coupon: <TruncatableFieldToolTip content={coupon?.code ?? ''} />,
       status: (
         <div

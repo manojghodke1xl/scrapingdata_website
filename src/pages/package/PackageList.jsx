@@ -18,7 +18,7 @@ const PackageList = () => {
   const [event, setEvent] = useState([]);
 
   const rows = packages.map((userPackage) => {
-    const { _id, title, amount, maxLimit, hasBooking, event, site, createdAt, updatedAt, ticketIdPattern } = userPackage;
+    const { _id, title, maxLimit, hasBooking, event, site, createdAt, updatedAt, ticketIdPattern } = userPackage;
     return {
       id: _id,
       hasBooking,
@@ -28,7 +28,6 @@ const PackageList = () => {
       event: <TruncatableFieldToolTip content={`${event.name} (${event.venue})`} />,
       site: <TruncatableFieldToolTip content={`${site.name} (${site.host})`} />,
       date: formatDateTime(event.date),
-      amount: <TruncatableFieldToolTip content={amount} />,
       maxLimit: <TruncatableFieldToolTip content={maxLimit} />,
       ticketIdPattern: <TruncatableFieldToolTip content={ticketIdPattern} />,
       createdAt: formatDateTime(createdAt),
@@ -48,7 +47,6 @@ const PackageList = () => {
     },
     { id: 9, label: 'Sites', key: 'site', dataKey: 'site', formatForExport: (value) => (value ? `${value.name} (${value.host})` : '') },
     { id: 3, label: 'Event Date', key: 'date', dataKey: 'event.date', formatForExport: (value) => formatDateTime(value) },
-    { id: 4, label: 'Price', key: 'amount', dataKey: 'amount' },
     { id: 5, label: 'Max Attendees', key: 'maxLimit', dataKey: 'maxLimit' },
     { id: 6, label: 'Ticket ID Pattern', key: 'ticketIdPattern', dataKey: 'ticketIdPattern' },
     { id: 7, label: 'Created Date', key: 'createdAt', dataKey: 'createdAt', formatForExport: (value) => formatDateTime(value) },

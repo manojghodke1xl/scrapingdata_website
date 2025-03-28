@@ -37,26 +37,40 @@ const MaterialSidebar = ({ handleToggleSidebar = () => {} }) => {
   const { auth } = useGlobalContext();
   const [openAccordion, setOpenAccordion] = useState(null);
 
+  // Check if the current path matches any of the provided menu paths
   const isActive = (menuPaths) => menuPaths.some((path) => pathname.startsWith(path));
 
+  // Handle sidebar link click by closing accordion and toggling sidebar
   const handleLinkClick = () => {
     setOpenAccordion(null);
     handleToggleSidebar();
   };
 
+  // Define sidebar navigation items with their respective icons and paths
   const accordianLinks = [
+    // Content Management Section
     { title: 'Contents', links: contentsPath, icon: <TbFileSearch /> },
     { title: 'Marketing', links: marketingPath, icon: <FaBullhorn /> },
     { title: 'Products', links: productsPath, icon: <AiOutlineProduct /> },
+
+    // User Management Section
     { title: 'leads', links: leadsPath, icon: <TbUsersGroup /> },
+
+    // System Configuration Section
     { title: 'Site Settings', links: siteSettingsPath, icon: <IoSettingsOutline /> },
+
+    // Media and File Management Section
     { title: 'Media', links: mediaPath, icon: <FaRegImage /> },
     { title: 'Files', links: filesPath, icon: <FaRegFile /> },
+
+    // Event and Communication Section
     { title: 'Events', links: eventsPath, icon: <FiCalendar /> },
     { title: 'After Sales', links: afterSalesPath, icon: <FaChartLine /> },
     { title: 'FAQs', links: faqsPath, icon: <FaRegQuestionCircle /> },
     { title: 'Testimonials', links: testimonialsPath, icon: <MdMessage /> },
     { title: 'Webinars', links: webinarsPath, icon: <PiVideoConferenceLight /> },
+
+    // Additional Tools Section
     { title: 'Templates', links: templatePath, icon: <TbTemplate /> },
     { title: 'Utilities', links: utilitiesPath, icon: <LuLink /> },
     { title: 'Logs', links: logsPath, icon: <LuLogs /> }
@@ -65,14 +79,17 @@ const MaterialSidebar = ({ handleToggleSidebar = () => {} }) => {
   return (
     <div className="w-full h-full p-1 relative">
       <div className="w-full">
+        {/* Main sidebar container with scrollable content */}
         <div className="flex flex-col h-screen lg:h-screen-minus-240 overflow-x-hidden overflow-y-auto scrollbar-hide">
+          {/* Search component (currently disabled) */}
           {/* <div className="w-full flex items-center rounded-xl border border-primary px-3 focus:border-hover mb-4">
             <SearchComponent />
           </div> */}
-          {/* Map through navLinks to render NavLinks */}
 
+          {/* Render primary navigation links */}
           <LinkComponent navLinks={navLinks} onClick={handleLinkClick} isActive={isActive} />
 
+          {/* Render accordion menu items */}
           {accordianLinks.map(({ title, links, icon }) => (
             <ReusableAccordion
               key={title}

@@ -1,10 +1,16 @@
 import { showNotification } from './showNotification';
 
+/**
+ * Handles single file upload
+ * @param {{ file: File, isImage: boolean, isPdf: boolean, isVideo: boolean, setDetails: function, fieldName: string }} options
+ * @returns {Promise<void>}
+ */
 export const uploadFile = async ({ file = null, isImage = false, isPdf = false, isVideo = false, setDetails = () => {}, fieldName = 'image' }) => {
   if (!file) return;
 
   const { name, size, type } = file;
 
+  // Check if the file is of the correct type
   const validImageTypes = ['image/jpeg', 'image/png', 'image/svg+xml'];
   const validPdfTypes = ['application/pdf'];
   const validVideoTypes = ['video/mp4', 'video/quicktime'];
@@ -25,6 +31,7 @@ export const uploadFile = async ({ file = null, isImage = false, isPdf = false, 
   }
 
   try {
+    // Get the upload URL from the server
     const res = await fetch(`${import.meta.env.VITE_API_URL}/upload`, {
       method: 'POST',
       headers: {
@@ -45,12 +52,14 @@ export const uploadFile = async ({ file = null, isImage = false, isPdf = false, 
 
     fd.append('file', file);
 
+    // Upload the file to the server
     const uploadRes = await fetch(data.url, { method: 'POST', body: fd });
 
     if (!uploadRes.ok) throw new Error('File upload failed');
 
     const fileId = data._id;
 
+    // Update the component state with the uploaded file ID
     setDetails((prevDetail) => ({ ...prevDetail, [fieldName]: fileId }));
   } catch (error) {
     console.error('Upload error:', error);
@@ -58,6 +67,11 @@ export const uploadFile = async ({ file = null, isImage = false, isPdf = false, 
   }
 };
 
+/**
+ * Handles multiple file uploads
+ * @param {File[]} files
+ * @returns {Promise<string[]>}
+ */
 export const uploadMultipleFiles = async (files = []) => {
   if (!files.length) return;
 
@@ -93,6 +107,11 @@ export const uploadMultipleFiles = async (files = []) => {
   return fileIds;
 };
 
+/**
+ * Handles multiple custom file uploads
+ * @param {{ file: File, customName: string }[]} files
+ * @returns {Promise<string[]>}
+ */
 export const uploadMultipleCustomFiles = async (files = []) => {
   if (!files.length) return;
 

@@ -1,12 +1,27 @@
 import { useState, useEffect, useRef } from 'react';
 import useGlobalContext from './useGlobalContext';
 
+/**
+ * Custom hook to handle API calls with debouncing
+ * @param {string} apiUrl - API endpoint URL
+ * @param {number} page - Page number for pagination
+ * @param {number} limit - Number of items per page
+ * @param {string} sortBy - Field to sort by
+ * @param {string} sortOrder - Sorting order (asc/desc)
+ * @param {string} val - Search value
+ * @param {string} key - Search key
+ * @param {string} a - Additional query parameter
+ * @param {string} site - Site ID
+ * @param {string} event - Event ID
+ * @param {number} delay - Debounce delay in milliseconds
+ * @returns {[error, data, setRefresh]} - An array containing the error, data, and setRefresh function
+ */
 const useSetTimeout = (apiUrl, page, limit, sortBy, sortOrder, val, key, a, site, event, delay = 500) => {
   const { setLoading, dispatch } = useGlobalContext();
-  const timeOutRef = useRef(0);
-  const [error, setError] = useState(null);
-  const [data, setData] = useState(null);
-  const [refresh, setRefresh] = useState(false);
+  const timeOutRef = useRef(0); // Reference to the setTimeout ID
+  const [error, setError] = useState(null); // Error state
+  const [data, setData] = useState(null); // Data state
+  const [refresh, setRefresh] = useState(false); // Refresh state
 
   useEffect(() => {
     // If apiUrl is null, don't make the API call

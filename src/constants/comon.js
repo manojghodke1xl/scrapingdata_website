@@ -1,3 +1,7 @@
+/**
+ * List of timezones with their offset in hours
+ * @type {Array<{name: string, value: string}>}
+ */
 export const tzInts = [
   { name: '(GMT-12:00) International Date Line West', value: '-12' },
   { name: '(GMT-11:00) Midway Island, Samoa', value: '-11' },
@@ -81,6 +85,12 @@ export const tzInts = [
   { name: "(GMT+13:00) Nuku'alofa", value: '13' }
 ];
 
+/**
+ * Converts a time value (in milliseconds) from one unit to another
+ * @param {number} value - Time value in milliseconds
+ * @param {string} unit - Unit of the time value (seconds, minutes, hours, days, weeks, months, years)
+ * @returns {number} Time value converted to the specified unit
+ */
 export const handleTimeConversion = (value, unit) => {
   const msConversions = {
     Seconds: 1000,
