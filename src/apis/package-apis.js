@@ -9,7 +9,7 @@ export const updatePackageApi = async (id, userData) => {
 };
 
 export const getPackageByIdApi = async (id) => {
-  return await getMethodCall(`${import.meta.env.VITE_API_URL}/package/${id}`);
+  return await getMethodCall(`${import.meta.env.VITE_API_URL}/package/${id}?p=1`);
 };
 
 export const getPackagesApi = async (ids) => {

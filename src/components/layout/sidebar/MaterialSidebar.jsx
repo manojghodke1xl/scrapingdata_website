@@ -54,7 +54,7 @@ const MaterialSidebar = ({ handleToggleSidebar = () => {} }) => {
     { title: 'Products', links: productsPath, icon: <AiOutlineProduct /> },
 
     // User Management Section
-    { title: 'leads', links: leadsPath, icon: <TbUsersGroup /> },
+    { title: 'Leads', links: leadsPath, icon: <TbUsersGroup /> },
 
     // System Configuration Section
     { title: 'Site Settings', links: siteSettingsPath, icon: <IoSettingsOutline /> },
