@@ -125,7 +125,7 @@ const AddCampaign = () => {
     if (!id && !isDuplicate && campaignDetails.site) {
       (async () => {
         const { status, data } = await getExistingCampaignsApi(campaignDetails.site);
-        if (status) if (data.campaign) setExistingCampaign((prev) => ({ ...prev, modelOpen: true, campaignId: data.campaignId._id }));
+        if (status) if (data.campaign) setExistingCampaign((prev) => ({ ...prev, modelOpen: true, campaignId: data.campaign._id }));
       })();
     }
   }, [campaignDetails.site, id, isDuplicate]);
