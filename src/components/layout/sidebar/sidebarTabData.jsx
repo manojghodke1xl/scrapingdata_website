@@ -101,7 +101,8 @@ export const afterSalesPath = [
   { title: 'Event Default Settings', to: ['/after-sales/event-default-settings'] },
   { title: 'After Sales', to: ['/after-sales/after-sales-list', '/after-sales/add-after-sale', '/after-sales/edit-after-sale', '/after-sales/duplicate-after-sale'] },
   { title: 'Reminders', to: ['/reminder/reminder-list', '/reminder/add-reminder', '/reminder/edit-reminder', '/reminder/duplicate-reminder'] },
-  { title: 'Broadcast', to: ['/broadcast/broadcast-list', '/broadcast/add-broadcast', '/broadcast/edit-broadcast', '/broadcast/duplicate-broadcast'] }
+  { title: 'Broadcast', to: ['/broadcast/broadcast-list', '/broadcast/add-broadcast', '/broadcast/edit-broadcast', '/broadcast/duplicate-broadcast'] },
+  { title: 'Campaign', to: ['/campaign/campaign-list', '/campaign/add-campaign', '/campaign/edit-campaign', '/campaign/duplicate-campaign'] }
 ];
 
 // FAQ management related paths

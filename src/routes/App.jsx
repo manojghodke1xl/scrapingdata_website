@@ -11,7 +11,6 @@ import StructuredLayout from '../layouts/StructuredLayout';
 import Dashboard from '../pages/common/Dashboard';
 import PageNotFound from '../pages/common/PageNotFound';
 
-// Importing all private routes
 import AdminRoutes from './private-routes/AdminRoutes';
 import SmtpRoutes from './private-routes/SmtpRoutes';
 import CaseStudyRoutes from './private-routes/CaseStudyRoutes';
@@ -61,6 +60,7 @@ import NotifAgentRoutes from './private-routes/NotifAgentRoutes';
 import TaskRoutes from './private-routes/taskRoutes';
 import Layout_SEO from '../layouts/LayoutSeo';
 import ContactRoutes from './private-routes/ContactRoutes';
+import CampaignRoutes from './private-routes/CampaignRoutes';
 
 const ZohoStatus = lazy(() => import('../pages/integration/ZohoStatus'));
 
@@ -102,6 +102,7 @@ const privateRoutes = [
   ...CertificateRoutes,
   ...CaseStudyRoutes,
   ...BroadcastRoutes,
+  ...CampaignRoutes,
   ...BookingRoutes,
   ...AfterSalesRoutes,
   ...AdminRoutes,
@@ -131,12 +132,10 @@ const App = () => {
                       <Route path="/" element={<Login />} />
                     </Route>
 
-                    {/* Private Routes */}
                     <Route element={<AuthComponent />}>
                       <Route element={<StructuredLayout />}>
                         <Route path="/dashboard" element={<Dashboard />} />
                         <Route path="/auth-status/:id" element={<ZohoStatus />} />
-                        {/* Looping over private routes and rendering them */}
                         {privateRoutes.map(({ path, Component }) => (
                           <Route key={path} path={`/${path}`} element={<Component />} />
                         ))}
