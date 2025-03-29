@@ -15,3 +15,7 @@ export const getContactByIdApi = async (id) => {
 export const bulkUploadContactsApi = async (data) => {
   return await postMethodCall(`${import.meta.env.VITE_API_URL}/contact/import`, data);
 };
+
+export const getContactApi = async () => {
+  return await getMethodCall(`${import.meta.env.VITE_API_URL}/contact`);
+};

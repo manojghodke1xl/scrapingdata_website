@@ -14,7 +14,10 @@ import WhatsAppPreview from '../../atoms/templatePreview/WhatsAppPreview';
 import { MdEdit } from 'react-icons/md';
 import ToggleComponent from '../../atoms/formFields/ToggleComponent';
 import { handleTimeConversion } from '../../constants/comon';
-import { getMethodCall, postMethodCall, putMethodCall } from '../../apis/api-handler';
+import { getEventBySiteIdApi } from '../../apis/event-apis';
+import { getProductsBySiteApi } from '../../apis/product-apis';
+import { addCampaignApi, getCampaignByIdApi, getExistingCampaignsApi, updateCampaignApi } from '../../apis/campaign-apis';
+import { getContactApi } from '../../apis/contact-apis';
 
 const AddCampaign = () => {
   const { id = '' } = useParams();
@@ -46,17 +49,6 @@ const AddCampaign = () => {
     ]
   });
 
-  const [allContacts, setAllContacts] = useState([]);
-
-  useEffect(() => {
-    const getContacts = async () => {
-      const { status, data } = await getMethodCall(`${import.meta.env.VITE_API_URL}/contact`);
-      if (status) setAllContacts(data?.contacts);
-      else showNotification('error', data);
-    };
-    if (campaignDetails.site) getContacts();
-  }, [campaignDetails.site]);
-
   const [formState, setFormState] = useState({
     list: [],
     emailTemplate: [],
@@ -69,6 +61,35 @@ const AddCampaign = () => {
   });
 
   const [displayTemplate, setDisplayTemplate] = useState(null);
+
+  const [allContacts, setAllContacts] = useState([]);
+
+  useEffect(() => {
+    const getContacts = async () => {
+      const { status, data } = await getContactApi();
+      if (status) setAllContacts(data?.contacts);
+      else showNotification('error', data);
+    };
+    if (campaignDetails.site) getContacts();
+  }, [campaignDetails.site]);
+
+  useEffect(() => {
+    const fetchData = async (apiFunction, site, key) => {
+      setLoading(true);
+      try {
+        const { status, data } = await apiFunction(site);
+        if (status) setFormState((prev) => ({ ...prev, list: data[key] }));
+        else showNotification('error', data);
+      } catch (error) {
+        showNotification('error', error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (campaignDetails.target === 'Event') fetchData(getEventBySiteIdApi, campaignDetails.site, 'events');
+    else if (campaignDetails.target === 'Product') fetchData(getProductsBySiteApi, campaignDetails.site, 'products');
+  }, [campaignDetails.site, campaignDetails.target, setLoading]);
 
   useEffect(() => {
     if (campaignDetails.site) {
@@ -84,7 +105,7 @@ const AddCampaign = () => {
     if (id) {
       setLoading(true);
       (async () => {
-        const { status, data } = await getMethodCall(`${import.meta.env.VITE_API_URL}/campaign/${id}`);
+        const { status, data } = await getCampaignByIdApi(id);
         if (status) {
           const { site, ...rest } = data.campaign;
           setCampaignDetails((prev) => ({
@@ -101,9 +122,9 @@ const AddCampaign = () => {
   }, [id, setLoading]);
 
   useEffect(() => {
-    if (!id && !isDuplicate && campaignDetails.site && campaignDetails.refTo) {
+    if (!id && !isDuplicate && campaignDetails.site) {
       (async () => {
-        const { status, data } = await getMethodCall(`${import.meta.env.VITE_API_URL}/campaign/existing-campaign?site=${site}&refTo=${refTo}`);
+        const { status, data } = await getExistingCampaignsApi(campaignDetails.site);
         if (status) if (data.campaign) setExistingCampaign((prev) => ({ ...prev, modelOpen: true, campaignId: data.campaignId._id }));
       })();
     }
@@ -121,11 +142,7 @@ const AddCampaign = () => {
     if (!validate()) return;
     setLoading(true);
     try {
-      const { status, data } = await (id
-        ? isDuplicate
-          ? await postMethodCall(`${import.meta.env.VITE_API_URL}/campaign`, campaignDetails)
-          : await putMethodCall(`${import.meta.env.VITE_API_URL}/campaign/${id}`, campaignDetails)
-        : await postMethodCall(`${import.meta.env.VITE_API_URL}/campaign`, campaignDetails));
+      const { status, data } = await (id ? (isDuplicate ? addCampaignApi(campaignDetails) : updateCampaignApi(id, campaignDetails)) : addCampaignApi(campaignDetails));
       if (status) {
         showNotification('success', data.message);
         navigate('/campaign/campaign-list');
@@ -162,11 +179,13 @@ const AddCampaign = () => {
         const prevChannels = updated[index].channels;
         const removedChannels = prevChannels.filter((channel) => !value.includes(channel));
         const newCampaign = { ...updated[index], channels: value };
+
         removedChannels.forEach((channel) => {
           if (channel === 'email') newCampaign.emailTemplate = null;
           if (channel === 'sms') newCampaign.smsTemplate = null;
           if (channel === 'whatsapp') newCampaign.whatsappTemplate = null;
         });
+
         updated[index] = newCampaign;
       } else if (field.includes('.')) {
         const [parent, child] = field.split('.');
@@ -177,6 +196,7 @@ const AddCampaign = () => {
       } else {
         updated[index] = { ...updated[index], [field]: value };
       }
+
       return { ...prev, campaigns: updated };
     });
   };
@@ -213,13 +233,11 @@ const AddCampaign = () => {
     if (template) navigate(`/templates/edit-email-template/${template._id}`);
   };
 
-  console.log('the campaign details', campaignDetails);
-
   return (
     <div className="py-8 p-4 sm:p-8 overflow-x-hidden mb-20">
       <div className="w-full pb-8 border-b border-primary gap-y-4 gap-2 flex flex-col items-start md:flex-row lg:flex-col xl:flex-row justify-between lg:items-start md:items-end xl:items-end">
         <div>
-          <span className="text-3xl font-semibold text-dark">{id ? (isDuplicate ? 'Add' : 'Edit') : 'Add'} Campaign </span>
+          <span className="text-3xl font-semibold text-dark"> {id ? (isDuplicate ? 'Add' : 'Edit') : 'Add'} Campaign </span>
         </div>
         <FormButtons to="/campaign/campaign-list" type="submit" onClick={handleSubmit} btnLebal={id ? (isDuplicate ? 'Add' : 'Save Changes') : 'Add'} loading={isLoading} />
       </div>
@@ -263,7 +281,7 @@ const AddCampaign = () => {
           </div>
           <div className="w-full flex flex-col gap-y-5">
             <MultiSelectCheckbox
-              options={allContacts}
+              options={allContacts.map((contact) => ({ name: contact.name, _id: contact._id }))}
               formLabel={'Select Contacts'}
               label={'Select Contacts'}
               onChange={(e) => setCampaignDetails((prev) => ({ ...prev, contacts: e }))}
@@ -276,7 +294,7 @@ const AddCampaign = () => {
       <div className="w-full  justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
         <div className="w-full  flex flex-col gap-y-2 md:flex-row gap-4 justify-evenly">
           <div className="sm:w-7/12 w-full flex flex-col">
-            <span className=" text-primary ">Follow - up</span>
+            <span className="text-primary">Follow - up</span>
           </div>
           <div className="w-full flex flex-col gap-y-5">
             {campaignDetails.campaigns.map((item, index) => (

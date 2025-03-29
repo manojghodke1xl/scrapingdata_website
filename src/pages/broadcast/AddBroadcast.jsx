@@ -232,7 +232,7 @@ const AddBroadcast = () => {
     <div className="py-8 p-4 sm:p-8 overflow-x-hidden mb-20">
       <div className="w-full pb-8 border-b border-primary gap-y-4 gap-2 flex flex-col items-start md:flex-row lg:flex-col xl:flex-row justify-between lg:items-start md:items-end xl:items-end">
         <div>
-          <span className="text-3xl font-semibold text-dark">{id ? (isDuplicate ? 'Add' : 'Edit') : 'Add'} Broadcast </span>
+          <span className="text-3xl font-semibold text-dark"> {id ? (isDuplicate ? 'Add' : 'Edit') : 'Add'} Broadcast </span>
         </div>
         <FormButtons to="/broadcast/broadcast-list" type="submit" onClick={handleSubmit} btnLebal={id ? (isDuplicate ? 'Add' : 'Save Changes') : 'Add'} loading={isLoading} />
       </div>
@@ -272,7 +272,7 @@ const AddBroadcast = () => {
       <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
         <div className="w-full sm:w-[85%] md:w-[80%] lg:w-[90%] xl:w-[74%] 2xl:w-[60%] flex flex-col gap-y-2 md:flex-row justify-evenly">
           <div className="sm:w-7/12 w-full flex flex-col">
-            <span className=" text-primary ">Target</span>
+            <span className="text-primary">Target</span>
           </div>
           <div className="w-full flex flex-col gap-y-5">
             {id && !isDuplicate ? (

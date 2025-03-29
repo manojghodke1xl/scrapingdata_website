@@ -27,7 +27,7 @@ const MultiSelectCheckbox = ({
   }, [isOpen]);
 
   // Filter options based on the search query
-  const filteredOptions = options.filter((option) => option.name.toLowerCase().includes(searchQuery.toLowerCase()));
+  const filteredOptions = options.filter((option) => option.name?.toLowerCase().includes(searchQuery?.toLowerCase()));
 
   // Handle selecting/deselecting individual checkboxes
   const handleChange = (key) => {
