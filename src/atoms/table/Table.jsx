@@ -557,8 +557,18 @@ const TableComponent = ({
     showNotification('success', 'Column preferences reset to default');
   };
 
-  // Add toggle handler
+  // Add toggle handler for expand and contrast table
   const handleToggleExpand = () => setIsExpanded((prev) => !prev);
+
+  // Add ESC key handler effect
+  useEffect(() => {
+    const handleEscKey = (event) => {
+      if (event.key === 'Escape' && isExpanded) setIsExpanded(false);
+    };
+
+    window.addEventListener('keydown', handleEscKey);
+    return () => window.removeEventListener('keydown', handleEscKey);
+  }, [isExpanded]);
 
   return (
     <div

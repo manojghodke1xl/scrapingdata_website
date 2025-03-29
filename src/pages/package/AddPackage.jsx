@@ -151,7 +151,8 @@ const AddPackage = () => {
         try {
           const { status, data } = await getPackageByIdApi(id);
           if (status) {
-            setPackageDetails(data.package);
+            const { event, ...rest } = data.package;
+            setPackageDetails((prev) => ({ ...prev, ...rest, event: event._id }));
             setShowTicket(data.package.ticket ? true : false);
           } else showNotification('warn', data);
         } catch (error) {

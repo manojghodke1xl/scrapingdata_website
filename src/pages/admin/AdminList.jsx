@@ -84,7 +84,7 @@ const AdminList = () => {
     }
   ];
 
-  const actionItems = [{ id: 0, label: 'Edit', icon: 'edit', handler: (row) => navigate(`/admin/edit-admin${row.id}`) }];
+  const actionItems = [{ id: 0, label: 'Edit', icon: 'edit', handler: (row) => navigate(`/admin/edit-admin/${row.id}`) }];
 
   return (
     <div className="p-1 overflow-x-hidden mb-12">
