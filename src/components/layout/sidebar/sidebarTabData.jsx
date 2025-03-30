@@ -1,4 +1,4 @@
-import { RiAdminLine, RiContactsLine, RiNotificationBadgeLine, RiTaskLine } from 'react-icons/ri';
+import { RiAdminLine, RiBroadcastLine, RiContactsLine, RiNotificationBadgeLine, RiTaskLine } from 'react-icons/ri';
 import { RxDashboard } from 'react-icons/rx';
 import { TbApps, TbWorld } from 'react-icons/tb';
 
@@ -101,8 +101,7 @@ export const afterSalesPath = [
   { title: 'Event Default Settings', to: ['/after-sales/event-default-settings'] },
   { title: 'After Sales', to: ['/after-sales/after-sales-list', '/after-sales/add-after-sale', '/after-sales/edit-after-sale', '/after-sales/duplicate-after-sale'] },
   { title: 'Reminders', to: ['/reminder/reminder-list', '/reminder/add-reminder', '/reminder/edit-reminder', '/reminder/duplicate-reminder'] },
-  { title: 'Broadcast', to: ['/broadcast/broadcast-list', '/broadcast/add-broadcast', '/broadcast/edit-broadcast', '/broadcast/duplicate-broadcast'] },
-  { title: 'Campaign', to: ['/campaign/campaign-list', '/campaign/add-campaign', '/campaign/edit-campaign', '/campaign/duplicate-campaign'] }
+  { title: 'Broadcast', to: ['/broadcast/broadcast-list', '/broadcast/add-broadcast', '/broadcast/edit-broadcast', '/broadcast/duplicate-broadcast'] }
 ];
 
 // FAQ management related paths
@@ -139,6 +138,7 @@ export const logsPath = [
 
 // Administrative user management paths
 export const adminNavLinks = [
+  { title: 'Campaign', to: ['/campaign/campaign-list', '/campaign/add-campaign', '/campaign/edit-campaign', '/campaign/duplicate-campaign'], icon: <RiBroadcastLine /> },
   { title: 'Admins', to: ['/admin/admin-list', '/admin/add-admin', '/admin/edit-admin'], icon: <RiAdminLine /> },
   { title: 'Contacts', to: ['/contact/contact-list', '/contact/add-contact', '/contact/edit-contact', '/contact/import-contacts'], icon: <RiContactsLine /> },
   {

@@ -126,41 +126,43 @@ const DocumentFileUpload = ({
 
   return (
     <div className="w-full flex flex-col gap-y-5">
-      <div className={`${divClassName} w-full border ${error ? 'border-danger focus:border-fadered' : 'border-primary focus:border-secondary'}  rounded-xl p-6 shadow-sm`}>
-        <h1 className="text-primary text-lg mb-3 text-left flex items-center gap-2">
-          <FaRegFile className="text-secondary text-2xl" strokeWidth={1.2} />
-          {label || 'Upload'}
-        </h1>
+      {(isMultiple || (!isMultiple && files.length === 0)) && (
+        <div className={`${divClassName} w-full border ${error ? 'border-danger focus:border-fadered' : 'border-primary focus:border-secondary'}  rounded-xl p-6 shadow-sm`}>
+          <h1 className="text-primary text-lg mb-3 text-left flex items-center gap-2">
+            <FaRegFile className="text-secondary text-2xl" strokeWidth={1.2} />
+            {label || 'Upload'}
+          </h1>
 
-        <div
-          ref={dropZoneRef}
-          className={`border-2 border-primary rounded-xl text-center border-dashed p-3 w-auto transition-colors duration-200 
+          <div
+            ref={dropZoneRef}
+            className={`border-2 border-primary rounded-xl text-center border-dashed p-3 w-auto transition-colors duration-200 
             ${isDragging ? 'bg-primary/10 border-primary' : ''}`}
-          onDragEnter={handleDragEnter}
-          onDragOver={handleDragOver}
-          onDragLeave={handleDragLeave}
-          onDrop={handleDrop}
-        >
-          <p className="font-normal text-sm text-primary w-5/12 text-center m-auto">
-            {isDragging ? 'Drop files here' : `Choose ${isMultiple ? 'files' : 'a file'} or drag and drop here to upload`}
-          </p>
+            onDragEnter={handleDragEnter}
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrop}
+          >
+            <p className="font-normal text-sm text-primary w-5/12 text-center m-auto">
+              {isDragging ? 'Drop files here' : `Choose ${isMultiple ? 'files' : 'a file'} or drag and drop here to upload`}
+            </p>
 
-          <div className="flex items-center m-auto justify-center my-4">
-            <input type="file" onChange={(e) => handleFileUpload(e)} className="hidden" accept={`.${allowedTypes.join(', ')}`} ref={fileInputRef} multiple={isMultiple} />
-            <div className="w-full flex justify-center">
-              <button
-                className="text-primary font-medium cursor-pointer inline-block px-4 py-2 border hover:bg-hover border-primary rounded-xl shadow-sm"
-                onClick={() => fileInputRef.current.click()}
-              >
-                <span className="text-primary">Browse</span>
-              </button>
+            <div className="flex items-center m-auto justify-center my-4">
+              <input type="file" onChange={(e) => handleFileUpload(e)} className="hidden" accept={`.${allowedTypes.join(', ')}`} ref={fileInputRef} multiple={isMultiple} />
+              <div className="w-full flex justify-center">
+                <button
+                  className="text-primary font-medium cursor-pointer inline-block px-4 py-2 border hover:bg-hover border-primary rounded-xl shadow-sm"
+                  onClick={() => fileInputRef.current.click()}
+                >
+                  <span className="text-primary">Browse</span>
+                </button>
+              </div>
             </div>
-          </div>
 
-          <div className="font-normal text-xs text-primary text-center m-auto">{toolTip ? toolTip : `Accepted file types: ${allowedFileTypes.join(', ')}`}</div>
+            <div className="font-normal text-xs text-primary text-center m-auto">{toolTip ? toolTip : `Accepted file types: ${allowedFileTypes.join(', ')}`}</div>
+          </div>
+          {error && <p className="text-danger text-sm mt-2">{error}</p>}
         </div>
-        {error && <p className="text-danger text-sm mt-2">{error}</p>}
-      </div>
+      )}
 
       <div>
         {files.length > 0 && <h3 className="font-semibold text-primary mb-2">Attached Documents</h3>}
@@ -255,7 +257,7 @@ const DocumentFileUpload = ({
                     {getFileIcon(file.customName)}
                     <div>
                       <p className="text-sm font-medium">{file.customName}</p>
-                      {file.file.size && <p className="text-xs text-secondary">{(file.file.size / 1024).toFixed(3)} KB</p>}
+                      {file.file?.size && <p className="text-xs text-secondary">{(file.file?.size / 1024).toFixed(3)} KB</p>}
                     </div>
                   </div>
                   <div className="relative" ref={(el) => (dropdownRefs.current[index] = el)}>

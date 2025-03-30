@@ -60,12 +60,15 @@ const AddWhatsAppTemplate = () => {
         if (status) {
           const { site, ...rest } = data.whatsappTemplate;
           setWhatsAppTemplate((prev) => ({ ...prev, ...rest, site: site._id }));
+          setAttachments(data?.whatsappTemplate?.files);
         } else showNotification('warn', data);
       })()
         .catch((error) => showNotification('error', error.message))
         .finally(() => setLoading(false));
     }
   }, [id, setLoading]);
+
+  console.log('whatsAppTemplate', whatsAppTemplate);
 
   useEffect(() => {
     if (whatsAppTemplate.site) {
@@ -351,7 +354,7 @@ const AddWhatsAppTemplate = () => {
         </div>
       </div>
 
-      {/* <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
+      <div className="w-full justify-center items-center border-b border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
         <div className="w-full flex flex-col gap-y-2 md:flex-row justify-evenly">
           <div className="sm:w-1/4 w-full flex flex-col">
             <span className="block text-primary">Attached Document</span>
@@ -371,18 +374,18 @@ const AddWhatsAppTemplate = () => {
               <DocumentFileUpload
                 divClassName={'mt-5'}
                 label={'Attachment Files'}
-                isMultiple
                 files={attachments}
+                isMultiple={false}
                 setFiles={setAttachments}
-                allowedTypes={acceptedProductTypes}
-                allowedFileTypes={acceptedExtensions}
+                allowedTypes={['image/jpg', 'image/png', 'image/jpeg']}
+                allowedFileTypes={['jpg', 'png', 'jpeg']}
                 handleFileUpload={handleFileUpload}
                 toolTip={<FileTypesTooltip />}
               />
             </div>
           </div>
         </div>
-      </div> */}
+      </div>
 
       {!isScrollable && (
         <div className="w-full flex justify-end items-center gap-4 pt-4 border- border-primary">

@@ -44,7 +44,7 @@ const AddCampaign = () => {
         smsTemplate: null,
         whatsappTemplate: null,
         isSendInstantly: true,
-        delay: { unit: 'Days', value: '', ms: '' }
+        delay: { unit: 'Seconds', value: '', ms: '' }
       }
     ]
   });
@@ -361,6 +361,7 @@ const AddCampaign = () => {
                   isEnableState={item.isSendInstantly}
                   setIsEnableState={(value) => handleVariableChange(index, 'isSendInstantly', value)}
                 />
+                {console.log('item.delay', item.delay)}
                 {!item.isSendInstantly && (
                   <div>
                     <label className="block text-sm font-medium text-primary mb-2">Custom Duration</label>
@@ -384,7 +385,7 @@ const AddCampaign = () => {
                         }}
                         className="w-30 border-0 focus:outline-none focus:ring-0 py-2.5 bg-grey mr-2 text-primary  "
                       >
-                        {['Days', 'Seconds', 'Hours', 'Weeks', 'Months', 'Years'].map((unit) => (
+                        {['Seconds', 'Minutes', 'Hours', 'Days', 'Weeks', 'Months', 'Years'].map((unit) => (
                           <option key={unit} value={unit}>
                             {unit}
                           </option>
