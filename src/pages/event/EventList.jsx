@@ -9,10 +9,20 @@ import TruncatableCopyFeild from '../../atoms/common/TruncatableCopyFeild';
 import TableHeader from '../../atoms/table/TableHeader';
 import { sendCertificateApi } from '../../apis/participant-apis';
 
+/**
+ * EventList Component
+ * Displays a table of events with sorting, filtering, and various actions
+ * Provides functionality to manage events including CRUD operations and certificate sending
+ */
 const EventList = () => {
   const navigate = useNavigate();
+  // State to store the list of events fetched from the API
   const [events, setEvents] = useState([]);
 
+  /**
+   * Transform event data into table row format
+   * Includes formatting dates and wrapping content in truncatable components
+   */
   const rows = events.map((event) => {
     const { _id, name, date, endDate, lastBookingDate, venue, site, createdAt, updatedAt, timeZone, certificate } = event;
     return {
@@ -32,6 +42,10 @@ const EventList = () => {
     };
   });
 
+  /**
+   * Column configuration for the table
+   * Defines the structure and formatting of each column
+   */
   const columnConfig = [
     { id: 0, label: 'Keys', key: 'Keys', dataKey: '_id' },
     { id: 1, label: 'Event Name', key: 'name', dataKey: 'name' },
@@ -51,6 +65,10 @@ const EventList = () => {
     { id: 9, label: 'Updated Date', key: 'updatedAt', dataKey: 'updatedAt', formatForExport: (value) => (value ? formatDateTime(value) : 'N/A') }
   ];
 
+  /**
+   * Available actions for each event row
+   * Includes navigation handlers and API calls for various operations
+   */
   const actionItems = [
     { id: 0, label: 'Edit', icon: 'edit', handler: (row) => navigate(`/events/edit-event/${row.id}`) },
     { id: 1, label: 'View', icon: 'view', handler: (row) => navigate(`/events/view-event/${row.id}`) },
@@ -77,7 +95,10 @@ const EventList = () => {
 
   return (
     <div className="p-1 overflow-x-hidden mb-12">
+      {/* Header section with add event button */}
       <TableHeader heading={'Events'} btn1={'Add Event'} href1={'/events/add-event'} icon1={<IoMdAdd />} btnLabel1={'Add Event'} />
+
+      {/* Main table component with filtering, searching, and pagination */}
       <TableComponent
         selectable={true}
         siteModule={'events'}
