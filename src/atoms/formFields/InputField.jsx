@@ -22,7 +22,7 @@ const FormField = ({
   const [showPassword, setShowPassword] = useState(false);
 
   return (
-    <div className={`${divClassName} w-full`}>
+    <div className={`w-full ${divClassName} `}>
       <label htmlFor={id} className="block text-sm  font-medium text-primary">
         {label} {required && <span className="text-danger text-lg">*</span>}
       </label>

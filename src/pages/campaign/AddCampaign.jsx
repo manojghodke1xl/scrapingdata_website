@@ -18,6 +18,8 @@ import { getEventBySiteIdApi } from '../../apis/event-apis';
 import { getProductsBySiteApi } from '../../apis/product-apis';
 import { addCampaignApi, getCampaignByIdApi, getExistingCampaignsApi, updateCampaignApi } from '../../apis/campaign-apis';
 import { getContactApi } from '../../apis/contact-apis';
+import FormField from '../../atoms/formFields/InputField';
+import Checkbox from '../../atoms/formFields/Checkbox';
 
 const AddCampaign = () => {
   const { id = '' } = useParams();
@@ -44,10 +46,25 @@ const AddCampaign = () => {
         smsTemplate: null,
         whatsappTemplate: null,
         isSendInstantly: true,
-        delay: { unit: 'Seconds', value: '', ms: '' }
+        campaignSettings: {
+          messageLimitUnit: 'Day',
+          messageLimit: 0,
+          sendBetweenDays: false,
+          sendBetweenDaysFrom: '',
+          sendBetweenDaysTo: '',
+          sendBetweenTime: false,
+          sendBetweenTimeFrom: '',
+          sendBetweenTimeTo: '',
+          maxMessagesPerBatch: 0,
+          batchIntervalUnit: 'Minutes',
+          batchInterval: 0,
+          days: []
+        }
       }
     ]
   });
+
+  console.log('campaignDetails', campaignDetails);
 
   const [formState, setFormState] = useState({
     list: [],
@@ -208,10 +225,31 @@ const AddCampaign = () => {
       campaigns: prev.campaigns.filter((_, i) => i !== index)
     }));
   };
+
   const addVariable = () => {
     setCampaignDetails((prev) => ({
       ...prev,
-      campaigns: [...prev.campaigns, { channels: [], isSendInstantly: true, delay: { unit: 'Days', value: '', custom: '', ms: '' } }]
+      campaigns: [
+        ...prev.campaigns,
+        {
+          channels: [],
+          isSendInstantly: true,
+          campaignSettings: {
+            messageLimitUnit: 'Day',
+            messageLimit: 0,
+            sendBetweenDays: false,
+            sendBetweenDaysFrom: '',
+            sendBetweenDaysTo: '',
+            sendBetweenTime: false,
+            sendBetweenTimeFrom: '',
+            sendBetweenTimeTo: '',
+            maxMessagesPerBatch: 0,
+            batchIntervalUnit: 'Minutes',
+            batchInterval: 0,
+            days: []
+          }
+        }
+      ]
     }));
   };
 
@@ -231,6 +269,55 @@ const AddCampaign = () => {
   const handleRedirectEdit = (channel, index) => {
     const template = formState.emailTemplate.find((template) => template._id === campaignDetails.campaigns[index].emailTemplate);
     if (template) navigate(`/templates/edit-email-template/${template._id}`);
+  };
+
+  const handleCampaignSettingChange = (campaignIndex, key, value) => {
+    setCampaignDetails((prev) => {
+      const updatedCampaigns = [...prev.campaigns];
+      updatedCampaigns[campaignIndex] = {
+        ...updatedCampaigns[campaignIndex],
+        campaignSettings: {
+          ...updatedCampaigns[campaignIndex].campaignSettings,
+          [key]: value
+        }
+      };
+
+      return { ...prev, campaigns: updatedCampaigns };
+    });
+  };
+
+  const handleDayChange = (campaignIndex, day, checked) => {
+    setCampaignDetails((prev) => {
+      const updatedCampaigns = [...prev.campaigns];
+      const updatedDays = checked
+        ? [...updatedCampaigns[campaignIndex].campaignSettings.days, day]
+        : updatedCampaigns[campaignIndex].campaignSettings.days.filter((d) => d !== day);
+
+      updatedCampaigns[campaignIndex] = {
+        ...updatedCampaigns[campaignIndex],
+        campaignSettings: {
+          ...updatedCampaigns[campaignIndex].campaignSettings,
+          days: updatedDays
+        }
+      };
+
+      return { ...prev, campaigns: updatedCampaigns };
+    });
+  };
+
+  const handleTimeRangeChange = (campaignIndex, key, value) => {
+    setCampaignDetails((prev) => {
+      const updatedCampaigns = [...prev.campaigns];
+      updatedCampaigns[campaignIndex] = {
+        ...updatedCampaigns[campaignIndex],
+        campaignSettings: {
+          ...updatedCampaigns[campaignIndex].campaignSettings,
+          [key]: value
+        }
+      };
+
+      return { ...prev, campaigns: updatedCampaigns };
+    });
   };
 
   return (
@@ -299,9 +386,11 @@ const AddCampaign = () => {
           <div className="w-full flex flex-col gap-y-5">
             {campaignDetails.campaigns.map((item, index) => (
               <div key={index} className="flex flex-col border border-primary bg-grey p-4 rounded-xl gap-y-5">
-                <div className="flex justify-end items-center">
-                  <IoCloseSharp className="cursor-pointer" onClick={() => removeVariable(index)} />
-                </div>
+                {campaignDetails.campaigns.length > 1 && (
+                  <div className="flex justify-end items-center">
+                    <IoCloseSharp className="cursor-pointer" onClick={() => removeVariable(index)} />
+                  </div>
+                )}
                 <MultiSelectCheckbox
                   formLabel={'Channels Available'}
                   options={[
@@ -363,34 +452,134 @@ const AddCampaign = () => {
                 />
                 {console.log('item.delay', item.delay)}
                 {!item.isSendInstantly && (
-                  <div>
-                    <label className="block text-sm font-medium text-primary mb-2">Custom Duration</label>
-                    <div className="flex gap-2 items-center mt-1 rounded-xl border border-primary bg-inherit overflow-hidden">
-                      <input
-                        type="number"
-                        min="0"
-                        placeholder="Duration"
-                        value={item?.delay?.value}
-                        onChange={(e) => {
-                          handleVariableChange(index, 'delay.value', e.target.value);
-                          handleCustomScheduleChange(e.target.value, item.delay.unit, index);
-                        }}
-                        className="w-full border-0 focus:outline-none focus:ring-0 px-4 py-2.5 placeholder:text-secondary text-primary bg-transparent"
-                      />
-                      <select
-                        value={item?.delay?.unit}
-                        onChange={(e) => {
-                          handleVariableChange(index, 'delay.unit', e.target.value);
-                          handleCustomScheduleChange(item.delay.value, e.target.value, index);
-                        }}
-                        className="w-30 border-0 focus:outline-none focus:ring-0 py-2.5 bg-grey mr-2 text-primary  "
-                      >
-                        {['Seconds', 'Minutes', 'Hours', 'Days', 'Weeks', 'Months', 'Years'].map((unit) => (
-                          <option key={unit} value={unit}>
-                            {unit}
-                          </option>
+                  <div className="w-full flex flex-col gap-6">
+                    {/* Message Limits */}
+                    <div className="flex font-normal items-center gap-3">
+                      <span>Message (Email, SMS, Whatsapp) Limit Per:</span>
+                      <div className="flex items-center border border-primary rounded-lg overflow-hidden">
+                        <input
+                          value={item.campaignSettings.messageLimit}
+                          onChange={(e) => handleCampaignSettingChange(index, 'messageLimit', e.target.value)}
+                          type="number"
+                          min="0"
+                          placeholder="Duration"
+                          className="w-40 px-3 py-2 focus:outline-none bg-transparent text-primary placeholder:text-secondary"
+                        />
+                        <select
+                          value={item.campaignSettings.messageLimitUnit}
+                          className="py-2 px-3 border-l border-primary bg-transparent text-primary"
+                          onChange={(e) => handleCampaignSettingChange(index, 'messageLimitUnit', e.target.value)}
+                        >
+                          {['Minute', 'Hour', 'Day'].map((unit) => (
+                            <option key={unit} value={unit}>
+                              {unit}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+
+                    {/* Time Range Selection */}
+                    <div className="flex flex-col gap-4">
+                      {/* Send messages between (Dates) */}
+                      <div className="flex flex-col gap-2">
+                        <label className="flex items-center gap-2">
+                          <Checkbox checked={item.campaignSettings.sendBetweenDays} onChange={(e) => handleTimeRangeChange(index, 'sendBetweenDays', e.target.checked)} />
+                          Send messages between (Dates)
+                        </label>
+                        {item.campaignSettings.sendBetweenDays && (
+                          <div className="flex items-center gap-4">
+                            <input
+                              type="date"
+                              value={item.campaignSettings.sendBetweenDaysFrom}
+                              onChange={(e) => handleTimeRangeChange(index, 'sendBetweenDaysFrom', e.target.value)}
+                              className="px-3 py-2 border border-primary rounded-lg bg-transparent text-primary"
+                            />
+                            <span>to</span>
+                            <input
+                              type="date"
+                              value={item.campaignSettings.sendBetweenDaysTo}
+                              onChange={(e) => handleTimeRangeChange(index, 'sendBetweenDaysTo', e.target.value)}
+                              className="px-3 py-2 border border-primary rounded-lg bg-transparent text-primary"
+                            />
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Send messages between (Time) */}
+                      <div className="flex flex-col gap-2">
+                        <label className="flex items-center gap-2">
+                          <Checkbox checked={item.campaignSettings.sendBetweenTime} onChange={(e) => handleTimeRangeChange(index, 'sendBetweenTime', e.target.checked)} />
+                          Send messages between (Time)
+                        </label>
+                        {item.campaignSettings.sendBetweenTime && (
+                          <div className="flex items-center gap-4">
+                            <input
+                              type="time"
+                              value={item.campaignSettings.sendBetweenTimeFrom}
+                              onChange={(e) => handleTimeRangeChange(index, 'sendBetweenTimeFrom', e.target.value)}
+                              className="px-3 py-2 border border-primary rounded-lg bg-transparent text-primary"
+                            />
+                            <span>to</span>
+                            <input
+                              type="time"
+                              value={item.campaignSettings.sendBetweenTimeTo}
+                              onChange={(e) => handleTimeRangeChange(index, 'sendBetweenTimeTo', e.target.value)}
+                              className="px-3 py-2 border border-primary rounded-lg bg-transparent text-primary"
+                            />
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Batch Limit & Interval */}
+                    <div className="flex flex-col gap-4">
+                      <div className="flex items-center gap-3">
+                        <span>Max messages per batch:</span>
+                        <FormField
+                          divClassName="w-[15%]"
+                          value={item.campaignSettings.batchLimit}
+                          onChange={(e) => handleCampaignSettingChange(index, 'batchLimit', e.target.value)}
+                        />
+                      </div>
+
+                      <div className="flex   items-center gap-3">
+                        <span>Time interval between batches:</span>
+                        <div className="flex items-center border border-primary rounded-lg overflow-hidden">
+                          <input
+                            type="number"
+                            min="0"
+                            placeholder="Duration"
+                            className="w-40 px-3 py-2 focus:outline-none bg-transparent text-primary placeholder:text-secondary"
+                            value={item.campaignSettings.batchInterval}
+                            onChange={(e) => handleCampaignSettingChange(index, 'batchInterval', e.target.value)}
+                          />
+                          <select
+                            className="py-2 px-3 border-l border-primary bg-transparent text-primary"
+                            value={item.campaignSettings.batchIntervalUnit}
+                            onChange={(e) => handleCampaignSettingChange(index, 'batchIntervalUnit', e.target.value)}
+                          >
+                            {['Seconds', 'Minutes', 'Hours', 'Days', 'Weeks', 'Months', 'Years'].map((unit) => (
+                              <option key={unit} value={unit}>
+                                {unit}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Days Selection */}
+                    <div className="flex flex-col gap-3">
+                      <span>Send messages only on:</span>
+                      <div className="grid grid-cols-7 gap-4">
+                        {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
+                          <label key={day} className="flex flex-col items-center gap-1">
+                            <Checkbox checked={item.campaignSettings.days.includes(day)} onChange={(e) => handleDayChange(index, day, e.target.checked)} />
+                            <span>{day}</span>
+                          </label>
                         ))}
-                      </select>
+                      </div>
                     </div>
                   </div>
                 )}
