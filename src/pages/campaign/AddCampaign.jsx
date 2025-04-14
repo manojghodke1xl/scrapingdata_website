@@ -50,11 +50,7 @@ const AddCampaign = () => {
           messageLimitUnit: 'Day',
           messageLimit: 0,
           sendBetweenDays: false,
-          sendBetweenDaysFrom: '',
-          sendBetweenDaysTo: '',
           sendBetweenTime: false,
-          sendBetweenTimeFrom: '',
-          sendBetweenTimeTo: '',
           maxMessagesPerBatch: 0,
           batchIntervalUnit: 'Minutes',
           batchInterval: 0,
@@ -150,7 +146,15 @@ const AddCampaign = () => {
   const validate = () => {
     const newErrors = {};
     if (!campaignDetails.site) newErrors.site = 'Site is required.';
+    if (!campaignDetails.contacts.length) newErrors.contacts = 'At least one contact is required.';
+    if (!campaignDetails.campaigns.length) newErrors.campaigns = 'At least one campaign is required.';
+
+    campaignDetails.campaigns.forEach((campaign, index) => {
+      if (!campaign.channels.length) newErrors[`channels.${index}`] = 'At least one channel is required.';
+    });
+
     setErrors(newErrors);
+    console.log('newErrors', newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
@@ -235,14 +239,10 @@ const AddCampaign = () => {
           channels: [],
           isSendInstantly: true,
           campaignSettings: {
-            messageLimitUnit: 'Day',
+            messageLimitUnit: 'day',
             messageLimit: 0,
             sendBetweenDays: false,
-            sendBetweenDaysFrom: '',
-            sendBetweenDaysTo: '',
             sendBetweenTime: false,
-            sendBetweenTimeFrom: '',
-            sendBetweenTimeTo: '',
             maxMessagesPerBatch: 0,
             batchIntervalUnit: 'Minutes',
             batchInterval: 0,
@@ -368,11 +368,13 @@ const AddCampaign = () => {
           </div>
           <div className="w-full flex flex-col gap-y-5">
             <MultiSelectCheckbox
-              options={allContacts.map((contact) => ({ name: contact.name, _id: contact._id }))}
+              options={allContacts.map((contact) => ({ name: contact.name, _id: contact._id, email: contact.email }))}
               formLabel={'Select Contacts'}
               label={'Select Contacts'}
               onChange={(e) => setCampaignDetails((prev) => ({ ...prev, contacts: e }))}
               selected={campaignDetails.contacts}
+              showNameKey="email"
+              error={errors.contacts}
             />
           </div>
         </div>
@@ -384,9 +386,9 @@ const AddCampaign = () => {
             <span className="text-primary">Follow - up</span>
           </div>
           <div className="w-full flex flex-col gap-y-5">
-            {campaignDetails.campaigns.map((item, index) => (
+            {campaignDetails.campaigns?.map((item, index) => (
               <div key={index} className="flex flex-col border border-primary bg-grey p-4 rounded-xl gap-y-5">
-                {campaignDetails.campaigns.length > 1 && (
+                {campaignDetails.campaigns?.length > 1 && (
                   <div className="flex justify-end items-center">
                     <IoCloseSharp className="cursor-pointer" onClick={() => removeVariable(index)} />
                   </div>
@@ -403,9 +405,10 @@ const AddCampaign = () => {
                     handleVariableChange(index, 'channels', selected);
                   }}
                   selected={item.channels}
+                  error={errors[`channels.${index}`]}
                 />
 
-                {item.channels.length > 0 && (
+                {item.channels?.length > 0 && (
                   <div>
                     {item.channels.map((channel, channelIndex) => (
                       <div key={channelIndex} className="relative">
@@ -458,7 +461,7 @@ const AddCampaign = () => {
                       <span>Message (Email, SMS, Whatsapp) Limit Per:</span>
                       <div className="flex items-center border border-primary rounded-lg overflow-hidden">
                         <input
-                          value={item.campaignSettings.messageLimit}
+                          value={item.campaignSettings?.messageLimit || 0}
                           onChange={(e) => handleCampaignSettingChange(index, 'messageLimit', e.target.value)}
                           type="number"
                           min="0"
@@ -466,7 +469,7 @@ const AddCampaign = () => {
                           className="w-40 px-3 py-2 focus:outline-none bg-transparent text-primary placeholder:text-secondary"
                         />
                         <select
-                          value={item.campaignSettings.messageLimitUnit}
+                          value={item.campaignSettings?.messageLimitUnit}
                           className="py-2 px-3 border-l border-primary bg-transparent text-primary"
                           onChange={(e) => handleCampaignSettingChange(index, 'messageLimitUnit', e.target.value)}
                         >
@@ -484,21 +487,21 @@ const AddCampaign = () => {
                       {/* Send messages between (Dates) */}
                       <div className="flex flex-col gap-2">
                         <label className="flex items-center gap-2">
-                          <Checkbox checked={item.campaignSettings.sendBetweenDays} onChange={(e) => handleTimeRangeChange(index, 'sendBetweenDays', e.target.checked)} />
+                          <Checkbox checked={item.campaignSettings?.sendBetweenDays} onChange={(e) => handleTimeRangeChange(index, 'sendBetweenDays', e.target.checked)} />
                           Send messages between (Dates)
                         </label>
-                        {item.campaignSettings.sendBetweenDays && (
+                        {item.campaignSettings?.sendBetweenDays && (
                           <div className="flex items-center gap-4">
                             <input
                               type="date"
-                              value={item.campaignSettings.sendBetweenDaysFrom}
+                              value={item.campaignSettings?.sendBetweenDaysFrom}
                               onChange={(e) => handleTimeRangeChange(index, 'sendBetweenDaysFrom', e.target.value)}
                               className="px-3 py-2 border border-primary rounded-lg bg-transparent text-primary"
                             />
                             <span>to</span>
                             <input
                               type="date"
-                              value={item.campaignSettings.sendBetweenDaysTo}
+                              value={item.campaignSettings?.sendBetweenDaysTo}
                               onChange={(e) => handleTimeRangeChange(index, 'sendBetweenDaysTo', e.target.value)}
                               className="px-3 py-2 border border-primary rounded-lg bg-transparent text-primary"
                             />
@@ -509,10 +512,10 @@ const AddCampaign = () => {
                       {/* Send messages between (Time) */}
                       <div className="flex flex-col gap-2">
                         <label className="flex items-center gap-2">
-                          <Checkbox checked={item.campaignSettings.sendBetweenTime} onChange={(e) => handleTimeRangeChange(index, 'sendBetweenTime', e.target.checked)} />
+                          <Checkbox checked={item.campaignSettings?.sendBetweenTime} onChange={(e) => handleTimeRangeChange(index, 'sendBetweenTime', e.target.checked)} />
                           Send messages between (Time)
                         </label>
-                        {item.campaignSettings.sendBetweenTime && (
+                        {item.campaignSettings?.sendBetweenTime && (
                           <div className="flex items-center gap-4">
                             <input
                               type="time"
@@ -538,7 +541,7 @@ const AddCampaign = () => {
                         <span>Max messages per batch:</span>
                         <FormField
                           divClassName="w-[15%]"
-                          value={item.campaignSettings.batchLimit}
+                          value={item.campaignSettings?.batchLimit}
                           onChange={(e) => handleCampaignSettingChange(index, 'batchLimit', e.target.value)}
                         />
                       </div>
@@ -551,12 +554,12 @@ const AddCampaign = () => {
                             min="0"
                             placeholder="Duration"
                             className="w-40 px-3 py-2 focus:outline-none bg-transparent text-primary placeholder:text-secondary"
-                            value={item.campaignSettings.batchInterval}
+                            value={item.campaignSettings?.batchInterval}
                             onChange={(e) => handleCampaignSettingChange(index, 'batchInterval', e.target.value)}
                           />
                           <select
                             className="py-2 px-3 border-l border-primary bg-transparent text-primary"
-                            value={item.campaignSettings.batchIntervalUnit}
+                            value={item.campaignSettings?.batchIntervalUnit}
                             onChange={(e) => handleCampaignSettingChange(index, 'batchIntervalUnit', e.target.value)}
                           >
                             {['Seconds', 'Minutes', 'Hours', 'Days', 'Weeks', 'Months', 'Years'].map((unit) => (
@@ -575,7 +578,7 @@ const AddCampaign = () => {
                       <div className="grid grid-cols-7 gap-4">
                         {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
                           <label key={day} className="flex flex-col items-center gap-1">
-                            <Checkbox checked={item.campaignSettings.days.includes(day)} onChange={(e) => handleDayChange(index, day, e.target.checked)} />
+                            <Checkbox checked={item.campaignSettings?.days.includes(day)} onChange={(e) => handleDayChange(index, day, e.target.checked)} />
                             <span>{day}</span>
                           </label>
                         ))}

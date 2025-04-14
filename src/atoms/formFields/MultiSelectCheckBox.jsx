@@ -13,7 +13,8 @@ const MultiSelectCheckbox = ({
   error,
   disabled,
   divClassName,
-  mode = 'ids' // 'ids' or 'objects'
+  mode = 'ids', // 'ids' or 'objects'
+  showNameKey = ''
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -27,7 +28,9 @@ const MultiSelectCheckbox = ({
   }, [isOpen]);
 
   // Filter options based on the search query
-  const filteredOptions = options.filter((option) => option.name?.toLowerCase().includes(searchQuery?.toLowerCase()));
+  const filteredOptions = options.filter(
+    (option) => option.name?.toLowerCase().includes(searchQuery?.toLowerCase()) || (showNameKey && option[showNameKey]?.toLowerCase().includes(searchQuery?.toLowerCase()))
+  );
 
   // Handle selecting/deselecting individual checkboxes
   const handleChange = (key) => {
@@ -129,7 +132,7 @@ const MultiSelectCheckbox = ({
                 <div key={option._id} className={`flex items-center px-3 py-2  ${isChecked ? 'bg-primary-faded ' : 'hover:bg-hover'} `}>
                   <Checkbox id={option._id} checked={isChecked} onChange={() => handleChange(option._id)} disabled={isSuperAdmin || disabled} />
                   <label htmlFor={option._id} className="ml-2 text-secondary cursor-pointer select-none">
-                    {option.name}
+                    {option.name} {showNameKey && option[showNameKey] && `(${option[showNameKey]})`}
                   </label>
                 </div>
               );
