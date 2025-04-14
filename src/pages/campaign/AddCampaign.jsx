@@ -369,12 +369,14 @@ const AddCampaign = () => {
           </div>
           <div className="w-full flex flex-col gap-y-5">
             <MultiSelectCheckbox
-              options={allContacts.map((contact) => ({ name: contact.name, _id: contact._id, email: contact.email }))}
+              options={allContacts.map((contact) => ({ name: contact.name, _id: contact._id, email: contact.email, phone: contact.phone, phoneCode: contact.phoneCode }))}
               formLabel={'Select Contacts'}
               label={'Select Contacts'}
               onChange={(e) => setCampaignDetails((prev) => ({ ...prev, contacts: e }))}
               selected={campaignDetails.contacts}
-              showNameKey="email"
+              descriptionKey="email"
+              showPhoneCodeKey="phoneCode"
+              showPhoneKey="phone"
               error={errors.contacts}
             />
           </div>

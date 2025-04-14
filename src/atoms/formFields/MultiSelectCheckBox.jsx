@@ -14,7 +14,9 @@ const MultiSelectCheckbox = ({
   disabled,
   divClassName,
   mode = 'ids', // 'ids' or 'objects'
-  showNameKey = ''
+  descriptionKey = '',
+  showPhoneCodeKey = '',
+  showPhoneKey = ''
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -29,7 +31,10 @@ const MultiSelectCheckbox = ({
 
   // Filter options based on the search query
   const filteredOptions = options.filter(
-    (option) => option.name?.toLowerCase().includes(searchQuery?.toLowerCase()) || (showNameKey && option[showNameKey]?.toLowerCase().includes(searchQuery?.toLowerCase()))
+    (option) =>
+      option.name?.toLowerCase().includes(searchQuery?.toLowerCase()) ||
+      (descriptionKey && option[descriptionKey]?.toLowerCase().includes(searchQuery?.toLowerCase())) ||
+      (showPhoneCodeKey && showPhoneKey && `${option[showPhoneCodeKey]}${option[showPhoneKey]}`.toLowerCase().includes(searchQuery?.toLowerCase()))
   );
 
   // Handle selecting/deselecting individual checkboxes
@@ -129,11 +134,16 @@ const MultiSelectCheckbox = ({
                   : selected.some((item) => item[option._id] === true);
 
               return (
-                <div key={option._id} className={`flex items-center px-3 py-2  ${isChecked ? 'bg-primary-faded ' : 'hover:bg-hover'} `}>
+                <div key={option._id} className={`flex items-start px-3 py-2 ${isChecked ? 'bg-primary-faded' : 'hover:bg-hover'}`}>
+                  {console.log('option', option)}
                   <Checkbox id={option._id} checked={isChecked} onChange={() => handleChange(option._id)} disabled={isSuperAdmin || disabled} />
-                  <label htmlFor={option._id} className="ml-2 text-secondary cursor-pointer select-none">
-                    {option.name} {showNameKey && option[showNameKey] && `(${option[showNameKey]})`}
-                  </label>
+                  <div className="ml-2">
+                    <label htmlFor={option._id} className="text-secondary cursor-pointer select-none">
+                      {option.name}
+                      {showPhoneCodeKey && option[showPhoneCodeKey] && showPhoneKey && option[showPhoneKey] && ` (+${option[showPhoneCodeKey]} ${option[showPhoneKey]})`}
+                    </label>
+                    {descriptionKey && option[descriptionKey] && <p className="text-secondary text-sm">{option[descriptionKey]}</p>}
+                  </div>
                 </div>
               );
             })}
