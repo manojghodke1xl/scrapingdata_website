@@ -193,10 +193,10 @@ const DocumentFileUpload = ({
               ) : (
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    {getFileIcon(file.name)}
+                    {getFileIcon(file?.name)}
                     <div>
-                      <p className="text-sm font-medium text-primary">{file.name}</p>
-                      <p className="text-xs text-secondary">{(file.size / 1024).toFixed(3)} KB</p>
+                      <p className="text-sm font-medium text-primary">{file?.name}</p>
+                      <p className="text-xs text-secondary">{(file?.size / 1024).toFixed(3)} KB</p>
                     </div>
                   </div>
                   <div className="relative" ref={(el) => (existingDropdownRefs.current[index] = el)}>

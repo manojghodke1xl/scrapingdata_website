@@ -118,13 +118,14 @@ export const uploadMultipleCustomFiles = async (files = []) => {
   const fileIds = [];
 
   for (const userFile of files) {
+    if (userFile._id) continue;
     const res = await fetch(`${import.meta.env.VITE_API_URL}/upload`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         Authorization: localStorage.getItem('auth')
       },
-      body: JSON.stringify({ name: userFile.customName, size: userFile.file.size, mime: userFile.file.type })
+      body: JSON.stringify({ name: userFile.customName, size: userFile.file?.size, mime: userFile.file?.type })
     });
 
     const { data, error } = await res.json();
