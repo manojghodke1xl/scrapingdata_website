@@ -7,6 +7,8 @@ import { showNotification } from '../../utils/showNotification';
 import TableComponent from '../../atoms/table/Table';
 import useGlobalContext from '../../hooks/useGlobalContext';
 import ImportResults from './ImportResults';
+import { IoArrowBack } from 'react-icons/io5';
+import FormButtons from '../../atoms/formFields/FormButtons';
 
 const BulkImport = ({ config }) => {
   const { title, templateFields, importApi, validateData, redirectPath, rows, getResponseHeaders } = config;
@@ -135,6 +137,7 @@ const BulkImport = ({ config }) => {
     <div className="p-8 flex flex-col min-h-screen mb-20">
       <div className="w-full pb-4 border-b border-primary gap-y-4 gap-2 flex flex-col items-start md:flex-row lg:flex-col xl:flex-row justify-between lg:items-start md:items-end xl:items-end mb-4">
         <span className="text-3xl font-semibold text-dark">Bulk Import {title}</span>
+        {!file && <FormButtons to="/contact/contact-list" btnLebal="" />}
       </div>
 
       <div className="flex justify-center">
