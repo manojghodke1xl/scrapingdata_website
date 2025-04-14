@@ -134,14 +134,15 @@ const AddCampaign = () => {
     }
   }, [id, setLoading]);
 
-  useEffect(() => {
-    if (!id && !isDuplicate && campaignDetails.site) {
-      (async () => {
-        const { status, data } = await getExistingCampaignsApi(campaignDetails.site);
-        if (status) if (data.campaign) setExistingCampaign((prev) => ({ ...prev, modelOpen: true, campaignId: data.campaign._id }));
-      })();
-    }
-  }, [campaignDetails.site, id, isDuplicate]);
+  // TODO: can run multiple campaigns on one site.
+  // useEffect(() => {
+  //   if (!id && !isDuplicate && campaignDetails.site) {
+  //     (async () => {
+  //       const { status, data } = await getExistingCampaignsApi(campaignDetails.site);
+  //       if (status) if (data.campaign) setExistingCampaign((prev) => ({ ...prev, modelOpen: true, campaignId: data.campaign._id }));
+  //     })();
+  //   }
+  // }, [campaignDetails.site, id, isDuplicate]);
 
   const validate = () => {
     const newErrors = {};
