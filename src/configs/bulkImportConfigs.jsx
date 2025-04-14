@@ -1,6 +1,6 @@
 /**
  * This file contains configurations for importing participants and contacts in bulk.
- * 
+ *
  * Each configuration object contains the following properties:
  * - title: The title of the import type.
  * - templateFields: An object containing the fields that should be present in the import template.
@@ -10,9 +10,9 @@
  * - rows: A function that takes the data and returns an array of objects that can be used to render the import results table.
  * - getResponseHeaders: A function that takes the data and returns an array of objects that can be used to render the import results table headers.
  * - redirectPath: The path to redirect the user to after the import is complete.
- * 
+ *
  * The functions `bulkUploadParticipantsApi` and `bulkUploadContactsApi` are imported from the `participant-apis` and `contact-apis` files respectively.
- * 
+ *
  * The `field` function is a helper function that takes a string and returns a React component that renders a red text with the given string.
  */
 
@@ -21,7 +21,7 @@ import { bulkUploadContactsApi } from '../apis/contact-apis';
 
 /**
  * A helper function to create a React component that renders a red text with the given string.
- * 
+ *
  * @param {string} data The string to render.
  * @returns {React.ReactElement} A React component that renders a red text with the given string.
  */
@@ -47,7 +47,7 @@ export const participantImportConfig = {
   },
   /**
    * A function that takes the validated data and makes a POST request to the API to import the participants.
-   * 
+   *
    * @param {Array<Object>} data The validated data to import.
    * @returns {Promise<Object>} A promise that resolves to the response from the API.
    */
@@ -68,7 +68,7 @@ export const participantImportConfig = {
   },
   /**
    * A function that takes the data and returns an object with two properties: valid and errors.
-   * 
+   *
    * @param {Array<Object>} data The data to validate.
    * @returns {Object} An object with two properties: valid and errors. valid is an array of objects that are valid, and errors is an array of objects that contain errors.
    */
@@ -102,7 +102,7 @@ export const participantImportConfig = {
   },
   /**
    * A function that takes the data and returns an array of objects that can be used to render the import results table.
-   * 
+   *
    * @param {Array<Object>} data The data to render.
    * @returns {Array<Object>} An array of objects that can be used to render the import results table.
    */
@@ -129,7 +129,7 @@ export const participantImportConfig = {
   },
   /**
    * A function that takes the data and returns an array of objects that can be used to render the import results table headers.
-   * 
+   *
    * @param {Array<Object>} data The data to render.
    * @returns {Array<Object>} An array of objects that can be used to render the import results table headers.
    */
@@ -166,7 +166,7 @@ export const contactImportConfig = {
   },
   /**
    * A function that takes the validated data and makes a POST request to the API to import the contacts.
-   * 
+   *
    * @param {Array<Object>} data The validated data to import.
    * @returns {Promise<Object>} A promise that resolves to the response from the API.
    */
@@ -182,7 +182,7 @@ export const contactImportConfig = {
   },
   /**
    * A function that takes the data and returns an object with two properties: valid and errors.
-   * 
+   *
    * @param {Array<Object>} data The data to validate.
    * @returns {Object} An object with two properties: valid and errors. valid is an array of objects that are valid, and errors is an array of objects that contain errors.
    */
@@ -209,7 +209,7 @@ export const contactImportConfig = {
   },
   /**
    * A function that takes the data and returns an array of objects that can be used to render the import results table.
-   * 
+   *
    * @param {Array<Object>} data The data to render.
    * @returns {Array<Object>} An array of objects that can be used to render the import results table.
    */

@@ -91,6 +91,7 @@ const AdminList = () => {
       <TableHeader heading={'Admins'} btn1={true} href1={'/admin/add-admin'} icon1={<IoMdAdd />} btnLabel1={'Add Admin'} />
       <TableComponent
         selectable={true}
+        // table name or id
         siteModule={'admins'}
         headers={columnConfig}
         tableData={(data) => setAdmins(data.admins)}

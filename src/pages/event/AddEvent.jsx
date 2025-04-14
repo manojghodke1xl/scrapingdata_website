@@ -13,17 +13,25 @@ import ToggleComponent from '../../atoms/formFields/ToggleComponent';
 import { MdDeleteForever } from 'react-icons/md';
 import { tzInts } from '../../constants/comon';
 
+/**
+ * AddEvent Component - Handles creation and editing of events
+ * Supports adding new events, editing existing events, and duplicating events
+ */
 const AddEvent = () => {
+  // Router and navigation hooks
   const navigate = useNavigate();
   const { id = '' } = useParams();
+  const { pathname } = useLocation();
+  const isDuplicate = pathname.includes('duplicate');
+
+  // Global context and state
   const {
     auth: { allSites: availableSites },
     setLoading,
     isLoading
   } = useGlobalContext();
-  const { pathname } = useLocation();
-  const isDuplicate = pathname.includes('duplicate');
 
+  // Local state management
   const [isScrollable, setIsScrollable] = useState(false);
   const [errors, setErrors] = useState({});
   const [eventDetails, setEventDetails] = useState({
@@ -39,9 +47,26 @@ const AddEvent = () => {
   });
   const [emailInput, setEmailInput] = useState('');
 
+  /**
+   * Removes an item from an array in state at the specified index
+   * @param {Function} setDetails - State setter function
+   * @param {string} key - Object key for the array
+   * @param {number} indexToRemove - Index to remove
+   */
   const removeItemAtIndex = (setDetails, key, indexToRemove) => setDetails((prev) => ({ ...prev, [key]: prev[key].filter((_, index) => index !== indexToRemove) }));
 
+  // Email validation regex
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+  /**
+   * Validates and adds an email to the adminEmails array
+   * @param {Event} e - Form event
+   * @param {string} inputValue - Email input value
+   * @param {Function} setInputValue - Input state setter
+   * @param {Function} setStateDetails - Main state setter
+   * @param {string} key - State key to update
+   * @param {RegExp} regexPattern - Validation pattern
+   */
   const validateAndAddInput = (e, inputValue, setInputValue, setStateDetails, key, regexPattern) => {
     e.preventDefault();
     if (inputValue && regexPattern.test(inputValue)) {
@@ -52,6 +77,10 @@ const AddEvent = () => {
     else setErrors((prev) => ({ ...prev, forwardEmails: 'Please enter a valid email address.' }));
   };
 
+  /**
+   * Validates form fields before submission
+   * @returns {boolean} - True if validation passes
+   */
   const validate = () => {
     const newErrors = {};
     if (!eventDetails.name.trim()) newErrors.name = 'Event Name is required.';
@@ -69,6 +98,7 @@ const AddEvent = () => {
     return Object.keys(newErrors).length === 0;
   };
 
+  // Effect to fetch event details when editing
   useEffect(() => {
     if (id) {
       setLoading(true);
@@ -87,6 +117,10 @@ const AddEvent = () => {
     }
   }, [id, setLoading]);
 
+  /**
+   * Handles form submission for creating/updating events
+   * @param {Event} e - Form event
+   */
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
@@ -104,12 +138,16 @@ const AddEvent = () => {
     }
   };
 
+  /**
+   * Checks if the content is scrollable and updates state
+   */
   const checkScrollability = () => {
     const contentHeight = document.documentElement.scrollHeight;
     const windowHeight = window.innerHeight;
     setIsScrollable(contentHeight > windowHeight);
   };
 
+  // Effect to handle scroll detection
   useEffect(() => {
     checkScrollability();
     window.addEventListener('resize', checkScrollability);

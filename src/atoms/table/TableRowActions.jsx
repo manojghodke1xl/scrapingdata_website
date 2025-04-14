@@ -35,11 +35,14 @@ const TableRowActions = ({ row, actionItems, onToggle, isOpen, setSelectionState
 
   return (
     isOpen && (
-      <ul ref={ref} className={`absolute right-10 z-40 w-56 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 sm:w-48 md:w-56 lg:w-fit whitespace-nowrap`}>
+      <ul
+        ref={ref}
+        className={`absolute right-10 z-40 w-56 rounded-md bg-main border border-primary shadow-lg ring-1 ring-black ring-opacity-5 sm:w-48 md:w-56 lg:w-fit whitespace-nowrap`}
+      >
         {filteredActionItems.map((item, index) => (
           <li key={index}>
             <button
-              className={`w-full flex gap-2 items-center px-4 py-2 text-sm hover:bg-hover focus:outline-none`}
+              className={`w-full flex gap-2 items-center px-4 py-2 text-sm text-primary hover:bg-hover focus:outline-none`}
               onClick={() => {
                 if (item.deleteAction) {
                   setSelectionState((prev) => ({ ...prev, deleteId: row.id }));

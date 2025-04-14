@@ -1,20 +1,45 @@
 import { useState } from 'react';
 import TableComponent from '../../atoms/table/Table';
 
+/**
+ * ImportResults component
+ *
+ * This component shows the results of the import operation.
+ * It displays two tables, one for successful imports and one for failed imports.
+ * The tables are paginated and the user can change the page and the number of items per page.
+ * The component also has a button to go back to the previous page.
+ *
+ * @param {Object} apiResponse The response from the API with the import results
+ * @param {Function} rows A function that takes the data and returns an array of objects that can be used to render the import results table
+ * @param {Function} getResponseHeaders A function that takes the data and returns an array of objects that can be used to render the import results table headers
+ * @param {Function} onClick A function that is called when the user clicks the back button
+ * @returns A JSX element with the import results component
+ */
 const ImportResults = ({ apiResponse, rows, getResponseHeaders, onClick }) => {
+  // State to store the pagination data for the successful and failed imports
   const [responseDataPagination, setResponseDataPagination] = useState({
+    // Initial page for successful imports
     successPage: 1,
+    // Initial number of items per page for successful imports
     successItemsPerPage: 25,
+    // Initial page for failed imports
     failedPage: 1,
+    // Initial number of items per page for failed imports
     failedItemsPerPage: 25
   });
+
+  // Function to get the paginated response data
   const getPaginatedResponseData = (data, currentPage, itemsPerPage) => {
     if (!data) return [];
+    // Calculate the start index based on the current page and the number of items per page
     const startIndex = (currentPage - 1) * itemsPerPage;
+    // Calculate the end index based on the start index and the number of items per page
     const endIndex = startIndex + itemsPerPage;
+    // Return the paginated data
     return data.slice(startIndex, endIndex);
   };
 
+  // Render the component
   return (
     <div className="w-full mt-5">
       <h3 className="text-xl font-semibold mb-4">Import Results</h3>
@@ -78,3 +103,4 @@ const ImportResults = ({ apiResponse, rows, getResponseHeaders, onClick }) => {
 };
 
 export default ImportResults;
+

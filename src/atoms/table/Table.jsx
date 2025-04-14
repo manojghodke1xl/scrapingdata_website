@@ -95,6 +95,8 @@ const TableComponent = ({
     selectedCategory: null,
     lastSelectedItem: null // Add this line
   });
+
+  // state for filter
   const [filterState, setFilterState] = useState({
     searchTerm: '',
     searchKey: '',
@@ -102,12 +104,17 @@ const TableComponent = ({
     siteId: '',
     eventId: ''
   });
+
+  // state for selected filter dropdowns
   const [showFilter, setShowFilter] = useState({
     status: false,
     sites: false,
     event: false
   });
+
+  // state for export modal
   const [exportDropdownOpen, setExportDropdownOpen] = useState(false);
+  // State for column preferences
   const [columnPreferences, setColumnPreferences] = useState({
     pinnedColumns: {
       left: [],
