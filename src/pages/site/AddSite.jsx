@@ -97,7 +97,6 @@ const AddSite = () => {
     else if (siteDetails.host.length > 30) newErrors.host = 'Host must be 30 characters or less';
 
     if (!siteDetails.smtp) newErrors.smtp = 'SMTP is required';
-    if (!siteDetails.orderId) newErrors.orderId = 'Product Order Id is required';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -195,7 +194,6 @@ const AddSite = () => {
               type="text"
               id="orderId"
               name="orderId"
-              required
               placeholder="Product Order Id"
               onChange={(e) => {
                 const value = e.target.value.toUpperCase();
