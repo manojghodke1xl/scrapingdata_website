@@ -62,6 +62,7 @@ const TableComponent = ({
   totalCount,
   onPageChange,
   onItemsPerPageChange,
+  onSelectionChange, // added by manoj shimpi
   bulkSiteOpenAction = [],
   actionItems = []
 }) => {
@@ -84,6 +85,7 @@ const TableComponent = ({
     itemsPerPage: itemsPerPage || 25,
     totalCount: totalCount || 0
   });
+
   const [selectionState, setSelectionState] = useState({
     selectedItems: [],
     isAllSelected: false,
@@ -397,6 +399,7 @@ const TableComponent = ({
   const handleMasterCheckboxChange = () => {
     const nonSuperAdminIds = rows.filter((row) => !row.isSuperAdmin).map((row) => row.id);
     const newChecked = !selectionState.isAllSelected;
+
     setSelectionState((prev) => ({
       ...prev,
       isAllSelected: newChecked,
@@ -440,7 +443,6 @@ const TableComponent = ({
         if (isSelected) updatedSelected = updatedSelected.filter((itemId) => itemId !== id);
         else updatedSelected.push(id);
       }
-
       return {
         ...prev,
         selectedItems: updatedSelected,
@@ -577,6 +579,13 @@ const TableComponent = ({
     return () => window.removeEventListener('keydown', handleEscKey);
   }, [isExpanded]);
 
+  // Added by manoj shimpi for get slectecd ids of checkbox
+  useEffect(() => {
+    if (selectionState.selectedItems.length > 0) {
+      onSelectionChange(selectionState.selectedItems);
+    }
+  }, [selectionState.selectedItems, onSelectionChange]);
+
   return (
     <div
       className={`text-sm transition-all duration-300 ${
@@ -602,6 +611,7 @@ const TableComponent = ({
             events={events}
             bulkSiteOpenAction={bulkSiteOpenAction}
           />
+
           <div
             className={`w-full xl:w-fit flex ${
               (deleteBtn + search + filter + exportBtn + modifyStatus, modifySite + duplicateBtn >= 3 ? 'flex-wrap' : 'flex-nowrap')

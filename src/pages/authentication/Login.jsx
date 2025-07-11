@@ -11,8 +11,8 @@ const Login = () => {
   const { isDarkMode } = useColorContext();
   const navigate = useNavigate();
   const { dispatch, setLoading } = useGlobalContext();
-  const [email, setEmail] = useState(import.meta.env.DEV ? 'vishwajeet.patil@dreamsinternational.in' : '');
-  const [password, setPassword] = useState(import.meta.env.DEV ? 'Vishu@123' : '');
+  const [email, setEmail] = useState(import.meta.env.DEV ? '' : '');
+  const [password, setPassword] = useState(import.meta.env.DEV ? '' : '');
 
   const loginAccount = async (e) => {
     e.preventDefault();

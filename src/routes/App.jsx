@@ -61,6 +61,7 @@ import TaskRoutes from './private-routes/taskRoutes';
 import Layout_SEO from '../layouts/LayoutSeo';
 import ContactRoutes from './private-routes/ContactRoutes';
 import CampaignRoutes from './private-routes/CampaignRoutes';
+import MetaDataRoutes from './private-routes/MetaDataRoutes';
 
 const ZohoStatus = lazy(() => import('../pages/integration/ZohoStatus'));
 
@@ -114,7 +115,8 @@ const privateRoutes = [
   ...DistributorRoutes,
   ...CareerRoutes,
   ...AffiliateRoutes,
-  ...AdvertisementRoutes
+  ...AdvertisementRoutes,
+  ...MetaDataRoutes
 ];
 
 const App = () => {

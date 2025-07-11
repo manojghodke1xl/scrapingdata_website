@@ -168,3 +168,5 @@ export const webinarsPath = [
 export const utilitiesPath = [
   { title: 'UTM Builder', to: ['/utm-builder/utm-builder-list', '/utm-builder/add-utm-builder', '/utm-builder/edit-utm-builder', '/utm-builder/duplicate-utm-builder'] }
 ];
+
+export const metaDataPath = [{ title: 'Meta Data', to: ['/metaData/metadata-list', '/metaData/add-metadata', '/metaData/edit-metadata'] }];

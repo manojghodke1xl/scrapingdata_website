@@ -24,7 +24,8 @@ import {
   afterSalesPath,
   logsPath,
   webinarsPath,
-  utilitiesPath
+  utilitiesPath,
+  metaDataPath
 } from './sidebarTabData';
 import ReusableAccordion from '../../../atoms/sidebar/ReusableAccordion';
 import useGlobalContext from '../../../hooks/useGlobalContext';
@@ -73,7 +74,9 @@ const MaterialSidebar = ({ handleToggleSidebar = () => {} }) => {
     // Additional Tools Section
     { title: 'Templates', links: templatePath, icon: <TbTemplate /> },
     { title: 'Utilities', links: utilitiesPath, icon: <LuLink /> },
-    { title: 'Logs', links: logsPath, icon: <LuLogs /> }
+    { title: 'Logs', links: logsPath, icon: <LuLogs /> },
+    // Meta Data Section  
+{ title: 'Meta Data', links: metaDataPath, icon: <TbFileSearch /> }
   ];
 
   return (
