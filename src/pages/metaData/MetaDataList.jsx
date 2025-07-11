@@ -197,14 +197,13 @@ const MetaDataList = () => {
             <label className="font-medium">Sites:</label>
             <select value={selectedProject} onChange={(e) => setSelectedProject(e.target.value)} className="border rounded px-3 py-1">
               <option value="">All</option>
-              <b>
-                {Array.isArray(siteList) &&
-                  siteList.map((site, index) => (
-                    <option key={site?.name || index} value={site?.name || ''}>
-                      {site?.name}
-                    </option>
-                  ))}
-              </b>
+
+              {Array.isArray(siteList) &&
+                siteList.map((site, index) => (
+                  <option key={site?.name || index} value={site?.name || ''}>
+                    {site?.name}
+                  </option>
+                ))}
             </select>
           </div>
 

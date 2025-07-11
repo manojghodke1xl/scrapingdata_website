@@ -581,8 +581,13 @@ const TableComponent = ({
 
   // Added by manoj shimpi for get slectecd ids of checkbox
   useEffect(() => {
-    if (selectionState.selectedItems.length > 0) {
-      onSelectionChange(selectionState.selectedItems);
+    const items = selectionState.selectedItems;
+    if (items.length > 0) {
+      if (typeof onSelectionChange !== 'function') {
+        //console.warn('onSelectionChange is not a function:', onSelectionChange);
+        return;
+      }
+      onSelectionChange(items);
     }
   }, [selectionState.selectedItems, onSelectionChange]);
 
