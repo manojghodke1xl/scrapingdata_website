@@ -5,6 +5,8 @@ import TableComponent from '../../atoms/table/Table';
 import NoteComponent from '../../atoms/common/NoteComponent';
 import { enquiryListNote } from './EnquiryNotes';
 import { AiOutlineApi } from 'react-icons/ai';
+import { BsDownload } from 'react-icons/bs';
+import { FaLinkedin } from 'react-icons/fa';
 import { IoMdAdd } from 'react-icons/io';
 import TruncatableFieldToolTip from '../../atoms/common/TruncatableFeildToolTip';
 import TableHeader from '../../atoms/table/TableHeader';
@@ -15,7 +17,30 @@ const EnquiryList = () => {
   const [enquiries, setEnquiries] = useState([]);
 
   const rows = enquiries.map((enquiry) => {
-    const { _id, name, email, service, subject, createdAt, updatedAt, site, url, campaign, medium, source, content, term, campaignId, mobile, ccode } = enquiry;
+    const {
+      _id,
+      name,
+      email,
+      service,
+      subject,
+      createdAt,
+      updatedAt,
+      site,
+      url,
+      campaign,
+      medium,
+      source,
+      content,
+      term,
+      campaignId,
+      mobile,
+      ccode,
+      application_url,
+      position_applying_for,
+      linkedin,
+      comments,
+      enquiryType
+    } = enquiry;
 
     return {
       id: _id,
@@ -34,7 +59,42 @@ const EnquiryList = () => {
       term: <TruncatableFieldToolTip content={term} />,
       campaignId: <TruncatableFieldToolTip content={campaignId} />,
       createdAt: formatDateTime(createdAt),
-      updatedAt: formatDateTime(updatedAt)
+      updatedAt: formatDateTime(updatedAt),
+      enquiryType: <TruncatableFieldToolTip content={enquiryType} />,
+      application_resume: application_url?.resume ? (
+        <a href={application_url.resume} download target="_blank" rel="noopener noreferrer">
+          <button className="btn btn-sm btn-outline-primary flex items-center space-x-1">
+            <BsDownload size={16} />
+            <span>Resume</span>
+          </button>
+        </a>
+      ) : null,
+
+      application_cover_letter: application_url?.cover_letter ? (
+        <a href={application_url.cover_letter} download target="_blank" rel="noopener noreferrer">
+          <button className="btn btn-sm btn-outline-primary flex items-center space-x-1">
+            <BsDownload size={16} />
+            <span>Cover Letter</span>
+          </button>
+        </a>
+      ) : null,
+
+      application_portfolio: application_url?.portfolio ? (
+        <a href={application_url.portfolio} download target="_blank" rel="noopener noreferrer">
+          <button className="btn btn-sm btn-outline-primary flex items-center space-x-1">
+            <BsDownload size={16} />
+            <span>Portfolio</span>
+          </button>
+        </a>
+      ) : null,
+      position_applying_for: <TruncatableFieldToolTip content={position_applying_for} />,
+      linkedin: linkedin ? (
+        <a href={linkedin} target="_blank" rel="noopener noreferrer" className="inline-flex items-center space-x-1">
+          <FaLinkedin size={16} className="text-blue-600" />
+          <TruncatableFieldToolTip content={linkedin} />
+        </a>
+      ) : null,
+      comments: <TruncatableFieldToolTip content={comments} />
     };
   });
 
@@ -53,7 +113,15 @@ const EnquiryList = () => {
     { id: 11, label: 'Term', key: 'term', dataKey: 'term' },
     { id: 12, label: 'Campaign ID', key: 'campaignId', dataKey: 'campaignId' },
     { id: 13, label: 'Created At', key: 'createdAt', dataKey: 'createdAt', formatForExport: (value) => formatDateTime(value) },
-    { id: 14, label: 'Updated At', key: 'updatedAt', dataKey: 'updatedAt', formatForExport: (value) => formatDateTime(value) }
+    { id: 14, label: 'Updated At', key: 'updatedAt', dataKey: 'updatedAt', formatForExport: (value) => formatDateTime(value) },
+
+    { id: 15, label: 'Enquiry Type', key: 'enquiryType', dataKey: 'enquiryType' },
+    { id: 16, label: 'Resume URL', key: 'application_resume', dataKey: 'application_resume' },
+    { id: 17, label: 'Cover Letter URL', key: 'application_cover_letter', dataKey: 'application_cover_letter' },
+    { id: 18, label: 'Portfolio URL', key: 'application_portfolio', dataKey: 'application_portfolio' },
+    { id: 19, label: 'Position Applying For', key: 'position_applying_for', dataKey: 'position_applying_for' },
+    { id: 20, label: 'LinkedIn', key: 'linkedin', dataKey: 'linkedin' },
+    { id: 21, label: 'Comments', key: 'comments', dataKey: 'comments' }
   ];
 
   const actionItems = [
