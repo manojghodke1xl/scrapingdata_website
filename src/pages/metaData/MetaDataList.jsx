@@ -165,8 +165,7 @@ const MetaDataList = () => {
   };
 
   const columnConfig = [
-    { id: 0, label: 'Key', key: 'key', dataKey: '_id' },
-    { id: 1, label: 'Website Name', key: 'project_name', dataKey: 'project_name' },
+    { id: 1, label: 'Site', key: 'project_name', dataKey: 'project_name' },
     { id: 2, label: 'Page', key: 'page', dataKey: 'page' },
     { id: 3, label: 'Meta Title', key: 'title', dataKey: 'meta_title' },
     { id: 4, label: 'Meta Description', key: 'meta_description', dataKey: 'meta_description' },

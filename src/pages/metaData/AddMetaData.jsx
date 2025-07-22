@@ -133,8 +133,8 @@ const AddMetaData = () => {
             <div className="w-full flex flex-col gap-y-5">
               <DropDown
                 name="Project"
-                label="Select Website Name"
-                SummaryChild={<h5 className="p-0 m-0 text-primary">{siteList.find((site) => site.name === metaDetails.project_name)?.name || 'Project'}</h5>}
+                label="Site"
+                SummaryChild={<h5 className="p-0 m-0 text-primary">{siteList.find((site) => site.name === metaDetails.project_name)?.name || 'Site'}</h5>}
                 dropdownList={siteList.map((site) => ({
                   id: site.name,
                   showName: site.name,
