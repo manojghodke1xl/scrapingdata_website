@@ -15,6 +15,8 @@ import { RiVideoUploadLine } from 'react-icons/ri';
 import NoteComponent from '../../atoms/common/NoteComponent';
 import { addTestimonialNote, editTestimonialNote } from './TestimonialNotes';
 import { FaRegImage } from 'react-icons/fa';
+// import ImageUpload from '../../atoms/formFields/ImageUpload';
+import ImageUpload from '../../atoms/formFields/ImageUpload';
 
 const AddTestimonial = () => {
   const navigate = useNavigate();
@@ -40,7 +42,9 @@ const AddTestimonial = () => {
     categories: [],
     // image: '',
     // video: '',
-    videoUrl: ''
+    videoUrl: '',
+    profilePicture: null, // new
+    profilePictureFile: null // new
   });
   const [availableCategories, setAvailableCategories] = useState([]);
   const [errors, setErrors] = useState({});
@@ -71,7 +75,8 @@ const AddTestimonial = () => {
       (async () => {
         const { status, data } = await getTestimonialById(id);
         if (status) {
-          const { image, video, sites, ...rest } = data.testimonial;
+          const { image, profilePicture, video, sites, ...rest } = data.testimonial;
+          console.log(profilePicture);
           setTestimonialDetails((prev) => ({
             ...prev,
             ...rest,
@@ -79,7 +84,8 @@ const AddTestimonial = () => {
             image: image && image._id,
             video: video && video._id,
             videoFile: video,
-            imageFile: image
+            imageFile: image,
+            profilePicture: profilePicture
           }));
         } else showNotification('warn', data);
       })()
@@ -109,21 +115,79 @@ const AddTestimonial = () => {
     if (!validate()) return;
     setLoading(true);
     try {
-      const { status, data } = await (id
-        ? isDuplicate
-          ? addTestimonialApi(testimonialDetails)
-          : updateTestimonialApi(id, testimonialDetails)
-        : addTestimonialApi(testimonialDetails));
+      const formData = new FormData();
+      // Explicitly set required fields
+      formData.set('name', testimonialDetails.name);
+      formData.set('type', testimonialDetails.type);
+      formData.set('isGlobal', testimonialDetails.isGlobal ? 'true' : 'false');
+      formData.set('isActive', testimonialDetails.isActive ? 'true' : 'false');
+
+      // Optional fields
+      if (testimonialDetails.desg) formData.set('desg', testimonialDetails.desg);
+      if (testimonialDetails.text) formData.set('text', testimonialDetails.text);
+      if (testimonialDetails.videoUrl) formData.set('videoUrl', testimonialDetails.videoUrl);
+      // Sites and categories (arrays)
+      testimonialDetails.sites.forEach((siteId) => formData.append('sites[]', siteId));
+      testimonialDetails.categories.forEach((catId) => formData.append('categories[]', catId));
+
+      // Handle file uploads
+
+      if (testimonialDetails.profilePicture?.file) {
+        //console.log('Profile picture file:', testimonialDetails.profilePictureFile.file);
+        formData.set('profilePicture', testimonialDetails.profilePicture.file);
+      } else {
+        formData.set('profilePicture', testimonialDetails.profilePicture);
+      }
+
+      if (testimonialDetails.type === 'image' && testimonialDetails.imageFile?.file) formData.set('image', testimonialDetails.imageFile.file);
+
+      if (testimonialDetails.type === 'video' && !testimonialDetails.videoBolean && testimonialDetails.videoFile?.file) formData.set('video', testimonialDetails.videoFile.file);
+
+      // Submit the form
+
+      const { status, data } = await (id ? (isDuplicate ? addTestimonialApi(formData, true) : updateTestimonialApi(id, formData, true)) : addTestimonialApi(formData, true));
+
       if (status) {
         showNotification('success', data.message);
         navigate('/testimonials/testimonial-list');
-      } else showNotification('warn', data);
+      } else {
+        showNotification('warn', data);
+      }
     } catch (error) {
       showNotification('error', error.message);
     } finally {
       setLoading(false);
     }
   };
+
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   if (!validate()) return;
+  //   setLoading(true);
+  //   try {
+  //     const { status, data } = await (id
+  //       ? isDuplicate
+  //         ? addTestimonialApi(testimonialDetails)
+  //         : updateTestimonialApi(id, testimonialDetails)
+  //       : addTestimonialApi(testimonialDetails));
+  //     if (status) {
+  //       showNotification('success', data.message);
+  //       navigate('/testimonials/testimonial-list');
+  //     } else showNotification('warn', data);
+  //   } catch (error) {
+  //     showNotification('error', error.message);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+  useEffect(() => {
+    return () => {
+      const fieldName = 'profilePicture';
+      const url = testimonialDetails?.[fieldName]?.url;
+      if (url) URL.revokeObjectURL(url);
+    };
+  }, [testimonialDetails.profilePicture]);
 
   return (
     <div className="py-8 p-4 sm:p-8 overflow-x-hidden mb-20">
@@ -161,6 +225,19 @@ const AddTestimonial = () => {
               name="desg"
               value={testimonialDetails.desg}
               onChange={(e) => setTestimonialDetails((prev) => ({ ...prev, desg: e.target.value }))}
+            />
+
+            {/*<ImageUpload label="Profile Picture" error={errors.profilePicture} setErrors={setErrors} setDetails={setTestimonialDetails} testimonialDetails={testimonialDetails} />*/}
+
+            <ImageUpload
+              label="Testimonial Profile Picture"
+              fieldName="profilePicture"
+              details={testimonialDetails}
+              setDetails={setTestimonialDetails}
+              error={errors.profilePicture}
+              setErrors={setErrors}
+              acceptedTypes={['image/jpeg', 'image/png', 'image/webp']}
+              isImage
             />
           </div>
         </div>

@@ -37,6 +37,26 @@ export const postMethodCall = async (url, userData, contentType = 'application/j
   }
 };
 
+export const postMethodCallTestimonial = async (url, data, isMultipart = false) => {
+  try {
+    const headers = {
+      ...(isMultipart ? {} : { 'Content-Type': 'application/json' }),
+      Authorization: localStorage.getItem('auth')
+    };
+
+    const response = await fetch(url, {
+      method: 'POST',
+      headers,
+      body: isMultipart ? data : JSON.stringify(data)
+    });
+
+    const result = await response.json();
+    return { status: response.ok, data: result };
+  } catch (error) {
+    return { status: false, data: error.message };
+  }
+};
+
 export const putMethodCall = async (url, userData, contentType = 'application/json') => {
   try {
     const response = await fetch(url, {
@@ -59,6 +79,25 @@ export const putMethodCall = async (url, userData, contentType = 'application/js
   }
 };
 
+export const putMethodCallTestimonial = async (url, data, isMultipart = false) => {
+  try {
+    const headers = {
+      ...(isMultipart ? {} : { 'Content-Type': 'application/json' }),
+      Authorization: localStorage.getItem('auth')
+    };
+
+    const response = await fetch(url, {
+      method: 'PUT',
+      headers,
+      body: isMultipart ? data : JSON.stringify(data)
+    });
+
+    const result = await response.json();
+    return { status: response.ok, data: result };
+  } catch (error) {
+    return { status: false, data: error.message };
+  }
+};
 export const deleteMethodCall = async (url, body, contentType = 'application/json') => {
   try {
     const response = await fetch(url, {

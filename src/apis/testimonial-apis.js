@@ -1,16 +1,24 @@
-import { deleteMethodCall, getMethodCall, postMethodCall, putMethodCall } from './api-handler';
+import { deleteMethodCall, getMethodCall, postMethodCallTestimonial, putMethodCall, putMethodCallTestimonial } from './api-handler';
 
 export const getTestimonialById = async (id) => {
   return await getMethodCall(`${import.meta.env.VITE_API_URL}/testimonial/${id}?p=1`);
 };
 
 export const addTestimonialApi = async (userData) => {
-  return await postMethodCall(`${import.meta.env.VITE_API_URL}/testimonial`, userData);
+  return await postMethodCallTestimonial(`${import.meta.env.VITE_API_URL}/testimonial`, userData, true);
 };
 
 export const updateTestimonialApi = async (id, userData) => {
-  return await putMethodCall(`${import.meta.env.VITE_API_URL}/testimonial/${id}`, userData);
+  return await putMethodCallTestimonial(`${import.meta.env.VITE_API_URL}/testimonial/${id}`, userData, true);
 };
+
+// export const addTestimonialApi = async (userData) => {
+//   return await postMethodCall(`${import.meta.env.VITE_API_URL}/testimonial`, userData, true);
+// };
+
+// export const updateTestimonialApi = async (id, userData) => {
+//   return await putMethodCall(`${import.meta.env.VITE_API_URL}/testimonial/${id}`, userData, true);
+// };
 
 export const updateTestimonialStatusApi = async (ids, isActive) => {
   return await putMethodCall(`${import.meta.env.VITE_API_URL}/testimonial/status`, { ids, isActive });
