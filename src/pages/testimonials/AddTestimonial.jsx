@@ -219,7 +219,7 @@ const AddTestimonial = () => {
               errorMessage={errors.name}
             />
             <TextareaComponent
-              label="Description"
+              label="Description / Designation"
               placeholder="Enter a description..."
               id="desg"
               name="desg"
