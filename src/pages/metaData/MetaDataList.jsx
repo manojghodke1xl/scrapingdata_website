@@ -9,6 +9,7 @@ import TruncatableCopyFeild from '../../atoms/common/TruncatableCopyFeild';
 import { deleteMetaDataApi } from '../../apis/metadata-apis';
 import { getAllSitesApi } from '../../apis/site-apis';
 import { getAllMetaDataApi } from '../../apis/metadata-apis';
+import { IoMdCloudUpload } from "react-icons/io";
 
 const MetaDataList = () => {
   const navigate = useNavigate();
@@ -82,41 +83,6 @@ const MetaDataList = () => {
     }))
   );
 
-  // const handleGeneratePHP = () => {
-  //   const selectedMetaData = metaDataList.filter((item) => selectedRowIds.includes(item._id));
-  //   if (selectedMetaData.length === 0) {
-  //     alert('No rows selected to generate PHP!');
-  //     return;
-  //   }
-
-  //   const cleanList = selectedMetaData.map(({ _id, createdAt, updatedAt, ...rest }) => rest);
-  //   const phpArray = cleanList
-  //     .map((item) => {
-  //       const page = item.page;
-  //       const fields = Object.entries(item)
-  //         .filter(([key]) => key !== 'page')
-  //         .map(([key, value]) => {
-  //           const val = typeof value === 'string' ? `'${value.replace(/'/g, "\\'")}'` : value;
-  //           return `\t\t\t'${key}' => ${val}`;
-  //         })
-  //         .join(',\n');
-
-  //       return `\t'${page}' => [\n${fields}\n\t]`;
-  //     })
-  //     .join(',\n\n');
-
-  //   const phpContent = `<?php\n\n$all_meta_data = [\n${phpArray}\n];\n\n?>`;
-
-  //   const blob = new Blob([phpContent], { type: 'application/x-php' });
-  //   const url = URL.createObjectURL(blob);
-  //   const link = document.createElement('a');
-  //   link.href = url;
-  //   link.download = `${selectedProject || 'selected-meta'}_metaData.php`;
-  //   document.body.appendChild(link);
-  //   link.click();
-  //   document.body.removeChild(link);
-  //   URL.revokeObjectURL(url);
-  // };
 
   const handleGenerateExport = (format) => {
     const selectedMetaData = metaDataList.filter((item) => selectedRowIds.includes(item._id));
@@ -189,7 +155,19 @@ const MetaDataList = () => {
   return (
     <div className="p-1 overflow-x-hidden mb-12">
       <div className="flex items-center justify-between">
-        <TableHeader heading="Meta Tags" btn1={true} href1="/metadata/add-metadata" icon1={<IoMdAdd />} btnLabel1="Add Meta Tag" btnClass="text-sm py-1 px-3" />
+        <TableHeader 
+          heading="Meta Tags" 
+          btn1={true} 
+          href1="/metadata/add-metadata" 
+          icon1={<IoMdAdd />} 
+          btnLabel1="Add Meta Tag" 
+          btnClass="text-sm py-1 px-3" 
+          
+          btn2={true}
+          href2={"/metadata/import-metadata"}
+          icon2={<IoMdCloudUpload />}
+          btnLabel2="Import Meta Tag"
+          />
 
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2">

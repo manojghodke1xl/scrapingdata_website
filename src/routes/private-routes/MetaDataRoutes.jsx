@@ -4,6 +4,8 @@ import { lazy } from 'react';
 const AddMetaData = lazy(() => import('../../pages/metaData/AddMetaData'));
 // Lazy load the AdminList component
 const MetaDataList = lazy(() => import('../../pages/metaData/MetaDataList'));
+// Lazy load the ImportMetaData component
+const ImportMetaData = lazy(() => import('../../pages/metaData/ImportMetaData'))
 
 // AdminRoutes array defines the routes for the admin feature.
 const MetaDataRoutes = [
@@ -12,7 +14,12 @@ const MetaDataRoutes = [
   // Route for adding a new admin
   { path: 'metadata/metadata-list', Component: MetaDataList },
 
-  { path: 'metadata/edit-metadata/:id', Component: AddMetaData }
+  { path: 'metadata/edit-metadata/:id', Component: AddMetaData },
+  
+  // Route for importing meta data
+  { path: 'metadata/import-metadata', Component: ImportMetaData }
+
+  
   // Route for editing an existing admin by ID
   //   { path: 'metaData/edit-admin/:id', Component: AddAdmin },
 ];

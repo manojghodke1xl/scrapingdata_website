@@ -1,4 +1,4 @@
-import { deleteMethodCall, getMethodCall, postMethodCall, putMethodCall } from './api-handler';
+import { deleteMethodCall, getMethodCall, postMethodCall, putMethodCall, downloadFile } from './api-handler';
 
 const BASE_URL = import.meta.env.VITE_API_URL;
 
@@ -32,3 +32,13 @@ export const getAllMetaDataApi = async () => {
 export const getMetaDataByPageApi = async (pageName) => {
   return await getMethodCall(`${BASE_URL}/metadata-page/${pageName}`);
 };
+
+// Get sample csv file
+export const getSampleCSVFile = async() => {
+  return downloadFile(`${BASE_URL}/metadata-sample-download`)
+}
+
+// Upload meta data csv file
+export const uploadCSVFile = async(metadata) => {
+  return postMethodCall(`${BASE_URL}/metadata/import`, metadata)
+}

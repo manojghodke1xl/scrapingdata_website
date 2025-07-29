@@ -119,3 +119,21 @@ export const deleteMethodCall = async (url, body, contentType = 'application/jso
     return { status: false, data: error.message };
   }
 };
+
+// utility method to download file from server:
+export const downloadFile = async (url, contentType = 'text/csv') => {
+  const response = await fetch(url, {
+    method: 'GET',
+    headers: {
+      'Content-Type': contentType,
+    },
+  });
+
+  if (!response.ok) {
+    return { status: false, data: 'Failed to download file' };
+  }
+
+  const blob = await response.blob();
+  console.log(blob)
+  return { status: true, data: blob };
+};

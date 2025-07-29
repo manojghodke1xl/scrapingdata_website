@@ -10,12 +10,8 @@ import TextareaComponent from '../../atoms/formFields/TextareaComponent';
 import DropDown from '../../atoms/formFields/DropDown';
 import MultiSelectCheckbox from '../../atoms/formFields/MultiSelectCheckBox';
 import ToggleComponent from '../../atoms/formFields/ToggleComponent';
-import FileUpload from '../../atoms/formFields/FileUpload';
-import { RiVideoUploadLine } from 'react-icons/ri';
 import NoteComponent from '../../atoms/common/NoteComponent';
 import { addTestimonialNote, editTestimonialNote } from './TestimonialNotes';
-import { FaRegImage } from 'react-icons/fa';
-// import ImageUpload from '../../atoms/formFields/ImageUpload';
 import ImageUpload from '../../atoms/formFields/ImageUpload';
 
 const AddTestimonial = () => {
@@ -40,11 +36,12 @@ const AddTestimonial = () => {
     videoBolean: false,
     sites: [],
     categories: [],
-    // image: '',
-    // video: '',
     videoUrl: '',
     profilePicture: null, // new
-    profilePictureFile: null // new
+    image: null, // new
+    video: null, // new
+    profilePictureFile: null, // new
+    cachedVideo: null,
   });
   const [availableCategories, setAvailableCategories] = useState([]);
   const [errors, setErrors] = useState({});
@@ -76,16 +73,15 @@ const AddTestimonial = () => {
         const { status, data } = await getTestimonialById(id);
         if (status) {
           const { image, profilePicture, video, sites, ...rest } = data.testimonial;
-          console.log(profilePicture);
+          console.log(data.testimonial);
           setTestimonialDetails((prev) => ({
             ...prev,
             ...rest,
             sites: sites.map((s) => s._id),
-            image: image && image._id,
-            video: video && video._id,
-            videoFile: video,
-            imageFile: image,
-            profilePicture: profilePicture
+            video: video,
+            image: image,
+            profilePicture: profilePicture,
+            videoBolean: false,
           }));
         } else showNotification('warn', data);
       })()
@@ -133,15 +129,14 @@ const AddTestimonial = () => {
       // Handle file uploads
 
       if (testimonialDetails.profilePicture?.file) {
-        //console.log('Profile picture file:', testimonialDetails.profilePictureFile.file);
         formData.set('profilePicture', testimonialDetails.profilePicture.file);
       } else {
         formData.set('profilePicture', testimonialDetails.profilePicture);
       }
 
-      if (testimonialDetails.type === 'image' && testimonialDetails.imageFile?.file) formData.set('image', testimonialDetails.imageFile.file);
+      if (testimonialDetails.type === 'image' && testimonialDetails.image?.file) formData.set('image', testimonialDetails.image.file);
 
-      if (testimonialDetails.type === 'video' && !testimonialDetails.videoBolean && testimonialDetails.videoFile?.file) formData.set('video', testimonialDetails.videoFile.file);
+      if (testimonialDetails.type === 'video' && !testimonialDetails.videoBolean && testimonialDetails.video?.file) formData.set('video', testimonialDetails.video.file);
 
       // Submit the form
 
@@ -159,27 +154,6 @@ const AddTestimonial = () => {
       setLoading(false);
     }
   };
-
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   if (!validate()) return;
-  //   setLoading(true);
-  //   try {
-  //     const { status, data } = await (id
-  //       ? isDuplicate
-  //         ? addTestimonialApi(testimonialDetails)
-  //         : updateTestimonialApi(id, testimonialDetails)
-  //       : addTestimonialApi(testimonialDetails));
-  //     if (status) {
-  //       showNotification('success', data.message);
-  //       navigate('/testimonials/testimonial-list');
-  //     } else showNotification('warn', data);
-  //   } catch (error) {
-  //     showNotification('error', error.message);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
 
   useEffect(() => {
     return () => {
@@ -227,8 +201,6 @@ const AddTestimonial = () => {
               onChange={(e) => setTestimonialDetails((prev) => ({ ...prev, desg: e.target.value }))}
             />
 
-            {/*<ImageUpload label="Profile Picture" error={errors.profilePicture} setErrors={setErrors} setDetails={setTestimonialDetails} testimonialDetails={testimonialDetails} />*/}
-
             <ImageUpload
               label="Testimonial Profile Picture"
               fieldName="profilePicture"
@@ -237,7 +209,8 @@ const AddTestimonial = () => {
               error={errors.profilePicture}
               setErrors={setErrors}
               acceptedTypes={['image/jpeg', 'image/png', 'image/webp']}
-              isImage
+              maxFileSizeInMB={1}
+              isImage={true}
             />
           </div>
         </div>
@@ -268,24 +241,26 @@ const AddTestimonial = () => {
                   ...(e.name === 'image'
                     ? { videoBolean: false, video: undefined, text: '', videoUrl: '', videoFile: null }
                     : e.name === 'video'
-                    ? { text: '', image: undefined, imageFile: null }
-                    : { image: undefined, video: undefined, videoBolean: false, videoUrl: '', imageFile: null, videoFile: null })
+                      ? { text: '', image: undefined, imageFile: null }
+                      : { image: undefined, video: undefined, videoBolean: false, videoUrl: '', imageFile: null, videoFile: null })
                 }))
               }
             />
 
             {testimonialDetails.type === 'image' && (
-              <FileUpload
-                logo={<FaRegImage className="text-primary text-2xl" />}
+              <ImageUpload
+                label="Testimonial Image"
+                fieldName="image"
+                details={testimonialDetails}
+                setDetails={setTestimonialDetails}
                 error={errors.image}
                 setErrors={setErrors}
-                acceptedTypes={['.jpeg', '.png']}
-                fieldName="image"
-                isImage
-                setDetails={setTestimonialDetails}
-                imagePreviewUrl={testimonialDetails.imageFile?.url}
+                acceptedTypes={['image/jpeg', 'image/png', 'image/webp']}
+                isImage={true}
+                maxFileSizeInMB={1}
               />
             )}
+
             {testimonialDetails.type === 'text' && (
               <TextareaComponent
                 label="Text"
@@ -302,10 +277,30 @@ const AddTestimonial = () => {
                   label={'Switch to Url?'}
                   isEnableState={testimonialDetails.videoBolean}
                   tooltipContent={'This toggle controls whether the video is uploaded or the video URL is entered.'}
-                  setIsEnableState={(value) =>
-                    setTestimonialDetails((prev) => ({ ...prev, videoBolean: value, ...(value ? { video: undefined, videoFile: null } : { videoUrl: '' }) }))
-                  }
+                  setIsEnableState={(value) => {
+                    setTestimonialDetails((prev) => {
+                      if (value) {
+                        // Switching to URL mode – cache existing video
+                        return {
+                          ...prev,
+                          cachedVideo: prev.video,  // Save current video
+                          video: undefined,
+                          videoFile: null,
+                          videoBolean: true
+                        };
+                      } else {
+                        // Switching back to upload mode – restore cached video if exists
+                        return {
+                          ...prev,
+                          video: prev.cachedVideo || undefined,
+                          videoUrl: '',
+                          videoBolean: false
+                        };
+                      }
+                    });
+                  }}
                 />
+
                 {testimonialDetails.videoBolean ? (
                   <div className="w-full flex flex-col gap-y-2">
                     <FormField
@@ -319,16 +314,20 @@ const AddTestimonial = () => {
                     />
                   </div>
                 ) : (
-                  <FileUpload
-                    logo={<RiVideoUploadLine className="text-primary text-2xl" />}
-                    error={errors.video}
-                    setErrors={setErrors}
-                    acceptedTypes={['.mp4', '.quicktime']}
-                    fieldName="video"
-                    isVideo
-                    setDetails={setTestimonialDetails}
-                    imagePreviewUrl={testimonialDetails.videoFile?.url}
-                  />
+                  <>
+                    <ImageUpload
+                      label="Testimonial Video"
+                      fieldName="video"
+                      details={testimonialDetails}
+                      setDetails={setTestimonialDetails}
+                      error={errors.video}
+                      setErrors={setErrors}
+                      acceptedTypes={['video/mp4', 'video/webm', 'video/ogg']}
+                      isVideo={true}
+                      maxFileSizeInMB={100}
+                    />
+
+                  </>
                 )}
               </>
             )}
