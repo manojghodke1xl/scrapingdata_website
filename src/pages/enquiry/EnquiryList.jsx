@@ -129,8 +129,8 @@ const EnquiryList = () => {
     { id: 20, label: 'LinkedIn', key: 'linkedin', dataKey: 'linkedin' },
     { id: 21, label: 'Comments', key: 'comments', dataKey: 'comments' },
     { id: 22, label: 'Preferred Method of Contact', key: 'preferredMethodOfContact', dataKey: 'preferredMethodOfContact' },
-    { id: 23, label: 'Preferred From Date', key: 'preferredFromDate', dataKey: 'preferredFromDate' },
-    { id: 24, label: 'Preferred To Date', key: 'preferredToDate', dataKey: 'preferredToDate' },
+    { id: 23, label: 'Preferred From Date', key: 'preferredFromDate', dataKey: 'preferredFromDate', formatForExport: (value) => formatDateTime(value)  },
+    { id: 24, label: 'Preferred To Date', key: 'preferredToDate', dataKey: 'preferredToDate', formatForExport: (value) => formatDateTime(value)  },
   ];
 
   const actionItems = [
