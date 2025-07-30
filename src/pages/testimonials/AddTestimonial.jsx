@@ -42,6 +42,7 @@ const AddTestimonial = () => {
     video: null, // new
     profilePictureFile: null, // new
     cachedVideo: null,
+    ratings: 5
   });
   const [availableCategories, setAvailableCategories] = useState([]);
   const [errors, setErrors] = useState({});
@@ -138,6 +139,7 @@ const AddTestimonial = () => {
 
       if (testimonialDetails.type === 'video' && !testimonialDetails.videoBolean && testimonialDetails.video?.file) formData.set('video', testimonialDetails.video.file);
 
+      formData.set('ratings', testimonialDetails.ratings);
       // Submit the form
 
       const { status, data } = await (id ? (isDuplicate ? addTestimonialApi(formData, true) : updateTestimonialApi(id, formData, true)) : addTestimonialApi(formData, true));
@@ -211,6 +213,22 @@ const AddTestimonial = () => {
               acceptedTypes={['image/jpeg', 'image/png', 'image/webp']}
               maxFileSizeInMB={1}
               isImage={true}
+            />
+
+            <DropDown
+              name="type"
+              label={'Ratings'}
+              SummaryChild={<h5 className="p-0 m-0 text-primary">{testimonialDetails.ratings ? testimonialDetails.ratings : 'Select the rating'}</h5>}
+              dropdownList={[
+                { id: 0, showName: '1', name: '1' },
+                { id: 1, showName: '2', name: '2' },
+                { id: 3, showName: '3', name: '3' },
+                { id: 4, showName: '4', name: '4' },
+                { id: 5, showName: '5', name: '5' }
+              ]}
+              selected={testimonialDetails.ratings}
+              search={false}
+              commonFunction={(item) => setTestimonialDetails((prev) => ({ ...prev, ratings: item.name }))}
             />
           </div>
         </div>
