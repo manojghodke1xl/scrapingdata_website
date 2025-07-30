@@ -124,6 +124,18 @@ const ViewEnquiry = () => {
                 <h1 className="font-semibold text-primary">Date & Time</h1>
                 <p className="text-placeholder font-normal"> {formatDateTime(enquiry?.createdAt) || 'No Date & Time available'}</p>
               </div>
+              <div className="mt-5">
+                <h1 className="font-semibold text-primary">Preferred From Date</h1>
+                <p className="text-placeholder font-normal"> {enquiry?.preferredFromDate ? formatDateTime(enquiry?.preferredFromDate) : 'No Preferred From Date available'}</p>
+              </div>
+              <div className="mt-5">
+                <h1 className="font-semibold text-primary">Preferred To Date</h1>
+                <p className="text-placeholder font-normal"> {enquiry?.preferredToDate ? formatDateTime(enquiry?.preferredToDate) : 'No Preferred To Date available'}</p>
+              </div>
+              <div className="mt-5">
+                <h1 className="font-semibold text-primary">Preferred Mode of Contact</h1>
+                <p className="text-placeholder font-normal"> {enquiry?.preferredMethodOfContact || 'No Preferred Mode of Contact is provided'}</p>
+              </div>  
             </div>
           </div>
         </div>
