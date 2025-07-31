@@ -39,10 +39,7 @@ const EnquiryList = () => {
       position_applying_for,
       linkedin,
       comments,
-      enquiryType,
-      preferredFromDate,
-      preferredToDate,
-      preferredMethodOfContact
+      enquiryType
     } = enquiry;
 
     return {
@@ -61,9 +58,6 @@ const EnquiryList = () => {
       content: <TruncatableFieldToolTip content={content} />,
       term: <TruncatableFieldToolTip content={term} />,
       campaignId: <TruncatableFieldToolTip content={campaignId} />,
-      preferredMethodOfContact: <TruncatableFieldToolTip content={preferredMethodOfContact} />,
-      preferredFromDate: preferredFromDate ? formatDateTime(preferredFromDate) : "-",
-      preferredToDate: preferredToDate ? formatDateTime(preferredToDate) : "-",
       createdAt: formatDateTime(createdAt),
       updatedAt: formatDateTime(updatedAt),
       enquiryType: <TruncatableFieldToolTip content={enquiryType} />,
@@ -127,10 +121,7 @@ const EnquiryList = () => {
     { id: 18, label: 'Portfolio URL', key: 'application_portfolio', dataKey: 'application_portfolio' },
     { id: 19, label: 'Position Applying For', key: 'position_applying_for', dataKey: 'position_applying_for' },
     { id: 20, label: 'LinkedIn', key: 'linkedin', dataKey: 'linkedin' },
-    { id: 21, label: 'Comments', key: 'comments', dataKey: 'comments' },
-    { id: 22, label: 'Preferred Method of Contact', key: 'preferredMethodOfContact', dataKey: 'preferredMethodOfContact' },
-    { id: 23, label: 'Preferred From Date', key: 'preferredFromDate', dataKey: 'preferredFromDate', formatForExport: (value) => formatDateTime(value)  },
-    { id: 24, label: 'Preferred To Date', key: 'preferredToDate', dataKey: 'preferredToDate', formatForExport: (value) => formatDateTime(value)  },
+    { id: 21, label: 'Comments', key: 'comments', dataKey: 'comments' }
   ];
 
   const actionItems = [
