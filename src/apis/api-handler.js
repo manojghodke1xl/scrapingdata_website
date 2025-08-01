@@ -37,6 +37,28 @@ export const postMethodCall = async (url, userData, contentType = 'application/j
   }
 };
 
+
+// Post method api call to upload file
+export const postMethodCallForFormWithFile = async (url, data, isMultipart = false) => {
+  try {
+    const headers = {
+      ...(isMultipart ? {} : { 'Content-Type': 'application/json' }),
+      Authorization: localStorage.getItem('auth')
+    };
+
+    const response = await fetch(url, {
+      method: 'POST',
+      headers,
+      body: isMultipart ? data : JSON.stringify(data)
+    });
+
+    const result = await response.json();
+    return { status: response.ok, data: result };
+  } catch (error) {
+    return { status: false, data: error.message };
+  }
+};
+
 export const postMethodCallTestimonial = async (url, data, isMultipart = false) => {
   try {
     const headers = {
@@ -80,6 +102,27 @@ export const putMethodCall = async (url, userData, contentType = 'application/js
 };
 
 export const putMethodCallTestimonial = async (url, data, isMultipart = false) => {
+  try {
+    const headers = {
+      ...(isMultipart ? {} : { 'Content-Type': 'application/json' }),
+      Authorization: localStorage.getItem('auth')
+    };
+
+    const response = await fetch(url, {
+      method: 'PUT',
+      headers,
+      body: isMultipart ? data : JSON.stringify(data)
+    });
+
+    const result = await response.json();
+    return { status: response.ok, data: result };
+  } catch (error) {
+    return { status: false, data: error.message };
+  }
+};
+
+// Put method api call to upload file
+export const putMethodCallForFormWithFile = async (url, data, isMultipart = false) => {
   try {
     const headers = {
       ...(isMultipart ? {} : { 'Content-Type': 'application/json' }),

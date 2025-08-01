@@ -1,15 +1,15 @@
-import { deleteMethodCall, getMethodCall, postMethodCall, putMethodCall } from './api-handler';
+import { deleteMethodCall, getMethodCall, putMethodCall, postMethodCallForFormWithFile, putMethodCallForFormWithFile } from './api-handler';
 
 export const getGalleryById = async (id) => {
   return await getMethodCall(`${import.meta.env.VITE_API_URL}/gallery/${id}?p=1`);
 };
 
 export const addGalleryApi = async (userData) => {
-  return await postMethodCall(`${import.meta.env.VITE_API_URL}/gallery`, userData);
+  return await postMethodCallForFormWithFile(`${import.meta.env.VITE_API_URL}/gallery`, userData, true);
 };
 
 export const updateGalleryApi = async (id, userData) => {
-  return await putMethodCall(`${import.meta.env.VITE_API_URL}/gallery/${id}`, userData);
+  return await putMethodCallForFormWithFile(`${import.meta.env.VITE_API_URL}/gallery/${id}`, userData, true);
 };
 
 export const updateGalleryStatusApi = async (ids, isActive) => {

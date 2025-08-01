@@ -4,6 +4,8 @@ import { lazy } from 'react';
 const GalleryList = lazy(() => import('../../pages/gallery/GalleryList'));
 // Lazy load the AddGallery component to add or edit a gallery
 const AddGallery = lazy(() => import('../../pages/gallery/AddGallery'));
+// Lazy load the ViewGallery component to view gallery
+const ViewGallery = lazy(() => import('../../pages/gallery/ViewGallery'));
 
 // Define routes for the gallery feature
 const GalleryRoutes = [
@@ -14,7 +16,10 @@ const GalleryRoutes = [
   // Route to edit an existing gallery by ID
   { path: 'gallery/edit-gallery/:id', Component: AddGallery },
   // Route to duplicate an existing gallery by ID
-  { path: 'gallery/duplicate-gallery/:id', Component: AddGallery }
+  { path: 'gallery/duplicate-gallery/:id', Component: AddGallery },
+  // Route to view a gallery by ID
+  { path: 'gallery/view-gallery/:id', Component: ViewGallery },
+
 ];
 
 // Export the GalleryRoutes array as the default export

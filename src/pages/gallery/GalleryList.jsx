@@ -16,12 +16,12 @@ const GalleryList = () => {
   const [galleries, setGalleries] = useState([]);
 
   const rows = galleries.map((gallery) => {
-    const { _id, image, isActive, sites, createdAt, updatedAt } = gallery;
+    const { _id, isActive, sites, createdAt, updatedAt } = gallery;
 
     return {
       id: _id,
       exportData: gallery,
-      image: <img src={image.url} alt="Company Logo" className="w-8 h-8 rounded" />,
+      // image: <img src={image.url} alt="Company Logo" className="w-8 h-8 rounded" />,
       sites: <TruncatableFieldToolTip content={sites.map((s) => `${s.name} (${s.host})`).join(', ')} />,
       status: (
         <div
@@ -39,7 +39,7 @@ const GalleryList = () => {
   });
 
   const columnConfig = [
-    { id: 0, label: 'Image', key: 'image', dataKey: 'image', formatForExport: (value) => (value ? value.url : '') },
+    // { id: 0, label: 'Image', key: 'image', dataKey: 'image', formatForExport: (value) => (value ? value.url : '') },
     { id: 1, label: 'Sites', key: 'sites', dataKey: 'sites', formatForExport: (value) => (value ? value.map((s) => `${s.name} (${s.host})`).join(', ') : '') },
     { id: 2, label: 'Status', key: 'status', dataKey: 'isActive', formatForExport: (value) => (value ? 'Active' : 'Inactive') },
     { id: 3, label: 'Created Date', key: 'createdAt', dataKey: 'createdAt', formatForExport: (value) => formatDateTime(value) },
@@ -47,9 +47,10 @@ const GalleryList = () => {
   ];
 
   const actionItems = [
-    { id: 0, label: 'Edit', icon: 'edit', handler: (row) => navigate(`/gallery/edit-gallery/${row.id}`) },
-    { id: 1, label: 'Copy', icon: 'copy', handler: (row) => navigate(`/gallery/duplicate-gallery/${row.id}`) },
-    { id: 2, label: 'Delete', icon: 'delete', deleteAction: true }
+    { id: 0, label: 'View', icon: 'view', handler: (row) => navigate(`/gallery/view-gallery/${row.id}`) },
+    { id: 1, label: 'Edit', icon: 'edit', handler: (row) => navigate(`/gallery/edit-gallery/${row.id}`) },
+    { id: 2, label: 'Copy', icon: 'copy', handler: (row) => navigate(`/gallery/duplicate-gallery/${row.id}`) },
+    { id: 3, label: 'Delete', icon: 'delete', deleteAction: true }
   ];
 
   return (

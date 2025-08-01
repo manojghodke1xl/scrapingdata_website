@@ -3,12 +3,12 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import useGlobalContext from '../../hooks/useGlobalContext';
 import { showNotification } from '../../utils/showNotification';
 import FormButtons from '../../atoms/formFields/FormButtons';
-import MultipleFileUpload from '../../atoms/formFields/MultiFileUpload';
 import MultiSelectCheckbox from '../../atoms/formFields/MultiSelectCheckBox';
 import ToggleComponent from '../../atoms/formFields/ToggleComponent';
 import { addGalleryApi, getGalleryById, updateGalleryApi } from '../../apis/gallery-apis';
 import NoteComponent from '../../atoms/common/NoteComponent';
 import { addGalleryNote, editGalleryNote } from './GalleryNotes';
+import MultipleImageUpload from '../../atoms/formFields/MultipleImageUpload';
 
 const AddGallery = () => {
   const navigate = useNavigate();
@@ -24,16 +24,17 @@ const AddGallery = () => {
   const [isScrollable, setIsScrollable] = useState(false);
   const [errors, setErrors] = useState({});
   const [galleryDetails, setGalleryDetails] = useState({
-    images: !id ? [] : undefined,
+    images: [],
     isActive: true,
     isGlobal: false,
-    sites: []
+    sites: [],
+    imageFile: []
   });
 
   const validate = () => {
     const newErrors = {};
-    if (!id && !galleryDetails.images?.length) newErrors.images = 'At least one image is needed.';
-    if (galleryDetails.sites.length === 0) newErrors.sites = 'At least one site must be selected.';
+    if (!galleryDetails.imageFile.length) newErrors.imageFile = 'At least one image is needed.';
+    if (!galleryDetails.sites.length) newErrors.sites = 'At least one site must be selected.';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -45,12 +46,20 @@ const AddGallery = () => {
         const { status, data } = await getGalleryById(id);
         if (status) {
           const { image, sites, ...rest } = data.gallery;
+
+          // formatting image file when receiving url from backend
+          const formattedImageFile = image.map((url) => ({
+            url,
+            name: url.split('/').pop(),
+            file: null
+          }));
+
           setGalleryDetails((prev) => ({
             ...prev,
             ...rest,
             sites: sites.map((s) => s._id),
-            images: image._id ? [image._id] : [],
-            imageFile: [image]
+            // images: image._id ? [image._id] : [],
+            imageFile: formattedImageFile
           }));
         } else {
           showNotification('warn', data);
@@ -66,7 +75,23 @@ const AddGallery = () => {
     if (!validate()) return;
     setLoading(true);
     try {
-      const { status, data } = await (id ? (isDuplicate ? addGalleryApi(galleryDetails) : updateGalleryApi(id, galleryDetails)) : addGalleryApi(galleryDetails));
+      const formData = new FormData();
+
+      formData.set('isGlobal', galleryDetails.isGlobal ? 'true' : 'false');
+      formData.set('isActive', galleryDetails.isActive ? 'true' : 'false');
+      galleryDetails.sites.forEach((siteId) => formData.append('sites[]', siteId));
+
+      galleryDetails.imageFile.forEach((imageObj) => {
+        if (imageObj.file) {
+          // If it's a new upload
+          formData.append('image', imageObj.file);
+        } else if (imageObj.url) {
+          // If it's an existing image from the backend
+          formData.append('image', imageObj.url);
+        }
+      });
+
+      const { status, data } = await (id ? (isDuplicate ? addGalleryApi(formData) : updateGalleryApi(id, formData)) : addGalleryApi(formData));
       if (status) {
         showNotification('success', data.message);
         navigate('/gallery/gallery-list');
@@ -87,7 +112,9 @@ const AddGallery = () => {
   useEffect(() => {
     checkScrollability();
     window.addEventListener('resize', checkScrollability);
-    return () => window.removeEventListener('resize', checkScrollability);
+    return () => {
+      window.removeEventListener('resize', checkScrollability); // Cleanup event listener
+    };
   }, []);
 
   return (
@@ -105,23 +132,17 @@ const AddGallery = () => {
             <span className=" text-primary ">Logo Upload Details</span>
           </div>
           <div className="w-full flex flex-col gap-y-5">
-            <MultipleFileUpload
-              label={'Upload Gallery Images'}
-              onUploadSuccess={(files) => {
-                setGalleryDetails((prev) => ({ ...prev, images: files }));
-                if (errors.images) setErrors((prev) => ({ ...prev, images: '' }));
+            <MultipleImageUpload
+              label="Gallery Images"
+              selected={galleryDetails}
+              onChange={(updatedImageFiles) => {
+                setGalleryDetails((prev) => ({
+                  ...prev,
+                  imageFile: updatedImageFiles
+                }));
               }}
-              onRemoveFile={(fileId) =>
-                setGalleryDetails((prev) => ({ ...prev, images: prev.images.filter((f) => f !== fileId), imageFile: prev.imageFile?.filter((f) => f._id !== fileId) }))
-              }
-              selected={galleryDetails?.imageFile ?? []}
-              allowedTypes={['image/png', 'image/jpeg', 'image/svg+xml', 'image/gif']}
-              allowedFileTypes={['.png', '.jpeg', '.svg', '.gif']}
-              imagePreviewUrl={galleryDetails.imageFile?.url}
-              isMultiple
-              isImage
-              setLoading={setLoading}
-              error={errors.images}
+              acceptedTypes={['image/jpeg', 'image/png', 'image/svg+xml', 'image/gif']}
+              maxFileSizeInMB={2}
             />
           </div>
         </div>
