@@ -37,7 +37,6 @@ export const postMethodCall = async (url, userData, contentType = 'application/j
   }
 };
 
-
 // Post method api call to upload file
 export const postMethodCallForFormWithFile = async (url, data, isMultipart = false) => {
   try {
@@ -168,8 +167,8 @@ export const downloadFile = async (url, contentType = 'text/csv') => {
   const response = await fetch(url, {
     method: 'GET',
     headers: {
-      'Content-Type': contentType,
-    },
+      'Content-Type': contentType
+    }
   });
 
   if (!response.ok) {
@@ -177,6 +176,6 @@ export const downloadFile = async (url, contentType = 'text/csv') => {
   }
 
   const blob = await response.blob();
-  console.log(blob)
+  console.log(blob);
   return { status: true, data: blob };
 };

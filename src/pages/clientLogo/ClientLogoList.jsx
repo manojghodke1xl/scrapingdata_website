@@ -25,9 +25,8 @@ const ClientLogoList = () => {
       sites: <TruncatableFieldToolTip content={sites.map((s) => `${s.name} (${s.host})`).join(', ')} />,
       status: (
         <div
-          className={`rounded-xl ${
-            isActive ? `${isDarkMode ? 'border border-success' : 'bg-lightgreen'} text-success` : `${isDarkMode ? 'border border-inactive' : 'bg-inactive'} text-inactive`
-          } px-2 py-1 w-fit flex gap-2 items-center`}
+          className={`rounded-xl ${isActive ? `${isDarkMode ? 'border border-success' : 'bg-lightgreen'} text-success` : `${isDarkMode ? 'border border-inactive' : 'bg-inactive'} text-inactive`
+            } px-2 py-1 w-fit flex gap-2 items-center`}
         >
           <span className={`min-w-[8px] min-h-[8px] rounded-full ${isActive ? 'bg-green ' : 'bg-darkgray'}`} />
           <span>{isActive ? 'Active' : 'Inactive'}</span>

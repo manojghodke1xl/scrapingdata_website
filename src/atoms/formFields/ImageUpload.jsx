@@ -12,6 +12,7 @@ const ImageUpload = ({
   setDetails = () => { },
   details = {},
   acceptedTypes = ['image/jpeg', 'image/png', 'image/webp'],
+  allowedFileTypes = [],
   isImage,
   isVideo,
   isDocument,
@@ -124,8 +125,8 @@ const ImageUpload = ({
             {/* If it is video */}
             {isVideo &&
               <video
-              src={previewUrl}
-              className="rounded-xl w-3/5 h-32 object-contain mx-auto"
+                src={previewUrl}
+                className="rounded-xl w-3/5 h-32 object-contain mx-auto"
               >
                 Your browser does not support the video tag.
               </video>
@@ -163,8 +164,14 @@ const ImageUpload = ({
               Browse
             </button>
             <p className="text-xs text-primary mt-2">
-              Accepted types: {acceptedTypes.join(', ')} <br />
+              {/* Accepted types: {acceptedTypes.join(', ')} <br /> */}
+              {/* To display file types if allowedFileTypes is not empty */}
+              {allowedFileTypes?.length > 0
+                ? `Accepted types: ${allowedFileTypes.join(', ')}`
+                : `Accepted types: ${acceptedTypes.join(', ')}`}
+              <br />
               Max size: {maxFileSizeInMB}MB
+
             </p>
           </div>
         )}
