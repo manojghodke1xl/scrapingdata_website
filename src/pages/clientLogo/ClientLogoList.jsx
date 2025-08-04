@@ -14,7 +14,7 @@ const ClientLogoList = () => {
   const navigate = useNavigate();
   const { isDarkMode } = useColorContext();
   const [clientlogos, setClientLogos] = useState([]);
-
+  console.log('clientlogos', clientlogos);
   const rows = clientlogos.map((clientlogo) => {
     const { _id, image, isActive, sites, createdAt, updatedAt } = clientlogo;
 

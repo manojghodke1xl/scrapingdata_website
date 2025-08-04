@@ -26,15 +26,15 @@ const AddClientLogo = () => {
   const [isScrollable, setIsScrollable] = useState(false);
   const [errors, setErrors] = useState({});
   const [clientlogoDetails, setClientLogoDetails] = useState({
-    clientLogoImage: null, // new image upload field
+    image: null, // new image upload field
     isActive: true,
     isGlobal: false,
     sites: []
   });
-
+  //console.log('clientlogoDetails', clientlogoDetails);
   const validate = () => {
     const newErrors = {};
-    if (!id && !clientlogoDetails.clientLogoImage) newErrors.images = 'At least one image is needed.';
+    if (!id && !clientlogoDetails?.image) newErrors.image = 'At least one image is needed.';
     if (clientlogoDetails.sites.length === 0) newErrors.sites = 'At least one site must be selected.';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -46,15 +46,15 @@ const AddClientLogo = () => {
       setLoading(true);
       (async () => {
         const { status, data } = await getClientLogoById(id);
-        // console.log('data', data.clientlogo);
+        //console.log('data', data.clientlogo);
         if (status) {
           const { image, sites, ...rest } = data.clientlogo;
           setClientLogoDetails((prev) => ({
             ...prev,
             ...rest,
             sites: sites.map((s) => s._id),
-            // If the image exists and has a url, set clientLogoImage to an object with that url and id. Otherwise, set it to null.
-            clientLogoImage: image?.url ? { url: image.url, id: image.id } : null // Handle existing image newly added
+            // If the image exists, set image. Otherwise, set it to null.
+            image: image._id ? image : null // Handle existing image newly added
           }));
         } else showNotification('warn', data);
       })()
@@ -68,6 +68,7 @@ const AddClientLogo = () => {
     if (!validate()) return;
     setLoading(true);
     try {
+      //console.log('clientlogoDetails', clientlogoDetails);
       const formData = new FormData();
       formData.set('isGlobal', clientlogoDetails.isGlobal ? 'true' : 'false');
       formData.set('isActive', clientlogoDetails.isActive ? 'true' : 'false');
@@ -75,22 +76,28 @@ const AddClientLogo = () => {
       clientlogoDetails.sites.forEach((siteId) => formData.append('sites[]', siteId));
 
       // Handle file uploads
-      if (clientlogoDetails.clientLogoImage?.file) {
-        // console.log("appending new file");
-        formData.append('clientLogoImage', clientlogoDetails.clientLogoImage.file);
+      if (clientlogoDetails.image && clientlogoDetails.image.file) {
+        //console.log("appending new file");
+        formData.append('image', clientlogoDetails.image.file);
       }
       else {
-        // console.log("sending existing file");
-        formData.set('clientLogoImage', JSON.stringify(clientlogoDetails.clientLogoImage)); // If no new file, send the existing image details .
+        //console.log("sending existing file");
+        formData.set('image', JSON.stringify(clientlogoDetails.image)); // If no new file, send the existing image details .
 
       }
       // console.log('clientlogoDetails', formData);
+
+      for (let pair of formData.entries()) {
+        console.log(pair[0], pair[1]);
+      }
+
       const { status, data } = await (id ? (isDuplicate ? addClientLogoApi(formData, true) : updateClientLogoApi(id, formData, true)) : addClientLogoApi(formData, true));
 
       if (status) {
         showNotification('success', data.message);
         navigate('/client-logo/client-logo-list');
       } else showNotification('warn', data);
+
     } catch (error) {
       showNotification('error', error.message);
     } finally {
@@ -100,11 +107,11 @@ const AddClientLogo = () => {
   // Cleanup function to revoke object URL if it exists
   useEffect(() => {
     return () => {
-      const fieldName = 'clientLogoImage';
+      const fieldName = 'image';
       const url = clientlogoDetails?.[fieldName]?.url;
       if (url) URL.revokeObjectURL(url);
     };
-  }, [clientlogoDetails.clientLogoImage]);
+  }, [clientlogoDetails, clientlogoDetails.image]);
 
 
   const checkScrollability = () => {
@@ -136,10 +143,10 @@ const AddClientLogo = () => {
           <div className="w-full flex flex-col gap-y-5">
             <ImageUpload
               label="Upload Client Logo"
-              fieldName="clientLogoImage"
+              fieldName="image"
               details={clientlogoDetails}
               setDetails={setClientLogoDetails}
-              error={errors.clientLogoImage}
+              error={errors.image}
               setErrors={setErrors}
               acceptedTypes={['image/png', 'image/jpeg', 'application/svg+xml', 'image/gif', 'image/webp', 'image/x-icon']}
               allowedFileTypes={['.png', '.jpeg', '.svg', '.gif', '.webp', '.ico']}
