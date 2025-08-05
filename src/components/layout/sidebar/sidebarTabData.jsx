@@ -170,3 +170,5 @@ export const utilitiesPath = [
 ];
 
 export const metaDataPath = [{ title: 'Meta Data', to: ['/metaData/metadata-list', '/metaData/add-metadata', '/metaData/edit-metadata'] }];
+
+export const projectCheckerPath = [{ title: 'Project Checker List', to: ['/projectChecker/project-checker-list'] }];

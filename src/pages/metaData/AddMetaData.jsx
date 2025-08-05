@@ -44,7 +44,8 @@ const AddMetaData = () => {
     twitter_title: '',
     twitter_description: '',
     twitter_image: '',
-    robots: ''
+    robots: '',
+    canonical: ''
   });
   const [initialized, setInitialized] = useState(!id);
 
@@ -77,7 +78,8 @@ const AddMetaData = () => {
             twitter_title: m.twitter_title || '',
             twitter_description: m.twitter_description || '',
             twitter_image: m.twitter_image || '',
-            robots: m.robots || ''
+            robots: m.robots || '',
+            canonical: m.canonical || ''
           });
         } else showNotification('warn', data.message || 'Meta data missing');
       })
@@ -197,6 +199,7 @@ const AddMetaData = () => {
                 onChange={(e) => setMetaDetails((prev) => ({ ...prev, twitter_image: e.target.value }))}
               />
               <FormField label="Robots Tag" value={metaDetails.robots} onChange={(e) => setMetaDetails((prev) => ({ ...prev, robots: e.target.value }))} />
+              <FormField label="Canonical" value={metaDetails.canonical} onChange={(e) => setMetaDetails((prev) => ({ ...prev, canonical: e.target.value }))} />
             </div>
           </div>
         </div>
