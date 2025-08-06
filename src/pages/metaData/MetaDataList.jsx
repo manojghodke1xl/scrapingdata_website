@@ -78,6 +78,7 @@ const MetaDataList = () => {
       twitter_description: <TruncatableFieldToolTip content={meta.twitter_description} />,
       twitter_image: <TruncatableFieldToolTip content={meta.twitter_image} />,
       robots: <TruncatableFieldToolTip content={meta.robots} />,
+      canonical: <TruncatableFieldToolTip content={meta.canonical} />,
       createdAt: formatDateTime(meta.createdAt),
       updatedAt: formatDateTime(meta.updatedAt)
     }))
@@ -143,8 +144,9 @@ const MetaDataList = () => {
     { id: 10, label: 'Twitter Description', key: 'twitter_description', dataKey: 'twitter_description' },
     { id: 11, label: 'Twitter Image', key: 'twitter_image', dataKey: 'twitter_image' },
     { id: 12, label: 'Robots', key: 'robots', dataKey: 'robots' },
-    { id: 13, label: 'Created Date', key: 'createdAt', dataKey: 'createdAt', formatForExport: formatDateTime },
-    { id: 14, label: 'Updated Date', key: 'updatedAt', dataKey: 'updatedAt', formatForExport: formatDateTime }
+    { id: 13, label: 'Canonical', key: 'canonical', dataKey: 'canonical' },
+    { id: 14, label: 'Created Date', key: 'createdAt', dataKey: 'createdAt', formatForExport: formatDateTime },
+    { id: 15, label: 'Updated Date', key: 'updatedAt', dataKey: 'updatedAt', formatForExport: formatDateTime }
   ];
 
   const actionItems = [

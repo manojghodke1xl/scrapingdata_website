@@ -39,7 +39,8 @@ const EnquiryList = () => {
       position_applying_for,
       linkedin,
       comments,
-      enquiryType
+      enquiryType,
+      preferredConsultation
     } = enquiry;
 
     return {
@@ -61,6 +62,7 @@ const EnquiryList = () => {
       createdAt: formatDateTime(createdAt),
       updatedAt: formatDateTime(updatedAt),
       enquiryType: <TruncatableFieldToolTip content={enquiryType} />,
+      preferredConsultation: <TruncatableFieldToolTip content={preferredConsultation} />,
       application_resume: application_url?.resume ? (
         <a href={application_url.resume} download target="_blank" rel="noopener noreferrer">
           <button className="btn btn-sm btn-outline-primary flex items-center space-x-1">
@@ -116,12 +118,13 @@ const EnquiryList = () => {
     { id: 14, label: 'Updated At', key: 'updatedAt', dataKey: 'updatedAt', formatForExport: (value) => formatDateTime(value) },
 
     { id: 15, label: 'Enquiry Type', key: 'enquiryType', dataKey: 'enquiryType' },
-    { id: 16, label: 'Resume URL', key: 'application_resume', dataKey: 'application_resume' },
-    { id: 17, label: 'Cover Letter URL', key: 'application_cover_letter', dataKey: 'application_cover_letter' },
-    { id: 18, label: 'Portfolio URL', key: 'application_portfolio', dataKey: 'application_portfolio' },
-    { id: 19, label: 'Position Applying For', key: 'position_applying_for', dataKey: 'position_applying_for' },
-    { id: 20, label: 'LinkedIn', key: 'linkedin', dataKey: 'linkedin' },
-    { id: 21, label: 'Comments', key: 'comments', dataKey: 'comments' }
+    { id: 16, label: 'Preferred Consultation', key: 'preferredConsultation', dataKey: 'preferredConsultation' },
+    { id: 17, label: 'Resume URL', key: 'application_resume', dataKey: 'application_resume' },
+    { id: 18, label: 'Cover Letter URL', key: 'application_cover_letter', dataKey: 'application_cover_letter' },
+    { id: 19, label: 'Portfolio URL', key: 'application_portfolio', dataKey: 'application_portfolio' },
+    { id: 20, label: 'Position Applying For', key: 'position_applying_for', dataKey: 'position_applying_for' },
+    { id: 21, label: 'LinkedIn', key: 'linkedin', dataKey: 'linkedin' },
+    { id: 22, label: 'Comments', key: 'comments', dataKey: 'comments' }
   ];
 
   const actionItems = [
