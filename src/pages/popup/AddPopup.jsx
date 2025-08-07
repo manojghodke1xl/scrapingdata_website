@@ -104,7 +104,6 @@ const AddPopup = () => {
     }
     if (!popupDetails.position) newErrors.position = 'Position is required.';
     if (!popupDetails.site) newErrors.site = 'At least one site must be selected.';
-    if (!popupDetails.image) newErrors.image = 'Image is required';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -148,12 +147,14 @@ const AddPopup = () => {
       }
 
       // Handle image uploads
-      if (popupDetails.image && popupDetails.image.file) {
-        // appending new file
-        formData.append('image', popupDetails.image.file);
-      } else {
-        // sending existing file
-        formData.set('image', JSON.stringify(popupDetails.image));
+      if(popupDetails.image){
+        if (popupDetails.image && popupDetails.image.file) {
+          // appending new file
+          formData.append('image', popupDetails.image.file);
+        } else {
+          // sending existing file
+          formData.set('image', JSON.stringify(popupDetails.image));
+        }
       }
 
       const { status, data } = await (id ? (isDuplicate ? addPopupApi(formData) : updatePopupApi(id, formData)) : addPopupApi(formData));
