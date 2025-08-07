@@ -53,7 +53,7 @@ function ImportMetaData() {
                 }
 
                 // Optional: validate required headers
-                const expectedHeaders = ['project_name', 'page', 'meta_title', 'meta_description', 'keywords', 'og_title', 'og_description', 'og_image_url', 'twitter_title', 'twitter_description', 'twitter_image', 'robots']; // Change based on your schema
+                const expectedHeaders = ['project_name', 'page', 'meta_title', 'meta_description', 'keywords', 'og_title', 'og_description', 'og_image_url', 'twitter_title', 'twitter_description', 'twitter_image', 'robots', 'canonical']; // Change based on your schema
                 const actualHeaders = Object.keys(parsedData[0]);
                 const missing = expectedHeaders.filter(h => !actualHeaders.includes(h));
                 if (missing.length > 0) {
