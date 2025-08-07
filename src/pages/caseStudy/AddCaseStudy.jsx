@@ -8,11 +8,10 @@ import FormField from '../../atoms/formFields/InputField';
 import TextareaComponent from '../../atoms/formFields/TextareaComponent';
 import MultiSelectCheckbox from '../../atoms/formFields/MultiSelectCheckBox';
 import ToggleComponent from '../../atoms/formFields/ToggleComponent';
-import FileUpload from '../../atoms/formFields/FileUpload';
 import { BsFilePdf } from 'react-icons/bs';
 import NoteComponent from '../../atoms/common/NoteComponent';
 import { addCasestudyNote, editCasestudyNote } from './CaseStudyNotes';
-import { FaRegImage } from 'react-icons/fa';
+import ImageUpload from '../../atoms/formFields/ImageUpload';
 
 const AddCaseStudy = () => {
   const navigate = useNavigate();
@@ -30,8 +29,8 @@ const AddCaseStudy = () => {
     title: '',
     sdesc: '',
     ldesc: '',
-    image: '',
-    pdf: '',
+    image: null,
+    pdf: null,
     mailSubject: '',
     mailBody: '',
     isActive: true,
@@ -63,10 +62,8 @@ const AddCaseStudy = () => {
             ...prev,
             ...rest,
             sites: sites.map((s) => s._id),
-            pdf: pdf ? pdf?._id : '',
-            image: pdf ? image?._id : '',
-            pdfFile: pdf,
-            imageFile: image
+            pdf: pdf._id ? pdf : null,
+            image: image._id ? image : null,
           }));
         } else showNotification('warn', data);
       })()
@@ -99,7 +96,38 @@ const AddCaseStudy = () => {
     if (!validate()) return;
     setLoading(true);
     try {
-      const { status, data } = await (id ? (isDuplicate ? addCaseStudyApi(caseStudyDetails) : updateCaseStudyApi(id, caseStudyDetails)) : addCaseStudyApi(caseStudyDetails));
+      const formData = new FormData();
+
+      formData.set('title', caseStudyDetails.title);
+      formData.set('sdesc', caseStudyDetails.sdesc);
+      formData.set('sdesc', caseStudyDetails.sdesc);
+      formData.set('ldesc', caseStudyDetails.ldesc);
+      formData.set('mailSubject', caseStudyDetails.mailSubject);
+      formData.set('mailBody', caseStudyDetails.mailBody);
+      formData.set('isActive', caseStudyDetails.isActive ? 'true' : 'false');
+      formData.set('isGlobal', caseStudyDetails.isGlobal ? 'true' : 'false');
+      caseStudyDetails.sites.forEach((siteId) => formData.append('sites[]', siteId));
+
+      // Handle image uploads
+      if (caseStudyDetails.image && caseStudyDetails.image.file) {
+        // appending new file
+        formData.append('image', caseStudyDetails.image.file);
+      } else {
+        // sending existing file
+        formData.set('image', JSON.stringify(caseStudyDetails.image));
+      }
+
+      // Handle PDF uploads
+      if (caseStudyDetails.pdf && caseStudyDetails.pdf.file) {
+        // appending new file
+        formData.append('pdf', caseStudyDetails.pdf.file);
+      } else {
+        // sending existing file
+        formData.set('pdf', JSON.stringify(caseStudyDetails.pdf));
+      }
+
+      const { status, data } = await (id ? (isDuplicate ? addCaseStudyApi(formData) : updateCaseStudyApi(id, formData)) : addCaseStudyApi(formData));
+
       if (status) {
         showNotification('success', data.message);
         navigate('/case-study/case-study-list');
@@ -110,6 +138,16 @@ const AddCaseStudy = () => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    return () => {
+      const fields = ['image', 'pdf'];
+      fields.forEach((field) => {
+        const url = caseStudyDetails?.[field]?.url;
+        if (url) URL.revokeObjectURL(url);
+      });
+    };
+  }, [caseStudyDetails]);
 
   return (
     <div className="py-8 p-4 sm:p-8 overflow-x-hidden mb-20">
@@ -167,25 +205,31 @@ const AddCaseStudy = () => {
             <span className="block text-primary">Media Upload</span>
           </div>
           <div className="w-full flex flex-col gap-y-5">
-            <FileUpload
-              logo={<FaRegImage className="text-primary text-2xl" />}
+            <ImageUpload
+              label="Case Study Image"
+              fieldName="image"
+              details={caseStudyDetails}
+              setDetails={setCaseStudyDetails}
               error={errors.image}
               setErrors={setErrors}
-              acceptedTypes={['.jpeg', '.png']}
-              fieldName="image"
-              isImage
-              setDetails={setCaseStudyDetails}
-              imagePreviewUrl={caseStudyDetails.imageFile?.url}
+              acceptedTypes={['image/png', 'image/jpeg' ]}
+              allowedFileTypes={['.png', '.jpeg' ]}
+              maxFileSizeInMB={1}
+              isImage={true}
             />
-            <FileUpload
-              logo={<BsFilePdf className="text-primary text-2xl" />}
+
+            <ImageUpload
+              label="Case Study PDF"
+              fieldName="pdf"
+              details={caseStudyDetails}
+              setDetails={setCaseStudyDetails}
               error={errors.pdf}
               setErrors={setErrors}
-              acceptedTypes={['.pdf']}
-              fieldName="pdf"
-              isPdf
-              setDetails={setCaseStudyDetails}
-              imagePreviewUrl={caseStudyDetails.pdfFile?.name}
+              acceptedTypes={['application/pdf']}
+              allowedFileTypes={['.pdf' ]}
+              maxFileSizeInMB={1}
+              isDocument={true}
+              logo={<BsFilePdf className="text-primary text-2xl" />}
             />
           </div>
         </div>

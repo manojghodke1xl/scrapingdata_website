@@ -135,7 +135,7 @@ const MultiSelectCheckbox = ({
 
               return (
                 <div key={option._id} className={`flex items-start px-3 py-2 ${isChecked ? 'bg-primary-faded' : 'hover:bg-hover'}`}>
-                  {console.log('option', option)}
+                  {/* {console.log('option', option)} */}
                   <Checkbox id={option._id} checked={isChecked} onChange={() => handleChange(option._id)} disabled={isSuperAdmin || disabled} />
                   <div className="ml-2">
                     <label htmlFor={option._id} className="text-secondary cursor-pointer select-none">

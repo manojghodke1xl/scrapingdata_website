@@ -8,11 +8,10 @@ import FormField from '../../atoms/formFields/InputField';
 import TextareaComponent from '../../atoms/formFields/TextareaComponent';
 import MultiSelectCheckbox from '../../atoms/formFields/MultiSelectCheckBox';
 import ToggleComponent from '../../atoms/formFields/ToggleComponent';
-import FileUpload from '../../atoms/formFields/FileUpload';
 import { BsFilePdf } from 'react-icons/bs';
 import NoteComponent from '../../atoms/common/NoteComponent';
 import { addGuideNote, editGuideNote } from './GuideNotes';
-import { FaRegImage } from 'react-icons/fa';
+import ImageUpload from '../../atoms/formFields/ImageUpload';
 
 const AddGuides = () => {
   const navigate = useNavigate();
@@ -29,8 +28,8 @@ const AddGuides = () => {
   const [guideDetails, setGuideDetails] = useState({
     title: '',
     desc: '',
-    image: '',
-    pdf: '',
+    image: null,
+    pdf: null,
     mailSubject: '',
     mailBody: '',
     isActive: true,
@@ -62,10 +61,8 @@ const AddGuides = () => {
             ...prev,
             ...rest,
             sites: sites.map((s) => s._id),
-            pdf: pdf ? pdf?._id : '',
-            image: image ? image?._id : '',
-            pdfFile: pdf,
-            imageFile: image
+            pdf: pdf._id ? pdf : null,
+            image: image._id ? image : null
           }));
         } else showNotification('warn', data);
       })()
@@ -98,7 +95,36 @@ const AddGuides = () => {
     if (!validate()) return;
     setLoading(true);
     try {
-      const { status, data } = await (id ? (isDuplicate ? addGuideApi(guideDetails) : updateGuideApi(id, guideDetails)) : addGuideApi(guideDetails));
+      const formData = new FormData();
+
+      formData.set('title', guideDetails.title);
+      formData.set('desc', guideDetails.desc);
+      formData.set('mailSubject', guideDetails.mailSubject);
+      formData.set('mailBody', guideDetails.mailBody);
+      formData.set('isActive', guideDetails.isActive ? 'true' : 'false');
+      formData.set('isGlobal', guideDetails.isGlobal ? 'true' : 'false');
+      guideDetails.sites.forEach((siteId) => formData.append('sites[]', siteId));
+
+      // Handle image uploads
+      if (guideDetails.image && guideDetails.image.file) {
+        // appending new file
+        formData.append('image', guideDetails.image.file);
+      } else {
+        // sending existing file
+        formData.set('image', JSON.stringify(guideDetails.image));
+      }
+
+      // Handle PDF uploads
+      if (guideDetails.pdf && guideDetails.pdf.file) {
+        // appending new file
+        formData.append('pdf', guideDetails.pdf.file);
+      } else {
+        // sending existing file
+        formData.set('pdf', JSON.stringify(guideDetails.pdf));
+      }
+
+      const { status, data } = await (id ? (isDuplicate ? addGuideApi(formData) : updateGuideApi(id, formData)) : addGuideApi(formData));
+
       if (status) {
         showNotification('success', data.message);
         navigate('/guides/guides-list');
@@ -109,6 +135,16 @@ const AddGuides = () => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    return () => {
+      const fields = ['image', 'pdf'];
+      fields.forEach((field) => {
+        const url = guideDetails?.[field]?.url;
+        if (url) URL.revokeObjectURL(url);
+      });
+    };
+  }, [guideDetails]);
 
   return (
     <div className="py-8 p-4 sm:p-8 overflow-x-hidden mb-20">
@@ -157,25 +193,30 @@ const AddGuides = () => {
             <span className="block text-primary">Media Upload</span>
           </div>
           <div className="w-full flex flex-col gap-y-5">
-            <FileUpload
-              logo={<FaRegImage className="text-primary text-2xl" />}
+            <ImageUpload
+              label="Case Study Image"
+              fieldName="image"
+              details={guideDetails}
+              setDetails={setGuideDetails}
               error={errors.image}
               setErrors={setErrors}
-              acceptedTypes={['.jpeg', '.png']}
-              fieldName="image"
-              isImage
-              setDetails={setGuideDetails}
-              imagePreviewUrl={guideDetails.imageFile?.url}
+              acceptedTypes={['image/png', 'image/jpeg']}
+              allowedFileTypes={['.png', '.jpeg']}
+              maxFileSizeInMB={1}
+              isImage={true}
             />
-            <FileUpload
-              logo={<BsFilePdf className="text-primary text-2xl" />}
+            <ImageUpload
+              label="Case Study PDF"
+              fieldName="pdf"
+              details={guideDetails}
+              setDetails={setGuideDetails}
               error={errors.pdf}
               setErrors={setErrors}
-              acceptedTypes={['.pdf']}
-              fieldName="pdf"
-              isPdf
-              setDetails={setGuideDetails}
-              imagePreviewUrl={guideDetails.pdfFile?.name}
+              acceptedTypes={['application/pdf']}
+              allowedFileTypes={['.pdf']}
+              maxFileSizeInMB={1}
+              isDocument={true}
+              logo={<BsFilePdf className="text-primary text-2xl" />}
             />
           </div>
         </div>

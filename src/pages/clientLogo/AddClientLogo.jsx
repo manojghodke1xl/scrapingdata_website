@@ -91,7 +91,7 @@ const AddClientLogo = () => {
         console.log(pair[0], pair[1]);
       }
 
-      const { status, data } = await (id ? (isDuplicate ? addClientLogoApi(formData, true) : updateClientLogoApi(id, formData, true)) : addClientLogoApi(formData, true));
+      const { status, data } = await (id ? (isDuplicate ? addClientLogoApi(formData) : updateClientLogoApi(id, formData)) : addClientLogoApi(formData));
 
       if (status) {
         showNotification('success', data.message);

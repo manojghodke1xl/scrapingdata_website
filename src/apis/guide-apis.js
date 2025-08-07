@@ -1,15 +1,17 @@
-import { getMethodCall, postMethodCall, putMethodCall } from './api-handler';
+import { getMethodCall, putMethodCall, postMethodCallForFormWithFile, putMethodCallForFormWithFile } from './api-handler';
 
 export const getGuideById = async (id) => {
   return await getMethodCall(`${import.meta.env.VITE_API_URL}/guide/${id}?p=1`);
 };
 
 export const addGuideApi = async (userData) => {
-  return await postMethodCall(`${import.meta.env.VITE_API_URL}/guide`, userData);
+  // return await postMethodCall(`${import.meta.env.VITE_API_URL}/guide`, userData);
+  return await postMethodCallForFormWithFile(`${import.meta.env.VITE_API_URL}/guide`, userData, true);
 };
 
 export const updateGuideApi = async (id, userData) => {
-  return await putMethodCall(`${import.meta.env.VITE_API_URL}/guide/${id}`, userData);
+  // return await putMethodCall(`${import.meta.env.VITE_API_URL}/guide/${id}`, userData);
+  return await putMethodCallForFormWithFile(`${import.meta.env.VITE_API_URL}/guide/${id}`, userData, true);
 };
 
 export const updateGuideStatusApi = async (ids, isActive) => {

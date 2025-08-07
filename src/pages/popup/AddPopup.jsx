@@ -7,7 +7,6 @@ import DropDown from '../../atoms/formFields/DropDown';
 import ToggleComponent from '../../atoms/formFields/ToggleComponent';
 import { showNotification } from '../../utils/showNotification';
 import { addPopupApi, getPopupById, updatePopupApi } from '../../apis/popup-apis';
-import FileUpload from '../../atoms/formFields/FileUpload';
 import TextareaComponent from '../../atoms/formFields/TextareaComponent';
 import DateTimePicker from '../../atoms/formFields/DateTimePicker';
 import { formatDateTime } from '../../utils/dateFormats';
@@ -16,7 +15,7 @@ import { getAllCaseStudyApi } from '../../apis/caseStudy-apis';
 import MultiSelectCheckbox from '../../atoms/formFields/MultiSelectCheckBox';
 import NoteComponent from '../../atoms/common/NoteComponent';
 import { addPopupNote, editPopupNote } from './PopupNotes';
-import { FaRegImage } from 'react-icons/fa';
+import ImageUpload from '../../atoms/formFields/ImageUpload';
 
 const AddPopup = () => {
   const navigate = useNavigate();
@@ -53,7 +52,8 @@ const AddPopup = () => {
     allSiteCaseStudy: false,
     moreCaseStudies: [],
     isActive: true,
-    site: ''
+    site: '',
+    image: null
   });
   const [contentDetials, setContentDetials] = useState([]);
 
@@ -68,8 +68,7 @@ const AddPopup = () => {
           setPopupDetails((prev) => ({
             ...prev,
             ...rest,
-            image: image ? image?._id : undefined,
-            imageFile: image,
+            image: image._id ? image : null,
             publishDate: formattedPublishDate,
             archiveDate: formattedArchiveDate
           }));
@@ -92,6 +91,7 @@ const AddPopup = () => {
       } else if (data) showNotification('warn', data);
     })();
   }, [popupDetails.contentType]);
+
   const validate = () => {
     const newErrors = {};
     const nameRegex = /^[a-zA-Z0-9-_]+( [a-zA-Z0-9-_]+)*$/;
@@ -104,6 +104,7 @@ const AddPopup = () => {
     }
     if (!popupDetails.position) newErrors.position = 'Position is required.';
     if (!popupDetails.site) newErrors.site = 'At least one site must be selected.';
+    if (!popupDetails.image) newErrors.image = 'Image is required';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -113,19 +114,68 @@ const AddPopup = () => {
     if (!validate()) return;
     setLoading(true);
     try {
-      const { status, data } = await (id ? (isDuplicate ? addPopupApi(popupDetails) : updatePopupApi(id, popupDetails)) : addPopupApi(popupDetails));
+      const formData = new FormData();
+
+      formData.set('name', popupDetails.name);
+      formData.set('position', popupDetails.position);
+      formData.set('onPageLoad', popupDetails.onPageLoad);
+      formData.set('onPageUnload', popupDetails.onPageUnload);
+      formData.set('afterPageLoad', popupDetails.afterPageLoad);
+      formData.set('atPageScroll', popupDetails.atPageScroll);
+      formData.set('offOnceSubmited', popupDetails.offOnceSubmited);
+      formData.set('againWhenCanceled', popupDetails.againWhenCanceled);
+
+      formData.set('showOnDeviceType', popupDetails.showOnDeviceType);
+      formData.set('publishDate', popupDetails.publishDate);
+      formData.set('archiveDate', popupDetails.archiveDate);
+      formData.set('contentType', popupDetails.contentType);
+      formData.set('title', popupDetails.title);
+      formData.set('desc', popupDetails.desc);
+      formData.set('allGlobalGuides', popupDetails.allGlobalGuides);
+      formData.set('allSiteGuides', popupDetails.allSiteGuides);
+
+      popupDetails.moreGuides.forEach((guideId) => formData.append('moreGuides[]', guideId));
+      formData.set('allGlobalCaseStudy', popupDetails.allGlobalCaseStudy);
+      formData.set('allSiteCaseStudy', popupDetails.allSiteCaseStudy);
+      popupDetails.moreCaseStudies.forEach((caseStudyId) => formData.append('moreCaseStudies[]', caseStudyId));
+
+      formData.set('isActive', popupDetails.isActive ? 'true' : 'false');
+
+      if(popupDetails.site._id) {
+        formData.set('site', popupDetails.site._id);
+      } else {
+        formData.set('site', popupDetails.site);
+      }
+
+      // Handle image uploads
+      if (popupDetails.image && popupDetails.image.file) {
+        // appending new file
+        formData.append('image', popupDetails.image.file);
+      } else {
+        // sending existing file
+        formData.set('image', JSON.stringify(popupDetails.image));
+      }
+
+      const { status, data } = await (id ? (isDuplicate ? addPopupApi(formData) : updatePopupApi(id, formData)) : addPopupApi(formData));
+
       if (status) {
         showNotification('success', data.message);
         navigate('/pop-up/pop-up-list');
-      } else {
-        showNotification('warn', data);
-      }
+      } else showNotification('warn', data);
     } catch (error) {
       showNotification('error', error.message);
     } finally {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    return () => {
+      const fieldName = 'image';
+      const url = popupDetails?.[fieldName]?.url;
+      if (url) URL.revokeObjectURL(url);
+    };
+  }, [popupDetails, popupDetails.image]);
 
   const checkScrollability = () => {
     const contentHeight = document.documentElement.scrollHeight;
@@ -265,15 +315,17 @@ const AddPopup = () => {
                   value={popupDetails.title}
                   errorMessage={errors.title}
                 />
-                <FileUpload
-                  logo={<FaRegImage className="text-primary text-2xl" />}
+                <ImageUpload
+                  label="Popup Image"
+                  fieldName="image"
+                  details={popupDetails}
+                  setDetails={setPopupDetails}
                   error={errors.image}
                   setErrors={setErrors}
-                  acceptedTypes={['.jpeg', '.png']}
-                  fieldName="image"
-                  isImage
-                  setDetails={setPopupDetails}
-                  imagePreviewUrl={popupDetails.imageFile?.url}
+                  acceptedTypes={['image/png', 'image/jpeg']}
+                  allowedFileTypes={['.png', '.jpeg']}
+                  maxFileSizeInMB={1}
+                  isImage={true}
                 />
               </>
             )}
