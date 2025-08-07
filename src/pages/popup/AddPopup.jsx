@@ -68,7 +68,7 @@ const AddPopup = () => {
           setPopupDetails((prev) => ({
             ...prev,
             ...rest,
-            image: image._id ? image : null,
+            image: image?._id ? image : null,
             publishDate: formattedPublishDate,
             archiveDate: formattedArchiveDate
           }));
