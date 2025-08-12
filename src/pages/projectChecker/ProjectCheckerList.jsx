@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import { formatDateTime } from '../../utils/dateFormats';
 import TableComponent from '../../atoms/table/Table';
-import NoteComponent from '../../atoms/common/NoteComponent';
-import { projectListNote } from './ProjectCheckerNotes';
 import { AiOutlineApi } from 'react-icons/ai';
 import TruncatableFieldToolTip from '../../atoms/common/TruncatableFeildToolTip';
 import TableHeader from '../../atoms/table/TableHeader';
@@ -10,6 +8,7 @@ import TableHeader from '../../atoms/table/TableHeader';
 const statusColors = {
   pending: 'bg-yellow-100 text-yellow-800 border-yellow-300',
   solved: 'bg-green-100 text-green-800 border-green-300',
+  resolved: 'bg-green-100 text-green-800 border-green-300',
   ignored: 'bg-orange-100 text-orange-800 border-orange-300'
 };
 
@@ -71,7 +70,6 @@ const ProjectCheckerList = () => {
         filterCategory={[{ id: 0, name: 'Project' }]}
         searchCategory={[{ id: 0, name: 'Project' }]}
       />
-      <NoteComponent note={projectListNote} />
     </div>
   );
 };
