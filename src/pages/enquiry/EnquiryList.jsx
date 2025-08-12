@@ -40,7 +40,9 @@ const EnquiryList = () => {
       linkedin,
       comments,
       enquiryType,
-      preferredConsultation
+      preferredConsultation,
+      organisation,
+      interviewPurpose
     } = enquiry;
 
     return {
@@ -62,6 +64,8 @@ const EnquiryList = () => {
       createdAt: formatDateTime(createdAt),
       updatedAt: formatDateTime(updatedAt),
       enquiryType: <TruncatableFieldToolTip content={enquiryType} />,
+      organisation: <TruncatableFieldToolTip content={organisation} />,
+      interviewPurpose: <TruncatableFieldToolTip content={interviewPurpose} />,
       preferredConsultation: <TruncatableFieldToolTip content={preferredConsultation} />,
       application_resume: application_url?.resume ? (
         <a href={application_url.resume} download target="_blank" rel="noopener noreferrer">
@@ -118,13 +122,17 @@ const EnquiryList = () => {
     { id: 14, label: 'Updated At', key: 'updatedAt', dataKey: 'updatedAt', formatForExport: (value) => formatDateTime(value) },
 
     { id: 15, label: 'Enquiry Type', key: 'enquiryType', dataKey: 'enquiryType' },
-    { id: 16, label: 'Preferred Consultation', key: 'preferredConsultation', dataKey: 'preferredConsultation' },
-    { id: 17, label: 'Resume URL', key: 'application_resume', dataKey: 'application_resume' },
-    { id: 18, label: 'Cover Letter URL', key: 'application_cover_letter', dataKey: 'application_cover_letter' },
-    { id: 19, label: 'Portfolio URL', key: 'application_portfolio', dataKey: 'application_portfolio' },
-    { id: 20, label: 'Position Applying For', key: 'position_applying_for', dataKey: 'position_applying_for' },
-    { id: 21, label: 'LinkedIn', key: 'linkedin', dataKey: 'linkedin' },
-    { id: 22, label: 'Comments', key: 'comments', dataKey: 'comments' }
+    
+    { id: 16, label: 'Organisation', key: 'organisation', dataKey: 'organisation' },
+    { id: 17, label: 'Interview Purpose', key: 'interviewPurpose', dataKey: 'interviewPurpose' },
+    
+    { id: 18, label: 'Preferred Consultation', key: 'preferredConsultation', dataKey: 'preferredConsultation' },
+    { id: 19, label: 'Resume URL', key: 'application_resume', dataKey: 'application_resume' },
+    { id: 20, label: 'Cover Letter URL', key: 'application_cover_letter', dataKey: 'application_cover_letter' },
+    { id: 21, label: 'Portfolio URL', key: 'application_portfolio', dataKey: 'application_portfolio' },
+    { id: 22, label: 'Position Applying For', key: 'position_applying_for', dataKey: 'position_applying_for' },
+    { id: 23, label: 'LinkedIn', key: 'linkedin', dataKey: 'linkedin' },
+    { id: 24, label: 'Comments', key: 'comments', dataKey: 'comments' }
   ];
 
   const actionItems = [
