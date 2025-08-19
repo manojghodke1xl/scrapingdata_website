@@ -121,6 +121,7 @@ export const testimonialsPath = [
 
 // Communication templates related paths
 export const templatePath = [
+  { title: 'Template Category', to: ['/template-category/template-category-list', '/template-category/add-template-category', '/template-category/edit-template-category/:id'] },
   { title: 'Email Templates', to: ['/templates/email-template-list', '/templates/add-email-template', '/templates/edit-email-template', '/templates/duplicate-email-template'] },
   { title: 'SMS Templates', to: ['/templates/sms-template-list', '/templates/add-sms-template', '/templates/edit-sms-template', '/templates/duplicate-sms-template'] },
   {

@@ -40,6 +40,7 @@ const AddTemplateCategory = () => {
   const [isScrollable, setIsScrollable] = useState(false);
   const [templateCategory, setTemplateCategory] = useState({
     name: '',
+    module: '',
     variableMap: [{ label: '', model: '', key: '', name: '', dataType: '' }]
   });
   const [errors, setErrors] = useState({});
@@ -99,9 +100,16 @@ const AddTemplateCategory = () => {
     }));
   };
 
+  const moduleOptions = [
+    { id: 'Email', name: 'Email' },
+    { id: 'Sms', name: 'SMS' },
+    { id: 'Whatsapp', name: 'WhatsApp' }
+  ];
+
   const validate = () => {
     const newErrors = {};
     if (!templateCategory.name) newErrors.name = 'Name is required';
+    if (!templateCategory.module) newErrors.module = 'Module is required';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -162,18 +170,22 @@ const AddTemplateCategory = () => {
               value={templateCategory.name}
               errorMessage={errors.name}
             />
-            <FormField
+            <DropDown
+              name="module"
               label="Module"
-              type="text"
-              id="fqaModule"
-              name="fqaModule"
-              placeholder="Module"
-              onChange={(e) => {
-                setTemplateCategory((prev) => ({ ...prev, module: e.target.value }));
+              SummaryChild={<h5 className="text-primary p-0 m-0">{templateCategory.module || 'Select Module'}</h5>}
+              dropdownList={moduleOptions.map((m) => ({
+                id: m.id,
+                showName: m.name,
+                name: m.id
+              }))}
+              selected={templateCategory.module}
+              search={false}
+              commonFunction={(e) => {
+                setTemplateCategory((prev) => ({ ...prev, module: e.name }));
                 if (errors.module) setErrors((prev) => ({ ...prev, module: '' }));
               }}
-              value={templateCategory.module}
-              errorMessage={errors.module}
+              error={errors.module}
             />
           </div>
         </div>

@@ -42,7 +42,13 @@ const EnquiryList = () => {
       enquiryType,
       preferredConsultation,
       organisation,
-      interviewPurpose
+      interviewPurpose,
+      eventName,
+      eventType,
+      eventDate,
+      eventLocation,
+      bookSessionFor,
+      eventTopic
     } = enquiry;
 
     return {
@@ -67,6 +73,12 @@ const EnquiryList = () => {
       organisation: <TruncatableFieldToolTip content={organisation} />,
       interviewPurpose: <TruncatableFieldToolTip content={interviewPurpose} />,
       preferredConsultation: <TruncatableFieldToolTip content={preferredConsultation} />,
+      eventName: <TruncatableFieldToolTip content={eventName} />,
+      eventType: <TruncatableFieldToolTip content={eventType} />,
+      eventDate: <TruncatableFieldToolTip content={eventDate} />,
+      eventLocation: <TruncatableFieldToolTip content={eventLocation} />,
+      bookSessionFor: <TruncatableFieldToolTip content={bookSessionFor} />,
+      eventTopic: <TruncatableFieldToolTip content={eventTopic} />,
       application_resume: application_url?.resume ? (
         <a href={application_url.resume} download target="_blank" rel="noopener noreferrer">
           <button className="btn btn-sm btn-outline-primary flex items-center space-x-1">
@@ -122,17 +134,23 @@ const EnquiryList = () => {
     { id: 14, label: 'Updated At', key: 'updatedAt', dataKey: 'updatedAt', formatForExport: (value) => formatDateTime(value) },
 
     { id: 15, label: 'Enquiry Type', key: 'enquiryType', dataKey: 'enquiryType' },
-    
+
     { id: 16, label: 'Organisation', key: 'organisation', dataKey: 'organisation' },
     { id: 17, label: 'Interview Purpose', key: 'interviewPurpose', dataKey: 'interviewPurpose' },
-    
-    { id: 18, label: 'Preferred Consultation', key: 'preferredConsultation', dataKey: 'preferredConsultation' },
-    { id: 19, label: 'Resume URL', key: 'application_resume', dataKey: 'application_resume' },
-    { id: 20, label: 'Cover Letter URL', key: 'application_cover_letter', dataKey: 'application_cover_letter' },
-    { id: 21, label: 'Portfolio URL', key: 'application_portfolio', dataKey: 'application_portfolio' },
-    { id: 22, label: 'Position Applying For', key: 'position_applying_for', dataKey: 'position_applying_for' },
-    { id: 23, label: 'LinkedIn', key: 'linkedin', dataKey: 'linkedin' },
-    { id: 24, label: 'Comments', key: 'comments', dataKey: 'comments' }
+    { id: 18, label: 'Event Name', key: 'eventName', dataKey: 'eventName' },
+    { id: 19, label: 'Event Type', key: 'eventType', dataKey: 'eventType' },
+    { id: 20, label: 'Event Date', key: 'eventDate', dataKey: 'eventDate' },
+    { id: 21, label: 'Event Location', key: 'eventLocation', dataKey: 'eventLocation' },
+    { id: 22, label: 'Book Session For', key: 'bookSessionFor', dataKey: 'bookSessionFor' },
+    { id: 23, label: 'Event Topic', key: 'eventTopic', dataKey: 'eventTopic' },
+
+    { id: 24, label: 'Preferred Consultation', key: 'preferredConsultation', dataKey: 'preferredConsultation' },
+    { id: 25, label: 'Resume URL', key: 'application_resume', dataKey: 'application_resume' },
+    { id: 26, label: 'Cover Letter URL', key: 'application_cover_letter', dataKey: 'application_cover_letter' },
+    { id: 27, label: 'Portfolio URL', key: 'application_portfolio', dataKey: 'application_portfolio' },
+    { id: 28, label: 'Position Applying For', key: 'position_applying_for', dataKey: 'position_applying_for' },
+    { id: 29, label: 'LinkedIn', key: 'linkedin', dataKey: 'linkedin' },
+    { id: 30, label: 'Comments', key: 'comments', dataKey: 'comments' }
   ];
 
   const actionItems = [
