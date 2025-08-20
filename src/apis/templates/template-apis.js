@@ -1,14 +1,14 @@
-import { deleteMethodCall, getMethodCall, postMethodCall, putMethodCall } from '../api-handler';
+import { deleteMethodCall, getMethodCall, postMethodCall, putMethodCall, postMethodCallForFormWithFile, putMethodCallForFormWithFile } from '../api-handler';
 
 // email templates apis
 export const getEmailTemplateByIdApi = async (id) => {
   return await getMethodCall(`${import.meta.env.VITE_API_URL}/template/email/${id}?p=1`);
 };
 export const addEmailTemplateApi = async (data) => {
-  return await postMethodCall(`${import.meta.env.VITE_API_URL}/template/email`, data);
+  return await postMethodCallForFormWithFile(`${import.meta.env.VITE_API_URL}/template/email`, data, true);
 };
 export const updateEmailTemplateApi = async (id, data) => {
-  return await putMethodCall(`${import.meta.env.VITE_API_URL}/template/email/${id}`, data);
+  return await putMethodCallForFormWithFile(`${import.meta.env.VITE_API_URL}/template/email/${id}`, data, true);
 };
 export const deleteEmailTemplateApi = async (ids) => {
   return await deleteMethodCall(`${import.meta.env.VITE_API_URL}/template/email`, { ids });

@@ -6,15 +6,12 @@ import { useEffect, useState } from 'react';
 import FormField from '../../../atoms/formFields/InputField';
 import { addEmailTemplateApi, getEmailTemplateByIdApi, updateEmailTemplateApi } from '../../../apis/templates/template-apis';
 import { showNotification } from '../../../utils/showNotification';
-import DocumentFileUpload from '../../../atoms/formFields/DocumentFileUpload';
-import { acceptedExtensions, acceptedProductTypes } from '../../product/productStaticData';
-import FileTypesTooltip from '../../../atoms/formFields/FileTypesTooltip';
 import MultiSelectCheckbox from '../../../atoms/formFields/MultiSelectCheckBox';
 import { getFilesBySiteIdApi } from '../../../apis/file-apis';
-import { uploadMultipleCustomFiles } from '../../../utils/fileUploads';
 import { getAllTemplateCategoriesApi } from '../../../apis/templates/template-category';
 import TextareaComponent from '../../../atoms/formFields/TextareaComponent';
 import EmailPreview from '../../../atoms/templatePreview/EmailPreview';
+import MultipleImageUpload from '../../../atoms/formFields/MultipleImageUpload';
 
 const AddEmailTemplate = () => {
   const navigate = useNavigate();
@@ -47,8 +44,25 @@ const AddEmailTemplate = () => {
       (async () => {
         const { status, data } = await getEmailTemplateByIdApi(id);
         if (status) {
-          const { site, templateCategory, ...rest } = data.emailTemplate;
-          setEmailTemplate((prev) => ({ ...prev, ...rest, site: site._id, templateCategory: templateCategory || undefined }));
+          const template = data.emailTemplate;
+
+          const formattedFiles = (template.files || []).map((f) => ({
+            _id: f._id,
+            file: null,
+            url: f.url
+          }));
+
+          setEmailTemplate((prev) => ({
+            ...prev,
+            name: template.name,
+            subject: template.subject,
+            body: template.body,
+            site: template.site._id,
+            templateCategory: template.templateCategory || undefined,
+            files: template.files.map((f) => f._id)
+          }));
+
+          setAttachments(formattedFiles);
         } else showNotification('warn', data);
       })()
         .catch((error) => showNotification('error', error.message))
@@ -74,11 +88,6 @@ const AddEmailTemplate = () => {
     })().catch((error) => showNotification('error', error.message));
   }, []);
 
-  const handleFileUpload = (e) => {
-    e.preventDefault();
-    const newFiles = Array.from(e.target.files).map((file) => ({ file, customName: file.name }));
-    setAttachments((prev) => [...prev, ...newFiles]);
-  };
   const validate = () => {
     const newErrors = {};
     if (!emailTemplate.site) newErrors.site = 'Site is required';
@@ -93,15 +102,42 @@ const AddEmailTemplate = () => {
     e.preventDefault();
     if (!validate()) return;
     setLoading(true);
+
     try {
-      let fileIds = [];
-      if (attachments.length > 0) fileIds = await uploadMultipleCustomFiles(attachments);
-      const payload = { ...emailTemplate, files: [...emailTemplate.files, ...fileIds], fileId: files?._id };
-      const { status, data } = await (id ? (isDuplicate ? addEmailTemplateApi(payload) : updateEmailTemplateApi(id, payload)) : addEmailTemplateApi(payload));
+      const formData = new FormData();
+
+      formData.set('site', emailTemplate.site);
+      formData.set('name', emailTemplate.name);
+      formData.set('subject', emailTemplate.subject);
+      formData.set('body', emailTemplate.body);
+      if (emailTemplate.templateCategory) {
+        formData.set('templateCategory', emailTemplate.templateCategory);
+      }
+
+      emailTemplate.files.forEach((fileId) => {
+        formData.append('files[]', fileId);
+      });
+
+      attachments.forEach((attachment) => {
+        if (attachment.file) {
+          formData.append('attachments[]', attachment.file);
+        }
+      });
+
+      if (files?._id) {
+        formData.set('fileId', files._id);
+      }
+
+      const apiFn = id ? (isDuplicate ? addEmailTemplateApi : (formData) => updateEmailTemplateApi(id, formData)) : addEmailTemplateApi;
+
+      const { status, data } = await apiFn(formData);
+
       if (status) {
         showNotification('success', data.message);
         navigate('/templates/email-template-list');
-      } else showNotification('warn', data);
+      } else {
+        showNotification('warn', data);
+      }
     } catch (error) {
       showNotification('error', error.message);
     } finally {
@@ -257,22 +293,29 @@ const AddEmailTemplate = () => {
             <div className="w-full sm:w-1/2 flex flex-col gap-y-5">
               {files && files.attachments && files.attachments.length > 0 && (
                 <MultiSelectCheckbox
-                  options={files.attachments || []}
+                  options={files.attachments}
                   formLabel={'Select File'}
                   label={'Invoice.pdf, Document.doc'}
-                  selected={emailTemplate.files}
-                  onChange={(e) => setEmailTemplate((prev) => ({ ...prev, files: e }))}
+                  selected={{ imageFile: attachments || [] }}
+                  onChange={(updatedFiles) => setAttachments(updatedFiles)}
                 />
               )}
-              <DocumentFileUpload
-                label={'Attachment Files'}
-                isMultiple
-                files={attachments}
-                setFiles={setAttachments}
-                allowedTypes={acceptedProductTypes}
-                allowedFileTypes={acceptedExtensions}
-                handleFileUpload={handleFileUpload}
-                toolTip={<FileTypesTooltip />}
+
+              <MultipleImageUpload
+                label="Attachment Files"
+                selected={{ imageFile: attachments || [] }}
+                onChange={(updatedFiles) => {
+                  const updatedFileIds = updatedFiles.filter((file) => file._id).map((file) => file._id);
+
+                  setEmailTemplate((prev) => ({
+                    ...prev,
+                    files: updatedFileIds
+                  }));
+
+                  setAttachments(updatedFiles);
+                }}
+                acceptedTypes={['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'image/jpeg', 'image/png']}
+                maxFileSizeInMB={5}
               />
             </div>
           </div>

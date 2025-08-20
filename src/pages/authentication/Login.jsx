@@ -26,6 +26,7 @@ const Login = () => {
       const { data, error } = await res.json();
       if (res.ok) {
         dispatch({ type: 'SIGNIN', payload: data.token });
+        localStorage.setItem("isSuperAdmin", data.isSuperAdmin);
         navigate('/dashboard');
       } else showNotification('warn', error);
     } catch (error) {
