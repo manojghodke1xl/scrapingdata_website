@@ -89,7 +89,7 @@ const MaterialSidebar = ({ handleToggleSidebar = () => { } }) => {
    - NOTE: Do NOT add this object inside accordianLinks by default,
    - because it should only appear for authorized users.
 */
-  if (canViewModule(auth, "meatatag.com")) {
+  if (canViewModule(auth, "metatag.com")) {
     // Append a new link object at the END of the accordianLinks array
     accordianLinks.push({
       title: "Meta Data",  // Label displayed in the sidebar
