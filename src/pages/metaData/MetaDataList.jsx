@@ -151,25 +151,26 @@ const MetaDataList = () => {
 
   const actionItems = [
     { id: 0, label: 'Edit', icon: 'edit', handler: (row) => navigate(`/metadata/edit-metadata/${row.id}`) },
-    { id: 1, label: 'Delete', icon: 'delete', deleteAction: true }
+    { id: 1, label: 'View', icon: 'view', handler: (row) => navigate(`/metadata/view-metadata/${row.id}`) },
+    { id: 2, label: 'Delete', icon: 'delete', deleteAction: true }
   ];
 
   return (
     <div className="p-1 overflow-x-hidden mb-12">
       <div className="flex items-center justify-between">
-        <TableHeader 
-          heading="Meta Tags" 
-          btn1={true} 
-          href1="/metadata/add-metadata" 
-          icon1={<IoMdAdd />} 
-          btnLabel1="Add Meta Tag" 
-          btnClass="text-sm py-1 px-3" 
-          
+        <TableHeader
+          heading="Meta Tags"
+          btn1={true}
+          href1="/metadata/add-metadata"
+          icon1={<IoMdAdd />}
+          btnLabel1="Add Meta Tag"
+          btnClass="text-sm py-1 px-3"
+
           btn2={true}
           href2={"/metadata/import-metadata"}
           icon2={<IoMdCloudUpload />}
           btnLabel2="Import Meta Tag"
-          />
+        />
 
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2">

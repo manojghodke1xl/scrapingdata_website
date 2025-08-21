@@ -34,11 +34,11 @@ export const getMetaDataByPageApi = async (pageName) => {
 };
 
 // Get sample csv file
-export const getSampleCSVFile = async() => {
-  return downloadFile(`${BASE_URL}/metadata-sample-download`)
-}
+export const getSampleCSVFile = async () => {
+  return downloadFile(`${BASE_URL}/metadata-sample-download`);
+};
 
 // Upload meta data csv file
-export const uploadCSVFile = async(metadata) => {
-  return postMethodCall(`${BASE_URL}/metadata/import`, metadata)
-}
+export const uploadCSVFile = async (metadata) => {
+  return postMethodCall(`${BASE_URL}/metadata/import`, metadata);
+};

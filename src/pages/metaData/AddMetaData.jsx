@@ -122,7 +122,7 @@ const AddMetaData = () => {
     <div className="py-8 p-4 sm:p-8 overflow-x-hidden mb-20">
       <div className="w-full pb-8 border-b border-primary flex flex-col gap-y-4 md:flex-row justify-between items-start md:items-end">
         <h1 className="text-3xl font-semibold text-dark">{id ? (isDuplicate ? 'Add' : 'Edit') : 'Add'} Meta Data</h1>
-        <FormButtons to="/metadata/metadata-list" type="submit" onClick={handleSubmit} btnLabel={id ? (isDuplicate ? 'Add' : 'Save Changes') : 'Add Meta'} loading={isLoading} />
+        <FormButtons to="/metadata/metadata-list" type="submit" onClick={handleSubmit} btnLebal={id ? (isDuplicate ? 'Add Meta' : 'Save Changes') : 'Add Meta'} loading={isLoading} />
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
@@ -206,7 +206,7 @@ const AddMetaData = () => {
 
         {/* Submit Button */}
         <div className="w-full flex justify-end pt-8">
-          <FormButtons to="/metadata/metadata-list" type="submit" onClick={handleSubmit} btnLabel={id ? (isDuplicate ? 'Add' : 'Save Changes') : 'Add Meta'} loading={isLoading} />
+          <FormButtons to="/metadata/metadata-list" type="submit" onClick={handleSubmit} btnLebal={id ? (isDuplicate ? 'Add Meta' : 'Save Changes') : 'Add Meta'} loading={isLoading} />
         </div>
       </form>
     </div>

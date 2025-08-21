@@ -30,9 +30,8 @@ const SiteList = () => {
       host: <TruncatableFieldToolTip content={host} />,
       status: (
         <div
-          className={`rounded-xl ${
-            isActive ? `${isDarkMode ? 'border border-success' : 'bg-lightgreen'} text-success` : `${isDarkMode ? 'border border-inactive' : 'bg-inactive'} text-inactive`
-          } p-0.5 w-fit text-sm flex gap-x-1 items-center`}
+          className={`rounded-xl ${isActive ? `${isDarkMode ? 'border border-success' : 'bg-lightgreen'} text-success` : `${isDarkMode ? 'border border-inactive' : 'bg-inactive'} text-inactive`
+            } p-0.5 w-fit text-sm flex gap-x-1 items-center`}
         >
           <span className={`w-2 h-2 rounded-full ${isActive ? 'bg-green ' : 'bg-darkgray'}`} />
           <span>{isActive ? 'Active' : 'Inactive'}</span>

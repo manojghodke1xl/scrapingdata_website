@@ -123,16 +123,16 @@ export const testimonialsPath = [
 export const templatePath =
   localStorage.getItem('isSuperAdmin') === 'true'
     ? [
-        { title: 'Template Category', to: ['/template-category/template-category-list', '/template-category/add-template-category', '/template-category/edit-template-category/:id'] },
-        { title: 'Email Templates', to: ['/templates/email-template-list', '/templates/add-email-template', '/templates/edit-email-template', '/templates/duplicate-email-template'] },
-        { title: 'SMS Templates', to: ['/templates/sms-template-list', '/templates/add-sms-template', '/templates/edit-sms-template', '/templates/duplicate-sms-template'] },
-        { title: 'WhatsApp Templates', to: ['/templates/whatsapp-template-list', '/templates/add-whatsapp-template', '/templates/edit-whatsapp-template', '/templates/duplicate-whatsapp-template'] }
-      ]
+      { title: 'Template Category', to: ['/template-category/template-category-list', '/template-category/add-template-category', '/template-category/edit-template-category/:id'] },
+      { title: 'Email Templates', to: ['/templates/email-template-list', '/templates/add-email-template', '/templates/edit-email-template', '/templates/duplicate-email-template'] },
+      { title: 'SMS Templates', to: ['/templates/sms-template-list', '/templates/add-sms-template', '/templates/edit-sms-template', '/templates/duplicate-sms-template'] },
+      { title: 'WhatsApp Templates', to: ['/templates/whatsapp-template-list', '/templates/add-whatsapp-template', '/templates/edit-whatsapp-template', '/templates/duplicate-whatsapp-template'] }
+    ]
     : [
-        { title: 'Email Templates', to: ['/templates/email-template-list', '/templates/add-email-template', '/templates/edit-email-template', '/templates/duplicate-email-template'] },
-        { title: 'SMS Templates', to: ['/templates/sms-template-list', '/templates/add-sms-template', '/templates/edit-sms-template', '/templates/duplicate-sms-template'] },
-        { title: 'WhatsApp Templates', to: ['/templates/whatsapp-template-list', '/templates/add-whatsapp-template', '/templates/edit-whatsapp-template', '/templates/duplicate-whatsapp-template'] }
-      ];
+      { title: 'Email Templates', to: ['/templates/email-template-list', '/templates/add-email-template', '/templates/edit-email-template', '/templates/duplicate-email-template'] },
+      { title: 'SMS Templates', to: ['/templates/sms-template-list', '/templates/add-sms-template', '/templates/edit-sms-template', '/templates/duplicate-sms-template'] },
+      { title: 'WhatsApp Templates', to: ['/templates/whatsapp-template-list', '/templates/add-whatsapp-template', '/templates/edit-whatsapp-template', '/templates/duplicate-whatsapp-template'] }
+    ];
 
 // System logs and tracking related paths
 export const logsPath = [
@@ -174,6 +174,6 @@ export const utilitiesPath = [
   { title: 'UTM Builder', to: ['/utm-builder/utm-builder-list', '/utm-builder/add-utm-builder', '/utm-builder/edit-utm-builder', '/utm-builder/duplicate-utm-builder'] }
 ];
 
-export const metaDataPath = [{ title: 'Meta Data', to: ['/metaData/metadata-list', '/metaData/add-metadata', '/metaData/edit-metadata'] }];
+export const metaDataPath = [{ title: 'Meta Data', to: ['/metaData/metadata-list', '/metaData/add-metadata', '/metaData/edit-metadata', '/metaData/view-metadata'] }];
 
 export const projectCheckerPath = [{ title: 'Project Checker List', to: ['/projectChecker/project-checker-list'] }];

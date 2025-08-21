@@ -33,8 +33,9 @@ import useGlobalContext from '../../../hooks/useGlobalContext';
 import { AiOutlineProduct } from 'react-icons/ai';
 import LinkComponent from '../../../atoms/sidebar/LinkComponent';
 // import SearchComponent from '../../../atoms/common/SearchComponent';
+import { canViewModule } from "../../../utils/canViewModule";
 
-const MaterialSidebar = ({ handleToggleSidebar = () => {} }) => {
+const MaterialSidebar = ({ handleToggleSidebar = () => { } }) => {
   const { pathname } = useLocation();
   const { auth } = useGlobalContext();
   const [openAccordion, setOpenAccordion] = useState(null);
@@ -77,12 +78,26 @@ const MaterialSidebar = ({ handleToggleSidebar = () => {} }) => {
     { title: 'Utilities', links: utilitiesPath, icon: <LuLink /> },
     { title: 'Logs', links: logsPath, icon: <LuLogs /> },
     // Meta Data Section
-    { title: 'Meta Data', links: metaDataPath, icon: <TbFileSearch /> },
-    
+    // { title: 'Meta Data', links: metaDataPath, icon: <TbFileSearch /> },
+
     // Project Checker Section
     { title: 'Project Checker', links: projectCheckerPath, icon: <TbFileSearch /> }
   ];
 
+  /* ===== Start: Conditionally add "Meta Data" link =====
+   - Only add "Meta Data" menu item if the user has permission for the site ("meatatag.com") website address
+   - NOTE: Do NOT add this object inside accordianLinks by default,
+   - because it should only appear for authorized users.
+*/
+  if (canViewModule(auth, "meatatag.com")) {
+    // Append a new link object at the END of the accordianLinks array
+    accordianLinks.push({
+      title: "Meta Data",  // Label displayed in the sidebar
+      links: metaDataPath, // Path(s) that open this menu item
+      icon: <TbFileSearch />  // Icon shown with the title
+    });
+  }
+  /* ===== End: Conditionally add "Meta Data" link ===== */
   return (
     <div className="w-full h-full p-1 relative">
       <div className="w-full">
