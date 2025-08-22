@@ -3,8 +3,8 @@ import { Link, useParams } from 'react-router-dom';
 import useGlobalContext from '../../hooks/useGlobalContext';
 import { showNotification } from '../../utils/showNotification';
 import { formatDateTime } from '../../utils/dateFormats';
-import { viewEnquiryNote } from './EnquiryNotes';
-import NoteComponent from '../../atoms/common/NoteComponent';
+// import { viewEnquiryNote } from './EnquiryNotes';
+// import NoteComponent from '../../atoms/common/NoteComponent';
 import CountryFlag from '../../atoms/common/CountryFlag';
 import { getEnquiryById } from '../../apis/leads/enquiry-apis';
 
@@ -135,7 +135,7 @@ const ViewScrapingData = () => {
               <div className="mt-5">
                 <h1 className="font-semibold text-primary">Preferred Mode of Contact</h1>
                 <p className="text-placeholder font-normal"> {enquiry?.preferredMethodOfContact || 'No Preferred Mode of Contact is provided'}</p>
-              </div>  
+              </div>
             </div>
           </div>
         </div>
@@ -183,31 +183,70 @@ const ViewScrapingData = () => {
           <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div className="mt-5">
               <h1 className="font-semibold text-primary">Resume URL</h1>
-              <p className="text-placeholder font-normal"> {enquiry?.application_url?.resume ? <a href={`${enquiry?.application_url?.resume}`} target='_blank'>View Resume</a> : 'No Resume available'}</p>
+              <p className="text-placeholder font-normal">
+                {' '}
+                {enquiry?.application_url?.resume ? (
+                  <a href={`${enquiry?.application_url?.resume}`} target="_blank">
+                    View Resume
+                  </a>
+                ) : (
+                  'No Resume available'
+                )}
+              </p>
             </div>
             <div className="mt-5">
               <h1 className="font-semibold text-primary">Cover Letter URL</h1>
-              <p className="text-placeholder font-normal"> {enquiry?.application_url?.cover_letter ? <a href={`${enquiry?.application_url?.cover_letter}`} target='_blank'>View Cover Letter</a> : 'No Cover Letter available'}</p>
+              <p className="text-placeholder font-normal">
+                {' '}
+                {enquiry?.application_url?.cover_letter ? (
+                  <a href={`${enquiry?.application_url?.cover_letter}`} target="_blank">
+                    View Cover Letter
+                  </a>
+                ) : (
+                  'No Cover Letter available'
+                )}
+              </p>
             </div>
             <div className="mt-5">
               <h1 className="font-semibold text-primary">Portfolio URL</h1>
-              <p className="text-placeholder font-normal"> {enquiry?.application_url?.portfolio ? <a href={`${enquiry?.application_url?.portfolio}`} target='_blank'>View Portfolio</a> : 'No Portfolio URL available'}</p>
+              <p className="text-placeholder font-normal">
+                {' '}
+                {enquiry?.application_url?.portfolio ? (
+                  <a href={`${enquiry?.application_url?.portfolio}`} target="_blank">
+                    View Portfolio
+                  </a>
+                ) : (
+                  'No Portfolio URL available'
+                )}
+              </p>
             </div>
             <div className="mt-5">
               <h1 className="font-semibold text-primary">Position Applying for</h1>
-              <p className="text-placeholder font-normal"> {enquiry?.position_applying_for ? <p>{enquiry?.position_applying_for}</p> : 'No data about position applied for available'}</p>
+              <p className="text-placeholder font-normal">
+                {' '}
+                {enquiry?.position_applying_for ? <p>{enquiry?.position_applying_for}</p> : 'No data about position applied for available'}
+              </p>
             </div>
             <div className="mt-5">
               <h1 className="font-semibold text-primary">Linkedin</h1>
-              <p className="text-placeholder font-normal"> {enquiry?.linkedin ? <a href={`${enquiry?.linkedin}`} target='_blank'>View LinkedIn</a> : 'No Linkedin URL available'}</p>
+              <p className="text-placeholder font-normal">
+                {' '}
+                {enquiry?.linkedin ? (
+                  <a href={`${enquiry?.linkedin}`} target="_blank">
+                    View LinkedIn
+                  </a>
+                ) : (
+                  'No Linkedin URL available'
+                )}
+              </p>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="w-full justify-center items-center border-b  border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end ">
+      {/* <div className="w-full justify-center items-center border-b  border-primary mt-7 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end ">
         <NoteComponent note={viewEnquiryNote} />
-      </div>
+      </div> */}
       {!isScrollable && (
         <div className="w-full flex justify-end items-center gap-4 pt-8  border- border-primary">
           <Link to={'/enquiry/enquiry-list'} className="px-4 py-2 text-primary font-medium bg-inherit hover:bg-hover rounded-xl border border-primary whitespace-nowrap">

@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { formatDateTime } from '../../utils/dateFormats';
 import TableComponent from '../../atoms/table/Table';
-import NoteComponent from '../../atoms/common/NoteComponent';
-import { enquiryListNote } from './EnquiryNotes';
+// import NoteComponent from '../../atoms/common/NoteComponent';
+// import { enquiryListNote } from './EnquiryNotes';
 import { AiOutlineApi } from 'react-icons/ai';
 import { BsDownload } from 'react-icons/bs';
 import { FaLinkedin } from 'react-icons/fa';
@@ -154,22 +154,22 @@ const ScrapingDataList = () => {
   ];
 
   const actionItems = [
-    { id: 0, label: 'View', icon: 'view', handler: (row) => navigate(`/enquiry/view-enquiry/${row.id}`) },
+    { id: 0, label: 'View', icon: 'view', handler: (row) => navigate(`bayut/view-scraping_data/${row.id}`) },
     { id: 1, label: 'Delete', icon: 'delete', deleteAction: true }
   ];
 
   return (
     <div className="p-1 overflow-x-hidden mb-12">
       <TableHeader
-        heading="Enquiry"
+        heading="Scraping Data"
         btn2={true}
         btn1={true}
-        href1={'/enquiry/enquiry-integration'}
-        href2={'/enquiry/add-enquiry'}
+        href1={' bayut/scraping_data-integration'}
+        href2={'bayut/add-scraping_data'}
         icon1={<AiOutlineApi />}
         icon2={<IoMdAdd />}
         btnLabel1={'API Integration'}
-        btnLabel2={'Add Enquiry'}
+        btnLabel2={'Add Scraping Data'}
       />
       <TableComponent
         selectable={true}
@@ -188,12 +188,12 @@ const ScrapingDataList = () => {
           { id: 1, name: 'Email' }
         ]}
         deleteBtn={true}
-        deleteLabel="Delete Enquiry"
-        deleteMessage="Are you sure you want to delete this enquiry?"
+        deleteLabel="Delete Entry"
+        deleteMessage="Are you sure you want to delete this Entry?"
         deleteApi={deleteEnquiryApi}
         actionItems={actionItems}
       />
-      <NoteComponent note={enquiryListNote} />
+      {/* <NoteComponent note={enquiryListNote} /> */}
     </div>
   );
 };
