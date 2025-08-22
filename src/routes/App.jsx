@@ -63,6 +63,7 @@ import ContactRoutes from './private-routes/ContactRoutes';
 import CampaignRoutes from './private-routes/CampaignRoutes';
 import MetaDataRoutes from './private-routes/MetaDataRoutes';
 import ProjectCheckerRoutes from './private-routes/ProjectCheckerRoutes';
+import ScrapingDataRoutes from './private-routes/ScrapingDataRoutes';
 
 const ZohoStatus = lazy(() => import('../pages/integration/ZohoStatus'));
 
@@ -98,6 +99,7 @@ const privateRoutes = [
   ...EventTicketRoutes,
   ...EventRoutes,
   ...EnquiryRoutes,
+  ...ScrapingDataRoutes,
   ...CouponRoutes,
   ...ContactRoutes,
   ...ClientLogoRoutes,

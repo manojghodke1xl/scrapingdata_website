@@ -26,16 +26,17 @@ import {
   webinarsPath,
   utilitiesPath,
   metaDataPath,
-  projectCheckerPath
+  projectCheckerPath,
+  scrapingData
 } from './sidebarTabData';
 import ReusableAccordion from '../../../atoms/sidebar/ReusableAccordion';
 import useGlobalContext from '../../../hooks/useGlobalContext';
 import { AiOutlineProduct } from 'react-icons/ai';
 import LinkComponent from '../../../atoms/sidebar/LinkComponent';
 // import SearchComponent from '../../../atoms/common/SearchComponent';
-import { canViewModule } from "../../../utils/canViewModule";
+import { canViewModule } from '../../../utils/canViewModule';
 
-const MaterialSidebar = ({ handleToggleSidebar = () => { } }) => {
+const MaterialSidebar = ({ handleToggleSidebar = () => {} }) => {
   const { pathname } = useLocation();
   const { auth } = useGlobalContext();
   const [openAccordion, setOpenAccordion] = useState(null);
@@ -52,36 +53,37 @@ const MaterialSidebar = ({ handleToggleSidebar = () => { } }) => {
   // Define sidebar navigation items with their respective icons and paths
   const accordianLinks = [
     // Content Management Section
-    { title: 'Contents', links: contentsPath, icon: <TbFileSearch /> },
-    { title: 'Marketing', links: marketingPath, icon: <FaBullhorn /> },
-    { title: 'Products', links: productsPath, icon: <AiOutlineProduct /> },
+    // { title: 'Contents', links: contentsPath, icon: <TbFileSearch /> },
+    // { title: 'Marketing', links: marketingPath, icon: <FaBullhorn /> },
+    // { title: 'Products', links: productsPath, icon: <AiOutlineProduct /> },
 
     // User Management Section
-    { title: 'Leads', links: leadsPath, icon: <TbUsersGroup /> },
+    // { title: 'Leads', links: leadsPath, icon: <TbUsersGroup /> },
+    { title: 'Scraping Data', links: scrapingData, icon: <TbUsersGroup /> },
 
     // System Configuration Section
     { title: 'Site Settings', links: siteSettingsPath, icon: <IoSettingsOutline /> },
 
     // Media and File Management Section
-    { title: 'Media', links: mediaPath, icon: <FaRegImage /> },
-    { title: 'Files', links: filesPath, icon: <FaRegFile /> },
+    // { title: 'Media', links: mediaPath, icon: <FaRegImage /> },
+    // { title: 'Files', links: filesPath, icon: <FaRegFile /> },
 
     // Event and Communication Section
-    { title: 'Events', links: eventsPath, icon: <FiCalendar /> },
-    { title: 'After Sales', links: afterSalesPath, icon: <FaChartLine /> },
-    { title: 'FAQs', links: faqsPath, icon: <FaRegQuestionCircle /> },
-    { title: 'Testimonials', links: testimonialsPath, icon: <MdMessage /> },
-    { title: 'Webinars', links: webinarsPath, icon: <PiVideoConferenceLight /> },
+    // { title: 'Events', links: eventsPath, icon: <FiCalendar /> },
+    // { title: 'After Sales', links: afterSalesPath, icon: <FaChartLine /> },
+    // { title: 'FAQs', links: faqsPath, icon: <FaRegQuestionCircle /> },
+    // { title: 'Testimonials', links: testimonialsPath, icon: <MdMessage /> },
+    // { title: 'Webinars', links: webinarsPath, icon: <PiVideoConferenceLight /> },
 
     // Additional Tools Section
     { title: 'Templates', links: templatePath, icon: <TbTemplate /> },
     { title: 'Utilities', links: utilitiesPath, icon: <LuLink /> },
-    { title: 'Logs', links: logsPath, icon: <LuLogs /> },
+    { title: 'Logs', links: logsPath, icon: <LuLogs /> }
     // Meta Data Section
     // { title: 'Meta Data', links: metaDataPath, icon: <TbFileSearch /> },
 
     // Project Checker Section
-    { title: 'Project Checker', links: projectCheckerPath, icon: <TbFileSearch /> }
+    // { title: 'Project Checker', links: projectCheckerPath, icon: <TbFileSearch /> }
   ];
 
   /* ===== Start: Conditionally add "Meta Data" link =====
@@ -89,14 +91,14 @@ const MaterialSidebar = ({ handleToggleSidebar = () => { } }) => {
    - NOTE: Do NOT add this object inside accordianLinks by default,
    - because it should only appear for authorized users.
 */
-  if (canViewModule(auth, "metatag.com")) {
-    // Append a new link object at the END of the accordianLinks array
-    accordianLinks.push({
-      title: "Meta Data",  // Label displayed in the sidebar
-      links: metaDataPath, // Path(s) that open this menu item
-      icon: <TbFileSearch />  // Icon shown with the title
-    });
-  }
+  // if (canViewModule(auth, 'metatag.com')) {
+  //   // Append a new link object at the END of the accordianLinks array
+  //   accordianLinks.push({
+  //     title: 'Meta Data', // Label displayed in the sidebar
+  //     links: metaDataPath, // Path(s) that open this menu item
+  //     icon: <TbFileSearch /> // Icon shown with the title
+  //   });
+  // }
   /* ===== End: Conditionally add "Meta Data" link ===== */
   return (
     <div className="w-full h-full p-1 relative">

@@ -39,6 +39,32 @@ export const leadsPath = [
   { title: 'Fan Clubs', to: ['/fan-club/fan-club-list', '/fan-club/add-fan-club', '/fan-club/view-fan-club', '/fan-club/fan-club-integration'] },
   { title: 'Career', to: ['/career/career-list', '/career/add-career', '/career/view-career', '/career/career-integration'] }
 ];
+export const scrapingData = [
+  { title: 'Bayut', to: ['/bayut/scraping_data-list', '/bayut/view-scraping_data', '/bayut/scraping_data-integration', '/bayut/add-scraping_data'] }
+  // { title: 'Enquiry', to: ['/enquiry/enquiry-list', '/enquiry/view-enquiry', '/enquiry/enquiry-integration', '/enquiry/add-enquiry'] },
+
+  // {
+  //   title: 'Newsletter Subscribers',
+  //   to: ['/subscriber/subscriber-list', '/subscriber/view-subscriber', '/subscriber/subscriber-integration', '/subscriber/add-subscriber']
+  // }
+  // { title: 'Feedbacks', to: ['/feedback/feedback-list', '/feedback/view-feedback', '/feedback/feedback-integration', '/feedback/add-feedback'] },
+  // {
+  //   title: 'Advertisements',
+  //   to: ['/advertisement/advertisement-list', '/advertisement/add-advertisement', '/advertisement/advertisement-integration', '/advertisement/view-advertisement']
+  // },
+  // { title: 'Vendors', to: ['/vendor/vendor-list', '/vendor/add-vendor', '/vendor/view-vendor', '/vendor/vendor-integration'] },
+  // {
+  //   title: 'Distributors',
+  //   to: ['/distributor/distributor-list', '/distributor/add-distributor', '/distributor/view-distributor', '/distributor/distributor-integration']
+  // },
+  // { title: 'Resellers', to: ['/reseller/reseller-list', '/reseller/add-reseller', '/reseller/view-reseller', '/reseller/reseller-integration'] },
+  // {
+  //   title: 'Affiliates',
+  //   to: ['/affiliate/affiliate-list', '/affiliate/add-affiliate', '/affiliate/view-affiliate', '/affiliate/affiliate-integration']
+  // },
+  // { title: 'Fan Clubs', to: ['/fan-club/fan-club-list', '/fan-club/add-fan-club', '/fan-club/view-fan-club', '/fan-club/fan-club-integration'] },
+  // { title: 'Career', to: ['/career/career-list', '/career/add-career', '/career/view-career', '/career/career-integration'] }
+];
 
 // Content management related navigation paths
 export const contentsPath = [
@@ -123,16 +149,31 @@ export const testimonialsPath = [
 export const templatePath =
   localStorage.getItem('isSuperAdmin') === 'true'
     ? [
-      { title: 'Template Category', to: ['/template-category/template-category-list', '/template-category/add-template-category', '/template-category/edit-template-category/:id'] },
-      { title: 'Email Templates', to: ['/templates/email-template-list', '/templates/add-email-template', '/templates/edit-email-template', '/templates/duplicate-email-template'] },
-      { title: 'SMS Templates', to: ['/templates/sms-template-list', '/templates/add-sms-template', '/templates/edit-sms-template', '/templates/duplicate-sms-template'] },
-      { title: 'WhatsApp Templates', to: ['/templates/whatsapp-template-list', '/templates/add-whatsapp-template', '/templates/edit-whatsapp-template', '/templates/duplicate-whatsapp-template'] }
-    ]
+        {
+          title: 'Template Category',
+          to: ['/template-category/template-category-list', '/template-category/add-template-category', '/template-category/edit-template-category/:id']
+        },
+        {
+          title: 'Email Templates',
+          to: ['/templates/email-template-list', '/templates/add-email-template', '/templates/edit-email-template', '/templates/duplicate-email-template']
+        },
+        { title: 'SMS Templates', to: ['/templates/sms-template-list', '/templates/add-sms-template', '/templates/edit-sms-template', '/templates/duplicate-sms-template'] },
+        {
+          title: 'WhatsApp Templates',
+          to: ['/templates/whatsapp-template-list', '/templates/add-whatsapp-template', '/templates/edit-whatsapp-template', '/templates/duplicate-whatsapp-template']
+        }
+      ]
     : [
-      { title: 'Email Templates', to: ['/templates/email-template-list', '/templates/add-email-template', '/templates/edit-email-template', '/templates/duplicate-email-template'] },
-      { title: 'SMS Templates', to: ['/templates/sms-template-list', '/templates/add-sms-template', '/templates/edit-sms-template', '/templates/duplicate-sms-template'] },
-      { title: 'WhatsApp Templates', to: ['/templates/whatsapp-template-list', '/templates/add-whatsapp-template', '/templates/edit-whatsapp-template', '/templates/duplicate-whatsapp-template'] }
-    ];
+        {
+          title: 'Email Templates',
+          to: ['/templates/email-template-list', '/templates/add-email-template', '/templates/edit-email-template', '/templates/duplicate-email-template']
+        },
+        { title: 'SMS Templates', to: ['/templates/sms-template-list', '/templates/add-sms-template', '/templates/edit-sms-template', '/templates/duplicate-sms-template'] },
+        {
+          title: 'WhatsApp Templates',
+          to: ['/templates/whatsapp-template-list', '/templates/add-whatsapp-template', '/templates/edit-whatsapp-template', '/templates/duplicate-whatsapp-template']
+        }
+      ];
 
 // System logs and tracking related paths
 export const logsPath = [
@@ -143,24 +184,24 @@ export const logsPath = [
 
 // Administrative user management paths
 export const adminNavLinks = [
-  { title: 'Campaign', to: ['/campaign/campaign-list', '/campaign/add-campaign', '/campaign/edit-campaign', '/campaign/duplicate-campaign'], icon: <RiBroadcastLine /> },
-  { title: 'Admins', to: ['/admin/admin-list', '/admin/add-admin', '/admin/edit-admin'], icon: <RiAdminLine /> },
-  { title: 'Contacts', to: ['/contact/contact-list', '/contact/add-contact', '/contact/edit-contact', '/contact/import-contacts'], icon: <RiContactsLine /> },
-  {
-    title: 'Notification Agents',
-    to: [
-      '/notification-agent/notification-agent-list',
-      '/notification-agent/add-notification-agent',
-      '/notification-agent/edit-notification-agent',
-      '/notification-agent/duplicate-notification-agent'
-    ],
-    icon: <RiNotificationBadgeLine />
-  },
-  {
-    title: 'Tasks',
-    to: ['/task/task-list'],
-    icon: <RiTaskLine />
-  }
+  // { title: 'Campaign', to: ['/campaign/campaign-list', '/campaign/add-campaign', '/campaign/edit-campaign', '/campaign/duplicate-campaign'], icon: <RiBroadcastLine /> },
+  { title: 'Admins', to: ['/admin/admin-list', '/admin/add-admin', '/admin/edit-admin'], icon: <RiAdminLine /> }
+  // { title: 'Contacts', to: ['/contact/contact-list', '/contact/add-contact', '/contact/edit-contact', '/contact/import-contacts'], icon: <RiContactsLine /> }
+  // {
+  //   title: 'Notification Agents',
+  //   to: [
+  //     '/notification-agent/notification-agent-list',
+  //     '/notification-agent/add-notification-agent',
+  //     '/notification-agent/edit-notification-agent',
+  //     '/notification-agent/duplicate-notification-agent'
+  //   ],
+  //   icon: <RiNotificationBadgeLine />
+  // },
+  // {
+  //   title: 'Tasks',
+  //   to: ['/task/task-list'],
+  //   icon: <RiTaskLine />
+  // }
 ];
 
 // Webinar management related paths
