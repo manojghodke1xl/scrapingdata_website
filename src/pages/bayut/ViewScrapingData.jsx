@@ -135,7 +135,7 @@ const ViewScrapingData = () => {
               <div className="mt-5">
                 <h1 className="font-semibold text-primary">Preferred Mode of Contact</h1>
                 <p className="text-placeholder font-normal"> {enquiry?.preferredMethodOfContact || 'No Preferred Mode of Contact is provided'}</p>
-              </div>
+              </div>  
             </div>
           </div>
         </div>
@@ -183,62 +183,23 @@ const ViewScrapingData = () => {
           <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div className="mt-5">
               <h1 className="font-semibold text-primary">Resume URL</h1>
-              <p className="text-placeholder font-normal">
-                {' '}
-                {enquiry?.application_url?.resume ? (
-                  <a href={`${enquiry?.application_url?.resume}`} target="_blank">
-                    View Resume
-                  </a>
-                ) : (
-                  'No Resume available'
-                )}
-              </p>
+              <p className="text-placeholder font-normal"> {enquiry?.application_url?.resume ? <a href={`${enquiry?.application_url?.resume}`} target='_blank'>View Resume</a> : 'No Resume available'}</p>
             </div>
             <div className="mt-5">
               <h1 className="font-semibold text-primary">Cover Letter URL</h1>
-              <p className="text-placeholder font-normal">
-                {' '}
-                {enquiry?.application_url?.cover_letter ? (
-                  <a href={`${enquiry?.application_url?.cover_letter}`} target="_blank">
-                    View Cover Letter
-                  </a>
-                ) : (
-                  'No Cover Letter available'
-                )}
-              </p>
+              <p className="text-placeholder font-normal"> {enquiry?.application_url?.cover_letter ? <a href={`${enquiry?.application_url?.cover_letter}`} target='_blank'>View Cover Letter</a> : 'No Cover Letter available'}</p>
             </div>
             <div className="mt-5">
               <h1 className="font-semibold text-primary">Portfolio URL</h1>
-              <p className="text-placeholder font-normal">
-                {' '}
-                {enquiry?.application_url?.portfolio ? (
-                  <a href={`${enquiry?.application_url?.portfolio}`} target="_blank">
-                    View Portfolio
-                  </a>
-                ) : (
-                  'No Portfolio URL available'
-                )}
-              </p>
+              <p className="text-placeholder font-normal"> {enquiry?.application_url?.portfolio ? <a href={`${enquiry?.application_url?.portfolio}`} target='_blank'>View Portfolio</a> : 'No Portfolio URL available'}</p>
             </div>
             <div className="mt-5">
               <h1 className="font-semibold text-primary">Position Applying for</h1>
-              <p className="text-placeholder font-normal">
-                {' '}
-                {enquiry?.position_applying_for ? <p>{enquiry?.position_applying_for}</p> : 'No data about position applied for available'}
-              </p>
+              <p className="text-placeholder font-normal"> {enquiry?.position_applying_for ? <p>{enquiry?.position_applying_for}</p> : 'No data about position applied for available'}</p>
             </div>
             <div className="mt-5">
               <h1 className="font-semibold text-primary">Linkedin</h1>
-              <p className="text-placeholder font-normal">
-                {' '}
-                {enquiry?.linkedin ? (
-                  <a href={`${enquiry?.linkedin}`} target="_blank">
-                    View LinkedIn
-                  </a>
-                ) : (
-                  'No Linkedin URL available'
-                )}
-              </p>
+              <p className="text-placeholder font-normal"> {enquiry?.linkedin ? <a href={`${enquiry?.linkedin}`} target='_blank'>View LinkedIn</a> : 'No Linkedin URL available'}</p>
             </div>
           </div>
         </div>

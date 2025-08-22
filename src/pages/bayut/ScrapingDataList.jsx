@@ -154,7 +154,7 @@ const ScrapingDataList = () => {
   ];
 
   const actionItems = [
-    { id: 0, label: 'View', icon: 'view', handler: (row) => navigate(`bayut/view-scraping_data/${row.id}`) },
+    { id: 0, label: 'View', icon: 'view', handler: (row) => navigate(`/enquiry/view-enquiry/${row.id}`) },
     { id: 1, label: 'Delete', icon: 'delete', deleteAction: true }
   ];
 
@@ -164,8 +164,8 @@ const ScrapingDataList = () => {
         heading="Scraping Data"
         btn2={true}
         btn1={true}
-        href1={' bayut/scraping_data-integration'}
-        href2={'bayut/add-scraping_data'}
+        href1={'/bayut/scraping_data-integration'}
+        href2={'/bayut/add-scraping_data'}
         icon1={<AiOutlineApi />}
         icon2={<IoMdAdd />}
         btnLabel1={'API Integration'}
@@ -188,8 +188,8 @@ const ScrapingDataList = () => {
           { id: 1, name: 'Email' }
         ]}
         deleteBtn={true}
-        deleteLabel="Delete Entry"
-        deleteMessage="Are you sure you want to delete this Entry?"
+        deleteLabel="Delete Enquiry"
+        deleteMessage="Are you sure you want to delete this enquiry?"
         deleteApi={deleteEnquiryApi}
         actionItems={actionItems}
       />
