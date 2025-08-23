@@ -123,7 +123,11 @@ const ScrapingDataList = () => {
 
       // Basic
       propertyId: <TruncatableFieldToolTip content={propertyId} />,
-      url: <TruncatableFieldToolTip content={url} />,
+      url: (
+        <a href={url} target="_blank" rel="noopener noreferrer">
+          <TruncatableFieldToolTip content={url} />
+        </a>
+      ),
       status: <TruncatableFieldToolTip content={status} />,
       createdAt: formatDateTime(createdAt),
       updatedAt: formatDateTime(updatedAt),

@@ -19,11 +19,11 @@ const InfoModal = ({ show, onClose, title, data }) => {
         </div>
 
         {/* Body */}
-        <div className="p-6 grid grid-cols-2 gap-x-10 gap-y-4">
+        <div className="p-6 grid grid-cols-2 gap-x-12 gap-y-4">
           {Object.entries(data || {}).map(([key, value]) => (
-            <div key={key} className="flex justify-between">
-              <span className="text-gray-600">{key}</span>
-              <span className="font-semibold text-gray-900">{value || '-'}</span>
+            <div key={key} className="grid grid-cols-2">
+              <span className="text-gray-600 font-medium border-b  py-2">{key}</span>
+              <span className="font-semibold text-gray-900 text-start border-b  py-2">{value || '-'}</span>
             </div>
           ))}
         </div>
