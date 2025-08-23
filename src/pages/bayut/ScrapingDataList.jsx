@@ -416,7 +416,7 @@ const ScrapingDataList = () => {
   ];
 
   const actionItems = [
-    { id: 0, label: 'View', icon: 'view', handler: (row) => navigate(`/enquiry/view-enquiry/${row.id}`) },
+    { id: 0, label: 'View', icon: 'view', handler: (row) => navigate(`/bayut/view-scraping_data/${row.id}`) },
     { id: 1, label: 'Delete', icon: 'delete', deleteAction: true }
   ];
 
