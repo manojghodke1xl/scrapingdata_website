@@ -133,7 +133,7 @@ const TableComponent = ({
   // Sorting state
   const [sortConfig, setSortConfig] = useState({
     sortBy: 'createdAt',
-    sortOrder: 'desc'
+    sortOrder: 'asc'
   });
 
   // Compute pinned columns

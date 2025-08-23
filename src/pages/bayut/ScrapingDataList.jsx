@@ -15,6 +15,7 @@ import { getBayutProperty } from '../../apis/bayut-apis';
 import propertydata from './propertyResponse.json'; // Assuming this is the file containing the property data
 import useGlobalContext from '../../hooks/useGlobalContext';
 import InfoModal from '../../atoms/modal/InfoModal';
+import PropertyTrans from '../../atoms/modal/PropertyTrans';
 
 const ScrapingDataList = () => {
   const navigate = useNavigate();
@@ -24,6 +25,8 @@ const ScrapingDataList = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalData, setModalData] = useState({});
   const [modalTitle, setModalTitle] = useState('');
+  const [transactionsOpen, setTransactionsOpen] = useState(false);
+  const [transactionsData, setTransactionsData] = useState([]);
 
   const handleOpenModal = (title, data) => {
     setModalTitle(title);
@@ -96,121 +99,149 @@ const ScrapingDataList = () => {
   //   };
   // });
 
-  const rows = propertyData.map((property) => {
-    const { _id, propertyId, url, status, createdAt, updatedAt, scrapedData } = property;
+  useEffect(() => {
+    console.log('property  data>>>>>>>>>>>>>>>>>>>>>', propertyData);
+  }, [propertyData]);
 
-    const {
-      title,
-      agent,
-      price,
-      priceCurrency,
-      priceText,
-      location,
-      displayAddress,
-      propertyInformation,
-      buildingInformation,
-      regulatoryInformation,
-      amenities,
-      validatedInformation,
-      verified
-    } = scrapedData || {};
-    const totalBuildingArea = buildingInformation?.['Total Building Area'];
-    const parkingAvailability = validatedInformation?.['Parking Availability'];
+  // Helper function to normalize tooltip content
+  const safeValue = (value) => {
+    if (value === null || value === undefined) return '';
+    if (typeof value === 'object') return JSON.stringify(value); // optional: stringify objects
+    return String(value);
+  };
 
-    return {
-      id: _id,
-      exportData: property,
+  // const rows = propertyData.map((property) => {
+  //   const { _id, propertyId, url, status, createdAt, updatedAt, scrapedData } = property;
 
-      // Basic
-      propertyId: <TruncatableFieldToolTip content={propertyId} />,
-      url: (
-        <a href={url} target="_blank" rel="noopener noreferrer">
-          <TruncatableFieldToolTip content={url} />
-        </a>
-      ),
-      status: <TruncatableFieldToolTip content={status} />,
-      createdAt: formatDateTime(createdAt),
-      updatedAt: formatDateTime(updatedAt),
+  //   const {
+  //     title,
+  //     agent,
+  //     price,
+  //     priceCurrency,
+  //     priceText,
+  //     location,
+  //     displayAddress,
+  //     propertyInformation,
+  //     buildingInformation,
+  //     regulatoryInformation,
+  //     SimilarPropertyTransactions,
+  //     amenities,
+  //     validatedInformation,
+  //     verified
+  //   } = scrapedData || {};
+  //   const totalBuildingArea = buildingInformation?.['Total Building Area'];
+  //   const parkingAvailability = validatedInformation?.['Parking Availability'];
 
-      // Core info
-      title: <TruncatableFieldToolTip content={title} />,
-      agent: <TruncatableFieldToolTip content={agent} />,
-      totalBuildingArea: <TruncatableFieldToolTip content={totalBuildingArea} />,
-      parkingAvailability: <TruncatableFieldToolTip content={parkingAvailability} />,
-      price: <TruncatableFieldToolTip content={`${priceCurrency} ${priceText}`} />,
-      location: <TruncatableFieldToolTip content={location} />,
-      displayAddress: <TruncatableFieldToolTip content={displayAddress} />,
-      verified: verified ? 'Yes' : 'No',
+  //   return {
+  //     id: _id,
+  //     exportData: property,
 
-      // Property info
-      type: <TruncatableFieldToolTip content={propertyInformation?.Type} />,
-      purpose: <TruncatableFieldToolTip content={propertyInformation?.Purpose} />,
-      furnishing: <TruncatableFieldToolTip content={propertyInformation?.Furnishing} />,
-      completion: <TruncatableFieldToolTip content={propertyInformation?.Completion} />,
-      reference: <TruncatableFieldToolTip content={propertyInformation?.['Reference no.']} />,
+  //     // Basic
+  //     propertyId: <TruncatableFieldToolTip content={propertyId} />,
+  //     url: (
+  //       <a href={url} target="_blank" rel="noopener noreferrer">
+  //         <TruncatableFieldToolTip content={url} />
+  //       </a>
+  //     ),
+  //     status: <TruncatableFieldToolTip content={status} />,
+  //     createdAt: formatDateTime(createdAt),
+  //     updatedAt: formatDateTime(updatedAt),
 
-      // Building info
-      building: <TruncatableFieldToolTip content={buildingInformation?.['Building Name']} />,
-      yearOfCompletion: <TruncatableFieldToolTip content={buildingInformation?.['Year of Completion']} />,
-      totalFloors: <TruncatableFieldToolTip content={buildingInformation?.['Total Floors']} />,
+  //     // Core info
+  //     title: <TruncatableFieldToolTip content={title} />,
+  //     agent: <TruncatableFieldToolTip content={agent} />,
+  //     totalBuildingArea: <TruncatableFieldToolTip content={totalBuildingArea} />,
+  //     parkingAvailability: <TruncatableFieldToolTip content={parkingAvailability} />,
+  //     price: <TruncatableFieldToolTip content={`${priceCurrency} ${priceText}`} />,
+  //     location: <TruncatableFieldToolTip content={location} />,
+  //     displayAddress: <TruncatableFieldToolTip content={displayAddress} />,
+  //     verified: verified ? 'Yes' : 'No',
 
-      // Regulatory
-      permitNumber: <TruncatableFieldToolTip content={regulatoryInformation?.['Permit Number']} />,
-      rera: <TruncatableFieldToolTip content={regulatoryInformation?.['RERA']} />,
-      agency: <TruncatableFieldToolTip content={regulatoryInformation?.['Registered Agency']} />,
-      // display information using model
-      PropertyInformation: (
-        <TruncatableFieldToolTip
-          content={
-            <span className="cursor-pointer text-blue-600 underline" onClick={() => handleOpenModal('Property Information', propertyInformation)}>
-              Property Information
-            </span>
-          }
-        />
-      ),
+  //     // Property info
+  //     type: <TruncatableFieldToolTip content={propertyInformation?.Type} />,
+  //     purpose: <TruncatableFieldToolTip content={propertyInformation?.Purpose} />,
+  //     furnishing: <TruncatableFieldToolTip content={propertyInformation?.Furnishing} />,
+  //     completion: <TruncatableFieldToolTip content={propertyInformation?.Completion} />,
+  //     reference: <TruncatableFieldToolTip content={propertyInformation?.['Reference no.']} />,
 
-      BuildingInformation: (
-        <TruncatableFieldToolTip
-          content={
-            <span className="cursor-pointer text-blue-600 underline" onClick={() => handleOpenModal('Building Information', buildingInformation)}>
-              Building Information
-            </span>
-          }
-        />
-      ),
-      RegulatoryInformation: (
-        <TruncatableFieldToolTip
-          content={
-            <span className="cursor-pointer text-blue-600 underline" onClick={() => handleOpenModal('Regulatory Information', regulatoryInformation)}>
-              Regulatory Information
-            </span>
-          }
-        />
-      ),
+  //     // Building info
+  //     building: <TruncatableFieldToolTip content={buildingInformation?.['Building Name']} />,
+  //     yearOfCompletion: <TruncatableFieldToolTip content={buildingInformation?.['Year of Completion']} />,
+  //     totalFloors: <TruncatableFieldToolTip content={buildingInformation?.['Total Floors']} />,
 
-      Amenities: (
-        <TruncatableFieldToolTip
-          content={
-            <span className="cursor-pointer text-blue-600 underline" onClick={() => handleOpenModal('Amenities', amenities)}>
-              Amenities
-            </span>
-          }
-        />
-      ),
+  //     // Regulatory
+  //     permitNumber: <TruncatableFieldToolTip content={regulatoryInformation?.['Permit Number']} />,
+  //     rera: <TruncatableFieldToolTip content={regulatoryInformation?.['RERA']} />,
+  //     agency: <TruncatableFieldToolTip content={regulatoryInformation?.['Registered Agency']} />,
+  //     // display information using model
+  //     PropertyInformation: (
+  //       <TruncatableFieldToolTip
+  //         content={
+  //           <span className="cursor-pointer text-blue-600 underline" onClick={() => handleOpenModal('Property Information', propertyInformation)}>
+  //             Property Information
+  //           </span>
+  //         }
+  //       />
+  //     ),
 
-      // At the bottom of your component
+  //     BuildingInformation: (
+  //       <TruncatableFieldToolTip
+  //         content={
+  //           <span className="cursor-pointer text-blue-600 underline" onClick={() => handleOpenModal('Building Information', buildingInformation)}>
+  //             Building Information
+  //           </span>
+  //         }
+  //       />
+  //     ),
+  //     PropertyTransactions: (
+  //       <TruncatableFieldToolTip
+  //         content={
+  //           <span
+  //             className="cursor-pointer text-blue-600 underline"
+  //             onClick={() => {
+  //               setTransactionsData(SimilarPropertyTransactions || []);
+  //               setTransactionsOpen(true);
+  //             }}
+  //           >
+  //             Similar Property Transactions
+  //           </span>
+  //         }
+  //       />
+  //     ),
 
-      //    { id: 7, label: 'Property Information', key: 'PropertyInformation', dataKey: 'PropertyInformation' },
-      // { id: 8, label: 'Building Information', key: 'BuildingInformation', dataKey: 'BuildingInformation' },
-      // { id: 9, label: 'Regulatory Information', key: 'RegulatoryInformation', dataKey: 'RegulatoryInformation' },
-      // { id: 10, label: 'Amenities', key: 'Amenities', dataKey: 'Amenities' },
+  //     RegulatoryInformation: (
+  //       <TruncatableFieldToolTip
+  //         content={
+  //           <span className="cursor-pointer text-blue-600 underline" onClick={() => handleOpenModal('Regulatory Information', regulatoryInformation)}>
+  //             Regulatory Information
+  //           </span>
+  //         }
+  //       />
+  //     ),
 
-      // Validated info
-      developer: <TruncatableFieldToolTip content={validatedInformation?.Developer} />,
-      ownership: <TruncatableFieldToolTip content={validatedInformation?.Ownership} />,
-      usage: <TruncatableFieldToolTip content={validatedInformation?.Usage} />
-    };
-  });
+  //     Amenities: (
+  //       <TruncatableFieldToolTip
+  //         content={
+  //           <span className="cursor-pointer text-blue-600 underline" onClick={() => handleOpenModal('Amenities', amenities)}>
+  //             Amenities
+  //           </span>
+  //         }
+  //       />
+  //     ),
+
+  //     // At the bottom of your component
+
+  //     //    { id: 7, label: 'Property Information', key: 'PropertyInformation', dataKey: 'PropertyInformation' },
+  //     // { id: 8, label: 'Building Information', key: 'BuildingInformation', dataKey: 'BuildingInformation' },
+  //     // { id: 9, label: 'Regulatory Information', key: 'RegulatoryInformation', dataKey: 'RegulatoryInformation' },
+  //     // { id: 10, label: 'Amenities', key: 'Amenities', dataKey: 'Amenities' },
+
+  //     // Validated info
+  //     developer: <TruncatableFieldToolTip content={validatedInformation?.Developer} />,
+  //     ownership: <TruncatableFieldToolTip content={validatedInformation?.Ownership} />,
+  //     usage: <TruncatableFieldToolTip content={validatedInformation?.Usage} />
+  //   };
+  // });
 
   // const columnConfig = [
   //   { id: 0, label: 'Property Name', key: 'name', dataKey: 'name' },
@@ -249,6 +280,111 @@ const ScrapingDataList = () => {
   //   { id: 30, label: 'Comments', key: 'comments', dataKey: 'comments' }
   // ];
 
+  const rows = propertyData.map((property) => {
+    const { _id, propertyId, url, status, createdAt, updatedAt, scrapedData } = property;
+
+    const {
+      title,
+      agent,
+      price,
+      priceCurrency,
+      priceText,
+      location,
+      displayAddress,
+      propertyInformation,
+      buildingInformation,
+      regulatoryInformation,
+      SimilarPropertyTransactions,
+      amenities,
+      validatedInformation,
+      verified
+    } = scrapedData || {};
+
+    const totalBuildingArea = buildingInformation?.['Total Building Area'];
+    const parkingAvailability = validatedInformation?.['Parking Availability'];
+
+    return {
+      id: _id,
+      exportData: property,
+
+      // Basic
+      propertyId: <TruncatableFieldToolTip content={safeValue(propertyId)} />,
+      url: (
+        <a href={url} target="_blank" rel="noopener noreferrer">
+          <TruncatableFieldToolTip content={safeValue(url)} />
+        </a>
+      ),
+      status: <TruncatableFieldToolTip content={safeValue(status)} />,
+      createdAt: formatDateTime(createdAt),
+      updatedAt: formatDateTime(updatedAt),
+
+      // Core info
+      title: <TruncatableFieldToolTip content={safeValue(title)} />,
+      agent: <TruncatableFieldToolTip content={safeValue(agent)} />,
+      totalBuildingArea: <TruncatableFieldToolTip content={safeValue(totalBuildingArea)} />,
+      parkingAvailability: <TruncatableFieldToolTip content={safeValue(parkingAvailability)} />,
+      price: <TruncatableFieldToolTip content={safeValue(`${priceCurrency || ''} ${priceText || ''}`)} />,
+      location: <TruncatableFieldToolTip content={safeValue(location)} />,
+      displayAddress: <TruncatableFieldToolTip content={safeValue(displayAddress)} />,
+      verified: verified ? 'Yes' : 'No',
+
+      // Property info
+      type: <TruncatableFieldToolTip content={safeValue(propertyInformation?.Type)} />,
+      purpose: <TruncatableFieldToolTip content={safeValue(propertyInformation?.Purpose)} />,
+      furnishing: <TruncatableFieldToolTip content={safeValue(propertyInformation?.Furnishing)} />,
+      completion: <TruncatableFieldToolTip content={safeValue(propertyInformation?.Completion)} />,
+      reference: <TruncatableFieldToolTip content={safeValue(propertyInformation?.['Reference no.'])} />,
+
+      // Building info
+      building: <TruncatableFieldToolTip content={safeValue(buildingInformation?.['Building Name'])} />,
+      yearOfCompletion: <TruncatableFieldToolTip content={safeValue(buildingInformation?.['Year of Completion'])} />,
+      totalFloors: <TruncatableFieldToolTip content={safeValue(buildingInformation?.['Total Floors'])} />,
+
+      // Regulatory
+      permitNumber: <TruncatableFieldToolTip content={safeValue(regulatoryInformation?.['Permit Number'])} />,
+      rera: <TruncatableFieldToolTip content={safeValue(regulatoryInformation?.['RERA'])} />,
+      agency: <TruncatableFieldToolTip content={safeValue(regulatoryInformation?.['Registered Agency'])} />,
+
+      // Info shown in modal → pass label, not object!
+      PropertyInformation: (
+        <span className="cursor-pointer text-blue-600 underline" onClick={() => handleOpenModal('Property Information', propertyInformation)}>
+          Property Information
+        </span>
+      ),
+      BuildingInformation: (
+        <span className="cursor-pointer text-blue-600 underline" onClick={() => handleOpenModal('Building Information', buildingInformation)}>
+          Building Information
+        </span>
+      ),
+      PropertyTransactions: (
+        <span
+          className="cursor-pointer text-blue-600 underline"
+          onClick={() => {
+            setTransactionsData(SimilarPropertyTransactions || []);
+            setTransactionsOpen(true);
+          }}
+        >
+          Similar Property Transactions
+        </span>
+      ),
+      RegulatoryInformation: (
+        <span className="cursor-pointer text-blue-600 underline" onClick={() => handleOpenModal('Regulatory Information', regulatoryInformation)}>
+          Regulatory Information
+        </span>
+      ),
+      Amenities: (
+        <span className="cursor-pointer text-blue-600 underline" onClick={() => handleOpenModal('Amenities', amenities)}>
+          Amenities
+        </span>
+      ),
+
+      // Validated info
+      developer: <TruncatableFieldToolTip content={safeValue(validatedInformation?.Developer)} />,
+      ownership: <TruncatableFieldToolTip content={safeValue(validatedInformation?.Ownership)} />,
+      usage: <TruncatableFieldToolTip content={safeValue(validatedInformation?.Usage)} />
+    };
+  });
+
   const columnConfig = [
     { id: 0, label: 'Property ID', key: 'propertyId', dataKey: 'propertyId' },
     { id: 1, label: 'Title', key: 'title', dataKey: 'title' },
@@ -261,6 +397,7 @@ const ScrapingDataList = () => {
     { id: 7, label: 'Property Information', key: 'PropertyInformation', dataKey: 'PropertyInformation' },
     { id: 8, label: 'Building Information', key: 'BuildingInformation', dataKey: 'BuildingInformation' },
     { id: 9, label: 'Regulatory Information', key: 'RegulatoryInformation', dataKey: 'RegulatoryInformation' },
+    { id: 19, label: 'Similar Property Transactions', key: 'PropertyTransactions', dataKey: 'PropertyTransactions' },
     { id: 10, label: 'Amenities', key: 'Amenities', dataKey: 'Amenities' },
 
     // Amenities
@@ -283,18 +420,6 @@ const ScrapingDataList = () => {
     { id: 1, label: 'Delete', icon: 'delete', deleteAction: true }
   ];
 
-  useEffect(() => {
-    setLoading(true);
-    (async () => {
-      const { status, data } = await getBayutProperty();
-      if (status) {
-        setPropertyData(data.enquiry);
-      } else showNotification('warn', data);
-    })()
-      .catch((error) => showNotification('error', error.message))
-      .finally(() => setLoading(false));
-  }, [setLoading]);
-
   return (
     <div className="p-1 overflow-x-hidden mb-12">
       <TableHeader
@@ -312,10 +437,10 @@ const ScrapingDataList = () => {
         selectable={true}
         siteModule={'enquiry'}
         headers={columnConfig}
-        tableData={(data) => setPropertyData(data.enquiry)}
+        tableData={(data) => setPropertyData(data.properties)}
         exportData={propertyData}
         rows={rows}
-        apiUrl={'propertydata'}
+        apiUrl={'scrape/properties'}
         pagination={true}
         search={true}
         filter={true}
@@ -325,13 +450,14 @@ const ScrapingDataList = () => {
           { id: 1, name: 'Email' }
         ]}
         deleteBtn={true}
-        deleteLabel="Delete Enquiry"
-        deleteMessage="Are you sure you want to delete this enquiry?"
+        deleteLabel="Delete Entry"
+        deleteMessage="Are you sure you want to delete this Entry?"
         deleteApi={deleteEnquiryApi}
         actionItems={actionItems}
       />
       {/* <NoteComponent note={enquiryListNote} /> */}
       <InfoModal show={modalOpen} onClose={() => setModalOpen(false)} title={modalTitle} data={modalData} />;
+      <PropertyTrans show={transactionsOpen} onClose={() => setTransactionsOpen(false)} transactions={transactionsData} />
     </div>
   );
 };
