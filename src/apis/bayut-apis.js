@@ -3418,9 +3418,9 @@ import { getMethodCall } from "./api-handler";
 // };
 
 export const getBayutProperty = async () => {
-  return await getMethodCall(`http://192.168.1.39:8000/api/scrape/properties`);
+  return await getMethodCall(`http://192.168.1.39:8000/api/scrape/scrappeddatas`);
 };
 
 export const getBayutPropertyById = async (id) => {
-  return await getMethodCall(`http://192.168.1.39:8000/api/scrape/properties/${id}`);
+  return await getMethodCall(`http://192.168.1.39:8000/api/scrape/scrappeddatas/${id}`);
 };

@@ -44,7 +44,7 @@ const ScrapingDataList = () => {
   };
 
   const rows = propertyData.map((property) => {
-    const { _id, propertyId, url, status, createdAt, updatedAt, scrapedData } = property;
+    const { _id, propertyId, url, status, createdAt, updatedAt, data } = property;
 
     const {
       title,
@@ -61,7 +61,7 @@ const ScrapingDataList = () => {
       amenities,
       validatedInformation,
       verified
-    } = scrapedData || {};
+    } = data || {};
 
     const totalBuildingArea = buildingInformation?.['Total Building Area'];
     const parkingAvailability = validatedInformation?.['Parking Availability'];
@@ -257,7 +257,7 @@ cursor-pointer text-black border border-blue-300 rounded-lg px-1 py-1
         tableData={(data) => setPropertyData(data.properties)}
         exportData={propertyData}
         rows={rows}
-        apiUrl={'scrape/properties'}
+        apiUrl={'scrape/scrappeddatas'}
         pagination={true}
         search={true}
         filter={true}

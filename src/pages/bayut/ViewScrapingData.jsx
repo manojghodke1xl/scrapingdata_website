@@ -42,12 +42,13 @@ const ViewScrapingData = () => {
     window.addEventListener('resize', checkScrollability);
     return () => window.removeEventListener('resize', checkScrollability);
   }, []);
-  const safeData = propertyData?.scrapedData?.SimilarPropertyTransactions || [];
+  const safeData = propertyData?.data?.similarPropertyTransactions || [];
   const [activeTab, setActiveTab] = useState("");
   const [activeType, setActiveType] = useState('SALE');
   const filteredSections = safeData.filter(
     (s) => s.location === activeTab && s.type === activeType
   );
+  console.log(filteredSections)
   // default show table
   useEffect(() => {
     if (safeData?.length > 1) {
@@ -81,11 +82,23 @@ const ViewScrapingData = () => {
             </div>
             <div className="mt-5">
               <h1 className="font-semibold text-primary">Agent Name</h1>
-              <p className="text-placeholder font-normal"> {propertyData?.scrapedData?.agent || 'No agent name available'}</p>
+              <p className="text-placeholder font-normal"> {propertyData?.data?.agent || 'No agent name available'}</p>
             </div>
             <div className="mt-5">
               <h1 className="font-semibold text-primary">Address</h1>
-              <p className="text-placeholder font-normal"> {propertyData?.scrapedData?.location || 'No Address available'}</p>
+              <p className="text-placeholder font-normal"> {propertyData?.data?.location || 'No Address available'}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="w-full justify-center items-center border-b border-primary mt-5 pb-7 gap-y-4 gap-2 lg:items-start md:items-end xl:items-end">
+        <div className="w-full flex flex-col gap-y-2 md:flex-row justify-evenly">
+          <div className="sm:w-3/12 w-full flex flex-col">
+            <span className=" text-primary">Property Description</span>
+          </div>
+          <div className="w-full grid">
+            <div className="mt-5">
+              <p className="text-placeholder font-normal"> {propertyData?.data?.description || 'Description is not available'}</p>
             </div>
           </div>
         </div>
@@ -99,8 +112,8 @@ const ViewScrapingData = () => {
             </span>
           </div>
           <div className="w-full grid grid-cols-1 sm:grid-cols-3 gap-x-12">
-            {propertyData?.scrapedData?.propertyInformation &&
-              Object.entries(propertyData.scrapedData.propertyInformation).map(([key, value]) => (
+            {propertyData?.data?.propertyInformation &&
+              Object.entries(propertyData.data.propertyInformation).map(([key, value]) => (
                 <div className="mt-5 space-y-1" key={key}>
                   <h1 className="font-semibold text-primary">{key}</h1>
                   <p className="text-placeholder font-normal">{value || "No info available"}</p>
@@ -118,8 +131,8 @@ const ViewScrapingData = () => {
             </span>
           </div>
           <div className="w-full grid grid-cols-1 sm:grid-cols-3 gap-x-12">
-            {propertyData?.scrapedData?.buildingInformation &&
-              Object.entries(propertyData.scrapedData.buildingInformation).map(([key, value]) => (
+            {propertyData?.data?.buildingInformation &&
+              Object.entries(propertyData.data.buildingInformation).map(([key, value]) => (
                 <div className="mt-5 space-y-1" key={key}>
                   <h1 className="font-semibold text-primary">{key}</h1>
                   <p className="text-placeholder font-normal">{value || "No info available"}</p>
@@ -137,8 +150,8 @@ const ViewScrapingData = () => {
             </span>
           </div>
           <div className="w-full grid grid-cols-1 sm:grid-cols-3 gap-x-12">
-            {propertyData?.scrapedData?.regulatoryInformation &&
-              Object.entries(propertyData.scrapedData.regulatoryInformation).map(([key, value]) => (
+            {propertyData?.data?.regulatoryInformation &&
+              Object.entries(propertyData.data.regulatoryInformation).map(([key, value]) => (
                 <div className="mt-5 space-y-1" key={key}>
                   <h1 className="font-semibold text-primary">{key}</h1>
                   <p className="text-placeholder font-normal">{value || "No info available"}</p>
@@ -156,8 +169,8 @@ const ViewScrapingData = () => {
             </span>
           </div>
           <div className="w-full grid grid-cols-1 sm:grid-cols-3 md:grid-cols-3 gap-x-2">
-            {propertyData?.scrapedData?.amenities &&
-              Object.entries(propertyData.scrapedData.amenities).map(([key, value]) => (
+            {propertyData?.data?.amenities &&
+              Object.entries(propertyData.data.amenities).map(([key, value]) => (
                 <div className="mt-5 px-4" key={key}>
                   <h1 className="font-semibold text-primary mb-3">{key}</h1>
                   {Array.isArray(value) ? (
@@ -183,8 +196,8 @@ const ViewScrapingData = () => {
             </span>
           </div>
           <div className="w-full grid grid-cols-1 sm:grid-cols-3 gap-x-24">
-            {propertyData?.scrapedData?.validatedInformation &&
-              Object.entries(propertyData.scrapedData.validatedInformation).map(([key, value]) => (
+            {propertyData?.data?.validatedInformation &&
+              Object.entries(propertyData.data.validatedInformation).map(([key, value]) => (
                 <div className="mt-5 space-y-1" key={key}>
                   <h1 className="font-semibold text-primary">{key}</h1>
                   <p className="text-placeholder font-normal">{value || "No info available"}</p>
@@ -203,9 +216,9 @@ const ViewScrapingData = () => {
             </span>
           </div>
           <div className="w-full md:w-12/12 flex flex-col gap-4 min-w-0">
-            <h1 className="text-primary font-bold text-gray-800 mb-4"> {propertyData?.scrapedData?.SimilarPropertyTransactions[0].propertyHeading}</h1>
+            {/* <h1 className="text-primary font-bold text-gray-800 mb-4"> {propertyData?.data?.SimilarPropertyTransactions[0].propertyHeading}</h1> */}
             <div className="flex gap-3 flex-wrap">
-              {Array.from(new Set(safeData.slice(1).map((s) => s.location))).map((tab) => (
+              {Array.from(new Set(safeData.map((s) => s.location))).map((tab) => (
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
