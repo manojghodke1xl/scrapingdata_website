@@ -2,8 +2,6 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { formatDateTime } from '../../utils/dateFormats';
 import TableComponent from '../../atoms/table/Table';
-// import NoteComponent from '../../atoms/common/NoteComponent';
-// import { enquiryListNote } from './EnquiryNotes';
 import { AiOutlineApi } from 'react-icons/ai';
 import { BsDownload } from 'react-icons/bs';
 import { FaLinkedin } from 'react-icons/fa';
@@ -232,7 +230,7 @@ cursor-pointer text-white border border-teal-600 rounded-lg px-1 py-1
         btn2={true}
         btn1={true}
         href1={'/bayut/scraping_data-integration'}
-        href2={'/bayut/add-scraping_data'}
+        // href2={'/bayut/add-scraping_data'}
         icon1={<AiOutlineApi />}
         icon2={<IoMdAdd />}
         btnLabel1={'API Integration'}
@@ -260,7 +258,6 @@ cursor-pointer text-white border border-teal-600 rounded-lg px-1 py-1
         deleteApi={deleteEnquiryApi}
         actionItems={actionItems}
       />
-      {/* <NoteComponent note={enquiryListNote} /> */}
       <InfoModal show={modalOpen} onClose={() => setModalOpen(false)} title={modalTitle} data={modalData} />;
       <PropertyTrans show={transactionsOpen} onClose={() => setTransactionsOpen(false)} transactions={transactionsData} />
     </div>

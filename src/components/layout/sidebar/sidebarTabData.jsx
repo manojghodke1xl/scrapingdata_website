@@ -40,7 +40,7 @@ export const leadsPath = [
   { title: 'Career', to: ['/career/career-list', '/career/add-career', '/career/view-career', '/career/career-integration'] }
 ];
 export const scrapingData = [
-  { title: 'Bayut', to: ['/bayut/scraping_data-list', '/bayut/view-scraping_data', '/bayut/scraping_data-integration', '/bayut/add-scraping_data'] }
+  { title: 'Bayut', to: ['/bayut/scraping_data-list', '/bayut/view-scraping_data', '/bayut/scraping_data-integration'] }
   // { title: 'Enquiry', to: ['/enquiry/enquiry-list', '/enquiry/view-enquiry', '/enquiry/enquiry-integration', '/enquiry/add-enquiry'] },
 
   // {
