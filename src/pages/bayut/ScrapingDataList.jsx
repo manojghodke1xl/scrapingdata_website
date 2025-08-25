@@ -112,8 +112,8 @@ const ScrapingDataList = () => {
       PropertyInformation: (
         <button
           className="
-    cursor-pointer text-white border border-blue-600 rounded-lg px-1 py-1
-    font-medium bg-blue-600 hover:bg-blue-700
+    cursor-pointer text-black border border-blue-300 rounded-lg px-1 py-1
+    font-medium bg-blue-200 hover:bg-blue-400
     transition-all duration-300 shadow-sm hover:shadow-md active:scale-95
     overflow-hidden truncate
   "
@@ -125,8 +125,8 @@ const ScrapingDataList = () => {
       BuildingInformation: (
         <button
           className="
-      cursor-pointer text-white border border-indigo-600 rounded-lg px-1 py-1
-      font-medium bg-indigo-600 hover:bg-indigo-700
+      cursor-pointer text-black border border-indigo-300 rounded-lg px-1 py-1
+      font-medium bg-indigo-200 hover:bg-indigo-400
       transition-all duration-300 shadow-sm hover:shadow-md active:scale-95
       overflow-hidden truncate
     "
@@ -139,8 +139,8 @@ const ScrapingDataList = () => {
       PropertyTransactions: (
         <button
           className="
-      cursor-pointer text-white border border-purple-600 rounded-lg px-1 py-1
-      font-medium bg-purple-600 hover:bg-purple-700
+      cursor-pointer text-black border border-purple-300 rounded-lg px-1 py-1
+      font-medium bg-purple-200 hover:bg-purple-400
       transition-all duration-300 shadow-sm hover:shadow-md active:scale-95
       overflow-hidden truncate
     "
@@ -155,8 +155,8 @@ const ScrapingDataList = () => {
       RegulatoryInformation: (
         <button
           className="
-      cursor-pointer text-white border border-teal-600 rounded-lg px-1 py-1
-      font-medium bg-teal-600 hover:bg-teal-700
+      cursor-pointer text-black border border-teal-300 rounded-lg px-1 py-1
+      font-medium bg-teal-200 hover:bg-teal-400
       transition-all duration-300 shadow-sm hover:shadow-md active:scale-95
       overflow-hidden truncate
     "
@@ -168,8 +168,8 @@ const ScrapingDataList = () => {
       Amenities: (
         <button
           className="
-cursor-pointer text-white border border-teal-600 rounded-lg px-1 py-1
-      font-medium bg-teal-600 hover:bg-teal-700
+cursor-pointer text-black border border-teal-300 rounded-lg px-1 py-1
+      font-medium bg-teal-200 hover:bg-teal-400
       transition-all duration-300 shadow-sm hover:shadow-md active:scale-95
       overflow-hidden truncate
 "
