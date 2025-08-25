@@ -10,7 +10,7 @@ const TableHeader = ({ heading, isSuperAdmin = true, btn1, href1, icon1, btnLabe
       }`}
     >
       <h4 className={`text-dark font-bold ${layoutSize === 'small' ? 'text-lg' : layoutSize === 'large' ? 'text-2xl' : 'text-xl'}`}>{heading}</h4>
-      <div className={`w-full flex justify-end sm:w-fit gap-2`}>
+      {/* <div className={`w-full flex justify-end sm:w-fit gap-2`}>
         {btn2 && (
           <Link to={href2} className="flex gap-1 h-fit items-center px-2 rounded-xl py-2 hover:bg-hover border border-primary text-primary">
             <span>{icon2}</span>
@@ -19,12 +19,12 @@ const TableHeader = ({ heading, isSuperAdmin = true, btn1, href1, icon1, btnLabe
         )}
         {btn1 && isSuperAdmin && (
           <Link to={href1} className="flex gap-1 h-fit items-center px-2 rounded-xl py-2 bg-primary hover:bg-primary-hover text-white">
-            {/* {icon1} */}
+           
             <span>{icon1}</span>
             <span className="hidden md:block">{btnLabel1}</span>
           </Link>
         )}
-      </div>
+      </div> */}
     </div>
   );
 };

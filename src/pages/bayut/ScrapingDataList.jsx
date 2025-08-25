@@ -34,71 +34,6 @@ const ScrapingDataList = () => {
     setModalOpen(true);
   };
 
-  // const rows = propertyData.map((enquiry) => {
-  //   const {
-  //     _id,
-  //     name,
-  //     email,
-  //     service,
-  //     subject,
-  //     createdAt,
-  //     updatedAt,
-  //     site,
-  //     url,
-  //     campaign,
-  //     medium,
-  //     source,
-  //     content,
-  //     term,
-  //     campaignId,
-  //     mobile,
-  //     ccode,
-  //     application_url,
-  //     position_applying_for,
-  //     linkedin,
-  //     comments,
-  //     enquiryType,
-  //     preferredConsultation,
-  //     organisation,
-  //     interviewPurpose,
-  //     eventName,
-  //     eventType,
-  //     eventDate,
-  //     eventLocation,
-  //     bookSessionFor,
-  //     eventTopic
-  //   } = enquiry;
-
-  //   return {
-  //     id: _id,
-  //     exportData: enquiry,
-  //     name: <TruncatableFieldToolTip content={name} />,
-  //     number: <TruncatableFieldToolTip content={`${ccode ?? ''} ${mobile}`} />,
-  //     email: <TruncatableFieldToolTip content={email} />,
-  //     service: <TruncatableFieldToolTip content={service} />,
-  //     subject: <TruncatableFieldToolTip content={subject} />,
-  //     site: <TruncatableFieldToolTip content={`${site?.name} (${site?.host})`} />,
-  //     url: <TruncatableFieldToolTip content={url} />,
-  //     campaign: <TruncatableFieldToolTip content={campaign} />,
-  //     medium: <TruncatableFieldToolTip content={medium} />,
-  //     source: <TruncatableFieldToolTip content={source} />,
-  //     content: <TruncatableFieldToolTip content={content} />,
-  //     term: <TruncatableFieldToolTip content={term} />,
-  //     campaignId: <TruncatableFieldToolTip content={campaignId} />,
-  //     createdAt: formatDateTime(createdAt),
-  //     updatedAt: formatDateTime(updatedAt),
-  //     enquiryType: <TruncatableFieldToolTip content={enquiryType} />,
-  //     organisation: <TruncatableFieldToolTip content={organisation} />,
-  //     interviewPurpose: <TruncatableFieldToolTip content={interviewPurpose} />,
-  //     preferredConsultation: <TruncatableFieldToolTip content={preferredConsultation} />,
-  //     eventName: <TruncatableFieldToolTip content={eventName} />,
-  //     eventType: <TruncatableFieldToolTip content={eventType} />,
-  //     eventDate: <TruncatableFieldToolTip content={eventDate} />,
-  //     eventLocation: <TruncatableFieldToolTip content={eventLocation} />,
-  //     bookSessionFor: <TruncatableFieldToolTip content={bookSessionFor} />
-  //   };
-  // });
-
   useEffect(() => {
     console.log('property  data>>>>>>>>>>>>>>>>>>>>>', propertyData);
   }, [propertyData]);
@@ -109,176 +44,6 @@ const ScrapingDataList = () => {
     if (typeof value === 'object') return JSON.stringify(value); // optional: stringify objects
     return String(value);
   };
-
-  // const rows = propertyData.map((property) => {
-  //   const { _id, propertyId, url, status, createdAt, updatedAt, scrapedData } = property;
-
-  //   const {
-  //     title,
-  //     agent,
-  //     price,
-  //     priceCurrency,
-  //     priceText,
-  //     location,
-  //     displayAddress,
-  //     propertyInformation,
-  //     buildingInformation,
-  //     regulatoryInformation,
-  //     SimilarPropertyTransactions,
-  //     amenities,
-  //     validatedInformation,
-  //     verified
-  //   } = scrapedData || {};
-  //   const totalBuildingArea = buildingInformation?.['Total Building Area'];
-  //   const parkingAvailability = validatedInformation?.['Parking Availability'];
-
-  //   return {
-  //     id: _id,
-  //     exportData: property,
-
-  //     // Basic
-  //     propertyId: <TruncatableFieldToolTip content={propertyId} />,
-  //     url: (
-  //       <a href={url} target="_blank" rel="noopener noreferrer">
-  //         <TruncatableFieldToolTip content={url} />
-  //       </a>
-  //     ),
-  //     status: <TruncatableFieldToolTip content={status} />,
-  //     createdAt: formatDateTime(createdAt),
-  //     updatedAt: formatDateTime(updatedAt),
-
-  //     // Core info
-  //     title: <TruncatableFieldToolTip content={title} />,
-  //     agent: <TruncatableFieldToolTip content={agent} />,
-  //     totalBuildingArea: <TruncatableFieldToolTip content={totalBuildingArea} />,
-  //     parkingAvailability: <TruncatableFieldToolTip content={parkingAvailability} />,
-  //     price: <TruncatableFieldToolTip content={`${priceCurrency} ${priceText}`} />,
-  //     location: <TruncatableFieldToolTip content={location} />,
-  //     displayAddress: <TruncatableFieldToolTip content={displayAddress} />,
-  //     verified: verified ? 'Yes' : 'No',
-
-  //     // Property info
-  //     type: <TruncatableFieldToolTip content={propertyInformation?.Type} />,
-  //     purpose: <TruncatableFieldToolTip content={propertyInformation?.Purpose} />,
-  //     furnishing: <TruncatableFieldToolTip content={propertyInformation?.Furnishing} />,
-  //     completion: <TruncatableFieldToolTip content={propertyInformation?.Completion} />,
-  //     reference: <TruncatableFieldToolTip content={propertyInformation?.['Reference no.']} />,
-
-  //     // Building info
-  //     building: <TruncatableFieldToolTip content={buildingInformation?.['Building Name']} />,
-  //     yearOfCompletion: <TruncatableFieldToolTip content={buildingInformation?.['Year of Completion']} />,
-  //     totalFloors: <TruncatableFieldToolTip content={buildingInformation?.['Total Floors']} />,
-
-  //     // Regulatory
-  //     permitNumber: <TruncatableFieldToolTip content={regulatoryInformation?.['Permit Number']} />,
-  //     rera: <TruncatableFieldToolTip content={regulatoryInformation?.['RERA']} />,
-  //     agency: <TruncatableFieldToolTip content={regulatoryInformation?.['Registered Agency']} />,
-  //     // display information using model
-  //     PropertyInformation: (
-  //       <TruncatableFieldToolTip
-  //         content={
-  //           <span className="cursor-pointer text-blue-600 underline" onClick={() => handleOpenModal('Property Information', propertyInformation)}>
-  //             Property Information
-  //           </span>
-  //         }
-  //       />
-  //     ),
-
-  //     BuildingInformation: (
-  //       <TruncatableFieldToolTip
-  //         content={
-  //           <span className="cursor-pointer text-blue-600 underline" onClick={() => handleOpenModal('Building Information', buildingInformation)}>
-  //             Building Information
-  //           </span>
-  //         }
-  //       />
-  //     ),
-  //     PropertyTransactions: (
-  //       <TruncatableFieldToolTip
-  //         content={
-  //           <span
-  //             className="cursor-pointer text-blue-600 underline"
-  //             onClick={() => {
-  //               setTransactionsData(SimilarPropertyTransactions || []);
-  //               setTransactionsOpen(true);
-  //             }}
-  //           >
-  //             Similar Property Transactions
-  //           </span>
-  //         }
-  //       />
-  //     ),
-
-  //     RegulatoryInformation: (
-  //       <TruncatableFieldToolTip
-  //         content={
-  //           <span className="cursor-pointer text-blue-600 underline" onClick={() => handleOpenModal('Regulatory Information', regulatoryInformation)}>
-  //             Regulatory Information
-  //           </span>
-  //         }
-  //       />
-  //     ),
-
-  //     Amenities: (
-  //       <TruncatableFieldToolTip
-  //         content={
-  //           <span className="cursor-pointer text-blue-600 underline" onClick={() => handleOpenModal('Amenities', amenities)}>
-  //             Amenities
-  //           </span>
-  //         }
-  //       />
-  //     ),
-
-  //     // At the bottom of your component
-
-  //     //    { id: 7, label: 'Property Information', key: 'PropertyInformation', dataKey: 'PropertyInformation' },
-  //     // { id: 8, label: 'Building Information', key: 'BuildingInformation', dataKey: 'BuildingInformation' },
-  //     // { id: 9, label: 'Regulatory Information', key: 'RegulatoryInformation', dataKey: 'RegulatoryInformation' },
-  //     // { id: 10, label: 'Amenities', key: 'Amenities', dataKey: 'Amenities' },
-
-  //     // Validated info
-  //     developer: <TruncatableFieldToolTip content={validatedInformation?.Developer} />,
-  //     ownership: <TruncatableFieldToolTip content={validatedInformation?.Ownership} />,
-  //     usage: <TruncatableFieldToolTip content={validatedInformation?.Usage} />
-  //   };
-  // });
-
-  // const columnConfig = [
-  //   { id: 0, label: 'Property Name', key: 'name', dataKey: 'name' },
-  //   { id: 1, label: 'Email', key: 'email', dataKey: 'email' },
-  //   { id: 2, label: 'Service', key: 'service', dataKey: 'service' },
-  //   { id: 3, label: 'Contact Number', key: 'number', dataKey: 'number' },
-  //   { id: 4, label: 'Subject', key: 'subject', dataKey: 'subject' },
-  //   { id: 5, label: 'Sites', key: 'site', dataKey: 'site', formatForExport: (value) => (value ? `${value?.name} (${value?.host})` : '') },
-  //   { id: 6, label: 'URL', key: 'url', dataKey: 'url' },
-  //   { id: 7, label: 'Campaign Name', key: 'campaign', dataKey: 'campaign' },
-  //   { id: 8, label: 'Medium', key: 'medium', dataKey: 'medium' },
-  //   { id: 9, label: 'Source', key: 'source', dataKey: 'source' },
-  //   { id: 10, label: 'Content', key: 'content', dataKey: 'content' },
-  //   { id: 11, label: 'Term', key: 'term', dataKey: 'term' },
-  //   { id: 12, label: 'Campaign ID', key: 'campaignId', dataKey: 'campaignId' },
-  //   { id: 13, label: 'Created At', key: 'createdAt', dataKey: 'createdAt', formatForExport: (value) => formatDateTime(value) },
-  //   { id: 14, label: 'Updated At', key: 'updatedAt', dataKey: 'updatedAt', formatForExport: (value) => formatDateTime(value) },
-
-  //   { id: 15, label: 'Enquiry Type', key: 'enquiryType', dataKey: 'enquiryType' },
-
-  //   { id: 16, label: 'Organisation', key: 'organisation', dataKey: 'organisation' },
-  //   { id: 17, label: 'Interview Purpose', key: 'interviewPurpose', dataKey: 'interviewPurpose' },
-  //   { id: 18, label: 'Event Name', key: 'eventName', dataKey: 'eventName' },
-  //   { id: 19, label: 'Event Type', key: 'eventType', dataKey: 'eventType' },
-  //   { id: 20, label: 'Event Date', key: 'eventDate', dataKey: 'eventDate' },
-  //   { id: 21, label: 'Event Location', key: 'eventLocation', dataKey: 'eventLocation' },
-  //   { id: 22, label: 'Book Session For', key: 'bookSessionFor', dataKey: 'bookSessionFor' },
-  //   { id: 23, label: 'Event Topic', key: 'eventTopic', dataKey: 'eventTopic' },
-
-  //   { id: 24, label: 'Preferred Consultation', key: 'preferredConsultation', dataKey: 'preferredConsultation' },
-  //   { id: 25, label: 'Resume URL', key: 'application_resume', dataKey: 'application_resume' },
-  //   { id: 26, label: 'Cover Letter URL', key: 'application_cover_letter', dataKey: 'application_cover_letter' },
-  //   { id: 27, label: 'Portfolio URL', key: 'application_portfolio', dataKey: 'application_portfolio' },
-  //   { id: 28, label: 'Position Applying For', key: 'position_applying_for', dataKey: 'position_applying_for' },
-  //   { id: 29, label: 'LinkedIn', key: 'linkedin', dataKey: 'linkedin' },
-  //   { id: 30, label: 'Comments', key: 'comments', dataKey: 'comments' }
-  // ];
 
   const rows = propertyData.map((property) => {
     const { _id, propertyId, url, status, createdAt, updatedAt, scrapedData } = property;
@@ -347,14 +112,6 @@ const ScrapingDataList = () => {
 
       // Info shown in modal → pass label, not object!
       PropertyInformation: (
-        // <span
-        //   className="cursor-pointer text-white border border-blue-600 rounded-lg px-2 py-2 overflow-x-auto
-        //  font-medium  bg-blue-600 hover:text-white
-        //  transition-all duration-300 shadow-sm hover:shadow-md active:scale-95"
-        //   onClick={() => handleOpenModal('Property Information', propertyInformation)}
-        // >
-        //   Property Information
-        // </span>
         <button
           className="
     cursor-pointer text-white border border-blue-600 rounded-lg px-1 py-1
@@ -370,8 +127,8 @@ const ScrapingDataList = () => {
       BuildingInformation: (
         <button
           className="
-      cursor-pointer text-white border border-blue-600 rounded-lg px-1 py-1
-      font-medium bg-blue-600 hover:bg-blue-700
+      cursor-pointer text-white border border-indigo-600 rounded-lg px-1 py-1
+      font-medium bg-indigo-600 hover:bg-indigo-700
       transition-all duration-300 shadow-sm hover:shadow-md active:scale-95
       overflow-hidden truncate
     "
@@ -384,8 +141,8 @@ const ScrapingDataList = () => {
       PropertyTransactions: (
         <button
           className="
-      cursor-pointer text-white border border-blue-600 rounded-lg px-1 py-1
-      font-medium bg-blue-600 hover:bg-blue-700
+      cursor-pointer text-white border border-purple-600 rounded-lg px-1 py-1
+      font-medium bg-purple-600 hover:bg-purple-700
       transition-all duration-300 shadow-sm hover:shadow-md active:scale-95
       overflow-hidden truncate
     "
@@ -400,8 +157,8 @@ const ScrapingDataList = () => {
       RegulatoryInformation: (
         <button
           className="
-      cursor-pointer text-white border border-blue-600 rounded-lg px-1 py-1
-      font-medium bg-blue-600 hover:bg-blue-700
+      cursor-pointer text-white border border-teal-600 rounded-lg px-1 py-1
+      font-medium bg-teal-600 hover:bg-teal-700
       transition-all duration-300 shadow-sm hover:shadow-md active:scale-95
       overflow-hidden truncate
     "
@@ -413,11 +170,11 @@ const ScrapingDataList = () => {
       Amenities: (
         <button
           className="
-      cursor-pointer text-white border border-blue-600 rounded-lg px-1 py-1
-      font-medium bg-blue-600 hover:bg-blue-700
+cursor-pointer text-white border border-teal-600 rounded-lg px-1 py-1
+      font-medium bg-teal-600 hover:bg-teal-700
       transition-all duration-300 shadow-sm hover:shadow-md active:scale-95
       overflow-hidden truncate
-    "
+"
           onClick={() => handleOpenModal('Amenities', amenities)}
         >
           Amenities
@@ -434,7 +191,9 @@ const ScrapingDataList = () => {
   const columnConfig = [
     { id: 0, label: 'Property ID', key: 'propertyId', dataKey: 'propertyId' },
     { id: 1, label: 'Title', key: 'title', dataKey: 'title' },
-    { id: 2, label: 'Total Area', key: 'totalBuildingArea', dataKey: 'totalBuildingArea' },
+    { id: 1, label: 'Total Area', key: 'TotalArea', dataKey: 'TotalArea' },
+    { id: 1, label: 'SqFt Calculation', key: 'sqft', dataKey: 'sqft' },
+    { id: 2, label: 'Total Building Area', key: 'totalBuildingArea', dataKey: 'totalBuildingArea' },
     { id: 3, label: 'Price', key: 'price', dataKey: 'price', formatForExport: (value, row) => `${row.priceCurrency} ${row.priceText}` },
     { id: 4, label: 'Address', key: 'displayAddress', dataKey: 'displayAddress' },
     { id: 5, label: 'Agent', key: 'agent', dataKey: 'agent' },
@@ -469,7 +228,7 @@ const ScrapingDataList = () => {
   return (
     <div className="p-1 overflow-x-hidden mb-12">
       <TableHeader
-        heading="Scraping Data"
+        heading="Scraping Data List"
         btn2={true}
         btn1={true}
         href1={'/bayut/scraping_data-integration'}
