@@ -191,8 +191,8 @@ cursor-pointer text-white border border-teal-600 rounded-lg px-1 py-1
   const columnConfig = [
     { id: 0, label: 'Property ID', key: 'propertyId', dataKey: 'propertyId' },
     { id: 1, label: 'Title', key: 'title', dataKey: 'title' },
-    { id: 1, label: 'Total Area', key: 'TotalArea', dataKey: 'TotalArea' },
-    { id: 1, label: 'SqFt Calculation', key: 'sqft', dataKey: 'sqft' },
+    // { id: 1, label: 'Total Area', key: 'TotalArea', dataKey: 'TotalArea' },
+    // { id: 1, label: 'SqFt Calculation', key: 'sqft', dataKey: 'sqft' },
     { id: 2, label: 'Total Building Area', key: 'totalBuildingArea', dataKey: 'totalBuildingArea' },
     { id: 3, label: 'Price', key: 'price', dataKey: 'price', formatForExport: (value, row) => `${row.priceCurrency} ${row.priceText}` },
     { id: 4, label: 'Address', key: 'displayAddress', dataKey: 'displayAddress' },
