@@ -178,11 +178,24 @@ cursor-pointer text-white border border-teal-600 rounded-lg px-1 py-1
           Amenities
         </button>
       ),
+      ValidatedInformation: (
+        <button
+          className="
+cursor-pointer text-white border border-blue-300 rounded-lg px-1 py-1
+      font-medium bg-teal-600 hover:bg-teal-700
+      transition-all duration-300 shadow-sm hover:shadow-md active:scale-95
+      overflow-hidden truncate
+"
+          onClick={() => handleOpenModal('Validated Information', validatedInformation)}
+        >
+          Validated Information
+        </button>
+      )
 
       // Validated info
-      developer: <TruncatableFieldToolTip content={safeValue(validatedInformation?.Developer)} />,
-      ownership: <TruncatableFieldToolTip content={safeValue(validatedInformation?.Ownership)} />,
-      usage: <TruncatableFieldToolTip content={safeValue(validatedInformation?.Usage)} />
+      // developer: <TruncatableFieldToolTip content={safeValue(validatedInformation?.Developer)} />,
+      // ownership: <TruncatableFieldToolTip content={safeValue(validatedInformation?.Ownership)} />,
+      // usage: <TruncatableFieldToolTip content={safeValue(validatedInformation?.Usage)} />
     };
   });
 
@@ -202,15 +215,16 @@ cursor-pointer text-white border border-teal-600 rounded-lg px-1 py-1
     { id: 9, label: 'Regulatory Information', key: 'RegulatoryInformation', dataKey: 'RegulatoryInformation' },
     { id: 19, label: 'Similar Property Transactions', key: 'PropertyTransactions', dataKey: 'PropertyTransactions' },
     { id: 10, label: 'Amenities', key: 'Amenities', dataKey: 'Amenities' },
+    { id: 11, label: 'Validated Information', key: 'ValidatedInformation', dataKey: 'ValidatedInformation' },
 
     // Amenities
     // { id: 11, label: 'Amenities', key: 'amenities', dataKey: 'amenities' },
 
     // Validated Information
-    { id: 12, label: 'Developer', key: 'developer', dataKey: 'developer' },
-    { id: 13, label: 'Ownership', key: 'ownership', dataKey: 'ownership' },
-    { id: 14, label: 'Usage', key: 'usage', dataKey: 'usage' },
-    { id: 15, label: 'Parking Availability', key: 'parkingAvailability', dataKey: 'parkingAvailability' },
+    // { id: 12, label: 'Developer', key: 'developer', dataKey: 'developer' },
+    // { id: 13, label: 'Ownership', key: 'ownership', dataKey: 'ownership' },
+    // { id: 14, label: 'Usage', key: 'usage', dataKey: 'usage' },
+    // { id: 15, label: 'Parking Availability', key: 'parkingAvailability', dataKey: 'parkingAvailability' },
 
     // Metadata
     { id: 16, label: 'Created At', key: 'createdAt', dataKey: 'createdAt', formatForExport: (value) => formatDateTime(value) },
