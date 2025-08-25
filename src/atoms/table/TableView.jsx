@@ -219,7 +219,7 @@ const TableView = ({
 
   return (
     <div className={`overflow-x-auto overflow-y-hidden ${isExpanded ? 'h-full' : ''}`}>
-      <table className={`w-full divide-y divide-primary text-sm text-primary ${isExpanded ? 'h-full' : ''}`}>
+      <table className={`w-full divide-y divide-primary text-sm text-primary ${isExpanded ? 'h-full' : ''} border-separate border-spacing-y-1 w-full`}>
         {/* Structure components with clear section comments */}
         {/* Header Section */}
         <thead className="font-semibold">

@@ -347,35 +347,81 @@ const ScrapingDataList = () => {
 
       // Info shown in modal → pass label, not object!
       PropertyInformation: (
-        <span className="cursor-pointer text-blue-600 underline" onClick={() => handleOpenModal('Property Information', propertyInformation)}>
+        // <span
+        //   className="cursor-pointer text-white border border-blue-600 rounded-lg px-2 py-2 overflow-x-auto
+        //  font-medium  bg-blue-600 hover:text-white
+        //  transition-all duration-300 shadow-sm hover:shadow-md active:scale-95"
+        //   onClick={() => handleOpenModal('Property Information', propertyInformation)}
+        // >
+        //   Property Information
+        // </span>
+        <button
+          className="
+    cursor-pointer text-white border border-blue-600 rounded-lg px-1 py-1
+    font-medium bg-blue-600 hover:bg-blue-700
+    transition-all duration-300 shadow-sm hover:shadow-md active:scale-95
+    overflow-hidden truncate
+  "
+          onClick={() => handleOpenModal('Property Information', propertyInformation)}
+        >
           Property Information
-        </span>
+        </button>
       ),
       BuildingInformation: (
-        <span className="cursor-pointer text-blue-600 underline" onClick={() => handleOpenModal('Building Information', buildingInformation)}>
+        <button
+          className="
+      cursor-pointer text-white border border-blue-600 rounded-lg px-1 py-1
+      font-medium bg-blue-600 hover:bg-blue-700
+      transition-all duration-300 shadow-sm hover:shadow-md active:scale-95
+      overflow-hidden truncate
+    "
+          onClick={() => handleOpenModal('Building Information', buildingInformation)}
+        >
           Building Information
-        </span>
+        </button>
       ),
+
       PropertyTransactions: (
-        <span
-          className="cursor-pointer text-blue-600 underline"
+        <button
+          className="
+      cursor-pointer text-white border border-blue-600 rounded-lg px-1 py-1
+      font-medium bg-blue-600 hover:bg-blue-700
+      transition-all duration-300 shadow-sm hover:shadow-md active:scale-95
+      overflow-hidden truncate
+    "
           onClick={() => {
             setTransactionsData(SimilarPropertyTransactions || []);
             setTransactionsOpen(true);
           }}
         >
           Similar Property Transactions
-        </span>
+        </button>
       ),
       RegulatoryInformation: (
-        <span className="cursor-pointer text-blue-600 underline" onClick={() => handleOpenModal('Regulatory Information', regulatoryInformation)}>
+        <button
+          className="
+      cursor-pointer text-white border border-blue-600 rounded-lg px-1 py-1
+      font-medium bg-blue-600 hover:bg-blue-700
+      transition-all duration-300 shadow-sm hover:shadow-md active:scale-95
+      overflow-hidden truncate
+    "
+          onClick={() => handleOpenModal('Regulatory Information', regulatoryInformation)}
+        >
           Regulatory Information
-        </span>
+        </button>
       ),
       Amenities: (
-        <span className="cursor-pointer text-blue-600 underline" onClick={() => handleOpenModal('Amenities', amenities)}>
+        <button
+          className="
+      cursor-pointer text-white border border-blue-600 rounded-lg px-1 py-1
+      font-medium bg-blue-600 hover:bg-blue-700
+      transition-all duration-300 shadow-sm hover:shadow-md active:scale-95
+      overflow-hidden truncate
+    "
+          onClick={() => handleOpenModal('Amenities', amenities)}
+        >
           Amenities
-        </span>
+        </button>
       ),
 
       // Validated info
