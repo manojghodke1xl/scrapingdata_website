@@ -181,8 +181,8 @@ cursor-pointer text-white border border-teal-600 rounded-lg px-1 py-1
       ValidatedInformation: (
         <button
           className="
-cursor-pointer text-white border border-blue-300 rounded-lg px-1 py-1
-      font-medium bg-teal-600 hover:bg-teal-700
+cursor-pointer text-black border border-blue-300 rounded-lg px-1 py-1
+      font-medium bg-blue-200 hover:bg-blue-400
       transition-all duration-300 shadow-sm hover:shadow-md active:scale-95
       overflow-hidden truncate
 "
